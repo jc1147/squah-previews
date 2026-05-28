@@ -1,0 +1,533 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=920">
+<title>Website Card — Brightwell Family Dental</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=Inter:wght@400;500;600;700;800&display=swap">
+<style>
+  :root {
+    --bw-primary: #2D6BAB;
+    --bw-primary-deep: #0E2640;
+    --bw-primary-soft: #E8F0F9;
+    --bw-mint: #62B696;
+    --bw-mint-deep: #2F8265;
+    --bw-mint-soft: #D7EEE2;
+    --bw-cream: #F8F5EE;
+    --bw-cream-2: #EFE8DA;
+    --bw-amber: #62B696; /* legacy alias → mint */
+    --bw-amber-soft: #D7EEE2;
+    --bw-coral: #F49B7A;
+    --bw-coral-soft: #FCE0D2;
+    --bw-ink: #0E2640;
+    --bw-ink-soft: #3F4F6A;
+    --bw-line: #DDD4C0;
+    --bw-line-cool: #DCE7F2;
+    --bw-white: #FFFFFF;
+
+    --neutral-bg: #ECE5D6;
+    --neutral-ink: #0E2640;
+    --neutral-line: #DDD4C0;
+
+    --bw-font-display: 'DM Sans', 'Inter', system-ui, -apple-system, Segoe UI, sans-serif;
+    --bw-font-body: 'Inter', system-ui, -apple-system, Segoe UI, sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--neutral-bg);
+    color: var(--neutral-ink);
+    font-family: var(--bw-font-body);
+    font-weight: 400;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    padding: 40px 24px;
+  }
+  img { max-width: 100%; display: block; }
+
+  /* ---------- Card ---------- */
+  .wc-card {
+    max-width: 880px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 24px;
+    box-shadow: 0 30px 80px rgba(15, 47, 51, 0.15), 0 8px 24px rgba(15, 47, 51, 0.08);
+    overflow: hidden;
+    border: 1px solid var(--neutral-line);
+  }
+
+  /* ---------- Top meta strip ---------- */
+  .wc-top {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 28px;
+    background: var(--bw-primary-deep);
+    color: rgba(255,255,255,0.75);
+  }
+  .wc-top-left {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    font-family: var(--bw-font-body);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+  .wc-top-num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 36px; height: 36px;
+    background: rgba(212, 162, 74, 0.18);
+    color: var(--bw-amber);
+    border-radius: 50%;
+    font-family: var(--bw-font-display);
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.04em;
+  }
+  .wc-top-divider { width: 1px; height: 20px; background: rgba(255,255,255,0.18); }
+  .wc-top-right {
+    display: flex; align-items: center; gap: 10px;
+    font-family: var(--bw-font-body);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .wc-package-pill {
+    padding: 5px 12px;
+    background: var(--bw-amber);
+    color: var(--bw-primary-deep);
+    border-radius: 999px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+  }
+  .wc-price-pill {
+    padding: 5px 12px;
+    border: 1px solid rgba(212, 162, 74, 0.5);
+    border-radius: 999px;
+    color: var(--bw-amber);
+    font-weight: 800;
+    letter-spacing: 0.1em;
+  }
+
+  /* ---------- Homepage thumbnail ---------- */
+  .wc-thumb {
+    position: relative;
+    background: linear-gradient(180deg, var(--bw-cream-2) 0%, var(--bw-cream) 100%);
+    padding: 36px 36px 0;
+  }
+  .wc-thumb-browser {
+    aspect-ratio: 16/10;
+    background: #fff;
+    border-radius: 16px 16px 0 0;
+    overflow: hidden;
+    box-shadow: 0 24px 60px rgba(15, 47, 51, 0.2), 0 4px 12px rgba(15, 47, 51, 0.08);
+    border: 1px solid rgba(15, 47, 51, 0.08);
+    border-bottom: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .wc-thumb-bar {
+    height: 32px;
+    background: var(--bw-cream-2);
+    border-bottom: 1px solid var(--bw-line);
+    display: flex; align-items: center; padding: 0 12px; gap: 6px;
+    flex-shrink: 0;
+  }
+  .wc-thumb-bar-dot {
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: rgba(15, 47, 51, 0.18);
+  }
+  .wc-thumb-bar-dot:nth-child(1) { background: #E68B6E; }
+  .wc-thumb-bar-dot:nth-child(2) { background: #D4A24A; }
+  .wc-thumb-bar-dot:nth-child(3) { background: #6FA587; }
+  .wc-thumb-bar-url {
+    margin-left: 14px;
+    flex: 1;
+    padding: 4px 14px;
+    background: #fff;
+    border: 1px solid var(--bw-line);
+    border-radius: 999px;
+    font-family: ui-monospace, 'SF Mono', Monaco, Consolas, monospace;
+    font-size: 11px;
+    color: var(--bw-ink-soft);
+    text-align: center;
+    letter-spacing: 0.02em;
+    max-width: 360px;
+  }
+  .wc-thumb-frame {
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+  }
+  .wc-thumb-frame iframe {
+    width: 1440px;
+    height: 900px;
+    border: 0;
+    transform: scale(0.55);
+    transform-origin: top left;
+    pointer-events: none;
+  }
+  /* Floating amber chip — homepage-card highlight */
+  .wc-thumb-badge {
+    position: absolute;
+    top: 24px; right: 24px;
+    padding: 8px 14px;
+    background: rgba(15, 47, 51, 0.85);
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    border-radius: 999px;
+    font-family: var(--bw-font-body);
+    font-size: 11px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--bw-amber);
+    display: flex; align-items: center; gap: 8px;
+    z-index: 2;
+  }
+  .wc-thumb-badge svg { width: 12px; height: 12px; color: var(--bw-amber); }
+
+  /* PHONE-FRAME PREVIEW (2026-05-21) — Brightwell uses legacy .wc-thumb-* schema, so the
+     phone-frame mobile preview pattern is mapped onto the equivalent selectors. Applies <=900px. */
+  @media (max-width: 900px) {
+    .wc-thumb {
+      padding: 24px 0 32px;
+      background: transparent;
+    }
+    .wc-thumb-bar { display: none; }
+    .wc-thumb-browser {
+      width: 340px;
+      max-width: 92vw;
+      aspect-ratio: 9 / 19;
+      margin: 0 auto;
+      border-radius: 38px;
+      background: #1a1a1a;
+      padding: 10px 8px;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.25), 0 8px 16px rgba(0,0,0,0.12);
+      border: 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .wc-thumb-browser::before {
+      content: '';
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 18px;
+      background: #1a1a1a;
+      border-radius: 0 0 14px 14px;
+      z-index: 2;
+      pointer-events: none;
+    }
+    .wc-thumb-frame {
+      border-radius: 30px;
+      overflow: hidden;
+    }
+    .wc-thumb-frame iframe {
+      width: 375px;
+      height: 100%;
+      transform: scale(0.85);
+      transform-origin: top left;
+      pointer-events: auto;
+    }
+    .wc-thumb-badge { top: 20px; right: 20px; font-size: 10px; padding: 6px 12px; }
+  }
+
+  /* ---------- Body ---------- */
+  .wc-body {
+    padding: 32px 36px 36px;
+    background: #fff;
+  }
+  .wc-name-row {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 6px;
+  }
+  .wc-name {
+    font-family: var(--bw-font-display);
+    font-weight: 600;
+    font-size: 36px;
+    letter-spacing: -0.025em;
+    color: var(--bw-primary-deep);
+    margin: 0;
+    line-height: 1;
+  }
+  .wc-name .wc-dot { color: var(--bw-amber); }
+  .wc-vertical {
+    font-family: var(--bw-font-body);
+    font-size: 12px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--bw-ink-soft);
+  }
+  .wc-vertical strong { color: var(--bw-amber); font-weight: 800; }
+  .wc-tagline {
+    font-family: var(--bw-font-display);
+    font-style: italic;
+    font-size: 19px;
+    color: var(--bw-ink-soft);
+    margin: 0 0 28px;
+    line-height: 1.4;
+  }
+  .wc-desc {
+    font-size: 15px;
+    color: var(--bw-ink-soft);
+    line-height: 1.6;
+    margin: 0 0 32px;
+    max-width: 720px;
+  }
+  .wc-desc strong { color: var(--bw-primary-deep); font-weight: 700; }
+
+  /* ---------- Scope grid ---------- */
+  .wc-scope {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    padding: 22px 24px;
+    background: var(--bw-cream);
+    border: 1px solid var(--bw-line);
+    border-radius: 14px;
+    margin-bottom: 28px;
+  }
+  @media (max-width: 640px) { .wc-scope { grid-template-columns: repeat(2, 1fr); } }
+  .wc-scope-cell { display: flex; flex-direction: column; gap: 4px; }
+  .wc-scope-label {
+    font-family: var(--bw-font-body);
+    font-size: 10px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--bw-amber);
+  }
+  .wc-scope-value {
+    font-family: var(--bw-font-display);
+    font-weight: 600;
+    font-size: 17px;
+    color: var(--bw-primary-deep);
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+  }
+  .wc-scope-value small {
+    display: block;
+    font-family: var(--bw-font-body);
+    font-size: 11px; font-weight: 600;
+    color: var(--bw-ink-soft);
+    margin-top: 2px;
+    letter-spacing: 0.02em;
+    text-transform: none;
+  }
+  .wc-palette-row {
+    display: flex; gap: 4px;
+  }
+  .wc-palette-dot {
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255,255,255,0.8);
+    box-shadow: 0 0 0 1px rgba(17, 36, 42, 0.06);
+  }
+
+  /* ---------- Pages line ---------- */
+  .wc-pages {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    margin-bottom: 32px;
+  }
+  .wc-page-pill {
+    padding: 6px 12px;
+    background: var(--bw-primary-soft);
+    color: var(--bw-primary);
+    border-radius: 999px;
+    font-family: var(--bw-font-body);
+    font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .wc-page-pill.is-conversion {
+    background: var(--bw-amber);
+    color: var(--bw-primary-deep);
+  }
+  .wc-page-pill.is-conversion::before {
+    content: '★ ';
+    color: var(--bw-primary-deep);
+  }
+
+  /* ---------- Outcome row ---------- */
+  .wc-outcome {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0;
+    padding: 26px 4px;
+    border-top: 1px solid var(--bw-line);
+    border-bottom: 1px solid var(--bw-line);
+    margin-bottom: 28px;
+  }
+  @media (max-width: 640px) { .wc-outcome { grid-template-columns: 1fr; } }
+  .wc-outcome-cell {
+    padding: 0 24px;
+    text-align: center;
+    border-right: 1px solid var(--bw-line);
+  }
+  .wc-outcome-cell:last-child { border-right: 0; }
+  @media (max-width: 640px) {
+    .wc-outcome-cell { border-right: 0; border-bottom: 1px solid var(--bw-line); padding: 16px 0; }
+    .wc-outcome-cell:last-child { border-bottom: 0; }
+  }
+  .wc-outcome-num {
+    font-family: var(--bw-font-display);
+    font-weight: 700;
+    font-size: 36px;
+    color: var(--bw-amber);
+    letter-spacing: -0.02em;
+    line-height: 1;
+    /* DM Sans has no opsz */
+  }
+  .wc-outcome-lbl {
+    font-family: var(--bw-font-body);
+    font-size: 11px;
+    color: var(--bw-ink-soft);
+    line-height: 1.45;
+    margin: 8px 0 0;
+    letter-spacing: 0.02em;
+  }
+  .wc-outcome-lbl strong { color: var(--bw-primary-deep); font-weight: 700; }
+
+  /* ---------- Footer ---------- */
+  .wc-foot {
+    display: flex; justify-content: space-between; align-items: center; gap: 16px;
+    flex-wrap: wrap;
+    font-family: var(--bw-font-body);
+    font-size: 11px;
+    color: var(--bw-ink-soft);
+    letter-spacing: 0.04em;
+  }
+  .wc-foot-credit {
+    font-family: ui-monospace, 'SF Mono', Monaco, Consolas, monospace;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--bw-ink-soft);
+  }
+  .wc-foot-credit em { color: var(--bw-amber); font-style: normal; font-weight: 700; }
+  .wc-foot-cta {
+    padding: 9px 18px;
+    background: var(--bw-primary-deep);
+    color: var(--bw-amber);
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .wc-foot-cta:hover { background: var(--bw-primary); color: var(--bw-cream); }
+</style>
+</head>
+<body>
+  <article class="wc-card">
+
+    <!-- Top meta strip -->
+    <div class="wc-top">
+      <div class="wc-top-left">
+        <span class="wc-top-num">01</span>
+        <span>Recent $500 build</span>
+        <span class="wc-top-divider"></span>
+        <span style="opacity: 0.65;">Shipped 2026.05 · 4 day turnaround</span>
+      </div>
+      <div class="wc-top-right">
+        <span class="wc-price-pill">$500 · Local 5-Page</span>
+        <span class="wc-package-pill">Live</span>
+      </div>
+    </div>
+
+    <!-- Thumbnail of homepage -->
+    <div class="wc-thumb">
+      <div class="wc-thumb-browser">
+        <div class="wc-thumb-bar">
+          <span class="wc-thumb-bar-dot"></span>
+          <span class="wc-thumb-bar-dot"></span>
+          <span class="wc-thumb-bar-dot"></span>
+          <span class="wc-thumb-bar-url">brightwell-dental.com</span>
+        </div>
+        <div class="wc-thumb-frame">
+          <iframe src="index.html" loading="lazy" title="Brightwell Family Dental homepage preview" scrolling="no"></iframe>
+        </div>
+      </div>
+      <span class="wc-thumb-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        Live on SGEN
+      </span>
+    </div>
+
+    <!-- Body -->
+    <div class="wc-body">
+      <div class="wc-name-row">
+        <h2 class="wc-name">Brightwell<span class="wc-dot">.</span> <span style="font-weight: 400; font-style: italic; font-size: 22px; color: var(--bw-ink-soft);">Family Dental</span></h2>
+        <span class="wc-vertical"><strong>Dental Practice</strong> · Local · Main Street</span>
+      </div>
+      <p class="wc-tagline">"Family dentistry, done right."</p>
+      <p class="wc-desc">A neighborhood dental practice that has been on Main Street since 2007. The brief: a warm, family-trusted site that booked appointments without making families feel like they were walking into a hospital. We built the full identity (logo, color, type, voice), wrote the copy, designed the homepage, and shipped the SGEN site in <strong>4 business days</strong>.</p>
+
+      <!-- Scope grid -->
+      <div class="wc-scope">
+        <div class="wc-scope-cell">
+          <span class="wc-scope-label">Package</span>
+          <span class="wc-scope-value">Local 5-Page<small>+ Booking embed</small></span>
+        </div>
+        <div class="wc-scope-cell">
+          <span class="wc-scope-label">Pages</span>
+          <span class="wc-scope-value">5<small>Home · About · Services · Reviews · Visit</small></span>
+        </div>
+        <div class="wc-scope-cell">
+          <span class="wc-scope-label">Conversion tool</span>
+          <span class="wc-scope-value">Online booking<small>Same-day urgent slot logic</small></span>
+        </div>
+        <div class="wc-scope-cell">
+          <span class="wc-scope-label">Palette</span>
+          <span class="wc-scope-value">
+            <span class="wc-palette-row" style="margin-top: 4px;">
+              <span class="wc-palette-dot" style="background: #2D6BAB;"></span>
+              <span class="wc-palette-dot" style="background: #62B696;"></span>
+              <span class="wc-palette-dot" style="background: #0E2640;"></span>
+              <span class="wc-palette-dot" style="background: #F49B7A;"></span>
+              <span class="wc-palette-dot" style="background: #F8F5EE;"></span>
+            </span>
+            <small style="margin-top: 6px;">Bright Blue · Fresh Mint · Soft Coral</small>
+          </span>
+        </div>
+      </div>
+
+      <!-- Pages -->
+      <div class="wc-pages">
+        <span class="wc-page-pill is-conversion">Home</span>
+        <span class="wc-page-pill">Services</span>
+        <span class="wc-page-pill">Our team</span>
+        <span class="wc-page-pill">Reviews</span>
+        <span class="wc-page-pill">Visit us</span>
+      </div>
+
+      <!-- Outcome row -->
+      <div class="wc-outcome">
+        <div class="wc-outcome-cell">
+          <p class="wc-outcome-num">41</p>
+          <p class="wc-outcome-lbl">new patient bookings <strong>in week 1</strong> from the new site</p>
+        </div>
+        <div class="wc-outcome-cell">
+          <p class="wc-outcome-num">4 days</p>
+          <p class="wc-outcome-lbl">kickoff to live · <strong>5-day SLA met</strong> with a day to spare</p>
+        </div>
+        <div class="wc-outcome-cell">
+          <p class="wc-outcome-num">$500</p>
+          <p class="wc-outcome-lbl">final invoice · <strong>zero upsells</strong> · platform bundled 3 months</p>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="wc-foot">
+        <span class="wc-foot-credit">Brand · Copy · Hi-Fi · Build · Launch · Done on <em>SGEN</em>.</span>
+        <a href="index.html" class="wc-foot-cta" target="_blank" rel="noopener">
+          View live site
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+    </div>
+  </article>
+</body>
+</html>

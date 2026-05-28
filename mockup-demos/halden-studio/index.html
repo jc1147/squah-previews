@@ -1,0 +1,1411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Halden Studio — Quiet essentials. Made to outlast trends.</title>
+<meta name="description" content="Heavyweight cotton. Mended, not replaced. Ten pieces per drop, every six weeks. The plan is the piece, not the volume. Halden Studio.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<style>
+/* =============================================================================
+ * Halden Studio — Indie apparel DTC · Ecom Starter package
+ * Tokens locked from .claude/skills/mockup-demo-build/verticals/halden-studio.md
+ * §4.bundles.A (California Modern) picked 2026-05-14.
+ * Photography: 7 Unsplash IDs curl-verified 200 + visual probe 2026-05-14.
+ * ============================================================================= */
+
+:root {
+  --h-primary:        #B89968;
+  --h-primary-deep:   #7C6646;
+  --h-primary-soft:   #EAE0CE;
+  --h-accent:         #6D7F65;
+  --h-accent-soft:    #D7DDD0;
+  --h-bg:             #F8F4ED;
+  --h-bg-2:           #FFFFFF;
+  --h-ink:            #2C2723;
+  --h-ink-soft:       #5A544E;
+  --h-line:           #E5DDD0;
+  --h-signature:      #B89968;
+
+  --h-font-display:   'DM Serif Display', Georgia, serif;
+  --h-font-body:      'Inter', system-ui, sans-serif;
+  --h-font-mono:      'JetBrains Mono', ui-monospace, monospace;
+
+  --h-r-sm:           8px;
+  --h-r-md:           12px;
+  --h-r-lg:           14px;
+  --h-r-pill:         9999px;
+
+  --h-shadow-card:    0 1px 2px rgba(60,40,20,0.04), 0 4px 12px rgba(60,40,20,0.04);
+  --h-shadow-lift:    0 10px 25px -5px rgba(60,40,20,0.10), 0 8px 10px -6px rgba(60,40,20,0.06);
+  --h-focus-ring:     0 0 0 3px color-mix(in srgb, var(--h-primary) 22%, transparent);
+
+  --h-container:      1340px;
+  --h-section-py:     104px;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; overflow-x: hidden; max-width: 100vw; }
+body {
+  font-family: var(--h-font-body);
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--h-ink);
+  background: var(--h-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a { color: var(--h-primary); }
+
+.eyebrow {
+  font-family: var(--h-font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--h-primary);
+  margin: 0 0 18px;
+  display: inline-block;
+}
+.eyebrow.on-dark { color: var(--h-primary); }
+.eyebrow.accent-sage { color: var(--h-accent); }
+
+/* ===== Buttons ===== */
+.h-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 30px;
+  background: var(--h-primary);
+  color: var(--h-bg-2);
+  border: 0;
+  border-radius: var(--h-r-pill);
+  font-family: var(--h-font-body);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 200ms ease, transform 80ms ease, box-shadow 200ms ease;
+}
+.h-btn::after {
+  content: "→";
+  display: inline-block;
+  transition: transform 220ms cubic-bezier(0.65, 0, 0.35, 1);
+}
+.h-btn:hover { background: var(--h-primary-deep); box-shadow: 0 8px 20px rgba(184, 153, 104, 0.30); }
+.h-btn:hover::after { transform: translateX(5px); }
+.h-btn:active { transform: scale(0.97); transition-duration: 80ms; }
+
+.h-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 30px;
+  background: transparent;
+  color: var(--h-ink);
+  border: 1px solid var(--h-ink);
+  border-radius: var(--h-r-pill);
+  font-family: var(--h-font-body);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 200ms ease, color 200ms ease;
+}
+.h-btn-secondary:hover { background: var(--h-ink); color: var(--h-bg-2); }
+
+.h-btn-onDark {
+  background: var(--h-bg-2);
+  color: var(--h-ink);
+}
+.h-btn-onDark:hover { background: var(--h-primary); color: var(--h-bg-2); box-shadow: 0 8px 24px rgba(184, 153, 104, 0.35); }
+
+.h-btn-outline-light {
+  background: transparent;
+  color: var(--h-bg-2);
+  border: 1px solid var(--h-bg-2);
+}
+.h-btn-outline-light:hover { background: var(--h-bg-2); color: var(--h-ink); }
+
+/* ===== Links ===== */
+.h-link {
+  color: var(--h-ink);
+  text-decoration: underline;
+  text-decoration-color: var(--h-line);
+  text-underline-offset: 4px;
+  transition: color 200ms ease, text-decoration-color 200ms ease;
+}
+.h-link:hover { color: var(--h-primary); text-decoration-color: var(--h-primary); }
+
+/* ===== Section base ===== */
+.section {
+  padding: var(--h-section-py) 0;
+  position: relative;
+}
+.container {
+  max-width: var(--h-container);
+  margin: 0 auto;
+  padding: 0 32px;
+}
+.section-head {
+  margin-bottom: 64px;
+  max-width: 720px;
+}
+.section-head.center {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+.section-head h2 {
+  font-family: var(--h-font-display);
+  font-size: 56px;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  font-weight: 400;
+  margin: 0 0 18px;
+  color: var(--h-ink);
+}
+.section-head h2 em { color: var(--h-primary); font-style: italic; }
+.section-head p {
+  font-family: var(--h-font-body);
+  font-size: 19px;
+  line-height: 1.55;
+  color: var(--h-ink-soft);
+  margin: 0;
+  max-width: 60ch;
+}
+.section-head.center p { margin: 0 auto; }
+
+/* ===== Nav ===== */
+.h-nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(248, 244, 237, 0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--h-line);
+}
+.h-nav .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  gap: 32px;
+}
+.h-logo {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0;
+  text-decoration: none;
+  font-family: var(--h-font-display);
+  font-weight: 400;
+  font-size: 28px;
+  letter-spacing: -0.02em;
+  color: var(--h-ink);
+}
+.h-logo .accent {
+  color: var(--h-primary);
+  font-style: italic;
+}
+.h-nav-links {
+  display: flex;
+  gap: 32px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.h-nav-links a {
+  font-family: var(--h-font-body);
+  font-weight: 500;
+  font-size: 15px;
+  color: var(--h-ink);
+  text-decoration: none;
+  letter-spacing: 0.005em;
+  transition: color 200ms ease;
+}
+.h-nav-links a:hover { color: var(--h-primary); }
+.h-nav-cart {
+  padding: 10px 22px;
+  background: transparent;
+  color: var(--h-ink);
+  font-family: var(--h-font-body);
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.01em;
+  border-radius: var(--h-r-pill);
+  border: 1px solid var(--h-ink);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 200ms ease, color 200ms ease;
+}
+.h-nav-cart:hover { background: var(--h-ink); color: var(--h-bg-2); }
+
+/* ===== §2 Hero — full-bleed drop capsule ===== */
+.hero {
+  position: relative;
+  min-height: 720px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  color: var(--h-bg-2);
+}
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background: url("https://images.unsplash.com/photo-1776633733518-d81137214dc9?w=1600&q=72&auto=format&fit=crop") center 30%/cover no-repeat;
+  z-index: 0;
+}
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(44, 39, 35, 0.78) 0%, rgba(44, 39, 35, 0.55) 40%, rgba(44, 39, 35, 0.15) 100%);
+  z-index: 1;
+}
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: var(--h-container);
+  margin: 0 auto;
+  padding: 140px 32px 100px;
+  width: 100%;
+}
+.hero-eyebrow {
+  font-family: var(--h-font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--h-primary);
+  margin: 0 0 28px;
+}
+.hero h1 {
+  font-family: var(--h-font-display);
+  font-size: 92px;
+  line-height: 1.0;
+  letter-spacing: -0.025em;
+  font-weight: 400;
+  margin: 0 0 24px;
+  max-width: 14ch;
+  color: var(--h-bg-2);
+}
+.hero h1 em {
+  color: var(--h-primary);
+  font-style: italic;
+}
+.hero-sub {
+  font-family: var(--h-font-body);
+  font-size: 20px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.88);
+  max-width: 52ch;
+  margin: 0 0 40px;
+  font-weight: 400;
+}
+.hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.hero-meta {
+  font-family: var(--h-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+/* Drop indicator strip */
+.drop-indicator {
+  position: absolute;
+  bottom: 32px;
+  left: 0;
+  right: 0;
+  z-index: 3;
+}
+.drop-indicator .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+  font-family: var(--h-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.72);
+  padding-top: 18px;
+  padding-bottom: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.18);
+}
+.drop-indicator .dot { color: var(--h-primary); margin: 0 12px; }
+
+/* ===== §3 Featured 3-col ===== */
+.featured-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+.featured {
+  background: var(--h-bg-2);
+  border-radius: var(--h-r-md);
+  overflow: hidden;
+  box-shadow: var(--h-shadow-card);
+  display: flex;
+  flex-direction: column;
+  transition: transform 220ms cubic-bezier(0.65, 0, 0.35, 1), box-shadow 220ms ease;
+}
+.featured:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--h-shadow-lift);
+}
+.featured-img {
+  position: relative;
+  aspect-ratio: 4/5;
+  overflow: hidden;
+  background: var(--h-primary-soft);
+}
+.featured-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 320ms ease;
+}
+.featured:hover .featured-img img { transform: scale(1.03); }
+.featured-tag {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  padding: 6px 14px;
+  background: var(--h-bg-2);
+  border-radius: var(--h-r-pill);
+  font-family: var(--h-font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--h-primary-deep);
+}
+.featured-body { padding: 28px 32px 32px; display: flex; flex-direction: column; flex: 1; }
+.featured-body h3 {
+  font-family: var(--h-font-display);
+  font-size: 28px;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  margin: 0 0 6px;
+  color: var(--h-ink);
+}
+.featured-body h3 em { color: var(--h-primary); font-style: italic; }
+.featured-meta {
+  font-family: var(--h-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--h-ink-soft);
+  margin: 0 0 14px;
+}
+.featured-body p {
+  font-family: var(--h-font-body);
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--h-ink-soft);
+  margin: 0 0 18px;
+  flex: 1;
+}
+.featured-price-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding-top: 16px;
+  border-top: 1px solid var(--h-line);
+}
+.featured-price {
+  font-family: var(--h-font-display);
+  font-size: 22px;
+  letter-spacing: -0.005em;
+  color: var(--h-primary-deep);
+  font-weight: 400;
+}
+.featured-cta {
+  font-family: var(--h-font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--h-ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--h-line);
+  padding-bottom: 4px;
+  transition: border-color 200ms ease, color 200ms ease;
+}
+.featured-cta:hover { color: var(--h-primary); border-bottom-color: var(--h-primary); }
+
+/* ===== §4 Materials 2-col ===== */
+.materials {
+  background: var(--h-bg);
+}
+.materials-grid {
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+.materials-img {
+  aspect-ratio: 4/5;
+  border-radius: var(--h-r-lg);
+  overflow: hidden;
+  background: var(--h-primary-soft);
+  position: relative;
+}
+.materials-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.materials-body h2 {
+  font-family: var(--h-font-display);
+  font-size: 56px;
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  font-weight: 400;
+  color: var(--h-ink);
+  margin: 0 0 24px;
+}
+.materials-body h2 em { color: var(--h-primary); font-style: italic; }
+.materials-body p {
+  font-family: var(--h-font-body);
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--h-ink-soft);
+  margin: 0 0 18px;
+}
+.materials-spec {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin-top: 32px;
+  padding-top: 28px;
+  border-top: 1px solid var(--h-line);
+}
+.materials-spec-item .key {
+  font-family: var(--h-font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--h-accent);
+  margin: 0 0 6px;
+  display: block;
+}
+.materials-spec-item .val {
+  font-family: var(--h-font-display);
+  font-size: 19px;
+  line-height: 1.3;
+  letter-spacing: -0.005em;
+  color: var(--h-ink);
+  margin: 0;
+}
+.materials-spec-item .val em { color: var(--h-primary); font-style: italic; }
+
+/* ===== §5 Collection grid 4-col ===== */
+.collection-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 32px;
+  margin-bottom: 48px;
+}
+.collection-head .h-block h2 {
+  font-family: var(--h-font-display);
+  font-size: 52px;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  font-weight: 400;
+  color: var(--h-ink);
+  margin: 0 0 12px;
+}
+.collection-head .h-block h2 em { color: var(--h-primary); font-style: italic; }
+.collection-head .h-block p {
+  font-family: var(--h-font-body);
+  font-size: 17px;
+  color: var(--h-ink-soft);
+  margin: 0;
+  max-width: 50ch;
+}
+.collection-counter {
+  font-family: var(--h-font-mono);
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--h-ink-soft);
+  text-align: right;
+}
+.collection-counter .num {
+  display: block;
+  font-family: var(--h-font-display);
+  font-size: 42px;
+  letter-spacing: -0.02em;
+  color: var(--h-primary);
+  margin-bottom: 4px;
+}
+
+.collection-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+.product {
+  background: var(--h-bg-2);
+  border-radius: var(--h-r-md);
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(60,40,20,0.04);
+  display: flex;
+  flex-direction: column;
+  transition: transform 220ms cubic-bezier(0.65, 0, 0.35, 1), box-shadow 220ms ease;
+}
+.product:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--h-shadow-lift);
+}
+.product-img {
+  position: relative;
+  aspect-ratio: 4/5;
+  overflow: hidden;
+  background: var(--h-primary-soft);
+}
+.product-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 320ms ease;
+}
+.product:hover .product-img img { transform: scale(1.03); }
+.product-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: 5px 11px;
+  background: rgba(248, 244, 237, 0.92);
+  border-radius: var(--h-r-pill);
+  font-family: var(--h-font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--h-primary-deep);
+}
+.product-body { padding: 18px 20px 22px; }
+.product-name {
+  font-family: var(--h-font-display);
+  font-size: 21px;
+  font-weight: 400;
+  letter-spacing: -0.005em;
+  margin: 0 0 4px;
+  color: var(--h-ink);
+}
+.product-name em { color: var(--h-primary); font-style: italic; }
+.product-price-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-top: 6px;
+}
+.product-price {
+  font-family: var(--h-font-body);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--h-primary-deep);
+}
+.product-color {
+  font-family: var(--h-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--h-ink-soft);
+}
+
+/* ===== §6 Craft story ===== */
+.craft {
+  background: var(--h-bg-2);
+}
+.craft-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 96px;
+  align-items: center;
+}
+.craft-img {
+  aspect-ratio: 4/5;
+  border-radius: var(--h-r-lg);
+  overflow: hidden;
+  background: var(--h-primary-soft);
+  position: relative;
+}
+.craft-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.craft-body h2 {
+  font-family: var(--h-font-display);
+  font-size: 52px;
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  font-weight: 400;
+  color: var(--h-ink);
+  margin: 0 0 22px;
+}
+.craft-body h2 em { color: var(--h-primary); font-style: italic; }
+.craft-body p {
+  font-family: var(--h-font-body);
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--h-ink-soft);
+  margin: 0 0 18px;
+}
+.craft-quote {
+  font-family: var(--h-font-display);
+  font-size: 24px;
+  line-height: 1.4;
+  font-weight: 400;
+  font-style: italic;
+  color: var(--h-primary-deep);
+  margin: 28px 0 12px;
+  padding-left: 22px;
+  border-left: 3px solid var(--h-primary);
+}
+.craft-attr {
+  font-family: var(--h-font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--h-primary);
+  margin: 0 0 0 22px;
+}
+
+/* ===== §7 Editorial row ===== */
+.editorial {
+  background: var(--h-bg);
+  padding: 0;
+}
+.editorial-inner {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  align-items: center;
+  min-height: 540px;
+}
+.editorial-img {
+  width: 100%;
+  height: 100%;
+  min-height: 540px;
+  background: url("https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1600&q=72&auto=format&fit=crop") center/cover no-repeat;
+}
+.editorial-body {
+  padding: 96px 80px;
+  max-width: 560px;
+}
+.editorial-body .eyebrow { color: var(--h-accent); }
+.editorial-body h2 {
+  font-family: var(--h-font-display);
+  font-size: 44px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  font-weight: 400;
+  color: var(--h-ink);
+  margin: 0 0 22px;
+}
+.editorial-body h2 em { color: var(--h-primary); font-style: italic; }
+.editorial-body p {
+  font-family: var(--h-font-body);
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--h-ink-soft);
+  margin: 0 0 28px;
+}
+
+/* ===== §8 Newsletter drop alert ===== */
+.newsletter {
+  background: var(--h-primary-soft);
+}
+.newsletter .container { text-align: center; max-width: 720px; }
+.newsletter h2 {
+  font-family: var(--h-font-display);
+  font-size: 48px;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  font-weight: 400;
+  color: var(--h-ink);
+  margin: 0 0 18px;
+}
+.newsletter h2 em { color: var(--h-primary-deep); font-style: italic; }
+.newsletter p {
+  font-family: var(--h-font-body);
+  font-size: 17px;
+  line-height: 1.55;
+  color: var(--h-ink-soft);
+  margin: 0 auto 36px;
+  max-width: 56ch;
+}
+.newsletter-form {
+  display: flex;
+  gap: 10px;
+  max-width: 480px;
+  margin: 0 auto;
+  align-items: stretch;
+}
+.newsletter-form input {
+  flex: 1;
+  padding: 16px 22px;
+  background: var(--h-bg-2);
+  border: 1px solid var(--h-line);
+  border-radius: var(--h-r-pill);
+  font-family: var(--h-font-body);
+  font-size: 15px;
+  color: var(--h-ink);
+  outline: none;
+  transition: border-color 200ms ease, box-shadow 200ms ease;
+}
+.newsletter-form input:focus { border-color: var(--h-primary); box-shadow: var(--h-focus-ring); }
+.newsletter-fine {
+  font-family: var(--h-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--h-ink-soft);
+  margin-top: 18px;
+}
+
+/* ===== §9 Closing CTA ===== */
+.closing {
+  background: var(--h-ink);
+  color: var(--h-bg-2);
+  padding: 120px 0 128px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.closing::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 25% 30%, rgba(184, 153, 104, 0.18), transparent 50%),
+              radial-gradient(circle at 80% 70%, rgba(109, 127, 101, 0.10), transparent 55%);
+  pointer-events: none;
+}
+.closing .container { position: relative; z-index: 1; max-width: 880px; }
+.closing-eyebrow {
+  font-family: var(--h-font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--h-primary);
+  margin: 0 0 28px;
+}
+.closing h2 {
+  font-family: var(--h-font-display);
+  font-size: 72px;
+  line-height: 1.0;
+  letter-spacing: -0.025em;
+  font-weight: 400;
+  margin: 0 0 22px;
+  color: var(--h-bg-2);
+  max-width: 16ch;
+  margin-left: auto;
+  margin-right: auto;
+}
+.closing h2 em { color: var(--h-primary); font-style: italic; }
+.closing p {
+  font-family: var(--h-font-body);
+  font-size: 19px;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.78);
+  margin: 0 auto 44px;
+  max-width: 56ch;
+}
+.closing-cta-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.closing-meta {
+  font-family: var(--h-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+  display: block;
+  margin-top: 12px;
+}
+
+/* ===== §10 Footer ===== */
+.h-footer {
+  background: var(--h-primary-deep);
+  color: rgba(255, 255, 255, 0.78);
+  padding: 88px 0 36px;
+}
+.h-footer .container { padding-left: 32px; padding-right: 32px; }
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
+  gap: 56px;
+  padding-bottom: 56px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+}
+.footer-col h4 {
+  font-family: var(--h-font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--h-primary-soft);
+  margin: 0 0 22px;
+}
+.footer-col ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.footer-col li {
+  margin: 0 0 10px;
+  font-family: var(--h-font-body);
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.74);
+  line-height: 1.55;
+}
+.footer-col li a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 200ms ease;
+}
+.footer-col li a:hover { color: var(--h-bg-2); }
+.footer-brand {
+  font-family: var(--h-font-display);
+  font-size: 32px;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  color: var(--h-bg-2);
+  margin: 0 0 8px;
+}
+.footer-brand .accent { color: var(--h-primary-soft); font-style: italic; }
+.footer-brand-tag {
+  font-family: var(--h-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+  margin: 0 0 24px;
+}
+.footer-brand-body {
+  font-family: var(--h-font-body);
+  font-size: 14px;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.68);
+  margin: 0 0 22px;
+  max-width: 32ch;
+}
+.footer-socials {
+  display: flex;
+  gap: 10px;
+}
+.footer-socials a {
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--h-r-pill);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: rgba(255, 255, 255, 0.78);
+  text-decoration: none;
+  transition: border-color 200ms ease, background 200ms ease, color 200ms ease;
+}
+.footer-socials a:hover {
+  background: var(--h-primary);
+  color: var(--h-ink);
+  border-color: var(--h-primary);
+}
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding-top: 28px;
+  font-family: var(--h-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+/* ===== Responsive — 4 locked breakpoints: 1440 / 1024 / 768 / 375 ===== */
+@media (max-width: 1024px) {
+  :root { --h-section-py: 88px; }
+  .hero { min-height: 600px; }
+  .hero-content { padding: 120px 32px 90px; }
+  .hero h1 { font-size: 76px; }
+  .collection-grid { grid-template-columns: repeat(3, 1fr); }
+  .materials-grid { gap: 56px; }
+  .craft-grid { gap: 64px; }
+  .editorial-body { padding: 72px 56px; }
+  .footer-grid { grid-template-columns: 1.2fr 1fr 1fr; }
+  .footer-col:nth-child(4) { grid-column: 1 / -1; padding-top: 32px; border-top: 1px solid rgba(255, 255, 255, 0.14); }
+}
+@media (max-width: 768px) {
+  :root { --h-section-py: 76px; }
+  .container { padding: 0 24px; }
+  .h-nav .container { padding-top: 16px; padding-bottom: 16px; }
+  .h-nav-links { display: none; }
+  .hero { min-height: 540px; }
+  .hero-content { padding: 100px 24px 100px; }
+  .hero h1 { font-size: 60px; }
+  .drop-indicator { display: none; }
+  .section-head h2 { font-size: 44px; }
+  .featured-grid { grid-template-columns: 1fr; }
+  .materials-grid { grid-template-columns: 1fr; gap: 40px; }
+  .materials-body h2 { font-size: 40px; }
+  .materials-img { max-width: 480px; }
+  .collection-head { flex-direction: column; align-items: flex-start; }
+  .collection-counter { text-align: left; }
+  .collection-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .craft-grid { grid-template-columns: 1fr; gap: 40px; }
+  .craft-body h2 { font-size: 40px; }
+  .craft-img { max-width: 480px; }
+  .editorial-inner { grid-template-columns: 1fr; }
+  .editorial-img { min-height: 360px; }
+  .editorial-body { padding: 56px 32px; max-width: 100%; }
+  .newsletter h2 { font-size: 38px; }
+  .newsletter-form { flex-direction: column; gap: 12px; }
+  .newsletter-form .h-btn { width: 100%; justify-content: center; }
+  .closing { padding: 96px 0 104px; }
+  .closing h2 { font-size: 56px; }
+  .footer-grid { grid-template-columns: 1fr 1fr; gap: 40px; }
+  .footer-col:nth-child(4) { display: block; padding-top: 0; border-top: 0; grid-column: 1 / -1; }
+}
+@media (max-width: 700px) {
+  :root { --h-section-py: 64px; }
+  .container { padding: 0 20px; }
+  .h-nav .container { padding-top: 14px; padding-bottom: 14px; gap: 12px; }
+  .h-nav-cart { padding: 8px 16px; font-size: 13px; }
+  .h-logo { font-size: 24px; }
+  .hero { min-height: 520px; }
+  .hero-content { padding: 88px 20px 88px; }
+  .hero h1 { font-size: 48px; }
+  .hero-sub { font-size: 17px; }
+  .hero-actions { flex-direction: column; align-items: stretch; gap: 12px; }
+  .hero-actions .h-btn,
+  .hero-actions .h-btn-outline-light { width: 100%; justify-content: center; }
+  .hero-meta { display: none; }
+  .section-head h2 { font-size: 34px; }
+  .section-head p { font-size: 17px; }
+  .materials-body h2,
+  .craft-body h2,
+  .collection-head .h-block h2 { font-size: 34px; }
+  .collection-counter .num { font-size: 32px; }
+  .editorial-body h2 { font-size: 34px; }
+  .editorial-body { padding: 48px 22px; }
+  .newsletter h2 { font-size: 30px; }
+  .closing { padding: 80px 0 88px; }
+  .closing h2 { font-size: 44px; }
+  .closing p { font-size: 17px; }
+  .closing-cta-row { flex-direction: column; gap: 16px; }
+  .closing-cta-row .h-btn { width: 100%; justify-content: center; }
+  .h-footer { padding: 64px 0 28px; }
+  .footer-grid { grid-template-columns: 1fr; gap: 36px; padding-bottom: 36px; }
+  .footer-bottom { flex-direction: column; align-items: flex-start; gap: 14px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============== §1 NAV ============== -->
+<header class="h-nav">
+  <div class="container">
+    <a href="#" class="h-logo">Halden <span class="accent">Studio.</span></a>
+    <nav>
+      <ul class="h-nav-links">
+        <li><a href="#featured">Shop the drop</a></li>
+        <li><a href="#materials">Materials</a></li>
+        <li><a href="#craft">Field notes</a></li>
+        <li><a href="#newsletter">Drop alerts</a></li>
+      </ul>
+    </nav>
+    <a href="#cart" class="h-nav-cart">Cart · 0</a>
+  </div>
+</header>
+
+<!-- ============== §2 HERO — full-bleed drop capsule ============== -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Autumn '26 capsule · Now drop 04</p>
+    <h1>Quiet essentials. <em>Made to outlast trends.</em></h1>
+    <p class="hero-sub">Heavyweight cotton. Mended, not replaced. Ten pieces per drop, every six weeks. The plan is the piece, not the volume.</p>
+    <div class="hero-actions">
+      <a href="#featured" class="h-btn">Shop the capsule</a>
+      <a href="#craft" class="h-btn h-btn-outline-light">Read the field notes</a>
+      <span class="hero-meta">Ten pieces · Stripe · free returns</span>
+    </div>
+  </div>
+  <div class="drop-indicator">
+    <div class="container">
+      <span>Drop 04 / 10 pieces</span>
+      <span class="dot">·</span>
+      <span>Shipping in 5 business days</span>
+      <span class="dot">·</span>
+      <span>Free mending for life</span>
+      <span class="dot">·</span>
+      <span>Next drop · 6 weeks</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============== §3 FEATURED 3-COL ============== -->
+<section class="section" id="featured" style="background: var(--h-bg-2);">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">Drop 04 · Three pieces, weighted</p>
+      <h2>The three to <em>start with</em>.</h2>
+      <p>Every drop has a starting point. These three pieces anchor the capsule — wear them across the next eighteen months. Everything else builds around them.</p>
+    </div>
+    <div class="featured-grid">
+
+      <article class="featured">
+        <div class="featured-img">
+          <img src="https://images.unsplash.com/photo-1773747310674-b42a55d72003?w=900&q=72&auto=format&fit=crop" alt="The Studio Sweater — cream waffle knit on a hanger in soft daylight.">
+          <span class="featured-tag">Capsule · 01</span>
+        </div>
+        <div class="featured-body">
+          <h3>The Studio <em>Sweater</em></h3>
+          <p class="featured-meta">Heavyweight cotton-merino · cream</p>
+          <p>Knitted in a single panel in Porto. Mended-not-replaced lifetime warranty. Sizes XS to XL. The piece we wear most often.</p>
+          <div class="featured-price-row">
+            <span class="featured-price">$248</span>
+            <a class="featured-cta" href="#">Add to cart →</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="featured">
+        <div class="featured-img">
+          <img src="https://images.unsplash.com/photo-1776633733518-d81137214dc9?w=900&q=72&auto=format&fit=crop" alt="The Field Shirt — oversized white linen shirt photographed in natural light.">
+          <span class="featured-tag">Capsule · 02</span>
+        </div>
+        <div class="featured-body">
+          <h3>The Field <em>Shirt</em></h3>
+          <p class="featured-meta">Oversized · heavyweight linen · oat</p>
+          <p>Cut from a 320gsm Italian linen we've been hunting for two years. Hand-finished hems. Worn out of the studio next door, photographed in the lot behind it.</p>
+          <div class="featured-price-row">
+            <span class="featured-price">$186</span>
+            <a class="featured-cta" href="#">Add to cart →</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="featured">
+        <div class="featured-img">
+          <img src="https://images.unsplash.com/photo-1740711152088-88a009e877bb?w=900&q=72&auto=format&fit=crop" alt="The Workshop Overshirt — navy heavyweight cotton shirt on a wooden hanger.">
+          <span class="featured-tag">Capsule · 03</span>
+        </div>
+        <div class="featured-body">
+          <h3>The Workshop <em>Overshirt</em></h3>
+          <p class="featured-meta">Heavyweight cotton · navy</p>
+          <p>Garment-dyed in small batches outside Lisbon. Reinforced shoulder seam. Worn open over the Studio Sweater. Will fade quietly over five years. That's the point.</p>
+          <div class="featured-price-row">
+            <span class="featured-price">$214</span>
+            <a class="featured-cta" href="#">Add to cart →</a>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============== §4 MATERIALS 2-COL ============== -->
+<section class="section materials" id="materials">
+  <div class="container">
+    <div class="materials-grid">
+      <div class="materials-img">
+        <img src="https://images.unsplash.com/photo-1686806374120-e7ae3f19801d?w=1200&q=72&auto=format&fit=crop" alt="Heavyweight cotton fabric photographed in natural daylight.">
+      </div>
+      <div class="materials-body">
+        <p class="eyebrow accent-sage">The cotton</p>
+        <h2>Heavyweight. <em>Hunted, not sourced.</em></h2>
+        <p>Every fabric we use is picked in person. The Studio Sweater's cotton-merino comes from a mill outside Porto we've worked with since the second drop. The Field Shirt's 320gsm linen we found at a textile show in Como in 2024 and tied up the next year's run on the spot.</p>
+        <p>The standard for the brand is simple: if we wouldn't wear it for five years, it doesn't get in the drop.</p>
+        <div class="materials-spec">
+          <div class="materials-spec-item">
+            <span class="key">Cotton weight</span>
+            <p class="val">320 <em>gsm</em></p>
+          </div>
+          <div class="materials-spec-item">
+            <span class="key">Mended for life</span>
+            <p class="val">Every <em>piece</em></p>
+          </div>
+          <div class="materials-spec-item">
+            <span class="key">Made in</span>
+            <p class="val">Portugal · <em>Italy</em></p>
+          </div>
+          <div class="materials-spec-item">
+            <span class="key">Drop cadence</span>
+            <p class="val">Every <em>6 weeks</em></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== §5 COLLECTION GRID 4-COL ============== -->
+<section class="section" id="collection" style="background: var(--h-bg-2);">
+  <div class="container">
+
+    <div class="collection-head">
+      <div class="h-block">
+        <p class="eyebrow">All ten · Autumn '26 · drop 04</p>
+        <h2>The full <em>capsule</em>.</h2>
+        <p>Every piece in the drop. Ten total. Each color is one batch. When it's gone, it's gone — the next drop is six weeks out.</p>
+      </div>
+      <div class="collection-counter">
+        <span class="num">10</span>
+        <span>pieces in this drop</span>
+      </div>
+    </div>
+
+    <div class="collection-grid">
+
+      <article class="product">
+        <div class="product-img">
+          <img src="https://images.unsplash.com/photo-1773747310674-b42a55d72003?w=600&q=72&auto=format&fit=crop" alt="The Studio Sweater · cream">
+          <span class="product-badge">Capsule</span>
+        </div>
+        <div class="product-body">
+          <p class="product-name">The Studio <em>Sweater</em></p>
+          <div class="product-price-row"><span class="product-price">$248</span><span class="product-color">cream</span></div>
+        </div>
+      </article>
+
+      <article class="product">
+        <div class="product-img">
+          <img src="https://images.unsplash.com/photo-1776633733518-d81137214dc9?w=600&q=72&auto=format&fit=crop" alt="The Field Shirt · oat">
+          <span class="product-badge">Capsule</span>
+        </div>
+        <div class="product-body">
+          <p class="product-name">The Field <em>Shirt</em></p>
+          <div class="product-price-row"><span class="product-price">$186</span><span class="product-color">oat</span></div>
+        </div>
+      </article>
+
+      <article class="product">
+        <div class="product-img">
+          <img src="https://images.unsplash.com/photo-1740711152088-88a009e877bb?w=600&q=72&auto=format&fit=crop" alt="The Workshop Overshirt · navy">
+          <span class="product-badge">Capsule</span>
+        </div>
+        <div class="product-body">
+          <p class="product-name">The Workshop <em>Overshirt</em></p>
+          <div class="product-price-row"><span class="product-price">$214</span><span class="product-color">navy</span></div>
+        </div>
+      </article>
+
+      <article class="product">
+        <div class="product-img">
+          <img src="https://images.unsplash.com/photo-1765337210176-1bb643f4776b?w=600&q=72&auto=format&fit=crop" alt="The Waffle Knit · oat">
+          <span class="product-badge">Capsule</span>
+        </div>
+        <div class="product-body">
+          <p class="product-name">The Waffle <em>Knit</em></p>
+          <div class="product-price-row"><span class="product-price">$168</span><span class="product-color">oat</span></div>
+        </div>
+      </article>
+
+      <article class="product">
+        <div class="product-img">
+          <img src="https://images.unsplash.com/photo-1633007400830-61a6f6fcbc40?w=600&q=72&auto=format&fit=crop" alt="The Mendable Trio · color study">
+          <span class="product-badge">Trio</span>
+        </div>
+        <div class="product-body">
+          <p class="product-name">The Mendable <em>Trio</em></p>
+          <div class="product-price-row"><span class="product-price">$520</span><span class="product-color">3 colors</span></div>
+        </div>
+      </article>
+
+      <article class="product">
+        <div class="product-img">
+          <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&q=72&auto=format&fit=crop" alt="The Wardrobe Six · the full layering kit">
+          <span class="product-badge">Set</span>
+        </div>
+        <div class="product-body">
+          <p class="product-name">The Wardrobe <em>Six</em></p>
+          <div class="product-price-row"><span class="product-price">$1,140</span><span class="product-color">6 pieces</span></div>
+        </div>
+      </article>
+
+      <article class="product">
+        <div class="product-img">
+          <img src="https://images.unsplash.com/photo-1773747310674-b42a55d72003?w=600&q=72&auto=format&fit=crop" alt="The Studio Sweater · ink (color variant)">
+          <span class="product-badge">Capsule</span>
+        </div>
+        <div class="product-body">
+          <p class="product-name">The Studio <em>Sweater · ink</em></p>
+          <div class="product-price-row"><span class="product-price">$248</span><span class="product-color">ink</span></div>
+        </div>
+      </article>
+
+      <article class="product">
+        <div class="product-img">
+          <img src="https://images.unsplash.com/photo-1740711152088-88a009e877bb?w=600&q=72&auto=format&fit=crop" alt="The Workshop Overshirt · oat color variant">
+          <span class="product-badge">Capsule</span>
+        </div>
+        <div class="product-body">
+          <p class="product-name">The Workshop <em>Overshirt · oat</em></p>
+          <div class="product-price-row"><span class="product-price">$214</span><span class="product-color">oat</span></div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============== §6 CRAFT STORY ============== -->
+<section class="section craft" id="craft">
+  <div class="container">
+    <div class="craft-grid">
+      <div class="craft-img">
+        <img src="https://images.unsplash.com/photo-1773747310674-b42a55d72003?w=1200&q=72&auto=format&fit=crop" alt="The Studio Sweater in soft afternoon light, knit detail visible.">
+      </div>
+      <div class="craft-body">
+        <p class="eyebrow accent-sage">The studio</p>
+        <h2>We make ten <em>things a year. Each one twice.</em></h2>
+        <p>Aisha started Halden out of a studio above a wine shop in 2023. The brand has one rule that hasn't moved: ten pieces a year, each one revisited in the second drop. Cotton gets ordered once. Sewing happens close to the studio. Photography is whatever happens in the lot behind it.</p>
+        <p>If a piece doesn't earn its second drop, it doesn't come back. That hasn't happened yet.</p>
+        <blockquote class="craft-quote">"The plan is the piece, not the volume. We pick ten things a year and put everything into them. The drop cadence is the discipline."</blockquote>
+        <p class="craft-attr">— Aisha Patel, co-owner</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== §7 EDITORIAL ROW ============== -->
+<section class="editorial">
+  <div class="editorial-inner">
+    <div class="editorial-img"></div>
+    <div class="editorial-body">
+      <p class="eyebrow">Editorial · Autumn '26 capsule</p>
+      <h2>Photographed in the <em>studio next door.</em></h2>
+      <p>No on-location shoots. No outsourced photography. The Autumn campaign was shot in three afternoons in the parking lot behind the studio. The light was the light that day. The piece is the piece.</p>
+      <a class="h-btn" href="#">See the full campaign</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============== §8 NEWSLETTER DROP ALERT ============== -->
+<section class="section newsletter" id="newsletter">
+  <div class="container">
+    <p class="eyebrow">Drop alerts</p>
+    <h2>The next drop is <em>six weeks out</em>.</h2>
+    <p>One email when the new ten pieces drop. No marketing. No discount codes. No "we miss you." Just the next ten, named.</p>
+    <form class="newsletter-form" onsubmit="event.preventDefault(); alert('Demo only — Klaviyo signup not connected.');">
+      <input type="email" placeholder="you@email.com" required>
+      <button type="submit" class="h-btn">Get drop alerts</button>
+    </form>
+    <p class="newsletter-fine">12,400 subscribers · one email per drop</p>
+  </div>
+</section>
+
+<!-- ============== §9 CLOSING CTA ============== -->
+<section class="closing" id="shop">
+  <div class="container">
+    <p class="closing-eyebrow">Autumn '26 capsule · Now</p>
+    <h2>Ten pieces. <em>Every six weeks.</em></h2>
+    <p>The plan is the piece, not the volume. Ten pieces per drop. Heavyweight cotton. Mended, not replaced. Free returns. Free mending for life.</p>
+    <div class="closing-cta-row">
+      <a href="#featured" class="h-btn h-btn-onDark" style="font-size: 17px; padding: 18px 36px;">Shop the capsule</a>
+      <a href="#newsletter" class="h-btn h-btn-outline-light">Get drop alerts</a>
+    </div>
+    <span class="closing-meta">Studio · Brooklyn · open by appointment</span>
+  </div>
+</section>
+
+<!-- ============== §10 FOOTER ============== -->
+<footer class="h-footer">
+  <div class="container">
+
+    <div class="footer-grid">
+
+      <div class="footer-col">
+        <p class="footer-brand">Halden <span class="accent">Studio.</span></p>
+        <p class="footer-brand-tag">Est. 2023 · Brooklyn-based</p>
+        <p class="footer-brand-body">Ten pieces, every six weeks. Heavyweight cotton, mended-not-replaced philosophy. The plan is the piece, not the volume.</p>
+        <div class="footer-socials">
+          <a href="#" aria-label="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+          <a href="#" aria-label="Email"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Shop</h4>
+        <ul>
+          <li><a href="#">Current drop</a></li>
+          <li><a href="#">All drops · archive</a></li>
+          <li><a href="#">Sets &amp; trios</a></li>
+          <li><a href="#">Gift cards</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Care</h4>
+        <ul>
+          <li><a href="#">Sizing guide</a></li>
+          <li><a href="#">Materials</a></li>
+          <li><a href="#">Mending service</a></li>
+          <li><a href="#">Returns &amp; exchanges</a></li>
+          <li><a href="#">FAQ</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Studio</h4>
+        <ul>
+          <li>312 Wythe Avenue, Floor 3</li>
+          <li>Brooklyn, NY 11249</li>
+          <li>Open by appointment</li>
+          <li><a href="mailto:hello@haldenstudio.co">hello@haldenstudio.co</a></li>
+          <li><a href="#">Field notes (blog)</a></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2026 Halden Studio LLC</span>
+      <span>Mended for life · free returns · Stripe checkout</span>
+      <span>Next drop in 6 weeks</span>
+    </div>
+
+  </div>
+</footer>
+
+</body>
+</html>

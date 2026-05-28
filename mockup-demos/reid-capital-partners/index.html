@@ -1,0 +1,1735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reid Capital Partners — Independent, fee-only, answerable only to you.</title>
+<meta name="description" content="Boutique fee-only fiduciary RIA for households $500k+. A fiduciary plan. Not a portfolio pitch. 30-minute discovery call. No commitment.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<style>
+/* =============================================================================
+ * Reid Capital Partners — Boutique fee-only fiduciary RIA · Local 5-page homepage
+ * All tokens sourced from .claude/skills/mockup-demo-build/verticals/reid-capital-partners.md
+ * §4.bundles.B (Tech-Native Boutique) locked 2026-05-13.
+ * No invented hex values. Photography from curl-verified Unsplash IDs only.
+ * ============================================================================= */
+
+:root {
+  /* --- Bundle B palette: Stripe Indigo + Soft White --- */
+  --reid-primary:        #4263EB;
+  --reid-primary-deep:   #364FC7;
+  --reid-primary-soft:   #DBE4FF;
+  --reid-accent:         #22B8CF;
+  --reid-accent-soft:    #C5F6FA;
+  --reid-bg:             #FAFAFE;
+  --reid-bg-2:           #FFFFFF;
+  --reid-ink:            #212529;
+  --reid-ink-soft:       #495057;
+  --reid-line:           #E9ECEF;
+  --reid-signature:      #22B8CF;
+
+  /* --- Bundle B typography: Plus Jakarta Sans + Inter --- */
+  --reid-font-display:   'Plus Jakarta Sans', system-ui, sans-serif;
+  --reid-font-body:      'Inter', system-ui, sans-serif;
+  --reid-font-mono:      'JetBrains Mono', ui-monospace, monospace;
+
+  /* --- Bundle B surface: micro radii 4/6/8 --- */
+  --reid-r-sm:           4px;
+  --reid-r-md:           6px;
+  --reid-r-lg:           8px;
+  --reid-r-pill:         9999px;
+
+  /* --- Shadows for lift hover (modern SaaS default) --- */
+  --reid-shadow-card:    0 1px 2px rgba(20, 30, 60, 0.04);
+  --reid-shadow-lift:    0 10px 25px -5px rgba(20, 30, 60, 0.10), 0 8px 10px -6px rgba(20, 30, 60, 0.05);
+  --reid-focus-ring:     0 0 0 3px color-mix(in srgb, var(--reid-primary) 22%, transparent);
+
+  /* --- Layout tokens --- */
+  --reid-container:      1340px;
+  --reid-section-py:     96px;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; overflow-x: hidden; max-width: 100vw; }
+body {
+  font-family: var(--reid-font-body);
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--reid-ink);
+  background: var(--reid-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a { color: var(--reid-primary); }
+
+/* ===== Eyebrows ===== */
+.eyebrow {
+  font-family: var(--reid-font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--reid-primary);
+  margin: 0 0 16px;
+  display: inline-block;
+}
+.eyebrow.on-dark { color: var(--reid-accent); }
+
+/* ===== Buttons — Bundle B icon-led-arrow + arrow-translate hover ===== */
+.reid-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 28px;
+  background: var(--reid-primary);
+  color: var(--reid-bg-2);
+  border: 0;
+  border-radius: var(--reid-r-md);
+  font-family: var(--reid-font-body);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 160ms ease, transform 80ms ease, box-shadow 160ms ease;
+}
+.reid-btn::after {
+  content: "→";
+  display: inline-block;
+  transition: transform 220ms cubic-bezier(0.65, 0, 0.35, 1);
+}
+.reid-btn:hover { background: var(--reid-primary-deep); box-shadow: 0 8px 20px rgba(66, 99, 235, 0.20); }
+.reid-btn:hover::after { transform: translateX(5px); }
+.reid-btn:active { transform: scale(0.97); transition-duration: 80ms; }
+
+.reid-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 28px;
+  background: transparent;
+  color: var(--reid-ink);
+  border: 1px solid var(--reid-line);
+  border-radius: var(--reid-r-md);
+  font-family: var(--reid-font-body);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
+  transition: border-color 160ms ease, color 160ms ease, background 160ms ease;
+}
+.reid-btn-secondary::after {
+  content: "→";
+  display: inline-block;
+  transition: transform 220ms cubic-bezier(0.65, 0, 0.35, 1);
+}
+.reid-btn-secondary:hover { border-color: var(--reid-primary); color: var(--reid-primary); background: var(--reid-primary-soft); }
+.reid-btn-secondary:hover::after { transform: translateX(5px); }
+
+.reid-btn-onDark {
+  background: var(--reid-bg-2);
+  color: var(--reid-primary-deep);
+}
+.reid-btn-onDark:hover { background: var(--reid-accent); color: var(--reid-primary-deep); box-shadow: 0 8px 24px rgba(34, 184, 207, 0.30); }
+
+/* ===== Links — color-shift on hover ===== */
+.reid-link {
+  color: var(--reid-ink);
+  text-decoration: underline;
+  text-decoration-color: var(--reid-line);
+  text-underline-offset: 4px;
+  transition: color 160ms ease, text-decoration-color 160ms ease;
+}
+.reid-link:hover { color: var(--reid-primary); text-decoration-color: var(--reid-primary); }
+
+/* ===== Section base ===== */
+.section {
+  padding: var(--reid-section-py) 0;
+  position: relative;
+}
+.container {
+  max-width: var(--reid-container);
+  margin: 0 auto;
+  padding: 0 32px;
+}
+.section-head {
+  margin-bottom: 56px;
+  max-width: 720px;
+}
+.section-head.center {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+.section-head h2 {
+  font-family: var(--reid-font-display);
+  font-size: 56px;
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  font-weight: 700;
+  margin: 0 0 18px;
+  color: var(--reid-ink);
+}
+.section-head h2 .accent { color: var(--reid-primary); }
+.section-head p {
+  font-family: var(--reid-font-body);
+  font-size: 19px;
+  line-height: 1.55;
+  color: var(--reid-ink-soft);
+  margin: 0;
+  max-width: 60ch;
+}
+.section-head.center p { margin: 0 auto; }
+
+/* Hairline section divider (Bundle B locked) */
+.divider {
+  height: 1px;
+  background: var(--reid-line);
+  border: 0;
+  margin: 0;
+}
+
+/* ===== Nav ===== */
+.reid-nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(250, 250, 254, 0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--reid-line);
+}
+.reid-nav .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 18px;
+  padding-bottom: 18px;
+  gap: 32px;
+}
+.reid-logo {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0;
+  text-decoration: none;
+  font-family: var(--reid-font-display);
+  font-weight: 700;
+  font-size: 22px;
+  letter-spacing: -0.015em;
+  color: var(--reid-ink);
+}
+.reid-logo .accent { color: var(--reid-primary); }
+.reid-logo .partners {
+  margin-left: 10px;
+  font-family: var(--reid-font-mono);
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--reid-ink-soft);
+}
+.reid-nav-links {
+  display: flex;
+  gap: 32px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.reid-nav-links a {
+  font-family: var(--reid-font-body);
+  font-weight: 500;
+  font-size: 15px;
+  color: var(--reid-ink);
+  text-decoration: none;
+  letter-spacing: 0.005em;
+  transition: color 160ms ease;
+}
+.reid-nav-links a:hover { color: var(--reid-primary); }
+.reid-nav-cta {
+  padding: 11px 22px;
+  background: var(--reid-primary);
+  color: var(--reid-bg-2);
+  font-family: var(--reid-font-body);
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.01em;
+  border-radius: var(--reid-r-md);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: background-color 160ms ease, transform 80ms ease;
+}
+.reid-nav-cta::after {
+  content: "→";
+  transition: transform 220ms cubic-bezier(0.65, 0, 0.35, 1);
+}
+.reid-nav-cta:hover { background: var(--reid-primary-deep); }
+.reid-nav-cta:hover::after { transform: translateX(4px); }
+
+/* ===== Hero — split-text-left 60/40 ===== */
+.hero {
+  padding: 88px 0 96px;
+  background: var(--reid-bg);
+  position: relative;
+}
+.hero .container {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+.hero-eyebrow {
+  font-family: var(--reid-font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--reid-primary);
+  margin: 0 0 28px;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+.hero-eyebrow::before {
+  content: "";
+  display: inline-block;
+  width: 28px;
+  height: 1px;
+  background: var(--reid-primary);
+}
+.hero h1 {
+  font-family: var(--reid-font-display);
+  font-size: 84px;
+  line-height: 1.0;
+  letter-spacing: -0.035em;
+  font-weight: 700;
+  margin: 0 0 28px;
+  color: var(--reid-ink);
+  max-width: 14ch;
+}
+.hero h1 .accent { color: var(--reid-primary); }
+.hero-sub {
+  font-family: var(--reid-font-body);
+  font-size: 20px;
+  line-height: 1.5;
+  color: var(--reid-ink-soft);
+  max-width: 50ch;
+  margin: 0 0 40px;
+  font-weight: 400;
+}
+.hero-cta-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.hero-cta-meta {
+  font-family: var(--reid-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--reid-ink-soft);
+  margin-left: 4px;
+}
+.hero-photo {
+  position: relative;
+  aspect-ratio: 4/5;
+  border-radius: var(--reid-r-lg);
+  overflow: hidden;
+  background: var(--reid-bg-2);
+  border: 1px solid var(--reid-line);
+}
+.hero-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.hero-photo-caption {
+  position: absolute;
+  left: 18px;
+  bottom: 18px;
+  background: var(--reid-ink);
+  color: var(--reid-bg-2);
+  padding: 8px 14px;
+  font-family: var(--reid-font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  border-radius: var(--reid-r-sm);
+}
+
+/* ===== Press strip ===== */
+.press {
+  padding: 56px 0;
+  background: var(--reid-bg-2);
+  border-top: 1px solid var(--reid-line);
+  border-bottom: 1px solid var(--reid-line);
+}
+.press .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+.press-label {
+  font-family: var(--reid-font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--reid-ink-soft);
+}
+.press-logos {
+  display: flex;
+  gap: 56px;
+  align-items: center;
+  flex-wrap: wrap;
+  flex: 1;
+  justify-content: flex-end;
+}
+.press-logo {
+  font-family: var(--reid-font-display);
+  font-weight: 700;
+  font-size: 22px;
+  color: var(--reid-ink-soft);
+  letter-spacing: -0.01em;
+  opacity: 0.78;
+  transition: opacity 160ms ease, color 160ms ease;
+}
+.press-logo:nth-child(1) { font-style: italic; font-family: 'Plus Jakarta Sans', serif; font-weight: 600; }
+.press-logo:nth-child(2) { font-family: var(--reid-font-display); font-weight: 800; }
+.press-logo:nth-child(3) { font-family: var(--reid-font-body); font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; font-size: 18px; }
+.press-logo:nth-child(4) { font-family: var(--reid-font-mono); font-weight: 700; font-size: 18px; letter-spacing: 0.04em; }
+.press-logo:hover { opacity: 1; color: var(--reid-primary); }
+
+/* ===== Is this for me? ===== */
+.qualifier {
+  background: var(--reid-bg);
+}
+.qualifier-intro {
+  font-family: var(--reid-font-display);
+  font-size: 32px;
+  line-height: 1.25;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  color: var(--reid-ink);
+  margin: 0 0 56px;
+  max-width: 72ch;
+}
+.qualifier-intro .accent { color: var(--reid-primary); }
+.qualifier-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+.qualifier-card {
+  background: var(--reid-bg-2);
+  border: 1px solid var(--reid-line);
+  border-radius: var(--reid-r-md);
+  padding: 36px 32px;
+  transition: transform 220ms cubic-bezier(0.65, 0, 0.35, 1), box-shadow 220ms ease, border-color 160ms ease;
+}
+.qualifier-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--reid-shadow-lift);
+  border-color: var(--reid-primary-soft);
+}
+.qualifier-num {
+  font-family: var(--reid-font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  color: var(--reid-accent);
+  margin: 0 0 16px;
+  display: block;
+}
+.qualifier-card h3 {
+  font-family: var(--reid-font-display);
+  font-size: 22px;
+  line-height: 1.25;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  color: var(--reid-ink);
+  margin: 0 0 12px;
+}
+.qualifier-card p {
+  font-family: var(--reid-font-body);
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--reid-ink-soft);
+  margin: 0;
+}
+
+/* ===== Approach 3-col ===== */
+.approach-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+}
+.approach-card {
+  background: var(--reid-bg-2);
+  border: 1px solid var(--reid-line);
+  border-radius: var(--reid-r-md);
+  padding: 40px 36px;
+  transition: transform 220ms cubic-bezier(0.65, 0, 0.35, 1), box-shadow 220ms ease;
+  position: relative;
+}
+.approach-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--reid-shadow-lift);
+}
+.approach-icon {
+  width: 52px;
+  height: 52px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--reid-primary-soft);
+  color: var(--reid-primary);
+  border-radius: var(--reid-r-md);
+  margin-bottom: 24px;
+}
+.approach-icon svg { width: 24px; height: 24px; }
+.approach-card h3 {
+  font-family: var(--reid-font-display);
+  font-size: 26px;
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--reid-ink);
+  margin: 0 0 14px;
+}
+.approach-card p {
+  font-family: var(--reid-font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--reid-ink-soft);
+  margin: 0 0 22px;
+}
+.approach-card .define {
+  display: block;
+  font-family: var(--reid-font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--reid-ink-soft);
+  padding-top: 18px;
+  border-top: 1px solid var(--reid-line);
+}
+.approach-card .define .word { color: var(--reid-primary); }
+
+/* ===== Founder bio 2-col ===== */
+.founder {
+  background: var(--reid-bg);
+}
+.founder-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.25fr;
+  gap: 72px;
+  align-items: center;
+}
+.founder-photo {
+  aspect-ratio: 4/5;
+  border-radius: var(--reid-r-lg);
+  overflow: hidden;
+  background: var(--reid-bg-2);
+  border: 1px solid var(--reid-line);
+  position: relative;
+}
+.founder-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.founder h2 {
+  font-family: var(--reid-font-display);
+  font-size: 52px;
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  font-weight: 700;
+  color: var(--reid-ink);
+  margin: 0 0 24px;
+}
+.founder h2 .accent { color: var(--reid-primary); }
+.founder-body p {
+  font-family: var(--reid-font-body);
+  font-size: 17px;
+  line-height: 1.65;
+  color: var(--reid-ink-soft);
+  margin: 0 0 18px;
+}
+.founder-quote {
+  font-family: var(--reid-font-display);
+  font-size: 24px;
+  line-height: 1.4;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  color: var(--reid-ink);
+  margin: 28px 0 14px;
+  padding-left: 22px;
+  border-left: 3px solid var(--reid-primary);
+}
+.founder-attr {
+  font-family: var(--reid-font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--reid-primary);
+  margin: 0 0 28px 22px;
+}
+.founder-creds {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+.founder-cred {
+  font-family: var(--reid-font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--reid-ink);
+  padding: 8px 14px;
+  border: 1px solid var(--reid-line);
+  border-radius: var(--reid-r-sm);
+  background: var(--reid-bg-2);
+}
+
+/* ===== Team grid ===== */
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+.team-card {
+  background: var(--reid-bg-2);
+  border: 1px solid var(--reid-line);
+  border-radius: var(--reid-r-md);
+  overflow: hidden;
+  transition: transform 220ms cubic-bezier(0.65, 0, 0.35, 1), box-shadow 220ms ease;
+}
+.team-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--reid-shadow-lift);
+}
+.team-photo {
+  aspect-ratio: 4/5;
+  background: var(--reid-bg);
+  overflow: hidden;
+}
+.team-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.team-body {
+  padding: 24px 26px 28px;
+}
+.team-name {
+  font-family: var(--reid-font-display);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: var(--reid-ink);
+  margin: 0 0 4px;
+}
+.team-role {
+  font-family: var(--reid-font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--reid-primary);
+  margin: 0 0 14px;
+}
+.team-bio {
+  font-family: var(--reid-font-body);
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--reid-ink-soft);
+  margin: 0;
+}
+
+/* ===== Case studies 3-col ===== */
+.case-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+.case-card {
+  background: var(--reid-bg-2);
+  border: 1px solid var(--reid-line);
+  border-radius: var(--reid-r-md);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 220ms cubic-bezier(0.65, 0, 0.35, 1), box-shadow 220ms ease;
+}
+.case-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--reid-shadow-lift);
+}
+.case-img {
+  position: relative;
+  aspect-ratio: 16/10;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--reid-primary), var(--reid-accent));
+}
+.case-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.case-tag {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  background: var(--reid-bg-2);
+  color: var(--reid-primary-deep);
+  padding: 6px 12px;
+  font-family: var(--reid-font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  border-radius: var(--reid-r-sm);
+}
+.case-body { padding: 26px 28px 30px; }
+.case-body h3 {
+  font-family: var(--reid-font-display);
+  font-size: 22px;
+  line-height: 1.25;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: var(--reid-ink);
+  margin: 0 0 10px;
+}
+.case-body p {
+  font-family: var(--reid-font-body);
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--reid-ink-soft);
+  margin: 0 0 18px;
+}
+.case-metric-row {
+  display: flex;
+  gap: 20px;
+  padding-top: 18px;
+  border-top: 1px solid var(--reid-line);
+}
+.case-metric .v {
+  font-family: var(--reid-font-display);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--reid-primary);
+  margin: 0 0 4px;
+}
+.case-metric .l {
+  font-family: var(--reid-font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--reid-ink-soft);
+  margin: 0;
+}
+
+/* ===== Insights teaser ===== */
+.insights {
+  background: var(--reid-bg);
+}
+.insights-head-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 48px;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+.insights-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+.insight {
+  display: flex;
+  flex-direction: column;
+  background: var(--reid-bg-2);
+  border: 1px solid var(--reid-line);
+  border-radius: var(--reid-r-md);
+  overflow: hidden;
+  text-decoration: none;
+  transition: transform 220ms cubic-bezier(0.65, 0, 0.35, 1), box-shadow 220ms ease;
+}
+.insight:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--reid-shadow-lift);
+}
+.insight-img {
+  aspect-ratio: 16/10;
+  overflow: hidden;
+  background: var(--reid-bg);
+}
+.insight-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 320ms ease;
+}
+.insight:hover .insight-img img { transform: scale(1.03); }
+.insight-body { padding: 24px 26px 28px; }
+.insight-meta {
+  display: flex;
+  gap: 12px;
+  font-family: var(--reid-font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--reid-accent);
+  margin: 0 0 12px;
+}
+.insight-meta .dot { color: var(--reid-line); }
+.insight h3 {
+  font-family: var(--reid-font-display);
+  font-size: 20px;
+  line-height: 1.3;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: var(--reid-ink);
+  margin: 0 0 10px;
+}
+.insight p {
+  font-family: var(--reid-font-body);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--reid-ink-soft);
+  margin: 0;
+}
+
+/* ===== Discovery CTA + form ===== */
+.discovery {
+  background: var(--reid-bg-2);
+  border-top: 1px solid var(--reid-line);
+}
+.discovery .container {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 72px;
+  align-items: start;
+}
+.discovery h2 {
+  font-family: var(--reid-font-display);
+  font-size: 48px;
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  font-weight: 700;
+  color: var(--reid-ink);
+  margin: 0 0 24px;
+}
+.discovery h2 .accent { color: var(--reid-primary); }
+.discovery-body p {
+  font-family: var(--reid-font-body);
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--reid-ink-soft);
+  margin: 0 0 18px;
+}
+.discovery-promises {
+  list-style: none;
+  padding: 0;
+  margin: 28px 0 0;
+}
+.discovery-promises li {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--reid-line);
+  font-family: var(--reid-font-body);
+  font-size: 15px;
+  color: var(--reid-ink);
+}
+.discovery-promises li::before {
+  content: "";
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  border-radius: var(--reid-r-pill);
+  background: var(--reid-accent);
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18'><path d='M4 9 L8 13 L14 6' fill='none' stroke='%23212529' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.discovery-form {
+  background: var(--reid-bg);
+  border: 1px solid var(--reid-line);
+  border-radius: var(--reid-r-lg);
+  padding: 40px 36px 36px;
+}
+.discovery-form h3 {
+  font-family: var(--reid-font-display);
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: var(--reid-ink);
+  margin: 0 0 8px;
+}
+.discovery-form .sub {
+  font-family: var(--reid-font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--reid-accent);
+  margin: 0 0 28px;
+}
+.field { margin-bottom: 14px; }
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.field label {
+  display: block;
+  font-family: var(--reid-font-body);
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--reid-ink);
+  margin-bottom: 6px;
+}
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  padding: 12px 14px;
+  background: var(--reid-bg-2);
+  color: var(--reid-ink);
+  border: 1px solid var(--reid-line);
+  border-radius: var(--reid-r-sm);
+  font-family: var(--reid-font-body);
+  font-size: 15px;
+  outline: none;
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+.field input::placeholder,
+.field textarea::placeholder { color: var(--reid-ink-soft); opacity: 0.55; }
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  border-color: var(--reid-primary);
+  box-shadow: var(--reid-focus-ring);
+}
+.field textarea { min-height: 84px; resize: vertical; }
+.discovery-form .submit-row {
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.discovery-form .submit-row .reid-btn { padding: 14px 24px; }
+.form-fine {
+  font-family: var(--reid-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--reid-ink-soft);
+}
+
+.calendly-strip {
+  margin-top: 32px;
+  padding: 18px 22px;
+  background: var(--reid-primary-soft);
+  border-radius: var(--reid-r-md);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.calendly-strip .label {
+  font-family: var(--reid-font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--reid-primary-deep);
+}
+.calendly-strip .text {
+  font-family: var(--reid-font-body);
+  font-size: 14px;
+  color: var(--reid-ink);
+  flex: 1;
+  min-width: 200px;
+}
+.calendly-strip a {
+  font-family: var(--reid-font-body);
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--reid-primary-deep);
+  text-decoration: underline;
+  text-decoration-color: var(--reid-primary);
+  text-underline-offset: 4px;
+}
+
+/* ===== Closing CTA ===== */
+.closing {
+  background: var(--reid-primary-deep);
+  color: var(--reid-bg-2);
+  padding: 120px 0 128px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.closing::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 20% 30%, rgba(34, 184, 207, 0.12), transparent 50%),
+              radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.05), transparent 50%);
+  pointer-events: none;
+}
+.closing .container { position: relative; z-index: 1; max-width: 900px; }
+.closing-eyebrow {
+  font-family: var(--reid-font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--reid-accent);
+  margin: 0 0 28px;
+}
+.closing h2 {
+  font-family: var(--reid-font-display);
+  font-size: 72px;
+  line-height: 1.0;
+  letter-spacing: -0.035em;
+  font-weight: 700;
+  margin: 0 0 24px;
+  color: var(--reid-bg-2);
+  max-width: 18ch;
+  margin-left: auto;
+  margin-right: auto;
+}
+.closing h2 .accent { color: var(--reid-accent); }
+.closing p {
+  font-family: var(--reid-font-body);
+  font-size: 19px;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.78);
+  margin: 0 auto 44px;
+  max-width: 56ch;
+}
+.closing-cta-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.closing-meta {
+  font-family: var(--reid-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+  display: inline-block;
+}
+
+/* ===== Footer — 4-col dark ===== */
+.reid-footer {
+  background: var(--reid-ink);
+  color: rgba(255, 255, 255, 0.78);
+  padding: 88px 0 36px;
+}
+.reid-footer .container { padding-left: 32px; padding-right: 32px; }
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
+  gap: 56px;
+  padding-bottom: 56px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+.footer-col h4 {
+  font-family: var(--reid-font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--reid-accent);
+  margin: 0 0 20px;
+}
+.footer-col ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.footer-col li {
+  margin: 0 0 10px;
+  font-family: var(--reid-font-body);
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.72);
+  line-height: 1.5;
+}
+.footer-col li a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 160ms ease;
+}
+.footer-col li a:hover { color: var(--reid-accent); }
+.footer-brand {
+  font-family: var(--reid-font-display);
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: var(--reid-bg-2);
+  margin: 0 0 6px;
+}
+.footer-brand .accent { color: var(--reid-accent); }
+.footer-brand-tag {
+  font-family: var(--reid-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+  margin: 0 0 24px;
+}
+.footer-brand-body {
+  font-family: var(--reid-font-body);
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.62);
+  margin: 0 0 24px;
+  max-width: 32ch;
+}
+.footer-socials {
+  display: flex;
+  gap: 10px;
+}
+.footer-socials a {
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--reid-r-pill);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: rgba(255, 255, 255, 0.78);
+  text-decoration: none;
+  transition: border-color 160ms ease, background 160ms ease, color 160ms ease;
+}
+.footer-socials a:hover {
+  background: var(--reid-accent);
+  color: var(--reid-ink);
+  border-color: var(--reid-accent);
+}
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding-top: 28px;
+  font-family: var(--reid-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+}
+.footer-oath {
+  font-family: var(--reid-font-body);
+  font-size: 12px;
+  text-transform: none;
+  letter-spacing: 0;
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.62);
+  max-width: 60ch;
+}
+
+/* ===== Responsive — 4 locked breakpoints: 1440 / 1024 / 768 / 375 ===== */
+
+/* Small desktop / large tablet (≤ 1024) — preserves 3-col grids except case-studies (collapses to 2) */
+@media (max-width: 1024px) {
+  :root { --reid-section-py: 80px; }
+  .hero { padding: 72px 0 80px; }
+  .hero .container { gap: 56px; }
+  .hero h1 { font-size: 72px; }
+  .case-grid { grid-template-columns: repeat(2, 1fr); }
+  .case-grid .case-card:nth-child(3) { grid-column: 1 / -1; max-width: 60%; }
+  .footer-grid { grid-template-columns: 1.4fr 1fr 1fr; }
+  .footer-col:nth-child(4) { grid-column: 1 / -1; padding-top: 32px; border-top: 1px solid rgba(255, 255, 255, 0.12); display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+  .footer-col:nth-child(4) h4 { grid-column: 1 / -1; }
+}
+
+/* Tablet portrait (≤ 768) — section padding tightens; founder + discovery stack; team to 2-col; press 2x2 */
+@media (max-width: 768px) {
+  :root { --reid-section-py: 72px; }
+  .container { padding: 0 24px; }
+  .reid-nav .container { padding-top: 14px; padding-bottom: 14px; }
+  .reid-nav-links { display: none; }
+  .hero { padding: 64px 0 72px; }
+  .hero .container { grid-template-columns: 1fr; gap: 48px; }
+  .hero h1 { font-size: 64px; }
+  .hero-photo { max-width: 480px; }
+  .section-head h2 { font-size: 44px; }
+  .press .container { flex-direction: column; align-items: flex-start; gap: 20px; }
+  .press-logos { width: 100%; justify-content: space-between; gap: 32px; flex-wrap: wrap; }
+  .qualifier-grid { grid-template-columns: 1fr; }
+  .approach-grid { grid-template-columns: 1fr; }
+  .founder-grid { grid-template-columns: 1fr; gap: 40px; }
+  .founder-photo { max-width: 480px; }
+  .team-grid { grid-template-columns: repeat(2, 1fr); }
+  .case-grid { grid-template-columns: 1fr; }
+  .case-grid .case-card:nth-child(3) { grid-column: auto; max-width: none; }
+  .insights-grid { grid-template-columns: 1fr; }
+  .insights-head-row { flex-direction: column; align-items: flex-start; gap: 24px; }
+  .discovery .container { grid-template-columns: 1fr; gap: 48px; }
+  .discovery h2 { font-size: 40px; }
+  .closing { padding: 96px 0 104px; }
+  .closing h2 { font-size: 56px; }
+  .footer-grid { grid-template-columns: 1fr 1fr; gap: 40px; }
+  .footer-col:nth-child(4) { display: block; padding-top: 0; border-top: 0; grid-column: 1 / -1; }
+}
+
+/* Mobile (≤ 700 — covers 375 phone width) — single column everything; reduced display scale */
+@media (max-width: 700px) {
+  :root { --reid-section-py: 64px; }
+  .container { padding: 0 20px; }
+  .reid-nav .container { padding-top: 12px; padding-bottom: 12px; gap: 12px; }
+  .reid-nav-cta { padding: 9px 14px; font-size: 13px; }
+  .reid-logo { font-size: 19px; }
+  .reid-logo .partners { display: none; }
+  .hero { padding: 48px 0 64px; }
+  .hero h1 { font-size: 48px; }
+  .hero-sub { font-size: 17px; }
+  .hero-cta-row .reid-btn,
+  .hero-cta-row .reid-btn-secondary { padding: 14px 22px; font-size: 15px; width: 100%; justify-content: center; }
+  .hero-cta-meta { display: none; }
+  .press { padding: 36px 0; }
+  .press-logos { gap: 22px; }
+  .press-logo { font-size: 17px !important; }
+  .section-head h2 { font-size: 32px; }
+  .section-head p { font-size: 17px; }
+  .qualifier-intro { font-size: 22px; }
+  .approach-card { padding: 32px 28px; }
+  .founder h2 { font-size: 38px; }
+  .founder-quote { font-size: 20px; }
+  .team-grid { grid-template-columns: 1fr; }
+  .case-body h3 { font-size: 20px; }
+  .case-metric .v { font-size: 19px; }
+  .discovery h2 { font-size: 32px; }
+  .discovery-form { padding: 28px 22px; }
+  .field-row { grid-template-columns: 1fr; gap: 0; }
+  .closing h2 { font-size: 42px; }
+  .closing p { font-size: 17px; }
+  .closing-cta-row { flex-direction: column; gap: 18px; }
+  .closing-cta-row .reid-btn { width: 100%; justify-content: center; }
+  .reid-footer { padding: 64px 0 28px; }
+  .footer-grid { grid-template-columns: 1fr; gap: 36px; padding-bottom: 36px; }
+  .footer-bottom { flex-direction: column; align-items: flex-start; gap: 14px; }
+}
+
+/* High-end large desktop (≥ 1440) — already the default base; no overrides needed. */
+</style>
+</head>
+<body>
+
+<!-- ============== §1 NAV ============== -->
+<header class="reid-nav">
+  <div class="container">
+    <a href="#" class="reid-logo">
+      Reid <span class="accent">Capital</span><span class="partners">Partners</span>
+    </a>
+    <nav>
+      <ul class="reid-nav-links">
+        <li><a href="#approach">Approach</a></li>
+        <li><a href="#team">Team</a></li>
+        <li><a href="#case-studies">Case studies</a></li>
+        <li><a href="#insights">Insights</a></li>
+      </ul>
+    </nav>
+    <a href="#discovery" class="reid-nav-cta">Book a call</a>
+  </div>
+</header>
+
+<!-- ============== §2 HERO — split-text-left ============== -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-text">
+      <p class="hero-eyebrow">For households $500k+</p>
+      <h1>Independent, fee-only, <span class="accent">answerable only to you.</span></h1>
+      <p class="hero-sub">A fiduciary plan. Not a portfolio pitch. Thirty minutes. No commitment. No products sold on the first call.</p>
+      <div class="hero-cta-row">
+        <a href="#discovery" class="reid-btn">Book your discovery call</a>
+        <a href="#approach" class="reid-btn-secondary">Read our approach</a>
+        <span class="hero-cta-meta">30 min · no commitment</span>
+      </div>
+    </div>
+    <div class="hero-photo">
+      <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=1100&q=72&auto=format&fit=crop" alt="Marcus Reid, Managing Partner of Reid Capital, in the firm's San Francisco office.">
+      <span class="hero-photo-caption">Marcus Reid · Managing Partner</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============== §3 PRESS STRIP ============== -->
+<section class="press">
+  <div class="container">
+    <span class="press-label">Coverage</span>
+    <div class="press-logos">
+      <span class="press-logo">Forbes</span>
+      <span class="press-logo">Barron's</span>
+      <span class="press-logo">Bloomberg</span>
+      <span class="press-logo">Kitces</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============== §4 IS THIS FOR ME? ============== -->
+<section class="section qualifier" id="is-this-for-me">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">Is this for me?</p>
+      <h2>We work with about <span class="accent">forty households</span>.</h2>
+    </div>
+    <p class="qualifier-intro">If two of the three below describe your situation, the 30-minute call is worth your time. If none describe you, we'll send you to a planner who fits better.</p>
+    <div class="qualifier-grid">
+
+      <article class="qualifier-card">
+        <span class="qualifier-num">01 · Assets</span>
+        <h3>$500k+ investable, before housing.</h3>
+        <p>Vested RSUs, post-exit liquidity, taxable accounts, IRAs, 401(k)s. We don't count primary residences. We do count concentrated single-stock positions you've been afraid to touch.</p>
+      </article>
+
+      <article class="qualifier-card">
+        <span class="qualifier-num">02 · Complexity</span>
+        <h3>One or more decisions on the table.</h3>
+        <p>A pre-IPO grant. A business sale. A trust to set up. An inheritance just landed. A career transition that broke the spreadsheet. The plan is the deliverable — not the products underneath.</p>
+      </article>
+
+      <article class="qualifier-card">
+        <span class="qualifier-num">03 · Fit</span>
+        <h3>You read carefully and ask hard questions.</h3>
+        <p>Our best clients want to know the why, not just the what. They read the engagement letter. They challenge the assumptions. The work goes better when we're both that kind of careful.</p>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ============== §5 APPROACH 3-COL ============== -->
+<section class="section approach" id="approach">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">The approach</p>
+      <h2>Three commitments. <span class="accent">Printed in the engagement letter.</span></h2>
+      <p>We've said no to commissions, kickbacks, and proprietary products since 2016. The structure isn't a marketing line — it's why the math works.</p>
+    </div>
+
+    <div class="approach-grid">
+
+      <article class="approach-card">
+        <div class="approach-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v10"/><path d="M8.5 10.5h6"/><path d="M9.5 13.5h5"/></svg>
+        </div>
+        <h3>Fee-only.</h3>
+        <p>One flat advisory fee, billed quarterly, disclosed in writing before you sign anything. Zero commissions. Zero kickbacks. Zero revenue-share from fund companies. The number we publish is the only number you'll see.</p>
+        <span class="define"><span class="word">Fee-only</span> · the only money we make from you, comes from you.</span>
+      </article>
+
+      <article class="approach-card">
+        <div class="approach-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 6v6c0 4.5 3.4 8.4 8 9 4.6-.6 8-4.5 8-9V6l-8-3z"/><path d="m9 12 2 2 4-4"/></svg>
+        </div>
+        <h3>Fiduciary.</h3>
+        <p>A legal obligation to act in your interest. We sign the CFP Board fiduciary oath. We publish the conflict-of-interest policy. We tell you when something we recommend has an alternative you should consider.</p>
+        <span class="define"><span class="word">Fiduciary</span> · the obligation goes one way — and it's toward you.</span>
+      </article>
+
+      <article class="approach-card">
+        <div class="approach-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21V10l9-7 9 7v11"/><path d="M9 21v-6h6v6"/><circle cx="12" cy="11" r="1.5"/></svg>
+        </div>
+        <h3>Independent.</h3>
+        <p>No parent company. No quotas. No sales managers. We don't answer to Schwab, Vanguard, BlackRock, or anyone with a product to push. Custody sits at independent third parties so your money never touches our balance sheet.</p>
+        <span class="define"><span class="word">Independent</span> · the only seat at the table is yours.</span>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ============== §6 FOUNDER BIO ============== -->
+<section class="section founder" id="founder">
+  <div class="container">
+    <div class="founder-grid">
+      <div class="founder-photo">
+        <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=1100&q=72&auto=format&fit=crop" alt="Portrait of Marcus Reid, Managing Partner.">
+      </div>
+      <div class="founder-body">
+        <p class="eyebrow">The founder</p>
+        <h2>Marcus Reid, <span class="accent">Managing Partner.</span></h2>
+        <p>Marcus spent twelve years at a major wirehouse before he stopped pretending the structure could ever sit on the client's side. He left in 2015, registered the firm with the SEC in 2016, and has run Reid Capital as a fee-only fiduciary ever since.</p>
+        <p>He holds the CFA charter and the CFP® certification. Before finance he studied applied math at Stanford and spent two years at McKinsey advising private clients on succession planning. He writes a quarterly letter that goes to clients first and the public second.</p>
+        <blockquote class="founder-quote">"The structure of the engagement is the work. If you get that wrong, no portfolio is going to save you."</blockquote>
+        <p class="founder-attr">— Marcus Reid, founder & Managing Partner</p>
+        <div class="founder-creds">
+          <span class="founder-cred">CFA charterholder</span>
+          <span class="founder-cred">CFP® certified</span>
+          <span class="founder-cred">SEC-registered RIA</span>
+          <span class="founder-cred">Fiduciary oath, 2016</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ============== §7 TEAM GRID ============== -->
+<section class="section team" id="team">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">The team</p>
+      <h2>Three planners. <span class="accent">Each named on every plan.</span></h2>
+      <p>No junior-handoff. Whoever you meet on the discovery call is one of the three people who will actually do the work.</p>
+    </div>
+
+    <div class="team-grid">
+
+      <article class="team-card">
+        <div class="team-photo">
+          <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=900&q=72&auto=format&fit=crop" alt="Sarah Chen, Partner & CFP®">
+        </div>
+        <div class="team-body">
+          <h3 class="team-name">Sarah Chen</h3>
+          <p class="team-role">Partner · CFP®</p>
+          <p class="team-bio">Sarah leads the planning practice. Specialty: pre-IPO RSU concentrations, 10b5-1 plans, and the choreography of selling concentrated stock over five-to-seven year windows.</p>
+        </div>
+      </article>
+
+      <article class="team-card">
+        <div class="team-photo">
+          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=900&q=72&auto=format&fit=crop" alt="David Park, CFA — Investment Lead">
+        </div>
+        <div class="team-body">
+          <h3 class="team-name">David Park</h3>
+          <p class="team-role">Investment Lead · CFA</p>
+          <p class="team-bio">David runs portfolio construction. He spent eight years at Bridgewater before joining the firm in 2019. He believes in cheap broad index ownership and the surgical use of factor tilts where the evidence holds.</p>
+        </div>
+      </article>
+
+      <article class="team-card">
+        <div class="team-photo">
+          <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=900&q=72&auto=format&fit=crop" alt="Elena Vasquez, CFP® — Planning Lead">
+        </div>
+        <div class="team-body">
+          <h3 class="team-name">Elena Vasquez</h3>
+          <p class="team-role">Planning Lead · CFP®</p>
+          <p class="team-bio">Elena owns the tax + estate workstreams. Background: ten years at a regional CPA firm before pivoting to advisory in 2017. She's the one who finds the seventeen percent.</p>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ============== §8 CASE STUDIES 3-COL ============== -->
+<section class="section case-studies" id="case-studies">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">Case studies</p>
+      <h2>Three plans. <span class="accent">Names changed, math intact.</span></h2>
+      <p>Every plan is custom. These three show the kind of decisions we work on — and the kind of outcomes we measure ourselves on.</p>
+    </div>
+
+    <div class="case-grid">
+
+      <article class="case-card">
+        <div class="case-img">
+          <img src="https://images.unsplash.com/photo-1556157382-97eda2d62296?w=900&q=72&auto=format&fit=crop" alt="Modern office interior, natural light through tall windows.">
+          <span class="case-tag">Pre-IPO</span>
+        </div>
+        <div class="case-body">
+          <h3>Engineering lead, late-stage tech IPO.</h3>
+          <p>Vested $3.2M in RSUs across two grants. Built a five-year diversification plan using 10b5-1, an exchange fund for the most concentrated tranche, and donor-advised fund timing for two charitable years.</p>
+          <div class="case-metric-row">
+            <div class="case-metric"><p class="v">$3.2M</p><p class="l">RSU stack</p></div>
+            <div class="case-metric"><p class="v">5 yr</p><p class="l">Diversification</p></div>
+            <div class="case-metric"><p class="v">$340k</p><p class="l">Tax saved</p></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="case-card">
+        <div class="case-img">
+          <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=900&q=72&auto=format&fit=crop" alt="Modern conference room with wood and natural light.">
+          <span class="case-tag">Business sale</span>
+        </div>
+        <div class="case-body">
+          <h3>Founder exit, $8M after-tax proceeds.</h3>
+          <p>Structured the close into a CRT plus DAF combination, repositioned the housing footprint, and built a 25-year drawdown plan with a sequence-of-returns reserve. Preserved an additional 24% over the all-taxable baseline.</p>
+          <div class="case-metric-row">
+            <div class="case-metric"><p class="v">$8M</p><p class="l">Exit proceeds</p></div>
+            <div class="case-metric"><p class="v">24%</p><p class="l">Tax preserved</p></div>
+            <div class="case-metric"><p class="v">25 yr</p><p class="l">Plan horizon</p></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="case-card">
+        <div class="case-img">
+          <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=900&q=72&auto=format&fit=crop" alt="Handwritten notes on a leather-bound notebook beside a fountain pen.">
+          <span class="case-tag">Generational</span>
+        </div>
+        <div class="case-body">
+          <h3>Inherited wealth, two-generation horizon.</h3>
+          <p>Inheritance of $2.4M with a 529-funded education trust for three grandchildren, a values-aligned portfolio tilt the family had been wanting for a decade, and a 30-year intergenerational plan with documented assumptions and a 10-yr review cadence.</p>
+          <div class="case-metric-row">
+            <div class="case-metric"><p class="v">$2.4M</p><p class="l">Inheritance</p></div>
+            <div class="case-metric"><p class="v">3</p><p class="l">Beneficiaries</p></div>
+            <div class="case-metric"><p class="v">30 yr</p><p class="l">Plan horizon</p></div>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============== §9 INSIGHTS TEASER ============== -->
+<section class="section insights" id="insights">
+  <div class="container">
+
+    <div class="insights-head-row">
+      <div>
+        <p class="eyebrow">Insights</p>
+        <h2 style="font-family: var(--reid-font-display); font-size: 48px; line-height: 1.05; letter-spacing: -0.025em; font-weight: 700; color: var(--reid-ink); margin: 0;">The letter, <span class="accent" style="color: var(--reid-primary);">quarterly</span>.</h2>
+      </div>
+      <a href="#" class="reid-btn-secondary">All insights</a>
+    </div>
+
+    <div class="insights-grid">
+
+      <a href="#" class="insight">
+        <div class="insight-img">
+          <img src="https://images.unsplash.com/photo-1517994112540-009c47ea476b?w=900&q=72&auto=format&fit=crop" alt="Modern desk with notebook and natural light.">
+        </div>
+        <div class="insight-body">
+          <div class="insight-meta">
+            <span>Concentrated stock</span>
+            <span class="dot">·</span>
+            <span>12 min read</span>
+          </div>
+          <h3>The 2026 concentrated-stock playbook.</h3>
+          <p>Five decisions every RSU-rich household should run, in order. With the math behind each, the trade-offs we see most often, and the one trap people miss until year three.</p>
+        </div>
+      </a>
+
+      <a href="#" class="insight">
+        <div class="insight-img">
+          <img src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=900&q=72&auto=format&fit=crop" alt="Laptop and notebook on a wooden desk.">
+        </div>
+        <div class="insight-body">
+          <div class="insight-meta">
+            <span>Tax + estate</span>
+            <span class="dot">·</span>
+            <span>18 min read</span>
+          </div>
+          <h3>Trusts, DAFs, and the real math of giving.</h3>
+          <p>Charitable structures look interchangeable on the slide. They're not. A working primer on CRTs, DAFs, and private foundations — and the income, timing, and control trade-offs each one buys.</p>
+        </div>
+      </a>
+
+      <a href="#" class="insight">
+        <div class="insight-img">
+          <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=900&q=72&auto=format&fit=crop" alt="Books and papers on a desk near a window.">
+        </div>
+        <div class="insight-body">
+          <div class="insight-meta">
+            <span>Portfolio design</span>
+            <span class="dot">·</span>
+            <span>9 min read</span>
+          </div>
+          <h3>When 60/40 lied: building a bucket strategy that holds.</h3>
+          <p>The 2022 drawdown wasn't a fluke. A two-bucket plan, a sequence-of-returns reserve, and the case for accepting lower expected returns in exchange for a real ability to spend.</p>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ============== §10 DISCOVERY CTA + FORM ============== -->
+<section class="section discovery" id="discovery">
+  <div class="container">
+
+    <div class="discovery-body">
+      <p class="eyebrow">The discovery call</p>
+      <h2>30 minutes. <span class="accent">No commitment.</span></h2>
+      <p>The call is exactly what it sounds like: thirty minutes for us to listen, ask the right questions, and tell you whether we're the right firm. If we are, we'll send a written next-step plan within two business days. If we're not, we'll point you to someone who fits.</p>
+      <p>No products are sold on this call. No portfolios are pitched. No engagement letter is signed.</p>
+
+      <ul class="discovery-promises">
+        <li>30 minutes, by video or phone — your choice.</li>
+        <li>No products, no pitches, no on-the-call signups.</li>
+        <li>Written next-step plan within two business days.</li>
+        <li>If we're not the fit, we tell you and recommend who is.</li>
+      </ul>
+    </div>
+
+    <form class="discovery-form" onsubmit="event.preventDefault(); alert('Demo only — form is not connected.');">
+      <h3>Book your call.</h3>
+      <p class="sub">Reply within 1 business day</p>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="f-name">Name</label>
+          <input id="f-name" type="text" placeholder="Your name" required>
+        </div>
+        <div class="field">
+          <label for="f-email">Email</label>
+          <input id="f-email" type="email" placeholder="you@email.com" required>
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="f-phone">Phone</label>
+          <input id="f-phone" type="tel" placeholder="(415) 555-0184">
+        </div>
+        <div class="field">
+          <label for="f-assets">Investable assets</label>
+          <select id="f-assets" required>
+            <option value="">Range</option>
+            <option>$500k – $1M</option>
+            <option>$1M – $3M</option>
+            <option>$3M – $10M</option>
+            <option>$10M+</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="f-msg">What's on your mind?</label>
+        <textarea id="f-msg" placeholder="A decision on the table, a question you want answered, or just the gist of where you are."></textarea>
+      </div>
+
+      <div class="submit-row">
+        <button type="submit" class="reid-btn">Send</button>
+        <span class="form-fine">We reply within 1 business day</span>
+      </div>
+
+      <div class="calendly-strip">
+        <span class="label">Or skip the form</span>
+        <span class="text">Pick a time directly on the Calendly that hits our calendar.</span>
+        <a href="#" target="_blank" rel="noopener">Open Calendly →</a>
+      </div>
+    </form>
+
+  </div>
+</section>
+
+<!-- ============== §11 CLOSING CTA ============== -->
+<section class="closing">
+  <div class="container">
+    <p class="closing-eyebrow">A fiduciary plan</p>
+    <h2>The plan is the deliverable. <span class="accent">Not the products underneath.</span></h2>
+    <p>Thirty minutes. No commitment. No products sold on the first call. If we're not the right firm, we'll tell you on the call and recommend someone who is.</p>
+    <div class="closing-cta-row">
+      <a href="#discovery" class="reid-btn reid-btn-onDark">Book your discovery call</a>
+      <span class="closing-meta">San Francisco · Tue – Fri · 9 am – 5 pm PT</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============== §12 FOOTER ============== -->
+<footer class="reid-footer">
+  <div class="container">
+
+    <div class="footer-grid">
+
+      <div class="footer-col">
+        <p class="footer-brand">Reid <span class="accent">Capital</span></p>
+        <p class="footer-brand-tag">Partners · Est. 2016</p>
+        <p class="footer-brand-body">Boutique fee-only fiduciary RIA, working with about forty households across the country. Headquartered in San Francisco.</p>
+        <div class="footer-socials">
+          <a href="#" aria-label="LinkedIn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0H5a5 5 0 0 0-5 5v14a5 5 0 0 0 5 5h14a5 5 0 0 0 5-5V5a5 5 0 0 0-5-5zM8 19H5V8h3v11zM6.5 6.7a1.8 1.8 0 1 1 0-3.6 1.8 1.8 0 0 1 0 3.6zM20 19h-3v-5.6c0-1.4-.5-2.4-1.8-2.4-1 0-1.6.7-1.9 1.4-.1.2-.1.5-.1.8V19h-3V8h3v1.3c.4-.6 1.1-1.5 2.7-1.5 2 0 3.5 1.3 3.5 4.1V19z"/></svg></a>
+          <a href="#" aria-label="Email"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Services</h4>
+        <ul>
+          <li><a href="#">Planning</a></li>
+          <li><a href="#">Investments</a></li>
+          <li><a href="#">Tax + estate</a></li>
+          <li><a href="#">Insurance review</a></li>
+          <li><a href="#">Concentrated stock</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <ul>
+          <li><a href="#insights">Insights</a></li>
+          <li><a href="#">Calculators</a></li>
+          <li><a href="#">Form ADV (PDF)</a></li>
+          <li><a href="#">Fee schedule</a></li>
+          <li><a href="#">Disclosures</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Office</h4>
+        <ul>
+          <li>312 Marina Boulevard, Suite 4</li>
+          <li>San Francisco, CA 94123</li>
+          <li>(415) 555-0184</li>
+          <li><a href="mailto:hello@reidcapital.com">hello@reidcapital.com</a></li>
+          <li><a href="#">LinkedIn →</a></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2026 Reid Capital Partners LLC</span>
+      <p class="footer-oath">A fee-only fiduciary, by oath and by structure. We do not accept commissions, kickbacks, or revenue-share from any product issuer.</p>
+      <span>SEC-registered · CRD #287541</span>
+    </div>
+
+  </div>
+</footer>
+
+</body>
+</html>

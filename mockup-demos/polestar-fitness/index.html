@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Polestar Fitness — Premium signature-method studio · Brooklyn</title>
+<meta name="description" content="A 45-minute signature method built for athletes, open to everyone. Train smart, recover well, measure progress.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600;700;800&family=Karla:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<style>
+/* =============================================================================
+ * Polestar Fitness — Bundle A (Performance Mono) — index.html
+ * All values from verticals/polestar-fitness.md §4.bundles.A
+ * Mobile-first, all 4 breakpoints (375 / 768 / 1024 / 1440) in one CSS pass
+ *
+ * Catalog picks implemented (per IMPLEMENTATION-DEPTH-BENCHMARK.md):
+ *   nav_pattern   : NAV-PATTERNS.md #2 Classic full-bar over hero (centered links + outline CTA)
+ *   hero_pattern  : HERO-COMPOSITIONS.md #6 Full-bleed video background + overlay text
+ *   footer_pattern: FOOTER-STYLES.md #1 4-col dark with brand-left
+ *   card_style    : CARD-VARIATIONS.md #3 Minimal 3-up icon-top feature
+ *   cta_style     : CTA-PATTERNS.md #1 Solid pill primary
+ *   divider_style : DIVIDER-PATTERNS.md #1 Hard edge (color change only)
+ *   surface       : SURFACE-PATTERNS.md #3 corners / #10 card / #18 button / #26 divider / #34 image / #39 form
+ *   motion        : MOTION-PATTERNS.md #2 btn-hover / #10 card-hover / #18 link-hover / #21 entrance / #26 scroll / #31 cursor / #36+#37 micro / #43 page-transition
+ *   form_style    : FORM-LAYOUTS.md #8 Booking form (shared)
+ *   faq_style     : FAQ-ACCORDION.md #1 Classic expand-rows with + indicator (shared)
+ *   sticky_cta    : STICKY-CTA-BAR.md #1 Full-width pill bottom-bar (shared)
+ * ============================================================================= */
+
+@view-transition { navigation: auto; }
+::view-transition-old(root) { animation: pf-vt-fade-out 220ms ease forwards; }
+::view-transition-new(root) { animation: pf-vt-fade-in 320ms ease forwards; }
+@keyframes pf-vt-fade-out { to { opacity: 0; } }
+@keyframes pf-vt-fade-in { from { opacity: 0; } to { opacity: 1; } }
+
+:root {
+  --pf-primary:        #0A0A0A;
+  --pf-primary-deep:   #000000;
+  --pf-primary-soft:   #E8E8E5;
+  --pf-accent:         #1A1A1A;
+  --pf-accent-soft:    #E8E8E5;
+  --pf-bg:             #F5F5F2;
+  --pf-bg-2:           #FFFFFF;
+  --pf-ink:            #0A0A0A;
+  --pf-ink-soft:       #5A5A55;
+  --pf-line:           #DDDDD8;
+  --pf-signature:      #666666;
+
+  --pf-font-display:   'Albert Sans', system-ui, sans-serif;
+  --pf-font-body:      'Karla', system-ui, sans-serif;
+  --pf-font-mono:      'JetBrains Mono', ui-monospace, monospace;
+
+  /* SURFACE-PATTERNS.md #3 Modern 8-12px — SM LOCKED at 8px per James pick */
+  --pf-radius-sm:      8px;
+  --pf-radius-md:      12px;
+  --pf-radius-lg:      16px;
+
+  --pf-section-py:     96px;
+  --pf-container-max:  1340px;
+  --pf-container-px:   32px;
+  --pf-grid-gap:       28px;
+
+  --pf-nav-h:          80px;
+}
+
+@media (max-width: 1024px) { :root { --pf-section-py: 80px; --pf-grid-gap: 24px; --pf-nav-h: 72px; } }
+@media (max-width: 768px)  { :root { --pf-section-py: 64px; --pf-container-px: 24px; --pf-grid-gap: 20px; --pf-nav-h: 64px; } }
+@media (max-width: 375px)  { :root { --pf-section-py: 48px; --pf-container-px: 20px; --pf-grid-gap: 16px; --pf-nav-h: 60px; } }
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: var(--pf-font-body);
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--pf-ink);
+  background: var(--pf-bg);
+  -webkit-font-smoothing: antialiased;
+}
+img { max-width: 100%; height: auto; display: block; }
+a { color: inherit; text-decoration: none; }
+
+/* ===== Reusable utilities ===== */
+.container { max-width: var(--pf-container-max); margin: 0 auto; padding: 0 var(--pf-container-px); }
+.section { padding: var(--pf-section-py) 0; }
+.eyebrow { font-family: var(--pf-font-mono); font-size: 11px; font-weight: 700; letter-spacing: 0.24em; text-transform: uppercase; color: var(--pf-signature); margin: 0 0 16px; }
+.section-title { font-family: var(--pf-font-display); font-size: 56px; line-height: 1.05; letter-spacing: -0.025em; font-weight: 600; margin: 0 0 20px; color: var(--pf-ink); max-width: 22ch; }
+.section-title .accent { font-style: italic; font-weight: 500; color: var(--pf-signature); }
+.section-intro { font-family: var(--pf-font-body); font-size: 18px; line-height: 1.55; color: var(--pf-ink-soft); max-width: 64ch; margin: 0 0 56px; }
+.section-head-row { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 24px; margin-bottom: 56px; }
+.section-head-row .section-title, .section-head-row .section-intro { margin-bottom: 0; }
+
+@media (max-width: 1024px) { .section-title { font-size: 48px; } }
+@media (max-width: 768px)  { .section-title { font-size: 40px; } .section-intro { font-size: 17px; margin-bottom: 40px; } }
+@media (max-width: 375px)  { .section-title { font-size: 32px; } }
+
+/* ===== Buttons (SURFACE #18 Solid-pill + MOTION #2 Color-shift) ===== */
+.pf-btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 14px 28px;
+  background: var(--pf-primary); color: var(--pf-bg);
+  border: 0; border-radius: 9999px;
+  font-family: var(--pf-font-body); font-weight: 600; font-size: 15px; line-height: 1;
+  cursor: pointer; text-decoration: none;
+  transition: background-color 160ms ease, color 160ms ease, transform 80ms ease;
+}
+.pf-btn::after { content: "→"; transition: transform 220ms cubic-bezier(0.65, 0, 0.35, 1); }
+.pf-btn:hover { background: color-mix(in srgb, var(--pf-primary) 88%, white); }
+.pf-btn:hover::after { transform: translateX(5px); }
+.pf-btn:active { transform: scale(0.97); }
+.pf-btn:focus-visible { outline: 0; box-shadow: 0 0 0 3px color-mix(in srgb, var(--pf-primary) 25%, transparent); }
+
+.pf-btn-secondary { background: transparent; color: var(--pf-ink); border: 1px solid var(--pf-line); }
+.pf-btn-secondary:hover { background: var(--pf-bg-2); color: var(--pf-ink); border-color: var(--pf-ink); }
+.pf-btn-secondary:focus-visible { box-shadow: 0 0 0 3px color-mix(in srgb, var(--pf-ink) 18%, transparent); }
+
+.pf-btn-on-dark { background: var(--pf-bg); color: var(--pf-ink); }
+.pf-btn-on-dark:hover { background: color-mix(in srgb, var(--pf-bg) 88%, black); }
+.pf-btn-on-dark-secondary { background: transparent; color: var(--pf-bg); border: 1px solid rgba(255,255,255,0.24); }
+.pf-btn-on-dark-secondary:hover { background: rgba(255,255,255,0.06); color: var(--pf-bg); border-color: rgba(255,255,255,0.5); }
+
+/* ===== Link hover (MOTION #18 Color-shift) ===== */
+.pf-link {
+  color: var(--pf-ink); text-decoration: underline; text-decoration-color: var(--pf-line);
+  text-underline-offset: 4px;
+  transition: color 160ms ease, text-decoration-color 160ms ease;
+}
+.pf-link:hover { color: var(--pf-primary); text-decoration-color: var(--pf-primary); }
+
+/* ===== Card (SURFACE #10 Soft-shadow-lift + MOTION #10 Lift) ===== */
+.pf-card {
+  background: var(--pf-bg-2);
+  border: 1px solid var(--pf-line);
+  border-radius: var(--pf-radius-md);
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,0.04), 0 1px 3px 0 rgba(0,0,0,0.06);
+  padding: 32px 32px;
+  transition: transform 220ms cubic-bezier(0.65, 0, 0.35, 1), box-shadow 220ms ease;
+}
+.pf-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px -5px rgba(0,0,0,0.08), 0 8px 10px -6px rgba(0,0,0,0.04);
+}
+@media (max-width: 768px) { .pf-card { padding: 24px 24px; } }
+
+/* ===== Inputs (SURFACE #39 Boxed-default + MOTION #37 focus-visible) ===== */
+.pf-input {
+  width: 100%;
+  padding: 14px 16px;
+  background: var(--pf-bg-2); color: var(--pf-ink);
+  border: 1px solid var(--pf-line); border-radius: var(--pf-radius-sm);
+  font-family: var(--pf-font-body); font-weight: 400; font-size: 15px; line-height: 1.4;
+  transition: border-color 200ms ease, box-shadow 200ms ease;
+}
+.pf-input:focus-visible {
+  outline: 0; border-color: var(--pf-primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--pf-primary) 20%, transparent);
+}
+.pf-label { font-family: var(--pf-font-mono); font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-ink-soft); display: block; margin-bottom: 8px; }
+
+/* ===== Page entrance / scroll-triggered (MOTION #21 + #26) ===== */
+.pf-reveal {
+  opacity: 0; transform: translateY(20px);
+  animation: pf-fade-up 600ms cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+@keyframes pf-fade-up { to { opacity: 1; transform: translateY(0); } }
+.pf-reveal-on-scroll {
+  animation: pf-fade-in-on-view linear both;
+  animation-timeline: view();
+  animation-range: entry 0% cover 30%;
+}
+@keyframes pf-fade-in-on-view { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+@supports not (animation-timeline: view()) {
+  .pf-reveal-on-scroll { opacity: 0; transform: translateY(30px); transition: opacity 600ms ease, transform 600ms ease; }
+  .pf-reveal-on-scroll.is-visible { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+/* ===== NAV (NAV-PATTERNS #2 Classic full-bar over hero) ===== */
+.pf-nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+  height: var(--pf-nav-h);
+  display: flex; align-items: center;
+  background: transparent;
+  transition: background-color 220ms ease, border-color 220ms ease, color 220ms ease;
+}
+.pf-nav.is-sticky { background: var(--pf-bg); border-bottom: 1px solid var(--pf-line); }
+.pf-nav .container { display: flex; align-items: center; justify-content: space-between; gap: 24px; width: 100%; }
+.pf-nav-logo { font-family: var(--pf-font-display); font-weight: 800; font-size: 22px; letter-spacing: -0.02em; color: var(--pf-bg); text-transform: none; }
+.pf-nav.is-sticky .pf-nav-logo { color: var(--pf-ink); }
+.pf-nav-logo small { font-family: var(--pf-font-mono); font-size: 9px; font-weight: 700; letter-spacing: 0.22em; color: rgba(255,255,255,0.6); display: block; line-height: 1; margin-top: 4px; }
+.pf-nav.is-sticky .pf-nav-logo small { color: var(--pf-signature); }
+.pf-nav-links { display: flex; align-items: center; gap: 32px; list-style: none; padding: 0; margin: 0; }
+.pf-nav-links a { font-family: var(--pf-font-body); font-size: 14px; font-weight: 500; letter-spacing: 0.04em; color: var(--pf-bg); transition: color 160ms ease; }
+.pf-nav.is-sticky .pf-nav-links a { color: var(--pf-ink); }
+.pf-nav-links a:hover { color: var(--pf-bg); opacity: 0.7; }
+.pf-nav.is-sticky .pf-nav-links a:hover { color: var(--pf-signature); opacity: 1; }
+.pf-nav-cta { display: inline-flex; }
+.pf-nav-cta .pf-btn { padding: 10px 20px; font-size: 14px; background: var(--pf-bg); color: var(--pf-ink); }
+.pf-nav.is-sticky .pf-nav-cta .pf-btn { background: var(--pf-primary); color: var(--pf-bg); }
+
+.pf-nav-burger {
+  display: none; appearance: none;
+  width: 44px; height: 44px;
+  background: transparent; border: 0; cursor: pointer;
+  padding: 10px; align-items: center; justify-content: center;
+  color: var(--pf-bg);
+}
+.pf-nav.is-sticky .pf-nav-burger { color: var(--pf-ink); }
+.pf-nav-burger span { display: block; width: 22px; height: 1.5px; background: currentColor; position: relative; }
+.pf-nav-burger span::before, .pf-nav-burger span::after { content: ""; position: absolute; left: 0; width: 22px; height: 1.5px; background: currentColor; }
+.pf-nav-burger span::before { top: -7px; }
+.pf-nav-burger span::after  { top: 7px; }
+.pf-nav-burger:focus-visible { outline: 0; box-shadow: 0 0 0 3px color-mix(in srgb, currentColor 30%, transparent); border-radius: 4px; }
+
+/* Nav drawer (mobile) */
+.pf-drawer {
+  position: fixed; top: 0; right: -100%; bottom: 0; width: min(320px, 88vw);
+  background: var(--pf-bg); border-left: 1px solid var(--pf-line);
+  z-index: 60;
+  display: flex; flex-direction: column; padding: 28px 24px;
+  transition: right 320ms cubic-bezier(0.65, 0, 0.35, 1);
+  box-shadow: -10px 0 30px -10px rgba(0,0,0,0.18);
+}
+.pf-drawer.is-open { right: 0; }
+.pf-drawer-close { align-self: flex-end; appearance: none; background: transparent; border: 0; cursor: pointer; padding: 8px; color: var(--pf-ink); font-size: 22px; line-height: 1; }
+.pf-drawer-close:focus-visible { outline: 0; box-shadow: 0 0 0 3px color-mix(in srgb, var(--pf-ink) 20%, transparent); border-radius: 4px; }
+.pf-drawer ul { list-style: none; padding: 0; margin: 24px 0 0; display: flex; flex-direction: column; gap: 12px; }
+.pf-drawer a { display: block; padding: 12px 4px; font-family: var(--pf-font-display); font-size: 22px; font-weight: 600; color: var(--pf-ink); border-bottom: 1px solid var(--pf-line); }
+.pf-drawer a:hover { color: var(--pf-signature); }
+.pf-drawer-cta { margin-top: auto; padding-top: 32px; }
+.pf-drawer-cta .pf-btn { width: 100%; justify-content: center; }
+.pf-drawer-scrim { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 55; opacity: 0; pointer-events: none; transition: opacity 320ms ease; }
+.pf-drawer-scrim.is-open { opacity: 1; pointer-events: auto; }
+
+@media (max-width: 1024px) {
+  .pf-nav-links, .pf-nav-cta { display: none; }
+  .pf-nav-burger { display: inline-flex; }
+}
+
+/* ===== HERO (HERO-COMPOSITIONS #6 Full-bleed video bg + overlay text) — bg dark / full-bleed-photo / open-layout ===== */
+.hero {
+  position: relative;
+  min-height: 92vh;
+  display: flex; align-items: center;
+  color: var(--pf-bg);
+  background: var(--pf-primary);
+  overflow: hidden;
+  isolation: isolate;
+}
+.hero-photo {
+  position: absolute; inset: 0; z-index: -1;
+  background-image:
+    linear-gradient(180deg, rgba(10,10,10,0.45) 0%, rgba(10,10,10,0.35) 40%, rgba(10,10,10,0.7) 100%),
+    url("https://images.unsplash.com/photo-1639660299469-9e9279364c97?w=1600&q=72&auto=format&fit=crop");
+  background-size: cover; background-position: center;
+}
+.hero .container { position: relative; padding-top: calc(var(--pf-nav-h) + 64px); padding-bottom: 96px; }
+.hero-eyebrow { font-family: var(--pf-font-mono); font-size: 11px; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(255,255,255,0.72); margin: 0 0 28px; }
+.hero h1 {
+  font-family: var(--pf-font-display);
+  font-size: 96px; line-height: 1.0; letter-spacing: -0.035em; font-weight: 700;
+  margin: 0 0 28px; color: var(--pf-bg); max-width: 14ch;
+}
+.hero h1 .accent { font-style: italic; font-weight: 500; color: var(--pf-primary-soft); }
+.hero-sub { font-family: var(--pf-font-body); font-size: 20px; line-height: 1.5; font-weight: 400; color: rgba(255,255,255,0.78); max-width: 52ch; margin: 0 0 40px; }
+.hero-ctas { display: inline-flex; gap: 14px; flex-wrap: wrap; }
+.hero-meta { font-family: var(--pf-font-mono); font-size: 11px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.6); margin: 24px 0 0; }
+
+@media (max-width: 1024px) { .hero h1 { font-size: 80px; } }
+@media (max-width: 768px)  { .hero { min-height: 88vh; } .hero h1 { font-size: 56px; } .hero-sub { font-size: 17px; } }
+@media (max-width: 375px)  { .hero h1 { font-size: 44px; } .hero .container { padding-top: calc(var(--pf-nav-h) + 32px); padding-bottom: 64px; } }
+
+/* ===== PRESS BAND — bg light / decorative-illustration / open-layout ===== */
+.press { background: var(--pf-bg); padding: 56px 0; }
+.press-row { display: flex; justify-content: space-between; align-items: center; gap: 32px; flex-wrap: wrap; }
+.press-row .press-label { font-family: var(--pf-font-mono); font-size: 11px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--pf-ink-soft); white-space: nowrap; }
+.press-logos { display: flex; align-items: center; gap: 40px; flex-wrap: wrap; flex: 1; justify-content: center; }
+.press-logo { font-family: var(--pf-font-display); font-weight: 700; font-size: 18px; letter-spacing: -0.01em; color: var(--pf-ink-soft); opacity: 0.78; }
+@media (max-width: 768px) { .press-row { justify-content: center; } .press-row .press-label { width: 100%; text-align: center; } .press-logos { gap: 24px; } .press-logo { font-size: 16px; } }
+
+/* ===== METHOD EXPLAINER — bg warm / inset-photo / shadow-lift ===== */
+.method { background: #FAF8F2; }
+.method .container { display: grid; grid-template-columns: 0.95fr 1.05fr; gap: 64px; align-items: center; }
+@media (max-width: 1024px) { .method .container { gap: 48px; } }
+@media (max-width: 768px)  { .method .container { grid-template-columns: 1fr; gap: 40px; } }
+
+.method-img { aspect-ratio: 4/5; border-radius: var(--pf-radius-md); overflow: hidden; box-shadow: 0 20px 50px -20px rgba(0,0,0,0.18); }
+.method-img img { width: 100%; height: 100%; object-fit: cover; }
+.method-body { display: flex; flex-direction: column; gap: 24px; }
+.method-pillars { display: flex; flex-direction: column; gap: 20px; margin-top: 16px; }
+.method-pillar { display: flex; align-items: flex-start; gap: 18px; padding: 18px 0; border-top: 1px solid var(--pf-line); }
+.method-pillar:first-child { border-top: 0; padding-top: 0; }
+.method-pillar-num { font-family: var(--pf-font-mono); font-size: 12px; font-weight: 700; letter-spacing: 0.18em; color: var(--pf-signature); min-width: 36px; padding-top: 4px; }
+.method-pillar h3 { font-family: var(--pf-font-display); font-size: 22px; font-weight: 600; margin: 0 0 6px; color: var(--pf-ink); }
+.method-pillar p { font-family: var(--pf-font-body); font-size: 16px; line-height: 1.55; color: var(--pf-ink-soft); margin: 0; }
+
+/* ===== CLASS SCHEDULE — bg dark / full-bleed-photo / dark-anchor-panel ===== */
+.schedule {
+  position: relative; isolation: isolate;
+  color: var(--pf-bg);
+  background: var(--pf-primary-deep);
+  overflow: hidden;
+}
+.schedule-photo {
+  position: absolute; inset: 0; z-index: -1;
+  background-image:
+    linear-gradient(180deg, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.55) 60%, rgba(0,0,0,0.85) 100%),
+    url("https://images.unsplash.com/photo-1674748597421-2d77b9ca5084?w=1600&q=72&auto=format&fit=crop");
+  background-size: cover; background-position: center;
+}
+.schedule .eyebrow { color: rgba(255,255,255,0.65); }
+.schedule .section-title { color: var(--pf-bg); }
+.schedule .section-title .accent { color: var(--pf-primary-soft); }
+.schedule .section-intro { color: rgba(255,255,255,0.72); }
+
+.schedule-panel {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: var(--pf-radius-md);
+  padding: 32px;
+  backdrop-filter: blur(8px);
+}
+@media (max-width: 768px) { .schedule-panel { padding: 24px 20px; } }
+
+.schedule-grid {
+  display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px;
+}
+@media (max-width: 1024px) { .schedule-grid { grid-template-columns: repeat(4, 1fr); } }
+@media (max-width: 768px)  { .schedule-grid { grid-template-columns: repeat(3, 1fr); gap: 6px; } }
+@media (max-width: 375px)  { .schedule-grid { grid-template-columns: repeat(2, 1fr); } }
+
+.schedule-day {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: var(--pf-radius-sm);
+  padding: 16px 12px;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.schedule-day-name { font-family: var(--pf-font-mono); font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.5); }
+.schedule-class { font-family: var(--pf-font-display); font-size: 14px; font-weight: 600; color: var(--pf-bg); margin: 0; }
+.schedule-class-time { font-family: var(--pf-font-mono); font-size: 11px; color: rgba(255,255,255,0.55); margin: 0; }
+.schedule-cta-row { margin-top: 28px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+.schedule-cta-row p { font-family: var(--pf-font-body); font-size: 14px; color: rgba(255,255,255,0.66); margin: 0; }
+
+/* ===== BENEFITS — bg light / decorative-illustration / hairline-card ===== */
+.benefits { background: var(--pf-bg); }
+.benefits-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--pf-grid-gap); }
+@media (max-width: 768px) { .benefits-grid { grid-template-columns: 1fr; } }
+
+.benefit-card {
+  background: var(--pf-bg-2);
+  border: 1px solid var(--pf-line);
+  border-radius: var(--pf-radius-md);
+  padding: 40px 36px;
+  transition: transform 220ms cubic-bezier(0.65, 0, 0.35, 1), border-color 220ms ease;
+}
+.benefit-card:hover { transform: translateY(-3px); border-color: var(--pf-signature); }
+.benefit-icon {
+  width: 48px; height: 48px; display: flex; align-items: center; justify-content: center;
+  border: 1.5px solid var(--pf-ink); border-radius: 50%;
+  font-family: var(--pf-font-display); font-weight: 700; font-size: 20px; color: var(--pf-ink);
+  margin-bottom: 28px;
+}
+.benefit-card h3 { font-family: var(--pf-font-display); font-size: 24px; font-weight: 600; margin: 0 0 12px; color: var(--pf-ink); }
+.benefit-card p { font-family: var(--pf-font-body); font-size: 16px; line-height: 1.55; color: var(--pf-ink-soft); margin: 0; }
+
+/* ===== COACH GRID — bg warm / inset-photo / hairline-card ===== */
+.coaches { background: #FAF8F2; }
+.coach-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--pf-grid-gap); }
+@media (max-width: 1024px) { .coach-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 768px)  { .coach-grid { grid-template-columns: 1fr; } }
+
+.coach-card { display: flex; flex-direction: column; gap: 16px; }
+.coach-img { aspect-ratio: 4/5; border-radius: var(--pf-radius-md); overflow: hidden; background: var(--pf-bg-2); }
+.coach-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 600ms cubic-bezier(0.65, 0, 0.35, 1); }
+.coach-card:hover .coach-img img { transform: scale(1.04); }
+.coach-name { font-family: var(--pf-font-display); font-size: 22px; font-weight: 600; margin: 0; color: var(--pf-ink); }
+.coach-role { font-family: var(--pf-font-mono); font-size: 11px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--pf-signature); margin: 4px 0 0; }
+.coach-creds { font-family: var(--pf-font-body); font-size: 14px; color: var(--pf-ink-soft); margin: 8px 0 0; }
+
+/* ===== TESTIMONIALS — bg light / inset-photo / shadow-lift ===== */
+.testimonials { background: var(--pf-bg); }
+.testimonial-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--pf-grid-gap); }
+@media (max-width: 1024px) { .testimonial-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 768px)  { .testimonial-grid { grid-template-columns: 1fr; } }
+
+.t-card { display: flex; flex-direction: column; padding: 36px 36px; }
+.t-card-stars { color: var(--pf-ink); font-size: 13px; letter-spacing: 0.2em; margin: 0 0 16px; }
+.t-card-quote { font-family: var(--pf-font-display); font-size: 19px; line-height: 1.45; font-weight: 500; color: var(--pf-ink); margin: 0 0 24px; flex: 1; }
+.t-card-foot { display: flex; align-items: center; gap: 14px; margin-top: auto; }
+.t-card-avatar { width: 48px; height: 48px; border-radius: 50%; overflow: hidden; background: var(--pf-line); flex-shrink: 0; }
+.t-card-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.t-card-name { font-family: var(--pf-font-body); font-size: 15px; font-weight: 600; color: var(--pf-ink); margin: 0; }
+.t-card-role { font-family: var(--pf-font-mono); font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-signature); margin: 2px 0 0; }
+
+/* ===== RECOVERY AMENITIES — bg dark / full-bleed-photo / image-overlay ===== */
+.recovery {
+  position: relative; isolation: isolate;
+  background: var(--pf-primary);
+  color: var(--pf-bg);
+  overflow: hidden;
+}
+.recovery-photo {
+  position: absolute; inset: 0; z-index: -1;
+  background-image:
+    linear-gradient(105deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.6) 50%, rgba(0,0,0,0.4) 100%),
+    url("https://images.unsplash.com/photo-1770625468069-9393585d7113?w=1600&q=72&auto=format&fit=crop");
+  background-size: cover; background-position: center;
+}
+.recovery .eyebrow { color: rgba(255,255,255,0.65); }
+.recovery .section-title { color: var(--pf-bg); max-width: 16ch; }
+.recovery .section-title .accent { color: var(--pf-primary-soft); }
+.recovery .section-intro { color: rgba(255,255,255,0.74); max-width: 54ch; }
+.recovery-features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 48px; }
+@media (max-width: 768px) { .recovery-features { grid-template-columns: 1fr; gap: 16px; } }
+.r-feature {
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14);
+  border-radius: var(--pf-radius-md);
+  padding: 28px 28px;
+  backdrop-filter: blur(8px);
+}
+.r-feature-img { aspect-ratio: 4/5; border-radius: var(--pf-radius-sm); overflow: hidden; margin-bottom: 16px; background: rgba(0,0,0,0.4); }
+.r-feature-img img { width: 100%; height: 100%; object-fit: cover; }
+.r-feature h3 { font-family: var(--pf-font-display); font-size: 22px; font-weight: 600; margin: 0 0 8px; color: var(--pf-bg); }
+.r-feature p { font-family: var(--pf-font-body); font-size: 14px; line-height: 1.55; color: rgba(255,255,255,0.72); margin: 0; }
+
+/* ===== PRICING — bg light / none-with-justification / hairline-card ===== */
+.pricing { background: var(--pf-bg); }
+.pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--pf-grid-gap); align-items: stretch; }
+@media (max-width: 1024px) { .pricing-grid { grid-template-columns: 1fr; max-width: 540px; margin: 0 auto; } }
+.p-tier {
+  background: var(--pf-bg-2);
+  border: 1px solid var(--pf-line);
+  border-radius: var(--pf-radius-md);
+  padding: 40px 36px;
+  display: flex; flex-direction: column;
+  transition: transform 220ms cubic-bezier(0.65, 0, 0.35, 1), border-color 220ms ease;
+}
+.p-tier.featured { border-color: var(--pf-ink); transform: translateY(-8px); position: relative; }
+.p-tier.featured::before { content: "Most popular"; position: absolute; top: -12px; right: 24px; background: var(--pf-ink); color: var(--pf-bg); padding: 4px 12px; border-radius: 9999px; font-family: var(--pf-font-mono); font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; }
+.p-tier:hover { transform: translateY(-3px); border-color: var(--pf-signature); }
+.p-tier.featured:hover { transform: translateY(-12px); }
+.p-tier-name { font-family: var(--pf-font-mono); font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--pf-signature); margin: 0 0 16px; }
+.p-tier-price { display: flex; align-items: baseline; gap: 6px; margin-bottom: 24px; }
+.p-tier-price .num { font-family: var(--pf-font-display); font-size: 56px; font-weight: 700; line-height: 1; color: var(--pf-ink); letter-spacing: -0.02em; }
+.p-tier-price .unit { font-family: var(--pf-font-body); font-size: 15px; color: var(--pf-ink-soft); }
+.p-tier ul { list-style: none; padding: 0; margin: 0 0 32px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+.p-tier li { font-family: var(--pf-font-body); font-size: 15px; line-height: 1.45; color: var(--pf-ink); padding-left: 24px; position: relative; }
+.p-tier li::before { content: "—"; position: absolute; left: 0; color: var(--pf-signature); font-weight: 700; }
+.p-tier .pf-btn { width: 100%; justify-content: center; }
+
+/* ===== FAQ — bg warm / none-with-justification / hairline-card ===== */
+.faq { background: #FAF8F2; }
+.faq-list { max-width: 800px; margin: 0 auto; }
+.faq-item { border-top: 1px solid var(--pf-line); }
+.faq-item:last-child { border-bottom: 1px solid var(--pf-line); }
+.faq-trigger {
+  width: 100%; appearance: none; background: transparent; border: 0; cursor: pointer;
+  padding: 24px 0;
+  display: flex; justify-content: space-between; align-items: center; gap: 24px;
+  font-family: var(--pf-font-display); font-size: 19px; font-weight: 600; line-height: 1.3; color: var(--pf-ink);
+  text-align: left;
+}
+.faq-trigger:hover { color: var(--pf-signature); }
+.faq-trigger:focus-visible { outline: 0; box-shadow: 0 0 0 3px color-mix(in srgb, var(--pf-primary) 20%, transparent); border-radius: 4px; }
+.faq-icon { font-family: var(--pf-font-display); font-size: 22px; font-weight: 300; color: var(--pf-signature); transition: transform 280ms cubic-bezier(0.65, 0, 0.35, 1); flex-shrink: 0; }
+.faq-item[data-open="true"] .faq-icon { transform: rotate(45deg); }
+.faq-panel { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 320ms cubic-bezier(0.65, 0, 0.35, 1); }
+.faq-item[data-open="true"] .faq-panel { grid-template-rows: 1fr; }
+.faq-panel > div { overflow: hidden; padding-bottom: 24px; }
+.faq-panel p { font-family: var(--pf-font-body); font-size: 16px; line-height: 1.6; color: var(--pf-ink-soft); margin: 0; max-width: 64ch; }
+
+/* ===== NEWSLETTER BAND — bg accent (matte ink) / none-with-justification / open-layout ===== */
+.newsletter {
+  background: var(--pf-accent);
+  color: var(--pf-bg);
+  padding: 64px 0;
+}
+.newsletter .container { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 56px; align-items: center; }
+@media (max-width: 768px) { .newsletter .container { grid-template-columns: 1fr; gap: 32px; } }
+.newsletter .eyebrow { color: rgba(255,255,255,0.65); }
+.newsletter h2 { font-family: var(--pf-font-display); font-size: 36px; line-height: 1.15; font-weight: 600; margin: 0; color: var(--pf-bg); max-width: 16ch; }
+.newsletter h2 .accent { font-style: italic; font-weight: 500; color: var(--pf-primary-soft); }
+.newsletter-form { display: flex; gap: 12px; flex-wrap: wrap; align-items: stretch; }
+.newsletter-form .pf-input {
+  flex: 1; min-width: 220px;
+  background: rgba(255,255,255,0.06); color: var(--pf-bg);
+  border-color: rgba(255,255,255,0.18);
+}
+.newsletter-form .pf-input::placeholder { color: rgba(255,255,255,0.4); }
+.newsletter-form .pf-input:focus-visible { border-color: var(--pf-bg); box-shadow: 0 0 0 3px rgba(255,255,255,0.2); }
+.newsletter-fine { font-family: var(--pf-font-mono); font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin: 12px 0 0; }
+@media (max-width: 768px) { .newsletter h2 { font-size: 28px; } }
+
+/* ===== CLOSING CTA — bg dark / full-bleed-photo / open-layout ===== */
+.closing {
+  position: relative; isolation: isolate;
+  background: var(--pf-primary-deep);
+  color: var(--pf-bg);
+  text-align: center;
+  overflow: hidden;
+}
+.closing-photo {
+  position: absolute; inset: 0; z-index: -1;
+  background-image:
+    linear-gradient(180deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.5) 50%, rgba(0,0,0,0.85) 100%),
+    url("https://images.unsplash.com/photo-1644085159448-1659fd88a217?w=1600&q=72&auto=format&fit=crop");
+  background-size: cover; background-position: center;
+}
+.closing .container { padding-top: 120px; padding-bottom: 120px; max-width: 880px; }
+.closing .eyebrow { color: rgba(255,255,255,0.6); }
+.closing h2 { font-family: var(--pf-font-display); font-size: 80px; line-height: 1.02; letter-spacing: -0.03em; font-weight: 700; color: var(--pf-bg); margin: 0 0 28px; }
+.closing h2 .accent { font-style: italic; font-weight: 500; color: var(--pf-primary-soft); }
+.closing p { font-family: var(--pf-font-body); font-size: 19px; color: rgba(255,255,255,0.78); margin: 0 0 40px; max-width: 60ch; margin-left: auto; margin-right: auto; }
+.closing-ctas { display: inline-flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+@media (max-width: 768px) { .closing h2 { font-size: 52px; } .closing .container { padding-top: 80px; padding-bottom: 80px; } }
+@media (max-width: 375px) { .closing h2 { font-size: 40px; } }
+
+/* ===== FOOTER (FOOTER-STYLES #1 4-col dark with brand-left) ===== */
+.footer { background: var(--pf-primary-deep); color: rgba(255,255,255,0.72); padding: 96px 0 40px; }
+.footer .container { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 56px; }
+@media (max-width: 1024px) { .footer .container { grid-template-columns: 1.4fr 1fr 1fr; } }
+@media (max-width: 768px)  { .footer .container { grid-template-columns: 1fr 1fr; gap: 40px; } }
+@media (max-width: 375px)  { .footer .container { grid-template-columns: 1fr; gap: 28px; } }
+
+.footer-brand h3 { font-family: var(--pf-font-display); font-size: 26px; font-weight: 800; letter-spacing: -0.02em; color: var(--pf-bg); margin: 0 0 12px; }
+.footer-brand p { font-family: var(--pf-font-body); font-size: 14px; line-height: 1.55; color: rgba(255,255,255,0.6); margin: 0 0 20px; max-width: 32ch; }
+.footer-brand address { font-family: var(--pf-font-mono); font-size: 11px; font-style: normal; letter-spacing: 0.04em; color: rgba(255,255,255,0.5); }
+.footer h4 { font-family: var(--pf-font-mono); font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.5); margin: 0 0 16px; }
+.footer ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
+.footer a { font-family: var(--pf-font-body); font-size: 14px; color: rgba(255,255,255,0.78); transition: color 160ms ease; }
+.footer a:hover { color: var(--pf-bg); }
+.footer-social { display: flex; gap: 16px; margin-top: 24px; }
+.footer-social a { font-family: var(--pf-font-mono); font-size: 10px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(255,255,255,0.65); border: 1px solid rgba(255,255,255,0.2); padding: 8px 12px; border-radius: 9999px; transition: border-color 160ms ease, color 160ms ease; }
+.footer-social a:hover { color: var(--pf-bg); border-color: rgba(255,255,255,0.5); }
+.footer-bottom { border-top: 1px solid rgba(255,255,255,0.12); margin-top: 56px; padding-top: 32px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; font-family: var(--pf-font-mono); font-size: 11px; letter-spacing: 0.06em; color: rgba(255,255,255,0.45); }
+
+/* ===== STICKY CTA (mobile only) — STICKY-CTA-BAR #1 Full-width pill bottom-bar ===== */
+.sticky-cta {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
+  background: linear-gradient(180deg, rgba(245,245,242,0) 0%, var(--pf-bg) 30%);
+  padding: 12px 16px 16px;
+  display: none;
+}
+.sticky-cta .pf-btn { width: 100%; justify-content: center; padding: 16px 24px; font-size: 15px; }
+@media (max-width: 768px) {
+  .sticky-cta { display: block; }
+  body { padding-bottom: 80px; }
+}
+
+/* ===== Body offset for fixed nav (only when above hero) ===== */
+main { padding-top: 0; }
+
+</style>
+</head>
+<body>
+
+<!-- ============================== NAV (Classic full-bar over hero) ============================== -->
+<header class="pf-nav" id="pf-nav" aria-label="Site navigation">
+  <div class="container">
+    <a class="pf-nav-logo" href="#top">
+      POLESTAR
+      <small>FITNESS · BROOKLYN</small>
+    </a>
+    <nav aria-label="Primary">
+      <ul class="pf-nav-links">
+        <li><a href="#method">The Method</a></li>
+        <li><a href="#schedule">Classes</a></li>
+        <li><a href="#coaches">Coaches</a></li>
+        <li><a href="#pricing">Membership</a></li>
+        <li><a href="#faq">FAQ</a></li>
+      </ul>
+    </nav>
+    <div class="pf-nav-cta">
+      <a class="pf-btn" href="#book">Book free intro</a>
+    </div>
+    <button class="pf-nav-burger" id="pf-burger" aria-label="Open menu" aria-controls="pf-drawer" aria-expanded="false">
+      <span aria-hidden="true"></span>
+    </button>
+  </div>
+</header>
+
+<!-- Mobile drawer -->
+<div class="pf-drawer-scrim" id="pf-scrim"></div>
+<aside class="pf-drawer" id="pf-drawer" aria-label="Mobile navigation" aria-hidden="true">
+  <button class="pf-drawer-close" id="pf-drawer-close" aria-label="Close menu">×</button>
+  <ul>
+    <li><a href="#method">The Method</a></li>
+    <li><a href="#schedule">Classes</a></li>
+    <li><a href="#coaches">Coaches</a></li>
+    <li><a href="#pricing">Membership</a></li>
+    <li><a href="#faq">FAQ</a></li>
+    <li><a href="#book">Visit studio</a></li>
+  </ul>
+  <div class="pf-drawer-cta">
+    <a class="pf-btn" href="#book">Book free intro</a>
+  </div>
+</aside>
+
+<main id="top">
+
+<!-- ============================== §1 HERO ============================== -->
+<section class="hero" aria-label="Hero">
+  <div class="hero-photo" aria-hidden="true"></div>
+  <div class="container">
+    <p class="hero-eyebrow">PREMIUM SIGNATURE-METHOD STUDIO</p>
+    <h1>Train smart. <span class="accent">Live strong.</span></h1>
+    <p class="hero-sub">A 45-minute signature method built for athletes, open to everyone. Show up. We do the rest.</p>
+    <div class="hero-ctas">
+      <a class="pf-btn pf-btn-on-dark" href="#book">Book free intro</a>
+      <a class="pf-btn pf-btn-on-dark-secondary" href="#method">See the method</a>
+    </div>
+    <p class="hero-meta">Brooklyn · No card · 50 min</p>
+  </div>
+</section>
+
+<!-- ============================== §2 PRESS BAND ============================== -->
+<section class="press" aria-label="Press">
+  <div class="container">
+    <div class="press-row">
+      <span class="press-label">AS FEATURED IN</span>
+      <div class="press-logos">
+        <span class="press-logo">OUTSIDE</span>
+        <span class="press-logo">MEN'S HEALTH</span>
+        <span class="press-logo">SELF</span>
+        <span class="press-logo">NYT WELLNESS</span>
+        <span class="press-logo">REFINERY29</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== §3 METHOD EXPLAINER ============================== -->
+<section class="section method" id="method" aria-label="The Polestar Method">
+  <div class="container">
+    <div class="method-img">
+      <img src="https://images.unsplash.com/photo-1741156229623-da94e6d7977d?w=1200&q=72&auto=format&fit=crop" alt="Studio interior with weights and equipment ready for the Polestar method class" loading="lazy">
+    </div>
+    <div class="method-body">
+      <p class="eyebrow">THE POLESTAR METHOD</p>
+      <h2 class="section-title">45 minutes. Three pillars. <span class="accent">Measured every week.</span></h2>
+      <p class="section-intro">Built on compound strength, metabolic conditioning, and structured recovery. The method works because the load progresses and the data tells you.</p>
+      <div class="method-pillars">
+        <div class="method-pillar">
+          <span class="method-pillar-num">01</span>
+          <div>
+            <h3>Compound strength</h3>
+            <p>Deadlift, squat, press, pull. Heavy load delivered safely, scaled to where you are, progressed weekly.</p>
+          </div>
+        </div>
+        <div class="method-pillar">
+          <span class="method-pillar-num">02</span>
+          <div>
+            <h3>Metabolic conditioning</h3>
+            <p>Short, hard intervals — sled push, kettlebell, rowing. Built to bend your engine, not break it.</p>
+          </div>
+        </div>
+        <div class="method-pillar">
+          <span class="method-pillar-num">03</span>
+          <div>
+            <h3>Structured recovery</h3>
+            <p>Sauna, cold plunge, percussive therapy on-site. Recovery is part of training, not the afterthought.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== §4 CLASS SCHEDULE ============================== -->
+<section class="section schedule" id="schedule" aria-label="Class schedule">
+  <div class="schedule-photo" aria-hidden="true"></div>
+  <div class="container">
+    <p class="eyebrow">A SAMPLE WEEK</p>
+    <h2 class="section-title">Drop in, or build the habit. <span class="accent">Same room, different methods.</span></h2>
+    <p class="section-intro">Five class types rotate through the week. All 45 minutes. All coach-led. All scaled to where you start.</p>
+    <div class="schedule-panel">
+      <div class="schedule-grid">
+        <div class="schedule-day"><span class="schedule-day-name">MON</span><p class="schedule-class">Strength</p><p class="schedule-class-time">6:30 · 12:00 · 18:30</p></div>
+        <div class="schedule-day"><span class="schedule-day-name">TUE</span><p class="schedule-class">Conditioning</p><p class="schedule-class-time">6:30 · 12:00 · 18:30</p></div>
+        <div class="schedule-day"><span class="schedule-day-name">WED</span><p class="schedule-class">Strength</p><p class="schedule-class-time">6:30 · 12:00 · 18:30</p></div>
+        <div class="schedule-day"><span class="schedule-day-name">THU</span><p class="schedule-class">Engine</p><p class="schedule-class-time">6:30 · 12:00 · 18:30</p></div>
+        <div class="schedule-day"><span class="schedule-day-name">FRI</span><p class="schedule-class">Mixed</p><p class="schedule-class-time">6:30 · 12:00 · 18:30</p></div>
+        <div class="schedule-day"><span class="schedule-day-name">SAT</span><p class="schedule-class">Long format</p><p class="schedule-class-time">8:00 · 10:00</p></div>
+        <div class="schedule-day"><span class="schedule-day-name">SUN</span><p class="schedule-class">Mobility</p><p class="schedule-class-time">10:00 · 11:30</p></div>
+      </div>
+      <div class="schedule-cta-row">
+        <p>All times Brooklyn ET · Class size capped at 14</p>
+        <a class="pf-btn pf-btn-on-dark" href="#book">Reserve your spot</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== §5 BENEFITS / WHY US ============================== -->
+<section class="section benefits" aria-label="Why Polestar">
+  <div class="container">
+    <p class="eyebrow">WHY POLESTAR</p>
+    <h2 class="section-title">Built for athletes. <span class="accent">Open to everyone.</span></h2>
+    <p class="section-intro">Three things separate a method that works from a class that just tires you out.</p>
+    <div class="benefits-grid">
+      <div class="benefit-card">
+        <div class="benefit-icon" aria-hidden="true">↗</div>
+        <h3>Progressive load</h3>
+        <p>You add weight when you're ready. The coach catches when you're not. Strength is built linear, on purpose.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon" aria-hidden="true">●</div>
+        <h3>Coach in the room</h3>
+        <p>14 person cap. The coach watches your form every set, every class. No phoning it in.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon" aria-hidden="true">▣</div>
+        <h3>Measured progress</h3>
+        <p>Strength benchmarks every 8 weeks. You leave knowing the numbers moved — not just that you sweat.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== §6 COACH GRID ============================== -->
+<section class="section coaches" id="coaches" aria-label="Coaches">
+  <div class="container">
+    <p class="eyebrow">THE COACHES</p>
+    <h2 class="section-title">Built the method. <span class="accent">Run the room.</span></h2>
+    <p class="section-intro">Eight coaches, all credentialed, all teach the method themselves before they teach you.</p>
+    <div class="coach-grid">
+      <div class="coach-card">
+        <div class="coach-img"><img src="https://images.unsplash.com/photo-1548690312-e3b507d8c110?w=900&q=72&auto=format&fit=crop" alt="Maya Reeves, Head Coach" loading="lazy"></div>
+        <div>
+          <p class="coach-name">Maya Reeves</p>
+          <p class="coach-role">HEAD COACH · CSCS</p>
+          <p class="coach-creds">Former D1 athlete. Builds the strength block. 9 years coaching.</p>
+        </div>
+      </div>
+      <div class="coach-card">
+        <div class="coach-img"><img src="https://images.unsplash.com/photo-1585892478508-130c50eb7a69?w=900&q=72&auto=format&fit=crop" alt="James Holloway, Strength Coach" loading="lazy"></div>
+        <div>
+          <p class="coach-name">James Holloway</p>
+          <p class="coach-role">STRENGTH · NSCA</p>
+          <p class="coach-creds">Powerlifting background. Owns the heavy compound days.</p>
+        </div>
+      </div>
+      <div class="coach-card">
+        <div class="coach-img"><img src="https://images.unsplash.com/photo-1434719079929-f61498a4828e?w=900&q=72&auto=format&fit=crop" alt="Andrea Park, Conditioning Coach" loading="lazy"></div>
+        <div>
+          <p class="coach-name">Andrea Park</p>
+          <p class="coach-role">CONDITIONING · RKC</p>
+          <p class="coach-creds">Kettlebell specialist. Writes the engine programming.</p>
+        </div>
+      </div>
+      <div class="coach-card">
+        <div class="coach-img"><img src="https://images.unsplash.com/photo-1704223523169-52feeed90365?w=900&q=72&auto=format&fit=crop" alt="Devon Bishop, Coach" loading="lazy"></div>
+        <div>
+          <p class="coach-name">Devon Bishop</p>
+          <p class="coach-role">METHOD · PRECISION-NUTRITION</p>
+          <p class="coach-creds">Mobility-first approach. Long-format Saturday lead.</p>
+        </div>
+      </div>
+      <div class="coach-card">
+        <div class="coach-img"><img src="https://images.unsplash.com/photo-1550345332-09e3ac987658?w=900&q=72&auto=format&fit=crop" alt="Priya Anand, Coach" loading="lazy"></div>
+        <div>
+          <p class="coach-name">Priya Anand</p>
+          <p class="coach-role">METHOD · CSCS</p>
+          <p class="coach-creds">Athletic performance. Runs Tuesday + Thursday engine.</p>
+        </div>
+      </div>
+      <div class="coach-card">
+        <div class="coach-img"><img src="https://images.unsplash.com/photo-1628935291759-bbaf33a66dc6?w=900&q=72&auto=format&fit=crop" alt="Carlos Vega, Recovery Coach" loading="lazy"></div>
+        <div>
+          <p class="coach-name">Carlos Vega</p>
+          <p class="coach-role">RECOVERY · NASM-CES</p>
+          <p class="coach-creds">Tissue work + protocol. Sundays mobility class.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== §7 TESTIMONIALS ============================== -->
+<section class="section testimonials" aria-label="Member stories">
+  <div class="container">
+    <p class="eyebrow">MEMBERS, IN THEIR OWN WORDS</p>
+    <h2 class="section-title">What progress sounds like.</h2>
+    <p class="section-intro">Pulled from the member quarterly check-in form. No edits.</p>
+    <div class="testimonial-grid">
+      <div class="pf-card t-card">
+        <p class="t-card-stars">★ ★ ★ ★ ★</p>
+        <p class="t-card-quote">"Six weeks in, my deadlift's up 40 pounds and I'm sleeping better than I have in years. The coach catches everything."</p>
+        <div class="t-card-foot">
+          <div class="t-card-avatar"><img src="https://images.unsplash.com/photo-1578924608828-79a71150f711?w=300&q=72&auto=format&fit=crop" alt="Marco Alvarez" loading="lazy"></div>
+          <div>
+            <p class="t-card-name">Marco Alvarez</p>
+            <p class="t-card-role">MEMBER SINCE FEB 2024</p>
+          </div>
+        </div>
+      </div>
+      <div class="pf-card t-card">
+        <p class="t-card-stars">★ ★ ★ ★ ★</p>
+        <p class="t-card-quote">"I came in worried I'd be out of my depth. By month two I'd added 25 kg to my squat. They scale it perfectly."</p>
+        <div class="t-card-foot">
+          <div class="t-card-avatar"><img src="https://images.unsplash.com/photo-1639660299469-9e9279364c97?w=300&q=72&auto=format&fit=crop" alt="Lena Kostas" loading="lazy"></div>
+          <div>
+            <p class="t-card-name">Lena Kostas</p>
+            <p class="t-card-role">MEMBER SINCE NOV 2023</p>
+          </div>
+        </div>
+      </div>
+      <div class="pf-card t-card">
+        <p class="t-card-stars">★ ★ ★ ★ ★</p>
+        <p class="t-card-quote">"The 45-minute window is the unlock. I show up before work three times a week. No theatrics, just the work."</p>
+        <div class="t-card-foot">
+          <div class="t-card-avatar"><img src="https://images.unsplash.com/photo-1706029831387-fd8bc3d27d01?w=300&q=72&auto=format&fit=crop" alt="Sienna Roe" loading="lazy"></div>
+          <div>
+            <p class="t-card-name">Sienna Roe</p>
+            <p class="t-card-role">MEMBER SINCE JAN 2024</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== §8 RECOVERY AMENITIES ============================== -->
+<section class="section recovery" aria-label="Recovery amenities">
+  <div class="recovery-photo" aria-hidden="true"></div>
+  <div class="container">
+    <p class="eyebrow">ON-SITE RECOVERY</p>
+    <h2 class="section-title">Recovery is part of the work. <span class="accent">Not the afterthought.</span></h2>
+    <p class="section-intro">Three modalities, all included with unlimited membership. Walk from the rig to the sauna without leaving the floor.</p>
+    <div class="recovery-features">
+      <div class="r-feature">
+        <div class="r-feature-img"><img src="https://images.unsplash.com/photo-1770625468069-9393585d7113?w=900&q=72&auto=format&fit=crop" alt="Cedar sauna interior at Polestar Fitness Brooklyn" loading="lazy"></div>
+        <h3>Cedar sauna</h3>
+        <p>180 °F traditional cedar room. Two sessions a week is the floor.</p>
+      </div>
+      <div class="r-feature">
+        <div class="r-feature-img"><img src="https://images.unsplash.com/photo-1770625467612-737595560097?w=900&q=72&auto=format&fit=crop" alt="Cold plunge tank on site" loading="lazy"></div>
+        <h3>Cold plunge</h3>
+        <p>45 °F. Two minutes, three rounds. Programmed contrast with the sauna.</p>
+      </div>
+      <div class="r-feature">
+        <div class="r-feature-img"><img src="https://images.unsplash.com/photo-1770625467894-0f8ed8d33e21?w=900&q=72&auto=format&fit=crop" alt="Percussive therapy room" loading="lazy"></div>
+        <h3>Percussive therapy</h3>
+        <p>Theragun stations + booked Hyperice float. Self-serve or coach-assisted.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== §9 PRICING ============================== -->
+<section class="section pricing" id="pricing" aria-label="Membership pricing">
+  <div class="container">
+    <p class="eyebrow">MEMBERSHIP</p>
+    <h2 class="section-title">Three ways in. <span class="accent">All the method.</span></h2>
+    <p class="section-intro">Drop-in for the test. Class pack for the habit. Unlimited if you're in.</p>
+    <div class="pricing-grid">
+      <div class="p-tier">
+        <p class="p-tier-name">DROP-IN</p>
+        <div class="p-tier-price"><span class="num">$38</span><span class="unit">/ class</span></div>
+        <ul>
+          <li>Any single class</li>
+          <li>Recovery amenities day-pass</li>
+          <li>Coach review post-class</li>
+          <li>No commitment</li>
+        </ul>
+        <a class="pf-btn pf-btn-secondary" href="#book">Book a class</a>
+      </div>
+      <div class="p-tier featured">
+        <p class="p-tier-name">CLASS PACK · 10</p>
+        <div class="p-tier-price"><span class="num">$320</span><span class="unit">/ 10 classes</span></div>
+        <ul>
+          <li>10 classes · 90 days to use</li>
+          <li>Sauna + cold plunge unlimited</li>
+          <li>Strength benchmark at week 4</li>
+          <li>Coach check-in monthly</li>
+        </ul>
+        <a class="pf-btn" href="#book">Choose this</a>
+      </div>
+      <div class="p-tier">
+        <p class="p-tier-name">UNLIMITED</p>
+        <div class="p-tier-price"><span class="num">$285</span><span class="unit">/ month</span></div>
+        <ul>
+          <li>Unlimited classes + recovery</li>
+          <li>1:1 coach session monthly</li>
+          <li>Strength benchmark every 8 wks</li>
+          <li>Cancel any time</li>
+        </ul>
+        <a class="pf-btn pf-btn-secondary" href="#book">Start unlimited</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== §10 FAQ ============================== -->
+<section class="section faq" id="faq" aria-label="Frequently asked questions">
+  <div class="container">
+    <div style="text-align: center; max-width: 720px; margin: 0 auto 48px;">
+      <p class="eyebrow" style="display: inline-block;">FAQ</p>
+      <h2 class="section-title" style="margin: 0 auto 20px; text-align: center;">Common questions. <span class="accent">Straight answers.</span></h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item" data-open="true">
+        <button class="faq-trigger" aria-expanded="true"><span>I haven't trained seriously in years. Can I start here?</span><span class="faq-icon" aria-hidden="true">+</span></button>
+        <div class="faq-panel"><div><p>Yes. The free intro class is built for first-timers. The coach scales every movement. We've onboarded members from "haven't worked out in a decade" to "competing powerlifter" using the same method.</p></div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-trigger" aria-expanded="false"><span>What's the difference vs a regular gym or a HIIT studio?</span><span class="faq-icon" aria-hidden="true">+</span></button>
+        <div class="faq-panel"><div><p>Two things: progressive load (you actually get stronger, week over week) and structured recovery (sauna and cold plunge on-site, programmed against your training). Most studios skip both.</p></div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-trigger" aria-expanded="false"><span>Do I need to bring anything?</span><span class="faq-icon" aria-hidden="true">+</span></button>
+        <div class="faq-panel"><div><p>Just yourself. Showers, towels, lift shoes (in our sizes), kettlebells, barbells — all here. Locker on first day. Bring a water bottle.</p></div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-trigger" aria-expanded="false"><span>How big is the class?</span><span class="faq-icon" aria-hidden="true">+</span></button>
+        <div class="faq-panel"><div><p>14 person cap. The coach watches every set. If you can't get the form, the coach catches it. If you can, the coach pushes the load.</p></div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-trigger" aria-expanded="false"><span>Can I pause my membership?</span><span class="faq-icon" aria-hidden="true">+</span></button>
+        <div class="faq-panel"><div><p>Yes. Unlimited members can pause up to 30 days per year (vacation, injury, life). Class packs don't expire for 90 days. We're not in the cancellation-trap business.</p></div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-trigger" aria-expanded="false"><span>Where are you located?</span><span class="faq-icon" aria-hidden="true">+</span></button>
+        <div class="faq-panel"><div><p>183 N 9th Street, Williamsburg, Brooklyn. Two minutes from Bedford L. Street parking up the block.</p></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== §11 NEWSLETTER ============================== -->
+<section class="newsletter" aria-label="Newsletter signup">
+  <div class="container">
+    <div>
+      <p class="eyebrow">FIRST-CLASS INVITES</p>
+      <h2>One email. <span class="accent">When it matters.</span></h2>
+    </div>
+    <form class="newsletter-form" onsubmit="event.preventDefault(); alert('Thanks for subscribing.');">
+      <label class="pf-label" for="nl-email" style="position: absolute; left: -9999px;">Email</label>
+      <input type="email" id="nl-email" class="pf-input" placeholder="you@gmail.com" required>
+      <button type="submit" class="pf-btn pf-btn-on-dark">Sign me up</button>
+      <p class="newsletter-fine">One email per fortnight. New programs · member events · waitlist priority. Unsubscribe one-click.</p>
+    </form>
+  </div>
+</section>
+
+<!-- ============================== §12 CLOSING CTA ============================== -->
+<section class="closing" id="book" aria-label="Book a free intro">
+  <div class="closing-photo" aria-hidden="true"></div>
+  <div class="container">
+    <p class="eyebrow">YOUR FIRST CLASS IS FREE</p>
+    <h2>Show up. <span class="accent">We do the rest.</span></h2>
+    <p>Fifty minutes. No card. Coach walks you through the method, picks the right load, leaves you stronger than you walked in.</p>
+    <div class="closing-ctas">
+      <a class="pf-btn pf-btn-on-dark" href="#">Book free intro class</a>
+      <a class="pf-btn pf-btn-on-dark-secondary" href="#">Or text us · (718) 555-0140</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ============================== FOOTER ============================== -->
+<footer class="footer" aria-label="Site footer">
+  <div class="container">
+    <div class="footer-brand">
+      <h3>POLESTAR</h3>
+      <p>Premium signature-method studio. Strength. Conditioning. Recovery. Measured.</p>
+      <address>
+        183 N 9TH ST · WILLIAMSBURG, BROOKLYN, NY<br>
+        (718) 555-0140 · HELLO@POLESTAR.FIT
+      </address>
+      <div class="footer-social">
+        <a href="#" aria-label="Instagram">IG</a>
+        <a href="#" aria-label="TikTok">TIKTOK</a>
+        <a href="#" aria-label="YouTube">YOUTUBE</a>
+      </div>
+    </div>
+    <div>
+      <h4>STUDIO</h4>
+      <ul>
+        <li><a href="#method">The Method</a></li>
+        <li><a href="#schedule">Class schedule</a></li>
+        <li><a href="#coaches">Coaches</a></li>
+        <li><a href="#">Visit Brooklyn</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>MEMBERSHIP</h4>
+      <ul>
+        <li><a href="#pricing">Pricing</a></li>
+        <li><a href="#book">Book free intro</a></li>
+        <li><a href="#">Drop-in</a></li>
+        <li><a href="#">Private training</a></li>
+        <li><a href="#">Corporate</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>ABOUT</h4>
+      <ul>
+        <li><a href="#">Our story</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="#">Press</a></li>
+        <li><a href="#">Privacy</a></li>
+        <li><a href="#">Terms</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="container footer-bottom">
+    <span>© 2026 POLESTAR FITNESS · ALL RIGHTS RESERVED</span>
+    <span>BUILT IN BROOKLYN</span>
+  </div>
+</footer>
+
+<!-- ============================== STICKY CTA (mobile only) ============================== -->
+<div class="sticky-cta" aria-label="Book intro class">
+  <a class="pf-btn" href="#book">Book free intro class →</a>
+</div>
+
+<script>
+(function(){
+  // Nav sticky toggle
+  const nav = document.getElementById('pf-nav');
+  const hero = document.querySelector('.hero');
+  function onScroll() {
+    const threshold = hero ? hero.offsetHeight - nav.offsetHeight - 8 : 80;
+    if (window.scrollY > threshold) nav.classList.add('is-sticky');
+    else nav.classList.remove('is-sticky');
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // Mobile drawer toggle
+  const burger = document.getElementById('pf-burger');
+  const drawer = document.getElementById('pf-drawer');
+  const scrim  = document.getElementById('pf-scrim');
+  const closeBtn = document.getElementById('pf-drawer-close');
+  function openDrawer() {
+    drawer.classList.add('is-open');
+    scrim.classList.add('is-open');
+    drawer.setAttribute('aria-hidden', 'false');
+    burger.setAttribute('aria-expanded', 'true');
+  }
+  function closeDrawer() {
+    drawer.classList.remove('is-open');
+    scrim.classList.remove('is-open');
+    drawer.setAttribute('aria-hidden', 'true');
+    burger.setAttribute('aria-expanded', 'false');
+  }
+  burger.addEventListener('click', () => {
+    if (drawer.classList.contains('is-open')) closeDrawer(); else openDrawer();
+  });
+  closeBtn.addEventListener('click', closeDrawer);
+  scrim.addEventListener('click', closeDrawer);
+  drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', closeDrawer));
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeDrawer(); });
+
+  // FAQ accordion
+  document.querySelectorAll('.faq-trigger').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.closest('.faq-item');
+      const open = item.getAttribute('data-open') === 'true';
+      item.setAttribute('data-open', open ? 'false' : 'true');
+      btn.setAttribute('aria-expanded', open ? 'false' : 'true');
+    });
+  });
+
+  // Scroll-driven fallback (IntersectionObserver only if scroll-timeline unsupported)
+  if (!CSS.supports('animation-timeline: view()')) {
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('is-visible'); io.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.pf-reveal-on-scroll').forEach(el => io.observe(el));
+  }
+})();
+</script>
+
+</body>
+</html>
