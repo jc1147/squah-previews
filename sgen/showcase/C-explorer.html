@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SGEN Showcase — Live Explorer (Direction C)</title>
+<meta name="robots" content="noindex" />
+<!--
+  DIRECTION C — "LIVE EXPLORER" · BESPOKE BF-tier showcase surface.
+  Paradigm: app-like, interactive, proof-as-interface. Persistent faceted sidebar
+  (vertical × prior platform × metric type) + live-updating results region + inline
+  SPOTLIGHT mini-case-study. Sortable by headline metric. Dashboard-meets-gallery.
+  Self-contained: inline CSS + inline JS, ZERO external dependencies, no external fonts,
+  no real screenshots (CSS-crafted visual treatments only).
+  PREVIEW — fabricated placeholders, not live customers (OWNER decision D3, 2026-06-02).
+  All 10 _showcase-entries/*.md rendered. SGEN charcoal #1a1a1a + red #d51522 anchor.
+-->
+<style>
+  /* ============================================================
+     TOKENS
+     ============================================================ */
+  :root{
+    --ink:#0d0d0d;            /* deepest surface */
+    --char:#1a1a1a;           /* SGEN charcoal anchor */
+    --char-2:#202022;         /* raised panel */
+    --char-3:#262629;         /* card surface */
+    --line:#323236;           /* hairline */
+    --line-2:#3c3c42;
+    --red:#d51522;            /* SGEN red anchor */
+    --red-2:#ff2a38;          /* hot red for glow */
+    --red-deep:#9c0d16;
+    --paper:#f4f1ec;          /* warm off-white text */
+    --paper-dim:#b9b6b0;
+    --paper-fade:#86847f;
+    --paper-faint:#5a5853;
+    --ok:#34d399;
+    --amber:#f6b73c;
+    --r-lg:20px; --r-md:13px; --r-sm:8px; --r-xs:5px;
+    --pad:clamp(18px,4vw,40px);
+    --mono:"SF Mono","Cascadia Mono","Roboto Mono",ui-monospace,"DejaVu Sans Mono",Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,system-ui,sans-serif;
+    --disp:"Helvetica Neue",-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:var(--sans);
+    background:
+      radial-gradient(1100px 620px at 82% -8%, rgba(213,21,34,.16), transparent 60%),
+      radial-gradient(900px 700px at -6% 4%, rgba(213,21,34,.07), transparent 55%),
+      linear-gradient(180deg,#121214 0%, var(--char) 30%, var(--ink) 100%);
+    color:var(--paper);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+    overflow-x:hidden;
+  }
+  ::selection{background:var(--red);color:#fff}
+  a{color:inherit;text-decoration:none}
+  button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+  ::-webkit-scrollbar{width:11px;height:11px}
+  ::-webkit-scrollbar-track{background:transparent}
+  ::-webkit-scrollbar-thumb{background:var(--line);border-radius:20px;border:3px solid transparent;background-clip:content-box}
+  ::-webkit-scrollbar-thumb:hover{background:var(--line-2);background-clip:content-box}
+
+  /* ============================================================
+     PREVIEW MARKER (persistent)
+     ============================================================ */
+  .preview-strip{
+    position:sticky;top:0;z-index:120;
+    display:flex;align-items:center;justify-content:center;gap:11px;
+    padding:7px 16px;
+    font:600 11px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;
+    color:#1a1a1a;
+    background:repeating-linear-gradient(135deg,var(--amber) 0 22px,#ffcf6b 22px 44px);
+    border-bottom:1px solid rgba(0,0,0,.25);
+  }
+  .preview-strip .dot{width:7px;height:7px;border-radius:50%;background:#1a1a1a;animation:pblink 1.7s ease-in-out infinite}
+  @keyframes pblink{0%,100%{opacity:1}50%{opacity:.28}}
+  .preview-strip b{font-weight:800}
+
+  /* ============================================================
+     APP CHROME / TOP BAR
+     ============================================================ */
+  .topbar{
+    position:sticky;top:28px;z-index:110;
+    display:flex;align-items:center;gap:18px;
+    padding:14px var(--pad);
+    background:rgba(18,18,20,.72);
+    backdrop-filter:blur(18px) saturate(140%);
+    -webkit-backdrop-filter:blur(18px) saturate(140%);
+    border-bottom:1px solid var(--line);
+  }
+  .brand{display:flex;align-items:center;gap:12px;flex-shrink:0}
+  .brand .mark{
+    width:34px;height:34px;border-radius:9px;position:relative;flex-shrink:0;
+    background:linear-gradient(150deg,var(--red-2),var(--red-deep));
+    box-shadow:0 0 0 1px rgba(255,255,255,.08), 0 10px 26px -10px rgba(213,21,34,.7);
+    overflow:hidden;
+  }
+  .brand .mark::before{content:"";position:absolute;inset:0;
+    background:
+      linear-gradient(90deg,transparent 46%,rgba(255,255,255,.85) 46% 54%,transparent 54%),
+      linear-gradient(0deg,transparent 46%,rgba(255,255,255,.55) 46% 54%,transparent 54%);
+    mix-blend-mode:overlay;}
+  .brand .mark::after{content:"";position:absolute;left:-30%;top:-30%;width:60%;height:160%;
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent);
+    transform:skewX(-18deg);animation:sweep 5.5s ease-in-out infinite;}
+  @keyframes sweep{0%,72%{left:-40%}88%,100%{left:140%}}
+  .brand .wm{display:flex;flex-direction:column;line-height:1}
+  .brand .wm .n{font:800 16px/1 var(--disp);letter-spacing:-.01em}
+  .brand .wm .s{font:600 9.5px/1 var(--mono);letter-spacing:.22em;color:var(--paper-fade);margin-top:4px;text-transform:uppercase}
+  .topbar .seg{
+    margin-left:auto;display:flex;gap:2px;padding:4px;border:1px solid var(--line);border-radius:11px;background:rgba(0,0,0,.25)}
+  .topbar .seg button{padding:7px 14px;border-radius:8px;font:600 12px var(--mono);letter-spacing:.06em;color:var(--paper-fade);text-transform:uppercase}
+  .topbar .seg button.on{background:var(--char-3);color:var(--paper);box-shadow:inset 0 0 0 1px var(--line-2)}
+  .topbar .live{
+    display:flex;align-items:center;gap:8px;padding:8px 14px;border-radius:10px;
+    border:1px solid var(--line);background:rgba(0,0,0,.3);font:600 11px var(--mono);letter-spacing:.08em;color:var(--paper-dim)}
+  .topbar .live .pulse{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 0 rgba(52,211,153,.6);animation:pulse 2s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(52,211,153,.55)}70%{box-shadow:0 0 0 9px rgba(52,211,153,0)}100%{box-shadow:0 0 0 0 rgba(52,211,153,0)}}
+
+  /* ============================================================
+     MASTHEAD
+     ============================================================ */
+  .masthead{padding:clamp(40px,6vw,76px) var(--pad) clamp(26px,3.5vw,40px);position:relative}
+  .masthead .eyebrow{
+    display:inline-flex;align-items:center;gap:10px;
+    font:600 11px var(--mono);letter-spacing:.26em;text-transform:uppercase;color:var(--red-2);margin-bottom:22px}
+  .masthead .eyebrow::before{content:"";width:30px;height:1px;background:linear-gradient(90deg,var(--red),transparent)}
+  .masthead h1{
+    font:800 clamp(38px,8.2vw,108px)/.92 var(--disp);letter-spacing:-.035em;max-width:14ch;
+    background:linear-gradient(180deg,#fff 30%,#cfccc6 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .masthead h1 .accent{
+    background:linear-gradient(100deg,var(--red-2),var(--red));-webkit-background-clip:text;background-clip:text;color:transparent;position:relative}
+  .masthead .sub{margin-top:24px;max-width:62ch;font-size:clamp(15px,1.7vw,19px);color:var(--paper-dim);line-height:1.6}
+  .masthead .sub b{color:var(--paper);font-weight:700}
+  /* live counter rail */
+  .counterrail{display:flex;flex-wrap:wrap;gap:clamp(22px,4vw,64px);margin-top:clamp(34px,4vw,52px);align-items:flex-end}
+  .counterrail .c{position:relative}
+  .counterrail .c .num{font:800 clamp(34px,5vw,60px)/.9 var(--disp);letter-spacing:-.03em;
+    background:linear-gradient(180deg,#fff,#b8b5af);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .counterrail .c.zero .num{background:linear-gradient(160deg,var(--red-2),var(--red));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .counterrail .c .lab{margin-top:9px;font:600 11px var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--paper-fade);max-width:18ch}
+  .counterrail .c .ph{display:inline-block;margin-left:7px;font:600 8.5px var(--mono);letter-spacing:.1em;color:var(--amber);
+    border:1px solid rgba(246,183,60,.4);border-radius:4px;padding:2px 5px;vertical-align:middle;transform:translateY(-1px)}
+  .scroll-blob{position:absolute;right:var(--pad);top:50%;transform:translateY(-50%);font:600 10px var(--mono);
+    letter-spacing:.2em;text-transform:uppercase;color:var(--paper-faint);display:none}
+
+  /* ============================================================
+     EXPLORER LAYOUT
+     ============================================================ */
+  .explorer{
+    display:grid;grid-template-columns:300px 1fr;gap:0;align-items:start;
+    border-top:1px solid var(--line);min-height:60vh}
+  /* ---- SIDEBAR (faceted) ---- */
+  .facets{
+    position:sticky;top:96px;align-self:start;
+    padding:clamp(20px,2.2vw,30px) clamp(16px,1.6vw,26px) 60px;
+    border-right:1px solid var(--line);
+    max-height:calc(100vh - 96px);overflow-y:auto;
+    background:linear-gradient(180deg,rgba(26,26,28,.55),rgba(13,13,14,.2))}
+  .facets .fhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+  .facets .fhead .t{font:700 12px var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--paper)}
+  .facets .fhead .reset{font:600 10px var(--mono);letter-spacing:.08em;color:var(--paper-fade);padding:5px 9px;border-radius:6px;border:1px solid var(--line);transition:.2s}
+  .facets .fhead .reset:hover{color:var(--paper);border-color:var(--red);background:rgba(213,21,34,.1)}
+  .facets .showing{font:600 11px var(--mono);letter-spacing:.05em;color:var(--paper-fade);margin-bottom:22px}
+  .facets .showing b{color:var(--red-2)}
+  .fgroup{margin-bottom:24px}
+  .fgroup > .gt{
+    display:flex;align-items:center;gap:8px;font:700 10.5px var(--mono);letter-spacing:.16em;text-transform:uppercase;
+    color:var(--paper-fade);margin-bottom:11px}
+  .fgroup > .gt::after{content:"";flex:1;height:1px;background:var(--line)}
+  .facet{
+    display:flex;align-items:center;gap:9px;width:100%;text-align:left;
+    padding:8px 10px;border-radius:8px;margin-bottom:3px;
+    font-size:13px;color:var(--paper-dim);transition:background .16s,color .16s,transform .16s;
+    border:1px solid transparent;position:relative}
+  .facet:hover{background:rgba(255,255,255,.04);color:var(--paper);transform:translateX(2px)}
+  .facet .box{width:15px;height:15px;border-radius:4px;border:1.5px solid var(--line-2);flex-shrink:0;
+    display:grid;place-items:center;transition:.16s}
+  .facet .box::after{content:"";width:7px;height:7px;border-radius:2px;background:var(--red);transform:scale(0);transition:transform .16s}
+  .facet.on{color:#fff;background:rgba(213,21,34,.1);border-color:rgba(213,21,34,.32)}
+  .facet.on .box{border-color:var(--red)}
+  .facet.on .box::after{transform:scale(1)}
+  .facet .cnt{margin-left:auto;font:600 10px var(--mono);color:var(--paper-faint)}
+  .facet.on .cnt{color:var(--red-2)}
+  .facet[data-disabled="1"]{opacity:.34;pointer-events:none}
+
+  /* ---- RESULTS REGION ---- */
+  .results{padding:clamp(18px,2vw,30px) var(--pad) 80px;min-width:0}
+  .resbar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:24px}
+  .resbar .rcount{font:700 13px var(--mono);letter-spacing:.05em;color:var(--paper-dim)}
+  .resbar .rcount b{color:var(--paper)}
+  .resbar .chips{display:flex;gap:7px;flex-wrap:wrap}
+  .activechip{display:inline-flex;align-items:center;gap:7px;padding:5px 8px 5px 11px;border-radius:20px;
+    font:600 11px var(--mono);letter-spacing:.03em;background:rgba(213,21,34,.14);border:1px solid rgba(213,21,34,.35);color:#fff}
+  .activechip button{width:15px;height:15px;border-radius:50%;display:grid;place-items:center;background:rgba(0,0,0,.35);font-size:11px;line-height:1;color:var(--paper-dim)}
+  .activechip button:hover{background:var(--red);color:#fff}
+  .resbar .sortwrap{margin-left:auto;display:flex;align-items:center;gap:9px}
+  .resbar .sortwrap .lbl{font:600 10px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--paper-faint)}
+  .sortbtns{display:flex;gap:2px;padding:3px;border:1px solid var(--line);border-radius:9px;background:rgba(0,0,0,.25)}
+  .sortbtns button{padding:6px 11px;border-radius:6px;font:600 11px var(--mono);letter-spacing:.04em;color:var(--paper-fade);transition:.16s}
+  .sortbtns button.on{background:var(--char-3);color:var(--paper);box-shadow:inset 0 0 0 1px var(--line-2)}
+  .sortbtns button:hover{color:var(--paper)}
+
+  /* ---- the live grid ---- */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:clamp(14px,1.3vw,20px)}
+  .row{
+    position:relative;border:1px solid var(--line);border-radius:var(--r-md);overflow:hidden;
+    background:linear-gradient(180deg,var(--char-3),var(--char-2));
+    transition:transform .3s cubic-bezier(.2,.7,.2,1),border-color .3s,box-shadow .3s,opacity .35s;
+    cursor:pointer;display:flex;flex-direction:column;
+    animation:riseup .5s cubic-bezier(.2,.8,.2,1) both}
+  @keyframes riseup{from{opacity:0;transform:translateY(22px) scale(.98)}to{opacity:1;transform:none}}
+  .row:hover{transform:translateY(-5px);border-color:var(--line-2);box-shadow:0 24px 50px -28px rgba(0,0,0,.9), 0 0 0 1px rgba(213,21,34,.18)}
+  .row.active{border-color:var(--red);box-shadow:0 0 0 1px var(--red), 0 26px 60px -30px rgba(213,21,34,.5)}
+  /* the crafted "screenshot" thumb — CSS visual treatment per entry */
+  .thumb{height:138px;position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
+  .thumb .chrome{position:absolute;top:0;left:0;right:0;height:22px;background:rgba(0,0,0,.42);
+    display:flex;align-items:center;gap:5px;padding:0 9px;border-bottom:1px solid rgba(255,255,255,.06);z-index:3}
+  .thumb .chrome i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.22)}
+  .thumb .chrome .url{margin-left:8px;font:500 9px var(--mono);color:rgba(255,255,255,.4);letter-spacing:.04em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .thumb .canvas{position:absolute;inset:22px 0 0 0;overflow:hidden}
+  .thumb .typ{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:0 16px;z-index:2}
+  .thumb .typ .h{font:800 17px/1.04 var(--disp);letter-spacing:-.02em;color:rgba(255,255,255,.93);max-width:90%}
+  .thumb .typ .b{margin-top:7px;display:flex;gap:5px}
+  .thumb .typ .b i{height:5px;border-radius:3px;background:rgba(255,255,255,.28)}
+  .thumb .grain{position:absolute;inset:0;z-index:1;opacity:.5;mix-blend-mode:overlay;
+    background-image:radial-gradient(rgba(255,255,255,.5) .5px,transparent .6px);background-size:4px 4px}
+  .thumb .badge{position:absolute;right:9px;bottom:9px;z-index:4;font:700 11px var(--mono);letter-spacing:.02em;
+    padding:4px 8px;border-radius:6px;background:rgba(0,0,0,.55);color:#fff;border:1px solid rgba(255,255,255,.14);backdrop-filter:blur(4px)}
+  .thumb .badge.spd{color:#9af5c9}
+
+  .rbody{padding:15px 16px 16px;display:flex;flex-direction:column;flex:1}
+  .rtags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+  .rtag{font:600 9.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--paper-fade);
+    padding:3px 7px;border:1px solid var(--line);border-radius:5px}
+  .rtag.platform{color:var(--paper-dim);border-color:var(--line-2)}
+  .rbrand{font:800 17px/1.1 var(--disp);letter-spacing:-.01em;color:#fff;margin-bottom:3px}
+  .rmetric{display:flex;align-items:baseline;gap:9px;margin:10px 0 9px}
+  .rmetric .v{font:800 clamp(22px,2.4vw,30px)/.95 var(--disp);letter-spacing:-.025em;
+    background:linear-gradient(150deg,var(--red-2),var(--red));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .rmetric .v.neu{background:linear-gradient(180deg,#fff,#cdcac4);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .rmetric .l{font-size:11px;color:var(--paper-fade);line-height:1.25;max-width:16ch}
+  .rdo{font-size:12.5px;color:var(--paper-dim);line-height:1.45;margin-bottom:13px;flex:1}
+  .rmods{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:13px}
+  .rmod{font:600 9.5px var(--mono);letter-spacing:.02em;color:var(--paper-dim);padding:3px 7px;border-radius:5px;
+    background:rgba(255,255,255,.045);border:1px solid var(--line)}
+  .rmod.more{color:var(--paper-faint)}
+  .rfoot{display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--line);padding-top:12px;margin-top:auto}
+  .rfoot .spotlight{font:700 11px var(--mono);letter-spacing:.06em;color:var(--red-2);display:flex;align-items:center;gap:6px;text-transform:uppercase}
+  .rfoot .spotlight .arr{transition:transform .25s}
+  .row:hover .rfoot .spotlight .arr{transform:translateX(4px)}
+  .rfoot .pay{display:flex;gap:4px}
+  .rfoot .pay i{width:7px;height:7px;border-radius:50%;border:1px solid var(--line-2)}
+  .rfoot .pay i.a{background:var(--ok);border-color:var(--ok)}      /* fewer vendors */
+  .rfoot .pay i.b{background:var(--amber);border-color:var(--amber)} /* lower cost */
+  .rfoot .pay i.c{background:var(--red);border-color:var(--red)}    /* less risk */
+
+  .empty{padding:70px 24px;text-align:center;border:1px dashed var(--line);border-radius:var(--r-md);background:rgba(0,0,0,.18)}
+  .empty .big{font:800 26px var(--disp);color:var(--paper);margin-bottom:10px}
+  .empty p{color:var(--paper-fade);font-size:14px;max-width:42ch;margin:0 auto 18px}
+  .empty button{padding:10px 18px;border-radius:9px;background:var(--red);color:#fff;font:700 12px var(--mono);letter-spacing:.06em}
+
+  /* ============================================================
+     SPOTLIGHT (inline mini-case-study overlay panel)
+     ============================================================ */
+  .spotlight-scrim{position:fixed;inset:0;z-index:200;background:rgba(6,6,7,.74);backdrop-filter:blur(7px);
+    opacity:0;pointer-events:none;transition:opacity .35s}
+  .spotlight-scrim.open{opacity:1;pointer-events:auto}
+  .spotlight{
+    position:fixed;top:0;right:0;bottom:0;z-index:201;width:min(640px,94vw);
+    background:linear-gradient(180deg,#19191b,#0f0f10);
+    border-left:1px solid var(--line-2);box-shadow:-40px 0 90px -30px rgba(0,0,0,.9);
+    transform:translateX(102%);transition:transform .42s cubic-bezier(.16,.84,.28,1);
+    display:flex;flex-direction:column;overflow:hidden}
+  .spotlight.open{transform:none}
+  .sp-hero{position:relative;flex-shrink:0;padding:0;overflow:hidden}
+  .sp-canvas{height:172px;position:relative;overflow:hidden}
+  .sp-close{position:absolute;top:16px;right:16px;z-index:5;width:38px;height:38px;border-radius:10px;
+    background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.16);display:grid;place-items:center;
+    font-size:18px;color:#fff;backdrop-filter:blur(6px);transition:.2s}
+  .sp-close:hover{background:var(--red);transform:rotate(90deg)}
+  .sp-nav{position:absolute;top:16px;left:16px;z-index:5;display:flex;gap:6px}
+  .sp-nav button{width:38px;height:38px;border-radius:10px;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.16);
+    display:grid;place-items:center;font-size:15px;color:#fff;backdrop-filter:blur(6px);transition:.2s}
+  .sp-nav button:hover{background:rgba(213,21,34,.7)}
+  .sp-eyebrow{position:absolute;left:20px;bottom:54px;z-index:4;font:600 10px var(--mono);letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.8)}
+  .sp-brand{position:absolute;left:20px;bottom:18px;z-index:4;font:800 30px/1 var(--disp);letter-spacing:-.02em;color:#fff;max-width:80%}
+  .sp-body{overflow-y:auto;padding:26px 30px 50px;flex:1}
+  .sp-headmetric{margin-bottom:24px}
+  .sp-headmetric .v{font:800 clamp(30px,4vw,46px)/.95 var(--disp);letter-spacing:-.03em;
+    background:linear-gradient(140deg,var(--red-2),var(--red));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .sp-headmetric .v.neu{background:linear-gradient(180deg,#fff,#c4c1bb);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .sp-headmetric .l{margin-top:6px;font-size:13px;color:var(--paper-dim)}
+  .sp-glance{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r-sm);overflow:hidden;margin-bottom:26px}
+  .sp-glance .g{background:var(--char-2);padding:11px 13px}
+  .sp-glance .g .k{font:600 9px var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--paper-faint);margin-bottom:5px}
+  .sp-glance .g .vv{font-size:12.5px;color:var(--paper);font-weight:600;line-height:1.3}
+  /* 3-big-number band */
+  .sp-band{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border-radius:var(--r-sm);overflow:hidden;
+    border:1px solid var(--line);margin-bottom:28px}
+  .sp-band .n{background:linear-gradient(180deg,var(--char-3),var(--char-2));padding:18px 12px;text-align:center}
+  .sp-band .n .num{font:800 clamp(18px,2.6vw,26px)/.95 var(--disp);letter-spacing:-.02em;
+    background:linear-gradient(160deg,#fff,#cfccc6);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .sp-band .n.red .num{background:linear-gradient(150deg,var(--red-2),var(--red));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .sp-band .n .lab{margin-top:8px;font:600 9px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--paper-fade);line-height:1.35}
+  .sp-sec{margin-bottom:26px}
+  .sp-sec .h{display:flex;align-items:center;gap:10px;font:700 11px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--red-2);margin-bottom:13px}
+  .sp-sec .h::before{content:"";width:18px;height:2px;background:var(--red);border-radius:2px}
+  .sp-sec p{font-size:14px;line-height:1.62;color:var(--paper-dim)}
+  .sp-sec p + p{margin-top:11px}
+  .sp-sec p b{color:var(--paper);font-weight:600}
+  /* solution module list */
+  .sp-mods{display:flex;flex-direction:column;gap:7px}
+  .sp-mods .m{display:flex;gap:12px;align-items:flex-start;padding:11px 13px;border:1px solid var(--line);border-radius:var(--r-sm);
+    background:rgba(255,255,255,.025);transition:.2s}
+  .sp-mods .m:hover{border-color:var(--line-2);background:rgba(255,255,255,.05)}
+  .sp-mods .m .name{font:700 12.5px var(--sans);color:#fff;flex-shrink:0;min-width:128px}
+  .sp-mods .m .rep{font-size:12px;color:var(--paper-fade);line-height:1.4}
+  .sp-mods .m .rep .x{color:var(--paper-faint)}
+  /* quote */
+  .sp-quote{position:relative;padding:24px 22px 22px;border:1px solid var(--line);border-radius:var(--r-md);
+    background:linear-gradient(150deg,rgba(213,21,34,.08),rgba(0,0,0,.18));margin-bottom:26px;overflow:hidden}
+  .sp-quote::before{content:"\201C";position:absolute;top:-18px;left:14px;font:800 90px/1 Georgia,serif;color:rgba(213,21,34,.32)}
+  .sp-quote .q{position:relative;font-size:15px;line-height:1.62;color:var(--paper);font-style:normal;z-index:1}
+  .sp-quote .attr{margin-top:16px;display:flex;align-items:center;gap:12px}
+  .sp-quote .face{width:42px;height:42px;border-radius:50%;flex-shrink:0;position:relative;overflow:hidden;border:1px solid var(--line-2)}
+  .sp-quote .face span{position:absolute;inset:0;display:grid;place-items:center;font:800 16px var(--disp);color:rgba(255,255,255,.85)}
+  .sp-quote .who .nm{font-weight:700;font-size:13px;color:#fff}
+  .sp-quote .who .tt{font-size:11.5px;color:var(--paper-fade);margin-top:2px}
+  /* payoff legend */
+  .sp-payoff{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:26px}
+  .sp-payoff .p{display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border-radius:8px;border:1px solid var(--line);font:600 11px var(--mono);letter-spacing:.03em;color:var(--paper-dim)}
+  .sp-payoff .p i{width:8px;height:8px;border-radius:50%}
+  .sp-payoff .p.a i{background:var(--ok)} .sp-payoff .p.b i{background:var(--amber)} .sp-payoff .p.c i{background:var(--red)}
+  /* CTA + placeholder note */
+  .sp-cta{display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap}
+  .sp-cta a{flex:1;min-width:150px;text-align:center;padding:13px 16px;border-radius:10px;font:700 12px var(--mono);letter-spacing:.06em;text-transform:uppercase;transition:.2s}
+  .sp-cta .primary{background:linear-gradient(120deg,var(--red),var(--red-deep));color:#fff;box-shadow:0 14px 32px -16px rgba(213,21,34,.8)}
+  .sp-cta .primary:hover{transform:translateY(-2px);box-shadow:0 20px 40px -16px rgba(213,21,34,.9)}
+  .sp-cta .ghost{border:1px solid var(--line-2);color:var(--paper-dim)}
+  .sp-cta .ghost:hover{border-color:var(--paper-dim);color:#fff}
+  .sp-disclaim{display:flex;gap:9px;align-items:flex-start;padding:11px 13px;border-radius:8px;background:rgba(246,183,60,.07);border:1px solid rgba(246,183,60,.25);
+    font:500 11px/1.5 var(--mono);color:var(--amber);letter-spacing:.01em}
+  .sp-disclaim .ic{flex-shrink:0;font-size:13px}
+
+  /* ============================================================
+     HOW-BUILT STRIP + CLOSING
+     ============================================================ */
+  .howbuilt{padding:clamp(46px,6vw,84px) var(--pad);border-top:1px solid var(--line);
+    background:linear-gradient(180deg,transparent,rgba(0,0,0,.3))}
+  .howbuilt .hb-eye{font:600 11px var(--mono);letter-spacing:.24em;text-transform:uppercase;color:var(--red-2);margin-bottom:16px;text-align:center}
+  .howbuilt h2{font:800 clamp(26px,4vw,46px)/1.02 var(--disp);letter-spacing:-.025em;text-align:center;max-width:18ch;margin:0 auto 12px;
+    background:linear-gradient(180deg,#fff,#c4c1bb);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .howbuilt .hb-sub{text-align:center;color:var(--paper-fade);max-width:54ch;margin:0 auto clamp(34px,4vw,52px);font-size:15px;line-height:1.6}
+  .hb-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;max-width:1080px;margin:0 auto}
+  .hb-card{padding:26px;border:1px solid var(--line);border-radius:var(--r-md);background:linear-gradient(180deg,var(--char-3),var(--char-2));position:relative;overflow:hidden}
+  .hb-card .ix{font:800 13px var(--mono);color:var(--red-2);margin-bottom:18px}
+  .hb-card h3{font:800 19px var(--disp);letter-spacing:-.01em;margin-bottom:9px}
+  .hb-card p{font-size:13.5px;color:var(--paper-fade);line-height:1.55}
+  .hb-card .glow{position:absolute;right:-40px;top:-40px;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,rgba(213,21,34,.18),transparent 70%)}
+
+  .closer{padding:clamp(56px,8vw,108px) var(--pad);text-align:center;position:relative;border-top:1px solid var(--line);
+    background:radial-gradient(700px 360px at 50% 0%,rgba(213,21,34,.16),transparent 65%)}
+  .closer .ce{font:600 11px var(--mono);letter-spacing:.24em;text-transform:uppercase;color:var(--paper-fade);margin-bottom:18px}
+  .closer h2{font:800 clamp(30px,5.5vw,68px)/.98 var(--disp);letter-spacing:-.03em;max-width:16ch;margin:0 auto 22px;
+    background:linear-gradient(180deg,#fff,#cdcac4);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .closer .cbtns{display:flex;gap:13px;justify-content:center;flex-wrap:wrap;margin-bottom:18px}
+  .closer .cbtns a{padding:15px 30px;border-radius:12px;font:700 13px var(--mono);letter-spacing:.06em;text-transform:uppercase;transition:.22s}
+  .closer .cbtns .primary{background:linear-gradient(120deg,var(--red-2),var(--red-deep));color:#fff;box-shadow:0 18px 44px -18px rgba(213,21,34,.85)}
+  .closer .cbtns .primary:hover{transform:translateY(-3px)}
+  .closer .cbtns .ghost{border:1px solid var(--line-2);color:var(--paper-dim)}
+  .closer .cbtns .ghost:hover{color:#fff;border-color:var(--paper)}
+  .closer .fine{font:500 12px var(--mono);color:var(--paper-faint);letter-spacing:.02em}
+
+  footer.foot{padding:34px var(--pad);border-top:1px solid var(--line);display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px;
+    font:500 11px var(--mono);letter-spacing:.04em;color:var(--paper-faint)}
+  footer.foot .zero{color:var(--red-2);font-weight:700}
+
+  /* ============================================================
+     RESPONSIVE
+     ============================================================ */
+  @media (max-width:980px){
+    .explorer{grid-template-columns:1fr}
+    .facets{position:relative;top:0;max-height:none;border-right:none;border-bottom:1px solid var(--line)}
+    .hb-grid{grid-template-columns:1fr}
+  }
+  @media (max-width:560px){
+    .topbar{flex-wrap:wrap;gap:10px}
+    .topbar .seg{margin-left:0;order:3;width:100%}
+    .counterrail{gap:22px}
+    .sp-band{grid-template-columns:1fr;}
+    .sp-glance{grid-template-columns:1fr}
+    .resbar .sortwrap{margin-left:0;width:100%}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{animation-duration:.001s!important;transition-duration:.05s!important}
+    html{scroll-behavior:auto}
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ PERSISTENT PREVIEW MARKER ============ -->
+<div class="preview-strip" role="note">
+  <span class="dot"></span>
+  <span><b>PREVIEW</b> — fabricated placeholders, not live customers</span>
+  <span class="dot"></span>
+</div>
+
+<!-- ============ APP TOP BAR ============ -->
+<header class="topbar">
+  <div class="brand">
+    <div class="mark" aria-hidden="true"></div>
+    <div class="wm">
+      <span class="n">SGEN</span>
+      <span class="s">Showcase · Live Explorer</span>
+    </div>
+  </div>
+  <div class="seg" role="tablist" aria-label="Surface">
+    <button class="on" role="tab" aria-selected="true">Explorer</button>
+    <button role="tab" aria-selected="false">Stories</button>
+    <button role="tab" aria-selected="false">Gallery</button>
+  </div>
+  <div class="live" title="Results update live as you filter">
+    <span class="pulse"></span><span>LIVE · <span id="liveN">10</span> sites indexed</span>
+  </div>
+</header>
+
+<!-- ============ MASTHEAD ============ -->
+<section class="masthead">
+  <span class="eyebrow">The proof, as an interface</span>
+  <h1>Don't browse the work.<br /><span class="accent">Interrogate it.</span></h1>
+  <p class="sub">Every site below was built <b>on the SGEN platform itself</b> — one all-inclusive stack, <b>zero plugins underneath</b>. Filter by vertical, by the platform they escaped, or by the kind of win they landed. Sort by the headline number. Open any one to read the whole story without leaving the page.</p>
+  <div class="counterrail" aria-label="Aggregate trust">
+    <div class="c"><div class="num" data-count="10">10</div><div class="lab">Builds in this index <span class="ph">PLH</span></div></div>
+    <div class="c"><div class="num" data-count="10">10</div><div class="lab">Verticals represented <span class="ph">PLH</span></div></div>
+    <div class="c zero"><div class="num">0</div><div class="lab">Plugins under any of them</div></div>
+    <div class="c"><div class="num">1</div><div class="lab">Stack · no suite tax, no plugin tax</div></div>
+  </div>
+</section>
+
+<!-- ============ EXPLORER ============ -->
+<div class="explorer">
+
+  <!-- FACETED SIDEBAR -->
+  <aside class="facets" aria-label="Filters">
+    <div class="fhead">
+      <span class="t">Facets</span>
+      <button class="reset" id="resetBtn">Reset all</button>
+    </div>
+    <div class="showing" id="showingLine">Showing <b>10</b> of 10 builds</div>
+
+    <div class="fgroup" id="grp-vertical">
+      <div class="gt">Vertical</div>
+    </div>
+    <div class="fgroup" id="grp-platform">
+      <div class="gt">Escaped platform</div>
+    </div>
+    <div class="fgroup" id="grp-metric">
+      <div class="gt">Win type</div>
+    </div>
+    <div class="fgroup" id="grp-payoff">
+      <div class="gt">One-stack payoff</div>
+    </div>
+  </aside>
+
+  <!-- LIVE RESULTS REGION -->
+  <main class="results">
+    <div class="resbar">
+      <div class="rcount"><b id="rc">10</b> results</div>
+      <div class="chips" id="activeChips"></div>
+      <div class="sortwrap">
+        <span class="lbl">Sort</span>
+        <div class="sortbtns" id="sortBtns">
+          <button data-sort="default" class="on">Curated</button>
+          <button data-sort="metric">Headline metric</button>
+          <button data-sort="az">A–Z</button>
+        </div>
+      </div>
+    </div>
+    <div class="grid" id="grid" aria-live="polite"></div>
+  </main>
+</div>
+
+<!-- ============ HOW THESE GET BUILT ============ -->
+<section class="howbuilt">
+  <div class="hb-eye">Attribution-forward · the work is the platform</div>
+  <h2>There is no stack underneath. That's the whole point.</h2>
+  <p class="hb-sub">Each story below resolves the same way: the plugins didn't get migrated, they got deleted — because the platform already did each job. One stack, one login, one rate.</p>
+  <div class="hb-grid">
+    <div class="hb-card"><div class="glow"></div><div class="ix">01</div><h3>One builder, no code</h3><p>Every site was rebuilt in SG Builder — a visual, drag-and-drop builder with 48 components and a templates library, so new pages start finished, not blank. No developer on retainer.</p></div>
+    <div class="hb-card"><div class="glow"></div><div class="ix">02</div><h3>The features are already in the box</h3><p>Forms, SEO, attribution, ecommerce, events, backups, multi-site — native modules, not third-party plugins on independent update schedules. No plugin tax, and no suite tax.</p></div>
+    <div class="hb-card"><div class="glow"></div><div class="ix">03</div><h3>A free baseline under all of it</h3><p>Foundation Pack ships free on every plan: hosting, auto-renewing SSL, global CDN, WAF, automatic security patching, and the multi-site dashboard. The update-night failure mode is the platform's job now.</p></div>
+  </div>
+</section>
+
+<!-- ============ CLOSER ============ -->
+<section class="closer">
+  <div class="ce">Your build could be the next entry in this index</div>
+  <h2>Stop renting plugins. Own one stack.</h2>
+  <div class="cbtns">
+    <a class="primary" href="#">Start free in the Sandbox</a>
+    <a class="ghost" href="#">See the Builder</a>
+  </div>
+  <p class="fine">Sandbox $0 — no credit card, no time limit · From $17/mo when you go live · 2-week free trial</p>
+</section>
+
+<footer class="foot">
+  <span>SGEN Showcase — Live Explorer · Direction C</span>
+  <span><span class="zero">0</span> plugins · <span class="zero">0</span> external dependencies · PREVIEW build</span>
+  <span>Fabricated placeholders (D3) — replace before publish</span>
+</footer>
+
+<!-- ============ SPOTLIGHT PANEL ============ -->
+<div class="spotlight-scrim" id="scrim"></div>
+<aside class="spotlight" id="spotlight" aria-hidden="true" aria-label="Case-study spotlight">
+  <div class="sp-hero">
+    <div class="sp-nav">
+      <button id="spPrev" title="Previous build" aria-label="Previous">&#8249;</button>
+      <button id="spNext" title="Next build" aria-label="Next">&#8250;</button>
+    </div>
+    <button class="sp-close" id="spClose" title="Close" aria-label="Close">&times;</button>
+    <div class="sp-canvas" id="spCanvas"></div>
+    <div class="sp-eyebrow" id="spEyebrow"></div>
+    <div class="sp-brand" id="spBrand"></div>
+  </div>
+  <div class="sp-body" id="spBody"></div>
+</aside>
+
+<script>
+/* ============================================================
+   DATA — 10 fabricated placeholder entries (sourced from
+   _content/_showcase-entries/*.md). Brands/people/metrics/quotes
+   are invented placeholders (D3); SGEN capabilities cited are real.
+   metricSort = numeric magnitude of the headline win, for sorting.
+   payoff: a=fewer vendors/logins · b=lower cost · c=less risk
+   ============================================================ */
+var ENTRIES = [
+  {
+    id:"fernwood-digital", brand:"Fernwood Digital", eyebrow:"Customer Story · Agency",
+    vertical:"Web Agency", platform:"WordPress + Elementor", metricType:"Stack collapse",
+    payoff:["a","c"], featured:true,
+    pillar:"Multi-site / portfolio management",
+    headline:"23 → 1", headlineNeu:true, headlineLabel:"client sites consolidated onto one stack",
+    metricSort:23,
+    thumbTone:["#1f3a2e","#0e1a14"], accentTxt:"23 sites, one login",
+    badge:"23 → 1 login", badgeSpeed:false,
+    doLine:"Run a 23-site client book from one dashboard — log in once, patch nothing, see every site's status at a glance.",
+    mods:[
+      {n:"Multi-site dashboard", r:["The whole client book in one fleet view","23 separate WP admins"]},
+      {n:"Login-as-client", r:["Drop into a client's site to fix it","credential hunts + shared passwords"]},
+      {n:"Users & Roles", r:["Native RBAC per designer / client","a members/roles plugin per site"]},
+      {n:"Templates", r:["New sites start finished, not blank","from-scratch Elementor assembly"]},
+      {n:"Attribution", r:["Show clients leads-by-source","no native WP equivalent"]},
+      {n:"Foundation Pack", r:["Hosting · SSL · CDN · WAF · auto-patching, free","the security-patch anxiety"]}
+    ],
+    glance:[["Industry","Web design & marketing agency"],["Company","Small business — 12 people"],["Managed","23 active client sites"],["Escaped","WordPress + Elementor + per-site plugins"]],
+    band:[{n:"9 → 0",l:"avg paid plugins per site, eliminated",red:true},{n:"14 → 2 hrs",l:"weekly cross-portfolio maintenance"},{n:"$0 / 8 mo",l:"update-broke-the-site incidents"}],
+    challenge:["Fernwood ran <b>23 client sites on WordPress</b>, each a hand-stitched tower of plugins that broke on a different schedule. The problem was never one site — it was 23, each on its own update schedule, fixed one panicked client email at a time.","“We weren't a design studio anymore. We were a plugin-maintenance company that occasionally did design.” Premium plugin licences stacked up on every site, renewals landed in different months, and nobody owned the total."],
+    quote:"WordPress made us a maintenance company. Twenty-three sites, twenty-three update schedules, and a Tuesday-night ritual of finding out which plugin broke which client overnight. On SGEN there's one dashboard and there are no plugins to break. I got my design studio back.",
+    person:"Priya Raman", title:"Founder & Creative Director, Fernwood Digital", initials:"PR"
+  },
+  {
+    id:"trailhand-supply", brand:"Trailhand Supply Co.", eyebrow:"Customer Story · Store",
+    vertical:"Ecommerce / DTC", platform:"WooCommerce", metricType:"Speed",
+    payoff:["a","b","c"], featured:true,
+    pillar:"Native ecommerce",
+    headline:"3.8s → 0.9s", headlineNeu:false, headlineLabel:"storefront LCP (≈ 4× faster)",
+    metricSort:76,
+    thumbTone:["#3a2c18","#16100a"], accentTxt:"0.9s storefront",
+    badge:"0.9s LCP", badgeSpeed:true,
+    doLine:"Ship a product launch in under 30 minutes from a template — and the cart stays up while you do it.",
+    mods:[
+      {n:"Native store", r:["~180 SKUs with size/color variations","the core WooCommerce plugin"]},
+      {n:"Cart & checkout", r:["One-page guest checkout, Stripe + PayPal","checkout add-on + abandoned-cart plugin"]},
+      {n:"Reviews & ratings", r:["Product reviews in-platform","a Yotpo-class plugin"]},
+      {n:"Attribution", r:["See which campaign drove which order","three tools reporting differently"]},
+      {n:"SEO + redirects", r:["301-mapped every product URL","a Yoast-class plugin"]},
+      {n:"Foundation Pack", r:["Server-first speed, no caching add-on","WP Rocket + image-optimizer + backups"]}
+    ],
+    glance:[["Industry","Direct-to-consumer outdoor gear"],["Company","4 people, ~2,400 orders/yr"],["Mobile","68% of sessions"],["Escaped","WooCommerce + 13 plugins"]],
+    band:[{n:"3.8s → 0.9s",l:"mobile storefront LCP",red:true},{n:"14 → 0",l:"plugins eliminated"},{n:"$3,900 → $0",l:"annual plugin licenses"}],
+    challenge:["Trailhand ran the textbook DTC WordPress stack: WooCommerce plus a plugin for nearly every feature. Over three years it accreted into <b>14 paid/active plugins</b> — reviews, abandoned-cart, caching, SEO, forms, popups, backups, consent, and more.","The breaking point: on a spring-collection launch morning, a routine extension update <b>took the cart offline for 5 hours</b> during the highest-traffic window of the year. Mara estimated the lost-sales window at roughly $9K."],
+    quote:"The morning our cart went down during a launch, I was on the phone with a plugin's support queue while orders just... weren't happening. On SGEN there's nothing to update against each other — it's one platform, so it just stays up. I spend my Saturdays making gear again instead of babysitting renewals.",
+    person:"Mara Vance", title:"Founder, Trailhand Supply Co.", initials:"MV"
+  },
+  {
+    id:"kettleback-coffee", brand:"Kettleback Coffee Co.", eyebrow:"Customer Story · Franchise",
+    vertical:"Restaurant / Franchise", platform:"WordPress Multisite", metricType:"Stack collapse",
+    payoff:["a","b","c"], featured:true,
+    pillar:"Multi-location management",
+    headline:"34 → 1", headlineNeu:true, headlineLabel:"location sites, now one dashboard",
+    metricSort:34,
+    thumbTone:["#2a1c12","#120b06"], accentTxt:"34 storefronts, 1 screen",
+    badge:"34 → 1", badgeSpeed:false,
+    doLine:"Manage 34 storefronts from one screen — and launch a new café's site in an afternoon, not three days.",
+    mods:[
+      {n:"Multi-site dashboard", r:["All 34 storefronts, one fleet view","a Multisite network nobody dared touch"]},
+      {n:"Multi-location", r:["Per-location pages, hours, NAP schema","mismatched themes per location"]},
+      {n:"SG Builder + Templates", r:["Every café from one brand template","34 slightly-different theme states"]},
+      {n:"Attribution + call tracking", r:["Tie a phone tap to a campaign + a store","a call-tracking add-on on some sites"]},
+      {n:"Forms & Popups", r:["Catering, careers, loyalty opt-ins","separate forms + popup plugins"]},
+      {n:"Foundation Pack", r:["Hosting · SSL · CDN · WAF, free per site","hosting/SSL/CDN billed on top"]}
+    ],
+    glance:[["Industry","Café-and-bakery franchise"],["Company","Mid-market — 34 locations"],["Region","US Mountain West"],["Escaped","WordPress Multisite + plugins"]],
+    band:[{n:"11",l:"plugins retired across every location",red:true},{n:"73% faster",l:"to publish a new-store page"},{n:"2.9s → 0.8s",l:"median page load, fleet-wide"}],
+    challenge:["Kettleback grew the way most franchises do: fast, and sideways. Every new café got a sub-site bolted onto one sprawling WordPress Multisite network. By store 34, it was a liability the corporate team managed by holding its breath.","A single plugin update could break the menu layout on a dozen storefronts at once, and nobody knew which dozen until a franchisee called. The ops team had stopped updating anything — so the whole network drifted out of security patch."],
+    quote:"We spent years afraid of our own website. One network, 34 storefronts, a pile of plugins, and a standing assumption that updating anything would break something somewhere. On SGEN it's one dashboard for the whole fleet. A new café used to take us three days to put online. Last month it took an afternoon.",
+    person:"Renata Salcedo", title:"VP of Operations, Kettleback Coffee Co.", initials:"RS"
+  },
+  {
+    id:"halloran-vint", brand:"Halloran & Vint", eyebrow:"Customer Story · Professional Services",
+    vertical:"Professional Services", platform:"Custom-dev", metricType:"Cost",
+    payoff:["a","b","c"], featured:true,
+    pillar:"Attribution (no native competitor)",
+    headline:"$2,940/yr", headlineNeu:false, headlineLabel:"in plugin + tracking fees eliminated",
+    metricSort:2940,
+    thumbTone:["#161d2e","#080b14"], accentTxt:"Operational clarity",
+    badge:"$2,940/yr gone", badgeSpeed:false,
+    doLine:"Publish a thought-leadership piece before lunch — and tell the management committee exactly which campaign put a client in the room.",
+    mods:[
+      {n:"SG Builder", r:["Marketing lead ships a page in an afternoon","email a contractor, wait on a quote"]},
+      {n:"Attribution", r:["First-touch, last-touch, multi-touch lead source","budget allocated on gut feel"]},
+      {n:"Call Tracking", r:["Phone-tap attribution across 3 office lines","a separate CallRail-class subscription"]},
+      {n:"Forms & Lead Reports", r:["Leads-by-source + CSV export","a standalone form/notification tool"]},
+      {n:"On-Page Optimization", r:["301-mapped the insight library's equity","a separate SEO tool"]},
+      {n:"Foundation Pack", r:["Hosting · SSL · CDN · WAF · patching, free","separate hosting + cert housekeeping"]}
+    ],
+    glance:[["Industry","B2B advisory / consulting"],["Company","Mid-market — ~40 staff, 3 offices"],["Plan","Launch tier"],["Escaped","Bespoke hand-coded site"]],
+    band:[{n:"$2,940/yr",l:"plugin + tracking fees eliminated",red:true},{n:"6 days → <2 hrs",l:"to publish an insight article"},{n:"+38%",l:"qualified consultation requests"}],
+    challenge:["Five years ago the firm commissioned a bespoke, hand-coded marketing site. Then the shop reorganized, the engineers moved on, and Halloran & Vint were left with an asset they'd paid handsomely for and <b>could no longer touch</b>. A typo in a partner's bio sat live for nine days because nobody wanted to open a $400 ticket.","The site had no first-party attribution. Leads arrived through a form and three office phone lines with <b>no idea which campaign produced an engagement</b>. To get partial visibility, a stitched stack of analytics + call-tracking + form tools ran ~$245/month on top of the per-change developer fees."],
+    quote:"We spent five years paying to change our own website. With SGEN the partners can publish a thought-leadership piece before lunch, and for the first time I can tell the management committee exactly which campaign put a client in the room — without three separate subscriptions to do it. We own this platform now, instead of renting access to it.",
+    person:"Marcus Vint", title:"Managing Partner, Halloran & Vint", initials:"MV"
+  },
+  {
+    id:"wildgraze", brand:"Wildgraze", eyebrow:"Customer Story · Creator / Media",
+    vertical:"Creator / Media", platform:"WordPress + Elementor", metricType:"Stack collapse",
+    payoff:["a","b","c"], featured:false,
+    pillar:"Content + membership stack",
+    headline:"12 → 0", headlineNeu:true, headlineLabel:"plugins retired (one stack)",
+    metricSort:12,
+    thumbTone:["#2b2113","#130d06"], accentTxt:"Field notes from the edge of the map",
+    badge:"12 → 0 plugins", badgeSpeed:false,
+    doLine:"Publish a film + journal pair in under an hour, and never lose a morning to a white-screened archive again.",
+    mods:[
+      {n:"Blog & Posts + Media", r:["Field journals + WebP/AVIF at the source","a blog + image-optimization plugin"]},
+      {n:"Custom Objects", r:["Modeled the members-only film archive","a custom-fields + memberships plugin"]},
+      {n:"SEO Manager", r:["On-page meta, OG, schema, sitemap","a standalone SEO plugin"]},
+      {n:"Forms + Popups", r:["Newsletter + exit-intent capture","a forms plugin + an opt-in plugin"]},
+      {n:"Ecommerce", r:["Digital products + paid membership","store-plus-memberships plugin pair"]},
+      {n:"Foundation Pack", r:["Speed + stability, no caching add-on","caching + backups plugins"]}
+    ],
+    glance:[["Industry","Creator / media & publishing"],["Company","Solo founder + 2 part-timers"],["Site","Content + membership + store"],["Escaped","WordPress + Elementor + 12 plugins"]],
+    band:[{n:"12 → 0",l:"plugins retired",red:true},{n:"2.9s → 0.7s",l:"first-load on the archive"},{n:"+41%",l:"newsletter signups, first quarter"}],
+    challenge:["By year three the stack was twelve plugins deep — SEO, forms, popups, image-optimization, caching, a store plugin plus a separate memberships plugin, custom-fields, stats, a consent banner, SMTP, and backups. Six billed separately, and the renewal dates never lined up.","The membership — the part that paid the bills — depended on the two most fragile plugins talking to each other correctly. Every update was a coin-flip, and the founder was the only person who could fix it."],
+    quote:"For three years my real job was keeping a website alive. Every Tuesday some plugin update would white-screen the archive or break the newsletter form. I'd stitched together twelve of them. On SGEN it's one thing. I write and shoot. I do not babysit plugins anymore.",
+    person:"Mara Okonkwo-Reyes", title:"Founder, Wildgraze", initials:"MO"
+  },
+  {
+    id:"marrow-vine", brand:"Marrow & Vine", eyebrow:"Customer Story · Restaurant",
+    vertical:"Restaurant", platform:"Squarespace", metricType:"Speed",
+    payoff:["a","b","c"], featured:false,
+    pillar:"Page-builder + events + ecommerce basics",
+    headline:"2.9s → 0.8s", headlineNeu:false, headlineLabel:"first-load on the menu page",
+    metricSort:72,
+    thumbTone:["#241410","#100707"], accentTxt:"Speed of the menu",
+    badge:"0.8s menu", badgeSpeed:true,
+    doLine:"Update the Tuesday menu in one place and have it live before service — across all three rooms.",
+    mods:[
+      {n:"SG Builder", r:["Rebuilt the site, no developer","a template that fought a real menu"]},
+      {n:"Menus", r:["Real menu module, live before service","a wrestled Squarespace template"]},
+      {n:"Events", r:["Supper-club calendar with RSVP + iCal","an off-brand calendar embed"]},
+      {n:"Ecommerce", r:["Pickup ordering, Stripe + PayPal","a separate ordering add-on + login"]},
+      {n:"Location Selector", r:["Three rooms, own hours + NAP schema","three sets of hours, no clean way"]},
+      {n:"Foundation Pack", r:["Server-first speed + security, free","six separately-billed add-ons"]}
+    ],
+    glance:[["Industry","Restaurant / hospitality"],["Company","Small business — 3 locations"],["Region","Pacific Northwest"],["Escaped","Squarespace + 6 add-ons"]],
+    band:[{n:"2.9s → 0.8s",l:"menu-page first load",red:true},{n:"6 → 0",l:"third-party add-ons retired"},{n:"+34%",l:"direct pickup orders, first quarter"}],
+    challenge:["Marrow & Vine started as one twelve-table room and a Squarespace site the owner built herself. Then a second room opened, then a third, and the seasonal supper-club nights became the thing people drove in for. <b>The site stopped keeping up.</b>","The menu changed weekly, but editing it meant fighting a template that wasn't built for a real menu. Events lived in an off-brand calendar embed. Online ordering ran through a separate add-on with its own cut and login. Six different add-ons, stitched around a site that still loaded slowly in the parking lot."],
+    quote:"I built the first version of this site myself, and I rebuilt this one myself too — the difference is I'm not paying six different companies to hold it together anymore. The menu changes when the farm changes, and people order pickup right from the site. When the kitchen gets busy, the website doesn't fall apart.",
+    person:"Renata Calloway", title:"Owner & Chef, Marrow & Vine", initials:"RC"
+  },
+  {
+    id:"tidewater-studio", brand:"Tidewater & Co.", eyebrow:"Customer Story · Freelancer",
+    vertical:"Freelancer", platform:"WordPress", metricType:"Stack collapse",
+    payoff:["a","b","c"], featured:false,
+    pillar:"Own-the-whole-stack / no maintenance tax",
+    headline:"6 → 1", headlineNeu:true, headlineLabel:"client sites, one dashboard, run solo",
+    metricSort:6,
+    thumbTone:["#23201a","#0f0d09"], accentTxt:"Six sites, one screen",
+    badge:"6 sites, 1 dashboard", badgeSpeed:false,
+    doLine:"Run six client sites single-handedly from one dashboard, with zero update-night calls.",
+    mods:[
+      {n:"SG Builder", r:["Visual rebuild of all six sites","a page-builder plugin per site"]},
+      {n:"Templates", r:["One kit reused across client sites","every page starting blank"]},
+      {n:"Forms", r:["Inquiry forms, honeypot + reCAPTCHA","a forms plugin per site"]},
+      {n:"On-Page Optimization", r:["Titles, meta, schema across every site","a Yoast-class plugin"]},
+      {n:"Backups", r:["On-demand + daily, per site","an UpdraftPlus-class plugin"]},
+      {n:"Site Manager", r:["All six sites, one dashboard, one person","seven WP admins"]}
+    ],
+    glance:[["Industry","Solo brand-and-web studio"],["Company","One person, Gulf Coast"],["Built","6 sites in a single quarter"],["Escaped","WordPress + 6-7 plugins/site"]],
+    band:[{n:"0.7s",l:"studio homepage load (was 4.2s)",red:true},{n:"41",l:"plugins retired across 6 sites"},{n:"~$2,900/yr",l:"in retired plugin + host licenses"}],
+    challenge:["Renata ran Tidewater & Co. solo — design, copy, build, and “tech support forever” all on one person. Each client site was a WordPress install stitched from the same recurring cast: page-builder, forms, SEO, image-optimizer, caching, backup, and security plugins.","The break came the week a routine plugin update took a client's site white-screened on a Friday afternoon; she spent the weekend in the database while the client emailed. She didn't want a better plugin stack — she wanted to stop owning a plugin stack at all."],
+    quote:"WordPress made me a part-time sysadmin I never wanted to be. On SGEN I rebuilt six sites in a quarter and I run all of them from one screen, by myself. Nothing updates behind my back, nothing needs a plugin renewal, and I finally own the whole thing instead of renting seven pieces of it.",
+    person:"Renata Okafor", title:"Founder, Tidewater & Co.", initials:"RO"
+  },
+  {
+    id:"clearwater-health", brand:"Clearwater Family Health", eyebrow:"Customer Story · Healthcare",
+    vertical:"Healthcare", platform:"WordPress + Elementor", metricType:"Stack collapse",
+    payoff:["a","b","c"], featured:false,
+    pillar:"Security & compliance posture",
+    headline:"7 → 0", headlineNeu:true, headlineLabel:"plugins retired across 4 locations",
+    metricSort:7,
+    thumbTone:["#0f2730","#06141a"], accentTxt:"Request an appointment",
+    badge:"7 → 0 plugins", badgeSpeed:false,
+    doLine:"Answer “who changed what, and is consent being logged?” from one dashboard — with no update night to dread.",
+    mods:[
+      {n:"SG Builder", r:["No-code rebuild of all four location sites","a page-builder layer per site"]},
+      {n:"Forms", r:["New-patient request, with a visible delivery record","a silently-failing Gravity Forms"]},
+      {n:"Consent & Tracking", r:["Per-session consent audit log","a Cookiebot-class plugin"]},
+      {n:"Security + Backups", r:["Platform hardening + daily backups","Wordfence + UpdraftPlus"]},
+      {n:"Location Selector", r:["Per-location pages, hours, NAP","four separate WP installs"]},
+      {n:"Foundation Pack", r:["WAF · SSL · auto-patching + audit log, free","a contractor's responsibility"]}
+    ],
+    glance:[["Industry","Family-medicine & pediatrics group"],["Company","4 locations, ~40 staff"],["Region","Pacific Northwest"],["Escaped","WordPress + Elementor (7 plugins)"]],
+    band:[{n:"4.6s → 0.9s",l:"mobile load, main location page",red:true},{n:"7 → 0",l:"plugins retired across 4 sites"},{n:"9 days",l:"to all four location sites live"}],
+    challenge:["Clearwater is a small clinic group that cannot afford to have its public site go down — it's how new patients find and request appointments. They weren't running a complex operation; they were running a fragile one: <b>seven plugins on four separate WordPress installs</b>, maintained by a single part-time contractor.","On a routine update night, a security-plugin and caching-plugin conflict took the main site offline for most of a business day, and the new-patient form <b>silently stopped delivering submissions</b> for longer than anyone could later reconstruct. For a clinic, a dead intake form is missed patients."],
+    quote:"We are a clinic, not a software team. The night it went down we couldn't even tell what had broken or whether our new-patient form had been quietly failing. On SGEN the security, the backups, the consent log, and the forms are just part of the platform — one stack, nothing to renew. I can finally answer 'who changed what' from one dashboard.",
+    person:"Diane Reyes", title:"Practice Administrator, Clearwater Family Health", initials:"DR"
+  },
+  {
+    id:"riverbend-commons", brand:"Riverbend Commons", eyebrow:"Customer Story · Nonprofit",
+    vertical:"Nonprofit", platform:"WordPress", metricType:"Speed",
+    payoff:["a","b","c"], featured:false,
+    pillar:"Events + donations + content, one stack",
+    headline:"6.1s → 1.3s", headlineNeu:false, headlineLabel:"mobile home-page load",
+    metricSort:48,
+    thumbTone:["#13261c","#081310"], accentTxt:"Built by neighbors",
+    badge:"1.3s load", badgeSpeed:true,
+    doLine:"Ship a new event and the story that promotes it in one afternoon — and see whether the story moved donations.",
+    mods:[
+      {n:"Events", r:["Market, concerts, grant deadlines + RSVP","a calendar plugin fighting the donate button"]},
+      {n:"Ecommerce (donations)", r:["One-time + recurring gifts, Stripe + PayPal","a separate donation plugin"]},
+      {n:"Forms + Popups", r:["Volunteer signups + newsletter capture","forms + email-capture plugins"]},
+      {n:"Blog / Posts", r:["Newsletter + spotlights, WebP/AVIF","a separate blog plugin"]},
+      {n:"First-party Analytics", r:["See which post drove donations","three systems that never spoke"]},
+      {n:"Foundation Pack", r:["Hosting · SSL · CDN · WAF, free + backups","caching + security + backup plugins"]}
+    ],
+    glance:[["Industry","Community foundation"],["Company","Small — 9 staff, ~140 volunteers"],["Site","Content + events + donations"],["Escaped","WordPress + 12 plugins"]],
+    band:[{n:"6.1s → 1.3s",l:"mobile home-page load",red:true},{n:"12 → 0",l:"plugins to maintain"},{n:"+41%",l:"recurring monthly donors, two quarters"}],
+    challenge:["For eight years the website was a WordPress site a board member's nephew set up, a freelancer patched, then nobody owned. It did three jobs badly — events, donations, the occasional post — each in a different plugin, and <b>the plugins did not get along.</b>","The donation plugin and the calendar plugin both wanted to control the same template, and roughly once a month an auto-update would white-screen the events page during a campaign. Donations, volunteer submissions, and the newsletter list lived in three systems that never spoke."],
+    quote:"We're a nine-person shop that runs a market, a concert series, and a grant program. We stopped paying a stack of plugins to argue with each other every Tuesday. Now the events, the donate button, and the newsletter are the same system, and I can actually see whether the story I wrote brought in any gifts.",
+    person:"Dana Okonkwo", title:"Operations Coordinator, Riverbend Commons", initials:"DO"
+  },
+  {
+    id:"thornbury-garden", brand:"Thornbury Garden & Supply", eyebrow:"Customer Story · Small Business",
+    vertical:"Small Business", platform:"WordPress", metricType:"Speed",
+    payoff:["a","b","c"], featured:false,
+    pillar:"Foundation Pack + forms",
+    headline:"5.9s → 0.8s", headlineNeu:false, headlineLabel:"mobile load — the parking-lot test",
+    metricSort:74,
+    thumbTone:["#1c2812","#0b1107"], accentTxt:"Find us · Hours",
+    badge:"0.8s load", badgeSpeed:true,
+    doLine:"Stop being a part-time webmaster: the quote form just works, the site loads instantly, and there's no stack to update.",
+    mods:[
+      {n:"SG Builder", r:["Visual rebuild of every page","an abandoned page-builder plugin"]},
+      {n:"Forms", r:["“Request a delivery quote,” honeypot + reCAPTCHA","a forms plugin + anti-spam plugin"]},
+      {n:"On-Page Optimization", r:["LocalBusiness schema + NAP on every page","a Yoast-class plugin"]},
+      {n:"Attribution", r:["Saw local-search drove quotes, not boosts","guessing for years"]},
+      {n:"Backups", r:["On-demand + daily, native","an UpdraftPlus-class plugin"]},
+      {n:"Foundation Pack", r:["Hosting · SSL · CDN · WAF, free","a shared host nickel-and-diming SSL"]}
+    ],
+    glance:[["Industry","Garden center + landscaping supply"],["Company","Family-run, single location"],["Built","DIY rebuild, late winter"],["Escaped","WordPress + 19 plugins"]],
+    band:[{n:"5.9s → 0.8s",l:"mobile page load",red:true},{n:"19 → 0",l:"plugins retired"},{n:"~$2,300/yr",l:"cut from the plugin + license bill"}],
+    challenge:["Dana ran the whole shop and the website both, and the website kept losing. <b>Nineteen plugins</b> covered everything from the delivery-quote form to caching to the cookie banner, and they did not agree with each other. The site sat above five seconds on a phone in the parking lot — exactly where customers checked it before driving over.","Twice in one season a routine plugin update took the “Request a delivery quote” form offline, and nobody noticed for days. The breaking point was a Saturday in April when the form was down during the busiest weekend of the year — and Dana found out from a regular at the register."],
+    quote:"The old site felt like a second job I was bad at. Every spring a plugin update would knock the quote form out and I'd find out from a customer at the register, not from the site. On SGEN it's one platform — the form, the speed, the local stuff Google wants, the backups — and I haven't touched a single update since we launched. I sell plants again, not plugins.",
+    person:"Dana Reyes", title:"Owner, Thornbury Garden & Supply", initials:"DR"
+  }
+];
+
+/* ============================================================
+   FACET CONFIG + STATE
+   ============================================================ */
+var PAYOFF_LABEL = {a:"Fewer vendors / logins", b:"Lower total cost", c:"Less risk"};
+var state = {vertical:new Set(), platform:new Set(), metric:new Set(), payoff:new Set(), sort:"default"};
+var curList = [];      /* current filtered + sorted list */
+var spIndex = -1;      /* spotlight pointer into curList */
+
+function uniq(key){
+  var s=[]; ENTRIES.forEach(function(e){ if(s.indexOf(e[key])<0) s.push(e[key]); }); return s;
+}
+function countFor(group,val){
+  return ENTRIES.filter(function(e){ return matchesExcept(e,group) && (group==="payoff"? e.payoff.indexOf(val)>=0 : e[groupKey(group)]===val); }).length;
+}
+function groupKey(group){ return group==="vertical"?"vertical": group==="platform"?"platform": group==="metric"?"metricType":"payoff"; }
+
+/* whether entry matches all active facets EXCEPT the named group (for live counts) */
+function matchesExcept(e,skip){
+  if(skip!=="vertical" && state.vertical.size && !state.vertical.has(e.vertical)) return false;
+  if(skip!=="platform" && state.platform.size && !state.platform.has(e.platform)) return false;
+  if(skip!=="metric"   && state.metric.size   && !state.metric.has(e.metricType)) return false;
+  if(skip!=="payoff"   && state.payoff.size){
+    var ok=false; state.payoff.forEach(function(p){ if(e.payoff.indexOf(p)>=0) ok=true; }); if(!ok) return false;
+  }
+  return true;
+}
+function matches(e){
+  if(state.vertical.size && !state.vertical.has(e.vertical)) return false;
+  if(state.platform.size && !state.platform.has(e.platform)) return false;
+  if(state.metric.size && !state.metric.has(e.metricType)) return false;
+  if(state.payoff.size){ var ok=false; state.payoff.forEach(function(p){ if(e.payoff.indexOf(p)>=0) ok=true; }); if(!ok) return false; }
+  return true;
+}
+
+/* ============================================================
+   BUILD FACET UI
+   ============================================================ */
+function buildFacet(group, container, values, labelFn){
+  values.forEach(function(val){
+    var b=document.createElement("button");
+    b.className="facet"; b.setAttribute("data-group",group); b.setAttribute("data-val",val);
+    b.innerHTML='<span class="box" aria-hidden="true"></span><span class="txt">'+labelFn(val)+'</span><span class="cnt"></span>';
+    b.addEventListener("click",function(){ toggleFacet(group,val); });
+    container.appendChild(b);
+  });
+}
+function toggleFacet(group,val){
+  var set=state[group];
+  if(set.has(val)) set.delete(val); else set.add(val);
+  render();
+}
+function render(){
+  /* filter */
+  curList = ENTRIES.filter(matches);
+  /* sort */
+  if(state.sort==="metric") curList.sort(function(a,b){ return b.metricSort-a.metricSort; });
+  else if(state.sort==="az") curList.sort(function(a,b){ return a.brand.localeCompare(b.brand); });
+  /* default keeps ENTRIES order */
+
+  /* counts on facets */
+  document.querySelectorAll(".facet").forEach(function(b){
+    var g=b.getAttribute("data-group"), v=b.getAttribute("data-val");
+    var on=state[g].has(v); b.classList.toggle("on",on);
+    var c=countFor(g,v);
+    b.querySelector(".cnt").textContent=c;
+    b.setAttribute("data-disabled", (c===0 && !on)?"1":"0");
+  });
+
+  /* showing line + result count */
+  document.getElementById("showingLine").innerHTML="Showing <b>"+curList.length+"</b> of "+ENTRIES.length+" builds";
+  document.getElementById("rc").textContent=curList.length;
+
+  /* active chips */
+  var chips=document.getElementById("activeChips"); chips.innerHTML="";
+  ["vertical","platform","metric","payoff"].forEach(function(g){
+    state[g].forEach(function(v){
+      var label = g==="payoff"? PAYOFF_LABEL[v] : v;
+      var el=document.createElement("span"); el.className="activechip";
+      el.innerHTML=label+'<button aria-label="remove">&times;</button>';
+      el.querySelector("button").addEventListener("click",function(ev){ ev.stopPropagation(); toggleFacet(g,v); });
+      chips.appendChild(el);
+    });
+  });
+
+  /* grid */
+  var grid=document.getElementById("grid");
+  if(curList.length===0){
+    grid.innerHTML='<div class="empty"><div class="big">No builds match those facets</div><p>That combination is empty in this PREVIEW index. Loosen a facet to keep exploring the work.</p><button id="emptyReset">Reset filters</button></div>';
+    document.getElementById("emptyReset").addEventListener("click",resetAll);
+    return;
+  }
+  grid.innerHTML="";
+  curList.forEach(function(e,i){
+    grid.appendChild(buildRow(e,i));
+  });
+}
+
+/* ============================================================
+   BUILD A RESULT ROW (live card)
+   ============================================================ */
+function thumbStyle(e){
+  return 'background:linear-gradient(150deg,'+e.thumbTone[0]+','+e.thumbTone[1]+');';
+}
+function buildRow(e,i){
+  var d=document.createElement("article");
+  d.className="row"; d.style.animationDelay=(Math.min(i,12)*0.035)+"s";
+  d.setAttribute("data-id",e.id);
+  var modChips = e.mods.slice(0,4).map(function(m){ return '<span class="rmod">'+m.n+'</span>'; }).join("");
+  if(e.mods.length>4) modChips+='<span class="rmod more">+'+(e.mods.length-4)+'</span>';
+  var payDots = e.payoff.map(function(p){ return '<i class="'+p+'" title="'+PAYOFF_LABEL[p]+'"></i>'; }).join("");
+  d.innerHTML=
+    '<div class="thumb" style="'+thumbStyle(e)+'">'+
+      '<div class="chrome"><i></i><i></i><i></i><span class="url">'+e.id+'.sgen.site</span></div>'+
+      '<div class="canvas">'+
+        '<div class="grain"></div>'+
+        '<div class="typ"><div class="h">'+e.accentTxt+'</div>'+
+          '<div class="b"><i style="width:46%;"></i><i style="width:30%;"></i></div>'+
+          '<div class="b" style="margin-top:5px;"><i style="width:62%;"></i></div></div>'+
+      '</div>'+
+      '<div class="badge'+(e.badgeSpeed?' spd':'')+'">'+e.badge+'</div>'+
+    '</div>'+
+    '<div class="rbody">'+
+      '<div class="rtags"><span class="rtag">'+e.vertical+'</span><span class="rtag platform">was: '+e.platform+'</span></div>'+
+      '<div class="rbrand">'+e.brand+'</div>'+
+      '<div class="rmetric"><span class="v'+(e.headlineNeu?' neu':'')+'">'+e.headline+'</span><span class="l">'+e.headlineLabel+'</span></div>'+
+      '<div class="rdo">'+e.doLine+'</div>'+
+      '<div class="rmods">'+modChips+'</div>'+
+      '<div class="rfoot"><span class="spotlight">Open spotlight <span class="arr">&rarr;</span></span><span class="pay">'+payDots+'</span></div>'+
+    '</div>';
+  d.addEventListener("click",function(){ openSpotlight(e.id); });
+  return d;
+}
+
+/* ============================================================
+   SPOTLIGHT — inline mini-case-study
+   ============================================================ */
+function openSpotlight(id){
+  spIndex = curList.findIndex(function(e){ return e.id===id; });
+  if(spIndex<0){ spIndex = ENTRIES.findIndex(function(e){ return e.id===id; }); }
+  paintSpotlight();
+  document.getElementById("scrim").classList.add("open");
+  document.getElementById("spotlight").classList.add("open");
+  document.getElementById("spotlight").setAttribute("aria-hidden","false");
+  document.body.style.overflow="hidden";
+  markActive(id);
+}
+function closeSpotlight(){
+  document.getElementById("scrim").classList.remove("open");
+  document.getElementById("spotlight").classList.remove("open");
+  document.getElementById("spotlight").setAttribute("aria-hidden","true");
+  document.body.style.overflow="";
+  markActive(null);
+}
+function markActive(id){
+  document.querySelectorAll(".row").forEach(function(r){ r.classList.toggle("active", id && r.getAttribute("data-id")===id); });
+}
+function stepSpotlight(dir){
+  var list = curList.length?curList:ENTRIES;
+  spIndex = (spIndex + dir + list.length) % list.length;
+  paintSpotlight();
+  markActive(list[spIndex].id);
+}
+function paintSpotlight(){
+  var list = curList.length?curList:ENTRIES;
+  var e = list[spIndex]; if(!e) return;
+  document.getElementById("spCanvas").style.cssText = thumbStyle(e)+';';
+  document.getElementById("spCanvas").innerHTML =
+    '<div class="grain" style="opacity:.4;mix-blend-mode:overlay;position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.5) .5px,transparent .6px);background-size:5px 5px;"></div>';
+  document.getElementById("spEyebrow").textContent=e.eyebrow;
+  document.getElementById("spBrand").textContent=e.brand;
+
+  var glance = e.glance.map(function(g){ return '<div class="g"><div class="k">'+g[0]+'</div><div class="vv">'+g[1]+'</div></div>'; }).join("");
+  var band = e.band.map(function(b){ return '<div class="n'+(b.red?' red':'')+'"><div class="num">'+b.n+'</div><div class="lab">'+b.l+'</div></div>'; }).join("");
+  var challenge = e.challenge.map(function(p){ return '<p>'+p+'</p>'; }).join("");
+  var mods = e.mods.map(function(m){ return '<div class="m"><div class="name">'+m.n+'</div><div class="rep">replaced <span class="x">'+m.r[1]+'</span></div></div>'; }).join("");
+  var payoff = e.payoff.map(function(p){ return '<span class="p '+p+'"><i></i>'+PAYOFF_LABEL[p]+'</span>'; }).join("");
+
+  document.getElementById("spBody").innerHTML=
+    '<div class="sp-headmetric"><div class="v'+(e.headlineNeu?' neu':'')+'">'+e.headline+'</div><div class="l">'+e.headlineLabel+'</div></div>'+
+    '<div class="sp-glance">'+glance+'</div>'+
+    '<div class="sp-band">'+band+'</div>'+
+    '<div class="sp-sec"><div class="h">The challenge</div>'+challenge+'</div>'+
+    '<div class="sp-sec"><div class="h">What they built on SGEN</div>'+
+      '<p style="margin-bottom:14px;">One all-inclusive stack — native modules, not plugins. Pillar: <b>'+e.pillar+'</b>.</p>'+
+      '<div class="sp-mods">'+mods+'</div></div>'+
+    '<div class="sp-sec"><div class="h">The result, in their words</div>'+
+      '<div class="sp-quote"><div class="q">'+e.quote+'</div>'+
+        '<div class="attr"><span class="face" style="background:linear-gradient(150deg,'+e.thumbTone[0]+','+e.thumbTone[1]+');"><span>'+e.initials+'</span></span>'+
+          '<span class="who"><span class="nm">'+e.person+'</span><span class="tt">'+e.title+'</span></span></div></div></div>'+
+    '<div class="sp-sec" style="margin-bottom:18px;"><div class="h">One-stack payoff</div><div class="sp-payoff">'+payoff+'</div></div>'+
+    '<div class="sp-cta"><a class="primary" href="#">Build your own &rarr;</a><a class="ghost" href="#">Visit site (none yet)</a></div>'+
+    '<div class="sp-disclaim"><span class="ic">&#9888;</span><span><b>PREVIEW placeholder.</b> '+e.brand+', '+e.person+', the metrics and the quote are fabricated for design population (D3). Every SGEN capability cited is real. Replace with a real, consented customer before publish.</span></div>';
+}
+
+/* ============================================================
+   SORT + RESET WIRING
+   ============================================================ */
+function resetAll(){
+  state.vertical.clear(); state.platform.clear(); state.metric.clear(); state.payoff.clear();
+  render();
+}
+document.getElementById("resetBtn").addEventListener("click",resetAll);
+document.getElementById("sortBtns").addEventListener("click",function(ev){
+  var b=ev.target.closest("button"); if(!b) return;
+  state.sort=b.getAttribute("data-sort");
+  document.querySelectorAll("#sortBtns button").forEach(function(x){ x.classList.toggle("on",x===b); });
+  render();
+});
+document.getElementById("spClose").addEventListener("click",closeSpotlight);
+document.getElementById("scrim").addEventListener("click",closeSpotlight);
+document.getElementById("spPrev").addEventListener("click",function(){ stepSpotlight(-1); });
+document.getElementById("spNext").addEventListener("click",function(){ stepSpotlight(1); });
+document.addEventListener("keydown",function(ev){
+  if(ev.key==="Escape") closeSpotlight();
+  if(document.getElementById("spotlight").classList.contains("open")){
+    if(ev.key==="ArrowRight") stepSpotlight(1);
+    if(ev.key==="ArrowLeft") stepSpotlight(-1);
+  }
+});
+
+/* ============================================================
+   INIT
+   ============================================================ */
+buildFacet("vertical", document.getElementById("grp-vertical"), uniq("vertical"), function(v){return v;});
+buildFacet("platform", document.getElementById("grp-platform"), uniq("platform"), function(v){return v;});
+buildFacet("metric", document.getElementById("grp-metric"), uniq("metricType"), function(v){return v;});
+buildFacet("payoff", document.getElementById("grp-payoff"), ["a","b","c"], function(v){return PAYOFF_LABEL[v];});
+document.getElementById("liveN").textContent=ENTRIES.length;
+render();
+</script>
+</body>
+</html>
