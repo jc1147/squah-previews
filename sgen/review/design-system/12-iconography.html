@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>SGEN Living Styleguide — 12 · Iconography (Lucide-style 24×24 · currentColor · 1.8)</title>
+<style>
+/* ============================================================
+   SGEN LIVING STYLEGUIDE — 12 · ICONOGRAPHY
+   charcoal #1a1a1a · red #d51522 · the ICON-SPEC page.
+   Lucide-style line icons: 24×24 viewBox, currentColor, ONE
+   stroke weight (1.8), 4-step size ramp (16/20/24/32), one
+   icon-chip recipe, and a live in-use inventory rendered from
+   the icons the demos actually ship.
+   Self-contained: system fonts, 0 external deps, no images.
+   ============================================================ */
+:root{
+  --ink:#1a1a1a;                 /* charcoal */
+  --paper:#f6f5f3;               /* warm off-white, never #fff */
+  --surface:#ffffff;
+  --muted:#626262;
+  --body:#4a4a4a;
+  --line:rgba(26,26,26,.10);
+  --accent:#d51522;              /* SGEN red */
+  --accent-ink:#a50f19;
+  --accent-2:#ff5762;
+  --ok:#1f8a4c;
+
+  --grad-brand:linear-gradient(135deg,#d51522,#7a0c13);
+  --r-chip:8px; --r-card:16px; --r-panel:24px; --r-pill:9999px;
+  --shadow-rest:0 2px 5px 0 rgba(0,0,0,.08);
+  --shadow-card:0 15px 30px 0 rgba(1,7,39,.13);
+  --shadow-hover:0 32px 64px -12px rgba(16,24,40,.18);
+  --ease:cubic-bezier(.05,.5,.3,1);
+  --t-fast:.2s ease-out;
+  --glass:blur(18px) saturate(180%);
+  --wrap:1180px;
+  --mono:ui-monospace,"SFMono-Regular",Menlo,Consolas,"Liberation Mono",monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+
+  --z-header:1000; --z-skiplink:1100;
+
+  /* === THE ICON TOKENS (this page is the spec) === */
+  --icon-sm:16px; --icon-md:20px; --icon-lg:24px; --icon-xl:32px;
+  --chip-sm:40px; --chip-md:48px; --chip-lg:56px; --chip-xl:64px;
+  --chip-tint:rgba(213,21,34,.10);
+  --chip-line:rgba(213,21,34,.22);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{
+  margin:0;background:var(--paper);color:var(--body);
+  font-family:var(--sans);font-size:16px;line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 24px}
+h1,h2,h3,h4{color:var(--ink);margin:0;letter-spacing:-.02em;line-height:1.06}
+p{margin:0 0 1em}
+a{color:var(--accent-ink);text-decoration:none}
+code{font-family:var(--mono);font-size:.85em;background:rgba(26,26,26,.05);padding:.06em .35em;border-radius:5px}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;text-transform:uppercase;letter-spacing:.16em;font-size:12px;font-weight:700;color:var(--accent)}
+.eyebrow::before{content:"";width:34px;height:2px;background:var(--accent);display:inline-block}
+
+/* ---- the canonical icon class (THE spec made literal) ---- */
+.icon{width:var(--icon-lg);height:var(--icon-lg);display:inline-block;flex:0 0 auto;vertical-align:middle;stroke:currentColor}
+.icon path,.icon circle,.icon rect,.icon line,.icon polyline,.icon polygon{
+  fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.icon--sm{width:var(--icon-sm);height:var(--icon-sm)}
+.icon--md{width:var(--icon-md);height:var(--icon-md)}
+.icon--lg{width:var(--icon-lg);height:var(--icon-lg)}
+.icon--xl{width:var(--icon-xl);height:var(--icon-xl)}
+.icon--fill path,.icon--fill circle,.icon--fill rect,.icon--fill polygon{fill:currentColor;stroke:none}
+
+/* ---- skip link (a11y) ---- */
+.skip{position:fixed;left:12px;top:-60px;z-index:var(--z-skiplink);
+  background:var(--ink);color:#fff;padding:10px 16px;border-radius:8px;font-weight:700;font-size:13px;
+  transition:top .2s ease}
+.skip:focus{top:12px;outline:3px solid var(--accent);outline-offset:2px}
+
+/* ---------- glass top nav (dogfood: TOP-12 #6) ---------- */
+.topnav{
+  position:sticky;top:0;z-index:var(--z-header);
+  background:rgba(26,26,26,.92);
+  -webkit-backdrop-filter:var(--glass);backdrop-filter:var(--glass);
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+.topnav .wrap{display:flex;align-items:center;gap:8px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;
+  padding-top:12px;padding-bottom:12px}
+.topnav .wrap::-webkit-scrollbar{display:none}
+.brand{display:flex;align-items:center;gap:10px;margin-right:auto;font-weight:700;color:#fff;
+  letter-spacing:-.01em;white-space:nowrap}
+.brand .dot{width:11px;height:11px;border-radius:3px;background:var(--accent);flex:0 0 auto;
+  box-shadow:0 0 0 0 rgba(213,21,34,.6);animation:nudge 3s var(--ease) infinite}
+.brand small{font-weight:600;font-size:.78em;opacity:.7}
+@keyframes nudge{0%,92%,100%{box-shadow:0 0 0 0 rgba(213,21,34,0)}96%{box-shadow:0 0 0 5px rgba(213,21,34,.18)}}
+.topnav a.nav{
+  color:#cfcfcf;font-size:13px;font-weight:600;letter-spacing:.01em;white-space:nowrap;
+  padding:7px 12px;border-radius:var(--r-pill);transition:var(--t-fast)}
+.topnav a.nav:hover{color:#fff;background:rgba(255,255,255,.10)}
+.topnav a.nav[aria-current="page"]{color:#fff;background:var(--accent)}
+
+/* ---------- hero — ambient glow blobs behind charcoal ---------- */
+.hero{position:relative;overflow:hidden;background:var(--ink);color:#fff;padding:96px 0 120px}
+.hero::before,.hero::after{content:"";position:absolute;z-index:0;border-radius:50%;filter:blur(72px);pointer-events:none}
+.hero::before{width:560px;height:560px;left:-150px;top:-170px;background:radial-gradient(circle,rgba(213,21,34,.55),transparent 70%)}
+.hero::after{width:480px;height:480px;right:-120px;bottom:-210px;background:radial-gradient(circle,rgba(213,21,34,.24),transparent 70%)}
+.hero .wrap{position:relative;z-index:1}
+.hero .eyebrow{color:var(--accent-2)}.hero .eyebrow::before{background:var(--accent-2)}
+.hero h1{color:#fff;font-size:clamp(38px,7vw,92px);font-weight:300;letter-spacing:-.045em;
+  line-height:.97;margin:16px 0 0;max-width:15ch}
+.hero h1 b{font-weight:700}
+.hero h1 .clip{background:linear-gradient(135deg,#ff5762,#d51522 60%,#7a0c13);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .lede{margin-top:24px;max-width:720px;color:#d6d6d6;font-size:clamp(16px,2.1vw,20px);line-height:1.6}
+.hero .lede b{color:#fff}
+.hero .specrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:32px}
+.hero .spec{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.12);border-radius:var(--r-pill);padding:8px 14px 8px 10px;
+  font-size:12.5px;font-weight:600;color:#e6e6e6;letter-spacing:.01em}
+.hero .spec .icon{width:18px;height:18px;color:var(--accent-2)}
+.scroll-fade{position:absolute;left:0;right:0;bottom:0;height:120px;z-index:1;
+  background:linear-gradient(180deg,rgba(246,245,243,0) 0%,var(--paper) 78%)}
+
+/* ---------- section shell ---------- */
+.section{padding:64px 0}
+.section:nth-of-type(even){background:linear-gradient(180deg,#fff,var(--paper))}
+.section .head{max-width:840px;margin-bottom:30px}
+.section .head h2{font-size:clamp(24px,3.4vw,38px);margin:12px 0 10px}
+.section .head p{color:var(--body);font-size:15.5px;margin:0}
+.num{display:inline-flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:13px;font-weight:700;color:#fff;background:var(--ink);
+  min-width:30px;height:30px;padding:0 9px;border-radius:9px;margin-right:6px;vertical-align:middle}
+
+/* scroll-reveal + stagger (TOP-12 #4) */
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
+.reveal.in-view{opacity:1;transform:none}
+.stagger>*{opacity:0;transform:translateY(18px);transition:opacity .55s var(--ease),transform .55s var(--ease)}
+.stagger.in-view>*{opacity:1;transform:none}
+
+/* ---------- spec at a glance ---------- */
+.spec4{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-top:6px}
+.spec4 .s{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-card);
+  padding:22px;box-shadow:var(--shadow-rest)}
+.spec4 .s .k{font-family:var(--mono);font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.12em}
+.spec4 .s .v{font-size:clamp(22px,3vw,30px);font-weight:700;color:var(--ink);letter-spacing:-.02em;margin-top:6px;line-height:1}
+.spec4 .s .d{font-size:13px;color:var(--muted);margin-top:8px}
+
+/* ---------- the canonical icon, dissected ---------- */
+.anatomy{display:grid;grid-template-columns:1.1fr 1fr;gap:22px;align-items:stretch}
+.anatomy .grid-demo{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-panel);
+  box-shadow:var(--shadow-card);padding:28px;display:grid;place-items:center}
+.gframe{position:relative;width:240px;height:240px}
+.gframe .keyline{position:absolute;inset:0;border:1px dashed rgba(213,21,34,.35);border-radius:10px}
+.gframe .live{position:absolute;inset:20px;border:1px solid rgba(26,26,26,.12);border-radius:8px}
+.gframe svg{position:absolute;inset:0;width:240px;height:240px;color:var(--ink)}
+.gframe svg path{stroke-width:1.8}
+.gframe .tag{position:absolute;font-family:var(--mono);font-size:10.5px;color:var(--accent);background:#fff;
+  border:1px solid var(--chip-line);border-radius:6px;padding:2px 7px;white-space:nowrap}
+.gframe .tag.t1{top:-12px;left:-1px}
+.gframe .tag.t2{bottom:-12px;right:-1px}
+.anatomy .copyblock{background:var(--ink);border-radius:var(--r-panel);padding:24px;box-shadow:var(--shadow-card);overflow:auto}
+.anatomy .copyblock pre{margin:0;color:#e6e6e6;font-family:var(--mono);font-size:12.5px;line-height:1.7;white-space:pre-wrap;word-break:break-word}
+.anatomy .copyblock .cm{color:#7f8aa0}
+.anatomy .copyblock .at{color:#ff8a92}
+.anatomy .copyblock .vl{color:#9fd0ff}
+.anatomy .copyblock .tg{color:#62d394}
+
+/* ---------- size ramp ---------- */
+.ramp{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}
+.ramp .r{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-card);
+  padding:24px 20px;box-shadow:var(--shadow-rest);text-align:center;
+  transition:transform var(--t-fast),box-shadow var(--t-fast)}
+.ramp .r:hover{transform:translateY(-4px);box-shadow:var(--shadow-card)}
+.ramp .r .stage{height:48px;display:grid;place-items:center;color:var(--ink)}
+.ramp .r .tk{font-family:var(--mono);font-size:12.5px;font-weight:700;color:var(--accent);margin-top:14px}
+.ramp .r .px{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:3px}
+.ramp .r .use{font-size:12px;color:var(--body);margin-top:8px;line-height:1.45}
+.ramp .r .baseline{margin-top:14px;display:flex;align-items:center;justify-content:center;gap:7px;
+  font-size:12px;color:var(--muted);border-top:1px dashed var(--line);padding-top:12px}
+.ramp .r .baseline .icon{color:var(--ink)}
+
+/* ---------- icon-chip recipe ---------- */
+.icon-chip{display:grid;place-items:center;width:var(--chip-md);height:var(--chip-md);
+  border-radius:14px;background:var(--chip-tint);border:1px solid var(--chip-line);
+  color:var(--accent);flex:0 0 auto;
+  transition:transform var(--t-fast),background var(--t-fast),box-shadow var(--t-fast)}
+.icon-chip .icon{width:22px;height:22px}
+.icon-chip--sm{width:var(--chip-sm);height:var(--chip-sm);border-radius:12px}.icon-chip--sm .icon{width:20px;height:20px}
+.icon-chip--lg{width:var(--chip-lg);height:var(--chip-lg);border-radius:16px}.icon-chip--lg .icon{width:24px;height:24px}
+.icon-chip--xl{width:var(--chip-xl);height:var(--chip-xl);border-radius:18px}.icon-chip--xl .icon{width:32px;height:32px}
+.icon-chip--ink{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.12);color:#fff}
+.icon-chip--solid{background:var(--grad-brand);border:0;color:#fff;box-shadow:0 8px 20px -6px rgba(213,21,34,.45)}
+
+.chiprow{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}
+.chipcard{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-card);
+  padding:22px;box-shadow:var(--shadow-rest);text-align:center;
+  transition:transform var(--t-fast),box-shadow var(--t-fast)}
+.chipcard:hover{transform:translateY(-4px);box-shadow:var(--shadow-card)}
+.chipcard:hover .icon-chip{transform:translateY(-2px);background:rgba(213,21,34,.14);box-shadow:0 8px 18px -6px rgba(213,21,34,.35)}
+.chipcard .icon-chip{margin:0 auto}
+.chipcard .nm{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--ink);margin-top:14px}
+.chipcard .vt{font-size:11.5px;color:var(--muted);margin-top:4px}
+.chipcard.ink-bg{background:var(--ink)}.chipcard.ink-bg .nm{color:#fff}.chipcard.ink-bg .vt{color:#9b9b9b}
+
+/* feature tile (chip in use) */
+.ftiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-top:8px}
+.ftile{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-card);
+  padding:24px;box-shadow:var(--shadow-rest);transition:transform var(--t-fast),box-shadow var(--t-fast)}
+.ftile:hover{transform:translateY(-4px);box-shadow:var(--shadow-card)}
+.ftile:hover .icon-chip{transform:translateY(-2px);background:rgba(213,21,34,.14);box-shadow:0 8px 18px -6px rgba(213,21,34,.35)}
+.ftile h4{font-size:16px;margin:16px 0 6px}
+.ftile p{font-size:13.5px;color:var(--muted);margin:0 0 12px;line-height:1.55}
+.ftile .more{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--accent-ink)}
+.ftile .more .icon{width:16px;height:16px;transition:transform var(--t-fast)}
+.ftile:hover .more .icon{transform:translateX(3px)}
+
+/* ---------- currentColor demo ---------- */
+.cc{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.cc .ctx{border-radius:var(--r-card);padding:22px;border:1px solid var(--line);box-shadow:var(--shadow-rest)}
+.cc .ctx .row{display:flex;align-items:center;gap:10px;font-weight:700;font-size:14px}
+.cc .ctx .lbl{font-family:var(--mono);font-size:11px;margin-top:12px;opacity:.85}
+.cc .ctx--body{background:var(--surface);color:var(--body)}
+.cc .ctx--accent{background:var(--surface);color:var(--accent)}
+.cc .ctx--muted{background:var(--surface);color:var(--muted)}
+.cc .ctx--ink{background:var(--ink);color:#fff;border-color:rgba(255,255,255,.10)}
+.cc .ctx--ink .lbl{color:#9b9b9b}
+.cc .ctx--grad{background:var(--grad-brand);color:#fff;border:0}
+
+/* ---------- in-use inventory grid ---------- */
+.invblock{margin-top:8px}
+.invlabel{display:flex;align-items:center;gap:10px;margin:26px 0 12px}
+.invlabel .t{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--ink);text-transform:uppercase;letter-spacing:.1em}
+.invlabel .ln{flex:1;height:1px;background:var(--line)}
+.invlabel .ct{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.invgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:12px}
+.icell{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-card);
+  padding:18px 12px 14px;box-shadow:var(--shadow-rest);text-align:center;
+  transition:transform var(--t-fast),box-shadow var(--t-fast),border-color var(--t-fast)}
+.icell:hover{transform:translateY(-3px);box-shadow:var(--shadow-card);border-color:var(--chip-line)}
+.icell .gl{height:40px;display:grid;place-items:center;color:var(--ink)}
+.icell:hover .gl{color:var(--accent)}
+.icell .gl .icon{width:26px;height:26px}
+.icell .nm{font-family:var(--mono);font-size:11.5px;font-weight:700;color:var(--ink);margin-top:12px;word-break:break-word}
+.icell .wh{font-size:10.5px;color:var(--muted);margin-top:3px;line-height:1.35}
+.icell.ink-cell{background:var(--ink)}.icell.ink-cell .gl{color:#fff}.icell.ink-cell:hover .gl{color:var(--accent-2)}
+.icell.ink-cell .nm{color:#fff}.icell.ink-cell .wh{color:#9b9b9b}
+
+/* ---------- a11y patterns ---------- */
+.a11y{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.a11y .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-panel);
+  padding:24px;box-shadow:var(--shadow-rest)}
+.a11y h4{font-size:15px;display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.a11y h4 .icon{width:18px;height:18px;color:var(--accent)}
+.a11y p{font-size:13.5px;color:var(--muted);margin:0 0 14px}
+.a11y .demobtns{display:flex;gap:12px;flex-wrap:wrap}
+.iconbtn{display:inline-grid;place-items:center;width:44px;height:44px;border-radius:12px;
+  background:var(--ink);color:#fff;border:0;cursor:pointer;transition:var(--t-fast)}
+.iconbtn:hover{background:var(--accent)}
+.iconbtn:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.iconbtn .icon{width:20px;height:20px}
+.iconbtn--ghost{background:rgba(26,26,26,.06);color:var(--ink)}
+.iconbtn--ghost:hover{background:rgba(213,21,34,.12);color:var(--accent)}
+.decorow{display:flex;align-items:center;gap:9px;font-size:14px;color:var(--body);margin-top:8px}
+.decorow .icon{width:18px;height:18px;color:var(--accent)}
+.codeline{font-family:var(--mono);font-size:11.5px;color:var(--muted);margin-top:14px;
+  background:rgba(26,26,26,.04);border-radius:8px;padding:10px 12px;line-height:1.6;word-break:break-word}
+.codeline b{color:var(--accent-ink)}
+
+/* ---------- footer ---------- */
+.foot{background:#111;color:#9b9b9b;padding:46px 0;font-size:13px;border-top:1px solid rgba(255,255,255,.08)}
+.foot .wrap{display:flex;gap:16px;flex-wrap:wrap;align-items:center}
+.foot .fbrand{margin-right:auto;color:#fff;font-weight:700}
+.foot a{color:#cfcfcf}.foot a:hover{color:#fff}
+.foot .social{display:flex;gap:10px}
+.foot .social a{display:grid;place-items:center;width:34px;height:34px;border-radius:9px;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:#cfcfcf;transition:var(--t-fast)}
+.foot .social a:hover{background:var(--accent);border-color:var(--accent);color:#fff}
+.foot .social .icon{width:18px;height:18px}
+.foot .meta{color:#666;font-family:var(--mono);font-size:11px}
+
+/* ---------- reduced motion ---------- */
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *{animation:none!important;transition:none!important}
+  .reveal,.stagger>*{opacity:1!important;transform:none!important}
+}
+@media (max-width:820px){
+  .anatomy{grid-template-columns:1fr}
+  .a11y{grid-template-columns:1fr}
+}
+@media (max-width:680px){
+  .hero{padding:76px 0 96px}
+}
+</style>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- ===================== GLASS TOP NAV ===================== -->
+<nav class="topnav">
+  <div class="wrap">
+    <span class="brand"><span class="dot"></span>SGEN&nbsp;<small>Living Styleguide</small></span>
+    <a class="nav" href="index.html">Index</a>
+    <a class="nav" href="00-top12.html">00 · Top-12</a>
+    <a class="nav" href="01-transitions-hero-motion.html">01 · Transitions</a>
+    <a class="nav" href="02-depth-type-color.html">02 · Depth</a>
+    <a class="nav" href="03-layout-imagery-components.html">03 · Layout</a>
+    <a class="nav" href="04-signatures-tokens.html">04 · Signatures</a>
+    <a class="nav" href="06-responsive.html">06 · Responsive</a>
+    <a class="nav" href="07-components.html">07 · Components</a>
+    <a class="nav" href="08-scroll-sticky.html">08 · Scroll / Sticky</a>
+    <a class="nav" href="09-accessibility.html">09 · Accessibility</a>
+    <a class="nav" href="10-sections.html">10 · Sections</a>
+    <a class="nav" href="11-theming.html">11 · Theming</a><a class="nav" href="12-iconography.html">12 · Iconography</a><a class="nav" href="13-utility-pages.html">13 · Utility</a><a class="nav" href="14-ecommerce.html">14 · Ecommerce</a><a class="nav" href="15-dataviz.html">15 · Data-viz</a>
+    <a class="nav" href="12-iconography.html" aria-current="page">12 · Iconography</a>
+  </div>
+</nav>
+
+<!-- ===================== HERO ===================== -->
+<header class="hero">
+  <div class="wrap">
+    <span class="eyebrow">12 · Iconography</span>
+    <h1>One grid, one weight, <b class="clip">one family</b>.</h1>
+    <p class="lede">SGEN icons are <b>Lucide-style line marks</b> — a single <code style="color:#fff;background:rgba(255,255,255,.1)">24×24</code> viewBox, drawn in <b>currentColor</b> with exactly <b>one stroke weight</b>. They inherit the colour of their text context, scale on a four-step ramp, and sit in one chip recipe. Every glyph below is rendered live, inline, with zero external dependencies — and every one is harvested from icons the demos already ship.</p>
+    <div class="specrow">
+      <span class="spec"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M9 21V9"/></svg>24 × 24 viewBox</span>
+      <span class="spec"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="10.5" r="2.5"/><circle cx="8.5" cy="7.5" r="2.5"/><circle cx="6.5" cy="12.5" r="2.5"/><path d="M12 2C6.5 2 2 6 2 11c0 4 3 7 7 7 1 0 2-1 2-2 0-.5-.2-.9-.5-1.2-.3-.4-.5-.8-.5-1.3 0-1.1.9-2 2-2h2.4c3.1 0 5.6-2.5 5.6-5.6C20 4.9 16.4 2 12 2z"/></svg>currentColor</span>
+      <span class="spec"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 18L20 6"/><path d="M4 12h7"/></svg>stroke-width 1.8</span>
+      <span class="spec"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h4l3-7 4 14 3-7h4"/></svg>16 / 20 / 24 / 32</span>
+    </div>
+  </div>
+  <div class="scroll-fade"></div>
+</header>
+
+<main id="main">
+
+<!-- ===================== 1 · SPEC AT A GLANCE ===================== -->
+<section class="section">
+  <div class="wrap">
+    <div class="head reveal">
+      <span class="eyebrow">The lock</span>
+      <h2><span class="num">1</span>The spec, in four numbers</h2>
+      <p>The non-negotiables. Authored on a single grid, one optical line, soft round terminals, colour inherited — never hard-coded. Full text in <code>_ICON-SYSTEM.md</code>.</p>
+    </div>
+    <div class="spec4 stagger reveal">
+      <div class="s"><div class="k">viewBox</div><div class="v">24×24</div><div class="d">Single canonical grid. Lucide / Feather native. ~2px keyline trim → 20×20 live area.</div></div>
+      <div class="s"><div class="k">stroke</div><div class="v">currentColor</div><div class="d">Never a hex on the SVG. The icon takes the colour of its text context and re-themes for free.</div></div>
+      <div class="s"><div class="k">stroke-width</div><div class="v">1.8</div><div class="d">THE one weight — fixed across all sizes. One emphasis exception: 2.4 on the scroll-top button.</div></div>
+      <div class="s"><div class="k">joins / caps</div><div class="v">round</div><div class="d">Soft round terminals everywhere. No mitred corners — matches the BeTheme settle aesthetic.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 2 · THE CANONICAL ICON, DISSECTED ===================== -->
+<section class="section">
+  <div class="wrap">
+    <div class="head reveal">
+      <span class="eyebrow">Anatomy</span>
+      <h2><span class="num">2</span>The canonical icon — copy this, swap the paths</h2>
+      <p>Every SGEN icon is this exact markup with a different inner path. The dashed frame is the 24-unit grid; the inner square is the ~20-unit live area Lucide draws inside.</p>
+    </div>
+    <div class="anatomy reveal">
+      <div class="grid-demo">
+        <div class="gframe">
+          <div class="keyline"></div>
+          <div class="live"></div>
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span class="tag t1">24 × 24 grid</span>
+          <span class="tag t2">~20 live area</span>
+        </div>
+      </div>
+      <div class="copyblock">
+<pre><span class="cm">&lt;!-- THE canonical icon: check --&gt;</span>
+<span class="tg">&lt;svg</span> <span class="at">class</span>=<span class="vl">"icon"</span> <span class="at">viewBox</span>=<span class="vl">"0 0 24 24"</span>
+     <span class="at">fill</span>=<span class="vl">"none"</span> <span class="at">stroke</span>=<span class="vl">"currentColor"</span>
+     <span class="at">stroke-width</span>=<span class="vl">"1.8"</span>
+     <span class="at">stroke-linecap</span>=<span class="vl">"round"</span>
+     <span class="at">stroke-linejoin</span>=<span class="vl">"round"</span>
+     <span class="at">aria-hidden</span>=<span class="vl">"true"</span><span class="tg">&gt;</span>
+  <span class="tg">&lt;path</span> <span class="at">d</span>=<span class="vl">"M20 6L9 17l-5-5"</span><span class="tg">/&gt;</span>
+<span class="tg">&lt;/svg&gt;</span>
+
+<span class="cm">/* one weight, fixed across all sizes */</span>
+<span class="at">.icon</span>{ width:var(<span class="vl">--icon-lg</span>); height:var(<span class="vl">--icon-lg</span>);
+        stroke:<span class="vl">currentColor</span>; flex:0 0 auto }</pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 3 · SIZE RAMP ===================== -->
+<section class="section">
+  <div class="wrap">
+    <div class="head reveal">
+      <span class="eyebrow">The ramp</span>
+      <h2><span class="num">3</span>Four sizes — and the weight never scales</h2>
+      <p>Pick the nearest token; never an off-ramp pixel. Same glyph at every stop — note the optical line stays <b>1.8</b> whether it is 16px or 32px. That is what keeps a mixed-size grid reading as one family.</p>
+    </div>
+    <div class="ramp stagger reveal">
+      <div class="r">
+        <div class="stage"><svg class="icon icon--sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></svg></div>
+        <div class="tk">--icon-sm</div><div class="px">16px</div>
+        <div class="use">List ticks, link arrows, input adornments, tags</div>
+        <div class="baseline">inline → <span style="color:var(--body)">verified</span> <svg class="icon icon--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg></div>
+      </div>
+      <div class="r">
+        <div class="stage"><svg class="icon icon--md" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></svg></div>
+        <div class="tk">--icon-md</div><div class="px">20px</div>
+        <div class="use">Nav items, buttons, dense UI, 36–40px chips</div>
+        <div class="baseline">button <svg class="icon icon--md" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+      </div>
+      <div class="r" style="border-color:var(--chip-line)">
+        <div class="stage" style="color:var(--accent)"><svg class="icon icon--lg" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></svg></div>
+        <div class="tk">--icon-lg · default</div><div class="px">24px</div>
+        <div class="use">Feature rows, card eyebrows, standalone UI</div>
+        <div class="baseline">default <svg class="icon icon--lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg></div>
+      </div>
+      <div class="r">
+        <div class="stage"><svg class="icon icon--xl" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></svg></div>
+        <div class="tk">--icon-xl</div><div class="px">32px</div>
+        <div class="use">Hero feature tiles, big chips, empty-states</div>
+        <div class="baseline">hero <svg class="icon icon--xl" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 4 · ICON-CHIP RECIPE ===================== -->
+<section class="section">
+  <div class="wrap">
+    <div class="head reveal">
+      <span class="eyebrow">The surface</span>
+      <h2><span class="num">4</span>The icon-chip recipe</h2>
+      <p>When an icon needs a ground it sits in a square chip on a <b>10% accent tint</b> with a hairline accent border — the single chip used across the feature tiles. Hover a card and the chip lifts <code>−2px</code> with it. Four chip sizes, plus inverted and solid variants.</p>
+    </div>
+
+    <div class="chiprow stagger reveal" style="margin-bottom:18px">
+      <div class="chipcard">
+        <span class="icon-chip icon-chip--sm"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7l9-4 9 4-9 4-9-4z"/><path d="M3 7v10l9 4 9-4V7"/></svg></span>
+        <div class="nm">--chip-sm</div><div class="vt">40px · icon 20</div>
+      </div>
+      <div class="chipcard">
+        <span class="icon-chip"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M9 21V9"/></svg></span>
+        <div class="nm">--chip-md · default</div><div class="vt">48px · icon 22</div>
+      </div>
+      <div class="chipcard">
+        <span class="icon-chip icon-chip--lg"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 17l6-6 4 4 6-7"/><path d="M14 8h6v6"/></svg></span>
+        <div class="nm">--chip-lg</div><div class="vt">56px · icon 24</div>
+      </div>
+      <div class="chipcard ink-bg">
+        <span class="icon-chip icon-chip--xl icon-chip--solid"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg></span>
+        <div class="nm">--chip-xl · solid</div><div class="vt">64px · gradient ground</div>
+      </div>
+    </div>
+
+    <!-- chip in use: feature tiles -->
+    <div class="ftiles stagger reveal">
+      <div class="ftile">
+        <span class="icon-chip"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7l9-4 9 4-9 4-9-4z"/><path d="M3 7v10l9 4 9-4V7"/></svg></span>
+        <h4>Strategy &amp; positioning</h4>
+        <p>We pin the offer, the audience and the one promise before a pixel moves.</p>
+        <span class="more">Learn more <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </div>
+      <div class="ftile">
+        <span class="icon-chip"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M9 21V9"/></svg></span>
+        <h4>Design systems</h4>
+        <p>One accent, one type pairing, one shadow family — a token layer you reskin, never rebuild.</p>
+        <span class="more">Learn more <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </div>
+      <div class="ftile">
+        <span class="icon-chip"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 17l6-6 4 4 6-7"/><path d="M14 8h6v6"/></svg></span>
+        <h4>Build &amp; launch</h4>
+        <p>Responsive, accessible, fast — verified at every breakpoint and shipped with the lights on.</p>
+        <span class="more">Learn more <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 5 · CURRENTCOLOR DEMO ===================== -->
+<section class="section">
+  <div class="wrap">
+    <div class="head reveal">
+      <span class="eyebrow">Colour</span>
+      <h2><span class="num">5</span>One glyph, five contexts — zero hexes on the icon</h2>
+      <p>The <b>same</b> shield-check below, dropped into five colour contexts. The icon never carries its own palette — it inherits from the parent's text colour. Put colour on the <i>context</i>, not the <code>&lt;svg&gt;</code>.</p>
+    </div>
+    <div class="cc stagger reveal">
+      <div class="ctx ctx--body">
+        <div class="row"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg> Body text</div>
+        <div class="lbl">color: var(--body) → #4a4a4a</div>
+      </div>
+      <div class="ctx ctx--accent">
+        <div class="row"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg> Accent link</div>
+        <div class="lbl">color: var(--accent) → #d51522</div>
+      </div>
+      <div class="ctx ctx--muted">
+        <div class="row"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg> Muted meta</div>
+        <div class="lbl">color: var(--muted) → #626262</div>
+      </div>
+      <div class="ctx ctx--ink">
+        <div class="row"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg> On charcoal</div>
+        <div class="lbl">color: #fff (inverted ground)</div>
+      </div>
+      <div class="ctx ctx--grad">
+        <div class="row"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg> On brand gradient</div>
+        <div class="lbl">color: #fff · grad-brand 135°</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 6 · IN-USE INVENTORY ===================== -->
+<section class="section">
+  <div class="wrap">
+    <div class="head reveal">
+      <span class="eyebrow">Ground truth</span>
+      <h2><span class="num">6</span>In-use inventory — what the demos actually render</h2>
+      <p>Not a wishlist. Every glyph below was harvested from the styleguide + section pages on 2026-06-02, grouped by where it appears: nav chrome, feature tiles, status lists, and social. This is the rendered set the SGEN build ships today.</p>
+    </div>
+
+    <div class="invblock reveal">
+
+      <div class="invlabel"><span class="t">Nav / UI chrome</span><span class="ln"></span><span class="ct">sections-headers · 09-a11y · 08-scroll · footers</span></div>
+      <div class="invgrid stagger reveal">
+        <div class="icell"><div class="gl"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg></div><div class="nm">menu</div><div class="wh">hamburger trigger</div></div>
+        <div class="icell"><div class="gl"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg></div><div class="nm">x</div><div class="wh">close drawer / dialog</div></div>
+        <div class="icell"><div class="gl"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></div><div class="nm">chevron-down</div><div class="wh">menus · FAQ accordions</div></div>
+        <div class="icell"><div class="gl"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></div><div class="nm">arrow-up</div><div class="wh">scroll-to-top (2.4 wt)</div></div>
+        <div class="icell"><div class="gl"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div><div class="nm">arrow-right</div><div class="wh">"Learn more →" links</div></div>
+        <div class="icell"><div class="gl"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg></div><div class="nm">chevron-left</div><div class="wh">carousel / back</div></div>
+        <div class="icell"><div class="gl"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></div><div class="nm">search</div><div class="wh">nav search field</div></div>
+        <div class="icell"><div class="gl"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18M3 12h18"/></svg></div><div class="nm">plus</div><div class="wh">add / expand</div></div>
+      </div>
+
+      <div class="invlabel"><span class="t">Feature tiles / value props</span><span class="ln"></span><span class="ct">sections-features · 03-layout</span></div>
+      <div class="invgrid stagger reveal">
+        <div class="icell"><div class="gl"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7l9-4 9 4-9 4-9-4z"/><path d="M3 7v10l9 4 9-4V7"/></svg></div><div class="nm">package</div><div class="wh">strategy / box</div></div>
+        <div class="icell"><div class="gl"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M9 21V9"/></svg></div><div class="nm">layout-grid</div><div class="wh">design systems</div></div>
+        <div class="icell"><div class="gl"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 17l6-6 4 4 6-7"/><path d="M14 8h6v6"/></svg></div><div class="nm">trending-up</div><div class="wh">build &amp; launch</div></div>
+        <div class="icell"><div class="gl"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3 6 6.5.9-4.7 4.6 1.1 6.5L12 17l-5.9 3 1.1-6.5L2.5 8.9 9 8l3-6z"/></svg></div><div class="nm">star</div><div class="wh">one system / rating</div></div>
+        <div class="icell"><div class="gl"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg></div><div class="nm">zap</div><div class="wh">fast by default</div></div>
+        <div class="icell"><div class="gl"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg></div><div class="nm">shield-check</div><div class="wh">accessible / secure</div></div>
+        <div class="icell"><div class="gl"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg></div><div class="nm">home</div><div class="wh">hosted</div></div>
+        <div class="icell"><div class="gl"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l18-8-8 18-2-7-8-3z"/></svg></div><div class="nm">send</div><div class="wh">paper-plane / submit</div></div>
+      </div>
+
+      <div class="invlabel"><span class="t">Lists / status</span><span class="ln"></span><span class="ct">09-a11y compliance · features check-lists</span></div>
+      <div class="invgrid stagger reveal">
+        <div class="icell"><div class="gl"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></svg></div><div class="nm">check-circle</div><div class="wh">verified item (×11 a11y)</div></div>
+        <div class="icell"><div class="gl"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg></div><div class="nm">check</div><div class="wh">tick / done</div></div>
+        <div class="icell"><div class="gl"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5h.01"/></svg></div><div class="nm">alert-circle</div><div class="wh">error / invalid input</div></div>
+        <div class="icell"><div class="gl"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/></svg></div><div class="nm">info</div><div class="wh">help / describedby</div></div>
+        <div class="icell"><div class="gl"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M15 9l-6 6M9 9l6 6"/></svg></div><div class="nm">x-circle</div><div class="wh">remove / dismiss</div></div>
+        <div class="icell"><div class="gl"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-2.7-1.1l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0-1.1-2.7H3a2 2 0 1 1 0-4h.1a1.6 1.6 0 0 0 1.1-2.7l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3 1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 2.7 1.1l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8 1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z"/></svg></div><div class="nm">settings</div><div class="wh">controls / prefs</div></div>
+      </div>
+
+      <div class="invlabel"><span class="t">Social — replaces text placeholders</span><span class="ln"></span><span class="ct">footers · filled-exception §6 · inverts on charcoal</span></div>
+      <div class="invgrid stagger reveal">
+        <div class="icell ink-cell"><div class="gl"><svg class="icon icon--fill" viewBox="0 0 24 24" aria-hidden="true"><path d="M15.5 8.5h-2.2c-.4 0-.8.4-.8 1V11h3l-.4 3h-2.6v7h-3v-7H9.5v-3h2.2V9.2C11.7 7 13 5.8 15 5.8c.9 0 1.8.1 1.8.1V8.5z"/></svg></div><div class="nm">facebook</div><div class="wh">was text "f"</div></div>
+        <div class="icell ink-cell"><div class="gl"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17" cy="7" r="1.1" fill="currentColor" stroke="none"/></svg></div><div class="nm">instagram</div><div class="wh">was text "IG"</div></div>
+        <div class="icell ink-cell"><div class="gl"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="2.5"/><path d="M8 10v7M8 7.5v.01M12 17v-4a2 2 0 0 1 4 0v4" stroke-linecap="round"/></svg></div><div class="nm">linkedin</div><div class="wh">was text "in"</div></div>
+        <div class="icell ink-cell"><div class="gl"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4l7 8M20 4l-7 8M4 4h3l13 16h-3L4 4z" stroke-linejoin="round"/></svg></div><div class="nm">x (twitter)</div><div class="wh">brand mark</div></div>
+        <div class="icell ink-cell"><div class="gl"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 19c-4 1.3-4-2-6-2.5M15 21v-3.2c0-.9-.1-1.5-.6-2 2.5-.3 5-1.3 5-5.7 0-1.3-.4-2.3-1.1-3.1.1-.3.5-1.5-.1-3 0 0-1-.3-3.2 1.2a11 11 0 0 0-6 0C6.7 3.4 5.7 3.7 5.7 3.7c-.6 1.5-.2 2.7-.1 3-.7.8-1.1 1.8-1.1 3.1 0 4.4 2.5 5.4 5 5.7-.3.3-.5.8-.6 1.5-.5.3-2 .8-3-.9 0 0-.5-1-1.5-1z" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="nm">github</div><div class="wh">brand mark</div></div>
+        <div class="icell ink-cell"><div class="gl"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="6" width="19" height="12" rx="3.5"/><path d="M10 9.5l5 2.5-5 2.5z" fill="currentColor" stroke="none"/></svg></div><div class="nm">youtube</div><div class="wh">brand mark</div></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 7 · A11Y PATTERNS ===================== -->
+<section class="section">
+  <div class="wrap">
+    <div class="head reveal">
+      <span class="eyebrow">Accessible by default</span>
+      <h2><span class="num">7</span>Decorative vs meaningful — the two patterns</h2>
+      <p>Most icons sit beside a text label and are <code>aria-hidden</code>. Icon-only buttons keep the glyph hidden and put the label on the <b>button</b>, with a ≥44×44 target and a visible focus ring. Tab to the buttons below to see the ring.</p>
+    </div>
+    <div class="a11y reveal">
+      <div class="card">
+        <h4><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></svg> Decorative (the default)</h4>
+        <p>The adjacent text <i>is</i> the label. The icon is <code>aria-hidden="true"</code> and reinforces — never replaces — the words. Meaning is never colour-only.</p>
+        <div class="decorow"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg> Keyboard-only operable</div>
+        <div class="decorow"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg> Visible focus on everything</div>
+        <div class="decorow"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg> Targets ≥ 44×44px</div>
+        <div class="codeline">&lt;svg class="icon" <b>aria-hidden="true"</b>&gt;…&lt;/svg&gt; <span style="opacity:.6">Verified</span></div>
+      </div>
+      <div class="card">
+        <h4><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg> Meaningful (icon-only button)</h4>
+        <p>The glyph stays <code>aria-hidden</code>; the <b>button</b> carries <code>aria-label</code>. Padded to a 44×44 target with a <code>:focus-visible</code> ring. Tab here →</p>
+        <div class="demobtns">
+          <button class="iconbtn" aria-label="Open menu"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+          <button class="iconbtn" aria-label="Close"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+          <button class="iconbtn iconbtn--ghost" aria-label="Search"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></button>
+          <button class="iconbtn" aria-label="Back to top"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+        </div>
+        <div class="codeline">&lt;button <b>aria-label="Back to top"</b>&gt;&lt;svg aria-hidden&gt;…&lt;/button&gt; <span style="opacity:.6">· last = 2.4 emphasis exception</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ===================== FOOTER (social icons in use) ===================== -->
+<footer class="foot">
+  <div class="wrap">
+    <span class="fbrand">SGEN · Living Styleguide</span>
+    <a href="index.html">Index</a>
+    <a href="10-sections.html">10 · Sections</a>
+    <a href="11-theming.html">11 · Theming</a><a href="12-iconography.html">12 · Iconography</a><a href="13-utility-pages.html">13 · Utility</a><a href="14-ecommerce.html">14 · Ecommerce</a><a href="15-dataviz.html">15 · Data-viz</a>
+    <a href="12-iconography.html" aria-current="page">12 · Iconography</a>
+    <span class="social">
+      <a href="#" aria-label="SGEN on Facebook"><svg class="icon icon--fill" viewBox="0 0 24 24" aria-hidden="true"><path d="M15.5 8.5h-2.2c-.4 0-.8.4-.8 1V11h3l-.4 3h-2.6v7h-3v-7H9.5v-3h2.2V9.2C11.7 7 13 5.8 15 5.8c.9 0 1.8.1 1.8.1V8.5z"/></svg></a>
+      <a href="#" aria-label="SGEN on Instagram"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17" cy="7" r="1.1" fill="currentColor" stroke="none"/></svg></a>
+      <a href="#" aria-label="SGEN on LinkedIn"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="2.5"/><path d="M8 10v7M8 7.5v.01M12 17v-4a2 2 0 0 1 4 0v4" stroke-linecap="round"/></svg></a>
+    </span>
+    <span class="meta">Lucide-style 24×24 · currentColor · weight 1.8 · 16/20/24/32</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var revealEls = [].slice.call(document.querySelectorAll('.reveal'));
+  function stagger(el){
+    if(!el.classList.contains('stagger')) return;
+    var kids = el.children;
+    for(var i=0;i<kids.length;i++){ kids[i].style.transitionDelay = (i*60)+'ms'; }
+  }
+  if(reduce || !('IntersectionObserver' in window)){
+    revealEls.forEach(function(el){ el.classList.add('in-view'); });
+  } else {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){
+          stagger(e.target);
+          e.target.classList.add('in-view');
+          io.unobserve(e.target);
+        }
+      });
+    }, {threshold:0.12, rootMargin:'0px 0px -6% 0px'});
+    revealEls.forEach(function(el){ io.observe(el); });
+  }
+})();
+</script>
+
+</body>
+</html>

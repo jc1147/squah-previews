@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SGEN Living Styleguide — Sections · Forms / Lead-Gen (live)</title>
+<style>
+/* ============================================================
+   SGEN LIVING STYLEGUIDE — SECTIONS · FORMS / LEAD-GEN
+   charcoal #1a1a1a · red #d51522 · clean editorial
+   Five production-grade SECTION blocks, each droppable into a
+   real page: contact x2, newsletter x2, multi-step x1.
+   Form-state CSS is the SAME source of truth as 07-components
+   (inputs >=16px, focus ring, .err/.ok/disabled). Responsive
+   verified headless at 390 + 1440 (Comp1 form stack, G5 split
+   reflow). One sticky summary rail (C2-a) releases on mobile.
+   Self-contained: system fonts, zero external deps, no images;
+   imagery is CSS gradients/mesh. prefers-reduced-motion honored.
+   ============================================================ */
+:root{
+  --ink:#1a1a1a;                 /* charcoal */
+  --paper:#f6f5f2;               /* warm off-white, never #fff */
+  --surface:#ffffff;
+  --muted:#626262;
+  --body:#4a4f55;                /* desaturated tint of ink, not #666 */
+  --hair:rgba(26,26,26,.10);
+  --accent:#d51522;              /* SGEN red */
+  --accent-ink:#a50f19;          /* darker red for text-on-light */
+  --accent-2:#ff5a4d;
+  --accent-tint:rgba(213,21,34,.10);
+
+  /* semantic feedback hues (tinted, never pure) */
+  --ok:#1f8a4c;   --ok-bg:#eaf6ee;   --ok-bd:rgba(31,138,76,.30);
+  --info:#1668c4; --info-bg:#eaf2fb; --info-bd:rgba(22,104,196,.28);
+  --warn:#9a6800; --warn-bg:#fdf4e3; --warn-bd:rgba(154,104,0,.30);
+  --err:#c0121e;  --err-bg:#fdeced; --err-bd:rgba(192,18,30,.32);
+
+  --r-chip:6px; --r-card:12px; --r-panel:20px; --r-pill:9999px;
+  --r-btn:8px;
+
+  --shadow-rest:0 2px 6px 0 rgba(26,26,26,.08);
+  --shadow-card:0 15px 30px 0 rgba(1,7,39,.13);
+  --shadow-hover:0 32px 64px -12px rgba(16,24,40,.18);
+
+  --ease:cubic-bezier(.05,.5,.3,1);
+  --t-fast:.18s ease-out;
+  --t-reveal:.6s var(--ease);
+
+  --ring:0 0 0 3px rgba(213,21,34,.40);
+
+  --sys-sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --sys-serif:ui-serif,Georgia,Cambria,"Times New Roman",Times,serif;
+  --sys-mono:ui-monospace,"SFMono-Regular","Cascadia Code","Consolas",monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--sys-sans);font-size:16px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{font-family:var(--sys-serif);font-weight:600;letter-spacing:-.02em;line-height:1.08;margin:0}
+a{color:var(--accent-ink);text-decoration:none}
+code,kbd{font-family:var(--sys-mono);font-size:.84em;background:rgba(26,26,26,.05);padding:.06em .35em;border-radius:4px}
+
+/* ---------- top bar + sibling nav (matches 00–08) ---------- */
+.topbar{
+  position:sticky;top:0;z-index:50;
+  background:rgba(246,245,242,.82);backdrop-filter:blur(14px) saturate(160%);
+  -webkit-backdrop-filter:blur(14px) saturate(160%);
+  border-bottom:1px solid var(--hair);
+}
+.topbar__in{max-width:1200px;margin:0 auto;padding:.7rem clamp(1rem,4vw,2.5rem);
+  display:flex;align-items:center;gap:1.2rem;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:.55rem;font-weight:800;letter-spacing:-.01em;font-family:var(--sys-sans)}
+.brand .dot{width:11px;height:11px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px rgba(213,21,34,.16)}
+.brand small{font-weight:600;color:var(--muted);letter-spacing:.02em}
+.sibnav{display:flex;gap:.2rem;flex-wrap:wrap;margin-left:auto}
+.sibnav a{
+  font-size:.74rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
+  color:var(--muted);padding:.35rem .6rem;border-radius:var(--r-chip);
+  transition:color var(--t-fast),background var(--t-fast)}
+.sibnav a:hover{color:var(--ink);background:rgba(26,26,26,.05)}
+.sibnav a.home{color:var(--accent-ink);background:var(--accent-tint)}
+.sibnav a[aria-current="page"]{color:#fff;background:var(--accent)}
+
+/* ---------- page header ---------- */
+.pagehead{max-width:1200px;margin:0 auto;padding:clamp(2.5rem,6vw,4.5rem) clamp(1rem,4vw,2.5rem) 1rem}
+.eyebrow{display:inline-flex;align-items:center;gap:.5rem;
+  font-family:var(--sys-sans);font-size:.72rem;font-weight:800;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--accent-ink)}
+.eyebrow::before{content:"";width:34px;height:2px;background:var(--accent);display:inline-block}
+.pagehead h1{font-size:clamp(2.2rem,6vw,4rem);margin:.5rem 0 .4rem;letter-spacing:-.035em}
+.pagehead p{max-width:70ch;color:var(--body);font-size:1.05rem}
+.legendbar{display:flex;gap:1.4rem;flex-wrap:wrap;margin-top:1.1rem;font-size:.82rem;color:var(--muted)}
+.legendbar b{color:var(--ink)}
+
+/* ---------- in-page variant chips ---------- */
+.catnav{max-width:1200px;margin:1.2rem auto .5rem;padding:0 clamp(1rem,4vw,2.5rem);
+  display:flex;gap:.5rem;flex-wrap:wrap}
+.catnav a{font-size:.78rem;font-weight:700;padding:.45rem .85rem;border:1px solid var(--hair);
+  border-radius:var(--r-pill);color:var(--ink);background:var(--surface);transition:all var(--t-fast)}
+.catnav a:hover{border-color:var(--accent);color:var(--accent-ink)}
+
+/* ---------- per-variant wrapper + label/caption ---------- */
+.variant{max-width:1200px;margin:0 auto;padding:clamp(1.4rem,3vw,2.4rem) clamp(1rem,4vw,2.5rem)}
+.variant + .variant{border-top:1px solid var(--hair)}
+.vhead{margin-bottom:1.2rem}
+.vhead .num{font-family:var(--sys-mono);font-size:.74rem;font-weight:700;color:var(--accent-ink);
+  background:var(--accent-tint);padding:.12rem .5rem;border-radius:5px;letter-spacing:.04em}
+.vhead h2{font-size:clamp(1.3rem,3vw,1.9rem);margin:.55rem 0 .3rem}
+.vhead .when{color:var(--body);font-size:.92rem;max-width:80ch}
+.vhead .when b{color:var(--ink)}
+.frame{border:1px solid var(--hair);border-radius:var(--r-panel);overflow:hidden;box-shadow:var(--shadow-rest);background:var(--surface)}
+
+/* ============================================================
+   FORM CONTROL STATES — SAME SOURCE OF TRUTH AS 07-components
+   inputs >=16px (stops iOS auto-zoom)
+   ============================================================ */
+.field{display:flex;flex-direction:column;gap:.4rem}
+.field > label{font-size:.82rem;font-weight:700;color:var(--ink);letter-spacing:.01em}
+.field .req{color:var(--accent)}
+.ctrl{
+  font-family:var(--sys-sans);font-size:16px;             /* >=16px — stops iOS zoom */
+  color:var(--ink);background:var(--surface);
+  border:1.5px solid #cdccc7;border-radius:var(--r-btn);
+  padding:.7rem .85rem;min-height:46px;width:100%;
+  transition:border-color var(--t-fast),box-shadow var(--t-fast),background var(--t-fast);
+  -webkit-appearance:none;appearance:none;
+}
+.ctrl::placeholder{color:#a3a09a}
+.ctrl:hover{border-color:#a8a6a0}
+.ctrl:focus,.ctrl.is-focus{outline:none;border-color:var(--accent);box-shadow:var(--ring)}
+textarea.ctrl{min-height:108px;resize:vertical;line-height:1.5}
+select.ctrl{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23626262' d='M6 8 0 0h12z'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right .9rem center;padding-right:2.2rem}
+/* error state */
+.ctrl.err,.field.err .ctrl{border-color:var(--err);background:var(--err-bg)}
+.ctrl.err:focus,.field.err .ctrl:focus,.ctrl.err.is-focus{box-shadow:0 0 0 3px rgba(192,18,30,.30)}
+.msg.err{font-size:.78rem;font-weight:600;color:var(--err);display:flex;align-items:center;gap:.35rem}
+.msg.err::before{content:"!";display:inline-grid;place-items:center;width:15px;height:15px;border-radius:50%;
+  background:var(--err);color:#fff;font-size:.68rem;font-weight:800}
+/* success state */
+.ctrl.ok,.field.ok .ctrl{border-color:var(--ok);background:var(--ok-bg)}
+.ctrl.ok:focus,.field.ok .ctrl:focus{box-shadow:0 0 0 3px rgba(31,138,76,.28)}
+.msg.ok{font-size:.78rem;font-weight:600;color:var(--ok);display:flex;align-items:center;gap:.35rem}
+.msg.ok::before{content:"\2713";display:inline-grid;place-items:center;width:15px;height:15px;border-radius:50%;
+  background:var(--ok);color:#fff;font-size:.66rem;font-weight:800}
+.ctrl:disabled,.ctrl.is-disabled{background:#f0efec;border-color:#e0dfdb;color:#9a978f;cursor:not-allowed}
+.hint{font-size:.76rem;color:var(--muted)}
+
+/* checkbox + radio — custom, accessible, real :checked */
+.opt{display:inline-flex;align-items:center;gap:.6rem;cursor:pointer;font-size:.92rem;color:var(--ink);min-height:44px}
+.opt input{position:absolute;opacity:0;width:0;height:0}
+.opt .box{width:22px;height:22px;border:2px solid #b9b7b1;border-radius:6px;background:var(--surface);
+  display:inline-grid;place-items:center;transition:all var(--t-fast);flex:0 0 auto}
+.opt .box.round{border-radius:50%}
+.opt input:checked + .box,.opt.is-checked .box{background:var(--accent);border-color:var(--accent)}
+.opt .box::after{content:"";opacity:0;transition:opacity var(--t-fast)}
+.opt input:checked + .box::after,.opt.is-checked .box::after{opacity:1}
+.opt .box:not(.round)::after{width:6px;height:11px;border:2.5px solid #fff;border-top:0;border-left:0;transform:rotate(42deg) translateY(-1px)}
+.opt .box.round::after{width:9px;height:9px;border-radius:50%;background:#fff}
+.opt input:focus-visible + .box,.opt.is-focus .box{box-shadow:var(--ring);border-color:var(--accent)}
+.opt.is-disabled,.opt input:disabled + .box{cursor:not-allowed}
+.opt.is-disabled{color:#9a978f}
+.opt.is-disabled .box{background:#f0efec;border-color:#dcdbd6}
+.opt.is-disabled.is-checked .box{background:#c7c5bf;border-color:#c7c5bf}
+
+/* toggle switch — real checkbox, :checked drives it */
+.switch{display:inline-flex;align-items:center;gap:.6rem;cursor:pointer;min-height:44px;font-size:.92rem;color:var(--ink)}
+.switch input{position:absolute;opacity:0;width:0;height:0}
+.switch .track{width:46px;height:26px;border-radius:var(--r-pill);background:#c9c7c1;position:relative;transition:background var(--t-fast);flex:0 0 auto}
+.switch .track::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;
+  box-shadow:0 1px 3px rgba(0,0,0,.3);transition:transform var(--t-fast)}
+.switch input:checked + .track,.switch.is-on .track{background:var(--accent)}
+.switch input:checked + .track::after,.switch.is-on .track::after{transform:translateX(20px)}
+.switch input:focus-visible + .track,.switch.is-focus .track{box-shadow:var(--ring)}
+.switch.is-disabled{color:#9a978f;cursor:not-allowed}
+.switch.is-disabled .track{background:#e0dfdb}
+
+/* ---------- shared button (one radius, full state machine) ---------- */
+.btn{
+  --bg:var(--accent); --fg:#fff; --bd:var(--accent);
+  font-family:var(--sys-sans);font-size:.95rem;font-weight:700;letter-spacing:.01em;
+  display:inline-flex;align-items:center;justify-content:center;gap:.5rem;
+  padding:.7rem 1.4rem;min-height:46px;            /* >=44px tap target / >=44 tall submit */
+  border-radius:var(--r-btn);border:2px solid var(--bd);cursor:pointer;
+  background:var(--bg);color:var(--fg);position:relative;
+  transition:background var(--t-fast),color var(--t-fast),border-color var(--t-fast),box-shadow var(--t-fast),transform var(--t-fast);
+  -webkit-tap-highlight-color:transparent;
+}
+.btn:hover,.btn.is-hover{background:var(--accent-ink);border-color:var(--accent-ink)}
+.btn:active,.btn.is-active{transform:translateY(1px);background:#8a0c15;border-color:#8a0c15}
+.btn:focus-visible,.btn.is-focus{outline:none;box-shadow:var(--ring)}
+.btn:disabled,.btn.is-disabled{cursor:not-allowed;opacity:1;background:#d8d6d2;border-color:#d8d6d2;color:#9a978f;transform:none;box-shadow:none}
+.btn.ghost{--bg:transparent;--fg:var(--accent-ink);--bd:rgba(26,26,26,.18)}
+.btn.ghost:hover,.btn.ghost.is-hover{background:var(--accent-tint);border-color:var(--accent);color:var(--accent-ink)}
+.btn.lg{font-size:1.02rem;padding:.85rem 1.7rem;min-height:52px}
+.btn.full{width:100%}
+.btn.on-dark{--bg:#fff;--fg:#1a1a1a;--bd:#fff}
+.btn.on-dark:hover{background:#efeae3;border-color:#efeae3}
+.btn .spin{width:16px;height:16px;border:2px solid rgba(255,255,255,.45);border-top-color:#fff;border-radius:50%;animation:btnspin .7s linear infinite}
+@keyframes btnspin{to{transform:rotate(360deg)}}
+
+/* =========================================================================
+   SECTION BLOCK SCAFFOLD — each block is a full-bleed-within-frame SECTION
+   ========================================================================= */
+.sect{padding:clamp(2.6rem,6vw,5rem) clamp(1.2rem,5vw,4rem)}
+.sect .kick{display:inline-flex;align-items:center;gap:.5rem;font-size:.72rem;font-weight:800;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--accent-ink)}
+.sect .kick::before{content:"";width:26px;height:2px;background:var(--accent);display:inline-block}
+.sect h3{font-size:clamp(1.7rem,4vw,2.7rem);letter-spacing:-.03em;margin:.55rem 0 .5rem}
+.sect .lede{color:var(--body);font-size:1.04rem;max-width:54ch;margin:0 0 0}
+.sect.on-dark{background:#1a1a1a;color:#f3f1ec}
+.sect.on-dark h3{color:#fff}
+.sect.on-dark .lede{color:#c9c6c0}
+.sect.on-dark .kick{color:var(--accent-2)}
+.sect.on-dark .field > label{color:#f3f1ec}
+.sect.on-dark .hint{color:#9b988f}
+
+/* ---- block 01: contact split (form + sticky summary rail) ---- */
+.contact-split{display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(1.6rem,4vw,3.4rem);align-items:start}
+.cf-form .two{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.cf-form .row{display:flex;flex-direction:column;gap:1.05rem}
+.cf-form .actions{display:flex;gap:.7rem;align-items:center;margin-top:.4rem;flex-wrap:wrap}
+.cf-form .consent{margin-top:.2rem}
+/* sticky summary rail — C2-a sticky wrap; releases to static on mobile */
+.cf-aside{position:sticky;top:84px;display:flex;flex-direction:column;gap:1rem}
+.cf-card{border-radius:var(--r-panel);padding:1.5rem 1.5rem 1.6rem;
+  background:linear-gradient(160deg,#202024 0%,#15151b 100%);color:#f3f1ec;
+  border:1px solid rgba(255,255,255,.08);position:relative;overflow:hidden}
+.cf-card::after{content:"";position:absolute;width:240px;height:240px;right:-90px;top:-90px;border-radius:50%;
+  background:radial-gradient(circle at 50% 50%,rgba(213,21,34,.5),transparent 68%);filter:blur(26px);pointer-events:none}
+.cf-card h4{font-family:var(--sys-sans);font-size:.74rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--accent-2);margin:0 0 .9rem}
+.cf-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.9rem}
+.cf-list li{display:flex;gap:.7rem;align-items:flex-start;font-size:.92rem;color:#d8d5cf;position:relative;z-index:1}
+.cf-list .ic{flex:0 0 auto;width:30px;height:30px;border-radius:9px;display:grid;place-items:center;
+  background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);font-size:.95rem}
+.cf-list b{display:block;color:#fff;font-weight:700;margin-bottom:1px}
+.cf-trust{display:flex;flex-direction:column;gap:.55rem;border:1px solid var(--hair);border-radius:var(--r-card);
+  padding:1.1rem 1.2rem;background:var(--surface)}
+.cf-trust .stars{color:var(--accent);letter-spacing:2px;font-size:.95rem}
+.cf-trust q{display:block;font-style:italic;color:var(--body);font-size:.92rem;line-height:1.5;margin:.2rem 0 .4rem}
+.cf-trust cite{font-style:normal;font-size:.8rem;color:var(--muted);font-weight:700}
+
+/* ---- block 02: contact center (compact card on tinted band) ---- */
+.contact-center{max-width:560px;margin:0 auto}
+.cc-card{background:var(--surface);border:1px solid var(--hair);border-radius:var(--r-panel);
+  box-shadow:var(--shadow-card);padding:clamp(1.6rem,4vw,2.4rem)}
+.cc-head{text-align:center;margin-bottom:1.5rem}
+.cc-head .kick{justify-content:center}
+.cc-row{display:flex;flex-direction:column;gap:1.05rem}
+.cc-chips{display:flex;gap:.6rem;flex-wrap:wrap;margin:.1rem 0 .2rem}
+.cc-chip{position:relative;cursor:pointer}
+.cc-chip input{position:absolute;opacity:0;width:0;height:0}
+.cc-chip span{display:inline-flex;align-items:center;min-height:40px;padding:.4rem .95rem;border-radius:var(--r-pill);
+  border:1.5px solid var(--hair);background:var(--surface);font-size:.86rem;font-weight:700;color:var(--body);
+  transition:all var(--t-fast)}
+.cc-chip:hover span{border-color:#a8a6a0}
+.cc-chip input:checked + span{background:var(--accent);border-color:var(--accent);color:#fff}
+.cc-chip input:focus-visible + span{box-shadow:var(--ring)}
+
+/* ---- block 03 + 04: newsletter ---- */
+/* 03 — newsletter strip (inline pill, I1 submit), on accent band */
+.nl-strip{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(1.6rem,4vw,3rem);align-items:center}
+.nl-form{display:flex;flex-direction:column;gap:.7rem}
+.nl-inline{display:flex;gap:.6rem;align-items:stretch}
+.nl-inline .field{flex:1;gap:0}
+.nl-inline .ctrl{min-height:52px}
+.nl-strip .micro{font-size:.78rem;color:#c9c6c0;display:flex;align-items:center;gap:.4rem}
+.nl-strip .micro b{color:#fff}
+.nl-art{position:relative;min-height:190px;border-radius:var(--r-panel);overflow:hidden;
+  background:
+    radial-gradient(120% 90% at 80% 10%,rgba(255,255,255,.12),transparent 60%),
+    conic-gradient(from 200deg at 30% 30%,#d51522,#ff5a4d,#8a0c15,#d51522);
+  border:1px solid rgba(255,255,255,.12)}
+.nl-art .glass{position:absolute;inset:auto 18px 18px;background:rgba(255,255,255,.10);
+  backdrop-filter:blur(10px) saturate(160%);-webkit-backdrop-filter:blur(10px) saturate(160%);
+  border:1px solid rgba(255,255,255,.22);border-radius:14px;padding:.85rem 1rem;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.25)}
+.nl-art .glass b{display:block;color:#fff;font-size:.92rem;font-weight:800}
+.nl-art .glass span{color:rgba(255,255,255,.82);font-size:.78rem}
+
+/* 04 — newsletter card (vertical, value-prop bullets, success-on-submit) */
+.nl-card-wrap{max-width:460px;margin:0 auto}
+.nl-card{background:var(--surface);border:1px solid var(--hair);border-radius:var(--r-panel);
+  box-shadow:var(--shadow-card);padding:clamp(1.6rem,4vw,2.3rem);text-align:center;position:relative;overflow:hidden}
+.nl-card::before{content:"";position:absolute;inset:0 0 auto;height:6px;
+  background:linear-gradient(90deg,var(--accent),var(--accent-2))}
+.nl-badge{width:54px;height:54px;border-radius:16px;margin:0 auto 1rem;display:grid;place-items:center;
+  background:var(--accent-tint);color:var(--accent-ink);font-size:1.5rem;border:1px solid rgba(213,21,34,.2)}
+.nl-card h3{font-size:clamp(1.4rem,3vw,1.8rem)}
+.nl-card .lede{margin:.5rem auto 1.2rem;text-align:center}
+.nl-benefits{list-style:none;margin:0 0 1.3rem;padding:0;display:flex;flex-direction:column;gap:.55rem;text-align:left}
+.nl-benefits li{display:flex;gap:.6rem;align-items:flex-start;font-size:.9rem;color:var(--body)}
+.nl-benefits li::before{content:"\2713";flex:0 0 auto;width:20px;height:20px;border-radius:50%;
+  background:var(--ok);color:#fff;font-size:.66rem;font-weight:800;display:grid;place-items:center;margin-top:2px}
+.nl-success{display:none;text-align:center;animation:fadeup .4s ease both}
+.is-sent .nl-form-body{display:none}
+.is-sent .nl-success{display:block}
+.nl-success .tick{width:62px;height:62px;border-radius:50%;background:var(--ok-bg);border:2px solid var(--ok);
+  color:var(--ok);font-size:1.8rem;display:grid;place-items:center;margin:0 auto 1rem}
+@keyframes fadeup{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* ---- block 05: multi-step lead-gen form ---- */
+.ms-wrap{max-width:660px;margin:0 auto}
+.ms-card{background:var(--surface);border:1px solid var(--hair);border-radius:var(--r-panel);
+  box-shadow:var(--shadow-card);overflow:hidden}
+.ms-prog{padding:1.3rem clamp(1.4rem,4vw,2.2rem) 0}
+.ms-bar{height:8px;border-radius:var(--r-pill);background:#eceae5;overflow:hidden}
+.ms-bar i{display:block;height:100%;width:33.33%;border-radius:var(--r-pill);
+  background:linear-gradient(90deg,var(--accent),var(--accent-2));transition:width .35s var(--ease)}
+.ms-steps{display:flex;justify-content:space-between;margin:.8rem 0 0;padding:0;list-style:none;counter-reset:s}
+.ms-steps li{flex:1;text-align:center;position:relative;font-size:.74rem;font-weight:700;color:var(--muted);
+  letter-spacing:.02em;display:flex;flex-direction:column;align-items:center;gap:.4rem}
+.ms-steps li .dot{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;
+  background:#eceae5;color:var(--muted);font-weight:800;font-size:.82rem;transition:all var(--t-fast);counter-increment:s}
+.ms-steps li .dot::after{content:counter(s)}
+.ms-steps li.active{color:var(--ink)}
+.ms-steps li.active .dot{background:var(--accent);color:#fff}
+.ms-steps li.done .dot{background:var(--ok);color:#fff}
+.ms-steps li.done .dot::after{content:"\2713"}
+.ms-steps li .lab{display:none}
+.ms-body{padding:1.5rem clamp(1.4rem,4vw,2.2rem) clamp(1.4rem,4vw,2.2rem)}
+.ms-panel{display:none}
+.ms-panel.active{display:block;animation:fadeup .35s ease both}
+.ms-panel h4{font-family:var(--sys-sans);font-size:1.12rem;font-weight:800;margin:0 0 .25rem}
+.ms-panel > p{font-size:.86rem;color:var(--muted);margin:0 0 1.2rem}
+.ms-panel .row{display:flex;flex-direction:column;gap:1.05rem}
+.ms-panel .two{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.ms-cards{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+.ms-pick{position:relative;cursor:pointer}
+.ms-pick input{position:absolute;opacity:0;width:0;height:0}
+.ms-pick .pk{display:block;border:1.5px solid var(--hair);border-radius:var(--r-card);padding:1rem;
+  transition:all var(--t-fast);min-height:88px}
+.ms-pick .pk b{display:block;font-size:.95rem;margin-bottom:.2rem}
+.ms-pick .pk span{font-size:.8rem;color:var(--muted)}
+.ms-pick:hover .pk{border-color:#a8a6a0}
+.ms-pick input:checked + .pk{border-color:var(--accent);background:var(--accent-tint);box-shadow:inset 0 0 0 1px var(--accent)}
+.ms-pick input:focus-visible + .pk{box-shadow:var(--ring)}
+.ms-nav{display:flex;justify-content:space-between;gap:.7rem;margin-top:1.6rem}
+.ms-nav .btn{min-width:118px}
+.ms-back{visibility:hidden}
+.ms-panel.active ~ .ms-nav{}
+.ms-done{display:none;text-align:center;padding:clamp(2rem,5vw,3rem)}
+.is-complete .ms-prog,.is-complete .ms-body{display:none}
+.is-complete .ms-done{display:block;animation:fadeup .4s ease both}
+.ms-done .tick{width:68px;height:68px;border-radius:50%;background:var(--ok-bg);border:2px solid var(--ok);
+  color:var(--ok);font-size:2rem;display:grid;place-items:center;margin:0 auto 1.1rem}
+.ms-done h4{font-family:var(--sys-serif);font-size:1.7rem;font-weight:600;margin:0 0 .4rem}
+.ms-done p{color:var(--body);max-width:42ch;margin:0 auto}
+
+/* =========================================================================
+   RESPONSIVE — Comp1 (forms stack, 100% inputs, submit >=44px), G5 split
+   reflow. Two switch lines folded into one ladder for this gallery.
+   ========================================================================= */
+@media (max-width:880px){
+  .contact-split{grid-template-columns:1fr}
+  .cf-aside{position:static;top:auto;order:-1}        /* sticky rail releases; lead with trust on mobile */
+  .nl-strip{grid-template-columns:1fr}
+  .nl-art{min-height:150px;order:-1}
+  .ms-cards{grid-template-columns:1fr}
+}
+@media (max-width:767px){
+  /* Comp1 — every input/select/textarea 100%, two-up collapses */
+  .cf-form .two,.ms-panel .two{grid-template-columns:1fr}
+  .nl-inline{flex-direction:column}                   /* pill submit drops below */
+  .nl-inline .ctrl{min-height:50px}
+  .cf-form .actions{flex-direction:column;align-items:stretch}
+  .cf-form .actions .btn{width:100%}                  /* submit full-width, >=44 tall */
+  .ms-nav .btn{flex:1;min-width:0}
+  .topbar{position:static}                            /* avoid sticky bar eating phone viewport */
+  .ms-steps li{font-size:.68rem}
+}
+@media (max-width:420px){
+  .sect{padding-left:1.1rem;padding-right:1.1rem}
+}
+
+/* reduced-motion: kill all animation/transition */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;
+    transition-duration:.001ms!important;scroll-behavior:auto!important}
+}
+
+/* footer */
+.foot{max-width:1200px;margin:2rem auto 0;padding:2rem clamp(1rem,4vw,2.5rem) 3rem;
+  border-top:1px solid var(--hair);color:var(--muted);font-size:.82rem;display:flex;gap:1rem;flex-wrap:wrap;align-items:center}
+.foot .sib{display:flex;gap:.4rem;flex-wrap:wrap;margin-left:auto}
+.foot .sib a{color:var(--muted);font-weight:700}
+.foot .sib a:hover{color:var(--accent-ink)}
+</style>
+</head>
+<body>
+
+<!-- ============ TOP BAR + SIBLING NAV ============ -->
+<header class="topbar">
+  <div class="topbar__in">
+    <div class="brand"><span class="dot"></span>SGEN <small>Living Styleguide</small></div>
+    <nav class="sibnav" aria-label="Styleguide pages">
+      <a class="home" href="10-sections.html">&larr; Sections hub</a>
+      <a href="index.html">Index</a>
+      <a href="07-components.html">07 · Components</a>
+      <a href="08-scroll-sticky.html">08 · Scroll / Sticky</a>
+      <a href="sections-forms-leadgen.html" aria-current="page">Forms / Lead-gen</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ============ PAGE HEADER ============ -->
+<div class="pagehead">
+  <span class="eyebrow">Sections — Forms / Lead-gen</span>
+  <h1>Forms &amp; lead-gen sections</h1>
+  <p>Five production-grade <b>section blocks</b> you can drop straight into a real page — two contact forms, two newsletter captures, and a multi-step lead-gen flow. Every control carries its full state machine (focus · error · success · disabled) drawn from the <a href="07-components.html">07 · Components</a> source of truth, all inputs are <b>&ge;16&nbsp;px</b> (no iOS auto-zoom), submits are <b>&ge;44&nbsp;px</b> tall, and each block reflows cleanly to a phone. One block carries a <b>sticky summary rail</b> that releases to static on mobile (per <a href="08-scroll-sticky.html">08 · Scroll / Sticky</a>).</p>
+  <div class="legendbar">
+    <span><b>Live &amp; interactive</b> — tab a field, trigger validation, run the multi-step flow.</span>
+    <span>Self-contained: system fonts, zero external deps, imagery is CSS gradients.</span>
+  </div>
+</div>
+
+<nav class="catnav" aria-label="Variants on this page">
+  <a href="#v1">01 · Contact — split + sticky rail</a>
+  <a href="#v2">02 · Contact — compact center card</a>
+  <a href="#v3">03 · Newsletter — inline strip</a>
+  <a href="#v4">04 · Newsletter — value card</a>
+  <a href="#v5">05 · Lead-gen — multi-step</a>
+</nav>
+
+<!-- =====================================================================
+     VARIANT 01 — CONTACT, split layout + sticky summary rail
+     ===================================================================== -->
+<section class="variant" id="v1">
+  <div class="vhead">
+    <span class="num">BLOCK 01 · CONTACT</span>
+    <h2>Split contact — form left, sticky trust rail right</h2>
+    <p class="when"><b>When to use:</b> a dedicated <b>Contact page</b> or a high-intent inquiry section where you want the form to do the work while a persistent rail keeps response-time, channels and a proof quote in view as the visitor scrolls. The rail is <code>position:sticky</code> and releases to a static, trust-first block on mobile.</p>
+  </div>
+  <div class="frame">
+    <div class="sect">
+      <div class="contact-split">
+        <!-- FORM -->
+        <form class="cf-form" novalidate aria-label="Contact form" onsubmit="return false">
+          <span class="kick">Get in touch</span>
+          <h3>Tell us about your project</h3>
+          <p class="lede" style="margin-bottom:1.6rem">We reply to every message within one business day — usually much faster.</p>
+          <div class="row">
+            <div class="two">
+              <div class="field">
+                <label for="cf-first">First name <span class="req" aria-hidden="true">*</span></label>
+                <input class="ctrl" id="cf-first" name="first" type="text" autocomplete="given-name" placeholder="Jordan" required>
+              </div>
+              <div class="field">
+                <label for="cf-last">Last name <span class="req" aria-hidden="true">*</span></label>
+                <input class="ctrl" id="cf-last" name="last" type="text" autocomplete="family-name" placeholder="Avery" required>
+              </div>
+            </div>
+            <!-- filled + success state shown -->
+            <div class="field ok">
+              <label for="cf-email">Work email <span class="req" aria-hidden="true">*</span></label>
+              <input class="ctrl" id="cf-email" name="email" type="email" autocomplete="email" value="jordan@northwind.co">
+              <p class="msg ok">Looks good — we'll reply here.</p>
+            </div>
+            <!-- error state shown -->
+            <div class="field err">
+              <label for="cf-phone">Phone</label>
+              <input class="ctrl" id="cf-phone" name="phone" type="tel" autocomplete="tel" value="555-12" aria-invalid="true" aria-describedby="cf-phone-err">
+              <p class="msg err" id="cf-phone-err">Enter a full 10-digit phone number.</p>
+            </div>
+            <div class="field">
+              <label for="cf-topic">What can we help with?</label>
+              <select class="ctrl" id="cf-topic" name="topic">
+                <option>New project / quote</option>
+                <option>Support for an existing build</option>
+                <option>Partnership or press</option>
+                <option>Something else</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="cf-msg">Message <span class="req" aria-hidden="true">*</span></label>
+              <textarea class="ctrl" id="cf-msg" name="message" placeholder="A sentence or two on what you're building and your timeline…" required></textarea>
+              <span class="hint">No NDAs needed to start a conversation.</span>
+            </div>
+            <label class="opt consent">
+              <input type="checkbox" name="consent" checked>
+              <span class="box" aria-hidden="true"></span>
+              I agree to be contacted about my enquiry.
+            </label>
+            <div class="actions">
+              <button class="btn lg" type="submit">Send message</button>
+              <button class="btn ghost" type="reset">Clear</button>
+              <span class="hint" style="margin-left:.2rem">🔒 We never share your details.</span>
+            </div>
+          </div>
+        </form>
+        <!-- STICKY RAIL -->
+        <aside class="cf-aside" aria-label="What to expect">
+          <div class="cf-card">
+            <h4>What happens next</h4>
+            <ul class="cf-list">
+              <li><span class="ic">⚡</span><span><b>Reply within 1 business day</b>A real person, not an autoresponder.</span></li>
+              <li><span class="ic">✉</span><span><b>hello@sgen.example</b>Prefer email? Reach us directly.</span></li>
+              <li><span class="ic">☎</span><span><b>+1 (555) 014-2200</b>Mon–Fri, 9–6 ET.</span></li>
+              <li><span class="ic">⏱</span><span><b>15-min intro call</b>Optional, booked after your message.</span></li>
+            </ul>
+          </div>
+          <div class="cf-trust">
+            <div class="stars" aria-label="5 out of 5 stars">★★★★★</div>
+            <q>They scoped our rebuild over a single call and shipped two weeks early. Easiest vendor decision we've made.</q>
+            <cite>— Priya N., Head of Growth, Northwind</cite>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     VARIANT 02 — CONTACT, compact center card on tinted band
+     ===================================================================== -->
+<section class="variant" id="v2">
+  <div class="vhead">
+    <span class="num">BLOCK 02 · CONTACT</span>
+    <h2>Compact contact — center card with reason chips</h2>
+    <p class="when"><b>When to use:</b> as a <b>mid-page or footer-adjacent</b> "still have questions?" block, or a short inquiry on a landing page where a full split layout is overkill. Reason chips (radio pills) pre-qualify the lead in one tap; everything stacks to one column on phones.</p>
+  </div>
+  <div class="frame">
+    <div class="sect" style="background:linear-gradient(180deg,#f6f5f2 0%,#efece6 100%)">
+      <div class="contact-center">
+        <div class="cc-card">
+          <div class="cc-head">
+            <span class="kick">Questions?</span>
+            <h3 style="font-size:clamp(1.5rem,3.4vw,2.1rem)">Drop us a line</h3>
+            <p class="lede" style="margin:.4rem auto 0;text-align:center">Pick a reason, leave a note — we'll route it to the right person.</p>
+          </div>
+          <form class="cc-row" novalidate aria-label="Quick contact" onsubmit="return false">
+            <div class="field">
+              <label>I'm reaching out about…</label>
+              <div class="cc-chips" role="radiogroup" aria-label="Reason">
+                <label class="cc-chip"><input type="radio" name="reason" checked><span>Sales</span></label>
+                <label class="cc-chip"><input type="radio" name="reason"><span>Support</span></label>
+                <label class="cc-chip"><input type="radio" name="reason"><span>Billing</span></label>
+                <label class="cc-chip"><input type="radio" name="reason"><span>Careers</span></label>
+              </div>
+            </div>
+            <div class="field">
+              <label for="cc-name">Your name <span class="req" aria-hidden="true">*</span></label>
+              <input class="ctrl" id="cc-name" type="text" autocomplete="name" placeholder="Sam Rivera" required>
+            </div>
+            <div class="field">
+              <label for="cc-email">Email <span class="req" aria-hidden="true">*</span></label>
+              <input class="ctrl" id="cc-email" type="email" autocomplete="email" placeholder="you@company.com" required>
+            </div>
+            <div class="field">
+              <label for="cc-note">How can we help?</label>
+              <textarea class="ctrl" id="cc-note" placeholder="Type your message…"></textarea>
+            </div>
+            <button class="btn lg full" type="submit">Send</button>
+            <p class="hint" style="text-align:center;margin:0">Typical reply time: <b style="color:var(--ink)">under 2 hours</b> on weekdays.</p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     VARIANT 03 — NEWSLETTER, inline strip on accent/dark band (I1 pill)
+     ===================================================================== -->
+<section class="variant" id="v3">
+  <div class="vhead">
+    <span class="num">BLOCK 03 · NEWSLETTER</span>
+    <h2>Inline newsletter strip — dark band, pill submit</h2>
+    <p class="when"><b>When to use:</b> the <b>conversion/closing band</b> near the page foot, or a full-width interrupt between content sections. The email + submit sit on one row at desktop and stack at ≤767 (the pill drops below). High contrast on a dark ground makes it the loudest CTA on the page.</p>
+  </div>
+  <div class="frame">
+    <div class="sect on-dark" style="background:radial-gradient(120% 140% at 0% 0%,#26262c 0%,#16161b 60%)">
+      <div class="nl-strip">
+        <div>
+          <span class="kick">The SGEN dispatch</span>
+          <h3>One sharp idea on building better sites — every Thursday.</h3>
+          <p class="lede" style="margin-bottom:1.3rem">Join 12,000+ designers and operators. No fluff, no spam, unsubscribe in a click.</p>
+          <form class="nl-form" novalidate aria-label="Newsletter signup" onsubmit="return false">
+            <div class="nl-inline">
+              <div class="field">
+                <label class="sr-only" for="nl3-email" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Email address</label>
+                <input class="ctrl" id="nl3-email" type="email" autocomplete="email" placeholder="you@company.com" required>
+              </div>
+              <button class="btn lg" type="submit" style="white-space:nowrap">Subscribe</button>
+            </div>
+            <p class="micro">✓ <b>12,000+</b> subscribers · ★ 4.9 avg · we never share your email.</p>
+          </form>
+        </div>
+        <div class="nl-art" role="img" aria-label="Decorative newsletter artwork">
+          <div class="glass">
+            <b>Issue #142 — Friday</b>
+            <span>“The 16px input rule, and 4 other tap-target wins.”</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     VARIANT 04 — NEWSLETTER, value card (success-on-submit, live)
+     ===================================================================== -->
+<section class="variant" id="v4">
+  <div class="vhead">
+    <span class="num">BLOCK 04 · NEWSLETTER</span>
+    <h2>Newsletter value card — benefits + inline success state</h2>
+    <p class="when"><b>When to use:</b> a <b>sidebar, blog footer, or modal</b> capture where you need to justify the ask. The bulleted value-prop earns the email; submitting swaps the form for a real success state (try it — type an email and hit subscribe). Centered, single-column, drops in anywhere.</p>
+  </div>
+  <div class="frame">
+    <div class="sect" style="background:linear-gradient(180deg,#efece6,#f6f5f2)">
+      <div class="nl-card-wrap">
+        <div class="nl-card" id="nl4">
+          <div class="nl-form-body">
+            <div class="nl-badge" aria-hidden="true">✦</div>
+            <h3>Get the weekly playbook</h3>
+            <p class="lede">Actionable design + conversion tactics, distilled to a 3-minute read.</p>
+            <ul class="nl-benefits">
+              <li>A teardown of one real site every week</li>
+              <li>Copy-paste patterns &amp; tokens, ready to ship</li>
+              <li>First access to new section blocks</li>
+            </ul>
+            <form class="nl-form" novalidate aria-label="Newsletter signup" onsubmit="nl4Submit(event)">
+              <div class="field" id="nl4-field">
+                <label class="sr-only" for="nl4-email" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Email address</label>
+                <input class="ctrl" id="nl4-email" type="email" autocomplete="email" placeholder="you@company.com" required style="text-align:center">
+                <p class="msg err" id="nl4-err" style="display:none;justify-content:center">Please enter a valid email.</p>
+              </div>
+              <button class="btn lg full" type="submit" style="margin-top:.9rem" id="nl4-btn">Subscribe free</button>
+              <p class="hint" style="text-align:center;margin:.7rem 0 0">No spam. Unsubscribe anytime.</p>
+            </form>
+          </div>
+          <div class="nl-success" role="status">
+            <div class="tick" aria-hidden="true">✓</div>
+            <h3 style="font-size:1.5rem">You're in! 🎉</h3>
+            <p class="lede" style="margin:.5rem auto 0">Check your inbox to confirm your subscription. The next issue lands Thursday.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     VARIANT 05 — MULTI-STEP LEAD-GEN FORM (live, 3 steps + success)
+     ===================================================================== -->
+<section class="variant" id="v5">
+  <div class="vhead">
+    <span class="num">BLOCK 05 · LEAD-GEN</span>
+    <h2>Multi-step lead-gen — progress bar, validation gating, success</h2>
+    <p class="when"><b>When to use:</b> a <b>quote / demo-request / qualification</b> flow where one long form would intimidate. Splitting into 3 short steps lifts completion; the progress bar sets expectations, each step validates before advancing, and a real success screen closes the loop. Fully keyboard-operable; all controls ≥16px.</p>
+  </div>
+  <div class="frame">
+    <div class="sect" style="background:linear-gradient(180deg,#f6f5f2,#efece6)">
+      <div class="ms-wrap">
+        <form class="ms-card" id="ms-form" novalidate aria-label="Get a quote" onsubmit="return false">
+          <div class="ms-prog">
+            <div class="ms-bar"><i id="ms-fill"></i></div>
+            <ol class="ms-steps" id="ms-steps">
+              <li class="active"><span class="dot" aria-hidden="true"></span><span class="lab">About you</span></li>
+              <li><span class="dot" aria-hidden="true"></span><span class="lab">Project</span></li>
+              <li><span class="dot" aria-hidden="true"></span><span class="lab">Details</span></li>
+            </ol>
+          </div>
+          <div class="ms-body">
+            <!-- STEP 1 -->
+            <div class="ms-panel active" data-step="0">
+              <h4>First, the basics</h4>
+              <p>Step 1 of 3 — about 60 seconds total.</p>
+              <div class="row">
+                <div class="two">
+                  <div class="field">
+                    <label for="ms-name">Full name <span class="req" aria-hidden="true">*</span></label>
+                    <input class="ctrl" id="ms-name" type="text" autocomplete="name" placeholder="Sam Rivera" required>
+                  </div>
+                  <div class="field">
+                    <label for="ms-co">Company</label>
+                    <input class="ctrl" id="ms-co" type="text" autocomplete="organization" placeholder="Acme Inc.">
+                  </div>
+                </div>
+                <div class="field">
+                  <label for="ms-email2">Work email <span class="req" aria-hidden="true">*</span></label>
+                  <input class="ctrl" id="ms-email2" type="email" autocomplete="email" placeholder="you@company.com" required>
+                  <p class="msg err" data-err style="display:none">Enter your name and a valid email to continue.</p>
+                </div>
+              </div>
+            </div>
+            <!-- STEP 2 -->
+            <div class="ms-panel" data-step="1">
+              <h4>What do you need built?</h4>
+              <p>Step 2 of 3 — pick the closest match.</p>
+              <div class="ms-cards" role="radiogroup" aria-label="Project type">
+                <label class="ms-pick"><input type="radio" name="ptype" required><span class="pk"><b>Marketing site</b><span>5–15 pages, CMS-driven</span></span></label>
+                <label class="ms-pick"><input type="radio" name="ptype"><span class="pk"><b>Landing page</b><span>Single high-converting page</span></span></label>
+                <label class="ms-pick"><input type="radio" name="ptype"><span class="pk"><b>Web app UI</b><span>Dashboard / product UI</span></span></label>
+                <label class="ms-pick"><input type="radio" name="ptype"><span class="pk"><b>Not sure yet</b><span>Help me figure it out</span></span></label>
+              </div>
+              <p class="msg err" data-err style="display:none;margin-top:.9rem">Choose a project type to continue.</p>
+            </div>
+            <!-- STEP 3 -->
+            <div class="ms-panel" data-step="2">
+              <h4>A few details</h4>
+              <p>Step 3 of 3 — then we'll send your estimate.</p>
+              <div class="row">
+                <div class="two">
+                  <div class="field">
+                    <label for="ms-budget">Budget</label>
+                    <select class="ctrl" id="ms-budget">
+                      <option>Under $5k</option><option>$5k – $15k</option>
+                      <option>$15k – $50k</option><option>$50k+</option>
+                    </select>
+                  </div>
+                  <div class="field">
+                    <label for="ms-when">Timeline</label>
+                    <select class="ctrl" id="ms-when">
+                      <option>ASAP</option><option>1–3 months</option>
+                      <option>3–6 months</option><option>Just exploring</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="field">
+                  <label for="ms-notes">Anything else?</label>
+                  <textarea class="ctrl" id="ms-notes" placeholder="Links, goals, must-haves…"></textarea>
+                </div>
+                <label class="opt"><input type="checkbox" id="ms-agree"><span class="box" aria-hidden="true"></span>Email me the estimate &amp; occasional tips.</label>
+                <p class="msg err" data-err style="display:none">Please tick the box so we can email your estimate.</p>
+              </div>
+            </div>
+            <!-- NAV -->
+            <div class="ms-nav">
+              <button class="btn ghost ms-back" type="button" id="ms-back">← Back</button>
+              <button class="btn" type="button" id="ms-next">Continue →</button>
+            </div>
+          </div>
+          <!-- SUCCESS -->
+          <div class="ms-done" role="status">
+            <div class="tick" aria-hidden="true">✓</div>
+            <h4>Request received</h4>
+            <p>Thanks — we're putting together your estimate and will email it within one business day. Watch for a note from <b>hello@sgen.example</b>.</p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <span>SGEN Living Styleguide · Sections — Forms / Lead-gen · self-contained, zero external deps.</span>
+  <nav class="sib" aria-label="Related pages">
+    <a href="10-sections.html">Sections hub</a>
+    <a href="07-components.html">07 · Components</a>
+    <a href="08-scroll-sticky.html">08 · Scroll / Sticky</a>
+    <a href="index.html">Index</a>
+  </nav>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---- Variant 04: newsletter card success-on-submit ---- */
+  window.nl4Submit = function(e){
+    e.preventDefault();
+    var email = document.getElementById('nl4-email');
+    var err = document.getElementById('nl4-err');
+    var field = document.getElementById('nl4-field');
+    var ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test((email.value||'').trim());
+    if(!ok){
+      field.classList.add('err'); err.style.display='flex';
+      email.setAttribute('aria-invalid','true'); email.focus();
+      return false;
+    }
+    field.classList.remove('err'); err.style.display='none';
+    document.getElementById('nl4').classList.add('is-sent');
+    return false;
+  };
+
+  /* ---- Variant 05: multi-step lead-gen ---- */
+  var form = document.getElementById('ms-form');
+  if(form){
+    var panels = Array.prototype.slice.call(form.querySelectorAll('.ms-panel'));
+    var steps  = Array.prototype.slice.call(document.getElementById('ms-steps').children);
+    var fill   = document.getElementById('ms-fill');
+    var back   = document.getElementById('ms-back');
+    var next   = document.getElementById('ms-next');
+    var cur = 0;
+    var total = panels.length;
+
+    function showErr(panel, on){
+      var m = panel.querySelector('[data-err]');
+      if(m) m.style.display = on ? 'flex' : 'none';
+    }
+    function validate(i){
+      var p = panels[i];
+      if(i===0){
+        var name = document.getElementById('ms-name');
+        var email = document.getElementById('ms-email2');
+        var nameOk = (name.value||'').trim().length>0;
+        var emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test((email.value||'').trim());
+        [ [name,nameOk],[email,emailOk] ].forEach(function(pair){
+          pair[0].closest('.field').classList.toggle('err', !pair[1]);
+        });
+        var ok = nameOk && emailOk; showErr(p, !ok); return ok;
+      }
+      if(i===1){
+        var picked = p.querySelector('input[name="ptype"]:checked');
+        showErr(p, !picked); return !!picked;
+      }
+      if(i===2){
+        var agree = document.getElementById('ms-agree').checked;
+        showErr(p, !agree); return agree;
+      }
+      return true;
+    }
+    function render(){
+      panels.forEach(function(p,i){ p.classList.toggle('active', i===cur); });
+      steps.forEach(function(s,i){
+        s.classList.toggle('active', i===cur);
+        s.classList.toggle('done', i<cur);
+      });
+      fill.style.width = (((cur+1)/total)*100) + '%';
+      back.style.visibility = cur===0 ? 'hidden' : 'visible';
+      next.textContent = cur===total-1 ? 'Submit request' : 'Continue →';
+      // move focus to first control of the step for keyboard users
+      var f = panels[cur].querySelector('input,select,textarea');
+      if(f) f.focus({preventScroll:false});
+    }
+    next.addEventListener('click', function(){
+      if(!validate(cur)) return;
+      if(cur < total-1){ cur++; render(); }
+      else { form.classList.add('is-complete'); }
+    });
+    back.addEventListener('click', function(){
+      if(cur>0){ cur--; render(); }
+    });
+    // live-clear error styling as the user fixes a field
+    form.addEventListener('input', function(ev){
+      var fld = ev.target.closest('.field');
+      if(fld && fld.classList.contains('err')) fld.classList.remove('err');
+    });
+    render();
+  }
+})();
+</script>
+</body>
+</html>

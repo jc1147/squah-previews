@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SGEN Section Blocks — HEROES (8 production-ready variants, live)</title>
+<meta name="robots" content="noindex">
+<style>
+/* ============================================================
+   SGEN SECTION-BLOCK GALLERY — HEROES
+   8 drop-in, production-grade hero SECTIONS. Each is a complete,
+   responsive, copy-ready block you could paste into a real page.
+   charcoal #1a1a1a · red #d51522 · warm paper #f6f5f3
+   Grounded in the proof-build libraries:
+     LOOK  : B1 media+scrim · B2 type-led · B3 split · B4 device+glow ·
+             B5 video-feel · D3 glow blobs · E2 oversized display ·
+             E5 highlighter · F2/F5 gradient+scrim · H5 squircle ·
+             #4 reveal+stagger · #10 eyebrow rule · #12 ambient depth
+     RESP  : Hero1 split→stack@767 · Hero5 100vh→auto@767 ·
+             Hero6 headline/CTA ladder · Hero8 scrim constant · Comp1 form
+     SCROLL: §2.3 sticky-CTA-after-hero (F2 sentinel) gated by reduced-motion
+   Self-contained: inline CSS+JS, system fonts, ZERO external deps,
+   all imagery CSS-crafted (gradients/masks). prefers-reduced-motion honored.
+   ============================================================ */
+:root{
+  --ink:#1a1a1a;            /* charcoal */
+  --ink-2:#232323;
+  --accent:#d51522;        /* SGEN red */
+  --accent-ink:#a50f19;    /* darker red for text-on-light */
+  --accent-2:#ff5762;      /* lighter red used on dark grounds */
+  --paper:#f6f5f3;         /* warm off-white, never #fff */
+  --paper-2:#efece7;       /* tint ground */
+  --surface:#ffffff;
+  --muted:#626262;
+  --body:#4a4a4a;
+  --line:rgba(26,26,26,.10);
+  --line-2:rgba(26,26,26,.16);
+
+  --grad-brand:linear-gradient(135deg,#ff5762,#d51522 55%,#7a0c13);
+  --grad-wash:linear-gradient(135deg,#34e2e4,#4721fb 50%,#ab1dfe);  /* F2 hero triple-stop */
+  --fade-to-paper:linear-gradient(180deg,rgba(246,245,243,0) 0%,var(--paper) 78%);
+
+  --r-chip:8px; --r-card:16px; --r-panel:24px; --r-pill:9999px; --r-btn:8px;
+  --r-squircle:clamp(20px,3vw,40px);   /* H5 large-radius frame */
+
+  --shadow-rest:0 2px 6px 0 rgba(26,26,26,.08);
+  --shadow-card:0 15px 30px 0 rgba(1,7,39,.13);          /* the universal one */
+  --shadow-hover:0 32px 64px -12px rgba(16,24,40,.18);
+  --shadow-dir:18px 36px 70px -24px rgba(16,24,40,.55);  /* D6 directional, on dark */
+
+  --ease:cubic-bezier(.05,.5,.3,1);    /* BeTheme settle */
+  --t-fast:.18s ease-out;
+  --t-reveal:.6s var(--ease);
+
+  --glass:blur(18px) saturate(180%);
+  --ring:0 0 0 3px rgba(213,21,34,.42);
+  --wrap:1180px;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --serif:ui-serif,Georgia,Cambria,"Times New Roman",Times,serif;
+  --mono:ui-monospace,"SFMono-Regular",Menlo,Consolas,"Liberation Mono",monospace;
+
+  /* z-scale (per SCROLL §3.2) */
+  --z-header:60; --z-sticky-cta:55;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;overflow-x:hidden;-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--paper);color:var(--body);
+  font-family:var(--sans);font-size:16px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+}
+h1,h2,h3,h4{color:var(--ink);margin:0;letter-spacing:-.02em;line-height:1.04}
+p{margin:0 0 1em}
+a{color:var(--accent);text-decoration:none}
+img{max-width:100%;display:block}
+code{font-family:var(--mono);font-size:.86em}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 24px}
+
+/* ---------- shared bits (dogfooded look) ---------- */
+.eyebrow{display:inline-flex;align-items:center;gap:10px;text-transform:uppercase;letter-spacing:.16em;font-size:12px;font-weight:700;color:var(--accent)}
+.eyebrow::before{content:"";width:34px;height:2px;background:var(--accent);display:inline-block;flex:0 0 auto}
+.eyebrow.light{color:var(--accent-2)} .eyebrow.light::before{background:var(--accent-2)}
+
+/* buttons — #9 invert/accent-flip + I1 pill */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  font-family:inherit;font-size:15px;font-weight:700;letter-spacing:.01em;
+  padding:14px 26px;border-radius:var(--r-btn);border:2px solid transparent;cursor:pointer;
+  transition:transform var(--t-fast),box-shadow var(--t-fast),background var(--t-fast),color var(--t-fast),border-color var(--t-fast);
+  text-align:center;line-height:1;
+}
+.btn .a{transition:transform var(--t-fast)}
+.btn:hover .a{transform:translateX(4px)}
+.btn-primary{background:var(--accent);color:#fff;box-shadow:0 8px 22px -8px rgba(213,21,34,.55)}
+.btn-primary:hover{transform:translateY(-2px);background:var(--accent-ink);box-shadow:0 14px 30px -8px rgba(213,21,34,.6)}
+.btn-ghost{background:transparent;color:var(--ink);border-color:var(--line-2)}
+.btn-ghost:hover{transform:translateY(-2px);border-color:var(--ink);background:var(--ink);color:#fff}
+.btn-ghost-light{background:transparent;color:#fff;border-color:rgba(255,255,255,.45)}
+.btn-ghost-light:hover{transform:translateY(-2px);background:#fff;color:var(--ink);border-color:#fff}
+.btn:focus-visible{outline:none;box-shadow:var(--ring)}
+.btn-block{width:100%}
+
+/* scroll-reveal + sibling stagger (#4) */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
+.reveal.in-view{opacity:1;transform:none}
+.stagger>*{opacity:0;transform:translateY(20px);transition:opacity .55s var(--ease),transform .55s var(--ease)}
+.stagger.in-view>*{opacity:1;transform:none}
+
+/* scroll cue chevron (recurs in hero metadata line) */
+.scroll-cue{display:inline-flex;flex-direction:column;align-items:center;gap:6px;color:inherit;opacity:.7;font-size:11px;letter-spacing:.18em;text-transform:uppercase}
+.scroll-cue .chev{width:16px;height:16px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg);animation:bob 1.8s var(--ease) infinite}
+@keyframes bob{0%,100%{transform:rotate(45deg) translate(0,0)}50%{transform:rotate(45deg) translate(3px,3px)}}
+
+/* trust / proof inline bits */
+.metaline{display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px;font-size:13.5px}
+.stars{color:#f5a524;letter-spacing:2px;font-size:14px}
+.avatars{display:inline-flex}
+.avatars span{width:30px;height:30px;border-radius:50%;border:2px solid var(--paper);margin-left:-9px;display:inline-block;box-shadow:var(--shadow-rest)}
+.avatars span:first-child{margin-left:0}
+
+/* ============================================================
+   STYLEGUIDE CHROME — top bar + gallery scaffolding
+   ============================================================ */
+.sg-top{
+  position:sticky;top:0;z-index:var(--z-header);
+  background:rgba(26,26,26,.93);
+  -webkit-backdrop-filter:var(--glass);backdrop-filter:var(--glass);
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+.sg-top .wrap{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding-top:12px;padding-bottom:12px}
+.sg-brand{display:flex;align-items:center;gap:10px;margin-right:auto;font-weight:700;color:#fff;letter-spacing:-.01em;font-size:15px}
+.sg-brand .dot{width:11px;height:11px;border-radius:3px;background:var(--accent);box-shadow:0 0 0 0 rgba(213,21,34,.6);animation:nudge 3s var(--ease) infinite}
+@keyframes nudge{0%,92%,100%{box-shadow:0 0 0 0 rgba(213,21,34,0)}96%{box-shadow:0 0 0 5px rgba(213,21,34,.18)}}
+.sg-brand small{color:#9b9b9b;font-weight:600;font-size:12px;letter-spacing:.02em}
+.sg-top a.nav{color:#cfcfcf;font-size:13px;font-weight:600;letter-spacing:.01em;padding:7px 12px;border-radius:var(--r-pill);transition:var(--t-fast)}
+.sg-top a.nav:hover{color:#fff;background:rgba(255,255,255,.09)}
+.sg-top a.nav[aria-current="page"]{color:#fff;background:var(--accent)}
+
+/* gallery header */
+.gallery-head{position:relative;overflow:hidden;background:var(--ink);color:#fff;padding:72px 0 84px}
+.gallery-head::before{content:"";position:absolute;width:520px;height:520px;left:50%;top:-280px;transform:translateX(-50%);border-radius:50%;filter:blur(80px);background:radial-gradient(circle,rgba(213,21,34,.24),transparent 70%);pointer-events:none}
+.gallery-head .wrap{position:relative;z-index:1}
+.gallery-head h1{color:#fff;font-size:clamp(34px,5.6vw,62px);font-weight:300;letter-spacing:-.04em;line-height:.98;margin:14px 0 0;max-width:18ch}
+.gallery-head h1 b{font-weight:700}
+.gallery-head h1 .clip{background:var(--grad-brand);-webkit-background-clip:text;background-clip:text;color:transparent}
+.gallery-head .lede{margin-top:18px;max-width:680px;color:#cfcfcf;font-size:clamp(15px,2vw,18px);line-height:1.62}
+.gallery-head .crumbs{display:flex;gap:8px;align-items:center;font-size:12px;color:#9b9b9b;font-family:var(--mono);letter-spacing:.04em}
+.gallery-head .crumbs a{color:#cfcfcf} .gallery-head .crumbs a:hover{color:#fff}
+.gallery-head .crumbs .sep{opacity:.5}
+
+/* per-variant frame */
+.spec{padding:0 0 14px;border-bottom:1px solid var(--line)}
+.spec:last-of-type{border-bottom:0}
+.spec-label{
+  position:sticky;top:53px;z-index:40;
+  background:rgba(246,245,243,.92);-webkit-backdrop-filter:var(--glass);backdrop-filter:var(--glass);
+  border-bottom:1px solid var(--line);
+}
+.spec-label .wrap{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 16px;padding-top:16px;padding-bottom:16px}
+.spec-label .n{font-family:var(--mono);font-size:13px;font-weight:700;color:#fff;background:var(--ink);width:32px;height:32px;border-radius:9px;display:grid;place-items:center;flex:0 0 auto}
+.spec-label .t{font-size:17px;font-weight:700;color:var(--ink);letter-spacing:-.01em}
+.spec-label .ids{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.02em;margin-left:auto}
+.spec-label .ids b{color:var(--accent-ink)}
+.when{background:var(--paper-2)}
+.when .wrap{padding-top:14px;padding-bottom:14px;display:flex;gap:12px;align-items:flex-start}
+.when .tag{font-family:var(--mono);font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:#fff;background:var(--accent);padding:4px 9px;border-radius:var(--r-pill);flex:0 0 auto;margin-top:1px}
+.when p{margin:0;font-size:14px;color:var(--body);line-height:1.55}
+.when p b{color:var(--ink)}
+
+/* the live block sits in a bounded stage so sticky/100vh behave sanely in-gallery */
+.stage{position:relative}
+
+/* ===== shared hero primitives ===== */
+.hero{position:relative;overflow:hidden}
+.hero .wrap{position:relative;z-index:2}
+.hero-eyebrow{margin-bottom:18px}
+.hero h2.h{font-size:clamp(38px,6.4vw,76px);font-weight:300;letter-spacing:-.04em;line-height:.98;margin:0;max-width:16ch}
+.hero h2.h b{font-weight:700}
+.hero .clip{background:var(--grad-brand);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .sub{margin-top:22px;font-size:clamp(16px,2.1vw,20px);line-height:1.6;max-width:54ch}
+.hero .cta-row{display:flex;flex-wrap:wrap;gap:14px;margin-top:34px;align-items:center}
+.hero .scrim-fade{position:absolute;left:0;right:0;bottom:0;height:110px;z-index:1;pointer-events:none}
+
+/* ============================================================
+   V1 — SPLIT (B3): copy + framed visual
+   ============================================================ */
+.v-split{background:var(--paper);padding:clamp(56px,8vw,104px) 0}
+.v-split .grid{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(28px,5vw,68px);align-items:center}
+.v-split .copy h2.h{color:var(--ink)} .v-split .copy h2.h .hl{
+  /* E5 highlighter inset */
+  box-shadow:inset 0 -.32em 0 rgba(213,21,34,.16);
+}
+.v-split .copy .sub{color:var(--body)}
+.v-split .metaline{margin-top:30px;color:var(--muted)}
+.v-split .frame{
+  position:relative;border-radius:var(--r-squircle);overflow:hidden;
+  aspect-ratio:4/5;box-shadow:var(--shadow-card);border:1px solid var(--line);
+  background:linear-gradient(160deg,#2a2d34,#15171c);
+}
+/* H5 squircle framed crafted visual + image-zoom-in-frame (#7) feel */
+.v-split .frame .art{position:absolute;inset:0;transition:transform .6s var(--ease)}
+.v-split .frame:hover .art{transform:scale(1.04)}
+.v-split .frame .art::before{content:"";position:absolute;inset:0;background:
+  radial-gradient(120% 90% at 78% 12%,rgba(255,87,98,.5),transparent 55%),
+  radial-gradient(90% 80% at 10% 95%,rgba(71,33,251,.42),transparent 60%),
+  linear-gradient(160deg,#272a31,#13151a)}
+.v-split .frame .art::after{content:"";position:absolute;inset:0;
+  background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);
+  background-size:34px 34px;mask:radial-gradient(120% 120% at 50% 0%,#000,transparent 78%)}
+.v-split .frame .chip{position:absolute;left:18px;bottom:18px;z-index:2;display:flex;gap:8px;align-items:center;background:rgba(26,26,26,.62);-webkit-backdrop-filter:var(--glass);backdrop-filter:var(--glass);border:1px solid rgba(255,255,255,.14);border-radius:var(--r-pill);padding:8px 14px;color:#fff;font-size:12.5px;font-weight:600}
+.v-split .frame .chip i{width:8px;height:8px;border-radius:50%;background:#3ad07a;box-shadow:0 0 0 4px rgba(58,208,122,.22)}
+
+/* ============================================================
+   V2 — FULL-BLEED IMAGE + SCRIM (B1 · Hero8 · F5)
+   ============================================================ */
+.v-bleed{position:relative;min-height:78svh;display:flex;align-items:flex-end;color:#fff;background:#0e0f12}
+.v-bleed .photo{position:absolute;inset:0;z-index:0;
+  /* CSS-crafted "photograph": layered gradients imply a lit architectural scene */
+  background:
+    radial-gradient(80% 60% at 72% 18%,rgba(255,196,140,.55),transparent 60%),
+    radial-gradient(70% 90% at 18% 90%,rgba(38,52,84,.9),transparent 65%),
+    linear-gradient(165deg,#3a4a63 0%,#1d2531 48%,#0c0f15 100%);
+}
+.v-bleed .photo::after{content:"";position:absolute;inset:0;
+  /* subtle structural lines = skyline / texture cue */
+  background:repeating-linear-gradient(100deg,rgba(255,255,255,.04) 0 2px,transparent 2px 46px);
+  mask:linear-gradient(180deg,transparent 30%,#000 100%)}
+/* Hero8: bottom-weighted scrim, light-to-heavy — premium read */
+.v-bleed .scrim{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(10,11,14,.10) 0%,rgba(10,11,14,.12) 42%,rgba(10,11,14,.72) 100%)}
+.v-bleed .wrap{padding-top:96px;padding-bottom:74px}
+.v-bleed .hero-eyebrow{color:var(--accent-2)}
+.v-bleed h2.h{color:#fff;font-weight:400;text-shadow:0 2px 30px rgba(0,0,0,.35)}
+.v-bleed .sub{color:#e8e8ea;max-width:48ch}
+.v-bleed .metaline{margin-top:26px;color:#d6d6d6}
+.v-bleed .scroll-cue{position:absolute;right:24px;bottom:28px;z-index:2;color:#fff}
+
+/* ============================================================
+   V3 — VIDEO-FEEL / LOOPING GRADIENT (B5-feel · C7 · D3)
+   ============================================================ */
+.v-video{position:relative;min-height:74svh;display:flex;align-items:center;color:#fff;background:#0a0b10;text-align:center}
+.v-video .loop{position:absolute;inset:-20%;z-index:0;filter:saturate(135%);
+  background:
+    radial-gradient(40% 50% at 25% 30%,rgba(213,21,34,.55),transparent 60%),
+    radial-gradient(45% 55% at 80% 30%,rgba(71,33,251,.5),transparent 62%),
+    radial-gradient(50% 60% at 55% 85%,rgba(52,226,228,.42),transparent 60%),
+    linear-gradient(135deg,#10121a,#0a0b10);
+  animation:drift 18s var(--ease) infinite alternate}
+@keyframes drift{0%{transform:translate3d(-3%,-2%,0) scale(1.05)}100%{transform:translate3d(3%,2%,0) scale(1.12)}}
+.v-video .grain{position:absolute;inset:0;z-index:1;opacity:.5;mix-blend-mode:overlay;
+  background-image:radial-gradient(rgba(255,255,255,.6) .5px,transparent .6px);background-size:3px 3px}
+.v-video .scrim{position:absolute;inset:0;z-index:1;background:radial-gradient(120% 90% at 50% 50%,transparent 35%,rgba(8,9,14,.62) 100%)}
+.v-video .wrap{padding-top:90px;padding-bottom:90px;display:flex;flex-direction:column;align-items:center}
+.v-video .hero-eyebrow{color:var(--accent-2)}
+.v-video h2.h{color:#fff;text-align:center;max-width:18ch}
+.v-video .sub{color:#dcdce2;text-align:center;margin-left:auto;margin-right:auto}
+.v-video .play{display:inline-flex;align-items:center;gap:14px;margin-top:30px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.18);-webkit-backdrop-filter:var(--glass);backdrop-filter:var(--glass);color:#fff;border-radius:var(--r-pill);padding:9px 22px 9px 9px;font-weight:600;font-size:14px;cursor:pointer;transition:var(--t-fast)}
+.v-video .play:hover{background:rgba(255,255,255,.12);transform:translateY(-2px)}
+.v-video .play .disc{width:42px;height:42px;border-radius:50%;background:var(--accent);display:grid;place-items:center;flex:0 0 auto;box-shadow:0 0 0 0 rgba(213,21,34,.6);animation:ring 3s var(--ease) infinite}
+.v-video .play .disc::before{content:"";width:0;height:0;border-style:solid;border-width:7px 0 7px 12px;border-color:transparent transparent transparent #fff;margin-left:3px}
+@keyframes ring{0%{box-shadow:0 0 0 0 rgba(213,21,34,.5)}70%{box-shadow:0 0 0 16px rgba(213,21,34,0)}100%{box-shadow:0 0 0 0 rgba(213,21,34,0)}}
+.v-video .play:focus-visible{outline:none;box-shadow:var(--ring)}
+
+/* ============================================================
+   V4 — EDITORIAL (B2 · E2 oversized display IS the asset)
+   ============================================================ */
+.v-edit{background:var(--paper);padding:clamp(64px,10vw,128px) 0 clamp(48px,7vw,92px);position:relative;overflow:hidden}
+.v-edit::after{content:"";position:absolute;right:-6%;top:-10%;width:46%;height:120%;z-index:0;
+  background:radial-gradient(closest-side,rgba(213,21,34,.07),transparent 70%);pointer-events:none}
+.v-edit .wrap{position:relative;z-index:1}
+.v-edit .display{font-size:clamp(48px,12.5vw,156px);font-weight:300;letter-spacing:-.05em;line-height:.9;color:var(--ink);margin:0;max-width:14ch}
+.v-edit .display em{font-style:italic;font-family:var(--serif);font-weight:400}
+.v-edit .display .clip{background:var(--grad-brand);-webkit-background-clip:text;background-clip:text;color:transparent}
+.v-edit .rule{height:3px;width:88px;background:var(--accent);border:0;margin:34px 0 26px}
+.v-edit .sub{font-size:clamp(17px,2.3vw,22px);color:var(--body);max-width:42ch;font-weight:300}
+.v-edit .foot{display:flex;flex-wrap:wrap;gap:18px;align-items:center;margin-top:34px}
+.v-edit .yr{font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+
+/* ============================================================
+   V5 — GRADIENT / GLOW (D3 blobs · #12a · F2 wash)
+   ============================================================ */
+.v-glow{position:relative;overflow:hidden;background:var(--ink);color:#fff;padding:clamp(72px,11vw,136px) 0;text-align:center}
+.v-glow::before,.v-glow::after{content:"";position:absolute;z-index:0;border-radius:50%;filter:blur(80px);pointer-events:none;animation:breathe 9s var(--ease) infinite alternate}
+.v-glow::before{width:560px;height:560px;left:-120px;top:-180px;background:radial-gradient(circle,rgba(213,21,34,.55),transparent 70%)}
+.v-glow::after{width:520px;height:520px;right:-130px;bottom:-220px;background:radial-gradient(circle,rgba(71,33,251,.42),transparent 70%);animation-delay:-4s}
+@keyframes breathe{0%{transform:translate(0,0) scale(1)}100%{transform:translate(18px,12px) scale(1.08)}}
+.v-glow .wrap{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center}
+.v-glow .hero-eyebrow{color:var(--accent-2)}
+.v-glow .pill{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);border-radius:var(--r-pill);padding:6px 14px;font-size:12.5px;font-weight:600;color:#dcdce2;margin-bottom:22px}
+.v-glow .pill i{width:7px;height:7px;border-radius:50%;background:#3ad07a}
+.v-glow h2.h{color:#fff;text-align:center;max-width:17ch}
+.v-glow h2.h .clip{background:var(--grad-wash);-webkit-background-clip:text;background-clip:text;color:transparent}
+.v-glow .sub{color:#cfcfd6;text-align:center;margin-left:auto;margin-right:auto}
+.v-glow .cta-row{justify-content:center}
+.v-glow .logos{display:flex;flex-wrap:wrap;gap:10px 30px;justify-content:center;align-items:center;margin-top:44px;opacity:.7}
+.v-glow .logos span{font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:#cfcfcf;font-weight:600}
+
+/* ============================================================
+   V6 — PRODUCT-LED (B4 dark split + device mock + glow)
+   ============================================================ */
+.v-prod{position:relative;overflow:hidden;background:linear-gradient(180deg,#15171d,#0e0f13);color:#fff;padding:clamp(60px,9vw,108px) 0}
+.v-prod::before{content:"";position:absolute;width:640px;height:640px;right:-8%;top:-12%;z-index:0;border-radius:50%;filter:blur(90px);background:radial-gradient(circle,rgba(213,21,34,.34),transparent 68%);pointer-events:none}
+.v-prod .grid{display:grid;grid-template-columns:1fr 1.08fr;gap:clamp(28px,5vw,60px);align-items:center}
+.v-prod .hero-eyebrow{color:var(--accent-2)}
+.v-prod h2.h{color:#fff}
+.v-prod .sub{color:#c7c7d0;max-width:46ch}
+.v-prod .proof{display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px;margin-top:26px;font-size:13.5px;color:#bdbdc6}
+.v-prod .proof .avatars span{border-color:#15171d;background:linear-gradient(135deg,#4a4f63,#2a2d3a)}
+.v-prod .proof .avatars span:nth-child(2){background:linear-gradient(135deg,#d51522,#7a0c13)}
+.v-prod .proof .avatars span:nth-child(3){background:linear-gradient(135deg,#34e2e4,#4721fb)}
+/* device mock: browser chrome floating over glow (drop-shadow follows the card) */
+.v-prod .device{position:relative;z-index:1;border-radius:14px;overflow:hidden;background:#0b0c10;border:1px solid rgba(255,255,255,.12);box-shadow:var(--shadow-dir);animation:float 7s var(--ease) infinite alternate}
+@keyframes float{0%{transform:translateY(-8px)}100%{transform:translateY(8px)}}
+.v-prod .device .bar{display:flex;align-items:center;gap:7px;padding:11px 14px;background:#16181f;border-bottom:1px solid rgba(255,255,255,.07)}
+.v-prod .device .bar i{width:11px;height:11px;border-radius:50%;background:#33363f}
+.v-prod .device .bar i:nth-child(1){background:#ff5f56}.v-prod .device .bar i:nth-child(2){background:#ffbd2e}.v-prod .device .bar i:nth-child(3){background:#27c93f}
+.v-prod .device .bar .url{margin-left:10px;flex:1;height:20px;border-radius:6px;background:rgba(255,255,255,.06);max-width:240px}
+.v-prod .device .screen{padding:20px;display:grid;gap:14px;background:
+  radial-gradient(70% 60% at 80% 0%,rgba(71,33,251,.22),transparent 60%),#0b0c10}
+.v-prod .device .screen .row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.v-prod .device .screen .tile{height:64px;border-radius:10px;background:linear-gradient(135deg,rgba(255,255,255,.09),rgba(255,255,255,.03));border:1px solid rgba(255,255,255,.07)}
+.v-prod .device .screen .tile.acc{background:var(--grad-brand);border:0}
+.v-prod .device .screen .bar2{height:13px;border-radius:7px;background:rgba(255,255,255,.10)}
+.v-prod .device .screen .bar2.w70{width:70%}.v-prod .device .screen .bar2.w45{width:45%}
+.v-prod .device .screen .big{height:110px;border-radius:12px;background:
+  linear-gradient(135deg,rgba(52,226,228,.18),rgba(71,33,251,.12));border:1px solid rgba(255,255,255,.08);
+  display:flex;align-items:flex-end;padding:14px;gap:6px}
+.v-prod .device .screen .big b{flex:1;border-radius:5px 5px 0 0;background:rgba(255,255,255,.18)}
+.v-prod .device .screen .big b:nth-child(2){height:64%;background:var(--accent)}
+.v-prod .device .screen .big b:nth-child(1){height:40%}.v-prod .device .screen .big b:nth-child(3){height:80%}.v-prod .device .screen .big b:nth-child(4){height:52%}.v-prod .device .screen .big b:nth-child(5){height:92%}
+
+/* ============================================================
+   V7 — MINIMAL CENTERED (B2 minimal · max restraint)
+   ============================================================ */
+.v-min{background:var(--paper);padding:clamp(72px,12vw,150px) 0;text-align:center}
+.v-min .wrap{display:flex;flex-direction:column;align-items:center}
+.v-min .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-bottom:24px}
+.v-min h2.h{color:var(--ink);text-align:center;max-width:16ch;font-weight:300}
+.v-min h2.h b{font-weight:600}
+.v-min .rule{height:2px;width:56px;background:var(--accent);border:0;margin:30px 0 0}
+.v-min .sub{color:var(--body);text-align:center;max-width:40ch;margin-left:auto;margin-right:auto;margin-top:24px}
+.v-min .cta-row{justify-content:center;margin-top:32px}
+
+/* ============================================================
+   V8 — LEAD-GEN (hero + inline form · Comp1 · B2 copy)
+   ============================================================ */
+.v-lead{background:var(--paper-2);padding:clamp(56px,8vw,104px) 0;position:relative;overflow:hidden}
+.v-lead::before{content:"";position:absolute;left:-8%;top:-30%;width:42%;height:160%;z-index:0;background:radial-gradient(closest-side,rgba(213,21,34,.06),transparent 70%);pointer-events:none}
+.v-lead .grid{position:relative;z-index:1;display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(28px,5vw,60px);align-items:center}
+.v-lead .copy h2.h{color:var(--ink)}
+.v-lead .copy .sub{color:var(--body);max-width:46ch}
+.v-lead .copy .ticks{list-style:none;margin:26px 0 0;padding:0;display:grid;gap:12px}
+.v-lead .copy .ticks li{display:flex;gap:11px;align-items:flex-start;font-size:14.5px;color:var(--body)}
+.v-lead .copy .ticks .tk{width:22px;height:22px;border-radius:50%;background:rgba(213,21,34,.10);border:1px solid rgba(213,21,34,.26);display:grid;place-items:center;flex:0 0 auto;margin-top:1px}
+.v-lead .copy .ticks .tk::after{content:"";width:8px;height:4px;border-left:2px solid var(--accent);border-bottom:2px solid var(--accent);transform:rotate(-45deg) translateY(-1px)}
+/* the card form */
+.v-lead .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-panel);box-shadow:var(--shadow-card);padding:clamp(24px,4vw,34px)}
+.v-lead .card h3{font-size:20px;letter-spacing:-.01em;margin:0 0 6px}
+.v-lead .card .note{font-size:13px;color:var(--muted);margin:0 0 20px}
+.v-lead .field{margin-bottom:14px}
+.v-lead label{display:block;font-size:12.5px;font-weight:700;color:var(--ink);margin-bottom:7px;letter-spacing:.01em}
+.v-lead .ctrl{width:100%;font-family:inherit;font-size:16px;color:var(--ink);background:#fff;border:1.5px solid var(--line-2);border-radius:var(--r-btn);padding:13px 14px;transition:border-color var(--t-fast),box-shadow var(--t-fast)}
+.v-lead .ctrl::placeholder{color:#9a9a9a}
+.v-lead .ctrl:focus{outline:none;border-color:var(--accent);box-shadow:var(--ring)}
+.v-lead .field.err .ctrl{border-color:var(--accent);box-shadow:0 0 0 3px rgba(213,21,34,.14)}
+.v-lead .field.ok .ctrl{border-color:#1f8a4c;box-shadow:0 0 0 3px rgba(31,138,76,.16)}
+.v-lead .msg{display:none;font-size:12.5px;margin-top:6px}
+.v-lead .field.err .msg.e{display:block;color:var(--accent-ink)}
+.v-lead .field.ok .msg.s{display:block;color:#1f8a4c}
+.v-lead .card .legal{font-size:11.5px;color:var(--muted);margin:14px 0 0;line-height:1.5}
+.v-lead .card .legal a{color:var(--accent-ink);text-decoration:underline}
+
+/* ============================================================
+   STICKY CONVERSION CTA (SCROLL §2.3 — F2 sentinel, reduced-motion-safe)
+   appears once the gallery's first hero scrolls past; demo of the pattern.
+   ============================================================ */
+#sticky-cta{
+  position:fixed;left:0;right:0;bottom:0;z-index:var(--z-sticky-cta);
+  transform:translateY(110%);transition:transform .32s var(--ease);
+  background:rgba(26,26,26,.96);-webkit-backdrop-filter:var(--glass);backdrop-filter:var(--glass);
+  border-top:1px solid rgba(255,255,255,.1);box-shadow:0 -10px 30px -12px rgba(0,0,0,.5);
+}
+#sticky-cta.show{transform:translateY(0)}
+#sticky-cta .wrap{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding-top:12px;padding-bottom:max(12px,env(safe-area-inset-bottom))}
+#sticky-cta .lbl{color:#fff;font-weight:700;font-size:14.5px;margin-right:auto}
+#sticky-cta .lbl small{display:block;color:#9b9b9b;font-weight:500;font-size:12px;margin-top:2px}
+#sticky-cta .close{background:transparent;border:0;color:#9b9b9b;font-size:20px;cursor:pointer;padding:6px 10px;line-height:1;border-radius:8px}
+#sticky-cta .close:hover{color:#fff;background:rgba(255,255,255,.08)}
+#sticky-cta .close:focus-visible{outline:none;box-shadow:var(--ring)}
+
+/* ---------- footer ---------- */
+.sg-foot{background:var(--ink);color:#9b9b9b;padding:44px 0 84px;font-size:13px;border-top:1px solid rgba(255,255,255,.08)}
+.sg-foot .wrap{display:flex;gap:18px;flex-wrap:wrap;align-items:center}
+.sg-foot .b{margin-right:auto;color:#fff}
+.sg-foot a{color:#cfcfcf}.sg-foot a:hover{color:#fff}
+.sg-foot .meta{color:#626262;font-family:var(--mono);font-size:11px}
+
+/* ============================================================
+   RESPONSIVE  (Hero1 split→stack@767 · Hero6 ladder · Hero5 release)
+   ============================================================ */
+@media (max-width:880px){
+  .v-split .grid,.v-prod .grid,.v-lead .grid{grid-template-columns:1fr}
+  .v-split .frame{aspect-ratio:16/11;max-width:520px}
+  .v-prod .device{order:-1;margin-bottom:8px}     /* Hero2 reorder: visual context first on tech */
+  .v-split .copy{order:0}
+}
+@media (max-width:767px){
+  .hero h2.h{font-size:clamp(32px,9vw,46px);line-height:1.02}    /* Hero6 headline ladder */
+  .v-edit .display{font-size:clamp(44px,15vw,70px)}
+  .v-bleed,.v-video{min-height:auto}                            /* Hero5 release 100vh→auto */
+  .v-bleed .wrap{padding-top:120px;padding-bottom:48px}
+  .v-video .wrap{padding-top:64px;padding-bottom:64px}
+  .hero .cta-row .btn,.v-glow .cta-row .btn{width:100%}          /* Hero6 CTA full-width */
+  .v-glow .cta-row,.v-min .cta-row{width:100%}
+  .v-bleed .scroll-cue{display:none}
+  .spec-label .ids{margin-left:0;flex-basis:100%}
+  .v-bleed .scrim{background:linear-gradient(180deg,rgba(10,11,14,.12) 0%,rgba(10,11,14,.30) 40%,rgba(10,11,14,.82) 100%)} /* Hero8 mobile-darken */
+}
+@media (max-width:480px){
+  .wrap{padding:0 18px}
+  .v-edit .display{font-size:clamp(40px,16vw,58px)}
+  .sg-top .wrap{gap:4px}
+}
+
+/* reduced motion — gate ALL of Category C + the looping bg + sticky slide */
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
+  .reveal,.stagger>*{opacity:1!important;transform:none!important}
+  .v-video .loop{transform:none}
+  #sticky-cta{transition:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ===================== STYLEGUIDE TOP BAR ===================== -->
+<nav class="sg-top">
+  <div class="wrap">
+    <span class="sg-brand"><span class="dot"></span>SGEN&nbsp;Section&nbsp;Blocks <small>&nbsp;/ Heroes</small></span>
+    <a class="nav" href="10-sections.html">← Sections hub</a>
+    <a class="nav" href="index.html">Index</a>
+    <a class="nav" href="#" aria-current="page">Heroes · 8</a>
+  </div>
+</nav>
+
+<!-- ===================== GALLERY HEADER ===================== -->
+<header class="gallery-head">
+  <div class="wrap">
+    <div class="crumbs"><a href="index.html">Styleguide</a><span class="sep">/</span><a href="10-sections.html">Section blocks</a><span class="sep">/</span><span>Heroes</span></div>
+    <span class="eyebrow light" style="margin-top:16px">Section-block gallery · 08 patterns</span>
+    <h1>HEROES — eight <b class="clip">drop-in</b> opening acts</h1>
+    <p class="lede">Every block below is a complete, responsive, copy-ready hero SECTION — real depth, type and motion from the look library, not a screenshot. Pick the archetype that matches the vertical (per <code>_PAGE-COMPOSITION §3.3</code>), reskin the five tokens, ship. Each carries its <b style="color:#fff">when-to-use</b> note and its source pattern IDs. Verified responsive headless at 390 + 1440.</p>
+  </div>
+</header>
+
+<!-- =================================================================
+     V1 — SPLIT (B3)
+     ================================================================= -->
+<section class="spec" id="v1">
+  <div class="spec-label"><div class="wrap"><span class="n">1</span><span class="t">Split — copy + framed visual</span><span class="ids">LOOK <b>B3</b> · H5 squircle · #7 zoom-in-frame · RESP <b>Hero1</b> @767</span></div></div>
+  <div class="when"><div class="wrap"><span class="tag">when</span><p><b>Personal brand, portfolio, architecture, SaaS deep-dive rows.</b> Reach for the split when the visual is half the message — a product shot, a portrait, a workspace. The asymmetric grid lets oversized copy and a framed image share the fold without either shrinking. Reads studio/considered.</p></div></div>
+  <div class="stage">
+    <div class="hero v-split">
+      <div class="wrap">
+        <div class="grid">
+          <div class="copy reveal">
+            <span class="eyebrow hero-eyebrow">Design studio · est. 2014</span>
+            <h2 class="h">Interfaces that <span class="hl">earn</span> their first impression.</h2>
+            <p class="sub">We design and build the digital surfaces where your customers decide. Strategy, brand, and a real production handoff — under one roof, one timeline.</p>
+            <div class="cta-row">
+              <a class="btn btn-primary" href="#">Start a project <span class="a">→</span></a>
+              <a class="btn btn-ghost" href="#">See selected work</a>
+            </div>
+            <div class="metaline"><span class="stars">★★★★★</span><span><b style="color:var(--ink)">4.9</b> from 120+ launches</span><span>·</span><span>Avg. ship 6 weeks</span></div>
+          </div>
+          <div class="frame reveal" aria-hidden="true">
+            <div class="art"></div>
+            <span class="chip"><i></i> Live preview · v3.2</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =================================================================
+     V2 — FULL-BLEED IMAGE + SCRIM (B1)
+     ================================================================= -->
+<section class="spec" id="v2">
+  <div class="spec-label"><div class="wrap"><span class="n">2</span><span class="t">Full-bleed image + scrim</span><span class="ids">LOOK <b>B1</b> · F5 scrim · #8 fade · RESP <b>Hero5/Hero8</b></span></div></div>
+  <div class="when"><div class="wrap"><span class="tag">when</span><p><b>Real estate, hotel, restaurant, travel, fitness — place &amp; service verticals.</b> The dominant hero (15/16). When the photograph IS the promise, let it fill the viewport and float the headline on a bottom-weighted scrim. Keep the scrim <b>light</b> (.10–.15 top) for luxury; darken only the bottom for legibility.</p></div></div>
+  <div class="stage">
+    <div class="hero v-bleed">
+      <div class="photo" aria-hidden="true"></div>
+      <div class="scrim" aria-hidden="true"></div>
+      <div class="wrap">
+        <div class="reveal">
+          <span class="eyebrow hero-eyebrow">Coastal collection · Lisbon</span>
+          <h2 class="h">A view worth<br>waking up to.</h2>
+          <p class="sub">Twelve light-filled residences above the harbour. Private terraces, architect-led interiors, and the ocean two minutes from your door.</p>
+          <div class="cta-row">
+            <a class="btn btn-primary" href="#">Book a viewing <span class="a">→</span></a>
+            <a class="btn btn-ghost-light" href="#">Download the brochure</a>
+          </div>
+          <div class="metaline"><span>From €640,000</span><span>·</span><span>4 remaining</span><span>·</span><span>Completion Q3</span></div>
+        </div>
+      </div>
+      <span class="scroll-cue" aria-hidden="true">Scroll<span class="chev"></span></span>
+    </div>
+  </div>
+</section>
+
+<!-- =================================================================
+     V3 — VIDEO-FEEL / LOOPING GRADIENT (B5)
+     ================================================================= -->
+<section class="spec" id="v3">
+  <div class="spec-label"><div class="wrap"><span class="n">3</span><span class="t">Video-feel — looping gradient</span><span class="ids">LOOK <b>B5</b>-feel · C7 play · D3 glow · reduced-motion gated</span></div></div>
+  <div class="when"><div class="wrap"><span class="tag">when</span><p><b>Music, events, nightlife, launch pages, agency reels — anything that wants energy without a 4&nbsp;MB video.</b> A slow looping gradient reads like ambient motion footage at zero network cost. Pair with a pulse-play affordance to a real lightbox. The whole loop freezes under <code>prefers-reduced-motion</code>.</p></div></div>
+  <div class="stage">
+    <div class="hero v-video">
+      <div class="loop" aria-hidden="true"></div>
+      <div class="grain" aria-hidden="true"></div>
+      <div class="scrim" aria-hidden="true"></div>
+      <div class="wrap">
+        <div class="reveal" style="display:flex;flex-direction:column;align-items:center;width:100%">
+          <span class="eyebrow hero-eyebrow">Summer series · 2026</span>
+          <h2 class="h">Three nights. One skyline. Sound that moves.</h2>
+          <p class="sub">An open-air series across the rooftops of the city — curated line-ups, late sets, and a view you'll talk about for years.</p>
+          <button class="play" type="button"><span class="disc" aria-hidden="true"></span> Watch the after-film</button>
+          <div class="cta-row" style="justify-content:center">
+            <a class="btn btn-primary" href="#">Get tickets <span class="a">→</span></a>
+            <a class="btn btn-ghost-light" href="#">See the line-up</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =================================================================
+     V4 — EDITORIAL (B2 oversized display)
+     ================================================================= -->
+<section class="spec" id="v4">
+  <div class="spec-label"><div class="wrap"><span class="n">4</span><span class="t">Editorial — oversized display type</span><span class="ids">LOOK <b>B2</b> · E2 oversized tight type · RESP <b>Hero6</b></span></div></div>
+  <div class="when"><div class="wrap"><span class="tag">when</span><p><b>Agency, business/consulting, education, beauty, brand statements.</b> When the words are the asset, set the headline at <code>clamp(48px, 12vw, 156px)</code>, light weight, negative tracking, one accent rule beneath. No image needed — light-at-large reads luxe. The most identity-forward of the eight.</p></div></div>
+  <div class="stage">
+    <div class="hero v-edit">
+      <div class="wrap">
+        <span class="eyebrow hero-eyebrow reveal" style="display:inline-flex;margin-bottom:6px">A strategy &amp; brand practice</span>
+        <h2 class="display reveal">We make<br>ambitious<br>brands <em class="clip">inevitable.</em></h2>
+        <hr class="rule reveal">
+        <p class="sub reveal">Positioning, identity, and the words that make people choose you. For founders who are done blending in.</p>
+        <div class="foot reveal">
+          <a class="btn btn-primary" href="#">Book an intro call <span class="a">→</span></a>
+          <span class="yr">Trusted by 60+ teams · since 2016</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =================================================================
+     V5 — GRADIENT / GLOW (D3 blobs)
+     ================================================================= -->
+<section class="spec" id="v5">
+  <div class="spec-label"><div class="wrap"><span class="n">5</span><span class="t">Gradient / glow</span><span class="ids">LOOK <b>D3</b> blobs · #12a ambient · F2 wash · breathe</span></div></div>
+  <div class="when"><div class="wrap"><span class="tag">when</span><p><b>AI/SaaS/tech startups, developer tools, fintech, dark-mode products.</b> Two offset blurred radial blobs behind a near-black hero ≈ the entire modern-startup look in six lines. Centered copy, gradient-clip keyword, a logo cloud for borrowed trust. Blobs breathe slowly; frozen under reduced-motion.</p></div></div>
+  <div class="stage">
+    <div class="hero v-glow">
+      <div class="wrap">
+        <div class="reveal" style="display:flex;flex-direction:column;align-items:center;width:100%">
+          <span class="pill"><i></i> Now in public beta</span>
+          <span class="eyebrow hero-eyebrow">The workflow layer</span>
+          <h2 class="h">Ship faster with a <span class="clip">single source</span> of truth.</h2>
+          <p class="sub">Plan, build, and launch from one connected surface. Your roadmap, docs, and releases — finally in sync, finally fast.</p>
+          <div class="cta-row">
+            <a class="btn btn-primary" href="#">Start free <span class="a">→</span></a>
+            <a class="btn btn-ghost-light" href="#">Watch the 2-min tour</a>
+          </div>
+          <div class="logos"><span>NORTHWIND</span><span>ACME</span><span>LUMEN</span><span>VERTEX</span><span>HALO</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =================================================================
+     V6 — PRODUCT-LED (B4 device + glow)
+     ================================================================= -->
+<section class="spec" id="v6">
+  <div class="spec-label"><div class="wrap"><span class="n">6</span><span class="t">Product-led — device + glow</span><span class="ids">LOOK <b>B4</b> dark split · D3 glow · D6 dir-shadow · float</span></div></div>
+  <div class="when"><div class="wrap"><span class="tag">when</span><p><b>App / SaaS / software — the dominant tech hero.</b> Copy + CTA + an inline social-proof line on the left; a floating device mock (browser chrome over a glow) on the right. The drop-shadow follows the card, a slow float adds life. On mobile the device leads so the visitor "gets it" before the words.</p></div></div>
+  <div class="stage">
+    <div class="hero v-prod">
+      <div class="wrap">
+        <div class="grid">
+          <div class="copy reveal">
+            <span class="eyebrow hero-eyebrow">Analytics, reimagined</span>
+            <h2 class="h">Every metric that matters, in one glance.</h2>
+            <p class="sub">Connect your stack in minutes and watch the dashboards build themselves. No SQL, no setup calls, no spreadsheets.</p>
+            <div class="cta-row">
+              <a class="btn btn-primary" href="#">Get started free <span class="a">→</span></a>
+              <a class="btn btn-ghost-light" href="#">Book a demo</a>
+            </div>
+            <div class="proof"><span class="avatars"><span></span><span></span><span></span><span></span></span><span><b style="color:#fff">12,000+</b> teams · <span class="stars">★★★★★</span> 9.8/10</span></div>
+          </div>
+          <div class="device reveal" aria-hidden="true">
+            <div class="bar"><i></i><i></i><i></i><span class="url"></span></div>
+            <div class="screen">
+              <div class="row"><span class="tile"></span><span class="tile acc"></span><span class="tile"></span></div>
+              <div class="big"><b></b><b></b><b></b><b></b><b></b></div>
+              <div class="bar2 w70"></div>
+              <div class="bar2 w45"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =================================================================
+     V7 — MINIMAL CENTERED (B2 restraint)
+     ================================================================= -->
+<section class="spec" id="v7">
+  <div class="spec-label"><div class="wrap"><span class="n">7</span><span class="t">Minimal centered</span><span class="ids">LOOK <b>B2</b> minimal · #10 eyebrow rule · max restraint</span></div></div>
+  <div class="when"><div class="wrap"><span class="tag">when</span><p><b>Docs, changelogs, pricing pages, a confident single product, or any page where the content below is the star.</b> One centered headline, one accent rule, one primary action. The premium signal is what you leave out — use this when louder heroes would compete with what follows.</p></div></div>
+  <div class="stage">
+    <div class="hero v-min">
+      <div class="wrap">
+        <div class="reveal" style="display:flex;flex-direction:column;align-items:center;width:100%">
+          <span class="kicker">Documentation</span>
+          <h2 class="h">Everything you need to <b>build with confidence.</b></h2>
+          <hr class="rule">
+          <p class="sub">Guides, references, and copy-paste recipes — written for humans, kept current, searchable in a keystroke.</p>
+          <div class="cta-row">
+            <a class="btn btn-primary" href="#">Read the quickstart <span class="a">→</span></a>
+            <a class="btn btn-ghost" href="#">Browse the API</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =================================================================
+     V8 — LEAD-GEN (hero + inline form)
+     ================================================================= -->
+<section class="spec" id="v8">
+  <div class="spec-label"><div class="wrap"><span class="n">8</span><span class="t">Lead-gen — hero + inline form</span><span class="ids">LOOK <b>B2</b> copy · I1 submit · RESP <b>Comp1</b> form · live states</span></div></div>
+  <div class="when"><div class="wrap"><span class="tag">when</span><p><b>Webinars, demos, gated guides, course launches, B2B capture pages.</b> Collapse the funnel into the fold: benefit copy + a live inline form. The form validates in place (try a bad email) with the 07-components error/success states. On mobile it stacks copy-over-form with ≥16px inputs (no iOS zoom).</p></div></div>
+  <div class="stage">
+    <div class="hero v-lead">
+      <div class="wrap">
+        <div class="grid">
+          <div class="copy reveal">
+            <span class="eyebrow hero-eyebrow">Free live workshop</span>
+            <h2 class="h">Turn a flat page into a page that converts.</h2>
+            <p class="sub">A 45-minute, no-fluff session on the layout, copy and proof moves that move the needle — with a teardown of a real site.</p>
+            <ul class="ticks">
+              <li><span class="tk" aria-hidden="true"></span> The 6 above-the-fold decisions that decide the bounce</li>
+              <li><span class="tk" aria-hidden="true"></span> A live teardown + the recording &amp; slides to keep</li>
+              <li><span class="tk" aria-hidden="true"></span> Q&amp;A — bring your page, leave with a fix list</li>
+            </ul>
+          </div>
+          <form class="card reveal" id="leadForm" novalidate>
+            <h3>Save your seat</h3>
+            <p class="note">Thursday · 11:00 ET · 45 min + Q&amp;A</p>
+            <div class="field" id="f-name">
+              <label for="ln">Full name</label>
+              <input class="ctrl" id="ln" name="name" type="text" placeholder="Ava Mendez" autocomplete="name">
+              <span class="msg e">Please enter your name.</span>
+            </div>
+            <div class="field err" id="f-email">
+              <label for="le">Work email</label>
+              <input class="ctrl" id="le" name="email" type="email" placeholder="you@company.com" value="ava@company" autocomplete="email">
+              <span class="msg e">Enter a valid email address.</span>
+              <span class="msg s">Looks good — we'll send the link here.</span>
+            </div>
+            <button class="btn btn-primary btn-block" type="submit">Reserve my spot <span class="a">→</span></button>
+            <p class="legal">No spam, ever. By registering you agree to our <a href="#">privacy policy</a>. Unsubscribe anytime.</p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== STICKY CONVERSION CTA (SCROLL §2.3 demo) ===================== -->
+<div id="sticky-cta" role="region" aria-label="Promotional offer">
+  <div class="wrap">
+    <span class="lbl">Free live workshop — Thursday 11:00 ET<small>Demo of the §2.3 sticky-CTA-after-hero pattern (F2 sentinel)</small></span>
+    <a class="btn btn-primary" href="#v8">Save my seat <span class="a">→</span></a>
+    <button class="close" id="ctaClose" type="button" aria-label="Dismiss">×</button>
+  </div>
+</div>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="sg-foot">
+  <div class="wrap">
+    <span class="b"><b style="color:#fff">SGEN</b> · Section Blocks / Heroes</span>
+    <a href="10-sections.html">← Sections hub</a>
+    <a href="index.html">Styleguide index</a>
+    <a href="07-components.html">07 · Components</a>
+    <a href="08-scroll-sticky.html">08 · Scroll / Sticky</a>
+    <span class="meta">8 variants · B1–B5 · D3 · E2 · self-contained</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---- scroll-reveal + sibling stagger (#4) ---- */
+  var revealEls = [].slice.call(document.querySelectorAll('.reveal'));
+  function stagger(el){
+    if(!el.classList.contains('stagger')) return;
+    var kids = el.children;
+    for(var i=0;i<kids.length;i++){ kids[i].style.transitionDelay = (i*80)+'ms'; }
+  }
+  if(reduce || !('IntersectionObserver' in window)){
+    revealEls.forEach(function(el){ el.classList.add('in-view'); });
+  } else {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){ stagger(e.target); e.target.classList.add('in-view'); io.unobserve(e.target); }
+      });
+    }, {threshold:0.16, rootMargin:'0px 0px -8% 0px'});
+    revealEls.forEach(function(el){ io.observe(el); });
+  }
+
+  /* ---- V8 live form validation (mirrors 07-components error/success) ---- */
+  var form = document.getElementById('leadForm');
+  if(form){
+    var fEmail = document.getElementById('f-email'), le = document.getElementById('le');
+    var fName  = document.getElementById('f-name'),  ln = document.getElementById('ln');
+    var reEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    function gradeEmail(){
+      var v = le.value.trim();
+      if(v === ''){ fEmail.classList.remove('ok'); fEmail.classList.remove('err'); return; }
+      var ok = reEmail.test(v);
+      fEmail.classList.toggle('ok', ok);
+      fEmail.classList.toggle('err', !ok);
+    }
+    le.addEventListener('input', gradeEmail);
+    ln.addEventListener('input', function(){ if(ln.value.trim()!=='') fName.classList.remove('err'); });
+    form.addEventListener('submit', function(ev){
+      ev.preventDefault();
+      var nameOk = ln.value.trim() !== '';
+      fName.classList.toggle('err', !nameOk);
+      gradeEmail();
+      var emailOk = reEmail.test(le.value.trim());
+      if(!emailOk) fEmail.classList.add('err');
+      if(nameOk && emailOk){ alert('Demo only — registration not submitted.'); }
+    });
+  }
+
+  /* ---- sticky conversion CTA (SCROLL §2.3) : F2 sentinel = first hero exits top ---- */
+  var bar = document.getElementById('sticky-cta');
+  var sentinelHost = document.getElementById('v1');
+  var dismissed = false;
+  document.getElementById('ctaClose').addEventListener('click', function(){
+    dismissed = true; bar.classList.remove('show');
+  });
+  if(bar && sentinelHost && 'IntersectionObserver' in window){
+    var sObs = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(dismissed) return;
+        // show once the first hero block has scrolled past the top
+        if(!e.isIntersecting && e.boundingClientRect.top < 0){ bar.classList.add('show'); }
+        else { bar.classList.remove('show'); }
+      });
+    }, {threshold:0, rootMargin:'0px 0px -10% 0px'});
+    sObs.observe(sentinelHost);
+    // second observer: hide the bar when the real lead-gen form / footer enters view (§2.3 dedupe)
+    var realCTA = document.getElementById('v8');
+    var dObs = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if(e.isIntersecting){ bar.classList.remove('show'); dismissed = true; } });
+    }, {threshold:0.2});
+    dObs.observe(realCTA);
+  }
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SGEN Living Styleguide — 06 · Responsive (live demos)</title>
+<style>
+/* ============================================================
+   SGEN LIVING STYLEGUIDE — 06 · RESPONSIVE
+   charcoal #1a1a1a · red #d51522 · clean editorial
+   The see-able version of the RESPONSIVE pattern library.
+   Self-contained: system fonts, zero external deps, no images.
+   ============================================================ */
+:root{
+  --ink:#1a1a1a;                 /* charcoal */
+  --paper:#f6f5f2;               /* warm off-white */
+  --surface:#ffffff;
+  --muted:#626262;
+  --hair:rgba(26,26,26,.10);
+  --accent:#d51522;              /* SGEN red */
+  --accent-ink:#a50f19;
+  --accent-2:#ff5a4d;
+  --body:#4a4f55;
+  --ok:#1f8a4c;
+  --r-chip:6px; --r-card:12px; --r-panel:20px; --r-pill:9999px;
+  --shadow-rest:0 2px 6px 0 rgba(26,26,26,.08);
+  --shadow-card:0 15px 30px 0 rgba(1,7,39,.13);
+  --shadow-hover:0 32px 64px -12px rgba(16,24,40,.18);
+  --ease:cubic-bezier(.05,.5,.3,1);
+  --ease-fit:cubic-bezier(.2,.8,.2,1);
+  --t-fast:.2s ease-out;
+  --t-reveal:.6s var(--ease);
+  --sys-sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --sys-serif:ui-serif,Georgia,Cambria,"Times New Roman",Times,serif;
+  --sys-mono:ui-monospace,"SFMono-Regular","Cascadia Code","Consolas",monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;overflow-x:hidden}   /* §0 #1 — the mandatory safety net, dogfooded */
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--sys-sans);font-size:16px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{font-family:var(--sys-serif);font-weight:600;letter-spacing:-.02em;line-height:1.08;margin:0}
+a{color:var(--accent-ink);text-decoration:none}
+code,kbd{font-family:var(--sys-mono);font-size:.84em}
+
+/* ---------- top bar + sibling nav (matches 00–04) ---------- */
+.topbar{
+  position:sticky;top:0;z-index:50;
+  background:rgba(246,245,242,.82);backdrop-filter:blur(14px) saturate(160%);
+  -webkit-backdrop-filter:blur(14px) saturate(160%);
+  border-bottom:1px solid var(--hair);
+}
+.topbar__in{max-width:1200px;margin:0 auto;padding:.7rem clamp(1rem,4vw,2.5rem);
+  display:flex;align-items:center;gap:1.2rem;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:.55rem;font-weight:800;letter-spacing:-.01em;font-family:var(--sys-sans)}
+.brand .dot{width:11px;height:11px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px rgba(213,21,34,.16)}
+.brand small{font-weight:600;color:var(--muted);letter-spacing:.02em}
+.sibnav{display:flex;gap:.2rem;flex-wrap:wrap;margin-left:auto}
+.sibnav a{
+  font-size:.74rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
+  color:var(--muted);padding:.35rem .6rem;border-radius:var(--r-chip);
+  transition:color var(--t-fast),background var(--t-fast)}
+.sibnav a:hover{color:var(--ink);background:rgba(26,26,26,.05)}
+.sibnav a[aria-current="page"]{color:#fff;background:var(--accent)}
+
+/* ---------- page header ---------- */
+.pagehead{max-width:1200px;margin:0 auto;padding:clamp(2.5rem,6vw,4.5rem) clamp(1rem,4vw,2.5rem) 1rem}
+.eyebrow{display:inline-flex;align-items:center;gap:.5rem;
+  font-family:var(--sys-sans);font-size:.72rem;font-weight:800;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--accent-ink)}
+.eyebrow::before{content:"";width:34px;height:2px;background:var(--accent);display:inline-block}
+.pagehead h1{font-size:clamp(2.2rem,6vw,4rem);margin:.5rem 0 .4rem;letter-spacing:-.035em}
+.pagehead p{max-width:64ch;color:var(--body);font-size:1.05rem}
+
+/* ---------- in-page category chips ---------- */
+.catnav{max-width:1200px;margin:1.2rem auto .5rem;padding:0 clamp(1rem,4vw,2.5rem);
+  display:flex;gap:.5rem;flex-wrap:wrap}
+.catnav a{font-size:.78rem;font-weight:700;padding:.45rem .85rem;border:1px solid var(--hair);
+  border-radius:var(--r-pill);color:var(--ink);background:var(--surface);transition:all var(--t-fast)}
+.catnav a:hover{border-color:var(--accent);color:var(--accent-ink)}
+
+/* ---------- category sections ---------- */
+.cat{max-width:1200px;margin:0 auto;padding:clamp(2.5rem,6vw,4.5rem) clamp(1rem,4vw,2.5rem)}
+.cat__head{margin-bottom:1.8rem}
+.cat__head h2{font-size:clamp(1.7rem,4vw,2.6rem)}
+.cat__head .num{font-family:var(--sys-serif);font-size:clamp(2.6rem,7vw,4.4rem);color:rgba(213,21,34,.14);
+  line-height:.8;display:block;font-weight:700}
+.cat__head p{color:var(--body);max-width:72ch;margin-top:.4rem}
+
+/* ---------- flag callout ---------- */
+.flag{background:#fff7f2;border:1px solid rgba(213,21,34,.22);border-left:4px solid var(--accent);
+  border-radius:var(--r-card);padding:1.2rem 1.4rem;margin:0 0 2rem}
+.flag h3{font-family:var(--sys-sans);font-size:1.02rem;font-weight:800;letter-spacing:0;display:flex;gap:.5rem;align-items:center}
+.flag h3 .warn{color:var(--accent)}
+.flag p{color:var(--body);font-size:.95rem;margin:.5rem 0 0}
+
+/* ---------- generic spec card ---------- */
+.specs{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:1.5rem}
+.spec{background:var(--surface);border:1px solid var(--hair);border-radius:var(--r-card);
+  overflow:hidden;display:flex;flex-direction:column;box-shadow:var(--shadow-rest);
+  transition:transform var(--t-fast),box-shadow var(--t-fast)}
+.spec:hover{transform:translateY(-4px);box-shadow:var(--shadow-card)}
+.spec--wide{grid-column:1/-1}
+.spec__bar{display:flex;align-items:center;justify-content:space-between;gap:.6rem;
+  padding:.85rem 1rem;border-bottom:1px solid var(--hair)}
+.spec__name{font-family:var(--sys-sans);font-weight:800;font-size:.92rem;letter-spacing:-.01em}
+.spec__name .id{color:var(--accent-ink);font-family:var(--sys-mono);font-size:.78rem;margin-right:.35rem}
+.badge{flex:none;font-family:var(--sys-mono);font-size:.72rem;font-weight:700;letter-spacing:.02em;
+  color:#fff;background:var(--ink);padding:.22rem .5rem;border-radius:var(--r-pill);white-space:nowrap}
+.badge--hot{background:var(--accent)}
+.spec__body{padding:1.1rem 1.2rem 1.3rem}
+.spec__note{color:var(--muted);font-size:.85rem;margin:.7rem 0 0}
+.spec__note b{color:var(--ink)}
+
+/* ============================================================
+   A · BREAKPOINT MATRIX  (visual table + container ladder)
+   ============================================================ */
+.matrix{overflow-x:auto;border:1px solid var(--hair);border-radius:var(--r-card);background:var(--surface);box-shadow:var(--shadow-rest)}
+table.mtx{border-collapse:collapse;width:100%;min-width:760px;font-size:.86rem}
+table.mtx th,table.mtx td{padding:.7rem .8rem;text-align:left;border-bottom:1px solid var(--hair);vertical-align:top}
+table.mtx thead th{background:var(--ink);color:#fff;font-family:var(--sys-sans);font-weight:700;
+  font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;position:sticky;top:0}
+table.mtx tbody tr:nth-child(even){background:rgba(26,26,26,.025)}
+table.mtx tbody tr:hover{background:rgba(213,21,34,.05)}
+table.mtx .w{font-family:var(--sys-mono);font-weight:800;color:var(--accent-ink);font-size:.92rem;white-space:nowrap}
+table.mtx .tier{font-weight:700;color:var(--ink)}
+table.mtx code{font-size:.78rem;color:var(--body)}
+.tierpill{display:inline-block;font-family:var(--sys-mono);font-size:.72rem;font-weight:700;
+  padding:.12rem .45rem;border-radius:var(--r-pill);color:#fff;white-space:nowrap}
+.tp-mob{background:#b32018}.tp-tab{background:#c25a14}.tp-lap{background:#1f6f8b}.tp-desk{background:#1f8a4c}.tp-uw{background:#5b3a8c}
+
+/* band diagram — the 4 authoring tiers laid out on a ruler */
+.ruler{margin-top:1.8rem;border:1px solid var(--hair);border-radius:var(--r-card);background:var(--surface);
+  box-shadow:var(--shadow-rest);padding:1.4rem 1.4rem 1.1rem;overflow-x:auto}
+.ruler h4{font-family:var(--sys-sans);font-size:.95rem;margin-bottom:1rem}
+.bands{display:flex;min-width:680px;gap:4px;align-items:stretch}
+.band{flex-grow:1;border-radius:8px;padding:.7rem .7rem .6rem;color:#fff;position:relative;min-height:96px;
+  display:flex;flex-direction:column;justify-content:space-between}
+.band.mob{flex-basis:90px;background:linear-gradient(135deg,#b32018,#7a0c13)}
+.band.tab{flex-basis:110px;background:linear-gradient(135deg,#c25a14,#8a3d0c)}
+.band.lap{flex-basis:200px;background:linear-gradient(135deg,#1f6f8b,#134657)}
+.band.desk{flex-basis:150px;background:linear-gradient(135deg,#1f8a4c,#125d33)}
+.band.uw{flex-basis:120px;background:linear-gradient(135deg,#5b3a8c,#3a2459)}
+.band .bt{font-weight:800;font-size:.82rem;letter-spacing:-.01em}
+.band .br{font-family:var(--sys-mono);font-size:.66rem;opacity:.92;margin-top:.3rem;line-height:1.4}
+.band .bc{font-family:var(--sys-mono);font-size:.72rem;font-weight:800;margin-top:.5rem;
+  background:rgba(255,255,255,.18);border-radius:6px;padding:.2rem .4rem;align-self:flex-start}
+.tickrow{display:flex;min-width:680px;margin-top:.5rem;font-family:var(--sys-mono);font-size:.64rem;color:var(--muted);gap:4px}
+.tickrow span{flex-grow:1;text-align:center}
+.tickrow .t-mob{flex-basis:90px}.tickrow .t-tab{flex-basis:110px}.tickrow .t-lap{flex-basis:200px}
+.tickrow .t-desk{flex-basis:150px}.tickrow .t-uw{flex-basis:120px}
+
+/* container ladder mini-bars */
+.ladder{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1rem;margin-top:1.8rem}
+.lad{background:var(--surface);border:1px solid var(--hair);border-radius:var(--r-card);padding:1rem;box-shadow:var(--shadow-rest)}
+.lad .lt{font-family:var(--sys-mono);font-size:.72rem;font-weight:700;color:var(--muted)}
+.lad .lframe{margin:.7rem 0 .5rem;height:54px;border:2px dashed rgba(26,26,26,.22);border-radius:6px;
+  display:flex;align-items:center;justify-content:center;position:relative;background:rgba(26,26,26,.02)}
+.lad .lcontent{height:30px;background:var(--accent);opacity:.85;border-radius:4px}
+.lad .lv{font-family:var(--sys-mono);font-size:.78rem;font-weight:800;color:var(--accent-ink)}
+.lad .lsub{font-family:var(--sys-mono);font-size:.68rem;color:var(--muted);margin-top:.2rem}
+
+/* ============================================================
+   B · THE MOBILE-NAV DRAWER  (live, inside a phone frame)
+   ============================================================ */
+.drawerwrap{display:grid;grid-template-columns:minmax(0,300px) 1fr;gap:2rem;align-items:start}
+@media(max-width:760px){.drawerwrap{grid-template-columns:1fr}}
+
+/* the phone frame — a self-contained positioning context so the
+   fixed-style drawer behaves inline at ANY viewport */
+.phone{
+  position:relative;width:300px;max-width:100%;height:600px;margin:0 auto;
+  background:#0d0d0d;border:10px solid #050505;border-radius:38px;
+  box-shadow:var(--shadow-hover),inset 0 0 0 2px rgba(255,255,255,.04);
+  overflow:hidden;isolation:isolate;
+}
+.phone::before{content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);
+  width:120px;height:22px;background:#050505;border-radius:0 0 14px 14px;z-index:40}
+/* the phone "screen" — clips the drawer/scrim to the frame */
+.screen{position:absolute;inset:0;background:var(--paper);overflow:hidden}
+/* inner scroller — scroll-lock targets THIS, not the page */
+.screen__scroll{position:absolute;inset:0;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.screen.locked .screen__scroll{overflow:hidden}
+
+/* mini header inside the phone */
+.mh{position:sticky;top:0;z-index:20;height:54px;display:flex;align-items:center;
+  justify-content:space-between;padding:0 12px;background:rgba(255,255,255,.92);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--hair)}
+.mh .mlogo{font-weight:800;font-size:.95rem;color:var(--ink);display:flex;align-items:center;gap:.4rem}
+.mh .mlogo .dot{width:9px;height:9px;border-radius:50%;background:var(--accent)}
+/* hamburger — a real 44x44 tap target (BeTheme ships 34; bumped) */
+.hamb{width:44px;height:44px;border:0;background:none;cursor:pointer;padding:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px}
+.hamb span{display:block;width:22px;height:2px;background:var(--ink);border-radius:2px;transition:transform .3s var(--ease),opacity .2s}
+.hamb[aria-expanded="true"] span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.hamb[aria-expanded="true"] span:nth-child(2){opacity:0}
+.hamb[aria-expanded="true"] span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
+.mbody{padding:14px 14px 40px}
+.mbody h5{font-family:var(--sys-serif);font-size:1.1rem;margin:0 0 .4rem}
+.mbody p{font-size:.82rem;color:var(--body);margin:0 0 1rem}
+.mtile{height:64px;border-radius:8px;background:linear-gradient(135deg,rgba(26,26,26,.06),rgba(26,26,26,.02));
+  border:1px solid var(--hair);margin-bottom:10px}
+
+/* the off-canvas drawer — absolute within .screen, parked off via transform */
+.drawer{
+  position:absolute;top:0;right:0;bottom:0;width:78%;max-width:230px;z-index:60;
+  background:#191919;color:#a6a6a6;
+  transform:translateX(100%);transition:transform .3s var(--ease);
+  overflow-y:auto;-webkit-overflow-scrolling:touch;padding:18px 16px 30px;
+  visibility:hidden;
+}
+.drawer.open{transform:translateX(0);visibility:visible}
+.drawer__close{position:absolute;top:6px;right:6px;width:44px;height:44px;line-height:44px;
+  font-size:26px;background:none;border:0;color:#fff;cursor:pointer;text-align:center}
+.drawer__menu{list-style:none;margin:30px 0 0;padding:0}
+.drawer__menu>li{position:relative;border-top:1px solid rgba(255,255,255,.08)}
+.drawer__menu a{display:block;min-height:44px;line-height:44px;padding:0 6px;color:#dcdcdc;
+  font-weight:600;font-size:.92rem}
+.drawer__menu a:hover{color:#fff}
+.has-sub .sub-toggle{position:absolute;top:0;right:0;width:44px;height:44px;line-height:44px;
+  font-size:22px;background:none;border:0;color:#fff;cursor:pointer;text-align:center}
+.drawer__submenu{list-style:none;margin:0;padding:0;max-height:0;overflow:hidden;transition:max-height .25s var(--ease)}
+.has-sub.expanded .drawer__submenu{max-height:200px}
+.drawer__submenu a{padding-left:18px;font-size:.86rem;color:#9b9b9b;min-height:40px;line-height:40px}
+.drawer__cta{display:block;width:100%;text-align:center;margin-top:20px;padding:.7rem;border-radius:8px;
+  background:var(--accent);color:#fff;font-weight:700;font-size:.9rem;min-height:44px;line-height:1.4}
+/* the scrim — real element, clipped to the phone screen, click-to-close */
+.scrim{position:absolute;inset:0;background:rgba(0,0,0,.55);opacity:0;visibility:hidden;
+  transition:opacity .3s,visibility .3s;z-index:50}
+.scrim.show{opacity:1;visibility:visible}
+
+.drawernote{font-size:.88rem;color:var(--body)}
+.drawernote ul{margin:.6rem 0 0;padding-left:1.1rem}
+.drawernote li{margin-bottom:.5rem}
+.drawernote li b{color:var(--ink)}
+.statusline{margin-top:1rem;font-family:var(--sys-mono);font-size:.78rem;font-weight:700;
+  padding:.55rem .8rem;border-radius:var(--r-chip);border:1px solid var(--hair);background:var(--surface);color:var(--muted)}
+.statusline.is-open{color:var(--ok);border-color:rgba(31,138,76,.4);background:rgba(31,138,76,.06)}
+
+/* ============================================================
+   C · LIVE REFLOW  (same component at 3 device widths via scale)
+   ============================================================ */
+.frames{display:flex;gap:1.5rem;flex-wrap:wrap;align-items:flex-start}
+.devicebox{flex:1 1 260px;min-width:0}
+.devicelabel{font-family:var(--sys-mono);font-size:.78rem;font-weight:800;color:var(--accent-ink);margin-bottom:.5rem;
+  display:flex;align-items:center;gap:.5rem}
+.devicelabel .px{color:var(--muted);font-weight:600}
+/* the viewport window — a fixed-height window; the demo is rendered
+   at its real CSS width then transform:scale'd to fit the window. */
+.vp{border:1px solid var(--hair);border-radius:var(--r-card);overflow:hidden;background:var(--surface);
+  box-shadow:var(--shadow-rest);height:340px;position:relative}
+.vp__inner{transform-origin:top left;position:absolute;top:0;left:0}
+/* the reflow demo itself — a real responsive component (grid + footer) */
+.demo{background:var(--paper);min-height:100%;font-family:var(--sys-sans)}
+.demo__hd{background:var(--ink);color:#fff;padding:14px 18px;font-weight:800;font-size:15px;letter-spacing:-.01em;
+  display:flex;align-items:center;gap:8px}
+.demo__hd .dt{width:9px;height:9px;border-radius:50%;background:var(--accent)}
+.demo__sec{padding:18px}
+.demo__lbl{font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--accent-ink);margin-bottom:12px}
+.demo__grid{display:grid;gap:12px;grid-template-columns:repeat(3,1fr)}
+.demo__card{background:var(--surface);border:1px solid var(--hair);border-radius:10px;overflow:hidden;box-shadow:var(--shadow-rest)}
+.demo__card .ph{height:60px;background:linear-gradient(135deg,#d51522,#7a0c13)}
+.demo__card:nth-child(2) .ph{background:linear-gradient(135deg,#1f6f8b,#134657)}
+.demo__card:nth-child(3) .ph{background:linear-gradient(135deg,#1f8a4c,#125d33)}
+.demo__card .cb{padding:10px 12px}
+.demo__card .ct{font-weight:800;font-size:14px;color:var(--ink)}
+.demo__card .cs{font-size:12px;color:var(--muted);margin-top:3px}
+.demo__foot{background:var(--ink);color:#9b9b9b;padding:18px;margin-top:6px}
+.demo__fcols{display:grid;gap:18px;grid-template-columns:repeat(4,1fr)}
+.demo__fcol h6{color:#fff;font-size:12px;margin:0 0 8px;font-family:var(--sys-sans);font-weight:800;letter-spacing:.04em}
+.demo__fcol a{display:block;color:#9b9b9b;font-size:12px;line-height:1.9}
+/* the demo's OWN responsive rules — keyed on its real rendered width.
+   Because each .vp__inner is sized to a device width, these fire per-frame. */
+.demo.w390 .demo__grid{grid-template-columns:1fr}
+.demo.w390 .demo__fcols{grid-template-columns:1fr;gap:10px}
+.demo.w390 .demo__fcol{border-top:1px solid rgba(255,255,255,.1);padding-top:10px}
+.demo.w768 .demo__grid{grid-template-columns:repeat(2,1fr)}
+.demo.w768 .demo__fcols{grid-template-columns:repeat(2,1fr)}
+/* w1440 keeps the 3-up grid + 4-col footer (the base rules) */
+
+.reflownote{margin-top:1.6rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem}
+.rn{background:var(--surface);border:1px solid var(--hair);border-left:3px solid var(--accent);border-radius:var(--r-chip);
+  padding:.9rem 1rem;font-size:.86rem;color:var(--body)}
+.rn b{color:var(--ink);display:block;margin-bottom:.2rem;font-family:var(--sys-sans)}
+
+/* ============================================================
+   D · KEY PATTERN MINI-DEMOS
+   ============================================================ */
+/* D1 sticky-shrink header (scoped scroll window) */
+.scrollwin{height:280px;overflow-y:auto;border:1px solid var(--hair);border-radius:var(--r-card);
+  background:var(--surface);position:relative;-webkit-overflow-scrolling:touch}
+.shrinkhdr{position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;
+  padding:0 16px;height:84px;background:var(--ink);color:#fff;transition:height .25s var(--ease),box-shadow .25s,background .25s}
+.shrinkhdr .lg{font-weight:800;transition:font-size .25s var(--ease)}
+.shrinkhdr.stuck{height:56px;box-shadow:0 4px 14px rgba(0,0,0,.35);background:rgba(26,26,26,.97)}
+.shrinkhdr.stuck .lg{font-size:.9rem}
+.shrinkhdr .lg b{color:var(--accent)}
+.scrollfill{padding:18px;color:var(--body);font-size:.88rem}
+.scrollfill p{margin:0 0 14px}
+.scrollhint{font-family:var(--sys-mono);font-size:.72rem;color:var(--muted);margin-bottom:14px}
+
+/* D2 clamp type ladder */
+.clampbox p{margin:.2rem 0;line-height:1.05;letter-spacing:-.02em;color:var(--ink);font-family:var(--sys-serif)}
+.clampbox .lbl{font-family:var(--sys-mono);font-size:.66rem;color:var(--muted);font-weight:700;
+  letter-spacing:.04em;display:inline-block;min-width:62px;vertical-align:middle}
+.cl-h1{font-size:clamp(2.625rem,2.2rem + 2.1vw,4.375rem)}   /* 42→70 */
+.cl-h2{font-size:clamp(1.875rem,1.6rem + 1.4vw,3.125rem)}   /* 30→50 */
+.cl-h3{font-size:clamp(1.5rem,1.3rem + 1.0vw,2.25rem)}      /* 24→36 */
+.cl-body{font-size:clamp(.9375rem,.9rem + .2vw,1rem);font-family:var(--sys-sans);line-height:1.6;color:var(--body)}
+.clampbox .now{margin-top:1rem;font-family:var(--sys-mono);font-size:.74rem;color:var(--accent-ink);font-weight:700}
+
+/* D3 44px tap target good vs bad */
+.tapdemo{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+@media(max-width:520px){.tapdemo{grid-template-columns:1fr}}
+.tapcol{text-align:center;padding:1rem;border-radius:var(--r-card);border:1px solid var(--hair)}
+.tapcol.good{background:rgba(31,138,76,.05);border-color:rgba(31,138,76,.3)}
+.tapcol.bad{background:rgba(213,21,34,.05);border-color:rgba(213,21,34,.3)}
+.tapcol h4{font-family:var(--sys-sans);font-size:.82rem;margin-bottom:.8rem}
+.tapcol.good h4{color:var(--ok)}.tapcol.bad h4{color:var(--accent-ink)}
+.tapbtn{display:inline-flex;align-items:center;justify-content:center;background:var(--ink);color:#fff;
+  border-radius:8px;font-weight:700;cursor:pointer;position:relative}
+.tapbtn.big{width:44px;height:44px}
+.tapbtn.sml{width:28px;height:28px;font-size:.7rem}
+.tapring{position:relative;display:inline-flex;align-items:center;justify-content:center}
+.tapring::after{content:"";position:absolute;width:44px;height:44px;border:2px dashed rgba(26,26,26,.35);border-radius:8px}
+.tapcol .cap{font-family:var(--sys-mono);font-size:.7rem;color:var(--muted);margin-top:.9rem}
+
+/* D4 full-bleed band vs capped reading column */
+.fbdemo{border:1px solid var(--hair);border-radius:var(--r-card);overflow:hidden;background:var(--surface);box-shadow:var(--shadow-rest)}
+.fbband{background:linear-gradient(135deg,#1a1a1a,#2a2a2a);padding:26px 0;position:relative}
+.fbband::after{content:"100vw band — bleeds edge to edge";position:absolute;top:6px;left:10px;
+  font-family:var(--sys-mono);font-size:.62rem;color:rgba(255,255,255,.4)}
+.fbread{max-width:520px;margin:0 auto;padding:0 22px;color:#e8e8e8}
+.fbread h4{color:#fff;font-family:var(--sys-serif);font-size:1.2rem;margin-bottom:.5rem}
+.fbread p{font-size:.86rem;color:#bdbdbd;margin:0}
+.fbread .cap{display:inline-block;margin-top:.7rem;font-family:var(--sys-mono);font-size:.66rem;
+  color:var(--accent-2);border:1px solid rgba(255,90,77,.4);border-radius:var(--r-pill);padding:.15rem .5rem}
+
+/* ============================================================
+   E · CHECKLIST
+   ============================================================ */
+.gate{background:var(--ink);color:#e8e8e8;border-radius:var(--r-card);padding:1.4rem 1.5rem;margin:0 0 2rem;
+  border-left:4px solid var(--accent)}
+.gate h3{font-family:var(--sys-sans);color:#fff;font-size:1.05rem;display:flex;gap:.5rem;align-items:center;margin-bottom:.5rem}
+.gate h3 .warn{color:var(--accent-2)}
+.gate p{color:#bdbdbd;font-size:.92rem;margin:0}
+.gate p b{color:#fff}
+.checks{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.2rem}
+.checkcard{background:var(--surface);border:1px solid var(--hair);border-radius:var(--r-card);
+  box-shadow:var(--shadow-rest);overflow:hidden}
+.checkcard__hd{padding:.8rem 1rem;border-bottom:1px solid var(--hair);display:flex;align-items:center;gap:.6rem;
+  background:rgba(26,26,26,.02)}
+.checkcard__hd .bp{font-family:var(--sys-mono);font-weight:800;font-size:.82rem;color:#fff;background:var(--ink);
+  padding:.18rem .5rem;border-radius:var(--r-pill)}
+.checkcard__hd.universal .bp{background:var(--accent)}
+.checkcard__hd .tt{font-family:var(--sys-sans);font-weight:800;font-size:.86rem;color:var(--ink)}
+.checkcard ul{list-style:none;margin:0;padding:.7rem 1rem 1rem}
+.checkcard li{position:relative;padding:.4rem 0 .4rem 1.6rem;font-size:.84rem;color:var(--body);border-bottom:1px solid rgba(26,26,26,.05)}
+.checkcard li:last-child{border-bottom:0}
+.checkcard li::before{content:"";position:absolute;left:0;top:.62rem;width:15px;height:15px;border-radius:4px;
+  border:2px solid rgba(26,26,26,.25)}
+.checkcard li::after{content:"";position:absolute;left:4px;top:.7rem;width:7px;height:7px;border-radius:2px;background:var(--accent);opacity:.85}
+.checkcard li b{color:var(--ink)}
+
+/* ---------- footer ---------- */
+footer{max-width:1200px;margin:0 auto;padding:2.5rem clamp(1rem,4vw,2.5rem) 4rem;color:var(--muted);font-size:.85rem;border-top:1px solid var(--hair)}
+footer b{color:var(--ink)}
+
+/* ---------- reveal ---------- */
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
+.reveal.in-view{opacity:1;transform:none}
+
+/* ---------- reduced motion gate ---------- */
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  .reveal{opacity:1!important;transform:none!important}
+  .drawer{transition:none!important}
+}
+
+/* ---------- this page's OWN responsive chrome ---------- */
+@media(max-width:680px){
+  .tapdemo{grid-template-columns:1fr}
+  .frames{gap:1.2rem}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ TOP BAR + SIBLING NAV ============ -->
+<header class="topbar">
+  <div class="topbar__in">
+    <div class="brand"><span class="dot"></span>SGEN <small>Living Styleguide</small></div>
+    <nav class="sibnav" aria-label="Styleguide pages">
+      <a href="00-top12.html">00 · Top-12</a>
+      <a href="01-transitions-hero-motion.html">01 · Transitions·Hero·Motion</a>
+      <a href="02-depth-type-color.html">02 · Depth·Type·Color</a>
+      <a href="03-layout-imagery-components.html">03 · Layout·Imagery·Components</a>
+      <a href="04-signatures-tokens.html">04 · Signatures·Tokens</a>
+      <a href="06-responsive.html" aria-current="page">06 · Responsive</a><a class="nav" href="07-components.html">07 · Components</a><a class="nav" href="08-scroll-sticky.html">08 · Scroll / Sticky</a><a class="nav" href="09-accessibility.html">09 · Accessibility</a><a class="nav" href="10-sections.html">10 · Sections</a><a class="nav" href="11-theming.html">11 · Theming</a><a class="nav" href="12-iconography.html">12 · Iconography</a><a class="nav" href="13-utility-pages.html">13 · Utility</a><a class="nav" href="14-ecommerce.html">14 · Ecommerce</a><a class="nav" href="15-dataviz.html">15 · Data-viz</a>
+      <a href="index.html">Index</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ============ PAGE HEADER ============ -->
+<div class="pagehead">
+  <span class="eyebrow">Page 06 — the responsive ceiling, live</span>
+  <h1>Responsive — see it work</h1>
+  <p>The see-able version of the <code>_RESPONSIVE-PATTERN-LIBRARY.md</code>. Every demo below is <b>real and working</b> — the drawer actually opens, the grid actually reflows, the header actually shrinks on scroll. This is the responsive ceiling that makes the premium desktop build survive <b>390 → 1920px</b> intact: no horizontal scroll, the nav works, grids reflow instead of crushing, type stays legible, and the reading column stays capped while full-bleed bands fill ultrawide.</p>
+</div>
+
+<nav class="catnav" aria-label="Categories on this page">
+  <a href="#catA">A · Breakpoint matrix</a>
+  <a href="#catB">B · The mobile-nav drawer</a>
+  <a href="#catC">C · Live reflow</a>
+  <a href="#catD">D · Key patterns</a>
+  <a href="#catE">E · Correctness checklist</a>
+</nav>
+
+<!-- ====================================================== -->
+<!-- A · BREAKPOINT MATRIX -->
+<!-- ====================================================== -->
+<section class="cat" id="catA">
+  <div class="cat__head">
+    <span class="num">A</span>
+    <h2>The breakpoint matrix</h2>
+    <p>The 6 locked project targets mapped to BeTheme's <b>real</b> shipped <code>@media</code> tiers — <code>767 · 959 · 1239 · 1441 · 1921</code> (plus fine mobile sub-steps at 479/600) — and the nested container ladder <code>1240 → 960 → 728 → fluid</code>. There are really only <b>4 layout tiers worth authoring</b>: 1024 and 1200 are the <b>same</b> tier — never invent a query per device.</p>
+  </div>
+
+  <div class="matrix">
+    <table class="mtx">
+      <thead>
+        <tr>
+          <th>Target width</th><th>BeTheme tier</th><th>Governing <code>@media</code> (verbatim)</th><th>What is true here</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="w">390<br><span style="font-weight:600;color:var(--muted);font-size:.72rem">mobile</span></td>
+          <td><span class="tierpill tp-mob">mobile portrait</span></td>
+          <td><code>(max-width:479px)</code> then <code>(max-width:767px)</code> — both apply</td>
+          <td>Hard 1-col stack · smallest type tier (×0.60) · <b>drawer nav</b> · 33px gutters</td>
+        </tr>
+        <tr>
+          <td class="w">768<br><span style="font-weight:600;color:var(--muted);font-size:.72rem">tablet portrait</span></td>
+          <td><span class="tierpill tp-tab">tablet portrait</span></td>
+          <td><code>(min-width:768px) and (max-width:959px)</code></td>
+          <td><b>NOT auto-stacked</b> (1px above the 767 line) — keeps <code>tablet-*</code> widths · container 728/708 · type ×0.85</td>
+        </tr>
+        <tr>
+          <td class="w">1024<br><span style="font-weight:600;color:var(--muted);font-size:.72rem">tablet land.</span></td>
+          <td><span class="tierpill tp-lap">laptop band</span></td>
+          <td><code>(min-width:960px) and (max-width:1239px)</code></td>
+          <td>Container 960/940 · below BeTheme's 1240 nav line (hamburger still on unless you set 1024)</td>
+        </tr>
+        <tr>
+          <td class="w">1200<br><span style="font-weight:600;color:var(--muted);font-size:.72rem">laptop</span></td>
+          <td><span class="tierpill tp-lap">laptop band</span></td>
+          <td><code>(min-width:960px) and (max-width:1239px)</code></td>
+          <td><b>Same tier as 1024</b> — do NOT invent a separate 1200 grid · container still 960/940</td>
+        </tr>
+        <tr>
+          <td class="w">1440<br><span style="font-weight:600;color:var(--muted);font-size:.72rem">desktop</span></td>
+          <td><span class="tierpill tp-desk">desktop</span></td>
+          <td><code>(min-width:1240px)</code> + laptop utilities up to 1440</td>
+          <td>Full 1240/1220 container · full horizontal nav · base type</td>
+        </tr>
+        <tr>
+          <td class="w">1920+<br><span style="font-weight:600;color:var(--muted);font-size:.72rem">full-bleed cap</span></td>
+          <td><span class="tierpill tp-uw">ultrawide</span></td>
+          <td><code>(min-width:1441px)</code> + <code>(min-width:1921px)</code></td>
+          <td>Content pinned at 1240/1220 centered · only opt-in bg/media stretch (<code>100vw</code>/<code>cover</code>); cover gated ≥1921</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- band ruler -->
+  <div class="ruler">
+    <h4>The 4 authoring tiers on a ruler — 1024 + 1200 collapse into one laptop band</h4>
+    <div class="bands">
+      <div class="band mob"><div><div class="bt">Mobile</div><div class="br">≤767</div></div><div class="bc">fluid · 700</div></div>
+      <div class="band tab"><div><div class="bt">Tablet portrait</div><div class="br">768–959</div></div><div class="bc">728 · 708</div></div>
+      <div class="band lap"><div><div class="bt">Laptop (1024 &amp; 1200)</div><div class="br">960–1239</div></div><div class="bc">960 · 940</div></div>
+      <div class="band desk"><div><div class="bt">Desktop</div><div class="br">≥1240</div></div><div class="bc">1240 · 1220</div></div>
+      <div class="band uw"><div><div class="bt">Ultrawide</div><div class="br">≥1441 / ≥1921</div></div><div class="bc">pin + bleed</div></div>
+    </div>
+    <div class="tickrow">
+      <span class="t-mob">479 · 767</span>
+      <span class="t-tab">959</span>
+      <span class="t-lap">1239</span>
+      <span class="t-desk">1440</span>
+      <span class="t-uw">1921</span>
+    </div>
+  </div>
+
+  <!-- container ladder -->
+  <div class="ladder">
+    <div class="lad">
+      <div class="lt">≥1240 · base</div>
+      <div class="lframe"><div class="lcontent" style="width:92%"></div></div>
+      <div class="lv">1240 / 1220</div>
+      <div class="lsub">body min-width:960</div>
+    </div>
+    <div class="lad">
+      <div class="lt">960–1239 · 1024 &amp; 1200</div>
+      <div class="lframe"><div class="lcontent" style="width:78%"></div></div>
+      <div class="lv">960 / 940</div>
+      <div class="lsub">floor released → 0</div>
+    </div>
+    <div class="lad">
+      <div class="lt">768–959 · tablet</div>
+      <div class="lframe"><div class="lcontent" style="width:62%"></div></div>
+      <div class="lv">728 / 708</div>
+      <div class="lsub">~232px narrower</div>
+    </div>
+    <div class="lad">
+      <div class="lt">≤767 · mobile</div>
+      <div class="lframe"><div class="lcontent" style="width:100%"></div></div>
+      <div class="lv">fluid / 700</div>
+      <div class="lsub">33px fixed gutters</div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================================================== -->
+<!-- B · THE MOBILE-NAV DRAWER -->
+<!-- ====================================================== -->
+<section class="cat" id="catB">
+  <div class="cat__head">
+    <span class="num">B</span>
+    <h2>The mobile-nav drawer — the #1 gap</h2>
+    <p>A <b>real, working</b> off-canvas hamburger → drawer. Click the hamburger inside the phone and the drawer slides in via <code>translateX</code>, a full scrim dims behind it, scroll locks, the submenu accordion expands, and it closes on the close button, scrim-tap, link-tap, or <kbd>Esc</kbd>. Embedded in a phone-frame so it works inline at any viewport. 44px tap targets throughout; driven by <code>aria-expanded</code> / <code>aria-controls</code>.</p>
+  </div>
+
+  <div class="flag">
+    <h3><span class="warn">&#9888;</span> This is the single biggest mobile pattern — and the most under-built</h3>
+    <p>A naive build "reflows" the desktop menu into a vertical list. The correct build is a <b>separate <code>position:fixed</code> panel parked off-screen</b> (<code>transform:translateX(100%)</code>), a real scrim with its own click-to-close, a hard scroll-lock, and a submenu toggle that is a <b>separate control from the link</b> (tap the label to navigate, tap the <code>+</code> to expand). The demo here parks the panel inside the phone frame instead of the page viewport so it stays self-contained.</p>
+  </div>
+
+  <div class="drawerwrap">
+    <!-- the live phone -->
+    <div>
+      <div class="phone">
+        <div class="screen" id="screen">
+          <div class="screen__scroll">
+            <div class="mh">
+              <span class="mlogo"><span class="dot"></span>Northcote</span>
+              <button class="hamb" id="hamb" aria-label="Open menu" aria-expanded="false" aria-controls="drawer">
+                <span></span><span></span><span></span>
+              </button>
+            </div>
+            <div class="mbody">
+              <h5>Scroll me, then open the drawer.</h5>
+              <p>The page behind the scrim must NOT scroll while the drawer is open — scroll-lock is scoped to this screen, not your browser window.</p>
+              <div class="mtile"></div><div class="mtile"></div><div class="mtile"></div>
+              <div class="mtile"></div><div class="mtile"></div><div class="mtile"></div>
+            </div>
+          </div>
+
+          <!-- scrim + drawer live INSIDE the screen so they clip to the phone -->
+          <div class="scrim" id="scrim"></div>
+          <nav id="drawer" class="drawer" aria-label="Mobile menu" aria-hidden="true">
+            <button class="drawer__close" id="drawerClose" aria-label="Close menu">&times;</button>
+            <ul class="drawer__menu">
+              <li><a href="#" data-link>Home</a></li>
+              <li class="has-sub">
+                <a href="#" data-link>Work</a>
+                <button class="sub-toggle" aria-label="Expand Work submenu" aria-expanded="false">+</button>
+                <ul class="drawer__submenu">
+                  <li><a href="#" data-link>Residential</a></li>
+                  <li><a href="#" data-link>Commercial</a></li>
+                  <li><a href="#" data-link>Heritage</a></li>
+                </ul>
+              </li>
+              <li><a href="#" data-link>Studio</a></li>
+              <li><a href="#" data-link>Journal</a></li>
+              <li><a href="#" data-link>Contact</a></li>
+            </ul>
+            <a class="drawer__cta" href="#" data-link>Start a project</a>
+          </nav>
+        </div>
+      </div>
+    </div>
+
+    <!-- the recipe notes -->
+    <div class="drawernote">
+      <div class="statusline" id="statusline" aria-live="polite">Drawer state: closed</div>
+      <ul>
+        <li><b>Separate fixed panel</b> — starts fully off-screen at <code>translateX(100%)</code>, animates to <code>0</code> over <b>300ms</b> (compositor-only, no layout thrash).</li>
+        <li><b>Real scrim with click-to-close</b> + a real scroll-lock — BeTheme ships no hard scroll-lock; this fills that gap.</li>
+        <li><b>Submenu accordion</b> — the <code>+</code> toggle is a separate control from the link, driven by <code>aria-expanded</code>, not a hover class.</li>
+        <li><b>Close triggers</b> — close button · scrim-tap · link-tap · <kbd>Esc</kbd>. Focus moves into the panel on open and back to the hamburger on close.</li>
+        <li><b>44px tap targets</b> — hamburger, close, every menu row, every submenu toggle (BeTheme ships 34 → bumped).</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ====================================================== -->
+<!-- C · LIVE REFLOW -->
+<!-- ====================================================== -->
+<section class="cat" id="catC">
+  <div class="cat__head">
+    <span class="num">C</span>
+    <h2>Live reflow — the same component at three widths</h2>
+    <p>The identical card-grid + footer component, rendered at its <b>real CSS width</b> for 390 / 768 / 1440 and scaled to fit each window. Watch the grid step <b>3 → 2 → 1</b> and the footer go from a <b>4-column row</b> to two columns to a stacked accordion-style list. This is what "reflow instead of crush" looks like — proven at the widths that matter, not just on a desktop monitor.</p>
+  </div>
+
+  <div class="frames" id="reflowFrames">
+
+    <!-- 390 -->
+    <div class="devicebox">
+      <div class="devicelabel">390 <span class="px">· mobile portrait · 1-up grid · stacked footer</span></div>
+      <div class="vp"><div class="vp__inner" data-w="390">
+        <div class="demo w390">
+          <div class="demo__hd"><span class="dt"></span>Maison Reflow</div>
+          <div class="demo__sec">
+            <div class="demo__lbl">Featured work</div>
+            <div class="demo__grid">
+              <div class="demo__card"><div class="ph"></div><div class="cb"><div class="ct">Atelier One</div><div class="cs">Brand &amp; identity</div></div></div>
+              <div class="demo__card"><div class="ph"></div><div class="cb"><div class="ct">Coastal House</div><div class="cs">Residential</div></div></div>
+              <div class="demo__card"><div class="ph"></div><div class="cb"><div class="ct">Field Notes</div><div class="cs">Editorial</div></div></div>
+            </div>
+          </div>
+          <div class="demo__foot"><div class="demo__fcols">
+            <div class="demo__fcol"><h6>Studio</h6><a>About</a><a>Team</a><a>Careers</a></div>
+            <div class="demo__fcol"><h6>Work</h6><a>Residential</a><a>Commercial</a><a>Heritage</a></div>
+            <div class="demo__fcol"><h6>Journal</h6><a>Latest</a><a>Process</a><a>Press</a></div>
+            <div class="demo__fcol"><h6>Contact</h6><a>Enquiries</a><a>Studio</a><a>Map</a></div>
+          </div></div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- 768 -->
+    <div class="devicebox">
+      <div class="devicelabel">768 <span class="px">· tablet portrait · 2-up grid · 2-col footer</span></div>
+      <div class="vp"><div class="vp__inner" data-w="768">
+        <div class="demo w768">
+          <div class="demo__hd"><span class="dt"></span>Maison Reflow</div>
+          <div class="demo__sec">
+            <div class="demo__lbl">Featured work</div>
+            <div class="demo__grid">
+              <div class="demo__card"><div class="ph"></div><div class="cb"><div class="ct">Atelier One</div><div class="cs">Brand &amp; identity</div></div></div>
+              <div class="demo__card"><div class="ph"></div><div class="cb"><div class="ct">Coastal House</div><div class="cs">Residential</div></div></div>
+              <div class="demo__card"><div class="ph"></div><div class="cb"><div class="ct">Field Notes</div><div class="cs">Editorial</div></div></div>
+            </div>
+          </div>
+          <div class="demo__foot"><div class="demo__fcols">
+            <div class="demo__fcol"><h6>Studio</h6><a>About</a><a>Team</a><a>Careers</a></div>
+            <div class="demo__fcol"><h6>Work</h6><a>Residential</a><a>Commercial</a><a>Heritage</a></div>
+            <div class="demo__fcol"><h6>Journal</h6><a>Latest</a><a>Process</a><a>Press</a></div>
+            <div class="demo__fcol"><h6>Contact</h6><a>Enquiries</a><a>Studio</a><a>Map</a></div>
+          </div></div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- 1440 -->
+    <div class="devicebox">
+      <div class="devicelabel">1440 <span class="px">· desktop · 3-up grid · 4-col footer</span></div>
+      <div class="vp"><div class="vp__inner" data-w="1440">
+        <div class="demo w1440">
+          <div class="demo__hd"><span class="dt"></span>Maison Reflow</div>
+          <div class="demo__sec">
+            <div class="demo__lbl">Featured work</div>
+            <div class="demo__grid">
+              <div class="demo__card"><div class="ph"></div><div class="cb"><div class="ct">Atelier One</div><div class="cs">Brand &amp; identity</div></div></div>
+              <div class="demo__card"><div class="ph"></div><div class="cb"><div class="ct">Coastal House</div><div class="cs">Residential</div></div></div>
+              <div class="demo__card"><div class="ph"></div><div class="cb"><div class="ct">Field Notes</div><div class="cs">Editorial</div></div></div>
+            </div>
+          </div>
+          <div class="demo__foot"><div class="demo__fcols">
+            <div class="demo__fcol"><h6>Studio</h6><a>About</a><a>Team</a><a>Careers</a></div>
+            <div class="demo__fcol"><h6>Work</h6><a>Residential</a><a>Commercial</a><a>Heritage</a></div>
+            <div class="demo__fcol"><h6>Journal</h6><a>Latest</a><a>Process</a><a>Press</a></div>
+            <div class="demo__fcol"><h6>Contact</h6><a>Enquiries</a><a>Studio</a><a>Map</a></div>
+          </div></div>
+        </div>
+      </div></div>
+    </div>
+
+  </div>
+
+  <div class="reflownote">
+    <div class="rn"><b>Card cascade 4 → 3 → 2 → 1</b>Keyed at 1440 / 959 / 767. Never jump a dense grid 6→1; the intermediate steps keep thumbnails legible.</div>
+    <div class="rn"><b>Footer columns → stack</b>Multi-column widget area collapses to a single stacked list at ≤767 with 20px gaps. Prefer CSS Grid <code>grid-template-columns:1fr</code> over an accordion.</div>
+    <div class="rn"><b>768 is NOT auto-stacked</b>1px above the 767 line — tablet portrait keeps an explicit 2-up, not a free-fall to 1-up.</div>
+  </div>
+</section>
+
+<!-- ====================================================== -->
+<!-- D · KEY PATTERN MINI-DEMOS -->
+<!-- ====================================================== -->
+<section class="cat" id="catD">
+  <div class="cat__head">
+    <span class="num">D</span>
+    <h2>Key patterns, live</h2>
+    <p>Four high-leverage moves you can verify directly: sticky-header shrink-on-scroll, the clamp type ladder, 44px tap targets (good vs bad), and full-bleed band vs capped reading column.</p>
+  </div>
+
+  <div class="specs">
+
+    <!-- D1 sticky shrink -->
+    <article class="spec spec--wide">
+      <div class="spec__bar"><span class="spec__name"><span class="id">D1</span>Sticky header — shrink on scroll</span><span class="badge badge--hot">live</span></div>
+      <div class="spec__body">
+        <div class="scrollwin" id="scrollwin">
+          <header class="shrinkhdr" id="shrinkhdr">
+            <span class="lg"><b>●</b> Brand mark</span>
+            <span style="font-size:.78rem;color:#bdbdbd;font-family:var(--sys-mono)">90px → 60px</span>
+          </header>
+          <div class="scrollfill">
+            <div class="scrollhint">▼ scroll this panel — the header shrinks 84→56, gains a shadow + solid bg</div>
+            <p>The bar starts tall and transparent-feeling. On scroll it adds <code>.stuck</code> — height drops, the logo shrinks, a shadow appears, and the background goes solid. The modern upgrade swaps BeTheme's flat <code>opacity:.97</code> for real <code>backdrop-filter</code> glass.</p>
+            <p>Scroll position drives a single class toggle via a passive scroll listener — no layout thrash.</p>
+            <p>Keep scrolling. The sticky bar stays pinned at the reduced height while content flows beneath it.</p>
+            <p>The same trick covers "transparent at top, solid when stuck" with one rule: <code>.site-header:not(.is-sticky){background:transparent}</code>.</p>
+            <p>On mobile the header is forced solid + static — never carry a transparent overlay into phone widths.</p>
+            <p>More content to give you room to scroll and watch the transition settle.</p>
+            <p>And a final paragraph so the scroll has somewhere to go.</p>
+          </div>
+        </div>
+        <p class="spec__note">Keys on <b>≥768</b>. 90px static → 60px sticky · logo 60→50 · solid bg + <code>0 2px 5px</code> shadow · z-index 30→701. Transition the change.</p>
+      </div>
+    </article>
+
+    <!-- D2 clamp ladder -->
+    <article class="spec">
+      <div class="spec__bar"><span class="spec__name"><span class="id">D2</span>Type clamp ladder</span><span class="badge">live</span></div>
+      <div class="spec__body">
+        <div class="clampbox">
+          <p class="cl-h1"><span class="lbl">H1</span>Aa</p>
+          <p class="cl-h2"><span class="lbl">H2</span>Aa</p>
+          <p class="cl-h3"><span class="lbl">H3</span>Aa</p>
+          <p class="cl-body"><span class="lbl">body</span>The quick brown fox — 15→16px, line-height 1.6.</p>
+          <p class="now">Now resize the window — these scale fluidly.</p>
+        </div>
+        <p class="spec__note"><b>clamp(floor, fluid, ceiling)</b> with the floor tuned to BeTheme's ×0.60 and the ceiling at desktop, so ≈768 lands ~0.85×. H1 42→70 · H2 30→50 · H3 24→36. <b>Inputs stay ≥16px</b> to stop iOS zoom.</p>
+      </div>
+    </article>
+
+    <!-- D3 tap targets -->
+    <article class="spec">
+      <div class="spec__bar"><span class="spec__name"><span class="id">D3</span>44px tap targets</span><span class="badge">live</span></div>
+      <div class="spec__body">
+        <div class="tapdemo">
+          <div class="tapcol good">
+            <h4>&#10003; 44 × 44 minimum</h4>
+            <span class="tapbtn big">＋</span>
+            <div class="cap">reachable with a thumb</div>
+          </div>
+          <div class="tapcol bad">
+            <h4>&#10007; 28px — too small</h4>
+            <span class="tapring"><span class="tapbtn sml">＋</span></span>
+            <div class="cap">dashed = the 44px it should fill</div>
+          </div>
+        </div>
+        <p class="spec__note">Every mobile control gets a <b>44px box</b> even when the glyph is 22px — nav rows, toggles, close, submit, slider dots, back-to-top.</p>
+      </div>
+    </article>
+
+    <!-- D4 full-bleed vs capped -->
+    <article class="spec spec--wide">
+      <div class="spec__bar"><span class="spec__name"><span class="id">D4</span>Full-bleed band vs capped reading column</span><span class="badge">live</span></div>
+      <div class="spec__body">
+        <div class="fbdemo">
+          <div class="fbband">
+            <div class="fbread">
+              <h4>The band bleeds — the words don't.</h4>
+              <p>The dark band spans the full width of its container, but the reading column inside it caps and centers. On a 1920 monitor the band fills the viewport while the text stays ~520px wide and readable. Body text never runs 1700px wide.</p>
+              <span class="cap">section = 100vw · reading column = capped + centered</span>
+            </div>
+          </div>
+        </div>
+        <p class="spec__note">"Full width" almost always means full-width <b>backgrounds/sections</b> with a capped <b>reading column</b>. Above the cap there is no stretch query — content pins, gutters grow, bands fill. Bump the token for a roomier ultrawide; never unbounded.</p>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- ====================================================== -->
+<!-- E · CORRECTNESS CHECKLIST -->
+<!-- ====================================================== -->
+<section class="cat" id="catE">
+  <div class="cat__head">
+    <span class="num">E</span>
+    <h2>The per-breakpoint correctness checklist</h2>
+    <p>Every SGEN site must pass this at all six widths. Fail-closed: an unproven item is a failing item.</p>
+  </div>
+
+  <div class="gate">
+    <h3><span class="warn">&#9888;</span> The gate — render &amp; read at 390 AND 768, fail-closed</h3>
+    <p>A green desktop screenshot proves <b>none</b> of these. Stacking, drawer-open, overflow, tap-target size and type legibility are only verifiable by <b>rendering at 390 AND 768 and reading the capture</b>. An unproven item is a failing item — default to broken until shown green.</p>
+  </div>
+
+  <div class="checks">
+
+    <div class="checkcard">
+      <div class="checkcard__hd universal"><span class="bp">∀</span><span class="tt">Universal — 390 → 1920</span></div>
+      <ul>
+        <li><b>No horizontal scroll</b> — <code>html{overflow-x:hidden}</code> present; no full-bleed spawns a 1–17px scrollbar.</li>
+        <li><b>Container caps + centers</b> for the tier (1220 / 940 / 708 / 700+33px); reading column never exceeds ~1220 even at 1920.</li>
+        <li><b><code>min-width:960</code> floor released to 0</b> below 1240.</li>
+        <li><b>Type legible</b> — heading ladder applied; body ≥13px, lh ≥1.5; <b>inputs ≥16px</b>; longest hero line fits.</li>
+        <li><b>44px tap targets</b> on every interactive control.</li>
+        <li><b>Motion gated</b> by <code>prefers-reduced-motion</code>; <code>background-attachment:fixed</code> killed ≤959 / iOS.</li>
+        <li><b>Retina via <code>srcset</code>/<code>image-set()</code></b>, not a density <code>@media</code>.</li>
+      </ul>
+    </div>
+
+    <div class="checkcard">
+      <div class="checkcard__hd"><span class="bp">390</span><span class="tt">Mobile portrait</span></div>
+      <ul>
+        <li>Every multi-column row <b>single-column, full-width, 20px gaps</b> (except compact tiles).</li>
+        <li><b>Hamburger visible (44px); desktop nav hidden; drawer opens, scrim dims, scroll locks; Esc/scrim/close dismiss; submenu accordion works.</b></li>
+        <li>Hero stacked; <b>100vh released to <code>height:auto</code></b>; CTA full-width / ≥44px.</li>
+        <li>Header solid + static; mobile logo; right-cluster collapsed (cart keeps icon, drops <code>$</code> total).</li>
+        <li><b>Footer fully stacked</b>; legal row centered; fixed footer un-pinned; back-to-top in 20px gutter.</li>
+        <li>33px gutters; section padding ~0.6–0.7×; eyebrows don't wrap.</li>
+      </ul>
+    </div>
+
+    <div class="checkcard">
+      <div class="checkcard__hd"><span class="bp">768</span><span class="tt">Tablet portrait</span></div>
+      <ul>
+        <li>Container = <b>728/708</b> (visibly narrower than landscape).</li>
+        <li>Grids at an <b>explicit 2-up</b> — NOT desktop-count, NOT free-fallen to 1-up.</li>
+        <li><b>Side-by-side internals stacked + centered</b> (icon-box, counter, image|copy).</li>
+        <li>Nav is the drawer (or desktop bar only with a chosen 1024 swap — no half-collapsed bar).</li>
+        <li>Footer <b>still multi-column</b> (<code>tablet-one-third</code>) — does NOT stack until 767.</li>
+        <li>At exactly 768, columns are <b>NOT auto-stacked</b> (1px above the 767 line).</li>
+      </ul>
+    </div>
+
+    <div class="checkcard">
+      <div class="checkcard__hd"><span class="bp">1024</span><span class="tt">Tablet landscape / small laptop</span></div>
+      <ul>
+        <li>Container = <b>960/940</b>; line-length readable (no edge-to-edge text).</li>
+        <li>Grids at the laptop step (6/5 → 4-up); internals stay horizontal.</li>
+        <li>Nav: hamburger (BeTheme default) OR desktop bar if 1024 is your swap line — decided.</li>
+        <li>Touch safety: parallax→scroll, <code>:hover</code> fallbacks, <code>tel:</code> links, 44px targets.</li>
+      </ul>
+    </div>
+
+    <div class="checkcard">
+      <div class="checkcard__hd"><span class="bp">1200</span><span class="tt">Laptop</span></div>
+      <ul>
+        <li><b>Same tier as 1024</b> — container still 960/940; no separate 1200 grid.</li>
+        <li>Full desktop nav back if your collapse line is 1024; still hamburger if 1240 — confirm it matches.</li>
+        <li>Cards/grid at full or near-full desktop count; no cramped nav bar.</li>
+      </ul>
+    </div>
+
+    <div class="checkcard">
+      <div class="checkcard__hd"><span class="bp">1440</span><span class="tt">Desktop</span></div>
+      <ul>
+        <li>Full <b>1240/1220</b> container, centered; base (largest) type; full horizontal hover nav.</li>
+        <li>Sticky+shrink works (90→60, logo 60→50, solid bg + shadow); transparent→solid flip if used.</li>
+        <li>All desktop-library depth/motion/type intact — this is where the ceiling is judged.</li>
+      </ul>
+    </div>
+
+    <div class="checkcard">
+      <div class="checkcard__hd"><span class="bp">1920+</span><span class="tt">Full-bleed / max-width cap</span></div>
+      <ul>
+        <li><b>Content pinned at ~1220 + centered</b> with wide gutters — body text NOT 1700px wide.</li>
+        <li>Full-bleed <b>bands fill the viewport</b> (<code>100vw</code>/<code>cover</code>); reading column capped.</li>
+        <li>No breakage above 1440; ultrawide <code>cover</code> gated ≥1921; reads as a fixed-width centered document with edge-to-edge bands.</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <b>SGEN Living Styleguide · 06 — Responsive.</b> Self-contained HTML5: inline CSS/JS, zero external dependencies, system fonts, no external images. All motion respects <code>prefers-reduced-motion</code>. The drawer, the reflow frames, the sticky-shrink and the clamp ladder are <b>real working demos</b>, not screenshots. Source: <code>_RESPONSIVE-PATTERN-LIBRARY.md</code> (breakpoint matrix · 53 patterns · the drawer recipe · per-breakpoint checklist) synthesized from the BeTheme responsive harvest. Brand chrome: charcoal <code>#1a1a1a</code> + red <code>#d51522</code>.
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion:reduce)").matches;
+
+  /* ---------------- B · the mobile-nav drawer ---------------- */
+  var screen   = document.getElementById("screen");
+  var hamb     = document.getElementById("hamb");
+  var drawer   = document.getElementById("drawer");
+  var scrim    = document.getElementById("scrim");
+  var closeBtn = document.getElementById("drawerClose");
+  var statusEl = document.getElementById("statusline");
+
+  function setStatus(open){
+    statusEl.textContent = "Drawer state: " + (open ? "open" : "closed");
+    statusEl.classList.toggle("is-open", open);
+  }
+  function openNav(){
+    drawer.classList.add("open");
+    drawer.setAttribute("aria-hidden","false");
+    hamb.setAttribute("aria-expanded","true");
+    hamb.setAttribute("aria-label","Close menu");
+    scrim.classList.add("show");
+    screen.classList.add("locked");          /* scroll-lock scoped to the phone */
+    setStatus(true);
+    try{ closeBtn.focus(); }catch(e){}
+  }
+  function closeNav(){
+    drawer.classList.remove("open");
+    drawer.setAttribute("aria-hidden","true");
+    hamb.setAttribute("aria-expanded","false");
+    hamb.setAttribute("aria-label","Open menu");
+    scrim.classList.remove("show");
+    screen.classList.remove("locked");
+    setStatus(false);
+    try{ hamb.focus(); }catch(e){}
+  }
+  function isOpen(){ return drawer.classList.contains("open"); }
+
+  hamb.addEventListener("click", function(){ isOpen() ? closeNav() : openNav(); });
+  scrim.addEventListener("click", closeNav);
+  closeBtn.addEventListener("click", closeNav);
+  document.addEventListener("keydown", function(e){
+    if((e.key === "Escape" || e.key === "Esc") && isOpen()) closeNav();
+  });
+  /* close after tapping a real link */
+  drawer.querySelectorAll("a[data-link]").forEach(function(a){
+    a.addEventListener("click", function(e){ e.preventDefault(); setTimeout(closeNav,150); });
+  });
+  /* submenu accordion — separate control, driven by aria-expanded */
+  drawer.querySelectorAll(".sub-toggle").forEach(function(btn){
+    btn.addEventListener("click", function(e){
+      e.preventDefault();
+      var li = btn.closest(".has-sub");
+      var open = li.classList.toggle("expanded");
+      btn.setAttribute("aria-expanded", String(open));
+      btn.textContent = open ? "–" : "+";   /* – / + */
+    });
+  });
+
+  /* ---------------- C · live reflow — scale each frame to its window ---------------- */
+  function scaleFrames(){
+    document.querySelectorAll(".vp").forEach(function(vp){
+      var inner = vp.querySelector(".vp__inner");
+      if(!inner) return;
+      var w = parseInt(inner.getAttribute("data-w"),10) || 390;
+      inner.style.width = w + "px";
+      var scale = vp.clientWidth / w;
+      inner.style.transform = "scale(" + scale + ")";
+      /* let the scaled content define the window height (capped by CSS height) */
+      var demo = inner.querySelector(".demo");
+      if(demo){ inner.style.height = demo.offsetHeight + "px"; }
+    });
+  }
+  scaleFrames();
+  window.addEventListener("resize", scaleFrames, {passive:true});
+  /* re-scale once fonts/layout settle */
+  window.addEventListener("load", scaleFrames);
+
+  /* ---------------- D1 · sticky shrink on scroll ---------------- */
+  var scrollwin = document.getElementById("scrollwin");
+  var shrinkhdr = document.getElementById("shrinkhdr");
+  if(scrollwin && shrinkhdr){
+    scrollwin.addEventListener("scroll", function(){
+      shrinkhdr.classList.toggle("stuck", scrollwin.scrollTop > 20);
+    }, {passive:true});
+  }
+
+  /* ---------------- reveal-on-scroll (page chrome) ---------------- */
+  var revealEls = [].slice.call(document.querySelectorAll(".reveal"));
+  if(reduce || !("IntersectionObserver" in window)){
+    revealEls.forEach(function(el){ el.classList.add("in-view"); });
+  } else {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){ e.target.classList.add("in-view"); io.unobserve(e.target); }
+      });
+    }, {threshold:0.12, rootMargin:"0px 0px -6% 0px"});
+    revealEls.forEach(function(el){ io.observe(el); });
+  }
+})();
+</script>
+
+</body>
+</html>

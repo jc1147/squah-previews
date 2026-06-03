@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TOP-12 [FLAT→ALIVE] — SGEN Living Styleguide</title>
+<style>
+:root{
+  /* SGEN brand chrome */
+  --ink:#1a1a1a;            /* charcoal */
+  --accent:#d51522;         /* SGEN red */
+  --paper:#f6f5f3;          /* warm off-white, never #fff */
+  --surface:#ffffff;        /* cards float on paper */
+  --muted:#626262;          /* recurs verbatim across the harvest */
+  --body:#4a4a4a;           /* desaturated tint of ink, not #666 */
+  --line:rgba(26,26,26,.10);
+
+  /* gradients (constant 135deg) */
+  --grad-brand:linear-gradient(135deg,#d51522,#7a0c13);
+  --fade-to-paper:linear-gradient(180deg,rgba(246,245,243,0) 0%,var(--paper) 70%);
+
+  /* radius */
+  --r-chip:8px; --r-card:16px; --r-panel:24px; --r-pill:9999px;
+
+  /* shadow — ink/navy-tinted, never #000 (D1) */
+  --shadow-rest:0 2px 5px 0 rgba(0,0,0,.08);
+  --shadow-card:0 15px 30px 0 rgba(1,7,39,.13);              /* the universal one */
+  --shadow-hover:0 32px 64px -12px rgba(16,24,40,.18);
+
+  /* motion (C8) */
+  --ease:cubic-bezier(.05,.5,.3,1);   /* BeTheme signature settle */
+  --t-fast:.2s ease-out;
+  --t-reveal:.6s var(--ease);
+
+  --glass:blur(18px) saturate(180%);
+  --wrap:1180px;
+  --mono:ui-monospace,"SFMono-Regular",Menlo,Consolas,"Liberation Mono",monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--paper);color:var(--body);
+  font-family:var(--sans);font-size:16px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 24px}
+h1,h2,h3,h4{color:var(--ink);margin:0;letter-spacing:-.02em;line-height:1.04}
+p{margin:0 0 1em}
+a{color:var(--accent);text-decoration:none}
+code{font-family:var(--mono);font-size:.86em}
+
+/* ---------- top nav (links sibling pages) ---------- */
+.topnav{
+  position:sticky;top:0;z-index:50;
+  background:rgba(26,26,26,.92);
+  -webkit-backdrop-filter:var(--glass);backdrop-filter:var(--glass);
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+.topnav .wrap{display:flex;align-items:center;gap:8px;flex-wrap:wrap;height:auto;padding-top:12px;padding-bottom:12px}
+.brand{display:flex;align-items:center;gap:10px;margin-right:auto;font-weight:700;color:#fff;letter-spacing:-.01em}
+.brand .dot{width:11px;height:11px;border-radius:3px;background:var(--accent);box-shadow:0 0 0 0 rgba(213,21,34,.6);animation:nudge 3s var(--ease) infinite}
+@keyframes nudge{0%,92%,100%{box-shadow:0 0 0 0 rgba(213,21,34,0)}96%{box-shadow:0 0 0 5px rgba(213,21,34,.18)}}
+.topnav a.nav{
+  color:#cfcfcf;font-size:13px;font-weight:600;letter-spacing:.01em;
+  padding:7px 12px;border-radius:var(--r-pill);transition:var(--t-fast);
+}
+.topnav a.nav:hover{color:#fff;background:rgba(255,255,255,.08)}
+.topnav a.nav[aria-current="page"]{color:#fff;background:var(--accent)}
+
+/* ---------- hero ---------- */
+.hero{position:relative;overflow:hidden;background:var(--ink);color:#fff;padding:96px 0 120px}
+.hero::before,.hero::after{content:"";position:absolute;z-index:0;border-radius:50%;filter:blur(70px);pointer-events:none}
+.hero::before{width:520px;height:520px;left:-120px;top:-160px;background:radial-gradient(circle,rgba(213,21,34,.55),transparent 70%)}
+.hero::after{width:460px;height:460px;right:-100px;bottom:-200px;background:radial-gradient(circle,rgba(213,21,34,.28),transparent 70%)}
+.hero .wrap{position:relative;z-index:1}
+.hero .eyebrow{color:#ff5762}
+.hero h1{
+  color:#fff;font-size:clamp(40px,7vw,92px);font-weight:300;letter-spacing:-.04em;line-height:.98;margin:14px 0 18px;
+}
+.hero h1 b{font-weight:700}
+.hero h1 .clip{
+  background:linear-gradient(135deg,#ff5762,#d51522 60%,#7a0c13);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.hero .lede{max-width:680px;color:#d6d6d6;font-size:clamp(16px,2.2vw,20px)}
+.hero .meta{display:flex;gap:26px;flex-wrap:wrap;margin-top:28px;color:#9b9b9b;font-size:13px}
+.hero .meta b{color:#fff}
+.scroll-fade{position:absolute;left:0;right:0;bottom:0;height:120px;background:var(--fade-to-paper);z-index:1}
+
+/* ---------- shared bits ---------- */
+.eyebrow{display:inline-flex;align-items:center;gap:10px;text-transform:uppercase;letter-spacing:.16em;font-size:12px;font-weight:700;color:var(--accent)}
+.eyebrow::before{content:"";width:34px;height:2px;background:var(--accent);display:inline-block}
+
+.intro{padding:64px 0 8px}
+.intro h2{font-size:clamp(26px,4vw,40px);margin:14px 0 16px}
+.intro p{max-width:760px;color:var(--body)}
+
+.legend{display:flex;gap:18px;flex-wrap:wrap;margin-top:24px;font-size:13px;color:var(--muted)}
+.legend .key{display:inline-flex;align-items:center;gap:8px}
+.swatch{width:14px;height:14px;border-radius:4px;display:inline-block;border:1px solid var(--line)}
+
+/* ---------- specimen card ---------- */
+.specimens{padding:40px 0 80px;display:grid;gap:30px}
+.specimen{
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--r-panel);
+  box-shadow:var(--shadow-card);overflow:hidden;
+}
+.spec-head{display:flex;align-items:flex-start;gap:14px;padding:22px 26px 18px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.spec-num{
+  font-family:var(--mono);font-size:13px;font-weight:700;color:#fff;background:var(--ink);
+  width:34px;height:34px;border-radius:9px;display:grid;place-items:center;flex:0 0 auto
+}
+.spec-titles{flex:1;min-width:220px}
+.spec-titles h3{font-size:clamp(18px,2.4vw,23px)}
+.spec-titles .sub{font-size:13px;color:var(--muted);margin-top:3px;text-transform:uppercase;letter-spacing:.08em}
+.badge{
+  flex:0 0 auto;align-self:center;font-family:var(--mono);font-size:12px;font-weight:700;
+  color:var(--accent);background:rgba(213,21,34,.08);border:1px solid rgba(213,21,34,.22);
+  padding:6px 11px;border-radius:var(--r-pill);white-space:nowrap
+}
+.badge.universal{color:#fff;background:var(--accent);border-color:var(--accent)}
+.stage{padding:26px;background:linear-gradient(180deg,#fafafa,#f3f2ef)}
+.howto{
+  padding:16px 26px 22px;border-top:1px solid var(--line);background:var(--surface);
+  font-size:13.5px;color:var(--muted);line-height:1.7
+}
+.howto b{color:var(--ink);font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:11px}
+.howto code{background:#f1f0ec;border:1px solid var(--line);padding:2px 6px;border-radius:5px;color:#222}
+
+/* ---------- FLAT vs ALIVE toggle ---------- */
+.compare{position:relative}
+.cmp-bar{display:flex;align-items:center;gap:14px;margin-bottom:18px}
+.toggle{
+  position:relative;display:inline-flex;background:#e7e6e2;border:1px solid var(--line);
+  border-radius:var(--r-pill);padding:3px;cursor:pointer;font-size:13px;font-weight:700;user-select:none
+}
+.toggle span{padding:6px 16px;border-radius:var(--r-pill);z-index:1;color:var(--muted);transition:color .2s}
+.toggle .knob{
+  position:absolute;top:3px;left:3px;height:calc(100% - 6px);width:calc(50% - 3px);
+  background:var(--accent);border-radius:var(--r-pill);transition:transform .28s var(--ease);box-shadow:var(--shadow-rest)
+}
+.compare[data-on="true"] .toggle .knob{transform:translateX(100%)}
+.compare[data-on="false"] .toggle span.f{color:var(--ink)}
+.compare[data-on="true"] .toggle span.a{color:#fff}
+.cmp-note{font-size:12px;color:var(--muted)}
+.cmp-note b{color:var(--accent)}
+/* the .alive class is added/removed to the demo subtree by the toggle */
+
+/* ===== specimen-specific demo styles ===== */
+
+/* 1 — accent over neutral base */
+.palette{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:14px}
+.pcell{border-radius:var(--r-card);height:96px;border:1px solid var(--line);position:relative;overflow:hidden;display:flex;align-items:flex-end;padding:10px;color:#fff;font-size:11px;font-family:var(--mono);text-shadow:0 1px 2px rgba(0,0,0,.4)}
+.pcell.lt{color:var(--ink);text-shadow:none}
+.miniui{margin-top:18px;border:1px solid var(--line);border-radius:var(--r-card);padding:18px;background:var(--surface)}
+.miniui .row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.miniui h4{font-size:16px}
+.miniui .lk{font-weight:700}
+.miniui .cta{padding:9px 18px;border-radius:var(--r-pill);font-weight:700;font-size:13px;border:0;cursor:pointer}
+.miniui .num{font-size:34px;font-weight:800;letter-spacing:-.03em}
+.miniui .rule{height:3px;width:48px;border-radius:2px}
+/* FLAT state for #1: everything grey, no accent */
+.s1 .demo .accentbg{background:var(--accent)}
+.s1 .demo .accenttx{color:var(--accent)}
+.s1 .demo.flat .accentbg{background:#8a8a8a}
+.s1 .demo.flat .accenttx{color:#8a8a8a}
+.s1 .demo .cta{background:var(--accent);color:#fff}
+.s1 .demo.flat .cta{background:#8a8a8a;color:#fff}
+
+/* 2 — display type */
+.typedemo h4.big{font-size:clamp(34px,6.5vw,72px);line-height:.98;color:var(--ink);max-width:11ch}
+.typedemo .sm{color:var(--muted);max-width:48ch;margin-top:12px}
+.s2 .typedemo.alive h4.big{font-weight:300;letter-spacing:-.04em;font-family:Georgia,"Times New Roman",serif}
+.s2 .typedemo.flat h4.big{font-weight:600;letter-spacing:0;font-size:clamp(22px,4vw,34px);font-family:var(--sans)}
+
+/* 3 — shadow + lift */
+.cardrow{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:22px}
+.liftcard{background:var(--surface);border-radius:var(--r-card);padding:22px;border:1px solid var(--line)}
+.liftcard .chip{width:46px;height:46px;border-radius:12px;background:var(--grad-brand);margin-bottom:14px;box-shadow:0 6px 14px rgba(213,21,34,.3)}
+.liftcard h4{font-size:16px;margin-bottom:6px}
+.liftcard p{font-size:13px;color:var(--muted);margin:0}
+.s3 .demo.alive .liftcard{box-shadow:var(--shadow-card);transition:transform .25s var(--ease),box-shadow .25s var(--ease)}
+.s3 .demo.alive .liftcard:hover{transform:translateY(-6px);box-shadow:var(--shadow-hover)}
+.s3 .demo.flat .liftcard{box-shadow:none;border:1px solid #ccc}
+
+/* 4 — scroll reveal stagger */
+.revealgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:16px}
+.revtile{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-card);padding:22px;text-align:center}
+.revtile .n{font-size:28px;font-weight:800;color:var(--accent);letter-spacing:-.03em}
+.revtile .t{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:4px}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
+.reveal.in-view{opacity:1;transform:none}
+.replay{margin-top:16px;background:transparent;border:1px solid var(--accent);color:var(--accent);font-weight:700;font-size:12px;padding:8px 16px;border-radius:var(--r-pill);cursor:pointer;transition:var(--t-fast)}
+.replay:hover{background:var(--accent);color:#fff}
+
+/* 5 — count up */
+.statsband{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:20px;text-align:center}
+.stat .num{font-size:clamp(40px,6vw,64px);font-weight:800;color:var(--ink);letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums}
+.stat .num .suf{color:var(--accent);font-size:.55em;vertical-align:top}
+.stat .lab{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-top:8px}
+
+/* 6 — glass sticky header (self-contained mini demo) */
+.scrollbox{position:relative;height:300px;overflow-y:auto;border-radius:var(--r-card);border:1px solid var(--line);background:var(--ink)}
+.scrollbox .fakehero{height:170px;background:radial-gradient(circle at 30% 30%,rgba(213,21,34,.5),transparent 60%),var(--ink);display:grid;place-items:center;color:#fff;font-weight:300;font-size:24px;letter-spacing:-.02em}
+.scrollbox .fakebar{
+  position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:14px;padding:14px 18px;color:#fff;font-weight:700;font-size:14px;
+  background:transparent;border-bottom:1px solid transparent;transition:background .3s,backdrop-filter .3s,padding .3s,border-color .3s
+}
+.scrollbox .fakebar .links{margin-left:auto;display:flex;gap:14px;font-weight:600;font-size:12px;color:#cfcfcf}
+.scrollbox .fakebar.is-stuck{
+  background:rgba(26,26,26,.72);-webkit-backdrop-filter:var(--glass);backdrop-filter:var(--glass);
+  border-bottom:1px solid rgba(255,255,255,.12);padding:10px 18px
+}
+.scrollbox .content{padding:24px 18px;color:#cfcfcf;font-size:13px}
+.scrollbox .content p{margin-bottom:14px}
+.s6 .demo.flat .fakebar.is-stuck{background:rgba(26,26,26,.97);-webkit-backdrop-filter:none;backdrop-filter:none}
+.hint{font-size:12px;color:var(--muted);margin-top:8px}
+
+/* 7 — image zoom in clipped frame (CSS-crafted "photo") */
+.framerow{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:18px}
+.frame{position:relative;overflow:hidden;border-radius:var(--r-card);aspect-ratio:4/3;border:1px solid var(--line)}
+.frame .img{position:absolute;inset:0;background-size:cover;transition:transform .4s var(--ease)}
+.frame .img.a{background:linear-gradient(135deg,#3a3f4a,#1a1a1a),repeating-linear-gradient(45deg,rgba(213,21,34,.18) 0 14px,transparent 14px 28px)}
+.frame .img.b{background:radial-gradient(circle at 70% 30%,#d51522,#5a0a10 70%)}
+.frame .img.c{background:linear-gradient(160deg,#5b6470,#272c36)}
+.frame .mask{position:absolute;inset:0;background:linear-gradient(0deg,rgba(26,26,26,.72),transparent 60%);opacity:0;transition:opacity .35s var(--ease);display:flex;align-items:flex-end;padding:14px}
+.frame .mask .cap{color:#fff;font-weight:700;font-size:13px;transform:translateY(8px);transition:transform .35s var(--ease)}
+.s7 .demo.alive .frame:hover .img{transform:scale(1.06)}
+.s7 .demo.alive .frame:hover .mask{opacity:1}
+.s7 .demo.alive .frame:hover .mask .cap{transform:none}
+
+/* 8 — image bottom-fade into next section */
+.fadewrap{border-radius:var(--r-card);overflow:hidden;border:1px solid var(--line)}
+.fadeimg{position:relative;height:200px;background:linear-gradient(135deg,#3a3f4a,#1a1a1a),radial-gradient(circle at 60% 40%,rgba(213,21,34,.4),transparent 60%)}
+.fadeimg::after{content:"";position:absolute;left:0;right:0;bottom:0;height:90px;background:linear-gradient(180deg,rgba(246,245,243,0),var(--paper));transition:opacity .3s}
+.fadenext{background:var(--paper);padding:22px;text-align:center}
+.fadenext h4{font-size:18px;margin-bottom:4px}
+.fadenext p{font-size:13px;color:var(--muted);margin:0}
+.s8 .demo.flat .fadeimg::after{opacity:0}
+
+/* 9 — invert/flip buttons */
+.btnrow{display:flex;gap:16px;flex-wrap:wrap;align-items:center}
+.fb{position:relative;overflow:hidden;font-weight:700;font-size:14px;padding:13px 30px;border-radius:var(--r-pill);cursor:pointer;border:2px solid var(--accent)}
+.fb1{background:var(--accent);color:#fff}
+.fb2{background:transparent;color:var(--accent)}
+.s9 .demo.alive .fb{transition:background-color .2s,color .2s,border-color .2s}
+.s9 .demo.alive .fb1:hover{background:transparent;color:var(--accent)}
+.s9 .demo.alive .fb2:hover{background:var(--accent);color:#fff}
+.s9 .demo.flat .fb1:hover{opacity:.9}
+/* sharp + tracked-caps luxe variant */
+.fb-luxe{border-radius:0;letter-spacing:.16em;text-transform:uppercase;font-size:12px;background:var(--ink);color:#fff;border:2px solid var(--ink)}
+.s9 .demo.alive .fb-luxe{transition:background-color .2s,color .2s}
+.s9 .demo.alive .fb-luxe:hover{background:transparent;color:var(--ink)}
+
+/* 10 — eyebrow + accent rule */
+.kickerdemo .blk{margin-bottom:26px}
+.kickerdemo h4{font-size:clamp(22px,3.5vw,30px)}
+.kickerdemo p{font-size:14px;color:var(--muted);max-width:52ch;margin-top:6px}
+.s10 .demo.flat .eyebrow{display:none}
+
+/* 11 — section rhythm + alternating grounds */
+.rhythm{border-radius:var(--r-card);overflow:hidden;border:1px solid var(--line)}
+.band{padding:clamp(28px,7vw,64px) 26px;text-align:center}
+.band .eyebrow{margin-bottom:10px}
+.band h4{font-size:22px}
+.band p{font-size:13px;color:var(--muted);margin:6px 0 0}
+.band.paper{background:var(--paper)}
+.band.tint{background:rgba(213,21,34,.05)}
+.band.anchor{background:var(--ink);color:#fff}
+.band.anchor h4{color:#fff}.band.anchor p{color:#bdbdbd}
+.s11 .demo.flat .band{padding:18px 26px;background:var(--surface)!important;color:var(--ink)!important;border-bottom:1px solid var(--line)}
+.s11 .demo.flat .band h4{color:var(--ink)!important}.s11 .demo.flat .band p{color:var(--muted)!important}
+
+/* 12 — ambient depth behind hero */
+.ambient{position:relative;overflow:hidden;border-radius:var(--r-card);background:var(--ink);min-height:240px;display:grid;place-items:center;text-align:center;padding:40px 24px;border:1px solid var(--line)}
+.ambient .blob{position:absolute;border-radius:50%;filter:blur(55px);z-index:0;opacity:0;transition:opacity .4s}
+.ambient .b1{width:260px;height:260px;left:-40px;top:-60px;background:radial-gradient(circle,rgba(213,21,34,.7),transparent 70%);animation:breathe 7s var(--ease) infinite}
+.ambient .b2{width:230px;height:230px;right:-30px;bottom:-70px;background:radial-gradient(circle,rgba(255,87,98,.45),transparent 70%);animation:breathe 9s var(--ease) infinite reverse}
+@keyframes breathe{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(18px,12px) scale(1.08)}}
+.ambient .inner{position:relative;z-index:1}
+.ambient h4{color:#fff;font-weight:300;font-size:clamp(24px,4vw,38px);letter-spacing:-.03em}
+.ambient p{color:#cfcfcf;font-size:13px;margin-top:8px}
+.s12 .demo.alive .blob{opacity:1}
+
+/* footer */
+.foot{background:var(--ink);color:#9b9b9b;padding:48px 0;font-size:13px}
+.foot .wrap{display:flex;gap:18px;flex-wrap:wrap;align-items:center}
+.foot .brand{margin-right:auto;color:#fff}
+.foot a{color:#cfcfcf}.foot a:hover{color:#fff}
+
+/* reduced motion */
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  .reveal{opacity:1!important;transform:none!important}
+  .ambient .blob{opacity:1!important}
+}
+@media (max-width:560px){
+  .spec-head{padding:18px}
+  .stage{padding:18px}
+  .howto{padding:14px 18px 18px}
+}
+</style>
+</head>
+<body>
+
+<!-- ===================== TOP NAV (sibling pages) ===================== -->
+<nav class="topnav">
+  <div class="wrap">
+    <span class="brand"><span class="dot"></span>SGEN&nbsp;Styleguide</span>
+    <a class="nav" href="00-top12.html" aria-current="page">00 · Top-12</a>
+    <a class="nav" href="01-transitions-hero-motion.html">01 · Transitions / Hero / Motion</a>
+    <a class="nav" href="02-depth-type-color.html">02 · Depth / Type / Color</a>
+    <a class="nav" href="03-layout-imagery-components.html">03 · Layout / Imagery / Components</a>
+    <a class="nav" href="04-signatures-tokens.html">04 · Signatures / Tokens</a><a class="nav" href="06-responsive.html">06 · Responsive</a><a class="nav" href="07-components.html">07 · Components</a><a class="nav" href="08-scroll-sticky.html">08 · Scroll / Sticky</a><a class="nav" href="09-accessibility.html">09 · Accessibility</a><a class="nav" href="10-sections.html">10 · Sections</a><a class="nav" href="11-theming.html">11 · Theming</a><a class="nav" href="12-iconography.html">12 · Iconography</a><a class="nav" href="13-utility-pages.html">13 · Utility</a><a class="nav" href="14-ecommerce.html">14 · Ecommerce</a><a class="nav" href="15-dataviz.html">15 · Data-viz</a>
+    <a class="nav" href="index.html">Index</a>
+  </div>
+</nav>
+
+<!-- ===================== HERO ===================== -->
+<header class="hero">
+  <div class="wrap">
+    <span class="eyebrow">Living Styleguide · The Headline Page</span>
+    <h1>The TOP-12<br><span class="clip">FLAT → ALIVE</span> <b>moves.</b></h1>
+    <p class="lede">The twelve highest-leverage upgrades that separate <em>premium and alive</em> from <em>clean and flat</em> — ranked by cross-category recurrence across <b>166 inspected demos</b> in 16 verticals. Every one below is a <b>real, working demo</b>: actual layered shadows, real hover-zoom, real IntersectionObserver reveals, real count-up, real glass-on-scroll. Flip the <b>FLAT / ALIVE</b> toggles to make the upgrade undeniable.</p>
+    <div class="meta">
+      <span><b>12</b> moves</span>
+      <span><b>16/16</b> top recurrence</span>
+      <span><b>0</b> external dependencies</span>
+      <span><b>1</b> accent · 1 ink · 1 paper</span>
+    </div>
+  </div>
+  <div class="scroll-fade" aria-hidden="true"></div>
+</header>
+
+<!-- ===================== INTRO ===================== -->
+<section class="intro">
+  <div class="wrap">
+    <span class="eyebrow">How to read this page</span>
+    <h2>Each card is a specimen, not a screenshot.</h2>
+    <p>Pattern name + a <b>recurrence badge</b> (how many of the 16 categories independently ranked the move) + the <b>live demo</b> + a one-line <b>how-to-build</b> caption with the key CSS/JS. Restraint is the rule — <em>wow should be felt, not noticed</em>. All motion respects <code>prefers-reduced-motion</code>.</p>
+    <div class="legend">
+      <span class="key"><span class="swatch" style="background:#1a1a1a"></span> Ink <code>#1a1a1a</code></span>
+      <span class="key"><span class="swatch" style="background:#d51522"></span> Accent <code>#d51522</code></span>
+      <span class="key"><span class="swatch" style="background:#f6f5f3"></span> Paper <code>#f6f5f3</code></span>
+      <span class="key"><span class="swatch" style="background:#626262"></span> Muted <code>#626262</code></span>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SPECIMENS ===================== -->
+<main class="wrap">
+<div class="specimens">
+
+  <!-- 1 -->
+  <article class="specimen s1" id="p1">
+    <div class="spec-head">
+      <span class="spec-num">01</span>
+      <div class="spec-titles">
+        <h3>One accent over a committed neutral base</h3>
+        <div class="sub">Color · the single highest-leverage move</div>
+      </div>
+      <span class="badge universal">16/16 · universal</span>
+    </div>
+    <div class="stage">
+      <div class="compare" data-on="true">
+        <div class="cmp-bar">
+          <div class="toggle" role="switch" aria-label="Toggle accent">
+            <span class="f">FLAT</span><span class="a">ALIVE</span><span class="knob"></span>
+          </div>
+          <span class="cmp-note">FLAT = no accent, everything grey. <b>ALIVE</b> = one saturated accent carries every CTA, link, counter & rule.</span>
+        </div>
+        <div class="demo alive">
+          <div class="palette">
+            <div class="pcell" style="background:#1a1a1a"><span>--ink</span></div>
+            <div class="pcell lt" style="background:#f6f5f3"><span>--paper</span></div>
+            <div class="pcell lt" style="background:#fff;border:1px solid #ddd"><span>--surface</span></div>
+            <div class="pcell" style="background:#626262"><span>--muted</span></div>
+            <div class="pcell accentbg"><span>--accent</span></div>
+          </div>
+          <div class="miniui">
+            <div class="row" style="justify-content:space-between">
+              <h4>Quarterly performance</h4>
+              <a class="lk accenttx" href="#p1">View report →</a>
+            </div>
+            <div class="rule accentbg" style="margin:14px 0"></div>
+            <div class="row" style="justify-content:space-between">
+              <div><span class="num accenttx">38%</span><div style="font-size:12px;color:var(--muted)">faster builds</div></div>
+              <button class="cta">Get started</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="howto"><b>How to build</b> &nbsp;Set 5 custom props: a <em>tinted</em> near-black ink (never <code>#000</code>), a warm off-white paper (never <code>#fff</code>), one <code>--muted:#626262</code>, white surface, and ONE saturated <code>--accent</code>. Route every CTA, link, icon-fill, counter number, active state & divider through <code>var(--accent)</code> — nothing else gets color.</p>
+  </article>
+
+  <!-- 2 -->
+  <article class="specimen s2" id="p2">
+    <div class="spec-head">
+      <span class="spec-num">02</span>
+      <div class="spec-titles">
+        <h3>Display face on headings + oversized, tight, negative-tracked type</h3>
+        <div class="sub">Typography · the #1 typographic lever</div>
+      </div>
+      <span class="badge">15/16</span>
+    </div>
+    <div class="stage">
+      <div class="compare" data-on="true">
+        <div class="cmp-bar">
+          <div class="toggle" role="switch" aria-label="Toggle display type">
+            <span class="f">FLAT</span><span class="a">ALIVE</span><span class="knob"></span>
+          </div>
+          <span class="cmp-note">FLAT = mid-size grotesk, normal tracking. <b>ALIVE</b> = serif display, oversized, light, negative tracking.</span>
+        </div>
+        <div class="demo alive typedemo">
+          <h4 class="big">Built for teams who ship.</h4>
+          <p class="sm">Light weight at huge size reads luxury; <code>line-height:~1.0</code> and <code>letter-spacing:-.04em</code> tighten the whole headline into one confident block.</p>
+        </div>
+      </div>
+    </div>
+    <p class="howto"><b>How to build</b> &nbsp;Pair ONE expressive display face (serif: Fraunces / Playfair; or condensed: Bebas / Syne) for H1–H3 with a neutral grotesk body. Push the hero to <code>clamp(48px,7vw,90–142px)</code>, <code>line-height:~1.0</code>, <code>letter-spacing:-.02em to -.04em</code>, weight 300–500.</p>
+  </article>
+
+  <!-- 3 -->
+  <article class="specimen s3" id="p3">
+    <div class="spec-head">
+      <span class="spec-num">03</span>
+      <div class="spec-titles">
+        <h3>Soft, large-blur, ink-tinted card shadow + lift-on-hover</h3>
+        <div class="sub">Depth · hover the cards</div>
+      </div>
+      <span class="badge">14/16</span>
+    </div>
+    <div class="stage">
+      <div class="compare" data-on="true">
+        <div class="cmp-bar">
+          <div class="toggle" role="switch" aria-label="Toggle shadow">
+            <span class="f">FLAT</span><span class="a">ALIVE</span><span class="knob"></span>
+          </div>
+          <span class="cmp-note">FLAT = hairline border, no depth. <b>ALIVE</b> = ink-tinted shadow + lift on hover. <b>Hover a card.</b></span>
+        </div>
+        <div class="demo alive">
+          <div class="cardrow">
+            <div class="liftcard"><div class="chip"></div><h4>Layered depth</h4><p>The card hovers above the page on a soft, navy-tinted penumbra.</p></div>
+            <div class="liftcard"><div class="chip"></div><h4>Lift on hover</h4><p>Deepen the shadow and rise <code>-6px</code> over the settle easing.</p></div>
+            <div class="liftcard"><div class="chip"></div><h4>Never pure black</h4><p>Tint the rgba toward the surface ink, not <code>#000</code>.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="howto"><b>How to build</b> &nbsp;Resting: <code>box-shadow:0 15px 30px 0 rgba(1,7,39,.13)</code> (the single most-recurring verbatim shadow in the harvest — navy-tinted, not black). Hover: <code>translateY(-6px)</code> + <code>0 32px 64px -12px rgba(16,24,40,.18)</code> over <code>.25s cubic-bezier(.05,.5,.3,1)</code>. Negative spread tucks the shadow under the card.</p>
+  </article>
+
+  <!-- 4 -->
+  <article class="specimen s4" id="p4">
+    <div class="spec-head">
+      <span class="spec-num">04</span>
+      <div class="spec-titles">
+        <h3>Scroll-reveal entrance with sibling stagger</h3>
+        <div class="sub">Motion · IntersectionObserver · live-only</div>
+      </div>
+      <span class="badge universal">16/16 · universal</span>
+    </div>
+    <div class="stage">
+      <p class="hint">Real <code>IntersectionObserver</code> — these tiles faded up as they scrolled into view. Hit <b>Replay</b> to watch the stagger again.</p>
+      <div class="revealgrid" id="revealGrid">
+        <div class="revtile reveal"><div class="n">01</div><div class="t">Observe</div></div>
+        <div class="revtile reveal"><div class="n">02</div><div class="t">Toggle</div></div>
+        <div class="revtile reveal"><div class="n">03</div><div class="t">Stagger</div></div>
+        <div class="revtile reveal"><div class="n">04</div><div class="t">Settle</div></div>
+      </div>
+      <button class="replay" id="replayReveal">↻ Replay reveal</button>
+    </div>
+    <p class="howto"><b>How to build</b> &nbsp;Base <code>opacity:0; transform:translateY(24px)</code> → revealed <code>opacity:1; transform:none</code> over <code>.6s</code>. An IntersectionObserver adds <code>.in-view</code>; children get <code>transition-delay:i*80ms</code>. ~10 lines — biggest perceived-quality jump per byte. <b>Must</b> gate behind <code>prefers-reduced-motion</code>.</p>
+  </article>
+
+  <!-- 5 -->
+  <article class="specimen s5" id="p5">
+    <div class="spec-head">
+      <span class="spec-num">05</span>
+      <div class="spec-titles">
+        <h3>Animated count-up stat counters</h3>
+        <div class="sub">Motion + proof · requestAnimationFrame · live-only</div>
+      </div>
+      <span class="badge universal">16/16 · universal</span>
+    </div>
+    <div class="stage">
+      <p class="hint">Real <code>requestAnimationFrame</code> ease-out count from 0. Hit <b>Replay</b> to re-run.</p>
+      <div class="statsband" id="statsBand">
+        <div class="stat"><div class="num"><span class="counter" data-to="166">0</span></div><div class="lab">Demos inspected</div></div>
+        <div class="stat"><div class="num"><span class="counter" data-to="16">0</span></div><div class="lab">Verticals</div></div>
+        <div class="stat"><div class="num"><span class="counter" data-to="71">0</span></div><div class="lab">Patterns</div></div>
+        <div class="stat"><div class="num"><span class="counter" data-to="99">0</span><span class="suf">%</span></div><div class="lab">CSS / JS only</div></div>
+      </div>
+      <button class="replay" id="replayCount">↻ Replay count-up</button>
+    </div>
+    <p class="howto"><b>How to build</b> &nbsp;Big numeral (display face) + tiny uppercase label. On reveal, <code>requestAnimationFrame</code> ease-out from <code>0 → data-to</code> over ~1.2–1.5s, fired by the same observer as #4. Use <code>font-variant-numeric:tabular-nums</code> so digits don't jitter. Motion + proof in one component.</p>
+  </article>
+
+  <!-- 6 -->
+  <article class="specimen s6" id="p6">
+    <div class="spec-head">
+      <span class="spec-num">06</span>
+      <div class="spec-titles">
+        <h3>Glass sticky header — transparent over hero → blurred on scroll</h3>
+        <div class="sub">Depth + motion · scroll the box</div>
+      </div>
+      <span class="badge">13/16</span>
+    </div>
+    <div class="stage">
+      <div class="compare" data-on="true">
+        <div class="cmp-bar">
+          <div class="toggle" role="switch" aria-label="Toggle glass">
+            <span class="f">FLAT</span><span class="a">ALIVE</span><span class="knob"></span>
+          </div>
+          <span class="cmp-note">FLAT = solid <code>opacity:.97</code> fill (the BeTheme default). <b>ALIVE</b> = real <code>backdrop-filter</code> glass. <b>Scroll inside the box.</b></span>
+        </div>
+        <div class="demo alive">
+          <div class="scrollbox" tabindex="0">
+            <div class="fakebar" id="fakeBar"><span style="color:#fff">◆ Acme</span><span class="links"><span>Product</span><span>Pricing</span><span>Docs</span></span></div>
+            <div class="fakehero">Transparent over the hero</div>
+            <div class="content">
+              <p>Scroll down — past the hero, the header gains a translucent fill and a real blur, shrinks its padding, and picks up a hairline border + soft shadow.</p>
+              <p>Most BeTheme demos ship a flat opaque <code>opacity:.97</code> bar. Real <code>backdrop-filter</code> glass is a free upgrade over the source — toggle FLAT to compare the stuck state.</p>
+              <p>The header stays pinned while this content slides beneath it.</p>
+              <p>Keep scrolling to confirm the stuck state holds.</p>
+              <p>The glass reads "expensive" because it samples and blurs the live content behind it.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="howto"><b>How to build</b> &nbsp;Header <code>position:fixed; background:transparent</code> over the hero. On scroll past the hero add <code>.is-stuck</code> → translucent fill + <code>backdrop-filter:blur(18px) saturate(180%)</code> + hairline border + soft shadow, shrink padding. CSS + tiny scroll listener. Always provide a solid-bg fallback for browsers without <code>backdrop-filter</code>.</p>
+  </article>
+
+  <!-- 7 -->
+  <article class="specimen s7" id="p7">
+    <div class="spec-head">
+      <span class="spec-num">07</span>
+      <div class="spec-titles">
+        <h3>Image-zoom inside a clipped frame on hover (+ mask / caption rise)</h3>
+        <div class="sub">Imagery · the most-repeated motion in be.css</div>
+      </div>
+      <span class="badge">15/16</span>
+    </div>
+    <div class="stage">
+      <div class="compare" data-on="true">
+        <div class="cmp-bar">
+          <div class="toggle" role="switch" aria-label="Toggle zoom">
+            <span class="f">FLAT</span><span class="a">ALIVE</span><span class="knob"></span>
+          </div>
+          <span class="cmp-note">FLAT = static image, no overlay. <b>ALIVE</b> = clipped frame zooms <code>1.06</code> + dark mask & caption rise. <b>Hover a frame.</b></span>
+        </div>
+        <div class="demo alive">
+          <div class="framerow">
+            <div class="frame"><div class="img a"></div><div class="mask"><span class="cap">Studio Build →</span></div></div>
+            <div class="frame"><div class="img b"></div><div class="mask"><span class="cap">Brand System →</span></div></div>
+            <div class="frame"><div class="img c"></div><div class="mask"><span class="cap">Product UI →</span></div></div>
+          </div>
+        </div>
+      </div>
+      <p class="hint">Imagery here is CSS-crafted (gradients) — zero external images, by design.</p>
+    </div>
+    <p class="howto"><b>How to build</b> &nbsp;<code>.frame{overflow:hidden} .frame img{transition:transform .4s} .frame:hover img{transform:scale(1.06)}</code>. Optional dark <code>.mask</code> fade-in + a rising caption bar. Apply to <em>every</em> product/gallery/team/blog image, not just portfolios.</p>
+  </article>
+
+  <!-- 8 -->
+  <article class="specimen s8" id="p8">
+    <div class="spec-head">
+      <span class="spec-num">08</span>
+      <div class="spec-titles">
+        <h3>Image bottom-fade / directional scrim into the next section</h3>
+        <div class="sub">Imagery + transition · kills the hard seam</div>
+      </div>
+      <span class="badge">12/16</span>
+    </div>
+    <div class="stage">
+      <div class="compare" data-on="true">
+        <div class="cmp-bar">
+          <div class="toggle" role="switch" aria-label="Toggle fade">
+            <span class="f">FLAT</span><span class="a">ALIVE</span><span class="knob"></span>
+          </div>
+          <span class="cmp-note">FLAT = hard "image stops, paper begins" edge. <b>ALIVE</b> = the photo dissolves into the next section's bg.</span>
+        </div>
+        <div class="demo alive">
+          <div class="fadewrap">
+            <div class="fadeimg"></div>
+            <div class="fadenext"><h4>The next section</h4><p>No hard seam — the image melts into this paper band.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="howto"><b>How to build</b> &nbsp;Overlay an <code>::after</code> gradient on the full-bleed image set to the <em>next</em> section's bg color: <code>linear-gradient(180deg, rgba(246,245,243,0) 0%, var(--paper) 70%)</code> (recurs 9× verbatim). For text-on-photo use a directional <code>270deg/180deg</code> dark→transparent scrim instead of a flat dark overlay.</p>
+  </article>
+
+  <!-- 9 -->
+  <article class="specimen s9" id="p9">
+    <div class="spec-head">
+      <span class="spec-num">09</span>
+      <div class="spec-titles">
+        <h3>2-way invert / accent-flip buttons (fill ↔ ghost)</h3>
+        <div class="sub">Components · named-property transitions</div>
+      </div>
+      <span class="badge">13/16</span>
+    </div>
+    <div class="stage">
+      <div class="compare" data-on="true">
+        <div class="cmp-bar">
+          <div class="toggle" role="switch" aria-label="Toggle invert">
+            <span class="f">FLAT</span><span class="a">ALIVE</span><span class="knob"></span>
+          </div>
+          <span class="cmp-note">FLAT = static, fades to <code>opacity:.9</code>. <b>ALIVE</b> = fill ↔ ghost invert. <b>Hover the buttons.</b></span>
+        </div>
+        <div class="demo alive">
+          <div class="btnrow">
+            <button class="fb fb1">Solid → ghost</button>
+            <button class="fb fb2">Ghost → fills</button>
+            <button class="fb fb-luxe">Sharp luxe</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="howto"><b>How to build</b> &nbsp;No static buttons. Solid-fill → transparent-with-accent-text, or ghost → fills with accent, over <code>transition:background-color .2s, color .2s, border-color .2s</code> (named props, NOT <code>transition:all</code> or <code>opacity:.9</code>). Pick ONE radius language site-wide: pill <code>9999px</code>, sharp <code>0px</code> + tracked caps (luxe), or <code>6–10px</code> (fintech).</p>
+  </article>
+
+  <!-- 10 -->
+  <article class="specimen s10" id="p10">
+    <div class="spec-head">
+      <span class="spec-num">10</span>
+      <div class="spec-titles">
+        <h3>Eyebrow / kicker + accent rule above every section H2</h3>
+        <div class="sub">Typography · editorial rhythm for almost no code</div>
+      </div>
+      <span class="badge">13/16</span>
+    </div>
+    <div class="stage">
+      <div class="compare" data-on="true">
+        <div class="cmp-bar">
+          <div class="toggle" role="switch" aria-label="Toggle eyebrow">
+            <span class="f">FLAT</span><span class="a">ALIVE</span><span class="knob"></span>
+          </div>
+          <span class="cmp-note">FLAT = bare heading. <b>ALIVE</b> = uppercase tracked kicker + short accent rule above it.</span>
+        </div>
+        <div class="demo alive kickerdemo">
+          <div class="blk">
+            <span class="eyebrow">What we do</span>
+            <h4>Design systems that scale.</h4>
+            <p>The small label establishes editorial rhythm and tells the eye where each section begins.</p>
+          </div>
+          <div class="blk">
+            <span class="eyebrow">How it works</span>
+            <h4>Three steps, one accent.</h4>
+            <p>Recurs in ~100% of inspected demos — the cheapest premium signal in the set.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="howto"><b>How to build</b> &nbsp;Small uppercase letter-spaced label (<code>letter-spacing:.12–.16em</code>) in the accent color, with a short 32–64px accent rule (an <code>::before</code> bar) above the heading. <code>.eyebrow{color:var(--accent)} .eyebrow::before{content:"";width:34px;height:2px;background:var(--accent)}</code>.</p>
+  </article>
+
+  <!-- 11 -->
+  <article class="specimen s11" id="p11">
+    <div class="spec-head">
+      <span class="spec-num">11</span>
+      <div class="spec-titles">
+        <h3>Section rhythm: large vertical padding + alternating grounds</h3>
+        <div class="sub">Layout · whitespace + figure/ground is the depth system</div>
+      </div>
+      <span class="badge">12/16</span>
+    </div>
+    <div class="stage">
+      <div class="compare" data-on="true">
+        <div class="cmp-bar">
+          <div class="toggle" role="switch" aria-label="Toggle rhythm">
+            <span class="f">FLAT</span><span class="a">ALIVE</span><span class="knob"></span>
+          </div>
+          <span class="cmp-note">FLAT = uniform tight padding, all white. <b>ALIVE</b> = generous padding, alternating paper/tint, one near-black anchor band.</span>
+        </div>
+        <div class="demo alive">
+          <div class="rhythm">
+            <div class="band paper"><span class="eyebrow">Paper</span><h4>Generous breathing room</h4><p>clamp(80px,10vw,180px) vertical padding</p></div>
+            <div class="band tint"><span class="eyebrow">Tint band</span><h4>A 5% brand-tint wash</h4><p>on-brand banding, not plain white</p></div>
+            <div class="band anchor"><span class="eyebrow">Anchor</span><h4>One near-black band per page</h4><p>grounds the figure/ground rhythm</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="howto"><b>How to build</b> &nbsp;<code>padding-block:clamp(80px,10vw,140–180px)</code> (top often ≠ bottom by design). Alternate the page bg between paper and a 3–8% tinted band, with one near-black "anchor" band per page. Whitespace + figure/ground <em>is</em> the depth system.</p>
+  </article>
+
+  <!-- 12 -->
+  <article class="specimen s12" id="p12">
+    <div class="spec-head">
+      <span class="spec-num">12</span>
+      <div class="spec-titles">
+        <h3>Ambient depth behind the hero (glow blobs / duotone wash)</h3>
+        <div class="sub">Depth · the "AI startup" look in ~6 lines</div>
+      </div>
+      <span class="badge">12/16</span>
+    </div>
+    <div class="stage">
+      <div class="compare" data-on="true">
+        <div class="cmp-bar">
+          <div class="toggle" role="switch" aria-label="Toggle glow">
+            <span class="f">FLAT</span><span class="a">ALIVE</span><span class="knob"></span>
+          </div>
+          <span class="cmp-note">FLAT = flat near-black hero. <b>ALIVE</b> = blurred radial glow blobs in the accent, slowly breathing behind the dark hero.</span>
+        </div>
+        <div class="demo alive">
+          <div class="ambient">
+            <span class="blob b1" aria-hidden="true"></span>
+            <span class="blob b2" aria-hidden="true"></span>
+            <div class="inner">
+              <h4>Premium, alive — not flat.</h4>
+              <p>Two offset glow blobs behind a near-black hero ≈ the whole tech-startup look.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="howto"><b>How to build</b> &nbsp;Absolutely-positioned <code>::before/::after</code> (or spans): <code>radial-gradient(circle, accent .55, transparent 70%); filter:blur(55px); z-index:0</code>, behind a near-black hero. Slow-animate position for "breathing." Alternatives: a soft 135° duotone wash, or gentle transform parallax (gated, throttled).</p>
+  </article>
+
+</div>
+</main>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="foot">
+  <div class="wrap">
+    <span class="brand"><b>SGEN</b> · Living Styleguide</span>
+    <a href="01-transitions-hero-motion.html">Transitions / Hero / Motion →</a>
+    <a href="02-depth-type-color.html">Depth / Type / Color →</a>
+    <a href="03-layout-imagery-components.html">Layout / Imagery / Components →</a>
+    <a href="04-signatures-tokens.html">Signatures / Tokens →</a>
+    <a href="index.html">Index →</a>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---- FLAT/ALIVE toggles ---- */
+  document.querySelectorAll(".compare").forEach(function(cmp){
+    var tg = cmp.querySelector(".toggle");
+    var demo = cmp.querySelector(".demo");
+    if(!tg || !demo) return;
+    function apply(on){
+      cmp.setAttribute("data-on", on ? "true" : "false");
+      demo.classList.toggle("alive", on);
+      demo.classList.toggle("flat", !on);
+      tg.setAttribute("aria-checked", on ? "true" : "false");
+    }
+    tg.setAttribute("tabindex","0");
+    function flip(){ apply(cmp.getAttribute("data-on") !== "true"); }
+    tg.addEventListener("click", flip);
+    tg.addEventListener("keydown", function(e){
+      if(e.key === " " || e.key === "Enter"){ e.preventDefault(); flip(); }
+    });
+    apply(true); /* start ALIVE so the upgrade is the default state */
+  });
+
+  /* ---- #4 scroll-reveal stagger via IntersectionObserver ---- */
+  function armReveal(items){
+    items.forEach(function(el,i){
+      el.classList.remove("in-view");
+      el.style.transitionDelay = (i*80) + "ms";
+    });
+  }
+  if(reduce){
+    document.querySelectorAll(".reveal").forEach(function(el){ el.classList.add("in-view"); });
+  } else if("IntersectionObserver" in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting){
+          var sibs = Array.prototype.slice.call(en.target.parentNode.querySelectorAll(".reveal"));
+          en.target.style.transitionDelay = (sibs.indexOf(en.target)*80) + "ms";
+          en.target.classList.add("in-view");
+          io.unobserve(en.target);
+        }
+      });
+    }, {threshold:0.2});
+    document.querySelectorAll(".reveal").forEach(function(el){ io.observe(el); });
+  } else {
+    document.querySelectorAll(".reveal").forEach(function(el){ el.classList.add("in-view"); });
+  }
+  var replayR = document.getElementById("replayReveal");
+  if(replayR) replayR.addEventListener("click", function(){
+    var items = Array.prototype.slice.call(document.querySelectorAll("#revealGrid .reveal"));
+    if(reduce){ return; }
+    armReveal(items);
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){
+      items.forEach(function(el){ el.classList.add("in-view"); });
+    }); });
+  });
+
+  /* ---- #5 count-up via requestAnimationFrame ---- */
+  function easeOut(t){ return 1 - Math.pow(1 - t, 3); }
+  function runCounter(el){
+    var to = parseFloat(el.getAttribute("data-to")) || 0;
+    if(reduce){ el.textContent = to; return; }
+    var dur = 1300, start = null;
+    function step(ts){
+      if(start === null) start = ts;
+      var p = Math.min((ts - start)/dur, 1);
+      el.textContent = Math.round(easeOut(p) * to);
+      if(p < 1) requestAnimationFrame(step);
+      else el.textContent = to;
+    }
+    el.textContent = "0";
+    requestAnimationFrame(step);
+  }
+  var countersFired = false;
+  function fireCounters(){
+    document.querySelectorAll("#statsBand .counter").forEach(runCounter);
+  }
+  if(reduce){
+    document.querySelectorAll(".counter").forEach(function(el){ el.textContent = el.getAttribute("data-to"); });
+  } else if("IntersectionObserver" in window){
+    var band = document.getElementById("statsBand");
+    if(band){
+      var co = new IntersectionObserver(function(entries){
+        entries.forEach(function(en){
+          if(en.isIntersecting && !countersFired){ countersFired = true; fireCounters(); co.unobserve(en.target); }
+        });
+      }, {threshold:0.3});
+      co.observe(band);
+    }
+  } else {
+    fireCounters();
+  }
+  var replayC = document.getElementById("replayCount");
+  if(replayC) replayC.addEventListener("click", fireCounters);
+
+  /* ---- #6 glass sticky header: stuck state on inner scroll ---- */
+  document.querySelectorAll(".scrollbox").forEach(function(box){
+    var bar = box.querySelector(".fakebar");
+    if(!bar) return;
+    box.addEventListener("scroll", function(){
+      bar.classList.toggle("is-stuck", box.scrollTop > 40);
+    });
+  });
+})();
+</script>
+</body>
+</html>

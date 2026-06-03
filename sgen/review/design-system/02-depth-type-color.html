@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SGEN Living Styleguide · 02 — Depth, Type & Color (D/E/F)</title>
+<meta name="robots" content="noindex">
+<style>
+  /* ============================================================
+     SGEN LIVING STYLEGUIDE  ·  PAGE 02
+     Categories D (depth / glass / shadow / transforms),
+     E (typography systems), F (color / light / gradient / skins).
+     Every specimen below is a REAL, WORKING demo — actual CSS/JS
+     rendering the technique, not a description or screenshot.
+     Source: _MODERN-DESIGN-PATTERN-LIBRARY.md (71 patterns, TOP-12,
+     master token block) + _design-research/betheme-*.md harvest notes.
+     SGEN chrome: charcoal #1a1a1a + red #d51522, clean editorial.
+     Self-contained: inline CSS + JS, ZERO external refs, system fonts,
+     no external images (CSS-crafted visuals where a demo needs imagery).
+     Respects prefers-reduced-motion.
+     ============================================================ */
+
+  :root{
+    /* SGEN brand chrome */
+    --ink:#1a1a1a;             /* SGEN charcoal — the page ink (tinted, never #000) */
+    --ink-2:#262626;
+    --paper:#f4f1ea;           /* warm editorial paper, never #fff */
+    --paper-2:#ece7dc;
+    --surface:#ffffff;         /* cards float on paper */
+    --red:#d51522;             /* SGEN red — the ONE accent */
+    --red-deep:#a50f19;
+    --muted:#6b6459;           /* desaturated brand-tint body, NOT #666 */
+    --muted-2:#8a8377;
+    --line:rgba(26,26,26,.16);
+    --line-soft:rgba(26,26,26,.08);
+
+    /* system font stacks — no web fonts, zero external deps */
+    --serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua","URW Palladio L",Georgia,"Times New Roman",serif;
+    --grotesk:"Helvetica Neue",Helvetica,"Segoe UI",Arial,"Liberation Sans",system-ui,sans-serif;
+    --mono:"SFMono-Regular",ui-monospace,"Cascadia Mono","Roboto Mono",Menlo,Consolas,monospace;
+
+    /* verbatim-harvested SHADOW tokens (D1) — ink-tinted, never #000 */
+    --shadow-card:0 15px 30px 0 rgba(1,7,39,.13);                                  /* the universal one */
+    --shadow-2stop:0 12px 16px -4px rgba(16,24,40,.08),0 4px 6px -2px rgba(16,24,40,.03);
+    --shadow-hover:0 32px 64px -12px rgba(16,24,40,.14);
+
+    /* MOTION (C8) */
+    --ease:cubic-bezier(.05,.5,.3,1);   /* BeTheme signature settle */
+    --t-fast:.2s ease-out;
+    --t-reveal:.6s var(--ease);
+
+    --maxw:1240px;
+    --gut:clamp(18px,4vw,72px);
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--grotesk);
+    line-height:1.55;
+    font-size:16px;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+  ::selection{background:var(--red);color:#fff}
+  a{color:inherit;text-decoration:none}
+
+  .wrap{max-width:var(--maxw);margin:0 auto;padding-left:var(--gut);padding-right:var(--gut)}
+
+  /* ---------- shared editorial type ---------- */
+  .kicker{
+    font-family:var(--grotesk);
+    font-size:11px;letter-spacing:.32em;text-transform:uppercase;
+    font-weight:700;color:var(--red);
+  }
+  .kicker.ink{color:var(--ink)}
+
+  /* ============================================================
+     PREVIEW MARKER + TOP NAV (sibling pages)
+     ============================================================ */
+  .preview-flag{
+    background:var(--ink);color:#fff;
+    font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
+    display:flex;align-items:center;justify-content:center;gap:.7em;
+    padding:7px 16px;text-align:center;line-height:1.3;
+    border-bottom:2px solid var(--red);
+  }
+  .preview-flag b{color:var(--red);font-weight:700}
+
+  .topnav{
+    position:sticky;top:0;z-index:100;
+    background:rgba(244,241,234,.82);
+    -webkit-backdrop-filter:blur(16px) saturate(180%);
+    backdrop-filter:blur(16px) saturate(180%);
+    border-bottom:1px solid var(--line);
+  }
+  @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+    .topnav{background:var(--paper)}   /* solid fallback */
+  }
+  .topnav__inner{
+    max-width:var(--maxw);margin:0 auto;padding:11px var(--gut);
+    display:flex;align-items:center;gap:18px;flex-wrap:wrap;
+  }
+  .topnav__brand{
+    font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;
+    font-weight:700;color:var(--ink);white-space:nowrap;
+  }
+  .topnav__brand b{color:var(--red)}
+  .topnav__links{display:flex;gap:4px;flex-wrap:wrap;margin-left:auto}
+  .topnav__links a{
+    font-family:var(--mono);font-size:11px;letter-spacing:.06em;
+    color:var(--muted);padding:5px 9px;border-radius:6px;
+    transition:background-color var(--t-fast),color var(--t-fast);
+  }
+  .topnav__links a:hover{background:rgba(26,26,26,.06);color:var(--ink)}
+  .topnav__links a[aria-current]{color:#fff;background:var(--red)}
+
+  /* ============================================================
+     PAGE HEADER
+     ============================================================ */
+  .pagehead{padding:clamp(46px,7vw,86px) 0 30px}
+  .pagehead .kicker{margin-bottom:14px}
+  .pagehead h1{
+    font-family:var(--serif);
+    font-size:clamp(34px,6.2vw,72px);
+    line-height:1.02;letter-spacing:-.025em;font-weight:600;
+    max-width:16ch;
+  }
+  .pagehead h1 em{font-style:italic;color:var(--red)}
+  .pagehead p{
+    margin-top:20px;max-width:62ch;color:var(--muted);
+    font-size:clamp(15px,1.5vw,18px);line-height:1.6;
+  }
+  .pagehead .meta{
+    margin-top:22px;font-family:var(--mono);font-size:11px;
+    letter-spacing:.08em;color:var(--muted-2);text-transform:uppercase;
+    display:flex;gap:10px;flex-wrap:wrap;align-items:center;
+  }
+  .pagehead .meta span{padding:4px 9px;border:1px solid var(--line);border-radius:999px}
+
+  /* ============================================================
+     CATEGORY BAND + SPECIMEN GRID
+     ============================================================ */
+  .cat{padding:clamp(34px,5vw,66px) 0}
+  .cat--alt{background:var(--paper-2)}
+  .cat__head{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;margin-bottom:30px}
+  .cat__num{
+    font-family:var(--serif);font-size:clamp(40px,7vw,86px);
+    font-weight:600;color:rgba(213,21,34,.16);line-height:.8;letter-spacing:-.04em;
+  }
+  .cat__title{font-family:var(--serif);font-size:clamp(24px,3.2vw,38px);font-weight:600;letter-spacing:-.02em}
+  .cat__title small{display:block;font-family:var(--grotesk);font-size:14px;font-weight:400;color:var(--muted);letter-spacing:0;margin-top:4px;text-transform:none}
+
+  .grid{
+    display:grid;gap:clamp(18px,2.2vw,28px);
+    grid-template-columns:repeat(auto-fill,minmax(330px,1fr));
+  }
+
+  /* ---------- the specimen card itself ---------- */
+  .spec{
+    background:var(--surface);
+    border:1px solid var(--line-soft);
+    border-radius:16px;
+    overflow:hidden;
+    display:flex;flex-direction:column;
+    box-shadow:var(--shadow-2stop);
+  }
+  .spec__top{
+    display:flex;align-items:center;gap:10px;
+    padding:15px 18px 12px;border-bottom:1px solid var(--line-soft);
+  }
+  .spec__name{font-weight:700;font-size:14.5px;letter-spacing:-.01em;flex:1;min-width:0}
+  .spec__name .id{font-family:var(--mono);color:var(--red);font-size:12px;margin-right:7px}
+  .spec__badge{
+    flex:none;font-family:var(--mono);font-size:10.5px;font-weight:700;
+    letter-spacing:.04em;color:#fff;background:var(--ink);
+    padding:3px 8px;border-radius:999px;white-space:nowrap;
+  }
+  .spec__badge.hot{background:var(--red)}
+  /* the LIVE demo stage */
+  .stage{
+    position:relative;
+    padding:30px 22px;
+    min-height:200px;
+    display:flex;align-items:center;justify-content:center;
+    background:
+      linear-gradient(rgba(26,26,26,.025),rgba(26,26,26,.025)),
+      repeating-linear-gradient(45deg,transparent 0 9px,rgba(26,26,26,.018) 9px 18px);
+    overflow:hidden;
+  }
+  .stage--dark{
+    background:#0e0f13;color:#fff;
+    background-image:
+      radial-gradient(80% 120% at 80% 0%,#1b2030 0%,#0c0d12 62%);
+  }
+  /* 1-line "how to build" caption */
+  .how{
+    padding:13px 18px;border-top:1px dashed var(--line);
+    background:rgba(26,26,26,.022);
+    font-family:var(--mono);font-size:11.5px;line-height:1.5;color:var(--muted);
+  }
+  .how b{color:var(--ink);font-weight:700}
+  .how code{color:var(--red-deep);background:rgba(213,21,34,.07);padding:1px 4px;border-radius:4px}
+
+  /* span helpers for wider specimens */
+  .spec.span2{grid-column:span 2}
+  @media(max-width:740px){.spec.span2{grid-column:auto}}
+
+  /* ============================================================
+     ----- D1 · ink-tinted soft shadow + hover lift -----
+     ============================================================ */
+  .d1row{display:flex;gap:18px;flex-wrap:wrap;justify-content:center;width:100%}
+  .d1card{
+    width:128px;height:96px;border-radius:14px;background:var(--surface);
+    border:1px solid var(--line-soft);
+    display:flex;align-items:flex-end;padding:11px;
+    font-family:var(--mono);font-size:10px;color:var(--muted);
+    transition:transform var(--t-fast),box-shadow var(--t-fast);
+    cursor:default;
+  }
+  .d1card.s-flat{box-shadow:0 1px 3px rgba(0,0,0,.2)}
+  .d1card.s-uni{box-shadow:var(--shadow-card)}
+  .d1card.s-two{box-shadow:var(--shadow-2stop)}
+  .d1card:hover{transform:translateY(-6px);box-shadow:var(--shadow-hover)}
+  .d1card .t{font-weight:700;color:var(--ink)}
+
+  /* ----- D2 · glassmorphism (+ glass-on-scroll header proven above) ----- */
+  .d2scene{position:relative;width:100%;height:170px;border-radius:14px;overflow:hidden}
+  .d2scene::before{content:"";position:absolute;inset:-30%;
+    background:
+      radial-gradient(40% 50% at 22% 30%,#ff5b6e .0,rgba(255,91,110,0) 60%),
+      radial-gradient(46% 55% at 82% 72%,#5e6bff .0,rgba(94,107,255,0) 62%),
+      conic-gradient(from 200deg at 60% 40%,#d51522,#3a2a6b,#0e0f13,#d51522);
+    filter:blur(8px) saturate(120%);
+  }
+  .d2glass{
+    position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+    width:74%;padding:18px 20px;border-radius:14px;
+    background:rgba(255,255,255,.10);
+    -webkit-backdrop-filter:blur(18px) saturate(180%);
+    backdrop-filter:blur(18px) saturate(180%);
+    border:1px solid rgba(255,255,255,.32);
+    box-shadow:0 20px 50px -20px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.45);
+    color:#fff;
+  }
+  @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+    .d2glass{background:rgba(30,30,40,.78)}   /* solid fallback */
+  }
+  .d2glass .gh{font-weight:700;font-size:15px;letter-spacing:-.01em}
+  .d2glass .gp{font-size:12px;opacity:.85;margin-top:4px}
+
+  /* ----- D3 · ambient glow blobs ----- */
+  .d3scene{position:relative;width:100%;height:170px;border-radius:14px;overflow:hidden;
+    background:#0c0d12;display:flex;align-items:center;justify-content:center}
+  .d3scene .blob{position:absolute;border-radius:50%;filter:blur(46px);z-index:0}
+  .d3scene .b1{width:150px;height:150px;left:-26px;top:-30px;
+    background:radial-gradient(circle,rgba(213,21,34,.85),transparent 70%);
+    animation:breathe 7s var(--ease) infinite alternate}
+  .d3scene .b2{width:170px;height:170px;right:-34px;bottom:-40px;
+    background:radial-gradient(circle,rgba(94,107,255,.8),transparent 70%);
+    animation:breathe 9s var(--ease) infinite alternate-reverse}
+  .d3scene .label{position:relative;z-index:1;color:#fff;font-family:var(--serif);
+    font-size:24px;letter-spacing:-.02em;text-align:center}
+  .d3scene .label small{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.18em;
+    text-transform:uppercase;color:rgba(255,255,255,.6);margin-top:6px}
+  @keyframes breathe{from{transform:translate(0,0) scale(1)}to{transform:translate(14px,10px) scale(1.12)}}
+
+  /* ----- D4 · deliberate-imperfection transform ----- */
+  .d4row{display:flex;gap:14px;align-items:center;justify-content:center;width:100%}
+  .d4tile{width:96px;height:118px;border-radius:12px;background:var(--surface);
+    border:1px solid var(--line-soft);box-shadow:var(--shadow-2stop);
+    display:flex;align-items:center;justify-content:center;
+    font-family:var(--serif);font-size:30px;color:var(--ink)}
+  .d4tile.tilt{transform:rotate(-2.4deg)}
+  .d4tile.feat{transform:rotate(1.8deg) scale(1.06);box-shadow:var(--shadow-hover);
+    background:var(--ink);color:#fff}
+
+  /* ----- D5 · hard-offset sticker shadow + press-in ----- */
+  .d5btn{
+    appearance:none;border:2px solid var(--ink);background:var(--paper);
+    color:var(--ink);font-family:var(--mono);font-weight:700;font-size:13px;
+    letter-spacing:.05em;text-transform:uppercase;padding:14px 26px;border-radius:10px;
+    box-shadow:5px 5px 0 var(--ink);cursor:pointer;
+    transition:transform var(--t-fast),box-shadow var(--t-fast);
+  }
+  .d5btn:hover{transform:translate(2px,2px);box-shadow:3px 3px 0 var(--ink)}
+  .d5btn:active{transform:translate(5px,5px);box-shadow:0 0 0 var(--ink)}
+  .d5btn.accent{border-color:var(--red);color:var(--red);box-shadow:5px 5px 0 var(--red)}
+  .d5btn.accent:hover{box-shadow:3px 3px 0 var(--red)}
+  .d5btn.accent:active{box-shadow:0 0 0 var(--red)}
+
+  /* ----- D6 · asymmetric directional shadow ----- */
+  .d6frame{width:200px;height:140px;border-radius:14px;overflow:hidden;
+    box-shadow:6px 30px 60px rgba(0,0,0,.30);
+    background:
+      linear-gradient(140deg,#3a3f4d,#1a1c24 70%);
+    position:relative}
+  .d6frame::after{content:"";position:absolute;inset:0;
+    background:radial-gradient(120% 90% at 18% 14%,rgba(255,255,255,.18),transparent 55%)}
+  .d6frame .cap{position:absolute;left:14px;bottom:12px;color:#fff;
+    font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;opacity:.85}
+
+  /* ============================================================
+     ----- CATEGORY E · TYPOGRAPHY specimens -----
+     ============================================================ */
+  /* E1 · display + grotesk pairing */
+  .e1{width:100%;text-align:left}
+  .e1 .disp{font-family:var(--serif);font-size:38px;line-height:1.0;letter-spacing:-.03em;font-weight:600}
+  .e1 .body{font-family:var(--grotesk);font-size:13.5px;color:var(--muted);line-height:1.6;margin-top:10px;max-width:40ch}
+  .e1 .tags{margin-top:14px;display:flex;gap:8px;flex-wrap:wrap}
+  .e1 .tags span{font-family:var(--mono);font-size:10px;color:var(--muted-2);
+    border:1px solid var(--line);border-radius:999px;padding:3px 8px}
+
+  /* E2 · oversized light-at-large + negative tracking */
+  .e2 .big{font-family:var(--serif);font-weight:300;
+    font-size:clamp(46px,11vw,108px);line-height:.92;letter-spacing:-.045em;color:var(--ink)}
+  .e2 .big em{font-style:italic;color:var(--red)}
+  .e2 .athletic{font-family:var(--grotesk);font-weight:800;text-transform:uppercase;
+    font-size:clamp(28px,6vw,52px);line-height:.9;letter-spacing:.01em;margin-top:14px}
+
+  /* E3 · distinct numeral face for stats — LIVE count-up */
+  .e3row{display:flex;gap:30px;flex-wrap:wrap;justify-content:center;width:100%;text-align:center}
+  .e3stat .num{font-family:var(--mono);font-weight:700;font-size:clamp(40px,8vw,64px);
+    color:var(--red);letter-spacing:-.02em;line-height:1;font-variant-numeric:tabular-nums}
+  .e3stat .suf{font-size:.55em;color:var(--ink)}
+  .e3stat .lab{font-family:var(--grotesk);font-size:10.5px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--muted);margin-top:8px}
+
+  /* E4 · tracked eyebrow + giant faint section numeral */
+  .e4{position:relative;width:100%;padding-left:6px}
+  .e4 .ghost{position:absolute;right:0;top:-26px;font-family:var(--serif);font-weight:600;
+    font-size:130px;line-height:1;color:rgba(213,21,34,.12);letter-spacing:-.04em;z-index:0}
+  .e4 .eye{position:relative;z-index:1;font-family:var(--grotesk);font-size:11px;font-weight:700;
+    letter-spacing:.28em;text-transform:uppercase;color:var(--red);display:flex;align-items:center;gap:10px}
+  .e4 .eye::before{content:"";width:40px;height:2px;background:var(--red)}
+  .e4 h3{position:relative;z-index:1;font-family:var(--serif);font-size:32px;font-weight:600;
+    letter-spacing:-.02em;margin-top:12px}
+
+  /* E5 · highlighter / underline-behind-text inset */
+  .e5 .line{font-family:var(--serif);font-size:clamp(24px,4vw,34px);line-height:1.3;font-weight:500;max-width:22ch}
+  .e5 .mark{box-shadow:inset 0 -.42em 0 rgba(213,21,34,.28);padding:0 .04em}
+  .e5 .mark.sweep{
+    background:linear-gradient(rgba(213,21,34,.28),rgba(213,21,34,.28)) no-repeat;
+    background-size:0% .42em;background-position:0 88%;box-shadow:none;
+    animation:sweepin 1.1s var(--ease) .25s forwards;
+  }
+  @keyframes sweepin{to{background-size:100% .42em}}
+
+  /* E6 · gradient-clip headline word */
+  .e6 .line{font-family:var(--serif);font-size:clamp(28px,5vw,44px);line-height:1.05;
+    font-weight:600;letter-spacing:-.025em;text-align:center}
+  .e6 .clip{
+    background:linear-gradient(135deg,var(--red),#ff7a3d 60%,#ffb01f);
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;color:transparent;
+  }
+
+  /* ============================================================
+     ----- CATEGORY F · COLOR / LIGHT / GRADIENT / SKINS -----
+     ============================================================ */
+  /* F1 · the 5-token skin (swatches) */
+  .f1swatches{display:grid;grid-template-columns:repeat(5,1fr);gap:0;width:100%;
+    border-radius:12px;overflow:hidden;border:1px solid var(--line-soft)}
+  .f1swatches .sw{height:108px;display:flex;flex-direction:column;justify-content:flex-end;
+    padding:9px;font-family:var(--mono);font-size:9.5px;line-height:1.35}
+  .f1swatches .sw .nm{font-weight:700;text-transform:uppercase;letter-spacing:.08em}
+  .sw.ink{background:var(--ink);color:#fff}
+  .sw.paper{background:var(--paper);color:var(--ink)}
+  .sw.surface{background:var(--surface);color:var(--ink);border-left:1px solid var(--line-soft)}
+  .sw.muted{background:var(--muted);color:#fff}
+  .sw.accent{background:var(--red);color:#fff}
+
+  /* F2 · 135deg duotone gradient library — verbatim presets */
+  .f2grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:100%}
+  .f2grid .g{height:74px;border-radius:10px;position:relative;overflow:hidden;
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)}
+  .f2grid .g span{position:absolute;left:8px;bottom:7px;font-family:var(--mono);font-size:9px;
+    color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.4)}
+  .g.g1{background:linear-gradient(135deg,#00d084,#0693e3)}
+  .g.g2{background:linear-gradient(135deg,#34e2e4,#4721fb 50%,#ab1dfe)}
+  .g.g3{background:linear-gradient(135deg,#faaca8,#dad0ec)}
+  .g.g4{background:linear-gradient(135deg,#fdd79a,#004a59)}
+  .g.g5{background:linear-gradient(135deg,#330968,#31cdcf)}
+  .g.g6{background:linear-gradient(135deg,#020381,#2874fc)}
+
+  /* F3 · per-vertical skin palettes (mood-mapped) */
+  .f3rows{display:flex;flex-direction:column;gap:9px;width:100%}
+  .f3row{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:10.5px}
+  .f3row .chips{display:flex;flex:none}
+  .f3row .chips i{width:30px;height:30px;border-radius:7px;display:block;margin-right:-7px;
+    box-shadow:0 0 0 2px var(--surface)}
+  .f3row .nm{color:var(--muted);letter-spacing:.04em}
+  .f3row .nm b{color:var(--ink);display:block;font-size:11.5px}
+  /* music dark+neon */ .mk1{background:#0a0a10}.mk2{background:#c6ff00}.mk3{background:#ff2e9a}
+  /* agency dark+violet */ .ag1{background:#161922}.ag2{background:#5e33ff}.ag3{background:#0089f7}
+  /* restaurant warm earth */ .re1{background:#291507}.re2{background:#ecdeca}.re3{background:#c06a3c}
+  /* medical one-hue+ink */ .me1{background:#204289}.me2{background:#daffef}.me3{background:#1f9d8f}
+  /* auto slate+amber */ .au1{background:#272c36}.au2{background:#f8ad40}.au3{background:#c9ccd2}
+
+  /* F4 · tinted-surface wash bands */
+  .f4{width:100%;border-radius:12px;overflow:hidden;border:1px solid var(--line-soft)}
+  .f4 .band{padding:14px 16px;font-family:var(--grotesk);font-size:12px;color:var(--ink)}
+  .f4 .band b{font-family:var(--mono);font-size:10px;color:var(--muted);float:right}
+  .f4 .w0{background:#ffffff}
+  .f4 .w1{background:#FFF8F5}
+  .f4 .w2{background:#f7fafd}
+  .f4 .w3{background:#daffef}
+
+  /* F5 · accent-multiply / duotone scrim over (CSS-crafted) "photo" + hover-zoom clipped frame */
+  .f5frame{position:relative;width:240px;max-width:100%;height:160px;border-radius:14px;overflow:hidden;cursor:default}
+  .f5frame .photo{position:absolute;inset:0;
+    background:
+      radial-gradient(60% 80% at 30% 20%,#caa07a,transparent 60%),
+      radial-gradient(70% 70% at 80% 85%,#7d5a3c,transparent 65%),
+      linear-gradient(160deg,#b9905f,#5a3d27 80%);
+    transition:transform .4s var(--ease)}
+  .f5frame:hover .photo{transform:scale(1.08)}
+  .f5frame .scrim{position:absolute;inset:0;background:var(--red);
+    mix-blend-mode:multiply;opacity:.34}
+  .f5frame .grad{position:absolute;inset:0;
+    background:linear-gradient(to top,rgba(26,26,26,.66),transparent 62%)}
+  .f5frame .cap{position:absolute;left:14px;bottom:12px;z-index:2;color:#fff;
+    font-family:var(--serif);font-size:18px;letter-spacing:-.01em}
+  .f5frame .cap small{display:block;font-family:var(--mono);font-size:9px;letter-spacing:.16em;
+    text-transform:uppercase;opacity:.8;margin-bottom:2px}
+
+  /* F6 · tinted-pastel low-contrast secondary button */
+  .f6row{display:flex;gap:14px;flex-wrap:wrap;align-items:center;justify-content:center;width:100%}
+  .btn{font-family:var(--grotesk);font-weight:700;font-size:13px;letter-spacing:.02em;
+    padding:13px 26px;border-radius:999px;cursor:pointer;border:1px solid transparent;
+    transition:background-color var(--t-fast),color var(--t-fast),border-color var(--t-fast)}
+  .btn.primary{background:var(--red);color:#fff}
+  .btn.primary:hover{background:var(--red-deep)}
+  .btn.secondary{
+    background:color-mix(in srgb,var(--red) 12%,white);
+    color:var(--red-deep);border-color:color-mix(in srgb,var(--red) 22%,white);
+  }
+  @supports not (color:color-mix(in srgb,red,white)){
+    .btn.secondary{background:#fbe7e8;color:var(--red-deep);border-color:#f3c9cc}
+  }
+  .btn.secondary:hover{background:color-mix(in srgb,var(--red) 20%,white)}
+  /* 2-way invert / fill-sweep flip button (TOP-12 #9, anchors F6 row) */
+  .btn.flip{position:relative;overflow:hidden;background:transparent;color:var(--ink);border-color:var(--ink);z-index:0}
+  .btn.flip::before{content:"";position:absolute;inset:0;z-index:-1;background:var(--ink);
+    transform:scaleX(0);transform-origin:left;transition:transform .28s var(--ease)}
+  .btn.flip:hover{color:#fff}
+  .btn.flip:hover::before{transform:scaleX(1)}
+
+  /* ============================================================
+     SCROLL-REVEAL (TOP-12 #4) — page-wide, sibling stagger
+     ============================================================ */
+  .reveal{opacity:0;transform:translateY(22px);transition:opacity var(--t-reveal),transform var(--t-reveal)}
+  .reveal.in-view{opacity:1;transform:none}
+
+  /* ---------- footer ---------- */
+  .foot{background:var(--ink);color:rgba(255,255,255,.7);padding:40px 0 46px;margin-top:20px}
+  .foot .wrap{display:flex;flex-wrap:wrap;gap:18px;align-items:baseline;justify-content:space-between}
+  .foot .b{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#fff}
+  .foot .b b{color:var(--red)}
+  .foot .links a{font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.6);margin-left:14px;
+    transition:color var(--t-fast)}
+  .foot .links a:hover{color:#fff}
+
+  /* ============================================================
+     REDUCED-MOTION GATE (master token block §)
+     ============================================================ */
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+    .reveal{opacity:1!important;transform:none!important}
+    .e5 .mark.sweep{background-size:100% .42em!important}
+  }
+</style>
+</head>
+<body>
+
+<div class="preview-flag">SGEN LIVING STYLEGUIDE &middot; <b>LIVE SPECIMENS</b> &middot; every pattern is a real working demo &mdash; open &amp; interact (hover / scroll)</div>
+
+<nav class="topnav" aria-label="Styleguide pages">
+  <div class="topnav__inner">
+    <div class="topnav__brand"><b>SGEN</b> · STYLEGUIDE</div>
+    <div class="topnav__links">
+      <a href="00-top12.html">00 · Top-12</a>
+      <a href="01-transitions-hero-motion.html">01 · Transitions / Hero / Motion</a>
+      <a href="02-depth-type-color.html" aria-current="page">02 · Depth / Type / Color</a>
+      <a href="03-layout-imagery-components.html">03 · Layout / Imagery / Components</a>
+      <a href="04-signatures-tokens.html">04 · Signatures / Tokens</a><a class="nav" href="06-responsive.html">06 · Responsive</a><a class="nav" href="07-components.html">07 · Components</a><a class="nav" href="08-scroll-sticky.html">08 · Scroll / Sticky</a><a class="nav" href="09-accessibility.html">09 · Accessibility</a><a class="nav" href="10-sections.html">10 · Sections</a><a class="nav" href="11-theming.html">11 · Theming</a><a class="nav" href="12-iconography.html">12 · Iconography</a><a class="nav" href="13-utility-pages.html">13 · Utility</a><a class="nav" href="14-ecommerce.html">14 · Ecommerce</a><a class="nav" href="15-dataviz.html">15 · Data-viz</a>
+      <a href="index.html">Index</a>
+    </div>
+  </div>
+</nav>
+
+<header class="pagehead">
+  <div class="wrap">
+    <div class="kicker reveal">Page 02 &middot; Categories D / E / F</div>
+    <h1 class="reveal">Depth, Type &amp; <em>Color</em> — rendered live, not described.</h1>
+    <p class="reveal">Eighteen working specimens drawn from the BeTheme harvest (166 demos, 16 verticals). Each card shows the pattern name, its cross-category recurrence badge, the <strong>real CSS/JS demo</strong> (hover the shadows and frames, watch the counters and reveals fire), and the one-line build note. Charcoal &amp; red SGEN chrome; system fonts; zero external assets.</p>
+    <div class="meta reveal">
+      <span>D · Depth · glass · shadow</span>
+      <span>E · Typography systems</span>
+      <span>F · Color · light · gradient · skins</span>
+      <span>prefers-reduced-motion respected</span>
+    </div>
+  </div>
+</header>
+
+<!-- =========================================================
+     CATEGORY D — Depth, glass & shadow
+     ========================================================= -->
+<section class="cat" id="cat-d">
+  <div class="wrap">
+    <div class="cat__head reveal">
+      <div class="cat__num">D</div>
+      <div class="cat__title">Depth, glass &amp; shadow
+        <small>Layered elevation, real backdrop-filter glass, ambient light, deliberate transforms.</small>
+      </div>
+    </div>
+
+    <div class="grid">
+
+      <!-- D1 -->
+      <article class="spec reveal span2">
+        <div class="spec__top">
+          <div class="spec__name"><span class="id">D1</span>Ink-tinted soft shadow + hover lift</div>
+          <div class="spec__badge hot">14/16</div>
+        </div>
+        <div class="stage">
+          <div class="d1row">
+            <div class="d1card s-flat"><span class="t">Flat<br>gray</span></div>
+            <div class="d1card s-uni"><span class="t">Universal<br>1,7,39</span></div>
+            <div class="d1card s-two"><span class="t">2-stop<br>neg-spread</span></div>
+          </div>
+        </div>
+        <div class="how"><b>Build:</b> tint the rgba toward the ink, never <code>#000</code> &mdash; <code>box-shadow:0 15px 30px 0 rgba(1,7,39,.13)</code>; hover &rarr; <code>translateY(-6px)</code> + <code>0 32px 64px -12px rgba(16,24,40,.14)</code>. <i>Hover any card.</i></div>
+      </article>
+
+      <!-- D2 -->
+      <article class="spec reveal">
+        <div class="spec__top">
+          <div class="spec__name"><span class="id">D2</span>Glassmorphism (+ inset light-catch)</div>
+          <div class="spec__badge">~6/16</div>
+        </div>
+        <div class="stage">
+          <div class="d2scene">
+            <div class="d2glass">
+              <div class="gh">Frosted panel</div>
+              <div class="gp">blur(18px) saturate(180%) over a colored ground</div>
+            </div>
+          </div>
+        </div>
+        <div class="how"><b>Build:</b> <code>backdrop-filter:blur(18px) saturate(180%)</code> + the selling <code>inset 0 1px 0 rgba(255,255,255,.45)</code> highlight; <code>@supports not</code> solid fallback. The sticky nav above is the same glass-on-scroll.</div>
+      </article>
+
+      <!-- D3 -->
+      <article class="spec reveal">
+        <div class="spec__top">
+          <div class="spec__name"><span class="id">D3</span>Ambient glow blobs</div>
+          <div class="spec__badge">~4/16</div>
+        </div>
+        <div class="stage">
+          <div class="d3scene">
+            <span class="blob b1"></span><span class="blob b2"></span>
+            <div class="label">Ship to anywhere<small>the AI-startup look in 6 lines</small></div>
+          </div>
+        </div>
+        <div class="how"><b>Build:</b> two offset <code>radial-gradient(circle,accent .45,transparent 70%)</code> + <code>filter:blur(46px); z-index:-1</code>; slow-animate position to "breathe". <i>Live now.</i></div>
+      </article>
+
+      <!-- D4 -->
+      <article class="spec reveal">
+        <div class="spec__top">
+          <div class="spec__name"><span class="id">D4</span>Deliberate imperfection (transform)</div>
+          <div class="spec__badge">~3/16</div>
+        </div>
+        <div class="stage">
+          <div class="d4row">
+            <div class="d4tile tilt">A</div>
+            <div class="d4tile feat">B</div>
+            <div class="d4tile tilt">C</div>
+          </div>
+        </div>
+        <div class="how"><b>Build:</b> a tiny <code>rotate(1&ndash;2&deg;)</code> / <code>scale</code> on ONE featured tile breaks grid monotony. One element per section, never a pattern.</div>
+      </article>
+
+      <!-- D5 -->
+      <article class="spec reveal">
+        <div class="spec__top">
+          <div class="spec__name"><span class="id">D5</span>Hard-offset "sticker" shadow + press-in</div>
+          <div class="spec__badge">1&ndash;2/16</div>
+        </div>
+        <div class="stage">
+          <button class="d5btn" type="button">Get started</button>
+          <button class="d5btn accent" type="button" style="margin-left:14px">Read docs</button>
+        </div>
+        <div class="how"><b>Build:</b> un-blurred <code>box-shadow:5px 5px 0 var(--ink)</code>; on press <code>translate(5px,5px)</code> + collapse the shadow to 0. <i>Click/hold a button.</i> Niche brutalist signature.</div>
+      </article>
+
+      <!-- D6 -->
+      <article class="spec reveal">
+        <div class="spec__top">
+          <div class="spec__name"><span class="id">D6</span>Asymmetric directional shadow</div>
+          <div class="spec__badge">1&ndash;2/16</div>
+        </div>
+        <div class="stage">
+          <div class="d6frame"><div class="cap">light from upper-left</div></div>
+        </div>
+        <div class="how"><b>Build:</b> horizontal offset implies a light source &mdash; <code>box-shadow:6px 30px 60px rgba(0,0,0,.3)</code>. High-end art-direction cue on hero portraits / feature images.</div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     CATEGORY E — Typography
+     ========================================================= -->
+<section class="cat cat--alt" id="cat-e">
+  <div class="wrap">
+    <div class="cat__head reveal">
+      <div class="cat__num">E</div>
+      <div class="cat__title">Typography systems
+        <small>Display-on-headings, oversized light-at-large, distinct numerals, editorial rhythm. Real type at scale.</small>
+      </div>
+    </div>
+
+    <div class="grid">
+
+      <!-- E1 -->
+      <article class="spec reveal">
+        <div class="spec__top">
+          <div class="spec__name"><span class="id">E1</span>Display face on headings + grotesk body</div>
+          <div class="spec__badge hot">15/16</div>
+        </div>
+        <div class="stage" style="justify-content:flex-start">
+          <div class="e1">
+            <div class="disp">Premium &amp; alive,<br>not clean &amp; flat.</div>
+            <div class="body">One expressive display face for H1&ndash;H3, one neutral grotesk for body. The single biggest typographic lever in the whole harvest.</div>
+            <div class="tags"><span>display: serif</span><span>body: grotesk</span><span>2 families max</span></div>
+          </div>
+        </div>
+        <div class="how"><b>Build:</b> headings on a serif/expressive face, body on Inter/DM-Sans-class grotesk. Here: system serif + system grotesk, no web fonts.</div>
+      </article>
+
+      <!-- E2 -->
+      <article class="spec reveal span2">
+        <div class="spec__top">
+          <div class="spec__name"><span class="id">E2</span>Oversized, light-at-large, negative-tracked</div>
+          <div class="spec__badge hot">15/16</div>
+        </div>
+        <div class="stage" style="justify-content:flex-start;min-height:220px">
+          <div class="e2">
+            <div class="big">Build it <em>once</em>.</div>
+            <div class="athletic">DEPLOY EVERYWHERE</div>
+          </div>
+        </div>
+        <div class="how"><b>Build:</b> <code>font-size:clamp(2.5rem,7vw,108px); line-height:.92; letter-spacing:-.045em</code>. Light weight (300) at huge size reads luxe; heavy uppercase reads athletic.</div>
+      </article>
+
+      <!-- E3 -->
+      <article class="spec reveal">
+        <div class="spec__top">
+          <div class="spec__name"><span class="id">E3</span>Distinct numeral face (live count-up)</div>
+          <div class="spec__badge hot">16/16</div>
+        </div>
+        <div class="stage">
+          <div class="e3row">
+            <div class="e3stat"><div class="num"><span data-count data-to="166">0</span></div><div class="lab">demos harvested</div></div>
+            <div class="e3stat"><div class="num"><span data-count data-to="71">0</span></div><div class="lab">patterns</div></div>
+            <div class="e3stat"><div class="num"><span data-count data-to="99">0</span><span class="suf">%</span></div><div class="lab">CSS-only</div></div>
+          </div>
+        </div>
+        <div class="how"><b>Build:</b> route figures through a mono/grotesk numeral face + <code>font-variant-numeric:tabular-nums</code>; <code>requestAnimationFrame</code> eases 0&rarr;<code>data-to</code>, fired by the reveal observer. <i>Scroll-fired.</i></div>
+      </article>
+
+      <!-- E4 -->
+      <article class="spec reveal">
+        <div class="spec__top">
+          <div class="spec__name"><span class="id">E4</span>Tracked eyebrow + giant faint numeral</div>
+          <div class="spec__badge">13/16</div>
+        </div>
+        <div class="stage" style="justify-content:flex-start">
+          <div class="e4">
+            <div class="ghost">03</div>
+            <div class="eye">Our process</div>
+            <h3>Map the platform truth.</h3>
+          </div>
+        </div>
+        <div class="how"><b>Build:</b> uppercase <code>letter-spacing:.12em</code> kicker + a short accent rule, with a large <code>01/02/03</code> numeral behind the heading at ~12% accent opacity.</div>
+      </article>
+
+      <!-- E5 -->
+      <article class="spec reveal">
+        <div class="spec__top">
+          <div class="spec__name"><span class="id">E5</span>Highlighter inset (animated swipe)</div>
+          <div class="spec__badge">1&ndash;2/16</div>
+        </div>
+        <div class="stage" style="justify-content:flex-start">
+          <div class="e5">
+            <div class="line">The premium signal is what you <span class="mark sweep">leave out</span>, not what you pile on.</div>
+          </div>
+        </div>
+        <div class="how"><b>Build:</b> <code>box-shadow:inset 0 -.4em 0 &lt;tint&gt;</code> (em-relative, scales with type); animate the swipe in via <code>background-size</code> on reveal. <i>Watch it fill.</i></div>
+      </article>
+
+      <!-- E6 -->
+      <article class="spec reveal">
+        <div class="spec__top">
+          <div class="spec__name"><span class="id">E6</span>Gradient-clip headline word</div>
+          <div class="spec__badge">~3/16</div>
+        </div>
+        <div class="stage">
+          <div class="e6">
+            <div class="line">Make the web feel <span class="clip">expensive</span>.</div>
+          </div>
+        </div>
+        <div class="how"><b>Build:</b> <code>background:linear-gradient(135deg,...);-webkit-background-clip:text;-webkit-text-fill-color:transparent</code> on ONE emphasis word, never the whole line.</div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     CATEGORY F — Color, light, gradient & skins
+     ========================================================= -->
+<section class="cat" id="cat-f">
+  <div class="wrap">
+    <div class="cat__head reveal">
+      <div class="cat__num">F</div>
+      <div class="cat__title">Color, light, gradient &amp; skins
+        <small>One accent over committed neutrals, 135&deg; duotone library, mood-mapped skins, tinted washes, color-grading scrims.</small>
+      </div>
+    </div>
+
+    <div class="grid">
+
+      <!-- F1 -->
+      <article class="spec reveal span2">
+        <div class="spec__top">
+          <div class="spec__name"><span class="id">F1</span>One accent + tinted ink + paper + muted</div>
+          <div class="spec__badge hot">16/16</div>
+        </div>
+        <div class="stage" style="padding:24px 22px">
+          <div class="f1swatches">
+            <div class="sw ink"><span class="nm">ink</span>#1a1a1a</div>
+            <div class="sw paper"><span class="nm">paper</span>#f4f1ea</div>
+            <div class="sw surface"><span class="nm">surface</span>#ffffff</div>
+            <div class="sw muted"><span class="nm">muted</span>#6b6459</div>
+            <div class="sw accent"><span class="nm">accent</span>#d51522</div>
+          </div>
+        </div>
+        <div class="how"><b>Build:</b> the single highest-leverage move &mdash; ONE accent over a tinted near-black ink (never <code>#000</code>), warm off-white paper (never <code>#fff</code>), one muted grey. Each skin = a re-set of these 5 custom props.</div>
+      </article>
+
+      <!-- F2 -->
+      <article class="spec reveal">
+        <div class="spec__top">
+          <div class="spec__name"><span class="id">F2</span>135&deg; duotone gradient library</div>
+          <div class="spec__badge hot">majority</div>
+        </div>
+        <div class="stage" style="padding:22px">
+          <div class="f2grid">
+            <div class="g g1"><span>00d084&rarr;0693e3</span></div>
+            <div class="g g2"><span>triple-stop hero</span></div>
+            <div class="g g3"><span>faaca8&rarr;dad0ec</span></div>
+            <div class="g g4"><span>fdd79a&rarr;004a59</span></div>
+            <div class="g g5"><span>330968&rarr;31cdcf</span></div>
+            <div class="g g6"><span>020381&rarr;2874fc</span></div>
+          </div>
+        </div>
+        <div class="how"><b>Build:</b> a fixed set of diagonals at a <i>constant</i> <code>135deg</code> (verbatim across the majority of categories). Keep the angle constant for cohesion; apply to CTA / icon-tile / hero wash.</div>
+      </article>
+
+      <!-- F3 -->
+      <article class="spec reveal">
+        <div class="spec__top">
+          <div class="spec__name"><span class="id">F3</span>Per-vertical skin palettes</div>
+          <div class="spec__badge">verified</div>
+        </div>
+        <div class="stage" style="padding:20px 22px;justify-content:flex-start">
+          <div class="f3rows">
+            <div class="f3row"><div class="chips"><i class="mk1"></i><i class="mk2"></i><i class="mk3"></i></div><div class="nm"><b>Music / nightlife</b>dark + neon</div></div>
+            <div class="f3row"><div class="chips"><i class="ag1"></i><i class="ag2"></i><i class="ag3"></i></div><div class="nm"><b>Agency</b>dark + single accent</div></div>
+            <div class="f3row"><div class="chips"><i class="re1"></i><i class="re2"></i><i class="re3"></i></div><div class="nm"><b>Restaurant / beauty</b>warm earth</div></div>
+            <div class="f3row"><div class="chips"><i class="me1"></i><i class="me2"></i><i class="me3"></i></div><div class="nm"><b>Medical / finance</b>one-hue + tinted ink</div></div>
+            <div class="f3row"><div class="chips"><i class="au1"></i><i class="au2"></i><i class="au3"></i></div><div class="nm"><b>Automotive</b>slate + metallic amber</div></div>
+          </div>
+        </div>
+        <div class="how"><b>Build:</b> match accent to vertical emotion; each palette is the same 5-prop skin re-tinted (F1). CSS-only reskin.</div>
+      </article>
+
+      <!-- F4 -->
+      <article class="spec reveal">
+        <div class="spec__top">
+          <div class="spec__name"><span class="id">F4</span>Tinted-surface wash bands</div>
+          <div class="spec__badge">verified</div>
+        </div>
+        <div class="stage" style="padding:22px">
+          <div class="f4">
+            <div class="band w0">plain white <b>#ffffff</b></div>
+            <div class="band w1">warm tint <b>#FFF8F5</b></div>
+            <div class="band w2">cool tint <b>#f7fafd</b></div>
+            <div class="band w3">mint wash <b>#daffef</b></div>
+          </div>
+        </div>
+        <div class="how"><b>Build:</b> put whole sections on 4&ndash;8% brand-tint washes instead of plain white for calm, on-brand banding (medical idiom). CSS-only.</div>
+      </article>
+
+      <!-- F5 -->
+      <article class="spec reveal">
+        <div class="spec__top">
+          <div class="spec__name"><span class="id">F5</span>Accent-multiply scrim + hover-zoom</div>
+          <div class="spec__badge">~6/16</div>
+        </div>
+        <div class="stage">
+          <div class="f5frame">
+            <div class="photo"></div>
+            <div class="scrim"></div>
+            <div class="grad"></div>
+            <div class="cap"><small>color-graded to brand</small>Selected work</div>
+          </div>
+        </div>
+        <div class="how"><b>Build:</b> <code>background:accent;mix-blend-mode:multiply;opacity:.34</code> grades a photo to brand + a bottom scrim locks text contrast; image zooms <code>scale(1.08)</code> inside a clipped frame on hover. <i>Hover the frame.</i> (CSS-crafted "photo" stands in for a real image.)</div>
+      </article>
+
+      <!-- F6 -->
+      <article class="spec reveal">
+        <div class="spec__top">
+          <div class="spec__name"><span class="id">F6</span>Tinted-pastel secondary + flip button</div>
+          <div class="spec__badge">~3/16</div>
+        </div>
+        <div class="stage">
+          <div class="f6row">
+            <button class="btn primary" type="button">Primary</button>
+            <button class="btn secondary" type="button">Secondary</button>
+            <button class="btn flip" type="button">Ghost &rarr; fill</button>
+          </div>
+        </div>
+        <div class="how"><b>Build:</b> hierarchy-aware secondary = <code>color-mix(in srgb, accent 12%, white)</code>; the ghost flips via a <code>::before</code> fill-sweep <code>scaleX(0)&rarr;1</code> (TOP-12 #9). <i>Hover all three.</i></div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="b"><b>SGEN</b> Living Styleguide &middot; 02 &mdash; Depth / Type / Color</div>
+    <div class="links">
+      <a href="00-top12.html">00</a>
+      <a href="01-transitions-hero-motion.html">01</a>
+      <a href="03-layout-imagery-components.html">03</a>
+      <a href="04-signatures-tokens.html">04</a>
+      <a href="index.html">Index</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // ---- count-up (E3) ----
+  function countUp(el){
+    var to = parseFloat(el.getAttribute("data-to")) || 0;
+    if(reduce){ el.textContent = to; return; }
+    var dur = 1300, start = null;
+    function ease(t){ return 1 - Math.pow(1 - t, 3); }      // ease-out cubic
+    function step(ts){
+      if(start === null) start = ts;
+      var p = Math.min((ts - start) / dur, 1);
+      el.textContent = Math.round(ease(p) * to);
+      if(p < 1) requestAnimationFrame(step);
+      else el.textContent = to;
+    }
+    requestAnimationFrame(step);
+  }
+
+  // ---- scroll-reveal (TOP-12 #4) with sibling stagger ----
+  var revealEls = Array.prototype.slice.call(document.querySelectorAll(".reveal"));
+
+  if(reduce || !("IntersectionObserver" in window)){
+    revealEls.forEach(function(el){ el.classList.add("in-view"); });
+    document.querySelectorAll("[data-count]").forEach(countUp);
+    return;
+  }
+
+  // stagger siblings inside each grid
+  document.querySelectorAll(".grid").forEach(function(grid){
+    Array.prototype.slice.call(grid.children).forEach(function(child, i){
+      child.style.transitionDelay = (i % 4) * 80 + "ms";
+    });
+  });
+
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(!e.isIntersecting) return;
+      e.target.classList.add("in-view");
+      e.target.querySelectorAll("[data-count]").forEach(countUp);
+      io.unobserve(e.target);
+    });
+  }, { threshold: 0.18, rootMargin: "0px 0px -8% 0px" });
+
+  revealEls.forEach(function(el){ io.observe(el); });
+})();
+</script>
+
+</body>
+</html>

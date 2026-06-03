@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SGEN Section Blocks — Content / Blog Rows (live gallery)</title>
+<style>
+/* ============================================================
+   SGEN SECTION-BLOCK GALLERY — CONTENT / BLOG ROWS
+   charcoal #1a1a1a · red #d51522 · warm paper · system fonts
+   3 production-grade, drop-in SECTIONS:
+     A · post-card grid      (I2 cards + H1 zoom frame · G3 reflow)
+     B · featured + list     (lead story + compact list · G5 reflow)
+     C · editorial index     (lead editorial + numbered index · I6 rows)
+   Each block is REAL & copy-ready: full markup + inline CSS/JS, zero
+   external deps, system fonts, CSS-crafted gradient imagery (no images).
+   Card hover (lift + image-zoom) + reflow verified headless @390 + @1440.
+   prefers-reduced-motion fully respected.
+   ============================================================ */
+:root{
+  --ink:#1a1a1a;            /* charcoal */
+  --accent:#d51522;         /* SGEN red */
+  --accent-ink:#a50f19;     /* darker red for text-on-light */
+  --accent-2:#ff5a4d;
+  --paper:#f6f5f3;          /* warm off-white, never #fff */
+  --surface:#ffffff;        /* cards float on paper */
+  --muted:#626262;          /* recurs verbatim across the harvest */
+  --body:#4a4a4a;           /* desaturated tint of ink, not #666 */
+  --line:rgba(26,26,26,.10);
+  --line-2:rgba(26,26,26,.16);
+
+  --grad-brand:linear-gradient(135deg,#d51522,#7a0c13);
+
+  /* CSS-crafted "imagery" — gradient grounds standing in for photos (no external files) */
+  --img-1:linear-gradient(135deg,#2b3a67 0%,#5a6fa8 55%,#cdd6ee 100%);
+  --img-2:linear-gradient(135deg,#7a0c13 0%,#d51522 55%,#ff8a7a 100%);
+  --img-3:linear-gradient(135deg,#1f5d4c 0%,#3f9f80 55%,#cfeede 100%);
+  --img-4:linear-gradient(135deg,#5a3d8a 0%,#9a7bd0 55%,#e6dcf6 100%);
+  --img-5:linear-gradient(135deg,#8a5a14 0%,#d59a3a 55%,#f6e4c0 100%);
+  --img-6:linear-gradient(135deg,#16384a 0%,#2f7da0 55%,#bfe2ee 100%);
+
+  --r-chip:8px; --r-card:16px; --r-panel:24px; --r-pill:9999px;
+
+  --shadow-rest:0 2px 5px 0 rgba(0,0,0,.08);
+  --shadow-card:0 15px 30px 0 rgba(1,7,39,.13);        /* the universal one */
+  --shadow-hover:0 32px 64px -12px rgba(16,24,40,.18);
+
+  --ease:cubic-bezier(.05,.5,.3,1);   /* BeTheme signature settle */
+  --t-fast:.2s ease-out;
+  --t-img:.45s var(--ease);           /* H1 image-zoom timing */
+
+  --glass:blur(18px) saturate(180%);
+  --wrap:1180px;
+  --mono:ui-monospace,"SFMono-Regular",Menlo,Consolas,"Liberation Mono",monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --serif:ui-serif,Georgia,Cambria,"Times New Roman",Times,serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{
+  margin:0;background:var(--paper);color:var(--body);
+  font-family:var(--sans);font-size:16px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 24px}
+h1,h2,h3,h4{color:var(--ink);margin:0;letter-spacing:-.02em;line-height:1.06}
+p{margin:0 0 1em}
+a{color:var(--accent-ink);text-decoration:none}
+code{font-family:var(--mono);font-size:.86em}
+img{max-width:100%;display:block}
+
+/* ---------- glass top bar (matches styleguide 00–08) ---------- */
+.topnav{
+  position:sticky;top:0;z-index:50;
+  background:rgba(26,26,26,.92);
+  -webkit-backdrop-filter:var(--glass);backdrop-filter:var(--glass);
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+.topnav .wrap{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding-top:12px;padding-bottom:12px}
+.brand{display:flex;align-items:center;gap:10px;margin-right:auto;font-weight:700;color:#fff;letter-spacing:-.01em}
+.brand .dot{width:11px;height:11px;border-radius:3px;background:var(--accent);box-shadow:0 0 0 0 rgba(213,21,34,.6);animation:nudge 3s var(--ease) infinite}
+@keyframes nudge{0%,92%,100%{box-shadow:0 0 0 0 rgba(213,21,34,0)}96%{box-shadow:0 0 0 5px rgba(213,21,34,.18)}}
+.topnav a.nav{
+  color:#cfcfcf;font-size:13px;font-weight:600;letter-spacing:.01em;
+  padding:7px 12px;border-radius:var(--r-pill);transition:var(--t-fast);
+}
+.topnav a.nav:hover{color:#fff;background:rgba(255,255,255,.08)}
+.topnav a.nav[aria-current="page"]{color:#fff;background:var(--accent)}
+
+/* ---------- page header ---------- */
+.pagehead{position:relative;overflow:hidden;background:var(--ink);color:#fff;padding:72px 0 88px}
+.pagehead::before{content:"";position:absolute;width:520px;height:520px;left:-120px;top:-200px;border-radius:50%;filter:blur(76px);background:radial-gradient(circle,rgba(213,21,34,.50),transparent 70%);pointer-events:none}
+.pagehead::after{content:"";position:absolute;width:440px;height:440px;right:-110px;bottom:-220px;border-radius:50%;filter:blur(72px);background:radial-gradient(circle,rgba(213,21,34,.22),transparent 70%);pointer-events:none}
+.pagehead .wrap{position:relative;z-index:1}
+.pagehead h1{color:#fff;font-size:clamp(32px,5.2vw,60px);font-weight:300;letter-spacing:-.04em;line-height:1.0;margin:14px 0 0}
+.pagehead h1 b{font-weight:700}
+.pagehead .sub{margin-top:18px;max-width:640px;color:#cfcfcf;font-size:clamp(15px,2vw,18px);font-weight:300}
+.pagehead .crumbs{display:flex;gap:8px;align-items:center;font-size:12px;color:#9b9b9b;font-family:var(--mono)}
+.pagehead .crumbs a{color:#cfcfcf}.pagehead .crumbs a:hover{color:#fff}
+.pagehead .crumbs span{opacity:.5}
+
+/* ---------- shared eyebrow ---------- */
+.eyebrow{display:inline-flex;align-items:center;gap:10px;text-transform:uppercase;letter-spacing:.16em;font-size:12px;font-weight:700;color:var(--accent)}
+.eyebrow::before{content:"";width:34px;height:2px;background:var(--accent);display:inline-block}
+.pagehead .eyebrow{color:#ff5762}.pagehead .eyebrow::before{background:#ff5762}
+
+/* ---------- per-variant label rail ---------- */
+.specimen{border-top:1px solid var(--line)}
+.specimen:first-of-type{border-top:0}
+.label{padding:40px 0 0}
+.label .tag{display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-size:12px;font-weight:700;color:#fff;background:var(--ink);padding:6px 12px;border-radius:var(--r-pill)}
+.label .tag b{color:var(--accent-2)}
+.label h2{font-size:clamp(22px,3.2vw,32px);margin:16px 0 8px;font-weight:700}
+.label .when{max-width:760px;color:var(--muted);font-size:14.5px;margin:0}
+.label .when b{color:var(--ink)}
+.label .ids{margin-top:10px;display:flex;flex-wrap:wrap;gap:6px}
+.label .ids span{font-family:var(--mono);font-size:10.5px;color:var(--muted);background:rgba(26,26,26,.05);border:1px solid var(--line);padding:2px 8px;border-radius:var(--r-pill)}
+
+/* ---------- scroll-reveal + stagger ---------- */
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
+.reveal.in-view{opacity:1;transform:none}
+.stagger > *{opacity:0;transform:translateY(20px);transition:opacity .55s var(--ease),transform .55s var(--ease)}
+.stagger.in-view > *{opacity:1;transform:none}
+
+/* ============================================================
+   SHARED EDITORIAL BITS (used across the three blocks)
+   ============================================================ */
+/* the chip */
+.chip{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--accent-ink);background:rgba(213,21,34,.10);
+  border:1px solid rgba(213,21,34,.22);padding:4px 10px;border-radius:var(--r-pill);
+}
+.chip.alt{color:var(--ink);background:rgba(26,26,26,.05);border-color:var(--line)}
+/* meta row */
+.meta{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted);font-family:var(--mono)}
+.meta .dot{width:3px;height:3px;border-radius:50%;background:var(--muted);opacity:.6}
+/* author row */
+.byline{display:flex;align-items:center;gap:10px;margin-top:auto}
+.byline .av{width:30px;height:30px;border-radius:50%;flex:0 0 auto;border:1.5px solid var(--surface);box-shadow:var(--shadow-rest)}
+.byline .nm{font-size:12.5px;color:var(--ink);font-weight:600}
+.byline .nm small{display:block;color:var(--muted);font-weight:500;font-size:11px}
+/* read-on link */
+.readon{display:inline-flex;align-items:center;gap:7px;font-weight:700;font-size:13px;color:var(--accent-ink)}
+.readon .a{transition:transform var(--t-fast)}
+/* CSS-crafted media frame (H1 zoom on hover) */
+.frame{position:relative;overflow:hidden;border-radius:var(--r-card);background:var(--ink)}
+.frame .ph{position:absolute;inset:0;transition:transform var(--t-img)}
+.frame .ph::after{content:"";position:absolute;inset:0;background:
+  radial-gradient(120px 90px at 22% 30%,rgba(255,255,255,.30),transparent 60%),
+  linear-gradient(180deg,transparent 40%,rgba(0,0,0,.22) 100%)}
+.frame .scrim{position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,rgba(0,0,0,.45) 100%)}
+
+/* ============================================================
+   VARIANT A — POST-CARD GRID
+   3-up card grid · I2 lift card + H1 image-zoom · G3 reflow 3→2→1
+   ============================================================ */
+.vA{padding:34px 0 64px}
+.vA .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:8px}
+.vA .card{
+  display:flex;flex-direction:column;background:var(--surface);
+  border:1px solid var(--line);border-radius:var(--r-card);overflow:hidden;
+  box-shadow:var(--shadow-rest);
+  transition:transform var(--t-fast),box-shadow var(--t-fast),border-color var(--t-fast);
+}
+.vA .card:hover{transform:translateY(-6px);box-shadow:var(--shadow-card);border-color:rgba(213,21,34,.28)}
+.vA .card .frame{border-radius:0;aspect-ratio:16/10}
+.vA .card:hover .frame .ph{transform:scale(1.07)}          /* H1 image-zoom */
+.vA .card .chip{position:absolute;left:14px;top:14px;z-index:2;background:rgba(246,245,243,.92);color:var(--accent-ink);border-color:transparent;backdrop-filter:blur(6px)}
+.vA .card .body{display:flex;flex-direction:column;gap:12px;padding:20px 20px 22px;flex:1}
+.vA .card h3{font-size:19px;font-weight:700;line-height:1.22;letter-spacing:-.01em}
+.vA .card h3 a{color:var(--ink);transition:color var(--t-fast)}
+.vA .card:hover h3 a{color:var(--accent-ink)}
+.vA .card .dek{font-size:14px;color:var(--body);margin:0;line-height:1.55}
+.vA .card .byline{padding-top:14px;border-top:1px solid var(--line)}
+
+/* ============================================================
+   VARIANT B — FEATURED + LIST
+   one big lead story (left) + compact reading list (right) · G5 reflow
+   ============================================================ */
+.vB{padding:34px 0 64px}
+.vB .split{display:grid;grid-template-columns:1.25fr 1fr;gap:32px;align-items:start;margin-top:8px}
+/* the featured story */
+.vB .feat{
+  display:flex;flex-direction:column;background:var(--surface);
+  border:1px solid var(--line);border-radius:var(--r-panel);overflow:hidden;
+  box-shadow:var(--shadow-rest);
+  transition:transform var(--t-fast),box-shadow var(--t-fast),border-color var(--t-fast);
+}
+.vB .feat:hover{transform:translateY(-4px);box-shadow:var(--shadow-card);border-color:rgba(213,21,34,.26)}
+.vB .feat .frame{border-radius:0;aspect-ratio:16/9}
+.vB .feat:hover .frame .ph{transform:scale(1.05)}
+.vB .feat .chip{position:absolute;left:18px;top:18px;z-index:2;background:var(--accent);color:#fff;border-color:transparent}
+.vB .feat .body{padding:26px 28px 28px;display:flex;flex-direction:column;gap:14px}
+.vB .feat h3{font-size:clamp(22px,2.6vw,30px);font-weight:700;line-height:1.14;letter-spacing:-.02em}
+.vB .feat h3 a{color:var(--ink);transition:color var(--t-fast)}
+.vB .feat:hover h3 a{color:var(--accent-ink)}
+.vB .feat .dek{font-size:15.5px;color:var(--body);margin:0;line-height:1.6;max-width:56ch}
+.vB .feat .byline{margin-top:6px}
+/* the list */
+.vB .list{display:flex;flex-direction:column}
+.vB .list .lhead{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:6px}
+.vB .list .lhead .ti{font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.14em;color:var(--ink)}
+.vB .list .lhead a{font-size:12px;font-weight:700;color:var(--accent-ink)}
+.vB .row{
+  display:grid;grid-template-columns:72px 1fr;gap:14px;align-items:center;
+  padding:16px 12px;border-radius:var(--r-card);border:1px solid transparent;
+  transition:background var(--t-fast),border-color var(--t-fast),transform var(--t-fast);
+}
+.vB .row + .row{border-top:1px solid var(--line);border-radius:0}
+.vB .row:hover{background:var(--surface);border-color:var(--line);border-radius:var(--r-card);transform:translateX(3px);box-shadow:var(--shadow-rest)}
+.vB .row:hover + .row{border-top-color:transparent}
+.vB .row .thumb{aspect-ratio:1/1;border-radius:12px;overflow:hidden;position:relative;background:var(--ink)}
+.vB .row:hover .thumb .ph{transform:scale(1.08)}
+.vB .row .rb .chip{margin-bottom:7px;padding:2px 8px;font-size:10px}
+.vB .row .rb h4{font-size:14.5px;font-weight:700;line-height:1.3;color:var(--ink);letter-spacing:-.01em}
+.vB .row:hover .rb h4{color:var(--accent-ink)}
+.vB .row .rb .meta{margin-top:6px;font-size:11.5px}
+
+/* ============================================================
+   VARIANT C — EDITORIAL INDEX
+   a lead editorial entry + a numbered, hairline-divided index list
+   (I6 row idiom: number · title · dotted leader · category · date)
+   ============================================================ */
+.vC{padding:34px 0 70px}
+.vC .frameC{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:8px;
+  border:1px solid var(--line);border-radius:var(--r-panel);overflow:hidden;background:var(--surface);box-shadow:var(--shadow-rest)}
+/* lead editorial (left) */
+.vC .lead{position:relative;min-height:340px;display:flex;flex-direction:column;justify-content:flex-end;padding:34px 34px 32px;color:#fff;overflow:hidden;background:var(--ink)}
+.vC .lead .ph{position:absolute;inset:0;transition:transform var(--t-img)}
+.vC .lead .ph::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.12) 0%,rgba(0,0,0,.62) 100%)}
+.vC .lead:hover .ph{transform:scale(1.05)}
+.vC .lead > *{position:relative;z-index:1}
+.vC .lead .chip{background:rgba(255,255,255,.16);color:#fff;border-color:rgba(255,255,255,.28);backdrop-filter:blur(4px)}
+.vC .lead h3{color:#fff;font-family:var(--serif);font-size:clamp(24px,2.8vw,34px);font-weight:600;line-height:1.12;margin:14px 0 10px;letter-spacing:-.015em;max-width:18ch}
+.vC .lead h3 a{color:#fff}
+.vC .lead .dek{color:#e0e0e0;font-size:14.5px;margin:0 0 16px;max-width:46ch}
+.vC .lead .byline .nm{color:#fff}.vC .lead .byline .nm small{color:#c4c4c4}
+.vC .lead .byline .av{border-color:rgba(255,255,255,.6)}
+/* the index list (right) */
+.vC .index{display:flex;flex-direction:column;padding:8px 30px}
+.vC .index .ihead{padding:22px 0 12px;border-bottom:1px solid var(--line-2)}
+.vC .index .ihead .ti{font-family:var(--serif);font-size:18px;font-weight:600;color:var(--ink)}
+.vC .index .ihead .sb{font-size:12px;color:var(--muted);margin-top:2px}
+.vC .ix{
+  display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:baseline;
+  padding:16px 0;border-bottom:1px solid var(--line);
+  transition:padding var(--t-fast);
+}
+.vC .ix:last-child{border-bottom:0}
+.vC .ix .no{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--accent);min-width:24px}
+.vC .ix .it{min-width:0}
+.vC .ix .it a{color:var(--ink);font-weight:700;font-size:15.5px;line-height:1.3;letter-spacing:-.01em;transition:color var(--t-fast);display:inline-block}
+.vC .ix:hover .it a{color:var(--accent-ink)}
+.vC .ix .it .cat{display:block;font-size:11px;color:var(--muted);margin-top:4px;text-transform:uppercase;letter-spacing:.1em;font-weight:700}
+.vC .ix .dt{font-family:var(--mono);font-size:12px;color:var(--muted);white-space:nowrap;text-align:right}
+.vC .ix:hover{padding-left:6px}
+.vC .ix .arr{display:inline-block;color:var(--accent);transform:translateX(-4px);opacity:0;transition:opacity var(--t-fast),transform var(--t-fast)}
+.vC .ix:hover .arr{opacity:1;transform:translateX(0)}
+
+/* ---------- footer ---------- */
+.foot{background:var(--ink);color:#9b9b9b;padding:46px 0;font-size:13px;border-top:1px solid rgba(255,255,255,.08);margin-top:24px}
+.foot .wrap{display:flex;gap:18px;flex-wrap:wrap;align-items:center}
+.foot .brand{margin-right:auto;color:#fff}
+.foot a{color:#cfcfcf}.foot a:hover{color:#fff}
+.foot .meta{color:#626262;font-family:var(--mono);font-size:11px}
+
+/* ============================================================
+   RESPONSIVE — desktop-first step ladder (1024 / 767 / 479)
+   ============================================================ */
+@media (max-width:1024px){
+  .vA .grid{grid-template-columns:repeat(2,1fr);gap:20px}     /* G3: 3 → 2 */
+  .vB .split{grid-template-columns:1fr;gap:26px}              /* G5: featured stacks above list */
+  .vC .frameC{grid-template-columns:1fr}                       /* lead stacks above index */
+  .vC .index{padding:8px 26px 18px}
+}
+@media (max-width:767px){
+  .wrap{padding:0 18px}
+  .vA .grid{grid-template-columns:1fr;gap:18px}                /* G3: 2 → 1 */
+  .vB .row{grid-template-columns:64px 1fr;gap:12px;padding:14px 10px}
+  .vC .lead{min-height:260px;padding:26px 22px 24px}
+  .vC .index{padding:6px 22px 16px}
+  .vC .ix{grid-template-columns:auto 1fr;gap:10px}             /* date drops under title */
+  .vC .ix .dt{grid-column:2;text-align:left;margin-top:2px}
+  .pagehead{padding:54px 0 64px}
+  .label{padding:34px 0 0}
+}
+@media (max-width:479px){
+  .vB .row{grid-template-columns:1fr}                          /* G6: thumb stacks above text */
+  .vB .row .thumb{aspect-ratio:16/9;width:100%}
+}
+
+/* reduced motion — gate ALL motion */
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  .reveal,.stagger > *{opacity:1!important;transform:none!important}
+  .frame .ph,.vC .lead .ph,.vB .row .thumb .ph{transform:none!important}
+}
+</style>
+</head>
+<body>
+
+<!-- ===================== GLASS TOP BAR ===================== -->
+<nav class="topnav">
+  <div class="wrap">
+    <span class="brand"><span class="dot"></span>SGEN&nbsp;Sections</span>
+    <a class="nav" href="10-sections.html">← Sections hub</a>
+    <a class="nav" href="index.html">Styleguide index</a>
+    <a class="nav" href="sections-content-blog.html" aria-current="page">Content / Blog</a>
+  </div>
+</nav>
+
+<!-- ===================== PAGE HEADER ===================== -->
+<header class="pagehead">
+  <div class="wrap">
+    <div class="crumbs"><a href="index.html">Styleguide</a><span>/</span><a href="10-sections.html">Section blocks</a><span>/</span>Content · Blog</div>
+    <span class="eyebrow" style="margin-top:16px">Section blocks · drop-in</span>
+    <h1>Content / Blog <b>rows</b></h1>
+    <p class="sub">Three production-grade, copy-ready blog/content sections — a post-card grid, a featured-plus-list, and an editorial index. Each is a complete <b style="color:#fff">drop-in section</b> with card hover (lift + image-zoom) and a real responsive reflow. Self-contained: system fonts, CSS-crafted imagery, zero external dependencies.</p>
+  </div>
+</header>
+
+<!-- ============================================================
+     VARIANT A · POST-CARD GRID
+     ============================================================ -->
+<section class="specimen">
+  <div class="wrap">
+    <div class="label reveal">
+      <span class="tag"><b>A</b> · post-card grid</span>
+      <h2>Post-card grid</h2>
+      <p class="when"><b>When to use:</b> the default blog index, "latest articles", or a resources hub — when every post is a peer and you want a scannable, even grid. Cards lift on hover and the cover image zooms inside its clipped frame.</p>
+      <div class="ids"><span>I2 lift-card</span><span>H1 image-zoom</span><span>G3 reflow 3→2→1</span><span>E4 eyebrow</span></div>
+    </div>
+  </div>
+
+  <div class="vA">
+    <div class="wrap">
+      <span class="eyebrow reveal">From the journal</span>
+      <h2 class="reveal" style="font-size:clamp(24px,3.4vw,36px);margin:12px 0 4px">Latest writing</h2>
+      <div class="grid stagger reveal">
+
+        <article class="card">
+          <a class="frame" href="#" aria-label="Read: The quiet case for boring infrastructure">
+            <span class="ph" style="background:var(--img-1)"></span>
+            <span class="chip">Engineering</span>
+          </a>
+          <div class="body">
+            <div class="meta"><span>Mar 14</span><span class="dot"></span><span>6 min read</span></div>
+            <h3><a href="#">The quiet case for boring infrastructure</a></h3>
+            <p class="dek">Why the most reliable platforms are the ones nobody talks about — and how restraint compounds into uptime.</p>
+            <div class="byline">
+              <span class="av" style="background:var(--img-2)"></span>
+              <span class="nm">Dana Okonkwo<small>Principal Engineer</small></span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <a class="frame" href="#" aria-label="Read: Designing for the second glance">
+            <span class="ph" style="background:var(--img-4)"></span>
+            <span class="chip">Design</span>
+          </a>
+          <div class="body">
+            <div class="meta"><span>Mar 09</span><span class="dot"></span><span>4 min read</span></div>
+            <h3><a href="#">Designing for the second glance</a></h3>
+            <p class="dek">Premium isn't felt on the first look — it's the detail you only notice when you come back. A field guide to restraint.</p>
+            <div class="byline">
+              <span class="av" style="background:var(--img-3)"></span>
+              <span class="nm">Priya Raman<small>Design Lead</small></span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <a class="frame" href="#" aria-label="Read: What we learned shipping in public">
+            <span class="ph" style="background:var(--img-3)"></span>
+            <span class="chip">Product</span>
+          </a>
+          <div class="body">
+            <div class="meta"><span>Mar 02</span><span class="dot"></span><span>8 min read</span></div>
+            <h3><a href="#">What we learned shipping in public for a year</a></h3>
+            <p class="dek">Twelve months of changelogs, broken builds, and grateful users. The honest retrospective, numbers included.</p>
+            <div class="byline">
+              <span class="av" style="background:var(--img-5)"></span>
+              <span class="nm">Marcus Hale<small>Head of Product</small></span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <a class="frame" href="#" aria-label="Read: The cost of a fast no">
+            <span class="ph" style="background:var(--img-6)"></span>
+            <span class="chip">Strategy</span>
+          </a>
+          <div class="body">
+            <div class="meta"><span>Feb 26</span><span class="dot"></span><span>5 min read</span></div>
+            <h3><a href="#">The cost of a fast "no"</a></h3>
+            <p class="dek">Saying no quickly feels disciplined. Here's when it's actually the most expensive thing you can do.</p>
+            <div class="byline">
+              <span class="av" style="background:var(--img-1)"></span>
+              <span class="nm">Lena Vogt<small>VP Strategy</small></span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <a class="frame" href="#" aria-label="Read: A field manual for on-call sleep">
+            <span class="ph" style="background:var(--img-2)"></span>
+            <span class="chip">Engineering</span>
+          </a>
+          <div class="body">
+            <div class="meta"><span>Feb 19</span><span class="dot"></span><span>7 min read</span></div>
+            <h3><a href="#">A field manual for sleeping while on-call</a></h3>
+            <p class="dek">Paging hygiene, error budgets, and the cultural debt that turns a rota into a grind. Practical, tested, humane.</p>
+            <div class="byline">
+              <span class="av" style="background:var(--img-6)"></span>
+              <span class="nm">Sam Idris<small>SRE</small></span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <a class="frame" href="#" aria-label="Read: Pricing is a product surface">
+            <span class="ph" style="background:var(--img-5)"></span>
+            <span class="chip">Growth</span>
+          </a>
+          <div class="body">
+            <div class="meta"><span>Feb 11</span><span class="dot"></span><span>6 min read</span></div>
+            <h3><a href="#">Pricing is a product surface, not a spreadsheet</a></h3>
+            <p class="dek">Every tier is a sentence about who you're for. Treat the pricing page like the landing page it actually is.</p>
+            <div class="byline">
+              <span class="av" style="background:var(--img-4)"></span>
+              <span class="nm">Tomás Beck<small>Growth</small></span>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     VARIANT B · FEATURED + LIST
+     ============================================================ -->
+<section class="specimen" style="background:#efeeec">
+  <div class="wrap">
+    <div class="label reveal">
+      <span class="tag"><b>B</b> · featured + list</span>
+      <h2>Featured + list</h2>
+      <p class="when"><b>When to use:</b> a homepage "from the blog" teaser or a section front where one story leads and the rest are quick picks. The lead carries the image weight; the compact list packs five more above the fold. List rows shift and surface on hover.</p>
+      <div class="ids"><span>I2 lift-card</span><span>H1 image-zoom</span><span>G5 card→stack</span><span>G6 thumb collapse @479</span></div>
+    </div>
+  </div>
+
+  <div class="vB">
+    <div class="wrap">
+      <span class="eyebrow reveal">Insights</span>
+      <h2 class="reveal" style="font-size:clamp(24px,3.4vw,36px);margin:12px 0 4px">This week's reading</h2>
+      <div class="split reveal">
+
+        <!-- featured story -->
+        <article class="feat">
+          <a class="frame" href="#" aria-label="Read the feature: The interface is the org chart">
+            <span class="ph" style="background:var(--img-1)"></span>
+            <span class="scrim"></span>
+            <span class="chip">Featured</span>
+          </a>
+          <div class="body">
+            <div class="meta"><span>Editorial</span><span class="dot"></span><span>Mar 18</span><span class="dot"></span><span>11 min read</span></div>
+            <h3><a href="#">The interface is the org chart — and your users can feel it</a></h3>
+            <p class="dek">Conway's Law doesn't stop at the API boundary. The seams between your teams leak into the product as friction, dead ends, and "why are there two settings pages?" A long read on shipping coherence.</p>
+            <div class="byline">
+              <span class="av" style="background:var(--img-4)"></span>
+              <span class="nm">Dana Okonkwo<small>Principal Engineer · 6 articles</small></span>
+            </div>
+          </div>
+        </article>
+
+        <!-- compact list -->
+        <div class="list">
+          <div class="lhead"><span class="ti">More this week</span><a href="#">View all →</a></div>
+
+          <a class="row" href="#">
+            <span class="thumb"><span class="ph" style="background:var(--img-2)"></span></span>
+            <span class="rb">
+              <span class="chip alt">Design</span>
+              <h4>The empty state is your best onboarding</h4>
+              <span class="meta">Mar 16 · 4 min</span>
+            </span>
+          </a>
+
+          <a class="row" href="#">
+            <span class="thumb"><span class="ph" style="background:var(--img-3)"></span></span>
+            <span class="rb">
+              <span class="chip alt">Product</span>
+              <h4>Roadmaps lie. Here's what to ship instead</h4>
+              <span class="meta">Mar 13 · 7 min</span>
+            </span>
+          </a>
+
+          <a class="row" href="#">
+            <span class="thumb"><span class="ph" style="background:var(--img-5)"></span></span>
+            <span class="rb">
+              <span class="chip alt">Growth</span>
+              <h4>Churn is a content problem in a trench coat</h4>
+              <span class="meta">Mar 10 · 5 min</span>
+            </span>
+          </a>
+
+          <a class="row" href="#">
+            <span class="thumb"><span class="ph" style="background:var(--img-6)"></span></span>
+            <span class="rb">
+              <span class="chip alt">Engineering</span>
+              <h4>Delete the dashboard nobody opens</h4>
+              <span class="meta">Mar 07 · 3 min</span>
+            </span>
+          </a>
+
+          <a class="row" href="#">
+            <span class="thumb"><span class="ph" style="background:var(--img-4)"></span></span>
+            <span class="rb">
+              <span class="chip alt">Culture</span>
+              <h4>Async isn't a setting, it's a contract</h4>
+              <span class="meta">Mar 04 · 6 min</span>
+            </span>
+          </a>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     VARIANT C · EDITORIAL INDEX
+     ============================================================ -->
+<section class="specimen">
+  <div class="wrap">
+    <div class="label reveal">
+      <span class="tag"><b>C</b> · editorial index</span>
+      <h2>Editorial index</h2>
+      <p class="when"><b>When to use:</b> a magazine-style section front, a "table of contents" for a longform series, or any editorial brand that wants type and rhythm over thumbnails. One image-led lead anchors a numbered, hairline-divided index — dense, calm, and high-status.</p>
+      <div class="ids"><span>I6 list rows</span><span>E1 serif display</span><span>H1 lead zoom</span><span>G5 stack reflow</span></div>
+    </div>
+  </div>
+
+  <div class="vC">
+    <div class="wrap">
+      <span class="eyebrow reveal">Volume 04 · Spring</span>
+      <h2 class="reveal" style="font-family:var(--serif);font-size:clamp(26px,3.6vw,40px);font-weight:600;margin:12px 0 4px;letter-spacing:-.015em">In this issue</h2>
+      <div class="frameC reveal">
+
+        <!-- lead editorial -->
+        <a class="lead" href="#" aria-label="Read the lead: On building things that outlast the hype">
+          <span class="ph" style="background:var(--img-1)"></span>
+          <span class="chip">The cover story</span>
+          <h3>On building things that outlast the hype</h3>
+          <p class="dek">A meditation on patience, taste, and the unfashionable work of making something durable.</p>
+          <div class="byline">
+            <span class="av" style="background:var(--img-5)"></span>
+            <span class="nm">Lena Vogt<small>Editor-in-chief</small></span>
+          </div>
+        </a>
+
+        <!-- numbered index -->
+        <div class="index">
+          <div class="ihead">
+            <div class="ti">The index</div>
+            <div class="sb">Seven essays · 48 pages · read in order or wander</div>
+          </div>
+
+          <div class="ix">
+            <span class="no">01</span>
+            <span class="it"><a href="#">The discipline of leaving things out <span class="arr">→</span></a><span class="cat">Craft</span></span>
+            <span class="dt">Mar 20</span>
+          </div>
+          <div class="ix">
+            <span class="no">02</span>
+            <span class="it"><a href="#">A grammar for product motion <span class="arr">→</span></a><span class="cat">Design</span></span>
+            <span class="dt">Mar 18</span>
+          </div>
+          <div class="ix">
+            <span class="no">03</span>
+            <span class="it"><a href="#">Why your changelog is your best marketing <span class="arr">→</span></a><span class="cat">Growth</span></span>
+            <span class="dt">Mar 15</span>
+          </div>
+          <div class="ix">
+            <span class="no">04</span>
+            <span class="it"><a href="#">Interviews are a design problem <span class="arr">→</span></a><span class="cat">Hiring</span></span>
+            <span class="dt">Mar 12</span>
+          </div>
+          <div class="ix">
+            <span class="no">05</span>
+            <span class="it"><a href="#">The long, slow compounding of trust <span class="arr">→</span></a><span class="cat">Essay</span></span>
+            <span class="dt">Mar 09</span>
+          </div>
+          <div class="ix">
+            <span class="no">06</span>
+            <span class="it"><a href="#">Notes on writing for engineers <span class="arr">→</span></a><span class="cat">Craft</span></span>
+            <span class="dt">Mar 06</span>
+          </div>
+          <div class="ix">
+            <span class="no">07</span>
+            <span class="it"><a href="#">What "done" means, exactly <span class="arr">→</span></a><span class="cat">Process</span></span>
+            <span class="dt">Mar 03</span>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="foot">
+  <div class="wrap">
+    <span class="brand"><b style="color:#fff">SGEN</b> · Section blocks · Content / Blog</span>
+    <a href="10-sections.html">← Sections hub</a>
+    <a href="index.html">Styleguide index</a>
+    <a href="07-components.html">07 · Components</a>
+    <span class="meta">3 variants · I2 · H1 · G3 · G5 · I6 · zero external deps</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var revealEls = [].slice.call(document.querySelectorAll('.reveal'));
+  function stagger(el){
+    if(!el.classList.contains('stagger')) return;
+    var kids = el.children;
+    for(var i=0;i<kids.length;i++){ kids[i].style.transitionDelay = (i*70)+'ms'; }
+  }
+  if(reduce || !('IntersectionObserver' in window)){
+    revealEls.forEach(function(el){ el.classList.add('in-view'); });
+  } else {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){
+          stagger(e.target);
+          e.target.classList.add('in-view');
+          io.unobserve(e.target);
+        }
+      });
+    }, {threshold:0.12, rootMargin:'0px 0px -6% 0px'});
+    revealEls.forEach(function(el){ io.observe(el); });
+  }
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SGEN Section Blocks — Pricing (3 variants, live)</title>
+<style>
+/* ============================================================
+   SGEN SECTION-BLOCK GALLERY — PRICING
+   charcoal #1a1a1a · red #d51522 · warm paper · clean editorial
+   Three production-grade, drop-in pricing SECTIONS:
+     P1  3-tier cards, middle featured        (G6)
+     P2  comparison table → cards on mobile   (Comp6 table→cards @767)
+     P3  monthly / annual toggle              (stateful switch, F-state)
+   All copy uses the SGEN "all-inclusive" framing (one price,
+   everything in). Self-contained: system fonts, CSS-crafted
+   visuals, ZERO external deps, motion gated by prefers-reduced-motion.
+   ============================================================ */
+:root{
+  --ink:#1a1a1a;                 /* charcoal */
+  --paper:#f6f5f2;               /* warm off-white, never #fff */
+  --surface:#ffffff;
+  --muted:#626262;               /* recurs verbatim across the harvest */
+  --body:#4a4f55;                /* desaturated tint of ink, not #666 */
+  --hair:rgba(26,26,26,.10);
+  --accent:#d51522;              /* SGEN red */
+  --accent-ink:#a50f19;          /* darker red for text-on-light */
+  --accent-2:#ff5a4d;
+  --accent-tint:rgba(213,21,34,.10);
+  --accent-bd:rgba(213,21,34,.25);
+  --ok:#1f8a4c;   --ok-bg:#eaf6ee;   --ok-bd:rgba(31,138,76,.30);
+
+  /* radius — ONE language: 6 chip / 12 card / 20 panel / 8 button / pill */
+  --r-chip:6px; --r-card:12px; --r-panel:20px; --r-pill:9999px; --r-btn:8px;
+
+  /* shadow — ink/navy-tinted, never #000 (D1) */
+  --shadow-rest:0 2px 6px 0 rgba(26,26,26,.08);
+  --shadow-card:0 15px 30px 0 rgba(1,7,39,.13);      /* the universal one */
+  --shadow-hover:0 32px 64px -12px rgba(16,24,40,.18);
+  --shadow-feat:0 28px 60px -18px rgba(213,21,34,.34);
+
+  /* motion */
+  --ease:cubic-bezier(.05,.5,.3,1);
+  --t-fast:.18s ease-out;
+  --t-reveal:.6s var(--ease);
+  --ring:0 0 0 3px rgba(213,21,34,.40);
+
+  --grad-brand:linear-gradient(135deg,#d51522,#7a0c13);
+  --grad-feat-head:linear-gradient(135deg,#ff5a4d,#d51522 55%,#7a0c13);
+
+  --sys-sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --sys-serif:ui-serif,Georgia,Cambria,"Times New Roman",Times,serif;
+  --sys-mono:ui-monospace,"SFMono-Regular","Cascadia Code","Consolas",monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;overflow-x:hidden}   /* mandatory safety net, dogfooded */
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--sys-sans);font-size:16px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{font-family:var(--sys-serif);font-weight:600;letter-spacing:-.02em;line-height:1.08;margin:0}
+p{margin:0 0 1em}
+a{color:var(--accent-ink);text-decoration:none}
+code{font-family:var(--sys-mono);font-size:.84em;background:rgba(26,26,26,.05);padding:.06em .35em;border-radius:4px}
+
+/* ---------- top bar + sibling nav (matches styleguide chrome) ---------- */
+.topbar{
+  position:sticky;top:0;z-index:50;
+  background:rgba(246,245,242,.82);backdrop-filter:blur(14px) saturate(160%);
+  -webkit-backdrop-filter:blur(14px) saturate(160%);
+  border-bottom:1px solid var(--hair);
+}
+.topbar__in{max-width:1200px;margin:0 auto;padding:.7rem clamp(1rem,4vw,2.5rem);
+  display:flex;align-items:center;gap:1.2rem;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:.55rem;font-weight:800;letter-spacing:-.01em;font-family:var(--sys-sans)}
+.brand .dot{width:11px;height:11px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px rgba(213,21,34,.16)}
+.brand small{font-weight:600;color:var(--muted);letter-spacing:.02em}
+.sibnav{display:flex;gap:.2rem;flex-wrap:wrap;margin-left:auto}
+.sibnav a{
+  font-size:.74rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
+  color:var(--muted);padding:.35rem .6rem;border-radius:var(--r-chip);
+  transition:color var(--t-fast),background var(--t-fast)}
+.sibnav a:hover{color:var(--ink);background:rgba(26,26,26,.05)}
+.sibnav a[aria-current="page"]{color:#fff;background:var(--accent)}
+
+/* ---------- page header ---------- */
+.pagehead{max-width:1200px;margin:0 auto;padding:clamp(2.5rem,6vw,4.5rem) clamp(1rem,4vw,2.5rem) 1rem}
+.eyebrow{display:inline-flex;align-items:center;gap:.5rem;
+  font-family:var(--sys-sans);font-size:.72rem;font-weight:800;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--accent-ink)}
+.eyebrow::before{content:"";width:34px;height:2px;background:var(--accent);display:inline-block}
+.pagehead h1{font-size:clamp(2.2rem,6vw,4rem);margin:.5rem 0 .4rem;letter-spacing:-.035em}
+.pagehead p{max-width:70ch;color:var(--body);font-size:1.05rem}
+.legendbar{display:flex;gap:1.4rem;flex-wrap:wrap;margin-top:1.1rem;font-size:.82rem;color:var(--muted)}
+.legendbar b{color:var(--ink)}
+.legendbar .pin{display:inline-block;font-family:var(--sys-mono);font-size:.72rem;font-weight:700;color:var(--accent-ink);
+  background:var(--accent-tint);border:1px solid var(--accent-bd);padding:.05rem .4rem;border-radius:5px}
+
+/* ---------- variant scaffold (label + when-to-use caption) ---------- */
+.variant{max-width:1200px;margin:0 auto;padding:clamp(1.6rem,4vw,2.8rem) clamp(1rem,4vw,2.5rem) 0}
+.variant + .variant{margin-top:.4rem}
+.vhead{display:flex;align-items:baseline;gap:.8rem;flex-wrap:wrap;margin-bottom:.35rem}
+.vtag{font-family:var(--sys-mono);font-size:.78rem;font-weight:700;color:#fff;background:var(--ink);
+  padding:.18rem .55rem;border-radius:var(--r-chip);letter-spacing:.02em}
+.vhead h2{font-size:clamp(1.4rem,3.2vw,2rem)}
+.vhead .ids{font-family:var(--sys-mono);font-size:.72rem;color:var(--accent-ink);
+  background:var(--accent-tint);border:1px solid var(--accent-bd);padding:.08rem .45rem;border-radius:5px}
+.whenuse{color:var(--body);font-size:.95rem;max-width:80ch;margin:0 0 1.4rem;
+  border-left:3px solid var(--accent);padding-left:.85rem}
+.whenuse b{color:var(--ink)}
+.frame{background:var(--surface);border:1px solid var(--hair);border-radius:var(--r-panel);
+  box-shadow:var(--shadow-rest);overflow:hidden}
+
+/* ===========================================================
+   SHARED PRICING SECTION CHROME (used by P1, P2 internals, P3)
+   =========================================================== */
+.pricing{padding:clamp(2.4rem,5vw,4rem) clamp(1.1rem,4vw,3rem)}
+.pricing.dark{background:
+  radial-gradient(820px 420px at 88% -10%,rgba(213,21,34,.16),transparent 60%),
+  var(--ink);color:#e9e9ea}
+.pricing__head{text-align:center;max-width:62ch;margin:0 auto 2.2rem}
+.pricing__head .eyebrow{justify-content:center}
+.pricing.dark .eyebrow{color:var(--accent-2)}
+.pricing.dark .eyebrow::before{background:var(--accent-2)}
+.pricing__head h3{font-size:clamp(1.7rem,4vw,2.7rem);margin:.55rem 0 .5rem;letter-spacing:-.03em}
+.pricing.dark .pricing__head h3{color:#fff}
+.pricing__head p{color:var(--body);font-size:1.04rem;margin:0}
+.pricing.dark .pricing__head p{color:#bdbec1}
+.allin{display:inline-flex;align-items:center;gap:.5rem;margin-top:1rem;
+  font-size:.78rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--accent-ink);background:var(--accent-tint);border:1px solid var(--accent-bd);
+  padding:.4rem .85rem;border-radius:var(--r-pill)}
+.pricing.dark .allin{color:#ffd2cf;background:rgba(255,90,77,.14);border-color:rgba(255,90,77,.34)}
+.allin::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px var(--accent-tint)}
+
+/* ---------- tier card (G6) ---------- */
+.tiers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.1rem;align-items:stretch}
+.tier{position:relative;display:flex;flex-direction:column;background:var(--surface);
+  border:1px solid var(--hair);border-radius:var(--r-card);padding:1.6rem 1.5rem 1.7rem;
+  box-shadow:var(--shadow-rest);transition:transform var(--t-fast),box-shadow var(--t-fast),border-color var(--t-fast)}
+.tier:hover{transform:translateY(-4px);box-shadow:var(--shadow-card);border-color:var(--accent-bd)}
+.tier__name{font-family:var(--sys-sans);font-size:.78rem;font-weight:800;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--muted)}
+.tier__blurb{color:var(--body);font-size:.92rem;margin:.5rem 0 1.1rem;min-height:2.6em}
+.tier__price{display:flex;align-items:flex-end;gap:.25rem;line-height:1}
+.tier__cur{font-size:1.3rem;font-weight:700;color:var(--ink);transform:translateY(-.55rem)}
+.tier__amt{font-family:var(--sys-serif);font-size:clamp(2.6rem,6vw,3.4rem);font-weight:700;
+  color:var(--ink);letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+.tier__per{font-size:.92rem;color:var(--muted);font-weight:600;padding-bottom:.55rem}
+.tier__note{font-size:.82rem;color:var(--muted);margin:.5rem 0 1.2rem}
+.tier__note b{color:var(--ink)}
+.tier__cta{display:block;text-align:center;font-weight:700;font-size:.96rem;
+  padding:.8rem 1rem;border-radius:var(--r-btn);border:1.5px solid var(--ink);
+  color:var(--ink);background:transparent;transition:all var(--t-fast);cursor:pointer;min-height:44px}
+.tier__cta:hover{background:var(--ink);color:#fff}
+.tier__cta:focus-visible{outline:none;box-shadow:var(--ring)}
+.tier__feats{list-style:none;margin:1.3rem 0 0;padding:1.3rem 0 0;border-top:1px solid var(--hair);
+  display:flex;flex-direction:column;gap:.7rem;font-size:.92rem;color:var(--body)}
+.tier__feats li{position:relative;padding-left:1.7rem;line-height:1.45}
+.tier__feats li::before{content:"";position:absolute;left:0;top:.15rem;width:18px;height:18px;border-radius:50%;
+  background:var(--ok-bg);border:1px solid var(--ok-bd)}
+.tier__feats li::after{content:"";position:absolute;left:5px;top:.42rem;width:7px;height:4px;
+  border-left:2px solid var(--ok);border-bottom:2px solid var(--ok);transform:rotate(-45deg)}
+.tier__feats li.off{color:var(--muted)}
+.tier__feats li.off::before{background:rgba(26,26,26,.04);border-color:var(--hair)}
+.tier__feats li.off::after{left:5px;top:.5rem;width:8px;height:0;border-left:none;border-bottom:2px solid #b9bbbe;transform:none}
+.tier__feats li b{color:var(--ink)}
+
+/* featured (middle) tier — accent header, scale, ribbon, deeper shadow */
+.tier.feat{border-color:var(--accent);box-shadow:var(--shadow-feat);transform:scale(1.045);z-index:2}
+.tier.feat:hover{transform:scale(1.045) translateY(-4px)}
+.tier.feat::before{content:"";position:absolute;inset:0 0 auto 0;height:6px;border-radius:var(--r-card) var(--r-card) 0 0;
+  background:var(--grad-feat-head)}
+.tier.feat .tier__cta{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 8px 20px -6px rgba(213,21,34,.5)}
+.tier.feat .tier__cta:hover{background:var(--accent-ink);border-color:var(--accent-ink)}
+.tier.feat .tier__amt,.tier.feat .tier__cur{color:var(--accent-ink)}
+.ribbon{position:absolute;top:-13px;left:50%;transform:translateX(-50%);
+  font-size:.7rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#fff;
+  background:var(--grad-brand);padding:.34rem .85rem;border-radius:var(--r-pill);
+  box-shadow:0 8px 18px -6px rgba(213,21,34,.55);white-space:nowrap}
+.guarantee{text-align:center;margin-top:1.8rem;font-size:.86rem;color:var(--muted)}
+.guarantee b{color:var(--ink)}
+
+/* ===========================================================
+   P2 — COMPARISON TABLE  →  CARDS ON MOBILE  (Comp6)
+   =========================================================== */
+.cmp-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.cmp{width:100%;border-collapse:separate;border-spacing:0;min-width:640px;font-size:.94rem}
+.cmp caption{text-align:left;font-size:.8rem;color:var(--muted);padding:0 0 .8rem}
+.cmp th,.cmp td{padding:.85rem 1rem;text-align:center;border-bottom:1px solid var(--hair);vertical-align:middle}
+.cmp thead th{position:sticky;top:0;background:var(--surface);z-index:1}
+.cmp thead .plan{padding-top:.4rem;padding-bottom:1.1rem}
+.cmp .rowhead{text-align:left;font-weight:700;color:var(--ink);background:var(--paper);white-space:nowrap}
+.cmp .grouphead td{text-align:left;font-family:var(--sys-sans);font-weight:800;font-size:.74rem;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--accent-ink);background:var(--accent-tint);
+  border-bottom:1px solid var(--accent-bd)}
+.cmp .plan .pn{font-family:var(--sys-sans);font-weight:800;font-size:.78rem;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--muted)}
+.cmp .plan .pp{font-family:var(--sys-serif);font-size:1.9rem;font-weight:700;color:var(--ink);
+  letter-spacing:-.03em;line-height:1.1;display:block;margin:.15rem 0 .05rem;font-variant-numeric:tabular-nums}
+.cmp .plan .pp small{font-size:.5em;font-weight:600;color:var(--muted);letter-spacing:0}
+.cmp .plan.is-feat{background:var(--accent-tint)}
+.cmp .plan.is-feat .pp{color:var(--accent-ink)}
+.cmp col.col-feat{background:rgba(213,21,34,.05)}
+.cmp .yes,.cmp .no{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;font-weight:800;font-size:.9rem}
+.cmp .yes{background:var(--ok-bg);color:var(--ok);border:1px solid var(--ok-bd)}
+.cmp .no{background:rgba(26,26,26,.05);color:#aeb0b3;border:1px solid var(--hair)}
+.cmp td.val{color:var(--ink);font-weight:600}
+.cmp tfoot td{padding-top:1.3rem;border-bottom:none}
+.cmp .cta{display:inline-block;font-weight:700;font-size:.9rem;padding:.7rem 1.3rem;border-radius:var(--r-btn);
+  border:1.5px solid var(--ink);color:var(--ink);transition:all var(--t-fast);min-height:44px;line-height:1.6}
+.cmp .cta:hover{background:var(--ink);color:#fff}
+.cmp .cta.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.cmp .cta.primary:hover{background:var(--accent-ink);border-color:var(--accent-ink)}
+
+/* ===========================================================
+   P3 — MONTHLY / ANNUAL TOGGLE
+   =========================================================== */
+.toggle-row{display:flex;align-items:center;justify-content:center;gap:1rem;flex-wrap:wrap;margin:1.4rem 0 .4rem}
+.toggle-row .tg-lbl{font-weight:700;font-size:.95rem;color:var(--muted);transition:color var(--t-fast)}
+.toggle-row .tg-lbl.on{color:var(--ink)}
+.pricing.dark .toggle-row .tg-lbl{color:#9a9c9f}
+.pricing.dark .toggle-row .tg-lbl.on{color:#fff}
+.switch{position:relative;display:inline-flex;align-items:center;width:64px;height:34px;flex:0 0 auto;
+  background:rgba(26,26,26,.14);border:1px solid var(--hair);border-radius:var(--r-pill);
+  cursor:pointer;padding:0;transition:background var(--t-fast)}
+.switch[aria-checked="true"]{background:var(--accent);border-color:var(--accent)}
+.switch::after{content:"";position:absolute;left:3px;top:50%;transform:translateY(-50%);
+  width:26px;height:26px;border-radius:50%;background:#fff;box-shadow:0 2px 5px rgba(0,0,0,.28);
+  transition:transform var(--t-fast)}
+.switch[aria-checked="true"]::after{transform:translate(30px,-50%)}
+.switch:focus-visible{outline:none;box-shadow:var(--ring)}
+.save-badge{display:inline-flex;align-items:center;gap:.4rem;font-size:.78rem;font-weight:800;
+  letter-spacing:.04em;color:var(--ok);background:var(--ok-bg);border:1px solid var(--ok-bd);
+  padding:.3rem .7rem;border-radius:var(--r-pill);opacity:0;transform:translateX(-6px);
+  transition:opacity var(--t-fast),transform var(--t-fast)}
+.save-badge.show{opacity:1;transform:none}
+.tier__amt[data-animating]{will-change:contents}
+.billed{font-size:.82rem;color:var(--muted);margin-top:.35rem;min-height:1.2em}
+.billed b{color:var(--ink)}
+
+/* ---------- scroll reveal (gated by reduced-motion) ---------- */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+.stagger.in > *{animation:rise .55s var(--ease) backwards}
+.stagger.in > *:nth-child(2){animation-delay:.08s}
+.stagger.in > *:nth-child(3){animation-delay:.16s}
+@keyframes rise{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+
+/* ---------- footer ---------- */
+.foot{border-top:1px solid var(--hair);margin-top:3rem}
+.foot__in{max-width:1200px;margin:0 auto;padding:1.6rem clamp(1rem,4vw,2.5rem);
+  display:flex;gap:1.2rem;flex-wrap:wrap;align-items:center;font-size:.82rem;color:var(--muted)}
+.foot__in a{color:var(--muted);font-weight:700}
+.foot__in a:hover{color:var(--accent-ink)}
+.foot__in .meta{margin-left:auto;font-family:var(--sys-mono);font-size:.72rem}
+
+/* ===========================================================
+   RESPONSIVE  (Comp6 + G6 + type ladder + 44px taps + ≥16px inputs)
+   =========================================================== */
+
+/* tablet portrait: 3-up tiers → 2-up, featured de-scales so it doesn't crop */
+@media (max-width:959px){
+  .tiers{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .tier.feat{transform:none;order:-1;grid-column:1 / -1}     /* featured leads, full width */
+  .tier.feat:hover{transform:translateY(-4px)}
+}
+
+/* mobile ≤767: single-column stack everywhere; table → cards */
+@media (max-width:767px){
+  .tiers{grid-template-columns:1fr}
+  .tier.feat{grid-column:auto}
+  .pricing__head h3{font-size:clamp(1.5rem,7vw,2rem)}
+
+  /* --- Comp6: comparison table reflows to stacked plan cards --- */
+  .cmp-wrap{overflow:visible}
+  .cmp{min-width:0;font-size:1rem}
+  .cmp caption{padding-bottom:1rem}
+  .cmp thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+  .cmp colgroup,.cmp col{display:none}
+  .cmp tbody{display:block}
+  .cmp .grouphead{display:block;margin:1.4rem 0 .2rem}
+  .cmp .grouphead td{display:block;border-radius:var(--r-chip)}
+  .cmp tbody tr:not(.grouphead){display:grid;grid-template-columns:1fr 1fr 1fr;gap:.4rem;
+    background:var(--surface);border:1px solid var(--hair);border-radius:var(--r-card);
+    margin-bottom:.55rem;padding:.7rem .85rem;box-shadow:var(--shadow-rest)}
+  .cmp tbody tr:not(.grouphead) .rowhead{grid-column:1 / -1;text-align:left;background:transparent;
+    border-bottom:1px solid var(--hair);padding:0 0 .55rem;margin-bottom:.45rem}
+  .cmp tbody td{border-bottom:none;padding:.2rem .2rem;text-align:center;display:flex;
+    flex-direction:column;align-items:center;justify-content:flex-start;gap:.25rem;font-size:.9rem}
+  .cmp tbody td::before{content:attr(data-label);display:block;font-family:var(--sys-sans);
+    font-weight:800;font-size:.62rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+  .cmp tbody td.rowhead::before{content:none}
+  /* per-card footer CTAs as a stacked block of plan buttons */
+  .cmp tfoot{display:block;margin-top:.6rem}
+  .cmp tfoot tr{display:grid;grid-template-columns:1fr;gap:.6rem}
+  .cmp tfoot td{display:block;padding:0}
+  .cmp tfoot td::before{content:attr(data-label);display:block;font-weight:800;font-size:.7rem;
+    letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:.35rem}
+  .cmp .cta{display:block;width:100%}
+
+  .toggle-row{gap:.7rem}
+}
+
+/* very small ≤479: featured ribbon + scale already neutralised above */
+@media (max-width:479px){
+  .pricing{padding-left:1rem;padding-right:1rem}
+  .tier{padding:1.4rem 1.2rem 1.5rem}
+  .cmp tbody tr:not(.grouphead){grid-template-columns:1fr 1fr}
+  .cmp tbody tr:not(.grouphead) .rowhead{grid-column:1 / -1}
+}
+
+/* reduced-motion: kill all reveals, hovers-translate, switch glide */
+@media (prefers-reduced-motion:reduce){
+  *{scroll-behavior:auto !important}
+  .reveal{opacity:1 !important;transform:none !important;transition:none}
+  .stagger.in > *{animation:none}
+  .tier{transition:box-shadow var(--t-fast),border-color var(--t-fast)}
+  .tier:hover,.tier.feat:hover{transform:none}
+  .switch::after,.switch[aria-checked="true"]::after{transition:none}
+  .save-badge{transition:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ TOP BAR + SIBLING NAV ============ -->
+<header class="topbar">
+  <div class="topbar__in">
+    <div class="brand"><span class="dot"></span>SGEN <small>Section Blocks</small></div>
+    <nav class="sibnav" aria-label="Section gallery navigation">
+      <a href="10-sections.html">&larr; Sections hub</a>
+      <a href="sections-pricing.html" aria-current="page">Pricing</a>
+      <a href="07-components.html">07 · Components</a>
+      <a href="index.html">Index</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ============ PAGE HEADER ============ -->
+<div class="pagehead">
+  <span class="eyebrow">Section block — Pricing · 3 variants, live</span>
+  <h1>Pricing sections</h1>
+  <p>Three production-grade, drop-in pricing <b>sections</b> — not described, actually rendered with working CSS &amp; JS. Each is a complete band you could lift into a real page. Copy throughout uses the SGEN <b>all-inclusive</b> framing: one price, everything in, no per-seat surcharges, no add-on tax. On the SGEN chrome — charcoal <code>#1a1a1a</code>, red <code>#d51522</code>, one 8&nbsp;px button radius, the ink-tinted shadow family, motion gated behind <code>prefers-reduced-motion</code>.</p>
+  <div class="legendbar">
+    <span><b>Pattern IDs</b> — <span class="pin">G6</span> tier cards · <span class="pin">Comp6</span> table&rarr;cards · <span class="pin">I6</span> inclusion rows</span>
+    <span><b>Verified responsive</b> at 390 &amp; 1440, headless.</span>
+    <span>Zero external deps · system fonts · CSS-crafted visuals.</span>
+  </div>
+</div>
+
+<!-- ===================================================================
+     VARIANT P1 — 3-TIER CARDS, MIDDLE FEATURED  (G6)
+     =================================================================== -->
+<section class="variant">
+  <div class="vhead">
+    <span class="vtag">P1</span>
+    <h2>Three-tier cards, middle featured</h2>
+    <span class="ids">G6 · middle scale(1.045) + ribbon</span>
+  </div>
+  <p class="whenuse"><b>When to use:</b> the default close for any productized offer with 2–4 plans. Three is the sweet spot — anchor low, push the middle. Reach for this the moment a visitor's job is to <b>pick a plan</b> (SaaS, membership, course, retainer). The featured tier is color-coded to the one accent so the conversion path reads at a glance.</p>
+
+  <div class="frame">
+    <div class="pricing reveal">
+      <div class="pricing__head">
+        <span class="eyebrow">Plans</span>
+        <h3>One price. Everything in.</h3>
+        <p>No per-seat creep, no &ldquo;contact sales&rdquo; wall, no surprise overage. Every plan ships the full platform — you&rsquo;re only choosing scale.</p>
+        <div class="allin">All-inclusive &middot; no hidden add-ons</div>
+      </div>
+
+      <div class="tiers stagger">
+        <!-- Tier 1 -->
+        <div class="tier">
+          <span class="tier__name">Starter</span>
+          <p class="tier__blurb">For a solo operator getting the whole stack in one place.</p>
+          <div class="tier__price"><span class="tier__cur">$</span><span class="tier__amt">29</span><span class="tier__per">/mo</span></div>
+          <p class="tier__note">Billed monthly &middot; <b>everything below included</b></p>
+          <button type="button" class="tier__cta">Start free trial</button>
+          <ul class="tier__feats">
+            <li>Up to <b>3 projects</b></li>
+            <li>All editor + publishing tools</li>
+            <li>Custom domain, SSL included</li>
+            <li>Community support</li>
+            <li class="off">Team roles &amp; permissions</li>
+            <li class="off">Priority support &amp; SLA</li>
+          </ul>
+        </div>
+
+        <!-- Tier 2 — FEATURED -->
+        <div class="tier feat">
+          <span class="ribbon">Most popular</span>
+          <span class="tier__name">Studio</span>
+          <p class="tier__blurb">For a working team that ships every week — the all-inclusive default.</p>
+          <div class="tier__price"><span class="tier__cur">$</span><span class="tier__amt">79</span><span class="tier__per">/mo</span></div>
+          <p class="tier__note">Billed monthly &middot; <b>unlimited everything</b></p>
+          <button type="button" class="tier__cta">Start free trial</button>
+          <ul class="tier__feats">
+            <li><b>Unlimited</b> projects</li>
+            <li>All editor + publishing tools</li>
+            <li>Custom domain, SSL included</li>
+            <li>Team roles &amp; permissions</li>
+            <li>Priority support &amp; SLA</li>
+            <li>Advanced analytics &amp; exports</li>
+          </ul>
+        </div>
+
+        <!-- Tier 3 -->
+        <div class="tier">
+          <span class="tier__name">Scale</span>
+          <p class="tier__blurb">For an org that needs governance, SSO and a real SLA.</p>
+          <div class="tier__price"><span class="tier__cur">$</span><span class="tier__amt">199</span><span class="tier__per">/mo</span></div>
+          <p class="tier__note">Billed monthly &middot; <b>everything in Studio, plus</b></p>
+          <button type="button" class="tier__cta">Start free trial</button>
+          <ul class="tier__feats">
+            <li>Everything in <b>Studio</b></li>
+            <li>SSO / SAML &amp; audit log</li>
+            <li>Dedicated success manager</li>
+            <li>99.9% uptime SLA</li>
+            <li>Custom data residency</li>
+            <li>Onboarding &amp; migration help</li>
+          </ul>
+        </div>
+      </div>
+
+      <p class="guarantee"><b>14-day free trial.</b> No card to start. Cancel anytime &mdash; you keep what you built.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================================
+     VARIANT P2 — COMPARISON TABLE  →  CARDS ON MOBILE  (Comp6)
+     =================================================================== -->
+<section class="variant">
+  <div class="vhead">
+    <span class="vtag">P2</span>
+    <h2>Comparison table &rarr; cards on mobile</h2>
+    <span class="ids">Comp6 · table reflows to per-plan cards @767</span>
+  </div>
+  <p class="whenuse"><b>When to use:</b> when buyers compare line-by-line before committing — feature-dense products, plan-overlap questions, &ldquo;what exactly do I lose on the cheaper tier?&rdquo; The desktop grid scans rows fast; on phones the same table <b>reflows to one card per plan</b> (no crushed table, no pinch-zoom) via the <code>Comp6</code> table&rarr;cards rule with <code>data-label</code> echoes.</p>
+
+  <div class="frame">
+    <div class="pricing reveal">
+      <div class="pricing__head">
+        <span class="eyebrow">Compare</span>
+        <h3>Every plan, every feature, side by side</h3>
+        <p>One price per plan, all-inclusive. The only thing that changes across columns is scale &mdash; never which features are &ldquo;unlocked&rdquo; behind an upsell.</p>
+        <div class="allin">All-inclusive &middot; no feature paywalls</div>
+      </div>
+
+      <div class="cmp-wrap">
+        <table class="cmp">
+          <caption>Pricing shown per month, billed monthly. All plans include unlimited bandwidth.</caption>
+          <colgroup>
+            <col><col><col class="col-feat"><col>
+          </colgroup>
+          <thead>
+            <tr>
+              <th scope="col" class="rowhead">&nbsp;</th>
+              <th scope="col" class="plan"><span class="pn">Starter</span><span class="pp">$29<small>/mo</small></span></th>
+              <th scope="col" class="plan is-feat"><span class="pn">Studio</span><span class="pp">$79<small>/mo</small></span></th>
+              <th scope="col" class="plan"><span class="pn">Scale</span><span class="pp">$199<small>/mo</small></span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="grouphead"><td colspan="4">Build &amp; publish</td></tr>
+            <tr>
+              <th scope="row" class="rowhead">Projects</th>
+              <td class="val" data-label="Starter">3</td>
+              <td class="val" data-label="Studio">Unlimited</td>
+              <td class="val" data-label="Scale">Unlimited</td>
+            </tr>
+            <tr>
+              <th scope="row" class="rowhead">Custom domain + SSL</th>
+              <td data-label="Starter"><span class="yes" aria-label="Included">&checkmark;</span></td>
+              <td data-label="Studio"><span class="yes" aria-label="Included">&checkmark;</span></td>
+              <td data-label="Scale"><span class="yes" aria-label="Included">&checkmark;</span></td>
+            </tr>
+            <tr>
+              <th scope="row" class="rowhead">All editor &amp; publishing tools</th>
+              <td data-label="Starter"><span class="yes" aria-label="Included">&checkmark;</span></td>
+              <td data-label="Studio"><span class="yes" aria-label="Included">&checkmark;</span></td>
+              <td data-label="Scale"><span class="yes" aria-label="Included">&checkmark;</span></td>
+            </tr>
+
+            <tr class="grouphead"><td colspan="4">Team &amp; collaboration</td></tr>
+            <tr>
+              <th scope="row" class="rowhead">Team seats</th>
+              <td class="val" data-label="Starter">1</td>
+              <td class="val" data-label="Studio">Unlimited</td>
+              <td class="val" data-label="Scale">Unlimited</td>
+            </tr>
+            <tr>
+              <th scope="row" class="rowhead">Roles &amp; permissions</th>
+              <td data-label="Starter"><span class="no" aria-label="Not included">&minus;</span></td>
+              <td data-label="Studio"><span class="yes" aria-label="Included">&checkmark;</span></td>
+              <td data-label="Scale"><span class="yes" aria-label="Included">&checkmark;</span></td>
+            </tr>
+            <tr>
+              <th scope="row" class="rowhead">SSO / SAML + audit log</th>
+              <td data-label="Starter"><span class="no" aria-label="Not included">&minus;</span></td>
+              <td data-label="Studio"><span class="no" aria-label="Not included">&minus;</span></td>
+              <td data-label="Scale"><span class="yes" aria-label="Included">&checkmark;</span></td>
+            </tr>
+
+            <tr class="grouphead"><td colspan="4">Support &amp; reliability</td></tr>
+            <tr>
+              <th scope="row" class="rowhead">Support</th>
+              <td class="val" data-label="Starter">Community</td>
+              <td class="val" data-label="Studio">Priority</td>
+              <td class="val" data-label="Scale">Dedicated CSM</td>
+            </tr>
+            <tr>
+              <th scope="row" class="rowhead">Uptime SLA</th>
+              <td data-label="Starter"><span class="no" aria-label="Not included">&minus;</span></td>
+              <td data-label="Studio"><span class="no" aria-label="Not included">&minus;</span></td>
+              <td class="val" data-label="Scale">99.9%</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td class="rowhead">&nbsp;</td>
+              <td data-label="Starter"><a href="#" class="cta">Choose Starter</a></td>
+              <td data-label="Studio"><a href="#" class="cta primary">Choose Studio</a></td>
+              <td data-label="Scale"><a href="#" class="cta">Choose Scale</a></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <p class="guarantee"><b>Same all-inclusive promise on every row.</b> Switch plans any time &mdash; we prorate to the day.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================================
+     VARIANT P3 — MONTHLY / ANNUAL TOGGLE  (stateful switch)
+     =================================================================== -->
+<section class="variant">
+  <div class="vhead">
+    <span class="vtag">P3</span>
+    <h2>Monthly / annual toggle</h2>
+    <span class="ids">Stateful switch · prices recompute · save badge</span>
+  </div>
+  <p class="whenuse"><b>When to use:</b> when you want to nudge buyers to annual without two separate pricing pages. One accessible switch flips every price in place and reveals the annual saving. Sits on a dark band so the accent does the persuading. The toggle is a <b>state control, not a scroll asset</b> &mdash; it ships no sticky/scroll behaviour; it simply remembers its <code>aria-checked</code> state and recomputes the figures.</p>
+
+  <div class="frame">
+    <div class="pricing dark reveal">
+      <div class="pricing__head">
+        <span class="eyebrow">Choose your cadence</span>
+        <h3>Pay monthly, or save with annual</h3>
+        <p>Every plan is all-inclusive at either cadence &mdash; annual just trades flexibility for two months free.</p>
+
+        <div class="toggle-row" role="group" aria-label="Billing period">
+          <span class="tg-lbl on" id="lblMonthly">Monthly</span>
+          <button type="button" class="switch" id="billSwitch" role="switch" aria-checked="false"
+                  aria-labelledby="lblMonthly lblAnnual">
+            <span class="visually-hidden"></span>
+          </button>
+          <span class="tg-lbl" id="lblAnnual">Annual</span>
+          <span class="save-badge" id="saveBadge">Save 17% &mdash; 2 months free</span>
+        </div>
+        <p class="billed" id="billedNote">Billed monthly. Switch to annual any time.</p>
+      </div>
+
+      <div class="tiers stagger" style="color:var(--ink)">
+        <!-- Tier 1 -->
+        <div class="tier">
+          <span class="tier__name">Starter</span>
+          <p class="tier__blurb">For a solo operator getting the whole stack in one place.</p>
+          <div class="tier__price">
+            <span class="tier__cur">$</span>
+            <span class="tier__amt" id="p1" data-monthly="29" data-annual="24">29</span>
+            <span class="tier__per">/mo</span>
+          </div>
+          <p class="tier__note" data-billed>Billed monthly &middot; <b>everything in</b></p>
+          <button type="button" class="tier__cta">Start free trial</button>
+          <ul class="tier__feats">
+            <li>Up to <b>3 projects</b></li>
+            <li>All editor + publishing tools</li>
+            <li>Custom domain, SSL included</li>
+            <li>Community support</li>
+          </ul>
+        </div>
+
+        <!-- Tier 2 — FEATURED -->
+        <div class="tier feat">
+          <span class="ribbon">Best value</span>
+          <span class="tier__name">Studio</span>
+          <p class="tier__blurb">For a working team that ships every week — the all-inclusive default.</p>
+          <div class="tier__price">
+            <span class="tier__cur">$</span>
+            <span class="tier__amt" id="p2" data-monthly="79" data-annual="66">79</span>
+            <span class="tier__per">/mo</span>
+          </div>
+          <p class="tier__note" data-billed>Billed monthly &middot; <b>unlimited everything</b></p>
+          <button type="button" class="tier__cta">Start free trial</button>
+          <ul class="tier__feats">
+            <li><b>Unlimited</b> projects</li>
+            <li>Team roles &amp; permissions</li>
+            <li>Priority support &amp; SLA</li>
+            <li>Advanced analytics &amp; exports</li>
+          </ul>
+        </div>
+
+        <!-- Tier 3 -->
+        <div class="tier">
+          <span class="tier__name">Scale</span>
+          <p class="tier__blurb">For an org that needs governance, SSO and a real SLA.</p>
+          <div class="tier__price">
+            <span class="tier__cur">$</span>
+            <span class="tier__amt" id="p3" data-monthly="199" data-annual="165">199</span>
+            <span class="tier__per">/mo</span>
+          </div>
+          <p class="tier__note" data-billed>Billed monthly &middot; <b>everything in Studio, plus</b></p>
+          <button type="button" class="tier__cta">Start free trial</button>
+          <ul class="tier__feats">
+            <li>Everything in <b>Studio</b></li>
+            <li>SSO / SAML &amp; audit log</li>
+            <li>Dedicated success manager</li>
+            <li>99.9% uptime SLA</li>
+          </ul>
+        </div>
+      </div>
+
+      <p class="guarantee" style="color:#9a9c9f"><b style="color:#fff">14-day free trial</b> at either cadence. Annual is billed once, all-inclusive, no per-seat add-ons.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="foot">
+  <div class="foot__in">
+    <span><b>SGEN</b> · Section Blocks</span>
+    <a href="10-sections.html">Sections hub</a>
+    <a href="07-components.html">07 · Components</a>
+    <a href="index.html">Index</a>
+    <span class="meta">sections · pricing · 3 variants live · all-inclusive framing · 0 external deps</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---- scroll reveal + sibling stagger (gated by reduced-motion) ---- */
+  function showAll(){
+    [].forEach.call(document.querySelectorAll('.reveal,.stagger'), function(el){ el.classList.add('in'); });
+  }
+  if(reduce || !('IntersectionObserver' in window)){
+    showAll();
+  } else {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, {threshold:0.14, rootMargin:'0px 0px -8% 0px'});
+    [].forEach.call(document.querySelectorAll('.reveal,.stagger'), function(el){ io.observe(el); });
+  }
+
+  /* ---- P3: monthly / annual toggle ---- */
+  var sw = document.getElementById('billSwitch');
+  if(sw){
+    var lblM = document.getElementById('lblMonthly');
+    var lblA = document.getElementById('lblAnnual');
+    var badge = document.getElementById('saveBadge');
+    var note = document.getElementById('billedNote');
+    var amts = [].slice.call(document.querySelectorAll('#p1,#p2,#p3'));
+    var tierNotes = [].slice.call(document.querySelectorAll('[data-billed]'));
+
+    function setPeriod(annual){
+      sw.setAttribute('aria-checked', annual ? 'true' : 'false');
+      lblM.classList.toggle('on', !annual);
+      lblA.classList.toggle('on', annual);
+      badge.classList.toggle('show', annual);
+      note.innerHTML = annual
+        ? 'Billed annually &middot; <b>2 months free</b> vs. monthly.'
+        : 'Billed monthly. Switch to annual any time.';
+      amts.forEach(function(el){
+        var v = el.getAttribute(annual ? 'data-annual' : 'data-monthly');
+        el.textContent = v;
+      });
+      tierNotes.forEach(function(el){
+        var b = el.querySelector('b');
+        var bHtml = b ? b.outerHTML : '';
+        el.innerHTML = (annual ? 'Billed annually &middot; ' : 'Billed monthly &middot; ') + bHtml;
+      });
+    }
+
+    function toggle(){ setPeriod(sw.getAttribute('aria-checked') !== 'true'); }
+    sw.addEventListener('click', toggle);
+    sw.addEventListener('keydown', function(e){
+      if(e.key === ' ' || e.key === 'Enter'){ e.preventDefault(); toggle(); }
+    });
+    /* clicking the period labels also flips, for a bigger tap target */
+    lblM.addEventListener('click', function(){ setPeriod(false); });
+    lblA.addEventListener('click', function(){ setPeriod(true); });
+
+    setPeriod(false); /* initial: monthly */
+  }
+})();
+</script>
+</body>
+</html>

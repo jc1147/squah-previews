@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Section Blocks · Trust + Stats — SGEN Living Styleguide</title>
+<style>
+:root{
+  /* SGEN brand chrome (verbatim from index.html) */
+  --ink:#1a1a1a;            /* charcoal */
+  --accent:#d51522;         /* SGEN red */
+  --paper:#f6f5f3;          /* warm off-white, never #fff */
+  --surface:#ffffff;        /* cards float on paper */
+  --muted:#626262;          /* recurs verbatim across the harvest */
+  --body:#4a4a4a;           /* desaturated tint of ink, not #666 */
+  --line:rgba(26,26,26,.10);
+
+  --grad-brand:linear-gradient(135deg,#d51522,#7a0c13);
+  --fade-to-paper:linear-gradient(180deg,rgba(246,245,243,0) 0%,var(--paper) 70%);
+
+  --r-chip:8px; --r-card:16px; --r-panel:24px; --r-pill:9999px;
+
+  --shadow-rest:0 2px 5px 0 rgba(0,0,0,.08);
+  --shadow-card:0 15px 30px 0 rgba(1,7,39,.13);
+  --shadow-hover:0 32px 64px -12px rgba(16,24,40,.18);
+
+  --ease:cubic-bezier(.05,.5,.3,1);
+  --t-fast:.2s ease-out;
+  --t-reveal:.6s var(--ease);
+
+  --glass:blur(18px) saturate(180%);
+  --wrap:1180px;
+  --mono:ui-monospace,"SFMono-Regular",Menlo,Consolas,"Liberation Mono",monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--paper);color:var(--body);
+  font-family:var(--sans);font-size:16px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 24px}
+h1,h2,h3,h4{color:var(--ink);margin:0;letter-spacing:-.02em;line-height:1.04}
+p{margin:0 0 1em}
+a{color:var(--accent);text-decoration:none}
+code{font-family:var(--mono);font-size:.86em}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;text-transform:uppercase;letter-spacing:.16em;font-size:12px;font-weight:700;color:var(--accent)}
+.eyebrow::before{content:"";width:34px;height:2px;background:var(--accent);display:inline-block}
+
+/* ---------- glass top nav (matches styleguide chrome) ---------- */
+.topnav{
+  position:sticky;top:0;z-index:50;
+  background:rgba(26,26,26,.92);
+  -webkit-backdrop-filter:var(--glass);backdrop-filter:var(--glass);
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+.topnav .wrap{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding-top:12px;padding-bottom:12px}
+.brand{display:flex;align-items:center;gap:10px;margin-right:auto;font-weight:700;color:#fff;letter-spacing:-.01em}
+.brand .dot{width:11px;height:11px;border-radius:3px;background:var(--accent);box-shadow:0 0 0 0 rgba(213,21,34,.6);animation:nudge 3s var(--ease) infinite}
+@keyframes nudge{0%,92%,100%{box-shadow:0 0 0 0 rgba(213,21,34,0)}96%{box-shadow:0 0 0 5px rgba(213,21,34,.18)}}
+.topnav a.nav{
+  color:#cfcfcf;font-size:13px;font-weight:600;letter-spacing:.01em;
+  padding:7px 12px;border-radius:var(--r-pill);transition:var(--t-fast);
+}
+.topnav a.nav:hover{color:#fff;background:rgba(255,255,255,.08)}
+.topnav a.nav[aria-current="page"]{color:#fff;background:var(--accent)}
+
+/* ---------- page header ---------- */
+.phead{position:relative;overflow:hidden;background:var(--ink);color:#fff;padding:64px 0 72px}
+.phead::before{content:"";position:absolute;z-index:0;border-radius:50%;filter:blur(72px);pointer-events:none;width:520px;height:520px;left:-120px;top:-200px;background:radial-gradient(circle,rgba(213,21,34,.50),transparent 70%)}
+.phead::after{content:"";position:absolute;z-index:0;border-radius:50%;filter:blur(72px);pointer-events:none;width:420px;height:420px;right:-90px;bottom:-200px;background:radial-gradient(circle,rgba(213,21,34,.22),transparent 70%)}
+.phead .wrap{position:relative;z-index:1}
+.phead .eyebrow{color:#ff5762}.phead .eyebrow::before{background:#ff5762}
+.phead h1{color:#fff;font-size:clamp(32px,5.4vw,58px);font-weight:300;letter-spacing:-.04em;line-height:1;margin:16px 0 0}
+.phead h1 b{font-weight:700}
+.phead .lede{margin-top:18px;max-width:680px;color:#d0d0d0;font-size:clamp(15px,2vw,18px);line-height:1.62}
+.phead .crumbs{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+.phead .crumbs a{display:inline-flex;align-items:center;gap:7px;color:#cfcfcf;font-size:13px;font-weight:600;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);padding:8px 14px;border-radius:var(--r-pill);transition:var(--t-fast)}
+.phead .crumbs a:hover{color:#fff;background:rgba(255,255,255,.12);border-color:rgba(213,21,34,.5)}
+.phead .crumbs a b{color:#ff5762}
+
+/* ---------- variant scaffold (gallery framing around each real block) ---------- */
+.spec{border-bottom:1px solid var(--line)}
+.spec__bar{background:var(--surface);border-bottom:1px solid var(--line)}
+.spec__bar .wrap{display:flex;align-items:flex-start;gap:18px;flex-wrap:wrap;padding-top:22px;padding-bottom:22px}
+.spec__id{font-family:var(--mono);font-size:12px;font-weight:700;color:#fff;background:var(--ink);border-radius:10px;padding:7px 11px;flex:0 0 auto;letter-spacing:.02em}
+.spec__meta{flex:1;min-width:240px}
+.spec__meta h3{font-size:clamp(18px,2.4vw,22px);margin:0 0 4px}
+.spec__meta .pat{font-family:var(--mono);font-size:11px;color:var(--accent);font-weight:700;letter-spacing:.03em}
+.spec__when{flex:1 1 320px;min-width:240px;color:var(--muted);font-size:13.5px;line-height:1.55}
+.spec__when b{color:var(--ink)}
+.spec__live{font-family:var(--mono);font-size:10.5px;color:var(--muted);background:var(--paper);border:1px solid var(--line);border-radius:var(--r-pill);padding:4px 10px;flex:0 0 auto;align-self:center}
+
+/* scroll-reveal + stagger (shared) */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
+.reveal.in-view{opacity:1;transform:none}
+.stagger > *{opacity:0;transform:translateY(22px);transition:opacity .55s var(--ease),transform .55s var(--ease)}
+.stagger.in-view > *{opacity:1;transform:none}
+
+/* =====================================================================
+   BLOCK 1 — TRUST BAR · MONO LOGO ROW (S-LOGOS · I10)
+   Grayscale → color on hover; reflows 6→3→2 cols.
+   ===================================================================== */
+.tb-mono{background:var(--paper);padding:clamp(48px,7vw,84px) 0}
+.tb-mono .lead{display:flex;align-items:baseline;justify-content:center;gap:14px;flex-wrap:wrap;text-align:center;margin-bottom:34px}
+.tb-mono .lead .k{text-transform:uppercase;letter-spacing:.18em;font-size:11.5px;font-weight:700;color:var(--muted)}
+.tb-mono .lead .rule{width:46px;height:1px;background:var(--line)}
+.logorow{
+  display:grid;grid-template-columns:repeat(6,1fr);gap:0;
+  border:1px solid var(--line);border-radius:var(--r-card);overflow:hidden;
+  background:var(--surface);box-shadow:var(--shadow-rest);
+}
+.logorow .cell{
+  display:grid;place-items:center;min-height:96px;padding:22px 16px;
+  border-right:1px solid var(--line);border-bottom:1px solid var(--line);
+  position:relative;
+}
+.logorow .cell:nth-child(6n){border-right:0}
+.logorow .cell:nth-last-child(-n+6){border-bottom:0}
+.logo{
+  display:inline-flex;align-items:center;gap:9px;
+  filter:grayscale(1) opacity(.55);transition:filter var(--t-fast),transform var(--t-fast);
+  will-change:filter;
+}
+.logorow .cell:hover .logo{filter:grayscale(0) opacity(1);transform:translateY(-2px)}
+.logo .mk{width:26px;height:26px;border-radius:7px;display:grid;place-items:center;flex:0 0 auto;color:#fff;font-weight:800;font-size:13px;font-family:var(--mono)}
+.logo .nm{font-weight:800;font-size:16px;letter-spacing:-.02em;color:var(--ink);white-space:nowrap}
+.logo .nm small{display:block;font-weight:600;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:1px}
+/* per-logo marks (CSS-crafted, no images) */
+.mk.m1{background:var(--grad-brand)}
+.mk.m2{background:linear-gradient(135deg,#2b2b2b,#000);border-radius:50%}
+.mk.m3{background:#1a1a1a;border-radius:4px;transform:rotate(45deg)}
+.mk.m3 span{transform:rotate(-45deg)}
+.mk.m4{background:linear-gradient(135deg,#3a3a3a,#1a1a1a);border-radius:9999px 9999px 9999px 3px}
+.mk.m5{background:linear-gradient(135deg,#d51522,#7a0c13);clip-path:polygon(50% 0,100% 100%,0 100%)}
+.mk.m6{background:#1a1a1a}
+.mk.m6::after{content:"";position:absolute;width:11px;height:11px;border:2.5px solid #fff;border-radius:50%}
+.tb-mono .cap{margin:30px auto 0;max-width:620px;text-align:center;color:var(--muted);font-size:13px}
+.tb-mono .cap b{color:var(--ink)}
+
+/* =====================================================================
+   BLOCK 2 — TRUST BAR · MARQUEE (S-LOGOS · C5)
+   Duplicated track, translateX(-50%) loop, pause on hover, edge mask,
+   reduced-motion → static wrap.
+   ===================================================================== */
+.tb-mq{background:var(--ink);color:#fff;padding:clamp(40px,6vw,64px) 0;position:relative;overflow:hidden}
+.tb-mq::before{content:"";position:absolute;inset:0;background:radial-gradient(60% 120% at 50% 0,rgba(213,21,34,.14),transparent 70%);pointer-events:none}
+.tb-mq .lead{position:relative;z-index:1;text-align:center;margin-bottom:30px}
+.tb-mq .lead .k{text-transform:uppercase;letter-spacing:.2em;font-size:11px;font-weight:700;color:#ff8a92}
+.tb-mq .lead p{margin:8px 0 0;color:#bdbdbd;font-size:14px;max-width:520px;margin-inline:auto}
+.marquee{
+  position:relative;z-index:1;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);
+}
+.marquee__track{display:flex;width:max-content;animation:mq-scroll 38s linear infinite;will-change:transform}
+.marquee:hover .marquee__track{animation-play-state:paused}
+.marquee__item{
+  display:inline-flex;align-items:center;gap:10px;padding:0 38px;flex:0 0 auto;
+  color:#e6e6e6;opacity:.78;transition:opacity var(--t-fast),color var(--t-fast);
+}
+.marquee__item:hover{opacity:1;color:#fff}
+.marquee__item .mk{width:24px;height:24px;border-radius:6px;display:grid;place-items:center;color:#fff;font-weight:800;font-size:12px;font-family:var(--mono);position:relative}
+.marquee__item .nm{font-weight:700;font-size:17px;letter-spacing:-.02em;white-space:nowrap}
+.marquee__item .nm small{font-weight:600;font-size:11px;color:#9b9b9b;letter-spacing:.04em;margin-left:4px}
+.marquee__item .sep{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.22);margin:0 4px}
+@keyframes mq-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* =====================================================================
+   BLOCK 3 — STATS · COUNT-UP 3-UP (S-STATS · C3/I3/TOP-12 #5)
+   Big numeral + tiny label, rAF ease-out 0→data-to, tabular-nums.
+   Keeps 2-up on phone via mobile-one-second.
+   ===================================================================== */
+.st-count{background:var(--paper);padding:clamp(64px,9vw,118px) 0;position:relative}
+.st-count .head{max-width:720px;margin:0 auto 52px;text-align:center}
+.st-count .head .eyebrow{justify-content:center}
+.st-count .head h2{font-size:clamp(28px,4vw,44px);margin:14px 0 12px}
+.st-count .head p{color:var(--muted);font-size:15.5px;margin:0}
+.countgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.countcard{
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--r-panel);
+  padding:38px 30px 32px;box-shadow:var(--shadow-rest);
+  transition:transform var(--t-fast),box-shadow var(--t-fast),border-color var(--t-fast);
+  text-align:left;position:relative;overflow:hidden;
+}
+.countcard::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--grad-brand);opacity:0;transition:opacity var(--t-fast)}
+.countcard:hover{transform:translateY(-5px);box-shadow:var(--shadow-card);border-color:rgba(213,21,34,.28)}
+.countcard:hover::before{opacity:1}
+.countcard .ic{width:42px;height:42px;border-radius:12px;background:rgba(213,21,34,.10);border:1px solid rgba(213,21,34,.22);display:grid;place-items:center;margin-bottom:20px}
+.countcard .ic i{width:15px;height:15px;border-radius:5px;background:var(--accent);display:block}
+.countcard .ic.r i{border-radius:50%}
+.countcard .ic.t i{border-radius:4px 4px 4px 0}
+.countcard .n{
+  display:flex;align-items:baseline;gap:2px;
+  font-size:clamp(44px,6vw,66px);font-weight:300;color:var(--ink);
+  letter-spacing:-.045em;line-height:1;font-variant-numeric:tabular-nums;
+}
+.countcard .n .pre{font-size:.55em;font-weight:400;color:var(--accent);align-self:flex-start;margin-right:2px}
+.countcard .n .suf{font-size:.5em;font-weight:600;color:var(--accent)}
+.countcard .lbl{margin-top:14px;font-weight:700;color:var(--ink);font-size:15.5px;letter-spacing:-.01em}
+.countcard .sub{margin-top:5px;color:var(--muted);font-size:13px;line-height:1.55}
+
+/* =====================================================================
+   BLOCK 4 — STATS · BIG-NUMBER BAND (S-STATS · C3/I3 · dark anchor)
+   Oversized display numerals on the near-black anchor band, hairline
+   dividers, accent rule. Count-up shares the same engine.
+   ===================================================================== */
+.st-band{background:var(--ink);color:#fff;padding:clamp(70px,10vw,128px) 0;position:relative;overflow:hidden}
+.st-band::before{content:"";position:absolute;width:620px;height:620px;left:50%;top:-320px;transform:translateX(-50%);border-radius:50%;filter:blur(90px);background:radial-gradient(circle,rgba(213,21,34,.20),transparent 70%);pointer-events:none}
+.st-band .wrap{position:relative;z-index:1}
+.st-band .head{max-width:680px;margin-bottom:54px}
+.st-band .head .eyebrow{color:#ff5762}.st-band .head .eyebrow::before{background:#ff5762}
+.st-band .head h2{color:#fff;font-size:clamp(28px,4vw,46px);font-weight:300;letter-spacing:-.035em;margin:14px 0 0}
+.st-band .head h2 b{font-weight:700}
+.bandgrid{display:grid;grid-template-columns:repeat(4,1fr)}
+.bandstat{padding:8px 30px;border-left:1px solid rgba(255,255,255,.12)}
+.bandstat:first-child{padding-left:0;border-left:0}
+.bandstat .n{
+  font-size:clamp(46px,7vw,84px);font-weight:300;color:#fff;
+  letter-spacing:-.05em;line-height:.92;font-variant-numeric:tabular-nums;
+  display:flex;align-items:baseline;
+}
+.bandstat .n .suf{font-size:.42em;font-weight:600;color:#ff5762;margin-left:3px;letter-spacing:-.01em}
+.bandstat .n .pre{font-size:.42em;font-weight:600;color:#ff5762;margin-right:2px;align-self:flex-start}
+.bandstat .lbl{margin-top:16px;text-transform:uppercase;letter-spacing:.15em;font-size:11.5px;font-weight:700;color:#9b9b9b}
+.bandstat .lbl b{display:block;color:#e2e2e2;text-transform:none;letter-spacing:-.01em;font-size:13.5px;font-weight:600;margin-top:6px}
+
+/* =====================================================================
+   RESPONSIVE LADDER (desktop-first max-width overrides; ladder 1024/767/420)
+   ===================================================================== */
+@media (max-width:1024px){
+  .logorow{grid-template-columns:repeat(3,1fr)}
+  .logorow .cell:nth-child(6n){border-right:1px solid var(--line)}
+  .logorow .cell:nth-child(3n){border-right:0}
+  .logorow .cell:nth-last-child(-n+6){border-bottom:1px solid var(--line)}
+  .logorow .cell:nth-last-child(-n+3){border-bottom:0}
+  .countgrid{grid-template-columns:repeat(3,1fr)}
+  .bandgrid{grid-template-columns:repeat(2,1fr);gap:38px 0}
+  .bandstat:nth-child(3),.bandstat:nth-child(4){padding-top:0}
+  .bandstat:nth-child(odd){padding-left:0;border-left:0}
+  .bandstat:nth-child(even){border-left:1px solid rgba(255,255,255,.12)}
+}
+@media (max-width:767px){
+  /* trust mono → 2-up (compact tiles keep 2 per responsive-lib #2 mobile-one-second) */
+  .logorow{grid-template-columns:repeat(2,1fr)}
+  .logorow .cell{border-right:1px solid var(--line)!important;border-bottom:1px solid var(--line)!important}
+  .logorow .cell:nth-child(2n){border-right:0!important}
+  .logorow .cell:nth-last-child(-n+2){border-bottom:0!important}
+  /* stats count-up → 1-up stacked cards (text cards stack, responsive-lib G2) */
+  .countgrid{grid-template-columns:1fr;gap:16px}
+  .countcard{padding:30px 26px 26px}
+  /* big-number band → 2-up compact tiles */
+  .bandgrid{grid-template-columns:repeat(2,1fr);gap:34px 26px}
+  .bandstat{padding:0!important;border-left:0!important;border-top:1px solid rgba(255,255,255,.12);padding-top:24px!important}
+  .bandstat:nth-child(1),.bandstat:nth-child(2){border-top:0;padding-top:0!important}
+  .spec__bar .wrap{gap:12px}
+  .marquee__item{padding:0 26px}
+}
+/* compact tiles (logos + big-number stats) stay 2-up at 390 per responsive-lib #2
+   (mobile-one-second) — never free-fall to 1-up at phone width.
+   1-up is only a safety floor for the very narrowest devices (<=359px). */
+@media (max-width:359px){
+  .logorow{grid-template-columns:1fr}
+  .logorow .cell{border-right:0!important;min-height:84px}
+  .logorow .cell:not(:last-child){border-bottom:1px solid var(--line)!important}
+  .bandgrid{grid-template-columns:1fr;gap:0}
+  .bandstat{border-top:1px solid rgba(255,255,255,.12);padding-top:26px!important;margin-top:26px}
+  .bandstat:first-child{border-top:0;margin-top:0;padding-top:0!important}
+}
+
+/* ---------- footer ---------- */
+.foot{background:var(--ink);color:#9b9b9b;padding:48px 0;font-size:13px;border-top:1px solid rgba(255,255,255,.08)}
+.foot .wrap{display:flex;gap:18px;flex-wrap:wrap;align-items:center}
+.foot .brand{margin-right:auto;color:#fff}
+.foot a{color:#cfcfcf}.foot a:hover{color:#fff}
+
+/* reduced motion (gate ALL motion) */
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  .reveal,.stagger > *{opacity:1!important;transform:none!important}
+  .marquee__track{animation:none!important}
+  .marquee{
+    -webkit-mask-image:none;mask-image:none;
+    overflow-x:auto;-webkit-overflow-scrolling:touch;
+  }
+  .marquee__track{width:auto}
+  .marquee__item[data-dup="1"]{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ===================== GLASS TOP NAV ===================== -->
+<nav class="topnav">
+  <div class="wrap">
+    <span class="brand"><span class="dot"></span>SGEN&nbsp;Styleguide</span>
+    <a class="nav" href="index.html">Index</a>
+    <a class="nav" href="10-sections.html">10 · Sections hub</a>
+    <a class="nav" href="07-components.html">07 · Components</a>
+    <a class="nav" href="sections-trust-stats.html" aria-current="page">Trust + Stats</a>
+  </div>
+</nav>
+
+<!-- ===================== PAGE HEADER ===================== -->
+<header class="phead">
+  <div class="wrap">
+    <span class="eyebrow">Section blocks · 10 · Trust + Stats</span>
+    <h1>Trust &amp; <b>Stats</b> blocks</h1>
+    <p class="lede">Four production-grade section blocks — drop any one into a real page. Two borrowed-credibility trust bars (a mono logo row and a scrolling marquee) and two quantified-proof stat sections (a count-up 3-up and a big-number anchor band). Every block is self-contained, responsive, and copy-ready.</p>
+    <div class="crumbs">
+      <a href="10-sections.html"><b>&larr;</b> Back to Sections hub</a>
+      <a href="index.html">Styleguide index</a>
+    </div>
+  </div>
+</header>
+
+<!-- ===================== BLOCK 1 · MONO LOGO ROW ===================== -->
+<section class="spec">
+  <div class="spec__bar">
+    <div class="wrap">
+      <span class="spec__id">1 / 4</span>
+      <div class="spec__meta">
+        <h3>Trust bar — mono logo row</h3>
+        <span class="pat">S-LOGOS · I10 · grayscale→color</span>
+      </div>
+      <div class="spec__when"><b>When to use:</b> zone-3 bridge between hero and proof when you have recognizable client / partner / press logos. Quiet borrowed credibility that doesn't pull focus.</div>
+      <span class="spec__live">static · CSS-only</span>
+    </div>
+  </div>
+
+  <div class="tb-mono">
+    <div class="wrap">
+      <div class="lead reveal">
+        <span class="rule"></span>
+        <span class="k">Trusted by teams shipping on SGEN</span>
+        <span class="rule"></span>
+      </div>
+      <div class="logorow stagger reveal">
+        <div class="cell"><span class="logo"><span class="mk m1">N</span><span class="nm">Northwind<small>Group</small></span></span></div>
+        <div class="cell"><span class="logo"><span class="mk m2">A</span><span class="nm">Arclight</span></span></div>
+        <div class="cell"><span class="logo"><span class="mk m3"><span>V</span></span><span class="nm">Vellum<small>Studio</small></span></span></div>
+        <div class="cell"><span class="logo"><span class="mk m4">H</span><span class="nm">Halcyon</span></span></div>
+        <div class="cell"><span class="logo"><span class="mk m5">&nbsp;</span><span class="nm">Summit<small>Labs</small></span></span></div>
+        <div class="cell"><span class="logo"><span class="mk m6">&nbsp;</span><span class="nm">Orbital</span></span></div>
+        <div class="cell"><span class="logo"><span class="mk m2">M</span><span class="nm">Meridian</span></span></div>
+        <div class="cell"><span class="logo"><span class="mk m1">K</span><span class="nm">Kestrel<small>Co</small></span></span></div>
+        <div class="cell"><span class="logo"><span class="mk m3"><span>P</span></span><span class="nm">Parallel</span></span></div>
+        <div class="cell"><span class="logo"><span class="mk m4">L</span><span class="nm">Lattice<small>HQ</small></span></span></div>
+        <div class="cell"><span class="logo"><span class="mk m6">&nbsp;</span><span class="nm">Beacon</span></span></div>
+        <div class="cell"><span class="logo"><span class="mk m1">Q</span><span class="nm">Quanta<small>Works</small></span></span></div>
+      </div>
+      <p class="cap reveal">Logos rest at <b>grayscale ·55% opacity</b> and resolve to full color on hover — present-but-quiet borrowed credibility. Reflows <b>6 → 3 → 2 → 1</b> across the breakpoint ladder.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== BLOCK 2 · MARQUEE ===================== -->
+<section class="spec">
+  <div class="spec__bar">
+    <div class="wrap">
+      <span class="spec__id">2 / 4</span>
+      <div class="spec__meta">
+        <h3>Trust bar — logo marquee</h3>
+        <span class="pat">S-LOGOS · C5 · scroll loop · pause-on-hover</span>
+      </div>
+      <div class="spec__when"><b>When to use:</b> a dark anchor variant of the trust strip when the logo set is long or you want quiet ambient motion. Use once per page; never two competing marquees.</div>
+      <span class="spec__live">motion · live-only · honors reduced-motion</span>
+    </div>
+  </div>
+
+  <div class="tb-mq">
+    <div class="wrap">
+      <div class="lead reveal">
+        <span class="k">As seen across 16 verticals</span>
+        <p>The track duplicates itself and translates &minus;50% on an infinite linear loop — hover to pause, edges fade under a gradient mask.</p>
+      </div>
+    </div>
+    <div class="marquee" aria-label="Partner and press logos, scrolling">
+      <div class="marquee__track" id="mqTrack">
+        <!-- set A -->
+        <span class="marquee__item"><span class="mk m1">N</span><span class="nm">Northwind</span><span class="sep"></span></span>
+        <span class="marquee__item"><span class="mk m2">A</span><span class="nm">Arclight <small>Press</small></span><span class="sep"></span></span>
+        <span class="marquee__item"><span class="mk m3"><span>V</span></span><span class="nm">Vellum</span><span class="sep"></span></span>
+        <span class="marquee__item"><span class="mk m4">H</span><span class="nm">Halcyon</span><span class="sep"></span></span>
+        <span class="marquee__item"><span class="mk m6">&nbsp;</span><span class="nm">Orbital <small>Daily</small></span><span class="sep"></span></span>
+        <span class="marquee__item"><span class="mk m1">K</span><span class="nm">Kestrel</span><span class="sep"></span></span>
+        <span class="marquee__item"><span class="mk m2">M</span><span class="nm">Meridian</span><span class="sep"></span></span>
+        <span class="marquee__item"><span class="mk m4">L</span><span class="nm">Lattice</span><span class="sep"></span></span>
+        <!-- set B (duplicate for seamless loop; hidden in reduced-motion) -->
+        <span class="marquee__item" data-dup="1"><span class="mk m1">N</span><span class="nm">Northwind</span><span class="sep"></span></span>
+        <span class="marquee__item" data-dup="1"><span class="mk m2">A</span><span class="nm">Arclight <small>Press</small></span><span class="sep"></span></span>
+        <span class="marquee__item" data-dup="1"><span class="mk m3"><span>V</span></span><span class="nm">Vellum</span><span class="sep"></span></span>
+        <span class="marquee__item" data-dup="1"><span class="mk m4">H</span><span class="nm">Halcyon</span><span class="sep"></span></span>
+        <span class="marquee__item" data-dup="1"><span class="mk m6">&nbsp;</span><span class="nm">Orbital <small>Daily</small></span><span class="sep"></span></span>
+        <span class="marquee__item" data-dup="1"><span class="mk m1">K</span><span class="nm">Kestrel</span><span class="sep"></span></span>
+        <span class="marquee__item" data-dup="1"><span class="mk m2">M</span><span class="nm">Meridian</span><span class="sep"></span></span>
+        <span class="marquee__item" data-dup="1"><span class="mk m4">L</span><span class="nm">Lattice</span><span class="sep"></span></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== BLOCK 3 · COUNT-UP 3-UP ===================== -->
+<section class="spec">
+  <div class="spec__bar">
+    <div class="wrap">
+      <span class="spec__id">3 / 4</span>
+      <div class="spec__meta">
+        <h3>Stats — count-up 3-up</h3>
+        <span class="pat">S-STATS · C3 / I3 / TOP-12 #5 · rAF ease-out</span>
+      </div>
+      <div class="spec__when"><b>When to use:</b> the near-mandatory zone-5 proof band on a light ground when each metric needs a label + supporting line. Numbers animate 0→target the first time the band scrolls into view.</div>
+      <span class="spec__live">count-up · live-only · tabular-nums</span>
+    </div>
+  </div>
+
+  <div class="st-count">
+    <div class="wrap">
+      <div class="head reveal">
+        <span class="eyebrow">By the numbers</span>
+        <h2>Proof, not adjectives.</h2>
+        <p>Three metrics that matter, each counting up from zero on first view — motion and credibility in a single component.</p>
+      </div>
+      <div class="countgrid stagger reveal" id="countBand">
+        <div class="countcard">
+          <div class="ic"><i></i></div>
+          <div class="n"><span class="count" data-to="2400" data-suffix="+">0</span></div>
+          <div class="lbl">Sites shipped</div>
+          <div class="sub">Live production builds running on the SGEN platform today.</div>
+        </div>
+        <div class="countcard">
+          <div class="ic r"><i></i></div>
+          <div class="n"><span class="count" data-to="99.9" data-decimals="1"></span><span class="suf">%</span></div>
+          <div class="lbl">Uptime, trailing 12&nbsp;mo</div>
+          <div class="sub">Measured at the edge across every customer region, every month.</div>
+        </div>
+        <div class="countcard">
+          <div class="ic t"><i></i></div>
+          <div class="n"><span class="pre">&times;</span><span class="count" data-to="3.2" data-decimals="1"></span></div>
+          <div class="lbl">Faster to first publish</div>
+          <div class="sub">Median build-to-live time versus the workflows teams replaced.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== BLOCK 4 · BIG-NUMBER BAND ===================== -->
+<section class="spec">
+  <div class="spec__bar">
+    <div class="wrap">
+      <span class="spec__id">4 / 4</span>
+      <div class="spec__meta">
+        <h3>Stats — big-number band</h3>
+        <span class="pat">S-STATS · C3 / I3 · dark anchor · hairline dividers</span>
+      </div>
+      <div class="spec__when"><b>When to use:</b> the one near-black "anchor" band per page (TOP-12 #11) — oversized display numerals for headline metrics where the figures themselves are the message. Pairs above a testimonial or the closing CTA.</div>
+      <span class="spec__live">count-up · live-only · anchor band</span>
+    </div>
+  </div>
+
+  <div class="st-band">
+    <div class="wrap">
+      <div class="head reveal">
+        <span class="eyebrow">The scale of it</span>
+        <h2>Built once, <b>running everywhere.</b></h2>
+      </div>
+      <div class="bandgrid stagger reveal" id="bandBand">
+        <div class="bandstat">
+          <div class="n"><span class="count" data-to="166" data-suffix=""></span></div>
+          <div class="lbl">Demos inspected<b>The reference harvest</b></div>
+        </div>
+        <div class="bandstat">
+          <div class="n"><span class="count" data-to="48" data-suffix=""></span></div>
+          <div class="lbl">Markets served<b>Across six continents</b></div>
+        </div>
+        <div class="bandstat">
+          <div class="n"><span class="count" data-to="18" data-decimals="0"></span><span class="suf">M</span></div>
+          <div class="lbl">Monthly visitors<b>Aggregate, all sites</b></div>
+        </div>
+        <div class="bandstat">
+          <div class="n"><span class="pre">&lt;</span><span class="count" data-to="40" data-suffix=""></span><span class="suf">ms</span></div>
+          <div class="lbl">Median edge response<b>p50, global</b></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="foot">
+  <div class="wrap">
+    <span class="brand"><b style="color:#fff">SGEN</b> · Section Blocks · Trust + Stats</span>
+    <a href="10-sections.html">10 · Sections hub</a>
+    <a href="index.html">Index</a>
+    <a href="07-components.html">07 · Components</a>
+    <span style="color:#626262;font-family:var(--mono);font-size:11px">4 blocks · S-LOGOS + S-STATS · self-contained</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ----- scroll-reveal + sibling stagger ----- */
+  var revealEls = [].slice.call(document.querySelectorAll('.reveal'));
+  function stagger(el){
+    if(!el.classList.contains('stagger')) return;
+    var kids = el.children;
+    for(var i=0;i<kids.length;i++){ kids[i].style.transitionDelay = (i*70)+'ms'; }
+  }
+  function fireCounters(scope){
+    var nums = [].slice.call(scope.querySelectorAll('.count'));
+    nums.forEach(function(n){
+      if(n.getAttribute('data-done')==='1') return;
+      n.setAttribute('data-done','1');
+      var to = parseFloat(n.getAttribute('data-to')) || 0;
+      var dec = parseInt(n.getAttribute('data-decimals')||'0',10);
+      var suffix = n.getAttribute('data-suffix') || '';
+      function fmt(v){ return v.toLocaleString(undefined,{minimumFractionDigits:dec,maximumFractionDigits:dec}) + suffix; }
+      if(reduce){ n.textContent = fmt(to); return; }
+      var dur = 1400, start = null;
+      function ease(t){ return 1 - Math.pow(1 - t, 3); } /* ease-out cubic */
+      function step(ts){
+        if(start === null) start = ts;
+        var p = Math.min((ts - start)/dur, 1);
+        n.textContent = fmt(ease(p) * to);
+        if(p < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    });
+  }
+
+  if(reduce || !('IntersectionObserver' in window)){
+    revealEls.forEach(function(el){ el.classList.add('in-view'); });
+    fireCounters(document);
+  } else {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){
+          stagger(e.target);
+          e.target.classList.add('in-view');
+          if(e.target.id === 'countBand' || e.target.id === 'bandBand') fireCounters(e.target);
+          io.unobserve(e.target);
+        }
+      });
+    }, {threshold:0.18, rootMargin:'0px 0px -8% 0px'});
+    revealEls.forEach(function(el){ io.observe(el); });
+  }
+})();
+</script>
+
+</body>
+</html>

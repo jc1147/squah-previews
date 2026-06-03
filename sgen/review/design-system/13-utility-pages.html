@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>SGEN Living Styleguide — 13 · Utility / System Pages (404 · 500 · no-results · maintenance · loading)</title>
+<style>
+/* ============================================================
+   SGEN LIVING STYLEGUIDE — 13 · UTILITY / SYSTEM PAGES
+   charcoal #1a1a1a · red #d51522 over warm paper #f6f5f3.
+   GAP #5 close-out. Five full-page system templates, each reusing
+   the spine nav + footer + the empty-state component (page 07).
+   Self-contained: system fonts, 0 external deps, no images,
+   CSS-crafted visuals only. Motion gated behind prefers-reduced-motion.
+   ============================================================ */
+:root{
+  /* ---- SGEN brand chrome (identical token set to 09/10/11) ---- */
+  --ink:#1a1a1a;                 /* charcoal */
+  --paper:#f6f5f3;               /* warm off-white, never #fff */
+  --surface:#ffffff;
+  --muted:#626262;
+  --body:#4a4a4a;
+  --line:rgba(26,26,26,.10);
+  --hair:rgba(26,26,26,.08);
+  --accent:#d51522;              /* SGEN red */
+  --accent-ink:#a50f19;          /* AA-on-white red */
+  --accent-2:#ff5762;
+  --accent-tint:rgba(213,21,34,.10);
+  --ok:#1f8a4c;
+  --warn:#b54708;
+  --bad:#c01525;
+
+  --grad-brand:linear-gradient(135deg,#d51522,#7a0c13);
+  --fade-to-paper:linear-gradient(180deg,rgba(246,245,243,0) 0%,var(--paper) 70%);
+  --r-chip:8px; --r-card:16px; --r-panel:24px; --r-pill:9999px;
+  --shadow-rest:0 2px 5px 0 rgba(0,0,0,.08);
+  --shadow-card:0 15px 30px 0 rgba(1,7,39,.13);   /* universal ink-tinted */
+  --shadow-hover:0 32px 64px -12px rgba(16,24,40,.18);
+  --ease:cubic-bezier(.05,.5,.3,1);               /* BeTheme settle */
+  --t-fast:.2s ease-out;
+  --glass:blur(18px) saturate(180%);
+  --wrap:1180px;
+  --mono:ui-monospace,"SFMono-Regular",Menlo,Consolas,"Liberation Mono",monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+
+  /* named z-index scale (single source of truth — dogfood page 09) */
+  --z-base:0; --z-header:1000; --z-skiplink:1100; --z-modal:1200;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{
+  margin:0;background:var(--paper);color:var(--body);
+  font-family:var(--sans);font-size:16px;line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 24px}
+h1,h2,h3,h4{color:var(--ink);margin:0;letter-spacing:-.02em;line-height:1.06}
+p{margin:0 0 1em}
+a{color:var(--accent-ink);text-decoration:none}
+code{font-family:var(--mono);font-size:.86em}
+
+/* ---- skip link (a11y · dogfood page 09) ---- */
+.skip{position:fixed;left:12px;top:-60px;z-index:var(--z-skiplink);
+  background:var(--ink);color:#fff;padding:10px 16px;border-radius:8px;font-weight:700;font-size:13px;
+  transition:top .2s ease}
+.skip:focus{top:12px;outline:3px solid var(--accent);outline-offset:2px}
+
+/* ---------- glass top nav — the spine bookend (dogfood: TOP-12 #6) ---------- */
+.topnav{
+  position:sticky;top:0;z-index:var(--z-header);
+  background:rgba(26,26,26,.92);
+  -webkit-backdrop-filter:var(--glass);backdrop-filter:var(--glass);
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+.topnav .wrap{display:flex;align-items:center;gap:8px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;
+  padding-top:12px;padding-bottom:12px}
+.topnav .wrap::-webkit-scrollbar{display:none}
+.brand{display:flex;align-items:center;gap:10px;margin-right:auto;font-weight:700;color:#fff;
+  letter-spacing:-.01em;white-space:nowrap}
+.brand .dot{width:11px;height:11px;border-radius:3px;background:var(--accent);flex:0 0 auto;
+  box-shadow:0 0 0 0 rgba(213,21,34,.6);animation:nudge 3s var(--ease) infinite}
+.brand small{font-weight:600;font-size:.78em;opacity:.7}
+@keyframes nudge{0%,92%,100%{box-shadow:0 0 0 0 rgba(213,21,34,0)}96%{box-shadow:0 0 0 5px rgba(213,21,34,.18)}}
+.topnav a.nav{
+  color:#cfcfcf;font-size:13px;font-weight:600;letter-spacing:.01em;white-space:nowrap;
+  padding:7px 12px;border-radius:var(--r-pill);transition:var(--t-fast)}
+.topnav a.nav:hover{color:#fff;background:rgba(255,255,255,.10)}
+.topnav a.nav[aria-current="page"]{color:#fff;background:var(--accent)}
+
+/* ---------- page hero ---------- */
+.hero{position:relative;overflow:hidden;background:var(--ink);color:#fff;padding:84px 0 104px}
+.hero::before,.hero::after{content:"";position:absolute;z-index:0;border-radius:50%;filter:blur(72px);pointer-events:none}
+.hero::before{width:520px;height:520px;left:-150px;top:-180px;background:radial-gradient(circle,rgba(213,21,34,.50),transparent 70%)}
+.hero::after{width:460px;height:460px;right:-120px;bottom:-200px;background:radial-gradient(circle,rgba(213,21,34,.24),transparent 70%)}
+.hero .wrap{position:relative;z-index:1}
+.hero .eyebrow{color:var(--accent-2)}
+.hero .eyebrow::before{background:var(--accent-2)}
+.hero h1{color:#fff;font-size:clamp(34px,6vw,68px);font-weight:300;letter-spacing:-.04em;line-height:.98;margin:16px 0 0;max-width:18ch}
+.hero h1 b{font-weight:700}
+.hero h1 .clip{background:linear-gradient(135deg,#ff5762,#d51522 60%,#7a0c13);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .lede{margin-top:22px;max-width:720px;color:#d6d6d6;font-size:clamp(15px,2vw,19px);line-height:1.6}
+.hero .lede b{color:#fff}
+.hstats{display:flex;gap:14px;flex-wrap:wrap;margin-top:38px}
+.hstat{flex:1 1 130px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.10);
+  border-radius:var(--r-card);padding:18px 20px;box-shadow:inset 0 1px 0 rgba(255,255,255,.10)}
+.hstat .n{font-size:clamp(30px,5vw,46px);font-weight:300;color:#fff;letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums}
+.hstat .lbl{margin-top:7px;text-transform:uppercase;letter-spacing:.15em;font-size:10.5px;font-weight:700;color:#9b9b9b}
+.scroll-fade{position:absolute;left:0;right:0;bottom:0;height:110px;background:var(--fade-to-paper);z-index:1}
+
+/* ---------- shared bits ---------- */
+.eyebrow{display:inline-flex;align-items:center;gap:10px;text-transform:uppercase;letter-spacing:.16em;
+  font-size:12px;font-weight:700;color:var(--accent-ink)}
+.eyebrow::before{content:"";width:34px;height:2px;background:var(--accent);display:inline-block}
+
+/* ---------- gallery section + the "browser frame" device ---------- */
+.section{padding:56px 0}
+.section .head{max-width:780px;margin-bottom:30px}
+.section .head h2{font-size:clamp(24px,3.4vw,38px);margin:12px 0 12px;display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.section .head h2 .num{font-family:var(--mono);font-size:.5em;font-weight:700;color:#fff;background:var(--ink);
+  width:1.9em;height:1.9em;border-radius:9px;display:inline-grid;place-items:center;flex:0 0 auto}
+.section .head p{color:var(--muted);font-size:15px;margin:0}
+
+.spec{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 0}
+.spec span{font-family:var(--mono);font-size:11px;color:var(--muted);background:var(--surface);
+  border:1px solid var(--hair);border-radius:var(--r-pill);padding:4px 11px}
+.spec b{color:var(--accent-ink);font-weight:700}
+
+/* the device chrome — a tiny browser window each template is rendered inside */
+.frame{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-panel);
+  overflow:hidden;box-shadow:var(--shadow-card);margin-top:26px}
+.frame__bar{display:flex;align-items:center;gap:8px;padding:11px 16px;background:#ededea;border-bottom:1px solid var(--hair)}
+.frame__dots{display:flex;gap:6px}
+.frame__dots i{width:11px;height:11px;border-radius:50%;display:block;background:#cfcdc8}
+.frame__dots i:nth-child(1){background:#f0625a}.frame__dots i:nth-child(2){background:#f2bd3f}.frame__dots i:nth-child(3){background:#5ec46b}
+.frame__url{flex:1;background:var(--paper);border:1px solid var(--hair);border-radius:var(--r-pill);
+  font-family:var(--mono);font-size:11.5px;color:var(--muted);padding:5px 13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.frame__url b{color:var(--ink);font-weight:700}
+.frame__tag{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  color:#fff;background:var(--ink);padding:3px 9px;border-radius:var(--r-pill);white-space:nowrap}
+.frame__tag.is-bad{background:var(--bad)}
+.frame__tag.is-warn{background:var(--warn)}
+.frame__tag.is-ok{background:var(--ok)}
+
+/* a self-contained mini spine (nav+footer) that lives INSIDE each frame */
+.u{position:relative;display:flex;flex-direction:column;min-height:560px}
+.u__nav{display:flex;align-items:center;gap:8px;padding:14px 22px;background:rgba(26,26,26,.92);
+  border-bottom:1px solid rgba(255,255,255,.08);position:sticky;top:0;z-index:5;
+  -webkit-backdrop-filter:var(--glass);backdrop-filter:var(--glass)}
+.u__brand{display:flex;align-items:center;gap:9px;margin-right:auto;font-weight:700;color:#fff;font-size:14px;letter-spacing:-.01em}
+.u__brand .dot{width:10px;height:10px;border-radius:3px;background:var(--accent);flex:0 0 auto}
+.u__nav a{color:#cfcfcf;font-size:12px;font-weight:600;padding:6px 11px;border-radius:var(--r-pill);transition:var(--t-fast);white-space:nowrap}
+.u__nav a:hover{color:#fff;background:rgba(255,255,255,.10)}
+.u__nav .cta{color:#fff;background:var(--accent)}
+.u__nav .cta:hover{background:#b3121d}
+.u__mb{display:none}
+
+.u__body{flex:1;display:grid;place-items:center;text-align:center;padding:48px 26px 60px;position:relative;overflow:hidden}
+
+.u__foot{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:22px;background:#111;
+  color:#9b9b9b;font-size:12px;border-top:1px solid rgba(255,255,255,.08)}
+.u__foot .fb{margin-right:auto;color:#fff;font-weight:700}
+.u__foot a{color:#cfcfcf;font-size:12px}.u__foot a:hover{color:#fff}
+.u__foot .m{color:#666;font-family:var(--mono);font-size:10.5px}
+
+/* ---- the empty-state component, reused verbatim from page 07 ---- */
+.empty{text-align:center;border:1.5px dashed #cdccc7;border-radius:var(--r-panel);
+  padding:2.4rem 1.5rem;background:rgba(26,26,26,.015);max-width:560px;margin:0 auto}
+.empty .glyph{width:54px;height:54px;border-radius:14px;background:var(--accent-tint);
+  display:grid;place-items:center;margin:0 auto 1rem;color:var(--accent);font-size:1.5rem}
+.empty h4{font-family:var(--sans);font-size:1.05rem;font-weight:800;margin:0 0 .35rem;color:var(--ink)}
+.empty p{font-size:.86rem;color:var(--muted);margin:0 auto 1.1rem;max-width:38ch}
+
+/* ---- buttons (one accent, 2-way invert · TOP-12 #9) ---- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;
+  font-family:var(--sans);font-size:14px;font-weight:700;letter-spacing:.01em;line-height:1;
+  padding:12px 22px;min-height:44px;border-radius:var(--r-pill);border:1.5px solid var(--accent);
+  background:var(--accent);color:#fff;transition:var(--t-fast);text-decoration:none}
+.btn:hover{background:#b3121d;border-color:#b3121d;transform:translateY(-2px);box-shadow:var(--shadow-card)}
+.btn.ghost{background:transparent;color:var(--accent-ink);border-color:rgba(213,21,34,.45)}
+.btn.ghost:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn.dark{background:var(--ink);border-color:var(--ink);color:#fff}
+.btn.dark:hover{background:#000;border-color:#000}
+.u__actions{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:6px}
+
+/* ---- big system code (404 / 500) ---- */
+.bigcode{font-size:clamp(86px,17vw,168px);font-weight:300;letter-spacing:-.05em;line-height:.86;
+  color:var(--ink);font-variant-numeric:tabular-nums;margin:0 0 6px}
+.bigcode .clip{background:var(--grad-brand);-webkit-background-clip:text;background-clip:text;color:transparent}
+.u__lede{max-width:46ch;margin:0 auto 4px;color:var(--body);font-size:clamp(15px,2.2vw,18px)}
+.u__title{font-size:clamp(22px,3.4vw,30px);font-weight:700;margin:0 0 10px;color:var(--ink);letter-spacing:-.02em}
+.u__kick{display:inline-flex;align-items:center;gap:8px;text-transform:uppercase;letter-spacing:.16em;
+  font-size:11px;font-weight:700;color:var(--accent-ink);margin-bottom:14px}
+.u__kick::before{content:"";width:26px;height:2px;background:var(--accent);display:inline-block}
+
+/* ambient glow behind a dark utility body */
+.u__body.dark{background:var(--ink);color:#fff}
+.u__body.dark::before,.u__body.dark::after{content:"";position:absolute;border-radius:50%;filter:blur(70px);pointer-events:none;z-index:0}
+.u__body.dark::before{width:420px;height:420px;left:-120px;top:-130px;background:radial-gradient(circle,rgba(213,21,34,.42),transparent 70%)}
+.u__body.dark::after{width:360px;height:360px;right:-110px;bottom:-150px;background:radial-gradient(circle,rgba(213,21,34,.20),transparent 70%)}
+.u__body.dark>*{position:relative;z-index:1}
+.u__body.dark .u__lede{color:#cfcfcf}
+.u__body.dark .bigcode{color:#fff}
+.u__body.dark .u__title{color:#fff}
+.u__body.dark .u__kick{color:var(--accent-2)}.u__body.dark .u__kick::before{background:var(--accent-2)}
+
+/* ---- search box + no-results filter context ---- */
+.u__search{width:100%;max-width:540px;margin:0 auto;text-align:left}
+.searchbar{display:flex;align-items:center;gap:10px;background:var(--surface);border:1.5px solid var(--line);
+  border-radius:var(--r-pill);padding:6px 8px 6px 16px;box-shadow:var(--shadow-rest)}
+.searchbar:focus-within{border-color:var(--accent);box-shadow:0 0 0 4px rgba(213,21,34,.12)}
+.searchbar .mag{width:18px;height:18px;flex:0 0 auto;color:var(--muted)}
+.searchbar input{flex:1;border:0;background:none;font-family:var(--sans);font-size:15px;color:var(--ink);outline:none;min-height:34px}
+.searchbar input::placeholder{color:#a3a19c}
+.searchbar .go{flex:0 0 auto;border:0;cursor:pointer;background:var(--accent);color:#fff;font-weight:700;font-size:13px;
+  padding:0 18px;height:38px;border-radius:var(--r-pill);transition:var(--t-fast)}
+.searchbar .go:hover{background:#b3121d}
+.filterctx{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:16px 0 4px;font-size:13px;color:var(--muted)}
+.filterctx .lbl{font-weight:700;color:var(--ink);font-size:12px;text-transform:uppercase;letter-spacing:.08em}
+.chip{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:600;color:var(--ink);
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--r-pill);padding:5px 8px 5px 12px}
+.chip .x{display:inline-grid;place-items:center;width:18px;height:18px;border-radius:50%;background:var(--paper);
+  color:var(--muted);font-weight:800;font-size:12px;line-height:1;cursor:pointer;transition:var(--t-fast)}
+.chip .x:hover{background:var(--accent);color:#fff}
+.chip.q{background:var(--accent-tint);border-color:rgba(213,21,34,.28);color:var(--accent-ink)}
+.suggest{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:14px}
+.suggest a{font-size:12.5px;font-weight:600;color:var(--accent-ink);background:var(--surface);
+  border:1px solid rgba(213,21,34,.28);border-radius:var(--r-pill);padding:6px 13px;transition:var(--t-fast)}
+.suggest a:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+/* ---- maintenance progress ---- */
+.mbar{width:100%;max-width:420px;height:10px;border-radius:var(--r-pill);background:rgba(255,255,255,.12);
+  overflow:hidden;margin:22px auto 8px;border:1px solid rgba(255,255,255,.10)}
+.mbar i{display:block;height:100%;width:64%;border-radius:var(--r-pill);background:var(--grad-brand);position:relative}
+.mbar i::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);
+  transform:translateX(-100%);animation:mshine 1.8s var(--ease) infinite}
+@keyframes mshine{to{transform:translateX(220%)}}
+.mmeta{font-family:var(--mono);font-size:12px;color:#9b9b9b}
+.mmeta b{color:#fff}
+.offline-pill{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;letter-spacing:.04em;
+  color:#ffd0d4;background:rgba(213,21,34,.16);border:1px solid rgba(213,21,34,.36);border-radius:var(--r-pill);padding:6px 14px;margin-bottom:6px}
+.offline-pill .live{width:8px;height:8px;border-radius:50%;background:var(--accent-2);box-shadow:0 0 0 0 rgba(255,87,98,.6);animation:beat 1.6s var(--ease) infinite}
+@keyframes beat{0%,100%{box-shadow:0 0 0 0 rgba(255,87,98,.5)}50%{box-shadow:0 0 0 7px rgba(255,87,98,0)}}
+
+/* ---- full-page loading / splash ---- */
+.splash{display:grid;place-items:center;gap:0;text-align:center}
+.spinner{width:62px;height:62px;margin:0 auto 22px;position:relative}
+.spinner i{position:absolute;inset:0;border-radius:50%;border:4px solid rgba(255,255,255,.12);
+  border-top-color:var(--accent);animation:spin 1s linear infinite}
+.spinner b{position:absolute;inset:0;display:grid;place-items:center;font-weight:800;color:#fff;font-size:13px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.splash .brandmark{display:inline-flex;align-items:center;gap:11px;font-weight:700;color:#fff;font-size:21px;letter-spacing:-.01em;margin-bottom:4px}
+.splash .brandmark .dot{width:13px;height:13px;border-radius:4px;background:var(--accent)}
+.dots{display:inline-flex;gap:6px;margin-top:14px}
+.dots span{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.45);animation:bob 1.2s var(--ease) infinite}
+.dots span:nth-child(2){animation-delay:.16s}.dots span:nth-child(3){animation-delay:.32s}
+@keyframes bob{0%,80%,100%{transform:translateY(0);opacity:.45}40%{transform:translateY(-7px);opacity:1}}
+.lbar{width:100%;max-width:300px;height:6px;border-radius:var(--r-pill);background:rgba(255,255,255,.12);overflow:hidden;margin:20px auto 0}
+.lbar i{display:block;height:100%;width:40%;border-radius:var(--r-pill);background:var(--grad-brand);animation:lslide 1.6s var(--ease) infinite}
+@keyframes lslide{0%{transform:translateX(-120%);width:40%}50%{width:62%}100%{transform:translateX(260%);width:40%}}
+
+/* ---- the page footer (the styleguide spine bookend) ---- */
+.foot{background:#111;color:#9b9b9b;padding:46px 0;font-size:13px;border-top:1px solid rgba(255,255,255,.08)}
+.foot .wrap{display:flex;gap:16px;flex-wrap:wrap;align-items:center}
+.foot .fbrand{margin-right:auto;color:#fff;font-weight:700}
+.foot a{color:#cfcfcf}.foot a:hover{color:#fff}
+.foot .meta{color:#666;font-family:var(--mono);font-size:11px}
+
+/* ---- reduced motion — gate EVERY move ---- */
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  .mbar i::after{display:none}
+  .spinner i{border-top-color:var(--accent);border-color:var(--accent) rgba(255,255,255,.18) rgba(255,255,255,.18)}
+}
+
+/* ---- responsive ---- */
+@media (max-width:760px){
+  .section .head h2{font-size:24px}
+  .u{min-height:520px}
+  .u__nav a:not(.cta){display:none}
+  .u__nav .u__mb{display:inline-grid;place-items:center;width:38px;height:38px;border-radius:10px;
+    background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);cursor:pointer}
+  .u__mb span{display:block;width:16px;height:2px;background:#fff;border-radius:2px;position:relative}
+  .u__mb span::before,.u__mb span::after{content:"";position:absolute;left:0;width:16px;height:2px;background:#fff;border-radius:2px}
+  .u__mb span::before{top:-5px}.u__mb span::after{top:5px}
+  .frame__tag{display:none}
+}
+@media (max-width:430px){
+  .hero{padding:64px 0 80px}
+  .u__body{padding:40px 18px 50px}
+  .u__actions .btn{flex:1 1 100%}
+}
+</style>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to gallery</a>
+
+<!-- ===================== GLASS TOP NAV (spine bookend) ===================== -->
+<nav class="topnav">
+  <div class="wrap">
+    <span class="brand"><span class="dot"></span>SGEN&nbsp;<small>Living Styleguide</small></span>
+    <a class="nav" href="index.html">Index</a>
+    <a class="nav" href="00-top12.html">00 · Top-12</a>
+    <a class="nav" href="01-transitions-hero-motion.html">01 · Transitions</a>
+    <a class="nav" href="02-depth-type-color.html">02 · Depth</a>
+    <a class="nav" href="03-layout-imagery-components.html">03 · Layout</a>
+    <a class="nav" href="04-signatures-tokens.html">04 · Signatures</a>
+    <a class="nav" href="06-responsive.html">06 · Responsive</a>
+    <a class="nav" href="07-components.html">07 · Components</a>
+    <a class="nav" href="08-scroll-sticky.html">08 · Scroll / Sticky</a>
+    <a class="nav" href="09-accessibility.html">09 · Accessibility</a>
+    <a class="nav" href="10-sections.html">10 · Sections</a>
+    <a class="nav" href="11-theming.html">11 · Theming</a><a class="nav" href="12-iconography.html">12 · Iconography</a><a class="nav" href="13-utility-pages.html">13 · Utility</a><a class="nav" href="14-ecommerce.html">14 · Ecommerce</a><a class="nav" href="15-dataviz.html">15 · Data-viz</a>
+    <a class="nav" href="13-utility-pages.html" aria-current="page">13 · Utility</a>
+  </div>
+</nav>
+
+<!-- ===================== HERO ===================== -->
+<header class="hero" id="main" tabindex="-1">
+  <div class="wrap">
+    <span class="eyebrow">Page 13 — the system-page library · GAP #5</span>
+    <h1>The pages nobody designs <b class="clip">until they break</b>.</h1>
+    <p class="lede">Every real site needs a <b>404</b>, a <b>500</b>, a search <b>no-results</b> state, a <b>maintenance / offline</b> screen and a full-page <b>loading / splash</b>. Below are five drop-in, full-page templates — each reusing the spine <b>nav + footer</b> and the page-07 <b>empty-state</b> component, dressed in the same charcoal-and-red chrome. Self-contained, responsive, motion gated behind <code>prefers-reduced-motion</code>.</p>
+    <div class="hstats">
+      <div class="hstat"><div class="n">5</div><div class="lbl">system templates</div></div>
+      <div class="hstat"><div class="n">1</div><div class="lbl">shared spine</div></div>
+      <div class="hstat"><div class="n">0</div><div class="lbl">external deps</div></div>
+      <div class="hstat"><div class="n">2</div><div class="lbl">breakpoints verified</div></div>
+    </div>
+  </div>
+  <div class="scroll-fade"></div>
+</header>
+
+<!-- ===================== §1 — 404 NOT FOUND ===================== -->
+<section class="section" id="t404">
+  <div class="wrap">
+    <div class="head">
+      <span class="eyebrow">Client error · light</span>
+      <h2><span class="num">1</span>404 — page not found</h2>
+      <p>The most-hit utility page. Big system code over the universal off-white paper, an empty-state-style apology, and two exits — back home + search. The spine nav and footer stay put so the visitor is never stranded.</p>
+      <div class="spec"><span>reuses <b>.empty</b> glyph + copy pattern</span><span>spine <b>nav + footer</b></span><span>2-way invert <b>buttons</b></span><span>status tag <b>404</b></span></div>
+    </div>
+
+    <div class="frame">
+      <div class="frame__bar">
+        <span class="frame__dots"><i></i><i></i><i></i></span>
+        <span class="frame__url"><b>sgen.com</b>/pricing/legacy-plan</span>
+        <span class="frame__tag is-bad">HTTP 404</span>
+      </div>
+      <div class="u">
+        <nav class="u__nav">
+          <span class="u__brand"><span class="dot"></span>SGEN</span>
+          <a href="index.html">Product</a><a href="index.html">Pricing</a><a href="index.html">Docs</a>
+          <a class="cta" href="index.html">Start free</a>
+          <button class="u__mb" aria-label="Open menu"><span></span></button>
+        </nav>
+        <div class="u__body">
+          <div class="empty" style="border:0;background:none;padding:0;max-width:600px">
+            <div class="bigcode"><span class="clip">404</span></div>
+            <span class="u__kick">Page not found</span>
+            <h3 class="u__title">We looked everywhere — that page has moved on.</h3>
+            <p class="u__lede">The link may be broken or the page may have been retired. Nothing's on fire — let's get you back to somewhere useful.</p>
+            <div class="u__actions">
+              <a class="btn" href="index.html">Back to home</a>
+              <a class="btn ghost" href="#t404nr">Search the site</a>
+            </div>
+          </div>
+        </div>
+        <footer class="u__foot">
+          <span class="fb">SGEN</span>
+          <a href="index.html">Home</a><a href="index.html">Docs</a><a href="index.html">Status</a><a href="index.html">Contact</a>
+          <span class="m">error 404 · nothing to see here</span>
+        </footer>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== §2 — 500 SERVER ERROR ===================== -->
+<section class="section" id="t500">
+  <div class="wrap">
+    <div class="head">
+      <span class="eyebrow">Server error · dark</span>
+      <h2><span class="num">2</span>500 — something broke on our end</h2>
+      <p>Server faults invert the body to charcoal with an ambient glow — signalling "this one's on us, not you." Carries a copyable incident reference and a link to the status page, alongside the same empty-state reassurance pattern.</p>
+      <div class="spec"><span>dark <b>ambient glow</b> body</span><span>incident <b>ref code</b></span><span>status-page exit</span><span>status tag <b>500</b></span></div>
+    </div>
+
+    <div class="frame">
+      <div class="frame__bar">
+        <span class="frame__dots"><i></i><i></i><i></i></span>
+        <span class="frame__url"><b>app.sgen.com</b>/dashboard</span>
+        <span class="frame__tag is-bad">HTTP 500</span>
+      </div>
+      <div class="u">
+        <nav class="u__nav">
+          <span class="u__brand"><span class="dot"></span>SGEN</span>
+          <a href="index.html">Product</a><a href="index.html">Pricing</a><a href="index.html">Docs</a>
+          <a class="cta" href="index.html">Start free</a>
+          <button class="u__mb" aria-label="Open menu"><span></span></button>
+        </nav>
+        <div class="u__body dark">
+          <div class="bigcode"><span class="clip">500</span></div>
+          <span class="u__kick">Internal server error</span>
+          <h3 class="u__title">That's on us — not you.</h3>
+          <p class="u__lede">Our team has been paged automatically. Give it a moment and try again, or check the live status page for updates.</p>
+          <div class="u__actions">
+            <a class="btn" href="index.html">Try again</a>
+            <a class="btn ghost" style="color:#ff9aa0;border-color:rgba(255,87,98,.5)" href="index.html">View status page</a>
+          </div>
+          <p class="mmeta" style="margin-top:22px">incident <b>#SG-7F3A91</b> · logged 14:02 UTC</p>
+        </div>
+        <footer class="u__foot">
+          <span class="fb">SGEN</span>
+          <a href="index.html">Home</a><a href="index.html">Status</a><a href="index.html">Support</a><a href="index.html">Contact</a>
+          <span class="m">error 500 · the team is on it</span>
+        </footer>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== §3 — SEARCH: NO RESULTS (with filter context) ===================== -->
+<section class="section" id="t404nr">
+  <div class="wrap">
+    <div class="head">
+      <span class="eyebrow">Zero state · with filter context</span>
+      <h2><span class="num">3</span>Search — no results found</h2>
+      <p>The PLP / search "no-results" state. It echoes the <b>exact query and active filters</b> back to the user as removable chips so they can recover without retyping, then drops the page-07 <b>empty-state</b> component in the results slot with suggested next queries.</p>
+      <div class="spec"><span>reuses <b>.empty</b> verbatim</span><span><b>filter context</b> chips (removable)</span><span>query echo</span><span>suggested queries</span></div>
+    </div>
+
+    <div class="frame">
+      <div class="frame__bar">
+        <span class="frame__dots"><i></i><i></i><i></i></span>
+        <span class="frame__url"><b>sgen.com</b>/search?q=woocommerce+migration&amp;cat=guides&amp;ver=v3</span>
+        <span class="frame__tag">200 · 0 results</span>
+      </div>
+      <div class="u">
+        <nav class="u__nav">
+          <span class="u__brand"><span class="dot"></span>SGEN</span>
+          <a href="index.html">Product</a><a href="index.html">Pricing</a><a href="index.html">Docs</a>
+          <a class="cta" href="index.html">Start free</a>
+          <button class="u__mb" aria-label="Open menu"><span></span></button>
+        </nav>
+        <div class="u__body" style="align-content:start;padding-top:38px">
+          <div class="u__search">
+            <form class="searchbar" onsubmit="return false" role="search" aria-label="Site search">
+              <svg class="mag" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="m20 20-3.2-3.2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              <input type="search" value="woocommerce migration" aria-label="Search query">
+              <button class="go" type="submit">Search</button>
+            </form>
+            <div class="filterctx">
+              <span class="lbl">Searched</span>
+              <span class="chip q">&ldquo;woocommerce migration&rdquo;</span>
+              <span class="chip">Category: Guides <span class="x" role="button" aria-label="Remove filter">&times;</span></span>
+              <span class="chip">Version: v3 <span class="x" role="button" aria-label="Remove filter">&times;</span></span>
+              <a href="#t404nr" style="font-weight:700;font-size:12.5px">Clear all</a>
+            </div>
+          </div>
+
+          <div class="empty" style="margin-top:26px">
+            <div class="glyph" aria-hidden="true">&#9633;</div>
+            <h4>No results for that combination</h4>
+            <p>Nothing matched <b style="color:var(--ink)">&ldquo;woocommerce migration&rdquo;</b> inside <b style="color:var(--ink)">Guides · v3</b>. Try removing a filter or broadening the wording.</p>
+            <a class="btn ghost" href="#t404nr">Clear filters &amp; search all</a>
+            <div class="suggest">
+              <a href="#t404nr">migrating from WordPress</a>
+              <a href="#t404nr">import products</a>
+              <a href="#t404nr">v2 → v3 upgrade</a>
+              <a href="#t404nr">storefront setup</a>
+            </div>
+          </div>
+        </div>
+        <footer class="u__foot">
+          <span class="fb">SGEN</span>
+          <a href="index.html">Home</a><a href="index.html">Docs</a><a href="index.html">Help center</a>
+          <span class="m">0 results · 2 filters active</span>
+        </footer>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== §4 — MAINTENANCE / OFFLINE ===================== -->
+<section class="section" id="tmaint">
+  <div class="wrap">
+    <div class="head">
+      <span class="eyebrow">Planned downtime · dark</span>
+      <h2><span class="num">4</span>Maintenance / offline</h2>
+      <p>Scheduled or unplanned downtime. A calm dark screen with a live "we're offline" pulse, an honest progress bar with an ETA, and a single way to stay informed. No nav links to dead routes — just the brand, the status, and a notify action.</p>
+      <div class="spec"><span>live <b>offline pulse</b></span><span>shimmer <b>progress bar</b> + ETA</span><span>notify-me action</span><span>status tag <b>503</b></span></div>
+    </div>
+
+    <div class="frame">
+      <div class="frame__bar">
+        <span class="frame__dots"><i></i><i></i><i></i></span>
+        <span class="frame__url"><b>sgen.com</b></span>
+        <span class="frame__tag is-warn">HTTP 503</span>
+      </div>
+      <div class="u">
+        <nav class="u__nav">
+          <span class="u__brand"><span class="dot"></span>SGEN</span>
+          <a class="cta" href="index.html">Status page</a>
+        </nav>
+        <div class="u__body dark">
+          <span class="offline-pill"><span class="live"></span>We're temporarily offline</span>
+          <h3 class="u__title" style="margin-top:14px">Down for scheduled maintenance.</h3>
+          <p class="u__lede">We're shipping a faster build. The site will be back shortly — no action needed on your side. Thanks for your patience.</p>
+          <div class="mbar" aria-hidden="true"><i></i></div>
+          <p class="mmeta">deploy <b>64%</b> complete · estimated back by <b>15:30 UTC</b></p>
+          <div class="u__actions" style="margin-top:18px">
+            <a class="btn" href="index.html">Notify me when it's back</a>
+            <a class="btn ghost" style="color:#ff9aa0;border-color:rgba(255,87,98,.5)" href="index.html">Live status</a>
+          </div>
+        </div>
+        <footer class="u__foot">
+          <span class="fb">SGEN</span>
+          <a href="index.html">Status</a><a href="index.html">@sgen on X</a><a href="index.html">Contact</a>
+          <span class="m">503 · scheduled maintenance window</span>
+        </footer>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== §5 — FULL-PAGE LOADING / SPLASH ===================== -->
+<section class="section" id="tload">
+  <div class="wrap">
+    <div class="head">
+      <span class="eyebrow">App boot · dark splash</span>
+      <h2><span class="num">5</span>Full-page loading / splash</h2>
+      <p>The first paint while the app boots or a heavy route loads. Brandmark front-and-center over the charcoal ground, a real CSS spinner + indeterminate bar, and a status line. Every animation collapses to a static, legible state under <code>prefers-reduced-motion</code>.</p>
+      <div class="spec"><span>CSS-only <b>spinner</b> + indeterminate bar</span><span>brandmark splash</span><span>bobbing dots</span><span><b>reduced-motion</b> safe</span></div>
+    </div>
+
+    <div class="frame">
+      <div class="frame__bar">
+        <span class="frame__dots"><i></i><i></i><i></i></span>
+        <span class="frame__url"><b>app.sgen.com</b> · loading workspace…</span>
+        <span class="frame__tag is-ok">booting</span>
+      </div>
+      <div class="u">
+        <div class="u__body dark" style="min-height:520px">
+          <div class="splash">
+            <span class="brandmark"><span class="dot"></span>SGEN</span>
+            <div class="spinner" role="status" aria-label="Loading"><i></i><b>%</b></div>
+            <p class="u__lede" style="margin-bottom:0">Spinning up your workspace…</p>
+            <div class="lbar" aria-hidden="true"><i></i></div>
+            <span class="dots" aria-hidden="true"><span></span><span></span><span></span></span>
+            <p class="mmeta" style="margin-top:18px">loading modules · this won't take long</p>
+          </div>
+        </div>
+        <footer class="u__foot">
+          <span class="fb">SGEN</span>
+          <span class="m">splash / loading state · shown until first meaningful paint</span>
+        </footer>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CLOSING NOTE ===================== -->
+<section class="section" style="padding-top:8px">
+  <div class="wrap">
+    <div class="empty" style="max-width:720px">
+      <div class="glyph" aria-hidden="true">&#10003;</div>
+      <h4>GAP #5 — utility / system pages — closed</h4>
+      <p style="max-width:52ch">404 · 500 · search no-results (with filter context) · maintenance/offline · full-page loading — each reuses the spine nav + footer and the page-07 empty-state, on the same charcoal-and-red chrome. Back to the <a href="index.html">styleguide index</a> or the <a href="10-sections.html">10 · Sections</a> library.</p>
+      <a class="btn dark" href="index.html">Back to the index</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FOOTER (spine bookend) ===================== -->
+<footer class="foot">
+  <div class="wrap">
+    <span class="fbrand">SGEN · Living Styleguide</span>
+    <a href="index.html">Index</a>
+    <a href="09-accessibility.html">09 · Accessibility</a>
+    <a href="10-sections.html">10 · Sections</a>
+    <a href="11-theming.html">11 · Theming</a><a href="12-iconography.html">12 · Iconography</a><a href="13-utility-pages.html">13 · Utility</a><a href="14-ecommerce.html">14 · Ecommerce</a><a href="15-dataviz.html">15 · Data-viz</a>
+    <a href="13-utility-pages.html" aria-current="page">13 · Utility</a>
+    <span class="meta">5 system templates · 1 shared spine · 0 external deps · GAP #5 closed</span>
+  </div>
+</footer>
+
+</body>
+</html>

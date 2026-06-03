@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>SGEN Living Styleguide — 10 · Sections (the section-block library)</title>
+<style>
+/* ============================================================
+   SGEN LIVING STYLEGUIDE — 10 · SECTIONS
+   charcoal #1a1a1a · red #d51522 · the SECTION-BLOCK LIBRARY hub.
+   The entry point to every drop-in <section> specimen: 11 gallery
+   pages, 53 production-grade blocks. Each block is a real, working,
+   responsive, copy-ready section you lay into the universal page
+   spine (_PAGE-COMPOSITION-LIBRARY.md). Pick the zone, pick the
+   block, drop it in — the architecture is already decided.
+   Self-contained: system fonts, 0 external deps, no images.
+   ============================================================ */
+
+/* ---- THE PAGE CHROME (the styleguide's own, fixed tokens) ---- */
+:root{
+  --ink:#1a1a1a;                 /* charcoal */
+  --paper:#f6f5f3;               /* warm off-white, never #fff */
+  --surface:#ffffff;
+  --muted:#626262;
+  --body:#4a4a4a;
+  --line:rgba(26,26,26,.10);
+  --accent:#d51522;              /* SGEN red */
+  --accent-ink:#a50f19;
+  --accent-2:#ff5762;
+  --ok:#1f8a4c;
+
+  --grad-brand:linear-gradient(135deg,#d51522,#7a0c13);
+  --r-chip:8px; --r-card:16px; --r-panel:24px; --r-pill:9999px;
+  --shadow-rest:0 2px 5px 0 rgba(0,0,0,.08);
+  --shadow-card:0 15px 30px 0 rgba(1,7,39,.13);
+  --shadow-hover:0 32px 64px -12px rgba(16,24,40,.18);
+  --ease:cubic-bezier(.05,.5,.3,1);
+  --t-fast:.2s ease-out;
+  --glass:blur(18px) saturate(180%);
+  --wrap:1180px;
+  --mono:ui-monospace,"SFMono-Regular",Menlo,Consolas,"Liberation Mono",monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+
+  --z-header:1000; --z-skiplink:1100;
+  --header-h:84px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{
+  margin:0;background:var(--paper);color:var(--body);
+  font-family:var(--sans);font-size:16px;line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 24px}
+h1,h2,h3,h4{color:var(--ink);margin:0;letter-spacing:-.02em;line-height:1.06}
+p{margin:0 0 1em}
+a{color:var(--accent-ink);text-decoration:none}
+code{font-family:var(--mono);font-size:.85em;background:rgba(26,26,26,.05);padding:.06em .35em;border-radius:5px}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;text-transform:uppercase;letter-spacing:.16em;font-size:12px;font-weight:700;color:var(--accent)}
+.eyebrow::before{content:"";width:34px;height:2px;background:var(--accent);display:inline-block}
+
+/* ---- skip link (a11y · dogfood page 09) ---- */
+.skip{position:fixed;left:12px;top:-60px;z-index:var(--z-skiplink);
+  background:var(--ink);color:#fff;padding:10px 16px;border-radius:8px;font-weight:700;font-size:13px;
+  transition:top .2s ease}
+.skip:focus{top:12px;outline:3px solid var(--accent);outline-offset:2px}
+
+/* ---------- glass top nav (dogfood: TOP-12 #6) ---------- */
+.topnav{
+  position:sticky;top:0;z-index:var(--z-header);
+  background:rgba(26,26,26,.92);
+  -webkit-backdrop-filter:var(--glass);backdrop-filter:var(--glass);
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+.topnav .wrap{display:flex;align-items:center;gap:8px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;
+  padding-top:12px;padding-bottom:12px}
+.topnav .wrap::-webkit-scrollbar{display:none}
+.brand{display:flex;align-items:center;gap:10px;margin-right:auto;font-weight:700;color:#fff;
+  letter-spacing:-.01em;white-space:nowrap}
+.brand .dot{width:11px;height:11px;border-radius:3px;background:var(--accent);flex:0 0 auto;
+  box-shadow:0 0 0 0 rgba(213,21,34,.6);animation:nudge 3s var(--ease) infinite}
+.brand small{font-weight:600;font-size:.78em;opacity:.7}
+@keyframes nudge{0%,92%,100%{box-shadow:0 0 0 0 rgba(213,21,34,0)}96%{box-shadow:0 0 0 5px rgba(213,21,34,.18)}}
+.topnav a.nav{
+  color:#cfcfcf;font-size:13px;font-weight:600;letter-spacing:.01em;white-space:nowrap;
+  padding:7px 12px;border-radius:var(--r-pill);transition:var(--t-fast)}
+.topnav a.nav:hover{color:#fff;background:rgba(255,255,255,.10)}
+.topnav a.nav[aria-current="page"]{color:#fff;background:var(--accent)}
+
+/* ---------- hero — ambient glow blobs behind charcoal ---------- */
+.hero{position:relative;overflow:hidden;background:var(--ink);color:#fff;padding:96px 0 120px}
+.hero::before,.hero::after{content:"";position:absolute;z-index:0;border-radius:50%;filter:blur(72px);pointer-events:none}
+.hero::before{width:560px;height:560px;left:-150px;top:-170px;background:radial-gradient(circle,rgba(213,21,34,.55),transparent 70%)}
+.hero::after{width:480px;height:480px;right:-120px;bottom:-210px;background:radial-gradient(circle,rgba(213,21,34,.24),transparent 70%)}
+.hero .wrap{position:relative;z-index:1}
+.hero .eyebrow{color:var(--accent-2)}.hero .eyebrow::before{background:var(--accent-2)}
+.hero h1{color:#fff;font-size:clamp(38px,7vw,92px);font-weight:300;letter-spacing:-.045em;
+  line-height:.97;margin:16px 0 0;max-width:15ch}
+.hero h1 b{font-weight:700}
+.hero h1 .clip{background:linear-gradient(135deg,#ff5762,#d51522 60%,#7a0c13);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .lede{margin-top:24px;max-width:740px;color:#d6d6d6;font-size:clamp(16px,2.1vw,20px);line-height:1.6}
+.hero .lede b{color:#fff}
+/* hero quick-stat chips */
+.hstats{position:relative;z-index:1;display:flex;gap:12px;flex-wrap:wrap;margin-top:40px}
+.hstat{flex:1 1 150px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.10);
+  border-radius:var(--r-card);padding:18px 20px;box-shadow:inset 0 1px 0 rgba(255,255,255,.10)}
+.hstat .n{font-size:clamp(32px,5vw,48px);font-weight:300;color:#fff;letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums}
+.hstat .lbl{margin-top:7px;text-transform:uppercase;letter-spacing:.16em;font-size:10.5px;font-weight:700;color:#9b9b9b}
+.scroll-fade{position:absolute;left:0;right:0;bottom:0;height:120px;z-index:1;
+  background:linear-gradient(180deg,rgba(246,245,243,0) 0%,var(--paper) 78%)}
+
+/* ---------- section shell ---------- */
+.section{padding:64px 0}
+.section:nth-of-type(even){background:linear-gradient(180deg,#fff,var(--paper))}
+.section .head{max-width:840px;margin-bottom:28px}
+.section .head h2{font-size:clamp(24px,3.4vw,38px);margin:12px 0 10px}
+.section .head p{color:var(--body);font-size:15.5px;margin:0}
+.num{display:inline-flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:13px;font-weight:700;color:#fff;background:var(--ink);
+  min-width:30px;height:30px;padding:0 9px;border-radius:9px;margin-right:6px;vertical-align:middle}
+
+/* ---------- the spine map (where each gallery sits) ---------- */
+.spine{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:22px}
+.spine .z{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-card);
+  padding:14px 15px;box-shadow:var(--shadow-rest);position:relative;overflow:hidden}
+.spine .z::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent)}
+.spine .z .zn{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);display:block;margin-bottom:5px}
+.spine .z .zt{font-size:13px;font-weight:700;color:var(--ink);line-height:1.3}
+.spine .z .zb{font-size:11.5px;color:var(--muted);margin-top:4px;line-height:1.45}
+
+/* ---------- the gallery grid (the 11 pages) ---------- */
+.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:16px;margin-top:8px}
+.gcard{
+  display:flex;flex-direction:column;background:var(--surface);
+  border:1px solid var(--line);border-radius:var(--r-panel);padding:24px 24px 20px;
+  box-shadow:var(--shadow-rest);position:relative;overflow:hidden;
+  transition:transform var(--t-fast),box-shadow var(--t-fast),border-color var(--t-fast);
+}
+.gcard::before{content:"";position:absolute;left:0;top:0;right:0;height:3px;
+  background:var(--grad-brand);transform:scaleX(0);transform-origin:left;transition:transform .3s var(--ease)}
+.gcard:hover{transform:translateY(-6px);box-shadow:var(--shadow-hover);border-color:rgba(213,21,34,.28)}
+.gcard:hover::before{transform:scaleX(1)}
+.gcard .top{display:flex;align-items:center;gap:11px;margin-bottom:13px}
+.gcard .gn{font-family:var(--mono);font-size:13px;font-weight:700;color:#fff;background:var(--ink);
+  width:34px;height:34px;border-radius:10px;display:grid;place-items:center;flex:0 0 auto;transition:background var(--t-fast)}
+.gcard:hover .gn{background:var(--accent)}
+.gcard .cnt{margin-left:auto;font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.04em;
+  color:var(--accent-ink);background:rgba(213,21,34,.09);border:1px solid rgba(213,21,34,.20);
+  padding:4px 10px;border-radius:var(--r-pill);white-space:nowrap}
+.gcard h3{font-size:18.5px;font-weight:700;color:var(--ink);letter-spacing:-.02em;line-height:1.2;flex:1 1 auto}
+.gcard .zone{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--muted);display:block;margin:2px 0 9px}
+.gcard p{font-size:13.5px;color:var(--body);line-height:1.55;margin:0 0 14px}
+.gcard .atoms{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+.gcard .atoms span{font-family:var(--mono);font-size:10px;font-weight:700;color:var(--muted);
+  background:rgba(26,26,26,.045);border:1px solid var(--line);padding:3px 8px;border-radius:var(--r-pill)}
+.gcard .open{margin-top:auto;display:inline-flex;align-items:center;gap:8px;
+  color:var(--accent-ink);font-weight:700;font-size:13px;letter-spacing:.01em}
+.gcard .open .a{transition:transform var(--t-fast)}
+.gcard:hover .open .a{transform:translateX(4px)}
+.gcard .stretch{position:absolute;inset:0}   /* full-card click target */
+
+/* ---------- the "how to compose" panel ---------- */
+.compose{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-panel);
+  box-shadow:var(--shadow-card);padding:30px clamp(22px,4vw,40px);margin-top:26px}
+.compose .lib{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;font-weight:700;
+  letter-spacing:.04em;color:var(--accent-ink);background:rgba(213,21,34,.08);border:1px solid rgba(213,21,34,.20);
+  padding:6px 12px;border-radius:var(--r-pill);margin-bottom:18px}
+.steps{counter-reset:step;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-top:6px}
+.step{position:relative;background:var(--paper);border:1px solid var(--line);border-radius:var(--r-card);
+  padding:18px 18px 16px 18px;box-shadow:var(--shadow-rest)}
+.step::before{counter-increment:step;content:counter(step,decimal-leading-zero);
+  font-family:var(--mono);font-size:11px;font-weight:700;color:#fff;background:var(--ink);
+  width:28px;height:28px;border-radius:8px;display:grid;place-items:center;margin-bottom:11px}
+.step h4{font-size:14.5px;margin:0 0 5px}
+.step p{font-size:12.5px;color:var(--body);line-height:1.55;margin:0}
+.step code{font-size:.92em}
+.heuristic{margin-top:20px;padding:18px 20px;border-left:3px solid var(--accent);
+  background:rgba(213,21,34,.04);border-radius:0 var(--r-card) var(--r-card) 0}
+.heuristic .k{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);display:block;margin-bottom:6px}
+.heuristic p{margin:0;font-size:14px;color:var(--ink);line-height:1.6}
+.heuristic i{color:var(--accent-ink);font-style:normal;font-weight:700}
+
+/* ---------- through-lines band (dark) ---------- */
+.darkband{padding:60px 0;background:var(--ink);color:#cfcfcf;position:relative;overflow:hidden}
+.darkband::before{content:"";position:absolute;width:520px;height:520px;left:50%;top:-260px;transform:translateX(-50%);
+  border-radius:50%;filter:blur(80px);background:radial-gradient(circle,rgba(213,21,34,.22),transparent 70%);pointer-events:none}
+.darkband .wrap{position:relative;z-index:1}
+.darkband h2{color:#fff;font-size:clamp(23px,3.2vw,34px);margin:12px 0 10px}
+.darkband .eyebrow{color:var(--accent-2)}.darkband .eyebrow::before{background:var(--accent-2)}
+.darkband .lede{max-width:760px;color:#bdbdbd}
+.dgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin-top:24px}
+.dcard{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:var(--r-card);
+  padding:16px 18px;box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
+.dcard .dn{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--accent-2)}
+.dcard h4{color:#fff;font-size:14.5px;margin:8px 0 4px}
+.dcard p{color:#9b9b9b;font-size:12.5px;margin:0;line-height:1.5}
+
+/* ---------- footer ---------- */
+.foot{background:#111;color:#9b9b9b;padding:46px 0;font-size:13px;border-top:1px solid rgba(255,255,255,.08)}
+.foot .wrap{display:flex;gap:16px;flex-wrap:wrap;align-items:center}
+.foot .fbrand{margin-right:auto;color:#fff;font-weight:700}
+.foot a{color:#cfcfcf}.foot a:hover{color:#fff}
+.foot .meta{color:#666;font-family:var(--mono);font-size:11px}
+
+/* ---------- reduced motion ---------- */
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *{animation:none!important;transition:none!important}
+}
+@media (max-width:680px){
+  .hero{padding:76px 0 96px}
+  .gallery{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- ===================== GLASS TOP NAV ===================== -->
+<nav class="topnav">
+  <div class="wrap">
+    <span class="brand"><span class="dot"></span>SGEN&nbsp;<small>Living Styleguide</small></span>
+    <a class="nav" href="index.html">Index</a>
+    <a class="nav" href="00-top12.html">00 · Top-12</a>
+    <a class="nav" href="01-transitions-hero-motion.html">01 · Transitions</a>
+    <a class="nav" href="02-depth-type-color.html">02 · Depth</a>
+    <a class="nav" href="03-layout-imagery-components.html">03 · Layout</a>
+    <a class="nav" href="04-signatures-tokens.html">04 · Signatures</a>
+    <a class="nav" href="06-responsive.html">06 · Responsive</a>
+    <a class="nav" href="07-components.html">07 · Components</a>
+    <a class="nav" href="08-scroll-sticky.html">08 · Scroll / Sticky</a>
+    <a class="nav" href="09-accessibility.html">09 · Accessibility</a>
+    <a class="nav" href="10-sections.html" aria-current="page">10 · Sections</a>
+    <a class="nav" href="11-theming.html">11 · Theming</a><a class="nav" href="12-iconography.html">12 · Iconography</a><a class="nav" href="13-utility-pages.html">13 · Utility</a><a class="nav" href="14-ecommerce.html">14 · Ecommerce</a><a class="nav" href="15-dataviz.html">15 · Data-viz</a>
+  </div>
+</nav>
+
+<!-- ===================== HERO ===================== -->
+<header class="hero" id="main" tabindex="-1">
+  <div class="wrap">
+    <span class="eyebrow">Page 10 — the section-block library</span>
+    <h1>Don't design a page. <b class="clip">Compose</b> one.</h1>
+    <p class="lede">The architecture is already decided. Below is the full library of <b>drop-in <code>&lt;section&gt;</code> blocks</b> — real, working, responsive, copy-ready specimens grouped by the zone they fill in the universal page spine. Pick the zone, pick the block, paste it in. <b>11 gallery pages, 53 blocks.</b> Every one is self-contained, motion lives only in the browser, and the order they go in is the <code>_PAGE-COMPOSITION-LIBRARY.md</code>.</p>
+    <div class="hstats">
+      <div class="hstat"><div class="n">11</div><div class="lbl">gallery pages</div></div>
+      <div class="hstat"><div class="n">53</div><div class="lbl">section blocks</div></div>
+      <div class="hstat"><div class="n">8</div><div class="lbl">spine zones</div></div>
+      <div class="hstat"><div class="n">16</div><div class="lbl">verticals covered</div></div>
+    </div>
+  </div>
+  <div class="scroll-fade"></div>
+</header>
+
+<!-- ===================== §1 — THE SPINE MAP ===================== -->
+<section class="section">
+  <div class="wrap">
+    <div class="head">
+      <span class="eyebrow">Where each block lives</span>
+      <h2><span class="num">1</span>The 8-zone page spine — every block fills a slot.</h2>
+      <p>A real homepage is ~8–12 sections laid into one invariant spine. The bookends (NAV, CONVERSION, FOOTER) and the proof→close tail are near-universal across all 16 verticals; the middle zones expand per vertical. The gallery below is grouped by the zone a block fills.</p>
+    </div>
+    <div class="spine">
+      <div class="z"><span class="zn">Zone 1</span><span class="zt">Nav</span><span class="zb">sticky → glass-on-scroll + one pinned CTA</span></div>
+      <div class="z"><span class="zn">Zone 2</span><span class="zt">Hero</span><span class="zb">the promise + primary action, above the fold</span></div>
+      <div class="z"><span class="zn">Zone 3</span><span class="zt">Trust / Intro</span><span class="zb">positioning · logos · benefits bridge</span></div>
+      <div class="z"><span class="zn">Zone 4</span><span class="zt">Value / Services</span><span class="zb">the scannable icon-tile capabilities grid</span></div>
+      <div class="z"><span class="zn">Zone 5</span><span class="zt">Proof</span><span class="zb">count-up stats + testimonials + case-study</span></div>
+      <div class="z"><span class="zn">Zone 6</span><span class="zt">Vertical block</span><span class="zb">the identity payload — pricing / gallery / team</span></div>
+      <div class="z"><span class="zn">Zone 7</span><span class="zt">Conversion</span><span class="zb">the close — CTA · FAQ · lead-gen form</span></div>
+      <div class="z"><span class="zn">Zone 8</span><span class="zt">Footer</span><span class="zb">nav cols + contact + social + legal</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== §2 — THE GALLERY (11 pages, 53 blocks) ===================== -->
+<section class="section">
+  <div class="wrap">
+    <div class="head">
+      <span class="eyebrow">The library · 11 pages · 53 blocks</span>
+      <h2><span class="num">2</span>The section-block gallery.</h2>
+      <p>Open any page to judge the motion live — staggered reveals, hover-zoom, glass-on-scroll, count-up and carousels are visible only in the browser, never in a static capture. Each card names the spine zone it fills and the slot atoms it implements.</p>
+    </div>
+    <div class="gallery">
+
+      <!-- HEADERS -->
+      <div class="gcard">
+        <a class="stretch" href="sections-headers.html" aria-label="Open Headers / Navs gallery"></a>
+        <div class="top"><span class="gn">A</span><span class="cnt">4 blocks</span></div>
+        <h3>Headers / Navs</h3>
+        <span class="zone">Zone 1 · Nav</span>
+        <p>Four live header variants — transparent-over-hero → glass-on-scroll, mega-menu, centered-logo and slim utility bar. Each ships the pinned conversion CTA and collapses to a mobile drawer.</p>
+        <div class="atoms"><span>S-NAV</span><span>I8</span><span>TOP-12 #6</span><span>I1</span></div>
+        <span class="open">Open page <span class="a">→</span></span>
+      </div>
+
+      <!-- HEROES -->
+      <div class="gcard">
+        <a class="stretch" href="sections-heroes.html" aria-label="Open Heroes gallery"></a>
+        <div class="top"><span class="gn">B</span><span class="cnt">8 blocks</span></div>
+        <h3>Heroes</h3>
+        <span class="zone">Zone 2 · Hero</span>
+        <p>Eight production-ready hero archetypes — media+scrim, type-led, split, device+glow, slider and more. The hero TYPE is the single most identity-defining slot decision for any vertical.</p>
+        <div class="atoms"><span>S-HERO</span><span>B1–B6</span><span>E2</span><span>I1</span></div>
+        <span class="open">Open page <span class="a">→</span></span>
+      </div>
+
+      <!-- TRUST + STATS -->
+      <div class="gcard">
+        <a class="stretch" href="sections-trust-stats.html" aria-label="Open Trust + Stats gallery"></a>
+        <div class="top"><span class="gn">C</span><span class="cnt">4 blocks</span></div>
+        <h3>Trust + Stats</h3>
+        <span class="zone">Zone 3 + 5 · Trust / Proof</span>
+        <p>Two borrowed-credibility trust bars (mono logo row + scrolling marquee) and two quantified-proof stat blocks (count-up 3-up + big-number anchor band). The stat counter band is near-mandatory proof.</p>
+        <div class="atoms"><span>S-LOGOS</span><span>S-STATS</span><span>C3</span><span>TOP-12 #5</span></div>
+        <span class="open">Open page <span class="a">→</span></span>
+      </div>
+
+      <!-- FEATURES -->
+      <div class="gcard">
+        <a class="stretch" href="sections-features.html" aria-label="Open Features / Services gallery"></a>
+        <div class="top"><span class="gn">D</span><span class="cnt">6 blocks</span></div>
+        <h3>Features / Services</h3>
+        <span class="zone">Zone 4 · Value / Services</span>
+        <p>Six variants of the scannable "what you get" zone — the icon-tile grid (the universal zone-4), alternating media↔copy deep-dive rows, and numbered how-it-works process steps. The page's table of contents.</p>
+        <div class="atoms"><span>S-SERVICES</span><span>S-DEEPDIVE</span><span>S-PROCESS</span><span>G4</span><span>I5</span></div>
+        <span class="open">Open page <span class="a">→</span></span>
+      </div>
+
+      <!-- PROOF -->
+      <div class="gcard">
+        <a class="stretch" href="sections-proof.html" aria-label="Open Proof gallery"></a>
+        <div class="top"><span class="gn">E</span><span class="cnt">5 blocks</span></div>
+        <h3>Proof</h3>
+        <span class="zone">Zone 5 · Proof</span>
+        <p>Five credibility blocks — testimonials as a cards grid, one big dark-band pull-quote, a swipe carousel, plus a metric-led case study and an image+result showcase split. Pick by how many quotes and how visual the work.</p>
+        <div class="atoms"><span>S-TESTIMONIAL</span><span>S-RESULTS</span><span>I4</span><span>C3</span><span>A4</span></div>
+        <span class="open">Open page <span class="a">→</span></span>
+      </div>
+
+      <!-- PRICING -->
+      <div class="gcard">
+        <a class="stretch" href="sections-pricing.html" aria-label="Open Pricing gallery"></a>
+        <div class="top"><span class="gn">F</span><span class="cnt">3 blocks</span></div>
+        <h3>Pricing</h3>
+        <span class="zone">Zone 6 · Vertical block</span>
+        <p>Three tier-card layouts with the middle plan featured — the conversion spine for gym, SaaS, medical and event verticals, where the whole page is built <i>toward</i> the plan decision. Monthly/annual toggle, comparison-ready.</p>
+        <div class="atoms"><span>S-PRICING</span><span>G6</span><span>I1</span></div>
+        <span class="open">Open page <span class="a">→</span></span>
+      </div>
+
+      <!-- CTA + FAQ -->
+      <div class="gcard">
+        <a class="stretch" href="sections-cta-faq.html" aria-label="Open CTA + FAQ gallery"></a>
+        <div class="top"><span class="gn">G</span><span class="cnt">6 blocks</span></div>
+        <h3>CTA + FAQ</h3>
+        <span class="zone">Zone 7 · Conversion</span>
+        <p>The closing pair — four full-width CTA bands (type-led anchor, accent band, split + inline action) and two FAQ blocks (accordion with accent active row + all-visible grid). The restated ask for scrollers.</p>
+        <div class="atoms"><span>S-CTA</span><span>S-FAQ</span><span>B2</span><span>F5</span><span>I9</span></div>
+        <span class="open">Open page <span class="a">→</span></span>
+      </div>
+
+      <!-- TEAM + GALLERY -->
+      <div class="gcard">
+        <a class="stretch" href="sections-team-gallery.html" aria-label="Open Team + Gallery gallery"></a>
+        <div class="top"><span class="gn">H</span><span class="cnt">5 blocks</span></div>
+        <h3>Team + Gallery</h3>
+        <span class="zone">Zone 6 · Vertical block</span>
+        <p>Two team blocks (card grid + circular roster, hover-reveal bios) and three image galleries (masonry hover-zoom, filterable grid, circle-mask tile wall). The people + work payload for agency, medical and portfolio verticals.</p>
+        <div class="atoms"><span>S-TEAM</span><span>S-GALLERY</span><span>G3</span><span>G4</span><span>H1</span><span>H2</span></div>
+        <span class="open">Open page <span class="a">→</span></span>
+      </div>
+
+      <!-- CONTENT / BLOG -->
+      <div class="gcard">
+        <a class="stretch" href="sections-content-blog.html" aria-label="Open Content / Blog gallery"></a>
+        <div class="top"><span class="gn">I</span><span class="cnt">3 blocks</span></div>
+        <h3>Content / Blog</h3>
+        <span class="zone">Zone 6 + 7 · Editorial</span>
+        <p>Three editorial layouts — a post-card grid, a featured + list split, and an editorial index. The news/blog/insights payload that carries authority for charity, education, real-estate and agency inner pages.</p>
+        <div class="atoms"><span>S-SHOWCASE</span><span>I2</span><span>G4</span><span>H1</span></div>
+        <span class="open">Open page <span class="a">→</span></span>
+      </div>
+
+      <!-- FOOTERS -->
+      <div class="gcard">
+        <a class="stretch" href="sections-footers.html" aria-label="Open Footers gallery"></a>
+        <div class="top"><span class="gn">J</span><span class="cnt">4 blocks</span></div>
+        <h3>Footers</h3>
+        <span class="zone">Zone 8 · Footer</span>
+        <p>Four dark-panel closes — multi-column nav, contact-recap with inset-radius top edge, a newsletter+social variant and a slim legal bar. The secondary-nav, contact, social and legal capstone for any page.</p>
+        <div class="atoms"><span>S-FOOTER</span><span>J1</span><span>I10</span><span>C2b</span></div>
+        <span class="open">Open page <span class="a">→</span></span>
+      </div>
+
+      <!-- FORMS / LEAD-GEN -->
+      <div class="gcard">
+        <a class="stretch" href="sections-forms-leadgen.html" aria-label="Open Forms / Lead-Gen gallery"></a>
+        <div class="top"><span class="gn">K</span><span class="cnt">5 blocks</span></div>
+        <h3>Forms / Lead-Gen</h3>
+        <span class="zone">Zone 7 · Conversion</span>
+        <p>Five lead-capture blocks — appointment/contact band, inline newsletter strip, split form+details, multi-step quote and a full-width signup. ≥16px inputs (no iOS zoom), 100%-width on mobile, real validation states.</p>
+        <div class="atoms"><span>S-CONTACT</span><span>Comp1</span><span>G5</span><span>I1</span></div>
+        <span class="open">Open page <span class="a">→</span></span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===================== §3 — HOW TO COMPOSE A TEMPLATE ===================== -->
+<section class="section">
+  <div class="wrap">
+    <div class="head">
+      <span class="eyebrow">From blocks to a template</span>
+      <h2><span class="num">3</span>How to compose a template from blocks.</h2>
+      <p>The blocks are the parts; the <b>order</b> is the architecture. The full procedure, the 16 DOM-verified per-vertical sequences, and the slot-atom legend all live in the composition library — this is the short version.</p>
+    </div>
+
+    <div class="compose">
+      <span class="lib">📐 source · _PAGE-COMPOSITION-LIBRARY.md → §0.2 (7-step procedure)</span>
+      <div class="steps">
+        <div class="step"><h4>Pick the vertical</h4><p>Look up its row in the library §2 — that gives the verified homepage sequence and inner-page blueprints.</p></div>
+        <div class="step"><h4>Lay the universal spine</h4><p>Drop the 8 zones (§1 above) as the frame. Every vertical IS this spine reordered and expanded.</p></div>
+        <div class="step"><h4>Choose the hero TYPE</h4><p>The most identity-defining slot — pick a block from the <a href="sections-heroes.html">Heroes</a> gallery (B1–B6) by vertical.</p></div>
+        <div class="step"><h4>Drop in the vertical block</h4><p>Zone 6 is the payload — <a href="sections-pricing.html">Pricing</a>, <a href="sections-team-gallery.html">Gallery</a>, menu or product grid — that makes it <i>this</i> vertical.</p></div>
+        <div class="step"><h4>Apply the composition rules</h4><p>How many sections, where proof sits, where the CTA lands, the vertical rhythm, and the never-do list (library §3).</p></div>
+        <div class="step"><h4>Fill each slot + lay the through-lines</h4><p>One accent colors the conversion path · alternating grounds are the skeleton · one transition family per page.</p></div>
+        <div class="step"><h4>Reflow + clear the gate</h4><p>Reflow every section per the responsive library and render-test at 390 + 768 + 1440. Fail-closed: an unproven breakpoint is a failing breakpoint.</p></div>
+      </div>
+      <div class="heuristic">
+        <span class="k">The one-line heuristic</span>
+        <p>The spine is invariant; the <i>hero TYPE</i> and the <i>vertical block</i> are the two knobs that make a template read as a given vertical; the proof→pricing/FAQ→CTA tail is the close for conversion verticals and is swapped for a gallery/showcase tail on showcase verticals.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== THROUGH-LINES BAND ===================== -->
+<section class="darkband">
+  <div class="wrap">
+    <span class="eyebrow">Three through-lines run the whole stack</span>
+    <h2>What holds a composed page together.</h2>
+    <p class="lede">These aren't blocks you place — they run <i>across</i> every block, top to bottom. Lay them once and a stack of independent sections reads as one designed page.</p>
+    <div class="dgrid">
+      <div class="dcard"><span class="dn">one accent</span><h4>Color-code the path</h4><p>A single hue paints every CTA, icon chip, counter numeral, link hover, active state and featured tier — the conversion path is the accent.</p></div>
+      <div class="dcard"><span class="dn">alternating grounds</span><h4>Ground = skeleton</h4><p>Full-bleed bands alternate paper → 3–8% tint → one near-black anchor. Depth is whitespace and figure/ground, not chrome between bands.</p></div>
+      <div class="dcard"><span class="dn">one transition family</span><h4>Seam with intent</h4><p>Shape dividers only where the mood fits; elsewhere color-band contrast + the image bottom-fade + inset panels. One family per page, 2–4 uses, never mixed.</p></div>
+      <div class="dcard"><span class="dn">reduced-motion</span><h4>Gate every move</h4><p>Every reveal, count-up and hover is gated behind <code>prefers-reduced-motion</code> — the page is fully legible and complete with motion off.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="foot">
+  <div class="wrap">
+    <span class="fbrand">SGEN · Living Styleguide</span>
+    <a href="index.html">Index</a>
+    <a href="08-scroll-sticky.html">08 · Scroll / Sticky</a>
+    <a href="09-accessibility.html">09 · Accessibility</a>
+    <a href="10-sections.html">10 · Sections</a>
+    <a href="11-theming.html">11 · Theming</a><a href="12-iconography.html">12 · Iconography</a><a href="13-utility-pages.html">13 · Utility</a><a href="14-ecommerce.html">14 · Ecommerce</a><a href="15-dataviz.html">15 · Data-viz</a>
+    <span class="meta">11 gallery pages · 53 section blocks · 8 spine zones · compose, don't design</span>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>SGEN Living Styleguide — 15 · Data-Viz Kit (live)</title>
+<style>
+/* ============================================================
+   SGEN LIVING STYLEGUIDE — 15 · DATA-VIZ KIT  (GAP #7)
+   charcoal #1a1a1a · red #d51522 · warm paper, never #fff
+   A small CSS/SVG data-viz set — bar, line/sparkline, donut/ring
+   gauge, KPI/metric card. Colour tokens derived from the accent
+   + the four semantic tones. Reduced-motion-aware. Responsive.
+   Self-contained: system fonts, 0 external deps, CSS/SVG visuals,
+   no external images.
+   ============================================================ */
+
+/* ---- THE PAGE CHROME (styleguide's own fixed tokens, matches 00–11) ---- */
+:root{
+  --ink:#1a1a1a;                 /* charcoal */
+  --paper:#f6f5f3;               /* warm off-white, never #fff */
+  --surface:#ffffff;
+  --muted:#626262;
+  --body:#4a4a4a;
+  --line:rgba(26,26,26,.10);
+  --accent:#d51522;              /* SGEN red */
+  --accent-ink:#a50f19;          /* darker red for text-on-light */
+  --accent-2:#ff5762;
+  --ok:#1f8a4c;
+
+  --grad-brand:linear-gradient(135deg,#d51522,#7a0c13);
+  --r-chip:8px; --r-card:16px; --r-panel:24px; --r-pill:9999px;
+  --shadow-rest:0 2px 5px 0 rgba(0,0,0,.08);
+  --shadow-card:0 15px 30px 0 rgba(1,7,39,.13);
+  --shadow-hover:0 32px 64px -12px rgba(16,24,40,.18);
+  --ease:cubic-bezier(.05,.5,.3,1);
+  --t-fast:.2s ease-out;
+  --glass:blur(18px) saturate(180%);
+  --wrap:1180px;
+  --mono:ui-monospace,"SFMono-Regular",Menlo,Consolas,"Liberation Mono",monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+
+  --z-header:1000; --z-skiplink:1100;
+
+  /* -------------------------------------------------------------
+     DATA-VIZ TOKEN LAYER  — derived from accent + semantic tones
+     -------------------------------------------------------------
+     ONE accent anchors the categorical ramp; the four semantic
+     tones (ok / info / warn / err) carry status meaning. Grid &
+     axis are tinted ink so the data always wins the contrast.   */
+  --viz-accent:#d51522;          /* primary series = the brand red */
+  --viz-accent-soft:#ff5762;     /* lighter sibling of the accent  */
+  --viz-deep:#7a0c13;            /* deep end of the brand gradient */
+
+  /* semantic tones (tinted, never pure) — shared with page 07 */
+  --viz-ok:#1f8a4c;   --viz-ok-bg:#eaf6ee;
+  --viz-info:#1668c4; --viz-info-bg:#eaf2fb;
+  --viz-warn:#9a6800; --viz-warn-bg:#fdf4e3;
+  --viz-err:#c0121e;  --viz-err-bg:#fdeced;
+
+  /* categorical series ramp — accent first, then de-conflicted hues */
+  --c1:#d51522;  /* accent      */
+  --c2:#1a1a1a;  /* ink         */
+  --c3:#1668c4;  /* info blue   */
+  --c4:#9a6800;  /* warn ochre  */
+  --c5:#1f8a4c;  /* ok green    */
+  --c6:#ff5762;  /* accent-soft */
+
+  /* chart chrome */
+  --grid:rgba(26,26,26,.10);
+  --grid-strong:rgba(26,26,26,.18);
+  --track:rgba(26,26,26,.08);    /* unfilled gauge / progress track */
+  --axis:rgba(26,26,26,.40);
+  --tick:#8a8a8a;
+
+  /* viz motion */
+  --t-grow:.9s var(--ease);      /* bars rise / area fills */
+  --t-draw:1.4s var(--ease);     /* line / ring draws on  */
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{
+  margin:0;background:var(--paper);color:var(--body);
+  font-family:var(--sans);font-size:16px;line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 24px}
+h1,h2,h3,h4{color:var(--ink);margin:0;letter-spacing:-.02em;line-height:1.06}
+p{margin:0 0 1em}
+a{color:var(--accent-ink);text-decoration:none}
+code{font-family:var(--mono);font-size:.85em;background:rgba(26,26,26,.05);padding:.06em .35em;border-radius:5px}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;text-transform:uppercase;letter-spacing:.16em;font-size:12px;font-weight:700;color:var(--accent)}
+.eyebrow::before{content:"";width:34px;height:2px;background:var(--accent);display:inline-block}
+
+/* ---- skip link (a11y · dogfood page 09) ---- */
+.skip{position:fixed;left:12px;top:-60px;z-index:var(--z-skiplink);
+  background:var(--ink);color:#fff;padding:10px 16px;border-radius:8px;font-weight:700;font-size:13px;
+  transition:top .2s ease}
+.skip:focus{top:12px;outline:3px solid var(--accent);outline-offset:2px}
+
+/* ---------- glass sticky top nav (dogfood: TOP-12 #6) ---------- */
+.topnav{
+  position:sticky;top:0;z-index:var(--z-header);
+  background:rgba(26,26,26,.92);
+  -webkit-backdrop-filter:var(--glass);backdrop-filter:var(--glass);
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+.topnav .wrap{display:flex;align-items:center;gap:8px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;
+  padding-top:12px;padding-bottom:12px}
+.topnav .wrap::-webkit-scrollbar{display:none}
+.brand{display:flex;align-items:center;gap:10px;margin-right:auto;font-weight:700;color:#fff;
+  letter-spacing:-.01em;white-space:nowrap}
+.brand .dot{width:11px;height:11px;border-radius:3px;background:var(--accent);flex:0 0 auto;
+  box-shadow:0 0 0 0 rgba(213,21,34,.6);animation:nudge 3s var(--ease) infinite}
+.brand small{font-weight:600;font-size:.78em;opacity:.7}
+@keyframes nudge{0%,92%,100%{box-shadow:0 0 0 0 rgba(213,21,34,0)}96%{box-shadow:0 0 0 5px rgba(213,21,34,.18)}}
+.topnav a.nav{
+  color:#cfcfcf;font-size:13px;font-weight:600;letter-spacing:.01em;white-space:nowrap;
+  padding:7px 12px;border-radius:var(--r-pill);transition:var(--t-fast)}
+.topnav a.nav:hover{color:#fff;background:rgba(255,255,255,.10)}
+.topnav a.nav[aria-current="page"]{color:#fff;background:var(--accent)}
+
+/* ---------- hero — ambient glow blobs behind charcoal ---------- */
+.hero{position:relative;overflow:hidden;background:var(--ink);color:#fff;padding:96px 0 120px}
+.hero::before,.hero::after{content:"";position:absolute;z-index:0;border-radius:50%;filter:blur(72px);pointer-events:none}
+.hero::before{width:560px;height:560px;left:-150px;top:-170px;background:radial-gradient(circle,rgba(213,21,34,.55),transparent 70%)}
+.hero::after{width:480px;height:480px;right:-120px;bottom:-210px;background:radial-gradient(circle,rgba(213,21,34,.24),transparent 70%)}
+.hero .wrap{position:relative;z-index:1}
+.hero .eyebrow{color:var(--accent-2)}.hero .eyebrow::before{background:var(--accent-2)}
+.hero h1{color:#fff;font-size:clamp(38px,7vw,92px);font-weight:300;letter-spacing:-.045em;
+  line-height:.97;margin:16px 0 0;max-width:15ch}
+.hero h1 b{font-weight:700}
+.hero h1 .clip{background:linear-gradient(135deg,#ff5762,#d51522 60%,#7a0c13);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .lede{margin-top:24px;max-width:740px;color:#d6d6d6;font-size:clamp(16px,2.1vw,20px);line-height:1.6}
+.hero .lede b{color:#fff}
+.hstats{position:relative;z-index:1;display:flex;gap:12px;flex-wrap:wrap;margin-top:40px}
+.hstat{flex:1 1 150px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.10);
+  border-radius:var(--r-card);padding:18px 20px;box-shadow:inset 0 1px 0 rgba(255,255,255,.10)}
+.hstat .n{font-size:clamp(32px,5vw,48px);font-weight:300;color:#fff;letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums}
+.hstat .lbl{margin-top:7px;text-transform:uppercase;letter-spacing:.16em;font-size:10.5px;font-weight:700;color:#9b9b9b}
+.scroll-fade{position:absolute;left:0;right:0;bottom:0;height:120px;z-index:1;
+  background:linear-gradient(180deg,rgba(246,245,243,0) 0%,var(--paper) 78%)}
+
+/* ---------- section shell ---------- */
+.section{padding:64px 0}
+.section:nth-of-type(even){background:linear-gradient(180deg,#fff,var(--paper))}
+.section .head{max-width:840px;margin-bottom:30px}
+.section .head h2{font-size:clamp(24px,3.4vw,38px);margin:12px 0 10px}
+.section .head p{color:var(--body);font-size:15.5px;margin:0}
+.snum{display:inline-flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:13px;font-weight:700;color:#fff;background:var(--ink);
+  min-width:30px;height:30px;padding:0 9px;border-radius:9px;margin-right:6px;vertical-align:middle}
+
+/* ---------- in-page category chips ---------- */
+.catnav{background:rgba(246,245,243,.86);backdrop-filter:blur(8px);position:sticky;top:55px;z-index:40;
+  border-bottom:1px solid var(--line)}
+.catnav .wrap{display:flex;gap:8px;flex-wrap:wrap;padding-top:11px;padding-bottom:11px}
+.catnav a{font-size:12.5px;font-weight:700;padding:6px 13px;border:1px solid var(--line);
+  border-radius:var(--r-pill);color:var(--ink);background:var(--surface);transition:all var(--t-fast);white-space:nowrap}
+.catnav a:hover{border-color:var(--accent);color:var(--accent-ink)}
+
+/* ---------- specimen card frame ---------- */
+.vizgrid{display:grid;gap:18px;margin-top:8px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.card{
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--r-panel);
+  box-shadow:var(--shadow-rest);padding:24px 24px 22px;position:relative;overflow:hidden;
+  transition:transform var(--t-fast),box-shadow var(--t-fast),border-color var(--t-fast);
+}
+.card:hover{transform:translateY(-4px);box-shadow:var(--shadow-card);border-color:rgba(213,21,34,.22)}
+.card .ch{display:flex;align-items:flex-start;gap:12px;margin-bottom:18px}
+.card .ch .tt{flex:1;min-width:0}
+.card .ch h3{font-size:16.5px;font-weight:700;color:var(--ink);letter-spacing:-.01em}
+.card .ch .sub{font-size:12.5px;color:var(--muted);margin-top:3px}
+.card .ch .tag{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.04em;
+  color:var(--accent-ink);background:rgba(213,21,34,.09);border:1px solid rgba(213,21,34,.20);
+  padding:4px 9px;border-radius:var(--r-pill);white-space:nowrap;flex:0 0 auto}
+
+/* legend (shared) */
+.legend{display:flex;flex-wrap:wrap;gap:14px;margin-top:16px;font-size:12px;color:var(--body)}
+.legend .lg{display:inline-flex;align-items:center;gap:7px}
+.legend .sw{width:11px;height:11px;border-radius:3px;flex:0 0 auto}
+
+/* =====================================================================
+   1) BAR CHART  — CSS grid columns, value-driven heights (--v 0..1)
+   ===================================================================== */
+.bars{--h:188px;position:relative;height:var(--h);margin-top:6px;
+  padding:0 4px 0 34px;display:flex;align-items:flex-end;gap:clamp(8px,2.4vw,20px)}
+/* y-axis gridlines + labels */
+.bars .yaxis{position:absolute;left:0;top:0;right:4px;bottom:22px;pointer-events:none}
+.bars .yaxis .gl{position:absolute;left:30px;right:0;border-top:1px dashed var(--grid);font-size:0}
+.bars .yaxis .yl{position:absolute;left:0;width:26px;text-align:right;
+  font-family:var(--mono);font-size:9.5px;color:var(--tick);transform:translateY(-50%)}
+.bar{flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
+  height:calc(var(--h) - 22px);position:relative}
+.bar .col{width:100%;max-width:46px;border-radius:6px 6px 0 0;position:relative;
+  background:linear-gradient(180deg,var(--c2,var(--accent)),color-mix(in srgb,var(--c2,var(--accent)) 78%,#000));
+  /* grow-in: scaleY from 0 -> 1 anchored at the baseline */
+  height:calc(var(--v) * 100%);transform:scaleY(0);transform-origin:bottom;
+  transition:transform var(--t-grow);box-shadow:0 1px 0 rgba(255,255,255,.25) inset}
+.bars.in .bar .col{transform:scaleY(1)}
+.bar .col[data-c="1"]{--c2:var(--c1)} .bar .col[data-c="2"]{--c2:var(--c2x,#1a1a1a)}
+.bar .col.accent{background:linear-gradient(180deg,var(--accent-2),var(--accent) 55%,var(--deep,#7a0c13))}
+.bar .vlbl{position:absolute;top:-19px;left:50%;transform:translateX(-50%);
+  font-family:var(--mono);font-size:11px;font-weight:700;color:var(--ink);
+  opacity:0;transition:opacity .4s var(--ease) .5s;white-space:nowrap}
+.bars.in .bar .vlbl{opacity:1}
+.bar .xlbl{position:absolute;bottom:-21px;left:0;right:0;text-align:center;
+  font-size:11px;color:var(--muted);font-weight:600}
+.bar:hover .col{filter:brightness(1.08)}
+.bars + .xpad{height:8px}
+
+/* grouped bars variant */
+.gbars{--h:170px;height:var(--h);display:flex;align-items:flex-end;gap:clamp(10px,3vw,26px);
+  padding-left:6px;margin-top:6px}
+.gbar{flex:1;display:flex;flex-direction:column;align-items:center;gap:8px}
+.gbar .pair{display:flex;align-items:flex-end;gap:5px;height:calc(var(--h) - 24px);width:100%;justify-content:center}
+.gbar .seg{width:30%;max-width:24px;border-radius:5px 5px 0 0;height:calc(var(--v) * 100%);
+  transform:scaleY(0);transform-origin:bottom;transition:transform var(--t-grow)}
+.gbars.in .gbar .seg{transform:scaleY(1)}
+.gbar .seg.a{background:var(--accent)} .gbar .seg.b{background:var(--ink)}
+.gbar .xlbl{font-size:11px;color:var(--muted);font-weight:600}
+
+/* horizontal bars (ranked list) */
+.hbars{display:flex;flex-direction:column;gap:13px;margin-top:6px}
+.hbar{display:grid;grid-template-columns:84px 1fr 46px;align-items:center;gap:12px}
+.hbar .nm{font-size:12.5px;color:var(--ink);font-weight:600;text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hbar .trk{height:14px;background:var(--track);border-radius:var(--r-pill);overflow:hidden}
+.hbar .fill{height:100%;border-radius:var(--r-pill);width:calc(var(--v) * 100%);
+  transform:scaleX(0);transform-origin:left;transition:transform var(--t-grow);
+  background:linear-gradient(90deg,var(--accent),var(--accent-2))}
+.hbars.in .hbar .fill{transform:scaleX(1)}
+.hbar .pct{font-family:var(--mono);font-size:11.5px;font-weight:700;color:var(--ink);text-align:right;
+  font-variant-numeric:tabular-nums}
+
+/* =====================================================================
+   2) LINE / SPARKLINE  — inline SVG, draw-on via stroke-dashoffset
+   ===================================================================== */
+.linewrap{margin-top:4px}
+.linechart{width:100%;height:auto;display:block;overflow:visible}
+.linechart .grid line{stroke:var(--grid);stroke-width:1;stroke-dasharray:3 4}
+.linechart .axis{stroke:var(--axis);stroke-width:1}
+.linechart .area{fill:url(#areaFill);opacity:0;transition:opacity .7s var(--ease) .35s}
+.linechart.in .area{opacity:1}
+.linechart .pathline{fill:none;stroke:var(--accent);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;
+  stroke-dasharray:var(--len,600);stroke-dashoffset:var(--len,600);transition:stroke-dashoffset var(--t-draw)}
+.linechart.in .pathline{stroke-dashoffset:0}
+.linechart .dot{fill:var(--surface);stroke:var(--accent);stroke-width:2.5;opacity:0;transition:opacity .4s var(--ease) 1s}
+.linechart.in .dot{opacity:1}
+.linechart .lastdot{fill:var(--accent);stroke:#fff;stroke-width:2}
+.linechart .tlabel{font-family:var(--mono);font-size:9px;fill:var(--tick)}
+.linechart .ylabel{font-family:var(--mono);font-size:9px;fill:var(--tick)}
+
+/* inline sparklines (no axis, sits in flow / inside a metric) */
+.spark{display:inline-block;vertical-align:middle;width:108px;height:30px}
+.spark .sl{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;
+  stroke-dasharray:var(--len,200);stroke-dashoffset:var(--len,200);transition:stroke-dashoffset 1.1s var(--ease)}
+.spark.in .sl{stroke-dashoffset:0}
+.spark .sa{opacity:0;transition:opacity .6s var(--ease) .3s}
+.spark.in .sa{opacity:.16}
+.spark.up .sl{stroke:var(--viz-ok)} .spark.up .sa{fill:var(--viz-ok)}
+.spark.down .sl{stroke:var(--viz-err)} .spark.down .sa{fill:var(--viz-err)}
+.spark.neutral .sl{stroke:var(--accent)} .spark.neutral .sa{fill:var(--accent)}
+.sparkrow{display:flex;flex-direction:column;gap:14px;margin-top:4px}
+.sparkline-item{display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:14px;
+  padding:11px 4px;border-bottom:1px solid var(--line)}
+.sparkline-item:last-child{border-bottom:0}
+.sparkline-item .nm{font-size:13px;font-weight:600;color:var(--ink)}
+.sparkline-item .val{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--ink);text-align:right;font-variant-numeric:tabular-nums}
+
+/* =====================================================================
+   3) DONUT / RING GAUGE  — SVG circle, dasharray sweep
+   ===================================================================== */
+.rings{display:flex;flex-wrap:wrap;gap:24px;justify-content:center;margin-top:6px}
+.ring{width:150px;text-align:center;flex:0 0 auto}
+.ring svg{width:150px;height:150px;transform:rotate(-90deg)}
+.ring .track{fill:none;stroke:var(--track);stroke-width:13}
+.ring .prog{fill:none;stroke-width:13;stroke-linecap:round;
+  stroke-dasharray:var(--circ,377);stroke-dashoffset:var(--circ,377);
+  transition:stroke-dashoffset var(--t-draw)}
+.ring.in .prog{stroke-dashoffset:var(--off,377)}
+.ring .center{position:relative;margin-top:-99px;height:78px;display:flex;flex-direction:column;justify-content:center}
+.ring .pct{font-size:30px;font-weight:700;color:var(--ink);letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums}
+.ring .cl{margin-top:30px;font-size:12px;color:var(--muted);font-weight:600}
+.ring.c-accent .prog{stroke:var(--accent)}
+.ring.c-ok .prog{stroke:var(--viz-ok)}
+.ring.c-info .prog{stroke:var(--viz-info)}
+.ring.c-warn .prog{stroke:var(--viz-warn)}
+.ring .pct small{font-size:15px;font-weight:600;color:var(--muted)}
+
+/* multi-segment donut (composition / share) */
+.donutwrap{display:flex;align-items:center;gap:26px;flex-wrap:wrap;margin-top:6px}
+.donut{width:168px;height:168px;flex:0 0 auto;position:relative}
+.donut svg{width:168px;height:168px;transform:rotate(-90deg)}
+.donut .seg{fill:none;stroke-width:22;
+  stroke-dasharray:0 999;transition:stroke-dasharray var(--t-draw)}
+.donut .hole{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.donut .hole .big{font-size:26px;font-weight:700;color:var(--ink);letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums}
+.donut .hole .lbl{font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;font-weight:700;margin-top:5px}
+.donut-legend{flex:1;min-width:160px;display:flex;flex-direction:column;gap:9px}
+.donut-legend .li{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--body)}
+.donut-legend .li .sw{width:12px;height:12px;border-radius:3px;flex:0 0 auto}
+.donut-legend .li b{color:var(--ink);margin-left:auto;font-family:var(--mono);font-size:12.5px;font-variant-numeric:tabular-nums}
+
+/* semi-circle gauge */
+.gaugewrap{text-align:center;margin-top:6px}
+.gauge{width:230px;max-width:100%;display:inline-block}
+.gauge svg{width:100%;height:auto;display:block}
+.gauge .gtrack{fill:none;stroke:var(--track);stroke-width:16;stroke-linecap:round}
+.gauge .gfill{fill:none;stroke-width:16;stroke-linecap:round;
+  stroke-dasharray:var(--arc,251);stroke-dashoffset:var(--arc,251);
+  transition:stroke-dashoffset var(--t-draw);stroke:url(#gaugeGrad)}
+.gauge.in .gfill{stroke-dashoffset:var(--goff,251)}
+.gauge .gval{font-size:34px;font-weight:700;fill:var(--ink);text-anchor:middle;font-variant-numeric:tabular-nums}
+.gauge .gunit{font-size:11px;fill:var(--muted);text-anchor:middle;font-weight:600;letter-spacing:.04em}
+.gauge .gend{font-family:var(--mono);font-size:10px;fill:var(--tick)}
+.gauge-cap{margin-top:8px;font-size:12.5px;color:var(--muted)}
+.gauge-cap b{color:var(--viz-ok)}
+
+/* =====================================================================
+   4) KPI / METRIC CARD
+   ===================================================================== */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:8px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-card);
+  box-shadow:var(--shadow-rest);padding:20px 20px 18px;position:relative;overflow:hidden;
+  transition:transform var(--t-fast),box-shadow var(--t-fast),border-color var(--t-fast)}
+.kpi::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent);opacity:.85}
+.kpi.is-ok::before{background:var(--viz-ok)} .kpi.is-down::before{background:var(--viz-err)}
+.kpi:hover{transform:translateY(-4px);box-shadow:var(--shadow-card);border-color:rgba(213,21,34,.22)}
+.kpi .ktop{display:flex;align-items:center;gap:9px;margin-bottom:13px}
+.kpi .kic{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;flex:0 0 auto;
+  background:rgba(213,21,34,.10);border:1px solid rgba(213,21,34,.22)}
+.kpi .kic svg{width:15px;height:15px;display:block}
+.kpi .klbl{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.kpi .kval{font-size:clamp(28px,4vw,38px);font-weight:300;color:var(--ink);letter-spacing:-.04em;line-height:1;
+  font-variant-numeric:tabular-nums}
+.kpi .kval .u{font-size:.5em;font-weight:600;color:var(--muted);margin-left:2px}
+.kpi .kbot{display:flex;align-items:center;gap:9px;margin-top:11px}
+.kpi .delta{display:inline-flex;align-items:center;gap:4px;font-family:var(--mono);font-size:12px;font-weight:700;
+  padding:3px 8px;border-radius:var(--r-pill);font-variant-numeric:tabular-nums}
+.kpi .delta.up{color:var(--viz-ok);background:var(--viz-ok-bg)}
+.kpi .delta.down{color:var(--viz-err);background:var(--viz-err-bg)}
+.kpi .delta .ar{font-size:10px}
+.kpi .kctx{font-size:11.5px;color:var(--muted)}
+.kpi .kspark{margin-top:14px}
+.kpi .kspark .spark{width:100%;height:34px}
+/* compact KPI strip variant */
+.kstrip{display:flex;flex-wrap:wrap;gap:0;margin-top:8px;background:var(--surface);
+  border:1px solid var(--line);border-radius:var(--r-card);box-shadow:var(--shadow-rest);overflow:hidden}
+.kstrip .ks{flex:1 1 150px;padding:18px 20px;border-right:1px solid var(--line);min-width:0}
+.kstrip .ks:last-child{border-right:0}
+.kstrip .ks .klbl{font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.kstrip .ks .v{font-size:26px;font-weight:300;color:var(--ink);letter-spacing:-.03em;margin-top:7px;line-height:1;font-variant-numeric:tabular-nums}
+.kstrip .ks .d{font-family:var(--mono);font-size:11.5px;font-weight:700;margin-top:6px}
+.kstrip .ks .d.up{color:var(--viz-ok)} .kstrip .ks .d.down{color:var(--viz-err)}
+
+/* token strip (dogfood — show the derived viz palette) */
+.tokstrip{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+.tok{flex:1 1 130px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-card);
+  box-shadow:var(--shadow-rest);overflow:hidden}
+.tok .sw{height:52px}
+.tok .meta{padding:9px 12px;font-family:var(--mono);font-size:10.5px;color:var(--muted)}
+.tok .meta b{color:var(--ink);display:block;font-size:11.5px}
+
+/* usage note */
+.note{margin-top:18px;padding:16px 18px;border-left:3px solid var(--accent);
+  background:rgba(213,21,34,.04);border-radius:0 var(--r-card) var(--r-card) 0}
+.note .k{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);display:block;margin-bottom:6px}
+.note p{margin:0;font-size:13.5px;color:var(--ink);line-height:1.6}
+.note i{color:var(--accent-ink);font-style:normal;font-weight:700}
+
+/* ---------- through-lines band (dark) ---------- */
+.darkband{padding:60px 0;background:var(--ink);color:#cfcfcf;position:relative;overflow:hidden}
+.darkband::before{content:"";position:absolute;width:520px;height:520px;left:50%;top:-260px;transform:translateX(-50%);
+  border-radius:50%;filter:blur(80px);background:radial-gradient(circle,rgba(213,21,34,.22),transparent 70%);pointer-events:none}
+.darkband .wrap{position:relative;z-index:1}
+.darkband h2{color:#fff;font-size:clamp(23px,3.2vw,34px);margin:12px 0 10px}
+.darkband .eyebrow{color:var(--accent-2)}.darkband .eyebrow::before{background:var(--accent-2)}
+.darkband .lede{max-width:760px;color:#bdbdbd}
+.dgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin-top:24px}
+.dcard{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:var(--r-card);
+  padding:16px 18px;box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
+.dcard .dn{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--accent-2)}
+.dcard h4{color:#fff;font-size:14.5px;margin:8px 0 4px}
+.dcard p{color:#9b9b9b;font-size:12.5px;margin:0;line-height:1.5}
+
+/* ---------- footer ---------- */
+.foot{background:#111;color:#9b9b9b;padding:46px 0;font-size:13px;border-top:1px solid rgba(255,255,255,.08)}
+.foot .wrap{display:flex;gap:16px;flex-wrap:wrap;align-items:center}
+.foot .fbrand{margin-right:auto;color:#fff;font-weight:700}
+.foot a{color:#cfcfcf}.foot a:hover{color:#fff}
+.foot .meta{color:#666;font-family:var(--mono);font-size:11px}
+
+/* ---------- responsive ---------- */
+@media (max-width:900px){
+  .g3{grid-template-columns:1fr}
+  .g2{grid-template-columns:1fr}
+}
+@media (max-width:560px){
+  .hero{padding:74px 0 96px}
+  .section{padding:48px 0}
+  .hbar{grid-template-columns:70px 1fr 40px;gap:9px}
+  .rings{gap:18px}
+  .ring,.ring svg{width:128px}
+  .ring svg{height:128px}
+  .ring .center{margin-top:-86px;height:66px}
+  .donut,.donut svg{width:148px;height:148px}
+  .catnav{top:54px}
+}
+
+/* ---------- reduced motion: paint final state, kill all animation ---------- */
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  .bars .bar .col,.gbars .gbar .seg{transform:scaleY(1)!important}
+  .hbars .hbar .fill{transform:scaleX(1)!important}
+  .bar .vlbl{opacity:1!important}
+  .linechart .pathline{stroke-dashoffset:0!important}
+  .linechart .area,.linechart .dot{opacity:1!important}
+  .spark .sl{stroke-dashoffset:0!important}.spark .sa{opacity:.16!important}
+  .ring .prog{stroke-dashoffset:var(--off,377)!important}
+  .gauge .gfill{stroke-dashoffset:var(--goff,251)!important}
+}
+</style>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- ===================== GLASS STICKY TOP NAV ===================== -->
+<nav class="topnav">
+  <div class="wrap">
+    <span class="brand"><span class="dot"></span>SGEN&nbsp;<small>Living Styleguide</small></span>
+    <a class="nav" href="index.html">Index</a>
+    <a class="nav" href="00-top12.html">00 · Top-12</a>
+    <a class="nav" href="01-transitions-hero-motion.html">01 · Transitions</a>
+    <a class="nav" href="02-depth-type-color.html">02 · Depth</a>
+    <a class="nav" href="03-layout-imagery-components.html">03 · Layout</a>
+    <a class="nav" href="04-signatures-tokens.html">04 · Signatures</a>
+    <a class="nav" href="06-responsive.html">06 · Responsive</a>
+    <a class="nav" href="07-components.html">07 · Components</a>
+    <a class="nav" href="08-scroll-sticky.html">08 · Scroll / Sticky</a>
+    <a class="nav" href="09-accessibility.html">09 · Accessibility</a>
+    <a class="nav" href="10-sections.html">10 · Sections</a>
+    <a class="nav" href="11-theming.html">11 · Theming</a><a class="nav" href="12-iconography.html">12 · Iconography</a><a class="nav" href="13-utility-pages.html">13 · Utility</a><a class="nav" href="14-ecommerce.html">14 · Ecommerce</a><a class="nav" href="15-dataviz.html">15 · Data-viz</a>
+    <a class="nav" href="15-dataviz.html" aria-current="page">15 · Data-Viz</a>
+  </div>
+</nav>
+
+<!-- ===================== HERO ===================== -->
+<header class="hero" id="main" tabindex="-1">
+  <div class="wrap">
+    <span class="eyebrow">Page 15 — the data-viz kit · GAP #7</span>
+    <h1>Numbers, <b class="clip">drawn</b> in the brand.</h1>
+    <p class="lede">The system had count-up stats and progress bars but <b>no chart primitives</b>. This closes the gap: a small <b>CSS/SVG data-viz set</b> — bar chart, line / sparkline, donut &amp; ring gauge, KPI metric card. Every colour is <b>derived from the one accent</b> plus the four semantic tones; every animation is <b>reduced-motion-aware</b>; every chart is responsive and self-contained — system fonts, zero dependencies, CSS-and-SVG visuals, no images.</p>
+    <div class="hstats">
+      <div class="hstat"><div class="n">4</div><div class="lbl">primitives</div></div>
+      <div class="hstat"><div class="n">6</div><div class="lbl">series colours</div></div>
+      <div class="hstat"><div class="n">4</div><div class="lbl">semantic tones</div></div>
+      <div class="hstat"><div class="n">0</div><div class="lbl">external deps</div></div>
+    </div>
+  </div>
+  <div class="scroll-fade"></div>
+</header>
+
+<!-- ===================== IN-PAGE CATEGORY NAV ===================== -->
+<nav class="catnav" aria-label="Data-viz primitives">
+  <div class="wrap">
+    <a href="#bars">01 · Bar chart</a>
+    <a href="#lines">02 · Line / sparkline</a>
+    <a href="#rings">03 · Donut / ring gauge</a>
+    <a href="#kpis">04 · KPI / metric card</a>
+    <a href="#tokens">Colour tokens</a>
+  </div>
+</nav>
+
+<!-- ===================== 1 · BAR CHART ===================== -->
+<section class="section" id="bars">
+  <div class="wrap">
+    <div class="head">
+      <span class="eyebrow">Primitive one</span>
+      <h2><span class="snum">01</span>Bar chart</h2>
+      <p>Pure CSS — grid columns whose heights are driven by a per-bar <code>--v</code> (0&ndash;1). Bars rise from the baseline via a <code>scaleY</code> grow-in fired by an IntersectionObserver; dashed y-gridlines and value labels sit behind / above. Three layouts: vertical, grouped, and ranked-horizontal.</p>
+    </div>
+    <div class="vizgrid g2">
+
+      <!-- vertical bar chart -->
+      <div class="card">
+        <div class="ch">
+          <div class="tt"><h3>Monthly active sites</h3><div class="sub">Vertical · accent + ink series · live grow-in</div></div>
+          <span class="tag">CSS</span>
+        </div>
+        <div class="bars" data-viz="bars">
+          <div class="yaxis">
+            <div class="gl" style="bottom:100%"></div><div class="yl" style="bottom:100%">2.0k</div>
+            <div class="gl" style="bottom:75%"></div><div class="yl" style="bottom:75%">1.5k</div>
+            <div class="gl" style="bottom:50%"></div><div class="yl" style="bottom:50%">1.0k</div>
+            <div class="gl" style="bottom:25%"></div><div class="yl" style="bottom:25%">0.5k</div>
+            <div class="gl" style="bottom:0"></div><div class="yl" style="bottom:0">0</div>
+          </div>
+          <div class="bar"><div class="col" style="--v:.42"><span class="vlbl">840</span></div><span class="xlbl">Jan</span></div>
+          <div class="bar"><div class="col" style="--v:.55"><span class="vlbl">1.1k</span></div><span class="xlbl">Feb</span></div>
+          <div class="bar"><div class="col" style="--v:.49"><span class="vlbl">980</span></div><span class="xlbl">Mar</span></div>
+          <div class="bar"><div class="col" style="--v:.68"><span class="vlbl">1.4k</span></div><span class="xlbl">Apr</span></div>
+          <div class="bar"><div class="col" style="--v:.80"><span class="vlbl">1.6k</span></div><span class="xlbl">May</span></div>
+          <div class="bar"><div class="col accent" style="--v:.94"><span class="vlbl">1.9k</span></div><span class="xlbl">Jun</span></div>
+        </div>
+        <div class="legend">
+          <span class="lg"><span class="sw" style="background:#1a1a1a"></span>Prior months</span>
+          <span class="lg"><span class="sw" style="background:linear-gradient(180deg,#ff5762,#d51522)"></span>Current</span>
+        </div>
+      </div>
+
+      <!-- grouped bar chart -->
+      <div class="card">
+        <div class="ch">
+          <div class="tt"><h3>Plan vs. actual</h3><div class="sub">Grouped · two series per category</div></div>
+          <span class="tag">CSS</span>
+        </div>
+        <div class="gbars" data-viz="bars">
+          <div class="gbar"><div class="pair"><div class="seg a" style="--v:.6"></div><div class="seg b" style="--v:.7"></div></div><span class="xlbl">Q1</span></div>
+          <div class="gbar"><div class="pair"><div class="seg a" style="--v:.75"></div><div class="seg b" style="--v:.66"></div></div><span class="xlbl">Q2</span></div>
+          <div class="gbar"><div class="pair"><div class="seg a" style="--v:.85"></div><div class="seg b" style="--v:.9"></div></div><span class="xlbl">Q3</span></div>
+          <div class="gbar"><div class="pair"><div class="seg a" style="--v:1"></div><div class="seg b" style="--v:.82"></div></div><span class="xlbl">Q4</span></div>
+        </div>
+        <div class="legend">
+          <span class="lg"><span class="sw" style="background:#d51522"></span>Plan</span>
+          <span class="lg"><span class="sw" style="background:#1a1a1a"></span>Actual</span>
+        </div>
+        <div class="note">
+          <span class="k">How it works</span>
+          <p>Each bar's height is just <i>height: calc(var(--v) * 100%)</i> on a flex/grid column — no JS measures anything. The only script toggles one <i>.in</i> class when the chart scrolls into view, which flips <i>scaleY(0) → scaleY(1)</i>.</p>
+        </div>
+      </div>
+
+      <!-- horizontal ranked bars -->
+      <div class="card" style="grid-column:1 / -1">
+        <div class="ch">
+          <div class="tt"><h3>Top verticals by share of builds</h3><div class="sub">Horizontal · ranked · pill tracks</div></div>
+          <span class="tag">CSS</span>
+        </div>
+        <div class="hbars" data-viz="bars">
+          <div class="hbar"><span class="nm">Healthcare</span><div class="trk"><div class="fill" style="--v:.92"></div></div><span class="pct">92%</span></div>
+          <div class="hbar"><span class="nm">SaaS</span><div class="trk"><div class="fill" style="--v:.78"></div></div><span class="pct">78%</span></div>
+          <div class="hbar"><span class="nm">Realty</span><div class="trk"><div class="fill" style="--v:.64"></div></div><span class="pct">64%</span></div>
+          <div class="hbar"><span class="nm">Fitness</span><div class="trk"><div class="fill" style="--v:.51"></div></div><span class="pct">51%</span></div>
+          <div class="hbar"><span class="nm">Agency</span><div class="trk"><div class="fill" style="--v:.37"></div></div><span class="pct">37%</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 2 · LINE / SPARKLINE ===================== -->
+<section class="section" id="lines">
+  <div class="wrap">
+    <div class="head">
+      <span class="eyebrow">Primitive two</span>
+      <h2><span class="snum">02</span>Line &amp; sparkline</h2>
+      <p>Inline SVG — a <code>polyline</code> over a gradient <code>area</code> fill. The line draws itself on with <code>stroke-dashoffset</code>; the area fades up behind it; the end-point dot pops last. The same engine shrinks to a 108&times;30 inline <b>sparkline</b> that lives inside a list row or a metric card. Trend colour is semantic — green up, red down.</p>
+    </div>
+    <div class="vizgrid g2">
+
+      <!-- full line chart -->
+      <div class="card">
+        <div class="ch">
+          <div class="tt"><h3>Conversion rate · 12 weeks</h3><div class="sub">SVG polyline + gradient area · draw-on</div></div>
+          <span class="tag">SVG</span>
+        </div>
+        <div class="linewrap">
+          <svg class="linechart" data-viz="line" viewBox="0 0 480 200" preserveAspectRatio="none" role="img" aria-label="Conversion rate rising over 12 weeks">
+            <defs>
+              <linearGradient id="areaFill" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#d51522" stop-opacity="0.26"/>
+                <stop offset="100%" stop-color="#d51522" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <g class="grid">
+              <line x1="34" y1="20"  x2="470" y2="20"/>
+              <line x1="34" y1="65"  x2="470" y2="65"/>
+              <line x1="34" y1="110" x2="470" y2="110"/>
+              <line x1="34" y1="155" x2="470" y2="155"/>
+            </g>
+            <line class="axis" x1="34" y1="20" x2="34" y2="170"/>
+            <line class="axis" x1="34" y1="170" x2="470" y2="170"/>
+            <text class="ylabel" x="28" y="24"  text-anchor="end">6%</text>
+            <text class="ylabel" x="28" y="113" text-anchor="end">3%</text>
+            <text class="ylabel" x="28" y="173" text-anchor="end">0</text>
+            <!-- area + line share the same point list -->
+            <path class="area" d="M34,150 L74,140 L114,148 L154,120 L194,128 L234,100 L274,108 L314,78 L354,86 L394,58 L434,64 L470,40 L470,170 L34,170 Z"/>
+            <polyline class="pathline" points="34,150 74,140 114,148 154,120 194,128 234,100 274,108 314,78 354,86 394,58 434,64 470,40"/>
+            <circle class="dot" cx="154" cy="120" r="3.5"/>
+            <circle class="dot" cx="234" cy="100" r="3.5"/>
+            <circle class="dot" cx="314" cy="78" r="3.5"/>
+            <circle class="dot" cx="394" cy="58" r="3.5"/>
+            <circle class="dot lastdot" cx="470" cy="40" r="4.5"/>
+            <text class="tlabel" x="34"  y="186">W1</text>
+            <text class="tlabel" x="232" y="186" text-anchor="middle">W6</text>
+            <text class="tlabel" x="470" y="186" text-anchor="end">W12</text>
+          </svg>
+        </div>
+      </div>
+
+      <!-- sparkline list -->
+      <div class="card">
+        <div class="ch">
+          <div class="tt"><h3>Per-page micro-trends</h3><div class="sub">Inline sparklines · semantic trend colour</div></div>
+          <span class="tag">SVG</span>
+        </div>
+        <div class="sparkrow">
+          <div class="sparkline-item">
+            <span class="nm">Sessions</span>
+            <svg class="spark up" data-viz="spark" viewBox="0 0 108 30" preserveAspectRatio="none">
+              <polygon class="sa" points="2,24 17,20 32,22 47,14 62,16 77,9 92,11 106,4 106,30 2,30"/>
+              <polyline class="sl" points="2,24 17,20 32,22 47,14 62,16 77,9 92,11 106,4"/>
+            </svg>
+            <span class="val">+18%</span>
+          </div>
+          <div class="sparkline-item">
+            <span class="nm">Bounce</span>
+            <svg class="spark down" data-viz="spark" viewBox="0 0 108 30" preserveAspectRatio="none">
+              <polygon class="sa" points="2,6 17,9 32,8 47,13 62,12 77,18 92,17 106,23 106,30 2,30"/>
+              <polyline class="sl" points="2,6 17,9 32,8 47,13 62,12 77,18 92,17 106,23"/>
+            </svg>
+            <span class="val">&minus;9%</span>
+          </div>
+          <div class="sparkline-item">
+            <span class="nm">Avg. load</span>
+            <svg class="spark neutral" data-viz="spark" viewBox="0 0 108 30" preserveAspectRatio="none">
+              <polygon class="sa" points="2,14 17,12 32,16 47,11 62,15 77,12 92,14 106,10 106,30 2,30"/>
+              <polyline class="sl" points="2,14 17,12 32,16 47,11 62,15 77,12 92,14 106,10"/>
+            </svg>
+            <span class="val">1.2s</span>
+          </div>
+          <div class="sparkline-item">
+            <span class="nm">Signups</span>
+            <svg class="spark up" data-viz="spark" viewBox="0 0 108 30" preserveAspectRatio="none">
+              <polygon class="sa" points="2,26 17,23 32,24 47,18 62,19 77,12 92,13 106,6 106,30 2,30"/>
+              <polyline class="sl" points="2,26 17,23 32,24 47,18 62,19 77,12 92,13 106,6"/>
+            </svg>
+            <span class="val">+31%</span>
+          </div>
+        </div>
+        <div class="note">
+          <span class="k">Trend = meaning</span>
+          <p>A sparkline carries no axis, so colour does the talking: <i>green</i> when up is good, <i>red</i> when down, accent when neutral. The 30px height drops straight into a table cell or a KPI card with no layout shift.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 3 · DONUT / RING GAUGE ===================== -->
+<section class="section" id="rings">
+  <div class="wrap">
+    <div class="head">
+      <span class="eyebrow">Primitive three</span>
+      <h2><span class="snum">03</span>Donut &amp; ring gauge</h2>
+      <p>One SVG <code>&lt;circle&gt;</code>, a <code>stroke-dasharray</code> equal to its circumference, and a <code>stroke-dashoffset</code> that animates the sweep from empty to its value. Single-value <b>ring gauges</b> tint by semantic tone; the multi-segment <b>donut</b> stacks series shares; the <b>semi-circle gauge</b> uses the brand gradient across a half-arc.</p>
+    </div>
+
+    <div class="vizgrid g3">
+
+      <!-- ring gauges -->
+      <div class="card" style="grid-column:1 / -1">
+        <div class="ch">
+          <div class="tt"><h3>Single-value ring gauges</h3><div class="sub">circ ≈ 2πr · offset = circ × (1 &minus; value) · semantic tint</div></div>
+          <span class="tag">SVG</span>
+        </div>
+        <!-- r=60 -> circ = 376.99; off = circ*(1-v) -->
+        <div class="rings">
+          <div class="ring c-accent" data-viz="ring" style="--circ:377;--off:64.1">
+            <svg viewBox="0 0 150 150"><circle class="track" cx="75" cy="75" r="60"/><circle class="prog" cx="75" cy="75" r="60"/></svg>
+            <div class="center"><div class="pct">83<small>%</small></div></div>
+            <div class="cl">Uptime SLA</div>
+          </div>
+          <div class="ring c-ok" data-viz="ring" style="--circ:377;--off:45.2">
+            <svg viewBox="0 0 150 150"><circle class="track" cx="75" cy="75" r="60"/><circle class="prog" cx="75" cy="75" r="60"/></svg>
+            <div class="center"><div class="pct">88<small>%</small></div></div>
+            <div class="cl">Pass rate</div>
+          </div>
+          <div class="ring c-info" data-viz="ring" style="--circ:377;--off:165.9">
+            <svg viewBox="0 0 150 150"><circle class="track" cx="75" cy="75" r="60"/><circle class="prog" cx="75" cy="75" r="60"/></svg>
+            <div class="center"><div class="pct">56<small>%</small></div></div>
+            <div class="cl">Storage used</div>
+          </div>
+          <div class="ring c-warn" data-viz="ring" style="--circ:377;--off:248.8">
+            <svg viewBox="0 0 150 150"><circle class="track" cx="75" cy="75" r="60"/><circle class="prog" cx="75" cy="75" r="60"/></svg>
+            <div class="center"><div class="pct">34<small>%</small></div></div>
+            <div class="cl">Quota left</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- multi-segment donut -->
+      <div class="card" style="grid-column:1 / -1">
+        <div class="ch">
+          <div class="tt"><h3>Traffic by source</h3><div class="sub">Multi-segment donut · share composition</div></div>
+          <span class="tag">SVG</span>
+        </div>
+        <div class="donutwrap">
+          <!-- r=56 -> circ = 351.86. each seg dasharray = "len gap". offset rotates each start. -->
+          <div class="donut" data-viz="donut">
+            <svg viewBox="0 0 168 168">
+              <!-- Organic 44% = 154.8 -->
+              <circle class="seg" data-len="154.8" cx="84" cy="84" r="56" stroke="#d51522" stroke-dashoffset="0"/>
+              <!-- Direct 27% = 95.0, starts after 154.8 -->
+              <circle class="seg" data-len="95.0" cx="84" cy="84" r="56" stroke="#1a1a1a" stroke-dashoffset="-154.8"/>
+              <!-- Referral 18% = 63.3, starts after 249.8 -->
+              <circle class="seg" data-len="63.3" cx="84" cy="84" r="56" stroke="#1668c4" stroke-dashoffset="-249.8"/>
+              <!-- Social 11% = 38.7, starts after 313.1 -->
+              <circle class="seg" data-len="38.7" cx="84" cy="84" r="56" stroke="#9a6800" stroke-dashoffset="-313.1"/>
+            </svg>
+            <div class="hole"><span class="big">31.4k</span><span class="lbl">Sessions</span></div>
+          </div>
+          <div class="donut-legend">
+            <div class="li"><span class="sw" style="background:#d51522"></span>Organic search <b>44%</b></div>
+            <div class="li"><span class="sw" style="background:#1a1a1a"></span>Direct <b>27%</b></div>
+            <div class="li"><span class="sw" style="background:#1668c4"></span>Referral <b>18%</b></div>
+            <div class="li"><span class="sw" style="background:#9a6800"></span>Social <b>11%</b></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- semi-circle gauge -->
+      <div class="card" style="grid-column:1 / -1">
+        <div class="ch">
+          <div class="tt"><h3>Performance score</h3><div class="sub">Semi-circle gauge · brand-gradient arc</div></div>
+          <span class="tag">SVG</span>
+        </div>
+        <div class="gaugewrap">
+          <!-- half-circle path length ≈ π*r = π*80 = 251.3; value 0.74 -> off = 251.3*(1-.74)=65.3 -->
+          <div class="gauge" data-viz="gauge" style="--arc:251.3;--goff:65.3">
+            <svg viewBox="0 0 200 120">
+              <defs>
+                <linearGradient id="gaugeGrad" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stop-color="#7a0c13"/>
+                  <stop offset="55%" stop-color="#d51522"/>
+                  <stop offset="100%" stop-color="#ff5762"/>
+                </linearGradient>
+              </defs>
+              <path class="gtrack" d="M20,100 A80,80 0 0 1 180,100"/>
+              <path class="gfill"  d="M20,100 A80,80 0 0 1 180,100"/>
+              <text class="gval" x="100" y="96">74</text>
+              <text class="gunit" x="100" y="113">SCORE / 100</text>
+              <text class="gend" x="20"  y="116" text-anchor="middle">0</text>
+              <text class="gend" x="180" y="116" text-anchor="middle">100</text>
+            </svg>
+          </div>
+          <div class="gauge-cap">Page health · <b>Good</b> · above the 70 threshold</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 4 · KPI / METRIC CARD ===================== -->
+<section class="section" id="kpis">
+  <div class="wrap">
+    <div class="head">
+      <span class="eyebrow">Primitive four</span>
+      <h2><span class="snum">04</span>KPI / metric card</h2>
+      <p>The composite: a big tabular-nums value, a semantic delta pill (green up / red down), a context line, and an embedded sparkline reusing primitive two. An accent rule on the left edge flips to green or red with the card's status. Below, a compact <b>KPI strip</b> for tight dashboards.</p>
+    </div>
+
+    <div class="kpis">
+      <div class="kpi is-ok" data-viz="kpi">
+        <div class="ktop">
+          <span class="kic"><svg viewBox="0 0 24 24" fill="none" stroke="#d51522" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M21 7v6h-6"/></svg></span>
+          <span class="klbl">Revenue</span>
+        </div>
+        <div class="kval">$48.2<span class="u">k</span></div>
+        <div class="kbot">
+          <span class="delta up"><span class="ar">&#9650;</span>12.4%</span>
+          <span class="kctx">vs last month</span>
+        </div>
+        <div class="kspark">
+          <svg class="spark up" data-viz="spark" viewBox="0 0 200 34" preserveAspectRatio="none">
+            <polygon class="sa" points="2,28 30,24 58,26 86,18 114,20 142,12 170,14 198,5 198,34 2,34"/>
+            <polyline class="sl" points="2,28 30,24 58,26 86,18 114,20 142,12 170,14 198,5"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="kpi is-down" data-viz="kpi">
+        <div class="ktop">
+          <span class="kic"><svg viewBox="0 0 24 24" fill="none" stroke="#d51522" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7l6 6 4-4 8 8"/><path d="M21 17v-6h-6"/></svg></span>
+          <span class="klbl">Bounce rate</span>
+        </div>
+        <div class="kval">31.6<span class="u">%</span></div>
+        <div class="kbot">
+          <span class="delta down"><span class="ar">&#9660;</span>4.1%</span>
+          <span class="kctx">improving</span>
+        </div>
+        <div class="kspark">
+          <svg class="spark down" data-viz="spark" viewBox="0 0 200 34" preserveAspectRatio="none">
+            <polygon class="sa" points="2,8 30,11 58,10 86,15 114,14 142,20 170,19 198,26 198,34 2,34"/>
+            <polyline class="sl" points="2,8 30,11 58,10 86,15 114,14 142,20 170,19 198,26"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="kpi" data-viz="kpi">
+        <div class="ktop">
+          <span class="kic"><svg viewBox="0 0 24 24" fill="none" stroke="#d51522" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span>
+          <span class="klbl">Active users</span>
+        </div>
+        <div class="kval">12,847</div>
+        <div class="kbot">
+          <span class="delta up"><span class="ar">&#9650;</span>8.9%</span>
+          <span class="kctx">7-day avg</span>
+        </div>
+        <div class="kspark">
+          <svg class="spark neutral" data-viz="spark" viewBox="0 0 200 34" preserveAspectRatio="none">
+            <polygon class="sa" points="2,22 30,18 58,24 86,16 114,21 142,15 170,19 198,12 198,34 2,34"/>
+            <polyline class="sl" points="2,22 30,18 58,24 86,16 114,21 142,15 170,19 198,12"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="kpi is-ok" data-viz="kpi">
+        <div class="ktop">
+          <span class="kic"><svg viewBox="0 0 24 24" fill="none" stroke="#d51522" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4 12 14.01l-3-3"/></svg></span>
+          <span class="klbl">Goal completion</span>
+        </div>
+        <div class="kval">88<span class="u">%</span></div>
+        <div class="kbot">
+          <span class="delta up"><span class="ar">&#9650;</span>2.3%</span>
+          <span class="kctx">of monthly target</span>
+        </div>
+        <div class="kspark">
+          <svg class="spark up" data-viz="spark" viewBox="0 0 200 34" preserveAspectRatio="none">
+            <polygon class="sa" points="2,26 30,24 58,22 86,20 114,16 142,14 170,9 198,7 198,34 2,34"/>
+            <polyline class="sl" points="2,26 30,24 58,22 86,20 114,16 142,14 170,9 198,7"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- compact KPI strip -->
+    <div class="kstrip">
+      <div class="ks"><div class="klbl">MRR</div><div class="v">$48.2k</div><div class="d up">&#9650; 12.4%</div></div>
+      <div class="ks"><div class="klbl">Churn</div><div class="v">1.8%</div><div class="d down">&#9660; 0.4%</div></div>
+      <div class="ks"><div class="klbl">NPS</div><div class="v">62</div><div class="d up">&#9650; 5 pts</div></div>
+      <div class="ks"><div class="klbl">Sites live</div><div class="v">1,942</div><div class="d up">&#9650; 211</div></div>
+      <div class="ks"><div class="klbl">Avg. CVR</div><div class="v">5.4%</div><div class="d up">&#9650; 0.9 pp</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== COLOUR TOKENS ===================== -->
+<section class="section" id="tokens">
+  <div class="wrap">
+    <div class="head">
+      <span class="eyebrow">The palette</span>
+      <h2><span class="snum">05</span>Colour tokens — derived, not invented</h2>
+      <p>The whole kit reads from one token block. The <b>series ramp</b> starts at the accent and adds de-conflicted hues; the <b>semantic tones</b> (shared with page 07) carry status. Reskin the accent and every chart re-tints with it.</p>
+    </div>
+
+    <h4 style="font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;margin:0 0 10px">Categorical series ramp</h4>
+    <div class="tokstrip">
+      <div class="tok"><div class="sw" style="background:#d51522"></div><div class="meta"><b>--c1 accent</b>#d51522</div></div>
+      <div class="tok"><div class="sw" style="background:#1a1a1a"></div><div class="meta"><b>--c2 ink</b>#1a1a1a</div></div>
+      <div class="tok"><div class="sw" style="background:#1668c4"></div><div class="meta"><b>--c3 info</b>#1668c4</div></div>
+      <div class="tok"><div class="sw" style="background:#9a6800"></div><div class="meta"><b>--c4 warn</b>#9a6800</div></div>
+      <div class="tok"><div class="sw" style="background:#1f8a4c"></div><div class="meta"><b>--c5 ok</b>#1f8a4c</div></div>
+      <div class="tok"><div class="sw" style="background:#ff5762"></div><div class="meta"><b>--c6 soft</b>#ff5762</div></div>
+    </div>
+
+    <h4 style="font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;margin:22px 0 10px">Semantic tones · chart chrome</h4>
+    <div class="tokstrip">
+      <div class="tok"><div class="sw" style="background:#1f8a4c"></div><div class="meta"><b>--viz-ok</b>up / good</div></div>
+      <div class="tok"><div class="sw" style="background:#1668c4"></div><div class="meta"><b>--viz-info</b>neutral info</div></div>
+      <div class="tok"><div class="sw" style="background:#9a6800"></div><div class="meta"><b>--viz-warn</b>caution</div></div>
+      <div class="tok"><div class="sw" style="background:#c0121e"></div><div class="meta"><b>--viz-err</b>down / bad</div></div>
+      <div class="tok"><div class="sw" style="background:rgba(26,26,26,.10);border-right:1px solid var(--line)"></div><div class="meta"><b>--grid</b>gridlines</div></div>
+      <div class="tok"><div class="sw" style="background:rgba(26,26,26,.08)"></div><div class="meta"><b>--track</b>unfilled</div></div>
+    </div>
+
+    <div class="note">
+      <span class="k">One accent, the whole kit</span>
+      <p>Bars, the line stroke, the ring sweep and the gauge gradient all anchor to <i>--accent</i>. Status — a KPI delta, a sparkline trend, a quota ring — switches to the semantic tone. Nothing here is pure <code>#000</code> or <code>#fff</code>; the grid is tinted ink so the data always wins the contrast.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== THROUGH-LINES (dark band) ===================== -->
+<section class="darkband">
+  <div class="wrap">
+    <span class="eyebrow">What holds it together</span>
+    <h2>Four primitives, one discipline.</h2>
+    <p class="lede">The same rules that govern the rest of the styleguide govern its charts — depth from light not borders, motion gated behind reduced-motion, a single accent over a committed neutral.</p>
+    <div class="dgrid">
+      <div class="dcard"><div class="dn">01</div><h4>Derived colour</h4><p>Every hue traces to the accent or a semantic tone. No bespoke chart palette to drift out of brand.</p></div>
+      <div class="dcard"><div class="dn">02</div><h4>Reduced-motion-aware</h4><p>Grow-ins, draw-ons and sweeps fire only when motion is allowed; otherwise the final state is painted instantly.</p></div>
+      <div class="dcard"><div class="dn">03</div><h4>CSS &amp; SVG only</h4><p>No charting library, no canvas, no images. A polyline, a circle, a calc()-driven height — that is the whole engine.</p></div>
+      <div class="dcard"><div class="dn">04</div><h4>Responsive by default</h4><p>viewBox SVG scales fluidly; grids collapse to one column; gauges shrink. Verified 390 → 1440.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="foot">
+  <div class="wrap">
+    <span class="fbrand">SGEN · Living Styleguide</span>
+    <a href="index.html">Index</a>
+    <a href="09-accessibility.html">09 · Accessibility</a>
+    <a href="10-sections.html">10 · Sections</a>
+    <a href="11-theming.html">11 · Theming</a><a href="12-iconography.html">12 · Iconography</a><a href="13-utility-pages.html">13 · Utility</a><a href="14-ecommerce.html">14 · Ecommerce</a><a href="15-dataviz.html">15 · Data-viz</a>
+    <a href="15-dataviz.html">15 · Data-Viz</a>
+    <span class="meta">GAP #7 closed · 4 primitives · 6 series colours · 4 semantic tones · 0 external deps</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* Pre-compute SVG path/segment lengths so the dash-draw math is exact
+     regardless of viewBox scaling. Runs whether or not motion is allowed
+     (cheap, and harmless — the CSS gate decides if it animates). */
+  function setLen(el, sel){
+    var n = el.querySelector(sel);
+    if(n && n.getTotalLength){
+      var L = n.getTotalLength();
+      el.style.setProperty('--len', L.toFixed(1));
+    }
+  }
+  // line charts + sparklines: measure their drawn line
+  [].slice.call(document.querySelectorAll('.linechart')).forEach(function(c){ setLen(c, '.pathline'); });
+  [].slice.call(document.querySelectorAll('.spark')).forEach(function(s){ setLen(s, '.sl'); });
+
+  // donut: apply each segment's stroke-dasharray ("len gap") once visible
+  function fillDonut(d){
+    [].slice.call(d.querySelectorAll('.seg')).forEach(function(seg){
+      var len = parseFloat(seg.getAttribute('data-len')) || 0;
+      seg.style.strokeDasharray = len + ' 999';
+    });
+  }
+
+  var animated = [].slice.call(document.querySelectorAll('[data-viz]'));
+
+  function activate(el){
+    el.classList.add('in');
+    if(el.classList.contains('donut')) fillDonut(el);
+  }
+
+  if(reduce || !('IntersectionObserver' in window)){
+    // paint final state immediately, no entrance animation
+    animated.forEach(activate);
+  } else {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){ activate(e.target); io.unobserve(e.target); }
+      });
+    }, {threshold:0.18, rootMargin:'0px 0px -6% 0px'});
+    animated.forEach(function(el){ io.observe(el); });
+
+    // Belt-and-suspenders: any specimen already within the viewport at load
+    // should animate on load (not wait for a scroll that may never happen).
+    // This also makes the entrance deterministic for headless capture.
+    function activateVisible(){
+      var vh = window.innerHeight || document.documentElement.clientHeight;
+      animated.forEach(function(el){
+        if(el.classList.contains('in')) return;
+        var r = el.getBoundingClientRect();
+        if(r.top < vh * 0.94 && r.bottom > 0){ activate(el); io.unobserve(el); }
+      });
+    }
+    requestAnimationFrame(function(){ requestAnimationFrame(activateVisible); });
+  }
+})();
+</script>
+
+</body>
+</html>

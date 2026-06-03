@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>SGEN Living Styleguide — 09 · Accessibility (keyboard · focus · ARIA, live)</title>
+<style>
+/* ============================================================
+   SGEN LIVING STYLEGUIDE — 09 · ACCESSIBILITY
+   charcoal #1a1a1a · red #d51522 · the PROVE-IT-WITH-A-KEYBOARD page.
+   Everything here is operable by keyboard ALONE and reads correctly
+   to assistive tech. Self-contained: system fonts, 0 external deps,
+   no images. Skip-link + focus-visible rings + keyboard menus / tabs /
+   accordion / modal + ARIA patterns + contrast pass/fail + reduced
+   motion + accessible forms + the checklist every SGEN block passes.
+   ============================================================ */
+:root{
+  /* ---- SGEN brand chrome (identical token set to 08) ---- */
+  --ink:#1a1a1a;                 /* charcoal */
+  --paper:#f6f5f3;               /* warm off-white, never #fff */
+  --surface:#ffffff;
+  --muted:#626262;
+  --body:#4a4a4a;
+  --line:rgba(26,26,26,.10);
+  --accent:#d51522;              /* SGEN red */
+  --accent-ink:#a50f19;          /* AA-on-white red */
+  --accent-2:#ff5762;
+  --ok:#1f8a4c;
+  --warn:#b54708;
+  --bad:#c01525;
+
+  --grad-brand:linear-gradient(135deg,#d51522,#7a0c13);
+  --r-chip:8px; --r-card:16px; --r-panel:24px; --r-pill:9999px;
+  --shadow-rest:0 2px 5px 0 rgba(0,0,0,.08);
+  --shadow-card:0 15px 30px 0 rgba(1,7,39,.13);
+  --shadow-hover:0 32px 64px -12px rgba(16,24,40,.18);
+  --ease:cubic-bezier(.05,.5,.3,1);
+  --t-fast:.2s ease-out;
+  --glass:blur(18px) saturate(180%);
+  --wrap:1180px;
+  --mono:ui-monospace,"SFMono-Regular",Menlo,Consolas,"Liberation Mono",monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+
+  /* ---- the named z-index scale (single source of truth) ---- */
+  --z-base:0; --z-header:1000; --z-skiplink:1100; --z-modal:1200;
+
+  /* measured header height (recomputed on resize) */
+  --header-h:84px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{
+  margin:0;background:var(--paper);color:var(--body);
+  font-family:var(--sans);font-size:16px;line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 24px}
+h1,h2,h3,h4{color:var(--ink);margin:0;letter-spacing:-.02em;line-height:1.06}
+p{margin:0 0 1em}
+a{color:var(--accent-ink);text-decoration:none}
+code{font-family:var(--mono);font-size:.85em;background:rgba(26,26,26,.05);padding:.06em .35em;border-radius:5px}
+kbd{font-family:var(--mono);font-size:.82em;font-weight:700;background:var(--ink);color:#fff;
+  padding:.12em .5em;border-radius:6px;box-shadow:0 1px 0 rgba(0,0,0,.4);white-space:nowrap}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;text-transform:uppercase;letter-spacing:.16em;font-size:12px;font-weight:700;color:var(--accent)}
+.eyebrow::before{content:"";width:34px;height:2px;background:var(--accent);display:inline-block}
+
+/* =====================================================================
+   GLOBAL FOCUS-VISIBLE CONTRACT — keyboard users always get a ring;
+   pointer users never see one. The single most load-bearing a11y rule.
+   ===================================================================== */
+:focus{outline:none}                                   /* kill UA default... */
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:4px}  /* ...replace deliberately */
+/* on dark grounds the ring switches to white so it never disappears */
+.on-dark :focus-visible,.hero :focus-visible{outline-color:#fff}
+
+/* ---- SKIP LINK (a11y · first focusable element · beats everything) ---- */
+.skip{position:fixed;left:12px;top:-60px;z-index:var(--z-skiplink);
+  background:var(--ink);color:#fff;padding:11px 18px;border-radius:10px;font-weight:700;font-size:13.5px;
+  box-shadow:0 8px 22px rgba(0,0,0,.3);transition:top .2s ease}
+.skip:focus{top:12px;outline:3px solid #fff;outline-offset:2px}
+
+/* visually-hidden helper for screen-reader-only text (never display:none) */
+.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
+  clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+/* ======================================================================
+   STICKY HEADER — same chrome as 08: transparent over hero → solid glass
+   ====================================================================== */
+.site-header{
+  position:fixed;top:0;left:0;right:0;z-index:var(--z-header);
+  height:var(--header-h);
+  background:transparent;border-bottom:1px solid transparent;
+  transition:height .3s var(--ease),background-color .3s var(--ease),
+             box-shadow .3s var(--ease),border-color .3s var(--ease),backdrop-filter .3s var(--ease);
+}
+.site-header .hin{max-width:var(--wrap);margin:0 auto;height:100%;padding:0 24px;
+  display:flex;align-items:center;gap:8px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
+.site-header .hin::-webkit-scrollbar{display:none}
+.brand{display:flex;align-items:center;gap:10px;margin-right:auto;font-weight:700;color:#fff;
+  letter-spacing:-.01em;white-space:nowrap;transition:color .3s var(--ease)}
+.brand .dot{width:11px;height:11px;border-radius:3px;background:var(--accent);flex:0 0 auto}
+.brand small{font-weight:600;font-size:.78em;opacity:.7}
+.site-header a.nav{
+  color:#cfcfcf;font-size:13px;font-weight:600;letter-spacing:.01em;white-space:nowrap;
+  padding:7px 12px;border-radius:var(--r-pill);transition:var(--t-fast)}
+.site-header a.nav:hover{color:#fff;background:rgba(255,255,255,.10)}
+.site-header a.nav[aria-current="page"]{color:#fff;background:var(--accent)}
+.site-header.is-stuck{
+  height:58px;
+  background:rgba(26,26,26,.92);
+  -webkit-backdrop-filter:var(--glass);backdrop-filter:var(--glass);
+  box-shadow:0 2px 14px 0 rgba(0,0,0,.28);
+  border-bottom-color:rgba(255,255,255,.08);
+}
+
+/* ======================================================================
+   HERO — dark band under the transparent header
+   ====================================================================== */
+.hero{position:relative;overflow:hidden;background:var(--ink);color:#fff;
+  padding:calc(var(--header-h) + 80px) 0 110px}
+.hero::before,.hero::after{content:"";position:absolute;z-index:0;border-radius:50%;filter:blur(72px);pointer-events:none}
+.hero::before{width:560px;height:560px;left:-150px;top:-160px;background:radial-gradient(circle,rgba(213,21,34,.55),transparent 70%)}
+.hero::after{width:480px;height:480px;right:-120px;bottom:-200px;background:radial-gradient(circle,rgba(213,21,34,.24),transparent 70%)}
+.hero .wrap{position:relative;z-index:1}
+.hero .eyebrow{color:var(--accent-2)}.hero .eyebrow::before{background:var(--accent-2)}
+.hero h1{color:#fff;font-size:clamp(38px,7vw,88px);font-weight:300;letter-spacing:-.045em;
+  line-height:.97;margin:16px 0 0;max-width:17ch}
+.hero h1 b{font-weight:700}
+.hero h1 .clip{background:linear-gradient(135deg,#ff5762,#d51522 60%,#7a0c13);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .lede{margin-top:24px;max-width:720px;color:#d6d6d6;font-size:clamp(16px,2.1vw,20px);line-height:1.6}
+.hero .lede b{color:#fff}
+.hero .keyhint{margin-top:30px;display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;
+  color:#bdbdbd;font-size:13px;font-weight:600;letter-spacing:.01em}
+.hero .keyhint .pair{display:inline-flex;align-items:center;gap:7px}
+
+/* ======================================================================
+   SECTION SHELL — each a11y topic is a labelled panel
+   ====================================================================== */
+.demo{padding:54px 0}
+.demo:nth-of-type(even){background:linear-gradient(180deg,#fff,var(--paper))}
+.demo .head{max-width:860px;margin-bottom:22px}
+.demo .head h2{font-size:clamp(23px,3.2vw,34px);margin:12px 0 10px}
+.demo .head p{color:var(--body);font-size:15.5px;margin:0}
+.demo .num{display:inline-flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:13px;font-weight:700;color:#fff;background:var(--ink);
+  min-width:30px;height:30px;padding:0 9px;border-radius:9px;margin-right:6px;vertical-align:middle}
+.fam{display:inline-block;font-family:var(--mono);font-size:10.5px;font-weight:700;
+  padding:3px 9px;border-radius:var(--r-pill);background:rgba(213,21,34,.1);color:var(--accent-ink);
+  border:1px solid rgba(213,21,34,.22);margin-left:6px;vertical-align:middle;letter-spacing:.03em}
+
+/* the WCAG criterion strip on each demo */
+.wcag{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;margin:18px 0 6px}
+.wcag .cell{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-card);
+  padding:13px 15px;box-shadow:var(--shadow-rest)}
+.wcag .k{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);display:block;margin-bottom:5px}
+.wcag .v{font-size:13px;color:var(--ink);line-height:1.45}
+.wcag .v code{font-size:.92em}
+
+/* live "what to try" callout */
+.try{display:flex;gap:11px;align-items:flex-start;background:rgba(213,21,34,.05);
+  border:1px solid rgba(213,21,34,.18);border-left:3px solid var(--accent);
+  border-radius:var(--r-card);padding:13px 16px;margin:8px 0 18px;font-size:14px;color:var(--ink)}
+.try .badge{flex:0 0 auto;font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.06em;
+  text-transform:uppercase;color:#fff;background:var(--accent);padding:4px 8px;border-radius:6px;margin-top:1px}
+.try b{color:var(--ink)}
+
+/* live status read-out pill */
+.statuspill{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;
+  font-weight:700;padding:7px 13px;border-radius:var(--r-pill);border:1px solid var(--line);
+  background:var(--surface);box-shadow:var(--shadow-rest);margin-top:6px}
+.statuspill .led{width:9px;height:9px;border-radius:50%;background:var(--muted);transition:background .2s,box-shadow .2s}
+.statuspill[data-on="1"] .led{background:var(--ok);box-shadow:0 0 0 4px rgba(31,138,76,.16)}
+.statuspill .st{color:var(--ink)}
+
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-panel);
+  box-shadow:var(--shadow-card);padding:26px clamp(18px,3.5vw,32px);margin-top:8px}
+.row{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start}
+.col{flex:1 1 320px;min-width:280px}
+.minihead{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.05em;
+  text-transform:uppercase;color:var(--muted);margin:0 0 12px}
+
+/* =========================== BUTTONS / CONTROLS =========================== */
+.btn{font-family:var(--sans);font-size:14px;font-weight:700;cursor:pointer;border:1px solid transparent;
+  border-radius:8px;padding:11px 18px;min-height:44px;display:inline-flex;align-items:center;gap:8px;
+  transition:var(--t-fast);line-height:1}
+.btn--primary{background:var(--accent);color:#fff}
+.btn--primary:hover{background:#ec1e2c}
+.btn--ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn--ghost:hover{background:rgba(26,26,26,.04)}
+.btn--dark{background:var(--ink);color:#fff}
+.btn--dark:hover{background:#000}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+
+/* =========================== FOCUS-VISIBLE GRID (§2) =========================== */
+.focusgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-top:6px}
+.focusgrid .fc{display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+.focusgrid .fc .lbl{font-family:var(--mono);font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.focusgrid a.tlink{font-weight:700;color:var(--accent-ink);border-bottom:1px solid rgba(165,15,25,.4)}
+.focusgrid input.tin{font-family:var(--sans);font-size:14px;padding:10px 12px;min-height:44px;width:100%;
+  border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink)}
+.focusgrid .chip{font-size:13px;font-weight:700;padding:9px 14px;border-radius:var(--r-pill);min-height:40px;
+  background:rgba(26,26,26,.05);color:var(--ink);border:1px solid var(--line);cursor:pointer}
+.forced-ring{outline:3px solid var(--accent)!important;outline-offset:2px!important;border-radius:4px}
+
+/* =========================== KEYBOARD MENU (§3) =========================== */
+.menuwrap{position:relative;display:inline-block}
+.menu{position:absolute;top:calc(100% + 8px);left:0;min-width:230px;z-index:5;
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--r-card);
+  box-shadow:var(--shadow-hover);padding:6px;list-style:none;margin:0;
+  opacity:0;visibility:hidden;transform:translateY(-6px);transition:opacity .18s var(--ease),transform .18s var(--ease),visibility 0s linear .18s}
+.menu[data-open="true"]{opacity:1;visibility:visible;transform:translateY(0);transition:opacity .18s var(--ease),transform .18s var(--ease),visibility 0s}
+.menu li{margin:0}
+.menu .mi{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:transparent;border:0;
+  font-family:var(--sans);font-size:14px;color:var(--ink);padding:10px 12px;min-height:44px;border-radius:9px;cursor:pointer}
+.menu .mi:hover,.menu .mi[data-active="true"]{background:rgba(213,21,34,.1);color:var(--accent-ink);outline:none}
+.menu .mi .mk{margin-left:auto;font-family:var(--mono);font-size:10.5px;color:var(--muted)}
+
+/* =========================== TABS (§4) =========================== */
+.tabs{margin-top:4px}
+.tablist{display:flex;gap:4px;border-bottom:2px solid var(--line);flex-wrap:wrap}
+.tab{font-family:var(--sans);font-size:14px;font-weight:700;color:var(--muted);background:transparent;border:0;
+  padding:12px 16px;cursor:pointer;position:relative;border-radius:8px 8px 0 0;min-height:44px}
+.tab[aria-selected="true"]{color:var(--ink)}
+.tab[aria-selected="true"]::after{content:"";position:absolute;left:0;right:0;bottom:-2px;height:2px;background:var(--accent)}
+.tab:hover{color:var(--ink);background:rgba(26,26,26,.03)}
+.tabpanel{padding:18px 4px 2px;font-size:14.5px;color:var(--body)}
+.tabpanel[hidden]{display:none}
+.tabpanel h4{font-size:16px;margin:0 0 8px}
+
+/* =========================== ACCORDION (§5) =========================== */
+.acc{border:1px solid var(--line);border-radius:var(--r-card);overflow:hidden;background:var(--surface);margin-top:4px}
+.acc__item+.acc__item{border-top:1px solid var(--line)}
+.acc__btn{width:100%;text-align:left;background:transparent;border:0;cursor:pointer;
+  font-family:var(--sans);font-size:15px;font-weight:700;color:var(--ink);
+  padding:16px 18px;display:flex;align-items:center;gap:12px;min-height:44px}
+.acc__btn:hover{background:rgba(26,26,26,.03)}
+.acc__btn .ico{margin-left:auto;width:14px;height:14px;flex:0 0 auto;transition:transform .25s var(--ease);color:var(--accent)}
+.acc__btn[aria-expanded="true"] .ico{transform:rotate(180deg)}
+.acc__panel{overflow:hidden;max-height:0;transition:max-height .3s var(--ease)}
+.acc__panel .inner{padding:0 18px 18px;font-size:14.5px;color:var(--body)}
+
+/* =========================== MODAL (§6) =========================== */
+.modal-overlay{position:fixed;inset:0;z-index:var(--z-modal);display:grid;place-items:center;padding:20px;
+  background:rgba(10,10,12,.55);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);
+  opacity:0;visibility:hidden;transition:opacity .22s var(--ease),visibility 0s linear .22s}
+.modal-overlay[data-open="true"]{opacity:1;visibility:visible;transition:opacity .22s var(--ease),visibility 0s}
+.modal{background:var(--surface);border-radius:var(--r-panel);box-shadow:var(--shadow-hover);
+  width:min(480px,100%);padding:26px clamp(20px,4vw,30px);transform:translateY(10px) scale(.98);
+  transition:transform .22s var(--ease)}
+.modal-overlay[data-open="true"] .modal{transform:translateY(0) scale(1)}
+.modal h3{font-size:20px;margin:0 0 8px}
+.modal p{font-size:14.5px;color:var(--body)}
+.modal .mfoot{display:flex;gap:10px;justify-content:flex-end;margin-top:20px;flex-wrap:wrap}
+.modal .mclose{position:absolute;top:14px;right:14px}
+
+/* =========================== CONTRAST PAIRS (§8) =========================== */
+.cgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:6px}
+.swatch{border-radius:var(--r-card);border:1px solid var(--line);overflow:hidden;box-shadow:var(--shadow-rest)}
+.swatch .sw{padding:20px 18px;font-size:15px;font-weight:700;line-height:1.35}
+.swatch .meta{padding:11px 14px;background:var(--surface);font-size:12.5px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.swatch .ratio{font-family:var(--mono);font-weight:700;color:var(--ink)}
+.verdict{font-family:var(--mono);font-size:10.5px;font-weight:700;letter-spacing:.04em;
+  padding:3px 9px;border-radius:var(--r-pill);text-transform:uppercase}
+.verdict.pass{background:rgba(31,138,76,.14);color:#136c3a}
+.verdict.fail{background:rgba(192,21,37,.12);color:var(--bad)}
+.verdict.large{background:rgba(181,71,8,.14);color:var(--warn)}
+
+/* =========================== REDUCED MOTION (§9) =========================== */
+.rm-demo{display:flex;flex-wrap:wrap;gap:18px;align-items:center;margin-top:6px}
+.rm-box{width:84px;height:84px;border-radius:var(--r-card);background:var(--grad-brand);
+  display:grid;place-items:center;color:#fff;font-weight:800;font-family:var(--mono);font-size:12px;
+  animation:rm-spin 2.4s linear infinite}
+@keyframes rm-spin{to{transform:rotate(360deg)}}
+.rm-note{flex:1 1 280px;min-width:260px;font-size:14px;color:var(--body)}
+body[data-force-rm="true"] .rm-box{animation:none}
+body[data-force-rm="true"] *{animation-duration:.001s!important;transition-duration:.001s!important}
+
+/* =========================== ACCESSIBLE FORM (§10) =========================== */
+.form{max-width:520px;margin-top:4px}
+.field{margin-bottom:18px}
+.field label{display:block;font-size:13.5px;font-weight:700;color:var(--ink);margin-bottom:7px}
+.field label .req{color:var(--accent);margin-left:2px}
+.field .hint{font-size:12.5px;color:var(--muted);margin:0 0 7px}
+.field input,.field textarea{font-family:var(--sans);font-size:14.5px;width:100%;
+  padding:11px 13px;min-height:46px;border:1.5px solid var(--line);border-radius:9px;
+  background:var(--surface);color:var(--ink);transition:border-color .18s var(--ease),box-shadow .18s var(--ease)}
+.field input:focus,.field textarea:focus{border-color:var(--accent)}
+.field input[aria-invalid="true"],.field textarea[aria-invalid="true"]{border-color:var(--bad);
+  box-shadow:0 0 0 3px rgba(192,21,37,.12)}
+.field .err{display:none;align-items:center;gap:7px;font-size:12.5px;font-weight:700;color:var(--bad);margin-top:7px}
+.field .err::before{content:"!";flex:0 0 auto;width:16px;height:16px;border-radius:50%;background:var(--bad);
+  color:#fff;font-size:11px;display:grid;place-items:center}
+.field[data-invalid="true"] .err{display:flex}
+.formstatus{display:none;margin-top:4px;padding:12px 15px;border-radius:var(--r-card);font-size:14px;font-weight:600}
+.formstatus.ok{display:block;background:rgba(31,138,76,.12);color:#136c3a;border:1px solid rgba(31,138,76,.3)}
+.formstatus.bad{display:block;background:rgba(192,21,37,.1);color:var(--bad);border:1px solid rgba(192,21,37,.3)}
+
+/* =========================== ARIA PATTERNS TABLE (§7) =========================== */
+.atable{width:100%;border-collapse:collapse;margin-top:8px;font-size:13.5px}
+.atable th,.atable td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+.atable th{font-family:var(--mono);font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.atable td.pat{font-weight:700;color:var(--ink);white-space:nowrap}
+.atable tr:last-child td{border-bottom:0}
+.atable code{font-size:.86em}
+
+/* =========================== CHECKLIST (§11) =========================== */
+.checklist{background:var(--ink);color:#cfcfcf;border-radius:var(--r-panel);padding:30px clamp(20px,4vw,36px);
+  margin-top:8px;position:relative;overflow:hidden}
+.checklist::before{content:"";position:absolute;width:480px;height:480px;left:50%;top:-260px;transform:translateX(-50%);
+  border-radius:50%;filter:blur(80px);background:radial-gradient(circle,rgba(213,21,34,.2),transparent 70%);pointer-events:none}
+.checklist .ci{position:relative;z-index:1}
+.checklist h3{color:#fff;font-size:22px;margin:0 0 6px}
+.checklist .csub{color:#bdbdbd;font-size:14px;margin:0 0 20px;max-width:680px}
+.clist{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:10px 22px;list-style:none;margin:0;padding:0}
+.clist li{display:flex;gap:12px;align-items:flex-start;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.08)}
+.clist li .tick{flex:0 0 auto;width:22px;height:22px;border-radius:6px;background:var(--ok);
+  display:grid;place-items:center;margin-top:2px}
+.clist li .tick svg{width:13px;height:13px}
+.clist li .ct b{color:#fff;font-size:14px;display:block;font-weight:700}
+.clist li .ct span{color:#9b9b9b;font-size:12.5px}
+.clist li .ct code{background:rgba(255,255,255,.08);color:#e7e7e7}
+
+/* ---- footer ---- */
+.foot{background:#111;color:#9b9b9b;padding:46px 0;font-size:13px;border-top:1px solid rgba(255,255,255,.08)}
+.foot .wrap{display:flex;gap:16px;flex-wrap:wrap;align-items:center}
+.foot .fbrand{margin-right:auto;color:#fff;font-weight:700}
+.foot a{color:#cfcfcf}.foot a:hover{color:#fff}
+.foot .meta{color:#666;font-family:var(--mono);font-size:11px}
+
+/* ---- reduced motion: honour the OS / user setting ---- */
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+  .site-header{position:sticky}
+}
+
+@media (max-width:680px){
+  .hero{padding:calc(var(--header-h) + 56px) 0 84px}
+  .wcag{grid-template-columns:1fr}
+  .modal .mclose{top:10px;right:10px}
+}
+</style>
+</head>
+<body>
+
+<!-- SKIP LINK — the very first focusable element on the page -->
+<a class="skip" href="#main">Skip to main content</a>
+
+<!-- live region used by JS to announce keyboard interactions to AT -->
+<div id="live" class="sr-only" role="status" aria-live="polite"></div>
+
+<!-- ===================== STICKY HEADER ===================== -->
+<header class="site-header at-top" id="site-header">
+  <div class="hin">
+    <span class="brand"><span class="dot"></span>SGEN&nbsp;<small>Living Styleguide</small></span>
+    <a class="nav" href="index.html">Index</a>
+    <a class="nav" href="00-top12.html">00 · Top-12</a>
+    <a class="nav" href="01-transitions-hero-motion.html">01 · Transitions</a>
+    <a class="nav" href="02-depth-type-color.html">02 · Depth</a>
+    <a class="nav" href="03-layout-imagery-components.html">03 · Layout</a>
+    <a class="nav" href="04-signatures-tokens.html">04 · Signatures</a>
+    <a class="nav" href="06-responsive.html">06 · Responsive</a>
+    <a class="nav" href="07-components.html">07 · Components</a>
+    <a class="nav" href="08-scroll-sticky.html">08 · Scroll / Sticky</a>
+    <a class="nav" href="09-accessibility.html" aria-current="page">09 · Accessibility</a>
+    <a class="nav" href="10-sections.html">10 · Sections</a>
+    <a class="nav" href="11-theming.html">11 · Theming</a><a class="nav" href="12-iconography.html">12 · Iconography</a><a class="nav" href="13-utility-pages.html">13 · Utility</a><a class="nav" href="14-ecommerce.html">14 · Ecommerce</a><a class="nav" href="15-dataviz.html">15 · Data-viz</a>
+  </div>
+</header>
+
+<!-- ===================== HERO ===================== -->
+<header class="hero on-dark" id="main" tabindex="-1">
+  <div class="wrap">
+    <span class="eyebrow">Page 09 — operable by keyboard alone</span>
+    <h1>Accessibility, <b class="clip">proven</b> — not promised.</h1>
+    <p class="lede">Every widget on this page works with <b>a keyboard only</b> and reports itself correctly to assistive technology. Press <kbd>Tab</kbd> right now — the first stop is a <b>Skip to main content</b> link, then the focus ring lands on every interactive control in a logical order. Menus, tabs, an accordion and a modal each honour the WAI-ARIA keyboard contract (<kbd>↑</kbd> <kbd>↓</kbd> <kbd>←</kbd> <kbd>→</kbd>, <kbd>Home</kbd>/<kbd>End</kbd>, <kbd>Enter</kbd>/<kbd>Space</kbd>, <kbd>Esc</kbd>). This is the bar <b>every SGEN block must clear</b>.</p>
+    <div class="keyhint">
+      <span class="pair"><kbd>Tab</kbd> move forward</span>
+      <span class="pair"><kbd>Shift</kbd>+<kbd>Tab</kbd> back</span>
+      <span class="pair"><kbd>Enter</kbd>/<kbd>Space</kbd> activate</span>
+      <span class="pair"><kbd>Esc</kbd> dismiss</span>
+      <span class="pair"><kbd>↑</kbd> <kbd>↓</kbd> within a widget</span>
+    </div>
+  </div>
+</header>
+
+<!-- ===================== [1] SKIP LINK ===================== -->
+<section class="demo" id="d-skip">
+  <div class="wrap">
+    <div class="head">
+      <span class="eyebrow">Demo 1 · the first thing a keyboard user meets</span>
+      <h2><span class="num">1</span>Skip-to-content link<span class="fam">WCAG 2.4.1 · Bypass Blocks</span></h2>
+      <p>A keyboard or screen-reader user shouldn't have to <kbd>Tab</kbd> through the entire 12-link header on every page. The first focusable element on this document is a visually-hidden <b>Skip to main content</b> link; it slides into view the instant it receives focus and jumps focus straight to <code>#main</code>.</p>
+    </div>
+    <div class="try"><span class="badge">Try</span><span>Reload, then press <kbd>Tab</kbd> <b>once</b>. The black "Skip to main content" pill appears at the top-left. Press <kbd>Enter</kbd> and focus jumps past the nav into the hero.</span></div>
+    <div class="wcag">
+      <div class="cell"><span class="k">Where</span><span class="v">first child of <code>&lt;body&gt;</code> — before the header</span></div>
+      <div class="cell"><span class="k">Hidden how</span><span class="v">off-screen via <code>top:-60px</code>, <b>not</b> <code>display:none</code> (stays focusable)</span></div>
+      <div class="cell"><span class="k">Reveal</span><span class="v"><code>.skip:focus</code> → slides to <code>top:12px</code>, z above the whole sticky stack</span></div>
+      <div class="cell"><span class="k">Target</span><span class="v"><code>href="#main"</code> → <code>tabindex="-1"</code> region receives focus</span></div>
+    </div>
+    <button class="btn btn--dark" type="button" id="skip-sim">Simulate pressing Tab from the top</button>
+    <p class="statuspill" id="pill-skip" data-on="0" style="margin-left:10px"><span class="led"></span><span class="st">skip-link: idle (Tab to reveal)</span></p>
+  </div>
+</section>
+
+<!-- ===================== [2] FOCUS-VISIBLE RINGS ===================== -->
+<section class="demo" id="d-focus">
+  <div class="wrap">
+    <div class="head">
+      <span class="eyebrow">Demo 2 · the keyboard's "you are here"</span>
+      <h2><span class="num">2</span>Focus-visible rings<span class="fam">WCAG 2.4.7 · Focus Visible</span></h2>
+      <p>Every interactive control shows a high-contrast <b>3px ring</b> when reached by keyboard, and <b>no ring</b> when clicked with a mouse — the <code>:focus-visible</code> heuristic. We never delete focus styling with a bare <code>outline:none</code>; we replace it deliberately. On dark grounds the ring flips to white so it never disappears.</p>
+    </div>
+    <div class="try"><span class="badge">Try</span><span><kbd>Tab</kbd> across this row — each control rings as it gains focus. Now <b>click</b> one with the mouse: no ring. Or press <b>"Force focus ring on all"</b> to pin every ring for the capture.</span></div>
+    <div class="panel">
+      <div class="focusgrid" id="focusgrid">
+        <div class="fc"><span class="lbl">Button</span><button class="btn btn--primary" type="button">Enroll now</button></div>
+        <div class="fc"><span class="lbl">Ghost button</span><button class="btn btn--ghost" type="button">Learn more</button></div>
+        <div class="fc"><span class="lbl">Text link</span><a class="tlink" href="#d-focus">Read the spec</a></div>
+        <div class="fc"><span class="lbl">Text input</span><label class="sr-only" for="fi1">Demo input</label><input class="tin" id="fi1" type="text" placeholder="Type here…"></div>
+        <div class="fc"><span class="lbl">Chip</span><button class="chip" type="button">Filter</button></div>
+        <div class="fc"><span class="lbl">Disabled</span><button class="btn btn--primary" type="button" disabled>Sold out</button></div>
+      </div>
+      <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+        <button class="btn btn--dark" type="button" id="force-ring">Force focus ring on all (for capture)</button>
+        <span class="statuspill" id="pill-focus" data-on="0"><span class="led"></span><span class="st">focus rings: live (Tab to see)</span></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== [3] KEYBOARD MENU ===================== -->
+<section class="demo" id="d-menu">
+  <div class="wrap">
+    <div class="head">
+      <span class="eyebrow">Demo 3 · ARIA menu button + roving focus</span>
+      <h2><span class="num">3</span>Keyboard-operable menu<span class="fam">APG · Menu Button</span></h2>
+      <p>A real <code>aria-haspopup</code> menu button. <kbd>Enter</kbd>/<kbd>Space</kbd>/<kbd>↓</kbd> opens it and moves focus to the first item; <kbd>↑</kbd>/<kbd>↓</kbd> roves between items (wrapping at the ends), <kbd>Home</kbd>/<kbd>End</kbd> jump to first/last, <kbd>Esc</kbd> closes and returns focus to the button, and <kbd>Tab</kbd> closes it too.</p>
+    </div>
+    <div class="try"><span class="badge">Try</span><span><kbd>Tab</kbd> to "Account ▾", press <kbd>↓</kbd> to open, arrow through items, press <kbd>Esc</kbd> to close. <code>aria-expanded</code> flips live.</span></div>
+    <div class="panel">
+      <div class="menuwrap">
+        <button class="btn btn--ghost" id="menu-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="menu-list">
+          Account
+          <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <ul class="menu" id="menu-list" role="menu" aria-labelledby="menu-btn">
+          <li role="none"><button class="mi" role="menuitem" type="button" tabindex="-1">Profile <span class="mk">P</span></button></li>
+          <li role="none"><button class="mi" role="menuitem" type="button" tabindex="-1">Billing <span class="mk">B</span></button></li>
+          <li role="none"><button class="mi" role="menuitem" type="button" tabindex="-1">Team settings <span class="mk">T</span></button></li>
+          <li role="none"><button class="mi" role="menuitem" type="button" tabindex="-1">Sign out <span class="mk">Q</span></button></li>
+        </ul>
+      </div>
+      <span class="statuspill" id="pill-menu" data-on="0" style="margin-left:12px"><span class="led"></span><span class="st">menu: closed · aria-expanded=false</span></span>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== [4] TABS ===================== -->
+<section class="demo" id="d-tabs">
+  <div class="wrap">
+    <div class="head">
+      <span class="eyebrow">Demo 4 · ARIA tablist with arrow-key selection</span>
+      <h2><span class="num">4</span>Keyboard-operable tabs<span class="fam">APG · Tabs</span></h2>
+      <p>A proper <code>role="tablist"</code>: only the active tab is in the tab order (roving <code>tabindex</code>). <kbd>←</kbd>/<kbd>→</kbd> move between tabs and select on move; <kbd>Home</kbd>/<kbd>End</kbd> jump to the first/last; <kbd>Tab</kbd> from the tablist lands in the active panel. Each panel is wired with <code>aria-labelledby</code> back to its tab.</p>
+    </div>
+    <div class="try"><span class="badge">Try</span><span><kbd>Tab</kbd> to the selected tab, then press <kbd>→</kbd> / <kbd>←</kbd> to switch panels without touching the mouse.</span></div>
+    <div class="panel">
+      <div class="tabs">
+        <div class="tablist" role="tablist" aria-label="Accessibility topics">
+          <button class="tab" role="tab" id="tab-1" aria-selected="true"  aria-controls="tp-1" tabindex="0">Perceivable</button>
+          <button class="tab" role="tab" id="tab-2" aria-selected="false" aria-controls="tp-2" tabindex="-1">Operable</button>
+          <button class="tab" role="tab" id="tab-3" aria-selected="false" aria-controls="tp-3" tabindex="-1">Understandable</button>
+          <button class="tab" role="tab" id="tab-4" aria-selected="false" aria-controls="tp-4" tabindex="-1">Robust</button>
+        </div>
+        <div class="tabpanel" role="tabpanel" id="tp-1" aria-labelledby="tab-1" tabindex="0">
+          <h4>Perceivable</h4><p>Text alternatives for non-text content, captions, sufficient colour contrast, and content that doesn't rely on colour alone. Information must be presentable in ways all users can perceive.</p>
+        </div>
+        <div class="tabpanel" role="tabpanel" id="tp-2" aria-labelledby="tab-2" tabindex="0" hidden>
+          <h4>Operable</h4><p>All functionality available from a keyboard, no keyboard traps, enough time, no seizure-inducing flashes, and clear navigation. This whole page is the Operable principle, demonstrated.</p>
+        </div>
+        <div class="tabpanel" role="tabpanel" id="tp-3" aria-labelledby="tab-3" tabindex="0" hidden>
+          <h4>Understandable</h4><p>Readable text, predictable behaviour, and input assistance — labels, instructions, and error messages that tell the user how to fix the problem (see the form below).</p>
+        </div>
+        <div class="tabpanel" role="tabpanel" id="tp-4" aria-labelledby="tab-4" tabindex="0" hidden>
+          <h4>Robust</h4><p>Markup that parses cleanly and works with current and future assistive technologies — semantic HTML first, ARIA only to fill the gaps, name/role/value exposed on every control.</p>
+        </div>
+      </div>
+      <span class="statuspill" id="pill-tabs" data-on="1" style="margin-top:16px"><span class="led"></span><span class="st">tab: Perceivable selected</span></span>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== [5] ACCORDION ===================== -->
+<section class="demo" id="d-acc">
+  <div class="wrap">
+    <div class="head">
+      <span class="eyebrow">Demo 5 · disclosure with aria-expanded</span>
+      <h2><span class="num">5</span>Keyboard-operable accordion<span class="fam">APG · Disclosure</span></h2>
+      <p>Each header is a real <code>&lt;button&gt;</code> carrying <code>aria-expanded</code> and <code>aria-controls</code>. <kbd>Enter</kbd> or <kbd>Space</kbd> toggles it; the chevron rotates and the panel animates open via <code>max-height</code> (no <code>display:none</code> popping). The panel is associated back to its trigger so a screen reader announces "expanded / collapsed".</p>
+    </div>
+    <div class="try"><span class="badge">Try</span><span><kbd>Tab</kbd> to a row header, press <kbd>Space</kbd> to open/close. Watch <code>aria-expanded</code> flip in the status pill.</span></div>
+    <div class="panel" style="padding-top:18px">
+      <div class="acc" id="acc">
+        <div class="acc__item">
+          <h3 style="margin:0">
+            <button class="acc__btn" type="button" aria-expanded="true" aria-controls="ap-1" id="ab-1">
+              Does every interactive element have a visible focus state?
+              <svg class="ico" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 5l5 5 5-5" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </h3>
+          <div class="acc__panel" id="ap-1" role="region" aria-labelledby="ab-1"><div class="inner">Yes — see Demo 2. Buttons, links, inputs, chips, tabs, menu items and accordion headers all show the 3px <code>:focus-visible</code> ring. The ring switches to white over dark grounds.</div></div>
+        </div>
+        <div class="acc__item">
+          <h3 style="margin:0">
+            <button class="acc__btn" type="button" aria-expanded="false" aria-controls="ap-2" id="ab-2">
+              Can the whole page be operated without a mouse?
+              <svg class="ico" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 5l5 5 5-5" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </h3>
+          <div class="acc__panel" id="ap-2" role="region" aria-labelledby="ab-2"><div class="inner">Yes. Tab order is logical, every widget honours its ARIA keyboard pattern, and the modal traps focus while open and returns it to the opener on close — with no keyboard trap anywhere else.</div></div>
+        </div>
+        <div class="acc__item">
+          <h3 style="margin:0">
+            <button class="acc__btn" type="button" aria-expanded="false" aria-controls="ap-3" id="ab-3">
+              Is meaning ever carried by colour alone?
+              <svg class="ico" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 5l5 5 5-5" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </h3>
+          <div class="acc__panel" id="ap-3" role="region" aria-labelledby="ab-3"><div class="inner">No. Form errors pair red with an icon and a text message; the contrast swatches below label PASS / FAIL in words and ratios, not just colour. Colour is reinforcement, never the only signal.</div></div>
+        </div>
+      </div>
+      <span class="statuspill" id="pill-acc" data-on="1" style="margin-top:16px"><span class="led"></span><span class="st">accordion: item 1 expanded</span></span>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== [6] MODAL ===================== -->
+<section class="demo" id="d-modal">
+  <div class="wrap">
+    <div class="head">
+      <span class="eyebrow">Demo 6 · the focus-trap test</span>
+      <h2><span class="num">6</span>Keyboard-operable modal dialog<span class="fam">APG · Modal Dialog</span></h2>
+      <p>The hardest a11y widget. On open, focus moves <b>into</b> the dialog; <kbd>Tab</kbd> and <kbd>Shift</kbd>+<kbd>Tab</kbd> are <b>trapped</b> inside it (you can never tab out to the page behind); <kbd>Esc</kbd> or the close button dismisses it; and focus <b>returns to the button that opened it</b>. It carries <code>role="dialog"</code>, <code>aria-modal="true"</code> and an <code>aria-labelledby</code> title.</p>
+    </div>
+    <div class="try"><span class="badge">Try</span><span>Press <kbd>Enter</kbd> on "Open dialog", then <kbd>Tab</kbd> repeatedly — focus cycles only inside the dialog. Press <kbd>Esc</kbd>; focus snaps back to the open button.</span></div>
+    <div class="panel">
+      <button class="btn btn--primary" id="modal-open" type="button">Open dialog</button>
+      <span class="statuspill" id="pill-modal" data-on="0" style="margin-left:12px"><span class="led"></span><span class="st">dialog: closed</span></span>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== [7] ARIA PATTERNS ===================== -->
+<section class="demo" id="d-aria">
+  <div class="wrap">
+    <div class="head">
+      <span class="eyebrow">Demo 7 · the reference</span>
+      <h2><span class="num">7</span>ARIA patterns &amp; the first rule of ARIA</h2>
+      <p>The first rule of ARIA is <b>don't use ARIA</b> — prefer a native element that already has the role, name and keyboard behaviour. Reach for ARIA only to fill a genuine gap. Each widget above maps to one APG pattern; here's the contract each one upholds.</p>
+    </div>
+    <div class="panel" style="overflow-x:auto">
+      <table class="atable">
+        <thead><tr><th>Widget</th><th>Native first?</th><th>Required ARIA</th><th>Keyboard contract</th></tr></thead>
+        <tbody>
+          <tr><td class="pat">Button</td><td><code>&lt;button&gt;</code> — yes</td><td>none (or <code>aria-pressed</code> for toggle)</td><td><kbd>Enter</kbd> / <kbd>Space</kbd></td></tr>
+          <tr><td class="pat">Link</td><td><code>&lt;a href&gt;</code> — yes</td><td>none</td><td><kbd>Enter</kbd></td></tr>
+          <tr><td class="pat">Menu button</td><td>no native popup</td><td><code>aria-haspopup</code> · <code>aria-expanded</code> · <code>role="menu/menuitem"</code></td><td><kbd>↓</kbd>/<kbd>↑</kbd> rove · <kbd>Home</kbd>/<kbd>End</kbd> · <kbd>Esc</kbd> close</td></tr>
+          <tr><td class="pat">Tabs</td><td>no native tabs</td><td><code>role="tablist/tab/tabpanel"</code> · <code>aria-selected</code> · <code>aria-controls</code></td><td><kbd>←</kbd>/<kbd>→</kbd> roving select · <kbd>Home</kbd>/<kbd>End</kbd></td></tr>
+          <tr><td class="pat">Accordion</td><td><code>&lt;button&gt;</code> trigger</td><td><code>aria-expanded</code> · <code>aria-controls</code></td><td><kbd>Enter</kbd> / <kbd>Space</kbd> toggle</td></tr>
+          <tr><td class="pat">Modal dialog</td><td><code>&lt;dialog&gt;</code> or ARIA</td><td><code>role="dialog"</code> · <code>aria-modal</code> · <code>aria-labelledby</code></td><td>trap <kbd>Tab</kbd> · <kbd>Esc</kbd> close · return focus</td></tr>
+          <tr><td class="pat">Live status</td><td>n/a</td><td><code>role="status"</code> · <code>aria-live="polite"</code></td><td>announced, not focused</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== [8] CONTRAST PAIRS ===================== -->
+<section class="demo" id="d-contrast">
+  <div class="wrap">
+    <div class="head">
+      <span class="eyebrow">Demo 8 · colour-contrast, measured</span>
+      <h2><span class="num">8</span>Colour-contrast pairs — pass &amp; fail<span class="fam">WCAG 1.4.3 · Contrast (Minimum)</span></h2>
+      <p>Normal text needs a contrast ratio of <b>≥ 4.5:1</b>; large text (≥ 24px, or ≥ 19px bold) needs <b>≥ 3:1</b>. Each swatch below shows the <b>computed ratio</b> and a worded verdict — so the pass/fail signal never depends on the colour itself. The failing pairs are here on purpose, labelled <span class="verdict fail">FAIL</span>, to show what to avoid.</p>
+    </div>
+    <div class="panel">
+      <p class="minihead">Body text on each ground · ratio computed live in JS from the actual hex values</p>
+      <div class="cgrid" id="cgrid">
+        <div class="swatch"><div class="sw" style="background:#1a1a1a;color:#ffffff">Charcoal × White</div>
+          <div class="meta"><span class="ratio" data-fg="#ffffff" data-bg="#1a1a1a">—</span><span class="verdict" data-thr="4.5">—</span><span style="color:var(--muted)">primary text</span></div></div>
+        <div class="swatch"><div class="sw" style="background:#a50f19;color:#ffffff">Accent-ink × White</div>
+          <div class="meta"><span class="ratio" data-fg="#ffffff" data-bg="#a50f19">—</span><span class="verdict" data-thr="4.5">—</span><span style="color:var(--muted)">CTA label</span></div></div>
+        <div class="swatch"><div class="sw" style="background:#f6f5f3;color:#4a4a4a">Body grey × Paper</div>
+          <div class="meta"><span class="ratio" data-fg="#4a4a4a" data-bg="#f6f5f3">—</span><span class="verdict" data-thr="4.5">—</span><span style="color:var(--muted)">paragraph</span></div></div>
+        <div class="swatch"><div class="sw" style="background:#ffffff;color:#d51522">Pure red × White</div>
+          <div class="meta"><span class="ratio" data-fg="#d51522" data-bg="#ffffff">—</span><span class="verdict" data-thr="4.5">—</span><span style="color:var(--muted)">small text — borderline</span></div></div>
+        <div class="swatch"><div class="sw" style="background:#ffffff;color:#9b9b9b">Light grey × White</div>
+          <div class="meta"><span class="ratio" data-fg="#9b9b9b" data-bg="#ffffff">—</span><span class="verdict" data-thr="4.5">—</span><span style="color:var(--muted)">too light for body</span></div></div>
+        <div class="swatch"><div class="sw" style="background:#ff5762;color:#ffffff">Accent-2 × White</div>
+          <div class="meta"><span class="ratio" data-fg="#ffffff" data-bg="#ff5762">—</span><span class="verdict" data-thr="4.5">—</span><span style="color:var(--muted)">decorative only</span></div></div>
+      </div>
+      <p style="font-size:13px;color:var(--muted);margin:16px 0 0">Verdict thresholds: <span class="verdict pass">PASS</span> ≥ 4.5:1 · <span class="verdict large">LARGE-ONLY</span> 3–4.5:1 (large text only) · <span class="verdict fail">FAIL</span> &lt; 3:1. This is why SGEN ships <code>--accent-ink&nbsp;#a50f19</code> for red text on light, not the brighter <code>--accent&nbsp;#d51522</code>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== [9] REDUCED MOTION ===================== -->
+<section class="demo" id="d-motion">
+  <div class="wrap">
+    <div class="head">
+      <span class="eyebrow">Demo 9 · respecting a setting, not removing motion</span>
+      <h2><span class="num">9</span>Reduced motion<span class="fam">WCAG 2.3.3 · Animation from Interactions</span></h2>
+      <p>Some users get motion sickness from movement. The whole site is wrapped in <code>@media (prefers-reduced-motion: reduce)</code> which drops non-essential animation and smooth scrolling when the OS setting is on. Function is never removed — only the movement. Toggle it here to see both states without changing your OS.</p>
+    </div>
+    <div class="try"><span class="badge">Try</span><span>The square spins by default. Press the toggle to simulate <code>prefers-reduced-motion: reduce</code> — the spin stops, everything still works.</span></div>
+    <div class="panel">
+      <div class="rm-demo">
+        <div class="rm-box" aria-hidden="true">SPIN</div>
+        <div class="rm-note">
+          <button class="btn btn--dark" type="button" id="rm-toggle" aria-pressed="false">Simulate "reduce motion"</button>
+          <p class="statuspill" id="pill-motion" data-on="0" style="margin-top:14px"><span class="led"></span><span class="st">motion: full (animation on)</span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== [10] ACCESSIBLE FORM ===================== -->
+<section class="demo" id="d-form">
+  <div class="wrap">
+    <div class="head">
+      <span class="eyebrow">Demo 10 · labels, errors & announcements</span>
+      <h2><span class="num">10</span>Accessible form — labels &amp; error states<span class="fam">WCAG 3.3.1/3.3.2 · Labels &amp; Error ID</span></h2>
+      <p>Every field has a real <code>&lt;label for&gt;</code> (placeholders are never a label). Help text is tied with <code>aria-describedby</code>. On a failed submit, each bad field gets <code>aria-invalid="true"</code>, its error message is linked the same way, focus moves to the <b>first</b> error, and a <code>role="alert"</code> summary is announced. Errors are worded — they say how to fix it — and never rely on red alone.</p>
+    </div>
+    <div class="try"><span class="badge">Try</span><span>Press <b>Submit</b> with empty fields: errors appear, focus lands on the first bad field, and a summary is announced. Fill them and submit again for the success state.</span></div>
+    <div class="panel">
+      <form class="form" id="a11y-form" novalidate>
+        <div class="formstatus" id="form-summary" role="alert" aria-live="assertive"></div>
+        <div class="field" id="f-name">
+          <label for="in-name">Full name <span class="req" aria-hidden="true">*</span><span class="sr-only">required</span></label>
+          <input id="in-name" name="name" type="text" autocomplete="name" required aria-describedby="err-name" placeholder="Ada Lovelace">
+          <span class="err" id="err-name" role="alert">Enter your full name so we can address you correctly.</span>
+        </div>
+        <div class="field" id="f-email">
+          <label for="in-email">Email address <span class="req" aria-hidden="true">*</span><span class="sr-only">required</span></label>
+          <p class="hint" id="hint-email">We'll only use this to send your enrolment receipt.</p>
+          <input id="in-email" name="email" type="email" autocomplete="email" required aria-describedby="hint-email err-email" placeholder="you@studio.com">
+          <span class="err" id="err-email">Enter a valid email, e.g. name@domain.com.</span>
+        </div>
+        <div class="field" id="f-msg">
+          <label for="in-msg">What do you want to build? <span class="req" aria-hidden="true">*</span><span class="sr-only">required</span></label>
+          <textarea id="in-msg" name="msg" rows="3" required aria-describedby="err-msg" placeholder="A few words…"></textarea>
+          <span class="err" id="err-msg">Tell us a sentence or two — this field can't be empty.</span>
+        </div>
+        <button class="btn btn--primary" type="submit">Submit</button>
+        <button class="btn btn--ghost" type="reset" id="form-reset" style="margin-left:8px">Reset</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== [11] THE CHECKLIST ===================== -->
+<section class="demo" id="d-checklist" style="background:linear-gradient(180deg,#fff,var(--paper))">
+  <div class="wrap">
+    <div class="head">
+      <span class="eyebrow">The bar · every SGEN block must clear this</span>
+      <h2><span class="num">11</span>The accessibility checklist</h2>
+      <p>No block — hero, card, form, nav, modal — ships until it passes all of these. It's the same contract demonstrated live above, written as a gate.</p>
+    </div>
+    <div class="checklist">
+      <div class="ci">
+        <h3>Ships only when all 12 are true</h3>
+        <p class="csub">Run top-to-bottom on every component before it leaves the styleguide. A single failure is a blocker, not a nit.</p>
+        <ul class="clist" id="checklist">
+          <li><span class="tick"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7.5l3 3 7-7" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="ct"><b>Keyboard-only operable</b><span>Every action reachable &amp; usable with no mouse — no keyboard traps.</span></span></li>
+          <li><span class="tick"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7.5l3 3 7-7" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="ct"><b>Visible focus on everything</b><span><code>:focus-visible</code> ring, ≥3px, contrasting on its ground.</span></span></li>
+          <li><span class="tick"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7.5l3 3 7-7" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="ct"><b>Logical tab order</b><span>DOM order = reading order; skip-link first; no positive <code>tabindex</code>.</span></span></li>
+          <li><span class="tick"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7.5l3 3 7-7" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="ct"><b>Semantic HTML first</b><span>Native <code>button</code>/<code>a</code>/<code>label</code> before any ARIA.</span></span></li>
+          <li><span class="tick"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7.5l3 3 7-7" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="ct"><b>Name, role, value exposed</b><span>Every control reports itself to AT — APG pattern upheld.</span></span></li>
+          <li><span class="tick"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7.5l3 3 7-7" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="ct"><b>Text contrast ≥ 4.5:1</b><span>(≥3:1 for large text) — measured, not eyeballed.</span></span></li>
+          <li><span class="tick"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7.5l3 3 7-7" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="ct"><b>Meaning beyond colour</b><span>Icons / text reinforce every colour-coded state.</span></span></li>
+          <li><span class="tick"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7.5l3 3 7-7" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="ct"><b>Labelled inputs + linked errors</b><span><code>label for</code>, <code>aria-describedby</code>, <code>aria-invalid</code>, focus to first error.</span></span></li>
+          <li><span class="tick"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7.5l3 3 7-7" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="ct"><b>Modals trap &amp; restore focus</b><span>Focus enters, <kbd>Tab</kbd> trapped, <kbd>Esc</kbd> closes, focus returns to opener.</span></span></li>
+          <li><span class="tick"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7.5l3 3 7-7" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="ct"><b>Honours reduced-motion</b><span>Non-essential animation drops under the media query.</span></span></li>
+          <li><span class="tick"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7.5l3 3 7-7" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="ct"><b>Targets ≥ 44×44px</b><span>Touch &amp; click targets meet the minimum size.</span></span></li>
+          <li><span class="tick"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7.5l3 3 7-7" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="ct"><b>Live regions announce change</b><span>Async updates spoken via <code>role="status"</code> / <code>alert</code>.</span></span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="foot">
+  <div class="wrap">
+    <span class="fbrand">SGEN · Living Styleguide</span>
+    <a href="index.html">Index</a>
+    <a href="07-components.html">07 · Components</a>
+    <a href="08-scroll-sticky.html">08 · Scroll / Sticky</a>
+    <a href="09-accessibility.html">09 · Accessibility</a>
+    <a href="10-sections.html">10 · Sections</a>
+    <a href="11-theming.html">11 · Theming</a><a href="12-iconography.html">12 · Iconography</a><a href="13-utility-pages.html">13 · Utility</a><a href="14-ecommerce.html">14 · Ecommerce</a><a href="15-dataviz.html">15 · Data-viz</a>
+    <span class="meta">keyboard · focus · ARIA · contrast · reduced-motion — operate it without a mouse</span>
+  </div>
+</footer>
+
+<!-- ===================== MODAL (body-level sibling) ===================== -->
+<div class="modal-overlay" id="modal-overlay" data-open="false">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-desc" id="modal">
+    <button class="btn btn--ghost mclose" id="modal-close" type="button" aria-label="Close dialog">✕</button>
+    <h3 id="modal-title">Confirm enrolment</h3>
+    <p id="modal-desc">Focus is trapped inside this dialog. Press <kbd>Tab</kbd> — it cycles only between these controls. Press <kbd>Esc</kbd> or Cancel and focus returns to the button that opened it.</p>
+    <div class="field" style="margin:14px 0 0">
+      <label for="modal-input">Coupon code (optional)</label>
+      <input id="modal-input" type="text" placeholder="DESIGNLAB" autocomplete="off">
+    </div>
+    <div class="mfoot">
+      <button class="btn btn--ghost" id="modal-cancel" type="button">Cancel</button>
+      <button class="btn btn--primary" id="modal-confirm" type="button">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var docEl = document.documentElement;
+  var liveEl = document.getElementById('live');
+  function announce(msg){ if(liveEl){ liveEl.textContent = ''; setTimeout(function(){ liveEl.textContent = msg; }, 30); } }
+  function pill(id, on, txt){
+    var el = document.getElementById(id); if(!el) return;
+    el.setAttribute('data-on', on ? '1' : '0');
+    var st = el.querySelector('.st'); if(st) st.textContent = txt;
+  }
+
+  /* ============ STICKY HEADER (transparent → solid) ============ */
+  var header = document.getElementById('site-header');
+  var headerH = header.offsetHeight || 84;
+  function measure(){ headerH = header.offsetHeight || 84; docEl.style.setProperty('--header-h', headerH + 'px'); }
+  var stuck = null;
+  function onScroll(){
+    var y = window.pageYOffset;
+    var s = y > headerH;
+    if(s === stuck) return;
+    stuck = s;
+    header.classList.toggle('is-stuck', s);
+    header.classList.toggle('at-top', !s);
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', function(){ measure(); }, { passive: true });
+
+  /* ============ [1] SKIP LINK — focus reveals; sim button proves it ============ */
+  var skip = document.querySelector('.skip');
+  skip.addEventListener('focus', function(){ pill('pill-skip', true, 'skip-link: revealed (focused)'); });
+  skip.addEventListener('blur',  function(){ pill('pill-skip', false, 'skip-link: idle (Tab to reveal)'); });
+  document.getElementById('skip-sim').addEventListener('click', function(){
+    skip.focus();
+    pill('pill-skip', true, 'skip-link: revealed — Enter jumps to #main');
+    announce('Skip to main content link focused');
+  });
+
+  /* ============ [2] FOCUS-VISIBLE — track live + force-ring for capture ============ */
+  var grid = document.getElementById('focusgrid');
+  grid.addEventListener('focusin', function(e){
+    pill('pill-focus', true, 'focus ring: shown on ' + (e.target.tagName.toLowerCase()));
+  });
+  grid.addEventListener('focusout', function(){ pill('pill-focus', false, 'focus rings: live (Tab to see)'); });
+  var forced = false;
+  document.getElementById('force-ring').addEventListener('click', function(){
+    forced = !forced;
+    var els = grid.querySelectorAll('button,a,input,.chip');
+    els.forEach(function(el){ el.classList.toggle('forced-ring', forced); });
+    this.textContent = forced ? 'Clear forced rings' : 'Force focus ring on all (for capture)';
+    pill('pill-focus', forced, forced ? 'focus ring: FORCED on all (capture)' : 'focus rings: live (Tab to see)');
+  });
+
+  /* ============ [3] KEYBOARD MENU — roving focus, arrows, Esc ============ */
+  var mBtn = document.getElementById('menu-btn');
+  var mList = document.getElementById('menu-list');
+  var mItems = Array.prototype.slice.call(mList.querySelectorAll('[role="menuitem"]'));
+  function openMenu(focusFirst){
+    mList.setAttribute('data-open', 'true');
+    mBtn.setAttribute('aria-expanded', 'true');
+    pill('pill-menu', true, 'menu: open · aria-expanded=true');
+    if(focusFirst !== false){ focusItem(0); }
+    document.addEventListener('keydown', menuKeydown, true);
+    document.addEventListener('click', outsideClose, true);
+  }
+  function closeMenu(returnFocus){
+    mList.setAttribute('data-open', 'false');
+    mBtn.setAttribute('aria-expanded', 'false');
+    mItems.forEach(function(it){ it.setAttribute('data-active','false'); });
+    pill('pill-menu', false, 'menu: closed · aria-expanded=false');
+    document.removeEventListener('keydown', menuKeydown, true);
+    document.removeEventListener('click', outsideClose, true);
+    if(returnFocus){ mBtn.focus(); }
+  }
+  function focusItem(i){
+    mItems.forEach(function(it){ it.setAttribute('data-active','false'); });
+    var n = (i + mItems.length) % mItems.length;
+    mItems[n].setAttribute('data-active','true');
+    mItems[n].focus();
+  }
+  function currentIndex(){ return mItems.indexOf(document.activeElement); }
+  mBtn.addEventListener('click', function(){
+    if(mList.getAttribute('data-open') === 'true'){ closeMenu(false); } else { openMenu(true); }
+  });
+  mBtn.addEventListener('keydown', function(e){
+    if(e.key === 'ArrowDown' || e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openMenu(true); }
+    else if(e.key === 'ArrowUp'){ e.preventDefault(); openMenu(false); focusItem(mItems.length - 1); }
+  });
+  function menuKeydown(e){
+    if(mList.getAttribute('data-open') !== 'true') return;
+    var i = currentIndex();
+    switch(e.key){
+      case 'ArrowDown': e.preventDefault(); focusItem(i + 1); break;
+      case 'ArrowUp':   e.preventDefault(); focusItem(i - 1); break;
+      case 'Home':      e.preventDefault(); focusItem(0); break;
+      case 'End':       e.preventDefault(); focusItem(mItems.length - 1); break;
+      case 'Escape':    e.preventDefault(); closeMenu(true); break;
+      case 'Tab':       closeMenu(false); break;
+    }
+  }
+  mItems.forEach(function(it){
+    it.addEventListener('click', function(){ closeMenu(true); announce(it.textContent.trim() + ' selected'); });
+  });
+  function outsideClose(e){ if(!mList.contains(e.target) && e.target !== mBtn){ closeMenu(false); } }
+
+  /* ============ [4] TABS — roving tabindex, arrows + Home/End ============ */
+  var tablist = document.querySelector('.tablist');
+  var tabs = Array.prototype.slice.call(tablist.querySelectorAll('[role="tab"]'));
+  function selectTab(tab, setFocus){
+    tabs.forEach(function(t){
+      var sel = t === tab;
+      t.setAttribute('aria-selected', sel ? 'true' : 'false');
+      t.setAttribute('tabindex', sel ? '0' : '-1');
+      var panel = document.getElementById(t.getAttribute('aria-controls'));
+      if(panel){ panel.hidden = !sel; }
+    });
+    if(setFocus){ tab.focus(); }
+    pill('pill-tabs', true, 'tab: ' + tab.textContent.trim() + ' selected');
+  }
+  tabs.forEach(function(tab, idx){
+    tab.addEventListener('click', function(){ selectTab(tab, true); });
+    tab.addEventListener('keydown', function(e){
+      var n = null;
+      if(e.key === 'ArrowRight'){ n = (idx + 1) % tabs.length; }
+      else if(e.key === 'ArrowLeft'){ n = (idx - 1 + tabs.length) % tabs.length; }
+      else if(e.key === 'Home'){ n = 0; }
+      else if(e.key === 'End'){ n = tabs.length - 1; }
+      if(n !== null){ e.preventDefault(); selectTab(tabs[n], true); }
+    });
+  });
+
+  /* ============ [5] ACCORDION — Enter/Space toggle, animated max-height ============ */
+  var accBtns = Array.prototype.slice.call(document.querySelectorAll('.acc__btn'));
+  function setPanel(btn, open){
+    var panel = document.getElementById(btn.getAttribute('aria-controls'));
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    if(panel){ panel.style.maxHeight = open ? (panel.scrollHeight + 'px') : '0px'; }
+  }
+  accBtns.forEach(function(btn){
+    // init: first one open
+    setPanel(btn, btn.getAttribute('aria-expanded') === 'true');
+    btn.addEventListener('click', function(){
+      var open = btn.getAttribute('aria-expanded') !== 'true';
+      setPanel(btn, open);
+      pill('pill-acc', open, 'accordion: ' + (open ? 'expanded' : 'collapsed') + ' "' + btn.textContent.trim().slice(0,22) + '…"');
+      announce(btn.textContent.trim() + (open ? ' expanded' : ' collapsed'));
+    });
+  });
+  // recompute open panel heights on resize
+  window.addEventListener('resize', function(){
+    accBtns.forEach(function(btn){ if(btn.getAttribute('aria-expanded') === 'true'){ setPanel(btn, true); } });
+  }, { passive: true });
+
+  /* ============ [6] MODAL — focus trap, Esc, return focus ============ */
+  var overlay = document.getElementById('modal-overlay');
+  var modal = document.getElementById('modal');
+  var openBtn = document.getElementById('modal-open');
+  var lastFocused = null;
+  function focusables(){
+    // width-based visible test — robust during the open transition where
+    // offsetParent can momentarily read null on a fixed overlay.
+    return Array.prototype.slice.call(
+      modal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')
+    ).filter(function(el){ return !el.disabled && el.getClientRects().length > 0; });
+  }
+  function focusFirstInModal(){
+    if(overlay.getAttribute('data-open') !== 'true') return;
+    if(modal.contains(document.activeElement)) return;        // already inside
+    var f = focusables(); if(f.length){ f[0].focus(); }
+  }
+  function openModal(){
+    lastFocused = document.activeElement;
+    overlay.setAttribute('data-open', 'true');
+    pill('pill-modal', true, 'dialog: OPEN · focus trapped');
+    document.addEventListener('keydown', modalKeydown, true);
+    // A focus issued while the overlay is mid opacity-transition (opacity:0→1)
+    // is silently rejected by the engine. Focus once the transition settles —
+    // on transitionend, with a timeout fallback if no transition fires
+    // (e.g. prefers-reduced-motion zeroes the duration).
+    focusFirstInModal();                                       // try immediately
+    overlay.addEventListener('transitionend', focusFirstInModal, { once: true });
+    setTimeout(focusFirstInModal, 240);                        // guaranteed fallback
+  }
+  function closeModal(){
+    overlay.setAttribute('data-open', 'false');
+    pill('pill-modal', false, 'dialog: closed · focus returned');
+    document.removeEventListener('keydown', modalKeydown, true);
+    if(lastFocused){ lastFocused.focus(); }
+    announce('Dialog closed');
+  }
+  function modalKeydown(e){
+    if(overlay.getAttribute('data-open') !== 'true') return;
+    if(e.key === 'Escape'){ e.preventDefault(); closeModal(); return; }
+    if(e.key === 'Tab'){
+      var f = focusables(); if(!f.length) return;
+      var first = f[0], last = f[f.length - 1];
+      if(e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+      else if(!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+    }
+  }
+  openBtn.addEventListener('click', openModal);
+  document.getElementById('modal-close').addEventListener('click', closeModal);
+  document.getElementById('modal-cancel').addEventListener('click', closeModal);
+  document.getElementById('modal-confirm').addEventListener('click', function(){ announce('Enrolment confirmed'); closeModal(); });
+  overlay.addEventListener('mousedown', function(e){ if(e.target === overlay){ closeModal(); } });
+
+  /* ============ [8] CONTRAST — compute real WCAG ratios from hex ============ */
+  function lum(hex){
+    var h = hex.replace('#','');
+    var r = parseInt(h.substr(0,2),16)/255, g = parseInt(h.substr(2,2),16)/255, b = parseInt(h.substr(4,2),16)/255;
+    function ch(c){ return c <= 0.03928 ? c/12.92 : Math.pow((c+0.055)/1.055, 2.4); }
+    return 0.2126*ch(r) + 0.7152*ch(g) + 0.0722*ch(b);
+  }
+  function ratio(fg, bg){
+    var l1 = lum(fg), l2 = lum(bg);
+    var hi = Math.max(l1,l2), lo = Math.min(l1,l2);
+    return (hi + 0.05) / (lo + 0.05);
+  }
+  Array.prototype.slice.call(document.querySelectorAll('#cgrid .meta')).forEach(function(meta){
+    var rEl = meta.querySelector('.ratio'); var vEl = meta.querySelector('.verdict');
+    var fg = rEl.getAttribute('data-fg'), bg = rEl.getAttribute('data-bg');
+    var r = ratio(fg, bg);
+    rEl.textContent = r.toFixed(2) + ':1';
+    if(r >= 4.5){ vEl.textContent = 'PASS'; vEl.classList.add('pass'); }
+    else if(r >= 3){ vEl.textContent = 'LARGE-ONLY'; vEl.classList.add('large'); }
+    else { vEl.textContent = 'FAIL'; vEl.classList.add('fail'); }
+  });
+
+  /* ============ [9] REDUCED MOTION — toggle simulation ============ */
+  var rmBtn = document.getElementById('rm-toggle');
+  rmBtn.addEventListener('click', function(){
+    var on = document.body.getAttribute('data-force-rm') === 'true';
+    on = !on;
+    document.body.setAttribute('data-force-rm', on ? 'true' : 'false');
+    rmBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    rmBtn.textContent = on ? 'Restore full motion' : 'Simulate "reduce motion"';
+    pill('pill-motion', !on ? false : true, on ? 'motion: reduced (animation off)' : 'motion: full (animation on)');
+  });
+
+  /* ============ [10] ACCESSIBLE FORM — validate, mark, announce, focus-first ============ */
+  var form = document.getElementById('a11y-form');
+  var summary = document.getElementById('form-summary');
+  function setField(id, invalid){
+    var wrap = document.getElementById('f-' + id);
+    var input = document.getElementById('in-' + id);
+    wrap.setAttribute('data-invalid', invalid ? 'true' : 'false');
+    input.setAttribute('aria-invalid', invalid ? 'true' : 'false');
+  }
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var name = document.getElementById('in-name').value.trim();
+    var email = document.getElementById('in-email').value.trim();
+    var msg = document.getElementById('in-msg').value.trim();
+    var emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    var bad = [];
+    setField('name', !name);   if(!name) bad.push('name');
+    setField('email', !emailOk); if(!emailOk) bad.push('email');
+    setField('msg', !msg);     if(!msg) bad.push('msg');
+    summary.classList.remove('ok','bad');
+    if(bad.length){
+      summary.classList.add('bad');
+      summary.textContent = bad.length + (bad.length === 1 ? ' field needs' : ' fields need') + ' attention. Focus moved to the first error.';
+      var firstId = bad[0] === 'name' ? 'in-name' : bad[0] === 'email' ? 'in-email' : 'in-msg';
+      document.getElementById(firstId).focus();
+    } else {
+      summary.classList.add('ok');
+      summary.textContent = 'Thanks — your details validated and would be submitted.';
+    }
+  });
+  document.getElementById('form-reset').addEventListener('click', function(){
+    ['name','email','msg'].forEach(function(id){ setField(id, false); });
+    summary.classList.remove('ok','bad'); summary.textContent = '';
+  });
+
+  /* ---- init ---- */
+  measure();
+  onScroll();
+})();
+</script>
+
+</body>
+</html>

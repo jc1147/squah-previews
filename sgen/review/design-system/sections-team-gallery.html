@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SGEN Living Styleguide — Section Blocks · Team + Gallery (live)</title>
+<style>
+/* ============================================================
+   SGEN SECTION-BLOCK GALLERY — TEAM + GALLERY / PORTFOLIO
+   charcoal #1a1a1a · red #d51522 · clean editorial
+   Five production-grade SECTION BLOCKS, each droppable into a
+   real page. Self-contained: system fonts, zero external deps,
+   CSS-crafted gradient imagery (no external images).
+   Pattern IDs (from _MODERN-DESIGN-PATTERN-LIBRARY.md):
+     TEAM   = S-TEAM (G4 + H2/H5) — circular portraits, image-zoom
+     GALLERY= S-GALLERY (H1 `exposure` in G3) — masonry/filter/zoom
+   Imagery: H1 image-zoom-in-clipped-frame + H2 shape-masks +
+            TOP-12 #7 hover mask/caption-rise, all CSS-only.
+   Motion gated behind prefers-reduced-motion.
+   ============================================================ */
+:root{
+  --ink:#1a1a1a;                 /* charcoal */
+  --paper:#f6f5f2;               /* warm off-white, never #fff */
+  --surface:#ffffff;
+  --muted:#626262;               /* recurs verbatim across the harvest */
+  --body:#4a4f55;                /* desaturated tint of ink, not #666 */
+  --hair:rgba(26,26,26,.10);
+  --accent:#d51522;              /* SGEN red */
+  --accent-ink:#a50f19;          /* darker red for text-on-light */
+  --accent-2:#ff5a4d;
+  --accent-tint:rgba(213,21,34,.10);
+  --accent-bd:rgba(213,21,34,.25);
+
+  /* radius — ONE language: 6 chip / 12 card / 20 panel */
+  --r-chip:6px; --r-card:12px; --r-panel:20px; --r-pill:9999px;
+  --r-btn:8px;
+
+  /* shadow — ink/navy-tinted, never #000 (D1) */
+  --shadow-rest:0 2px 6px 0 rgba(26,26,26,.08);
+  --shadow-card:0 15px 30px 0 rgba(1,7,39,.13);      /* the universal one */
+  --shadow-hover:0 32px 64px -12px rgba(16,24,40,.18);
+
+  /* motion (C8) */
+  --ease:cubic-bezier(.05,.5,.3,1);
+  --t-fast:.18s ease-out;
+  --t-img:.45s var(--ease);      /* image-zoom settle */
+  --t-reveal:.6s var(--ease);
+  --ring:0 0 0 3px rgba(213,21,34,.40);
+
+  --sys-sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --sys-serif:ui-serif,Georgia,Cambria,"Times New Roman",Times,serif;
+  --sys-mono:ui-monospace,"SFMono-Regular","Cascadia Code","Consolas",monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--sys-sans);font-size:16px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{font-family:var(--sys-serif);font-weight:600;letter-spacing:-.02em;line-height:1.08;margin:0}
+a{color:var(--accent-ink);text-decoration:none}
+code{font-family:var(--sys-mono);font-size:.84em;background:rgba(26,26,26,.05);padding:.06em .35em;border-radius:4px}
+
+/* ---------- top bar + sibling nav ---------- */
+.topbar{
+  position:sticky;top:0;z-index:50;
+  background:rgba(246,245,242,.82);backdrop-filter:blur(14px) saturate(160%);
+  -webkit-backdrop-filter:blur(14px) saturate(160%);
+  border-bottom:1px solid var(--hair);
+}
+.topbar__in{max-width:1200px;margin:0 auto;padding:.7rem clamp(1rem,4vw,2.5rem);
+  display:flex;align-items:center;gap:1.2rem;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:.55rem;font-weight:800;letter-spacing:-.01em;font-family:var(--sys-sans)}
+.brand .dot{width:11px;height:11px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px rgba(213,21,34,.16)}
+.brand small{font-weight:600;color:var(--muted);letter-spacing:.02em}
+.sibnav{display:flex;gap:.2rem;flex-wrap:wrap;margin-left:auto;align-items:center}
+.sibnav a{
+  font-size:.74rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
+  color:var(--muted);padding:.35rem .6rem;border-radius:var(--r-chip);
+  transition:color var(--t-fast),background var(--t-fast)}
+.sibnav a:hover{color:var(--ink);background:rgba(26,26,26,.05)}
+.sibnav a.hub{color:#fff;background:var(--ink)}
+.sibnav a.hub:hover{background:#000}
+.sibnav a[aria-current="page"]{color:#fff;background:var(--accent)}
+
+/* ---------- page header ---------- */
+.pagehead{max-width:1200px;margin:0 auto;padding:clamp(2.5rem,6vw,4.5rem) clamp(1rem,4vw,2.5rem) 1rem}
+.eyebrow{display:inline-flex;align-items:center;gap:.5rem;
+  font-family:var(--sys-sans);font-size:.72rem;font-weight:800;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--accent-ink)}
+.eyebrow::before{content:"";width:34px;height:2px;background:var(--accent);display:inline-block}
+.pagehead h1{font-size:clamp(2.2rem,6vw,4rem);margin:.5rem 0 .4rem;letter-spacing:-.035em}
+.pagehead p{max-width:68ch;color:var(--body);font-size:1.05rem}
+.legendbar{display:flex;gap:1.4rem;flex-wrap:wrap;margin-top:1.1rem;font-size:.82rem;color:var(--muted)}
+.legendbar b{color:var(--ink)}
+.legendbar .pin{display:inline-block;font-family:var(--sys-mono);font-size:.72rem;font-weight:700;color:var(--accent-ink);
+  background:var(--accent-tint);border:1px solid var(--accent-bd);padding:.05rem .4rem;border-radius:5px}
+
+/* ---------- in-page variant chips ---------- */
+.catnav{max-width:1200px;margin:1.2rem auto .5rem;padding:0 clamp(1rem,4vw,2.5rem);
+  display:flex;gap:.5rem;flex-wrap:wrap}
+.catnav a{font-size:.78rem;font-weight:700;padding:.45rem .85rem;border:1px solid var(--hair);
+  border-radius:var(--r-pill);color:var(--ink);background:var(--surface);transition:all var(--t-fast)}
+.catnav a:hover{border-color:var(--accent);color:var(--accent-ink)}
+
+/* ---------- variant framing (label + when-to-use) ---------- */
+.variant{max-width:1280px;margin:0 auto;padding:clamp(2rem,4vw,3rem) clamp(1rem,4vw,2.5rem)}
+.variant + .variant{border-top:1px solid var(--hair)}
+.vhead{margin-bottom:1.4rem;display:flex;flex-wrap:wrap;align-items:baseline;gap:.7rem 1rem}
+.vhead .vno{font-family:var(--sys-serif);font-size:clamp(1.6rem,4vw,2.3rem);color:rgba(213,21,34,.30);
+  font-weight:700;line-height:.9}
+.vhead .vlabel{font-family:var(--sys-sans);font-size:1.15rem;font-weight:800;letter-spacing:-.01em;color:var(--ink)}
+.vhead .vkind{font-family:var(--sys-mono);font-size:.66rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
+  color:var(--accent-ink);background:var(--accent-tint);border:1px solid var(--accent-bd);padding:.15rem .5rem;border-radius:var(--r-chip)}
+.vhead .vids{font-family:var(--sys-mono);font-size:.66rem;color:var(--muted);letter-spacing:.02em}
+.whenuse{font-size:.86rem;color:var(--body);margin:.1rem 0 1.5rem;max-width:80ch;line-height:1.55}
+.whenuse b{color:var(--ink)}
+/* the frame the section sits in — a tinted "page" so blocks read as drop-ins */
+.stage{background:var(--surface);border:1px solid var(--hair);border-radius:var(--r-panel);
+  overflow:hidden;box-shadow:var(--shadow-rest)}
+.stage.dark{background:#17181c;border-color:rgba(255,255,255,.08)}
+.stage.tint{background:#f1efe9}
+
+/* ============================================================
+   SHARED — section scaffolding used inside every block
+   ============================================================ */
+.sec{padding:clamp(2.6rem,5vw,4.2rem) clamp(1.2rem,4vw,3.2rem)}
+.sec__head{max-width:60ch;margin:0 auto clamp(1.8rem,3vw,2.6rem);text-align:center}
+.sec__head.left{text-align:left;margin-left:0}
+.kicker{display:inline-flex;align-items:center;gap:.5rem;
+  font-family:var(--sys-sans);font-size:.7rem;font-weight:800;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--accent-ink)}
+.kicker::before{content:"";width:26px;height:2px;background:var(--accent);display:inline-block}
+.sec__head.center .kicker{justify-content:center}
+.sec h2.t{font-size:clamp(1.7rem,3.6vw,2.7rem);margin:.6rem 0 .5rem;letter-spacing:-.03em}
+.sec .lede{color:var(--body);font-size:1rem;margin:0}
+.sec.on-dark h2.t,.sec.on-dark .lede{color:#fff}
+.sec.on-dark .lede{color:#b9bcc2}
+.sec.on-dark .kicker{color:var(--accent-2)}
+
+/* reveal (scroll entrance, gated) */
+.reveal{opacity:0;transform:translateY(22px);transition:opacity var(--t-reveal),transform var(--t-reveal)}
+.reveal.in-view{opacity:1;transform:none}
+
+/* ============================================================
+   IMAGERY ENGINE — CSS-crafted "photos" (no external images)
+   A portrait/photo is a layered gradient inside a clipped frame.
+   .frame clips; .frame .ph zooms on hover (H1 / TOP-12 #7).
+   ============================================================ */
+.frame{position:relative;overflow:hidden;background:#e7e4dd}
+.frame .ph{position:absolute;inset:0;transition:transform var(--t-img),filter var(--t-img);
+  background-size:cover;background-position:center}
+.frame .ph::after{content:"";position:absolute;inset:0;
+  background:radial-gradient(120% 90% at 50% 12%,rgba(255,255,255,.22),transparent 55%),
+             linear-gradient(180deg,rgba(26,26,26,0) 40%,rgba(26,26,26,.06) 100%)}
+/* portrait skin palettes — distinct gradient "faces" so each person reads unique */
+.ph.p1{background-image:linear-gradient(150deg,#d8d2c6 0%,#b7ada0 100%),radial-gradient(60% 50% at 50% 30%,#efe9dd,transparent 70%)}
+.ph.p2{background-image:linear-gradient(150deg,#cfd6d3 0%,#9aa7a6 100%),radial-gradient(60% 50% at 52% 28%,#e9efed,transparent 70%)}
+.ph.p3{background-image:linear-gradient(150deg,#e0cabb 0%,#b89884 100%),radial-gradient(60% 50% at 48% 30%,#f3e6dc,transparent 70%)}
+.ph.p4{background-image:linear-gradient(150deg,#c9cbe0 0%,#9094b3 100%),radial-gradient(60% 50% at 50% 28%,#e7e8f2,transparent 70%)}
+.ph.p5{background-image:linear-gradient(150deg,#d9cfe0 0%,#ab97b8 100%),radial-gradient(60% 50% at 52% 30%,#efe7f3,transparent 70%)}
+.ph.p6{background-image:linear-gradient(150deg,#e3d6bd 0%,#c2ab7e 100%),radial-gradient(60% 50% at 48% 28%,#f5edd9,transparent 70%)}
+.ph.p7{background-image:linear-gradient(150deg,#bdd2d8 0%,#7fa3ad 100%),radial-gradient(60% 50% at 50% 30%,#dcebef,transparent 70%)}
+.ph.p8{background-image:linear-gradient(150deg,#dac6c6 0%,#b48989 100%),radial-gradient(60% 50% at 52% 28%,#f1e0e0,transparent 70%)}
+/* faux "subject" silhouette — a soft head/shoulders so portraits read as people */
+.ph .subj{position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:62%;height:86%;
+  background:
+    radial-gradient(38% 30% at 50% 22%,rgba(26,26,26,.34),transparent 72%),  /* head */
+    radial-gradient(120% 70% at 50% 120%,rgba(26,26,26,.30),transparent 70%); /* shoulders */
+  filter:blur(.4px)}
+/* artwork/portfolio "photos" — abstract scenes, richer chroma */
+.ph.g1{background-image:
+  linear-gradient(135deg,#3a2f6e 0%,#7b3aa6 55%,#d5447a 100%)}
+.ph.g2{background-image:
+  linear-gradient(135deg,#0e5a6b 0%,#16a0a8 60%,#7fd6b0 100%)}
+.ph.g3{background-image:
+  linear-gradient(135deg,#7a1f2b 0%,#c23a2a 55%,#f2a14a 100%)}
+.ph.g4{background-image:
+  linear-gradient(135deg,#1d2440 0%,#374a8c 55%,#6fb6e8 100%)}
+.ph.g5{background-image:
+  linear-gradient(135deg,#2e1a3c 0%,#6c2f7a 55%,#c75fb0 100%)}
+.ph.g6{background-image:
+  linear-gradient(135deg,#143b2a 0%,#2f8a52 55%,#bfe05a 100%)}
+.ph.g7{background-image:
+  linear-gradient(135deg,#4a2a12 0%,#a6602a 55%,#f0c25a 100%)}
+.ph.g8{background-image:
+  linear-gradient(135deg,#102542 0%,#1f5fa8 55%,#54c6d6 100%)}
+.ph.g9{background-image:
+  linear-gradient(135deg,#3d1530 0%,#8a2752 55%,#e06a7a 100%)}
+.ph.g10{background-image:
+  linear-gradient(135deg,#1a1c22 0%,#3a3f4d 55%,#8a90a0 100%)}
+/* drifting light streaks so the abstract art reads "shot", not flat */
+.ph[class*="g"]::before{content:"";position:absolute;inset:-20%;
+  background:
+    linear-gradient(115deg,transparent 38%,rgba(255,255,255,.18) 48%,transparent 58%),
+    radial-gradient(40% 60% at 80% 15%,rgba(255,255,255,.25),transparent 60%)}
+
+/* ============================================================
+   BLOCK A — TEAM · card grid, hover-reveal (S-TEAM / G4 + H1 zoom)
+   ============================================================ */
+.team-grid{display:grid;gap:clamp(1rem,2vw,1.6rem);
+  grid-template-columns:repeat(4,1fr);max-width:1100px;margin:0 auto}
+.tcard{position:relative;background:var(--surface);border:1px solid var(--hair);border-radius:var(--r-card);
+  overflow:hidden;box-shadow:var(--shadow-rest);
+  transition:transform var(--t-fast),box-shadow var(--t-fast)}
+.tcard:hover,.tcard:focus-within{transform:translateY(-6px);box-shadow:var(--shadow-card)}
+.tcard .frame{aspect-ratio:1/1.12}
+.tcard:hover .ph,.tcard:focus-within .ph{transform:scale(1.06)}
+/* hover-reveal: a role/social bar rises from the bottom of the portrait */
+.tcard .reveal-bar{position:absolute;left:0;right:0;bottom:0;
+  padding:1.5rem .9rem .9rem;display:flex;gap:.5rem;justify-content:center;
+  background:linear-gradient(180deg,rgba(20,18,18,0),rgba(20,18,18,.82));
+  transform:translateY(101%);opacity:0;transition:transform var(--t-img),opacity var(--t-img)}
+.tcard:hover .reveal-bar,.tcard:focus-within .reveal-bar{transform:translateY(0);opacity:1}
+.tcard .soc{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;
+  background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.28);color:#fff;
+  font-family:var(--sys-mono);font-size:.7rem;font-weight:800;
+  transition:background var(--t-fast),transform var(--t-fast)}
+.tcard .soc:hover{background:var(--accent);border-color:var(--accent);transform:translateY(-2px)}
+.tcard .meta{padding:.9rem 1rem 1.05rem}
+.tcard .nm{font-family:var(--sys-serif);font-size:1.08rem;font-weight:600;letter-spacing:-.01em;color:var(--ink)}
+.tcard .ro{font-size:.78rem;font-weight:700;letter-spacing:.02em;color:var(--accent-ink);margin-top:.15rem}
+.tcard .bio{font-size:.82rem;color:var(--muted);margin-top:.45rem;line-height:1.5;
+  max-height:0;opacity:0;overflow:hidden;transition:max-height var(--t-img),opacity var(--t-img),margin var(--t-img)}
+.tcard:hover .bio,.tcard:focus-within .bio{max-height:6rem;opacity:1;margin-top:.55rem}
+
+/* ============================================================
+   BLOCK B — TEAM · circular roster, hover-reveal bio (H5 medallion)
+   ============================================================ */
+.roster{display:grid;gap:clamp(1.4rem,3vw,2.4rem);
+  grid-template-columns:repeat(3,1fr);max-width:980px;margin:0 auto}
+.member{text-align:center}
+.member .ring{position:relative;width:clamp(120px,16vw,168px);aspect-ratio:1;margin:0 auto;
+  border-radius:50%;padding:5px;background:conic-gradient(from 220deg,var(--accent),var(--accent-2),var(--accent));
+  transition:transform var(--t-fast)}
+.member:hover .ring,.member:focus-within .ring{transform:translateY(-4px)}
+.member .ringin{position:relative;width:100%;height:100%;border-radius:50%;overflow:hidden;
+  background:#e7e4dd;border:4px solid var(--surface)}
+.member .ringin .ph{border-radius:50%}
+.member:hover .ringin .ph,.member:focus-within .ringin .ph{transform:scale(1.08)}
+/* hover-reveal accent dot badge */
+.member .badge{position:absolute;right:8%;bottom:8%;width:30px;height:30px;border-radius:50%;
+  background:var(--accent);border:3px solid var(--surface);display:grid;place-items:center;
+  color:#fff;font-family:var(--sys-mono);font-size:.7rem;font-weight:800;
+  transform:scale(0);transition:transform var(--t-img) }
+.member:hover .badge,.member:focus-within .badge{transform:scale(1)}
+.member .nm{font-family:var(--sys-serif);font-size:1.1rem;font-weight:600;color:var(--ink);margin-top:.9rem}
+.member .ro{font-size:.76rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--accent-ink);margin-top:.2rem}
+.member .bio{font-size:.84rem;color:var(--body);line-height:1.55;
+  max-height:0;opacity:0;overflow:hidden;transition:max-height var(--t-img),opacity var(--t-img),margin var(--t-img)}
+.member:hover .bio,.member:focus-within .bio{max-height:7rem;opacity:1;margin-top:.6rem}
+.member .links{display:flex;gap:.4rem;justify-content:center;margin-top:.7rem;
+  opacity:0;transform:translateY(6px);transition:opacity var(--t-img),transform var(--t-img)}
+.member:hover .links,.member:focus-within .links{opacity:1;transform:none}
+.member .links a{font-family:var(--sys-mono);font-size:.68rem;font-weight:700;color:var(--muted);
+  border:1px solid var(--hair);border-radius:var(--r-pill);padding:.2rem .55rem;transition:all var(--t-fast)}
+.member .links a:hover{color:#fff;background:var(--accent);border-color:var(--accent)}
+
+/* ============================================================
+   BLOCK C — GALLERY · CSS-columns masonry, hover-zoom + caption-rise
+   (S-GALLERY / H1 `exposure` in a masonry G3)
+   ============================================================ */
+.masonry{column-count:3;column-gap:clamp(.9rem,1.6vw,1.3rem);max-width:1120px;margin:0 auto}
+.mtile{break-inside:avoid;margin:0 0 clamp(.9rem,1.6vw,1.3rem);position:relative;
+  border-radius:var(--r-card);overflow:hidden;box-shadow:var(--shadow-rest);display:block;
+  transition:box-shadow var(--t-fast)}
+.mtile:hover,.mtile:focus-visible{box-shadow:var(--shadow-card);outline:none}
+.mtile .frame{width:100%}
+.mtile.t-tall .frame{aspect-ratio:3/4}
+.mtile.t-wide .frame{aspect-ratio:4/3}
+.mtile.t-sq .frame{aspect-ratio:1/1}
+.mtile:hover .ph,.mtile:focus-visible .ph{transform:scale(1.07)}
+/* exposure mask: dark wash + rising caption + growing underline */
+.mtile .mask{position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,18,22,0) 40%,rgba(20,18,22,.72));
+  opacity:0;transition:opacity var(--t-img)}
+.mtile:hover .mask,.mtile:focus-visible .mask{opacity:1}
+.mtile .cap{position:absolute;left:0;right:0;bottom:0;padding:1rem 1.05rem;color:#fff;
+  transform:translateY(12px);opacity:0;transition:transform var(--t-img),opacity var(--t-img)}
+.mtile:hover .cap,.mtile:focus-visible .cap{transform:none;opacity:1}
+.mtile .cap .ttl{font-family:var(--sys-serif);font-size:1.02rem;font-weight:600;line-height:1.2}
+.mtile .cap .sub{font-family:var(--sys-mono);font-size:.66rem;font-weight:700;letter-spacing:.08em;
+  text-transform:uppercase;color:#e7c2c4;margin-top:.25rem;display:inline-block}
+.mtile .cap .sub::after{content:"";display:block;height:2px;width:0;background:var(--accent);margin-top:.4rem;
+  transition:width var(--t-img)}
+.mtile:hover .cap .sub::after,.mtile:focus-visible .cap .sub::after{width:42px}
+
+/* ============================================================
+   BLOCK D — GALLERY · filterable grid, image-zoom + mask
+   (S-GALLERY / G3 + G3-bento + JS filter toggling opacity)
+   ============================================================ */
+.filterbar{display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center;margin:0 auto clamp(1.6rem,3vw,2.4rem)}
+.filterbar button{font-family:var(--sys-sans);font-size:.8rem;font-weight:700;cursor:pointer;
+  padding:.5rem 1rem;min-height:40px;border-radius:var(--r-pill);border:1px solid var(--hair);
+  background:var(--surface);color:var(--ink);transition:all var(--t-fast)}
+.filterbar button:hover{border-color:var(--accent);color:var(--accent-ink)}
+.filterbar button:focus-visible{outline:none;box-shadow:var(--ring)}
+.filterbar button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.fgrid{display:grid;gap:clamp(.9rem,1.6vw,1.3rem);grid-template-columns:repeat(3,1fr);
+  max-width:1120px;margin:0 auto}
+.fcell{position:relative;border-radius:var(--r-card);overflow:hidden;box-shadow:var(--shadow-rest);
+  transition:opacity .35s var(--ease),transform .35s var(--ease),box-shadow var(--t-fast)}
+.fcell.is-hidden{opacity:0;transform:scale(.92);pointer-events:none;
+  position:absolute;width:0;height:0;overflow:hidden;clip-path:inset(50%)}
+.fcell:hover{box-shadow:var(--shadow-card)}
+.fcell .frame{aspect-ratio:4/3}
+.fcell.span2{grid-column:span 2}
+.fcell.span2 .frame{aspect-ratio:8/3}
+.fcell:hover .ph{transform:scale(1.07)}
+.fcell .mask{position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,18,22,0) 45%,rgba(20,18,22,.74));
+  opacity:.15;transition:opacity var(--t-img)}
+.fcell:hover .mask{opacity:1}
+.fcell .info{position:absolute;left:0;right:0;bottom:0;padding:.95rem 1.05rem;color:#fff;
+  display:flex;align-items:flex-end;justify-content:space-between;gap:.6rem;
+  transform:translateY(8px);opacity:0;transition:transform var(--t-img),opacity var(--t-img)}
+.fcell:hover .info{transform:none;opacity:1}
+.fcell .info .ttl{font-family:var(--sys-serif);font-size:1rem;font-weight:600;line-height:1.2}
+.fcell .info .cat{font-family:var(--sys-mono);font-size:.62rem;font-weight:700;letter-spacing:.06em;
+  text-transform:uppercase;background:var(--accent);padding:.2rem .5rem;border-radius:var(--r-chip);flex:0 0 auto}
+.fcount{text-align:center;font-size:.78rem;color:var(--muted);margin-top:1.2rem;
+  font-variant-numeric:tabular-nums}
+.fcount b{color:var(--ink)}
+
+/* ============================================================
+   BLOCK E — GALLERY · hover-zoom tiles + circle-mask reveal
+   (S-GALLERY / H2 shape-mask + H1 zoom on a dark stage)
+   ============================================================ */
+.ztiles{display:grid;gap:clamp(.8rem,1.5vw,1.2rem);grid-template-columns:repeat(4,1fr);
+  max-width:1160px;margin:0 auto}
+.ztile{position:relative;border-radius:var(--r-card);overflow:hidden;cursor:pointer;
+  aspect-ratio:1/1;box-shadow:0 1px 0 rgba(255,255,255,.04)}
+.ztile .frame{position:absolute;inset:0}
+.ztile:hover .ph,.ztile:focus-visible .ph{transform:scale(1.12)}
+.ztile:focus-visible{outline:none;box-shadow:var(--ring)}
+/* circle-mask reveal — a clipped circle expands from center on hover (H2) */
+.ztile .veil{position:absolute;inset:0;background:rgba(18,16,20,.55);
+  -webkit-mask:radial-gradient(circle at 50% 50%,transparent 0,transparent 0,#000 0);
+  mask:radial-gradient(circle at 50% 50%,transparent 0,transparent 0,#000 0);
+  transition:background var(--t-img)}
+.ztile .glyph{position:absolute;left:50%;top:50%;width:48px;height:48px;border-radius:50%;
+  border:2px solid #fff;color:#fff;display:grid;place-items:center;font-size:1.2rem;font-weight:300;
+  transform:translate(-50%,-50%) scale(.4);opacity:0;transition:transform var(--t-img),opacity var(--t-img)}
+.ztile:hover .veil,.ztile:focus-visible .veil{background:rgba(18,16,20,.34)}
+.ztile:hover .glyph,.ztile:focus-visible .glyph{transform:translate(-50%,-50%) scale(1);opacity:1}
+.ztile .cap{position:absolute;left:0;right:0;bottom:0;padding:.85rem .95rem;color:#fff;
+  background:linear-gradient(180deg,transparent,rgba(18,16,20,.7));
+  transform:translateY(100%);transition:transform var(--t-img)}
+.ztile:hover .cap,.ztile:focus-visible .cap{transform:none}
+.ztile .cap .ttl{font-family:var(--sys-sans);font-size:.84rem;font-weight:800;letter-spacing:.01em}
+.ztile .cap .sub{font-family:var(--sys-mono);font-size:.6rem;color:#e7c2c4;letter-spacing:.06em;text-transform:uppercase}
+/* one featured tile spans 2x2 (G3 bento moment), collapses on small screens */
+.ztile.feat{grid-column:span 2;grid-row:span 2}
+
+/* ============================================================
+   RESPONSIVE — reflow each block (G1/G2/G3/G6, T4/T5)
+   Verified headless at 390 + 1440.
+   ============================================================ */
+@media (max-width:1100px){
+  .team-grid{grid-template-columns:repeat(3,1fr)}          /* 4 -> 3 */
+  .ztiles{grid-template-columns:repeat(3,1fr)}
+}
+@media (max-width:880px){
+  .roster{grid-template-columns:repeat(2,1fr)}             /* 3 -> 2 */
+  .masonry{column-count:2}
+  .fgrid{grid-template-columns:repeat(2,1fr)}
+  .fcell.span2{grid-column:span 2}
+}
+@media (max-width:680px){
+  .team-grid{grid-template-columns:repeat(2,1fr)}          /* 3 -> 2 */
+  .ztiles{grid-template-columns:repeat(2,1fr)}
+  .ztile.feat{grid-column:span 2;grid-row:span 1}          /* relax bento at small */
+  .sec{padding:clamp(2rem,7vw,2.8rem) clamp(1rem,5vw,1.6rem)}  /* T4/T5 gutter+rhythm */
+}
+@media (max-width:480px){
+  .team-grid{grid-template-columns:1fr}                    /* 2 -> 1 (G2) */
+  .roster{grid-template-columns:1fr}
+  .masonry{column-count:1}
+  .fgrid{grid-template-columns:1fr}
+  .fcell.span2{grid-column:span 1}
+  .fcell.span2 .frame{aspect-ratio:4/3}
+  .ztiles{grid-template-columns:repeat(2,1fr)}             /* keep 2-up tiles, not 1 (Comp2) */
+  .ztile.feat{grid-column:span 2;grid-row:span 1}
+  /* on touch, the hover-reveal bars/captions can't be hovered — show them */
+  .tcard .reveal-bar,.tcard .bio,.member .bio,.member .links,
+  .mtile .cap,.fcell .info,.ztile .cap{opacity:1;transform:none}
+  .mtile .mask,.fcell .mask{opacity:.5}
+  .tcard .reveal-bar{transform:translateY(0)}
+  .tcard .bio,.member .bio{max-height:none}
+  .ztile .cap{transform:none}
+}
+
+/* reduced-motion gate (mandatory) */
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  .reveal{opacity:1!important;transform:none!important}
+}
+
+/* footer */
+.foot{background:var(--ink);color:#9b9b9b;padding:2.2rem 0;font-size:.84rem;margin-top:1rem}
+.foot__in{max-width:1200px;margin:0 auto;padding:0 clamp(1rem,4vw,2.5rem);display:flex;gap:1.1rem;flex-wrap:wrap;align-items:center}
+.foot b{color:#fff}.foot a{color:#cfcfcf;font-weight:600}.foot a:hover{color:#fff}
+.foot .meta{margin-left:auto;font-family:var(--sys-mono);font-size:.72rem;color:#6e6e6e}
+</style>
+</head>
+<body>
+
+<!-- ============ TOP BAR + SIBLING NAV ============ -->
+<header class="topbar">
+  <div class="topbar__in">
+    <div class="brand"><span class="dot"></span>SGEN <small>Section Blocks</small></div>
+    <nav class="sibnav" aria-label="Styleguide navigation">
+      <a class="hub" href="10-sections.html">&larr; Sections hub</a>
+      <a href="index.html">Index</a>
+      <a href="sections-team-gallery.html" aria-current="page">Team + Gallery</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ============ PAGE HEADER ============ -->
+<div class="pagehead">
+  <span class="eyebrow">Section blocks — Team &amp; Gallery / Portfolio</span>
+  <h1>Team &amp; gallery sections</h1>
+  <p>Five complete, production-grade <b>section blocks</b> — drop any one straight into a real page. Two <b>team</b> patterns (card grid + circular roster) and three <b>gallery / portfolio</b> patterns (masonry, filterable grid, hover-zoom tiles). Every block carries the SGEN imagery engine: <b>image-zoom inside a clipped frame</b> (<code>H1</code> / TOP-12&nbsp;#7), <b>shape masks</b> (<code>H2</code>), and the <b>exposure</b> hover (mask + rising caption + growing underline). Charcoal <code>#1a1a1a</code>, red <code>#d51522</code>, one radius language, ink-tinted shadows, motion gated behind <code>prefers-reduced-motion</code>. Imagery is <b>CSS-crafted gradients</b> — zero external images, zero dependencies.</p>
+  <div class="legendbar">
+    <span><b>Hover or tab-focus</b> any portrait / tile — zoom, masks and caption-rise are live.</span>
+    <span>Blocks marked <span class="pin">S-TEAM</span> / <span class="pin">S-GALLERY</span> map to the composition-library slot atoms.</span>
+  </div>
+</div>
+
+<nav class="catnav" aria-label="Variants on this page">
+  <a href="#vA">A · Team — card grid</a>
+  <a href="#vB">B · Team — circular roster</a>
+  <a href="#vC">C · Gallery — masonry</a>
+  <a href="#vD">D · Gallery — filterable</a>
+  <a href="#vE">E · Gallery — zoom tiles</a>
+</nav>
+
+<!-- ====================================================== -->
+<!-- A · TEAM — CARD GRID, HOVER-REVEAL -->
+<!-- ====================================================== -->
+<section class="variant" id="vA">
+  <div class="vhead">
+    <span class="vno">A</span>
+    <span class="vlabel">Team — card grid, hover-reveal</span>
+    <span class="vkind">S-TEAM</span>
+    <span class="vids">G4 grid · H1 image-zoom · TOP-12 #7 reveal-bar</span>
+  </div>
+  <p class="whenuse"><b>When to use:</b> the standard "meet the team / our people" block on an About or Agency page. Portrait-first cards in a 4-up grid; on hover the card lifts, the portrait zooms, a social bar rises and a one-line bio expands — so the resting grid stays calm and scannable while detail is one hover away.</p>
+  <div class="stage tint">
+    <section class="sec">
+      <div class="sec__head center reveal">
+        <span class="kicker">The people</span>
+        <h2 class="t">A small team that ships</h2>
+        <p class="lede">Senior by default. The person you meet is the person who does the work.</p>
+      </div>
+      <div class="team-grid">
+        <article class="tcard reveal" tabindex="0">
+          <div class="frame"><div class="ph p1"><span class="subj"></span></div>
+            <div class="reveal-bar"><span class="soc">in</span><span class="soc">X</span><span class="soc">@</span></div>
+          </div>
+          <div class="meta"><div class="nm">Ava Reyes</div><div class="ro">Founder &amp; Principal</div>
+            <p class="bio">15 years across brand and product. Leads strategy on every engagement.</p></div>
+        </article>
+        <article class="tcard reveal" tabindex="0">
+          <div class="frame"><div class="ph p2"><span class="subj"></span></div>
+            <div class="reveal-bar"><span class="soc">in</span><span class="soc">X</span><span class="soc">@</span></div>
+          </div>
+          <div class="meta"><div class="nm">Marcus Hale</div><div class="ro">Design Director</div>
+            <p class="bio">Systems, type and motion. Turns rough ideas into shippable interfaces.</p></div>
+        </article>
+        <article class="tcard reveal" tabindex="0">
+          <div class="frame"><div class="ph p3"><span class="subj"></span></div>
+            <div class="reveal-bar"><span class="soc">in</span><span class="soc">X</span><span class="soc">@</span></div>
+          </div>
+          <div class="meta"><div class="nm">Priya Nair</div><div class="ro">Lead Engineer</div>
+            <p class="bio">Front of frontend. Cares about performance budgets and clean handoff.</p></div>
+        </article>
+        <article class="tcard reveal" tabindex="0">
+          <div class="frame"><div class="ph p4"><span class="subj"></span></div>
+            <div class="reveal-bar"><span class="soc">in</span><span class="soc">X</span><span class="soc">@</span></div>
+          </div>
+          <div class="meta"><div class="nm">Theo Brandt</div><div class="ro">Strategy</div>
+            <p class="bio">Research and positioning. Makes sure we build the right thing first.</p></div>
+        </article>
+      </div>
+    </section>
+  </div>
+</section>
+
+<!-- ====================================================== -->
+<!-- B · TEAM — CIRCULAR ROSTER, HOVER-REVEAL BIO -->
+<!-- ====================================================== -->
+<section class="variant" id="vB">
+  <div class="vhead">
+    <span class="vno">B</span>
+    <span class="vlabel">Team — circular roster, hover-reveal bio</span>
+    <span class="vkind">S-TEAM</span>
+    <span class="vids">H5 circular medallion · H1 zoom · H2 mask</span>
+  </div>
+  <p class="whenuse"><b>When to use:</b> a warmer, editorial team block for studios, clinics, advisories or any people-led brand where portraits should feel like medallions, not file photos. Conic-gradient accent rings frame circular portraits; hover surfaces a badge, a fuller bio and tappable links. Reads premium at fewer columns — ideal when you have 3, 6 or 9 people.</p>
+  <div class="stage">
+    <section class="sec">
+      <div class="sec__head center reveal">
+        <span class="kicker">Leadership</span>
+        <h2 class="t">The people you'll work with</h2>
+        <p class="lede">No account layer between you and the makers. Hover a portrait to read more.</p>
+      </div>
+      <div class="roster">
+        <div class="member reveal" tabindex="0">
+          <div class="ring"><div class="ringin"><div class="frame"><div class="ph p5"><span class="subj"></span></div></div></div>
+            <span class="badge">in</span></div>
+          <div class="nm">Dr. Lena Cho</div><div class="ro">Clinical Director</div>
+          <p class="bio">Board-certified, 12 years in practice. Sets the standard of care for the whole team.</p>
+          <div class="links"><a href="#0">LinkedIn</a><a href="#0">Email</a></div>
+        </div>
+        <div class="member reveal" tabindex="0">
+          <div class="ring"><div class="ringin"><div class="frame"><div class="ph p6"><span class="subj"></span></div></div></div>
+            <span class="badge">X</span></div>
+          <div class="nm">Sam Okafor</div><div class="ro">Operations Lead</div>
+          <p class="bio">Keeps every engagement on time and on scope. Your first point of contact.</p>
+          <div class="links"><a href="#0">LinkedIn</a><a href="#0">Email</a></div>
+        </div>
+        <div class="member reveal" tabindex="0">
+          <div class="ring"><div class="ringin"><div class="frame"><div class="ph p7"><span class="subj"></span></div></div></div>
+            <span class="badge">@</span></div>
+          <div class="nm">Mara Lindqvist</div><div class="ro">Senior Specialist</div>
+          <p class="bio">Deep technical bench. Handles the hard cases the rest of the field refers out.</p>
+          <div class="links"><a href="#0">LinkedIn</a><a href="#0">Email</a></div>
+        </div>
+        <div class="member reveal" tabindex="0">
+          <div class="ring"><div class="ringin"><div class="frame"><div class="ph p8"><span class="subj"></span></div></div></div>
+            <span class="badge">in</span></div>
+          <div class="nm">Daniel Reyes</div><div class="ro">Associate</div>
+          <p class="bio">Joined from a top studio. Fast, meticulous, and great with clients.</p>
+          <div class="links"><a href="#0">LinkedIn</a><a href="#0">Email</a></div>
+        </div>
+        <div class="member reveal" tabindex="0">
+          <div class="ring"><div class="ringin"><div class="frame"><div class="ph p2"><span class="subj"></span></div></div></div>
+            <span class="badge">X</span></div>
+          <div class="nm">Yuki Tanaka</div><div class="ro">Specialist</div>
+          <p class="bio">Bridges design and delivery. Obsessed with getting the details right.</p>
+          <div class="links"><a href="#0">LinkedIn</a><a href="#0">Email</a></div>
+        </div>
+        <div class="member reveal" tabindex="0">
+          <div class="ring"><div class="ringin"><div class="frame"><div class="ph p3"><span class="subj"></span></div></div></div>
+            <span class="badge">@</span></div>
+          <div class="nm">Noor Haddad</div><div class="ro">Coordinator</div>
+          <p class="bio">Scheduling, intake and the small things that make the experience feel easy.</p>
+          <div class="links"><a href="#0">LinkedIn</a><a href="#0">Email</a></div>
+        </div>
+      </div>
+    </section>
+  </div>
+</section>
+
+<!-- ====================================================== -->
+<!-- C · GALLERY — CSS-COLUMNS MASONRY, HOVER-ZOOM + CAPTION RISE -->
+<!-- ====================================================== -->
+<section class="variant" id="vC">
+  <div class="vhead">
+    <span class="vno">C</span>
+    <span class="vlabel">Gallery — masonry, hover-zoom + caption-rise</span>
+    <span class="vkind">S-GALLERY</span>
+    <span class="vids">H1 `exposure` · CSS columns · G3 reflow</span>
+  </div>
+  <p class="whenuse"><b>When to use:</b> a portfolio / work / look-book grid where pieces have mixed proportions and you want a magazine, gallery-wall feel. CSS-columns masonry packs tall, wide and square tiles with no JS layout engine; hover plays the <code>exposure</code> motion — image zooms, a dark wash fades in, the caption rises and an accent underline grows. The default "selected work" pattern for agency and photography pages.</p>
+  <div class="stage">
+    <section class="sec">
+      <div class="sec__head center reveal">
+        <span class="kicker">Selected work</span>
+        <h2 class="t">Things we made</h2>
+        <p class="lede">A mixed-proportion gallery wall. Hover any piece for the title and discipline.</p>
+      </div>
+      <div class="masonry">
+        <a class="mtile t-tall reveal" href="#0"><div class="frame"><div class="ph g1"></div></div>
+          <div class="mask"></div><div class="cap"><div class="ttl">Aurora Identity</div><span class="sub">Branding</span></div></a>
+        <a class="mtile t-sq reveal" href="#0"><div class="frame"><div class="ph g2"></div></div>
+          <div class="mask"></div><div class="cap"><div class="ttl">Tidal App</div><span class="sub">Product</span></div></a>
+        <a class="mtile t-wide reveal" href="#0"><div class="frame"><div class="ph g3"></div></div>
+          <div class="mask"></div><div class="cap"><div class="ttl">Ember Campaign</div><span class="sub">Art Direction</span></div></a>
+        <a class="mtile t-sq reveal" href="#0"><div class="frame"><div class="ph g4"></div></div>
+          <div class="mask"></div><div class="cap"><div class="ttl">Northwind Site</div><span class="sub">Web</span></div></a>
+        <a class="mtile t-tall reveal" href="#0"><div class="frame"><div class="ph g5"></div></div>
+          <div class="mask"></div><div class="cap"><div class="ttl">Violet Editorial</div><span class="sub">Print</span></div></a>
+        <a class="mtile t-wide reveal" href="#0"><div class="frame"><div class="ph g6"></div></div>
+          <div class="mask"></div><div class="cap"><div class="ttl">Meadow Packaging</div><span class="sub">Packaging</span></div></a>
+        <a class="mtile t-sq reveal" href="#0"><div class="frame"><div class="ph g7"></div></div>
+          <div class="mask"></div><div class="cap"><div class="ttl">Copper Type</div><span class="sub">Typography</span></div></a>
+        <a class="mtile t-tall reveal" href="#0"><div class="frame"><div class="ph g8"></div></div>
+          <div class="mask"></div><div class="cap"><div class="ttl">Marine Dashboard</div><span class="sub">Product</span></div></a>
+        <a class="mtile t-sq reveal" href="#0"><div class="frame"><div class="ph g9"></div></div>
+          <div class="mask"></div><div class="cap"><div class="ttl">Rosewood Film</div><span class="sub">Motion</span></div></a>
+      </div>
+    </section>
+  </div>
+</section>
+
+<!-- ====================================================== -->
+<!-- D · GALLERY — FILTERABLE GRID, IMAGE-ZOOM + MASK -->
+<!-- ====================================================== -->
+<section class="variant" id="vD">
+  <div class="vhead">
+    <span class="vno">D</span>
+    <span class="vlabel">Gallery — filterable grid, image-zoom + mask</span>
+    <span class="vkind">S-GALLERY</span>
+    <span class="vids">G3 bento · H1 zoom + H3 overlay · filter (opacity)</span>
+  </div>
+  <p class="whenuse"><b>When to use:</b> a larger portfolio / case-study index where visitors self-select by category. Filter chips toggle tiles by fading (not removing) so the grid animates smoothly and never jumps; a category badge and title rise on hover over the zooming image. One bento "span-2" tile breaks the rhythm. Best for work indexes, product galleries and resource libraries.</p>
+  <div class="stage tint">
+    <section class="sec">
+      <div class="sec__head center reveal">
+        <span class="kicker">Portfolio</span>
+        <h2 class="t">Browse the work</h2>
+        <p class="lede">Filter by discipline — tiles fade in and out, the grid never reflows abruptly.</p>
+      </div>
+      <div class="filterbar" role="group" aria-label="Filter gallery by category">
+        <button type="button" data-filter="all" aria-pressed="true">All</button>
+        <button type="button" data-filter="brand" aria-pressed="false">Branding</button>
+        <button type="button" data-filter="product" aria-pressed="false">Product</button>
+        <button type="button" data-filter="web" aria-pressed="false">Web</button>
+        <button type="button" data-filter="motion" aria-pressed="false">Motion</button>
+      </div>
+      <div class="fgrid" id="fgrid">
+        <figure class="fcell span2" data-cat="brand"><div class="frame"><div class="ph g3"></div></div><div class="mask"></div>
+          <figcaption class="info"><span class="ttl">Ember — Full Rebrand</span><span class="cat">Brand</span></figcaption></figure>
+        <figure class="fcell" data-cat="product"><div class="frame"><div class="ph g2"></div></div><div class="mask"></div>
+          <figcaption class="info"><span class="ttl">Tidal App</span><span class="cat">Product</span></figcaption></figure>
+        <figure class="fcell" data-cat="web"><div class="frame"><div class="ph g4"></div></div><div class="mask"></div>
+          <figcaption class="info"><span class="ttl">Northwind</span><span class="cat">Web</span></figcaption></figure>
+        <figure class="fcell" data-cat="brand"><div class="frame"><div class="ph g1"></div></div><div class="mask"></div>
+          <figcaption class="info"><span class="ttl">Aurora Identity</span><span class="cat">Brand</span></figcaption></figure>
+        <figure class="fcell" data-cat="motion"><div class="frame"><div class="ph g9"></div></div><div class="mask"></div>
+          <figcaption class="info"><span class="ttl">Rosewood Film</span><span class="cat">Motion</span></figcaption></figure>
+        <figure class="fcell" data-cat="product"><div class="frame"><div class="ph g8"></div></div><div class="mask"></div>
+          <figcaption class="info"><span class="ttl">Marine Dashboard</span><span class="cat">Product</span></figcaption></figure>
+        <figure class="fcell" data-cat="web"><div class="frame"><div class="ph g6"></div></div><div class="mask"></div>
+          <figcaption class="info"><span class="ttl">Meadow Store</span><span class="cat">Web</span></figcaption></figure>
+        <figure class="fcell" data-cat="motion"><div class="frame"><div class="ph g5"></div></div><div class="mask"></div>
+          <figcaption class="info"><span class="ttl">Violet Titles</span><span class="cat">Motion</span></figcaption></figure>
+      </div>
+      <p class="fcount" id="fcount" aria-live="polite"><b>8</b> of 8 projects shown</p>
+    </section>
+  </div>
+</section>
+
+<!-- ====================================================== -->
+<!-- E · GALLERY — HOVER-ZOOM TILES + CIRCLE-MASK REVEAL -->
+<!-- ====================================================== -->
+<section class="variant" id="vE">
+  <div class="vhead">
+    <span class="vno">E</span>
+    <span class="vlabel">Gallery — hover-zoom tiles, circle-mask reveal</span>
+    <span class="vkind">S-GALLERY</span>
+    <span class="vids">H2 circle mask · H1 zoom · G3 bento · dark stage</span>
+  </div>
+  <p class="whenuse"><b>When to use:</b> a tight, dense, dark-mode tile wall — photography sets, press shots, an Instagram-style grid, or a "more work" footer to a case study. Square tiles zoom on hover while a radial veil lightens and a "view" glyph scales in from the center; a caption slides up. One featured 2&times;2 bento tile anchors the grid. The most photo-forward of the three gallery patterns.</p>
+  <div class="stage dark">
+    <section class="sec on-dark">
+      <div class="sec__head center reveal">
+        <span class="kicker">Gallery</span>
+        <h2 class="t">Captured on set</h2>
+        <p class="lede">A dense tile wall. Hover any frame to zoom in and reveal the shot.</p>
+      </div>
+      <div class="ztiles">
+        <button class="ztile feat"><div class="frame"><div class="ph g10"></div></div><div class="veil"></div>
+          <span class="glyph">+</span><div class="cap"><div class="ttl">Cover — Studio Session</div><span class="sub">Featured</span></div></button>
+        <button class="ztile"><div class="frame"><div class="ph g1"></div></div><div class="veil"></div>
+          <span class="glyph">+</span><div class="cap"><div class="ttl">Aurora</div><span class="sub">Frame 01</span></div></button>
+        <button class="ztile"><div class="frame"><div class="ph g2"></div></div><div class="veil"></div>
+          <span class="glyph">+</span><div class="cap"><div class="ttl">Tidal</div><span class="sub">Frame 02</span></div></button>
+        <button class="ztile"><div class="frame"><div class="ph g4"></div></div><div class="veil"></div>
+          <span class="glyph">+</span><div class="cap"><div class="ttl">Northwind</div><span class="sub">Frame 03</span></div></button>
+        <button class="ztile"><div class="frame"><div class="ph g7"></div></div><div class="veil"></div>
+          <span class="glyph">+</span><div class="cap"><div class="ttl">Copper</div><span class="sub">Frame 04</span></div></button>
+        <button class="ztile"><div class="frame"><div class="ph g5"></div></div><div class="veil"></div>
+          <span class="glyph">+</span><div class="cap"><div class="ttl">Violet</div><span class="sub">Frame 05</span></div></button>
+        <button class="ztile"><div class="frame"><div class="ph g6"></div></div><div class="veil"></div>
+          <span class="glyph">+</span><div class="cap"><div class="ttl">Meadow</div><span class="sub">Frame 06</span></div></button>
+        <button class="ztile"><div class="frame"><div class="ph g8"></div></div><div class="veil"></div>
+          <span class="glyph">+</span><div class="cap"><div class="ttl">Marine</div><span class="sub">Frame 07</span></div></button>
+        <button class="ztile"><div class="frame"><div class="ph g9"></div></div><div class="veil"></div>
+          <span class="glyph">+</span><div class="cap"><div class="ttl">Rosewood</div><span class="sub">Frame 08</span></div></button>
+        <button class="ztile"><div class="frame"><div class="ph g3"></div></div><div class="veil"></div>
+          <span class="glyph">+</span><div class="cap"><div class="ttl">Ember</div><span class="sub">Frame 09</span></div></button>
+      </div>
+    </section>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="foot">
+  <div class="foot__in">
+    <b>SGEN Living Styleguide</b>
+    <span>Section blocks — Team + Gallery</span>
+    <a href="10-sections.html">&larr; Sections hub</a>
+    <a href="index.html">Index</a>
+    <span class="meta">charcoal #1a1a1a · red #d51522 · zero external deps</span>
+  </div>
+</footer>
+
+<script>
+/* ---- scroll-reveal with sibling stagger (gated) — lib §2.7(a) ---- */
+(function(){
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var els = document.querySelectorAll('.reveal');
+  if (reduce || !('IntersectionObserver' in window)) {
+    els.forEach(function(el){ el.classList.add('in-view'); });   /* fail-open: never trap content */
+    return;
+  }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (e.isIntersecting){ e.target.classList.add('in-view'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -8% 0px' });
+  /* stagger siblings inside each grid for a wave */
+  els.forEach(function(el){
+    var sibs = el.parentNode ? Array.prototype.indexOf.call(el.parentNode.children, el) : 0;
+    el.style.transitionDelay = Math.min(sibs, 8) * 70 + 'ms';
+    io.observe(el);
+  });
+})();
+
+/* ---- Block D: filterable gallery (fade, not remove) ---- */
+(function(){
+  var bar = document.querySelector('.filterbar');
+  var grid = document.getElementById('fgrid');
+  var count = document.getElementById('fcount');
+  if (!bar || !grid) return;
+  var cells = Array.prototype.slice.call(grid.querySelectorAll('.fcell'));
+  var total = cells.length;
+  bar.addEventListener('click', function(e){
+    var btn = e.target.closest('button[data-filter]');
+    if (!btn) return;
+    var f = btn.getAttribute('data-filter');
+    bar.querySelectorAll('button').forEach(function(b){ b.setAttribute('aria-pressed', b === btn ? 'true' : 'false'); });
+    var shown = 0;
+    cells.forEach(function(c){
+      var match = (f === 'all') || (c.getAttribute('data-cat') === f);
+      c.classList.toggle('is-hidden', !match);
+      if (match) shown++;
+    });
+    if (count) count.innerHTML = '<b>' + shown + '</b> of ' + total + ' projects shown';
+  });
+})();
+</script>
+</body>
+</html>

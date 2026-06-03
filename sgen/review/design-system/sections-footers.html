@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SGEN Living Styleguide — Sections · Footers (live gallery)</title>
+<style>
+/* ============================================================
+   SGEN LIVING STYLEGUIDE — SECTION BLOCKS · FOOTERS
+   charcoal #1a1a1a · red #d51522 · clean editorial
+   4 production-grade FOOTER section blocks, each a complete
+   <footer> you could drop into a real page:
+     A · MEGA            multi-column + newsletter + payment/social + legal
+     B · STANDARD        brand + link columns + contact recap + legal
+     C · MINIMAL         one-row brand · inline nav · legal/social
+     D · NEWSLETTER-LED  capture-first footer, slim link/legal tail
+   Composition: zone-8 of _PAGE-COMPOSITION (S-FOOTER). Look: J1 inset
+   dark panel, I10 trust/payment strip, I8 back-to-top, one-accent.
+   Responsive: F1 cols->stack @767 (3-up holds @768-959), F2 legal row
+   centers, F4 back-to-top in 20px gutter @767. Inputs >=16px, 44px taps.
+   Self-contained: system fonts, CSS-crafted visuals, ZERO external deps.
+   Motion gated behind prefers-reduced-motion.
+   ============================================================ */
+:root{
+  --ink:#1a1a1a;                 /* charcoal */
+  --paper:#f6f5f2;               /* warm off-white, never #fff */
+  --surface:#ffffff;
+  --muted:#626262;
+  --body:#4a4f55;
+  --hair:rgba(26,26,26,.10);
+  --accent:#d51522;              /* SGEN red */
+  --accent-ink:#a50f19;
+  --accent-2:#ff5a4d;
+  --accent-tint:rgba(213,21,34,.10);
+
+  --r-chip:6px; --r-card:12px; --r-panel:20px; --r-pill:9999px;
+  --r-btn:8px;
+
+  --shadow-rest:0 2px 6px 0 rgba(26,26,26,.08);
+  --shadow-card:0 15px 30px 0 rgba(1,7,39,.13);
+  --shadow-hover:0 32px 64px -12px rgba(16,24,40,.18);
+
+  --ease:cubic-bezier(.05,.5,.3,1);
+  --t-fast:.18s ease-out;
+  --t-reveal:.6s var(--ease);
+
+  --ring:0 0 0 3px rgba(213,21,34,.40);
+
+  /* dark-footer palette (the near-black anchor every footer closes on) */
+  --foot-bg:#161719;
+  --foot-bg-2:#202124;
+  --foot-line:rgba(255,255,255,.10);
+  --foot-line-2:rgba(255,255,255,.06);
+  --foot-fg:#c9c9cc;
+  --foot-fg-dim:#8b8d92;
+  --foot-head:#ffffff;
+
+  --sys-sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --sys-serif:ui-serif,Georgia,Cambria,"Times New Roman",Times,serif;
+  --sys-mono:ui-monospace,"SFMono-Regular","Cascadia Code","Consolas",monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--sys-sans);font-size:16px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{font-family:var(--sys-serif);font-weight:600;letter-spacing:-.02em;line-height:1.08;margin:0}
+a{color:var(--accent-ink);text-decoration:none}
+code,kbd{font-family:var(--sys-mono);font-size:.84em;background:rgba(26,26,26,.05);padding:.06em .35em;border-radius:4px}
+
+/* ---------- top bar + sibling nav (matches 00-08) ---------- */
+.topbar{
+  position:sticky;top:0;z-index:50;
+  background:rgba(246,245,242,.82);backdrop-filter:blur(14px) saturate(160%);
+  -webkit-backdrop-filter:blur(14px) saturate(160%);
+  border-bottom:1px solid var(--hair);
+}
+.topbar__in{max-width:1200px;margin:0 auto;padding:.7rem clamp(1rem,4vw,2.5rem);
+  display:flex;align-items:center;gap:1.2rem;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:.55rem;font-weight:800;letter-spacing:-.01em;font-family:var(--sys-sans)}
+.brand .dot{width:11px;height:11px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px rgba(213,21,34,.16)}
+.brand small{font-weight:600;color:var(--muted);letter-spacing:.02em}
+.sibnav{display:flex;gap:.2rem;flex-wrap:wrap;margin-left:auto;align-items:center}
+.sibnav a{
+  font-size:.74rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
+  color:var(--muted);padding:.35rem .6rem;border-radius:var(--r-chip);
+  transition:color var(--t-fast),background var(--t-fast)}
+.sibnav a:hover{color:var(--ink);background:rgba(26,26,26,.05)}
+.sibnav a[aria-current="page"]{color:#fff;background:var(--accent)}
+.sibnav a.hub{color:var(--accent-ink);border:1px solid rgba(213,21,34,.30)}
+.sibnav a.hub:hover{background:var(--accent-tint);color:var(--accent-ink)}
+
+/* ---------- page header ---------- */
+.pagehead{max-width:1200px;margin:0 auto;padding:clamp(2.5rem,6vw,4.5rem) clamp(1rem,4vw,2.5rem) 1rem}
+.eyebrow{display:inline-flex;align-items:center;gap:.5rem;
+  font-family:var(--sys-sans);font-size:.72rem;font-weight:800;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--accent-ink)}
+.eyebrow::before{content:"";width:34px;height:2px;background:var(--accent);display:inline-block}
+.pagehead h1{font-size:clamp(2.2rem,6vw,4rem);margin:.5rem 0 .4rem;letter-spacing:-.035em}
+.pagehead p{max-width:70ch;color:var(--body);font-size:1.05rem}
+.legendbar{display:flex;gap:1.4rem;flex-wrap:wrap;margin-top:1.1rem;font-size:.82rem;color:var(--muted)}
+.legendbar b{color:var(--ink)}
+.legendbar .pin{display:inline-block;font-family:var(--sys-mono);font-size:.72rem;font-weight:700;color:var(--accent-ink);
+  background:var(--accent-tint);border:1px solid rgba(213,21,34,.25);padding:.05rem .4rem;border-radius:5px}
+
+/* ---------- in-page jump chips ---------- */
+.catnav{max-width:1200px;margin:1.2rem auto .5rem;padding:0 clamp(1rem,4vw,2.5rem);
+  display:flex;gap:.5rem;flex-wrap:wrap}
+.catnav a{font-size:.78rem;font-weight:700;padding:.45rem .85rem;border:1px solid var(--hair);
+  border-radius:var(--r-pill);color:var(--ink);background:var(--surface);transition:all var(--t-fast)}
+.catnav a:hover{border-color:var(--accent);color:var(--accent-ink)}
+
+/* ---------- specimen framing ---------- */
+.spec{max-width:1200px;margin:0 auto;padding:clamp(2rem,5vw,3.4rem) clamp(1rem,4vw,2.5rem) .5rem}
+.spec__head{display:flex;flex-wrap:wrap;align-items:baseline;gap:.7rem 1rem;margin-bottom:.5rem}
+.spec__head h2{font-size:clamp(1.5rem,3.6vw,2.2rem)}
+.spec__head .tag{font-family:var(--sys-mono);font-size:.66rem;font-weight:700;color:var(--accent-ink);
+  background:var(--accent-tint);border:1px solid rgba(213,21,34,.25);padding:.12rem .5rem;border-radius:5px;
+  letter-spacing:.03em;text-transform:uppercase;align-self:center}
+.spec__when{color:var(--body);font-size:.95rem;max-width:74ch;margin:.1rem 0 1.1rem}
+.spec__when b{color:var(--ink)}
+.spec__ids{font-family:var(--sys-mono);font-size:.72rem;color:var(--muted);margin:.1rem 0 1.1rem}
+.spec__ids span{color:var(--accent-ink)}
+/* the device frame the live footer sits in */
+.frame{border:1px solid var(--hair);border-radius:var(--r-panel);overflow:hidden;
+  box-shadow:var(--shadow-card);background:#0c0d0e}
+.frame__bar{display:flex;align-items:center;gap:.5rem;padding:.55rem .9rem;background:#101113;border-bottom:1px solid var(--foot-line)}
+.frame__bar .dotrow{display:flex;gap:.4rem}
+.frame__bar .d{width:10px;height:10px;border-radius:50%;background:#3a3b3e}
+.frame__bar .d.r{background:#5a2b2e}
+.frame__bar .url{font-family:var(--sys-mono);font-size:.7rem;color:#7a7c80;margin-left:.6rem}
+.frame__bar .vp{margin-left:auto;font-family:var(--sys-mono);font-size:.66rem;color:#5d5f63}
+/* a tiny strip of faux "page above" so the footer reads as a page close */
+.aboveline{height:54px;background:
+  linear-gradient(180deg,#fbfaf8,#f1efeb);
+  border-bottom:1px solid var(--hair);display:flex;align-items:center;
+  padding:0 clamp(1rem,4vw,2.2rem);gap:.7rem}
+.aboveline .ph{height:9px;border-radius:5px;background:rgba(26,26,26,.10)}
+.aboveline .ph.a{width:120px}.aboveline .ph.b{width:64px}.aboveline .ph.c{width:90px;margin-left:auto;background:var(--accent-tint)}
+
+/* ============================================================
+   SHARED FOOTER PRIMITIVES (used across all 4 blocks)
+   ============================================================ */
+.ftr{background:var(--foot-bg);color:var(--foot-fg);font-family:var(--sys-sans);
+  font-size:.92rem;line-height:1.65;position:relative}
+.ftr__in{max-width:1180px;margin:0 auto;padding:clamp(2.4rem,5vw,3.6rem) clamp(1.2rem,5vw,3rem)}
+.ftr a{color:var(--foot-fg);transition:color var(--t-fast)}
+.ftr a:hover{color:var(--foot-head)}
+.ftr h4{font-family:var(--sys-sans);font-size:.74rem;font-weight:800;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--foot-fg-dim);margin:0 0 1rem}
+
+/* footer brand lockup */
+.fbrand{display:flex;align-items:center;gap:.6rem;font-weight:800;letter-spacing:-.01em;
+  font-size:1.18rem;color:var(--foot-head)}
+.fbrand .mark{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;
+  background:linear-gradient(135deg,var(--accent),#7a0c13);
+  box-shadow:0 6px 16px -4px rgba(213,21,34,.5);color:#fff;font-weight:900;font-size:.95rem;
+  font-family:var(--sys-sans)}
+.fbrand .mark::after{content:"S"}
+.fblurb{color:var(--foot-fg-dim);max-width:34ch;margin:.9rem 0 0;font-size:.88rem;line-height:1.6}
+
+/* link column */
+.fcol ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.12rem}
+.fcol li a{display:inline-flex;align-items:center;min-height:32px;padding:.18rem 0;font-size:.9rem;
+  color:var(--foot-fg)}
+.fcol li a .badge{margin-left:.5rem;font-size:.6rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;
+  color:#fff;background:var(--accent);border-radius:99px;padding:.08rem .42rem;line-height:1.4}
+
+/* social row — CSS-crafted glyph chips, zero external icons */
+.fsocial{display:flex;gap:.5rem;flex-wrap:wrap}
+.fsocial a{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;
+  background:rgba(255,255,255,.06);border:1px solid var(--foot-line);
+  color:var(--foot-fg);font-weight:800;font-size:.86rem;letter-spacing:-.02em;
+  transition:background var(--t-fast),border-color var(--t-fast),transform var(--t-fast)}
+.fsocial a:hover{background:var(--accent);border-color:var(--accent);color:#fff;transform:translateY(-2px)}
+
+/* payment / trust strip (I10) — CSS-crafted chips, no images */
+.fpay{display:flex;gap:.45rem;flex-wrap:wrap;align-items:center}
+.fpay .pc{height:26px;min-width:42px;padding:0 .5rem;border-radius:5px;display:grid;place-items:center;
+  background:#fff;color:#1a1a1a;font-weight:800;font-size:.6rem;letter-spacing:.02em;
+  font-family:var(--sys-sans);box-shadow:inset 0 0 0 1px rgba(0,0,0,.08)}
+.fpay .pc.visa{background:linear-gradient(135deg,#1a1f71,#2433a8);color:#fff;font-style:italic}
+.fpay .pc.mc{background:#fff;color:#eb001b;position:relative}
+.fpay .pc.amex{background:linear-gradient(135deg,#0077a6,#006fcf);color:#fff}
+.fpay .pc.pp{background:#fff;color:#003087;font-style:italic}
+.fpay .pc.applepay{background:#000;color:#fff}
+.fpay .pc.gpay{background:#fff;color:#5f6368}
+
+/* newsletter form (shared) */
+.fnews{display:flex;gap:.5rem;flex-wrap:wrap;max-width:420px}
+.fnews .grow{flex:1 1 220px;min-width:0}
+.finput{
+  width:100%;font-family:var(--sys-sans);font-size:16px;             /* >=16px: no iOS zoom */
+  color:#fff;background:rgba(255,255,255,.06);border:1px solid var(--foot-line);
+  border-radius:var(--r-btn);padding:.72rem .9rem;min-height:46px;
+  transition:border-color var(--t-fast),box-shadow var(--t-fast),background var(--t-fast)}
+.finput::placeholder{color:#7e8086}
+.finput:focus{outline:none;border-color:var(--accent);background:rgba(255,255,255,.10);
+  box-shadow:0 0 0 3px rgba(213,21,34,.30)}
+.fbtn{
+  font-family:var(--sys-sans);font-size:.94rem;font-weight:800;letter-spacing:.01em;
+  display:inline-flex;align-items:center;justify-content:center;gap:.45rem;
+  padding:.72rem 1.3rem;min-height:46px;border-radius:var(--r-btn);cursor:pointer;
+  background:var(--accent);color:#fff;border:2px solid var(--accent);white-space:nowrap;
+  transition:background var(--t-fast),border-color var(--t-fast),transform var(--t-fast),box-shadow var(--t-fast);
+  -webkit-tap-highlight-color:transparent}
+.fbtn:hover{background:var(--accent-ink);border-color:var(--accent-ink)}
+.fbtn:active{transform:translateY(1px)}
+.fbtn:focus-visible{outline:none;box-shadow:var(--ring)}
+.fhint{font-size:.74rem;color:var(--foot-fg-dim);margin:.55rem 0 0;display:flex;align-items:center;gap:.4rem}
+.fok{display:none;margin:.55rem 0 0;font-size:.82rem;font-weight:700;color:#6fdc9b}
+.fnewswrap.is-sent .fnews{display:none}
+.fnewswrap.is-sent .fhint{display:none}
+.fnewswrap.is-sent .fok{display:flex;align-items:center;gap:.4rem}
+
+/* legal bar (F2 reflow target) */
+.flegal{border-top:1px solid var(--foot-line);margin-top:clamp(1.8rem,3.5vw,2.6rem);
+  padding-top:1.4rem;display:flex;align-items:center;gap:1rem 1.4rem;flex-wrap:wrap;
+  font-size:.8rem;color:var(--foot-fg-dim)}
+.flegal .copy{margin-right:auto}
+.flegal nav{display:flex;gap:.2rem 1.1rem;flex-wrap:wrap}
+.flegal nav a{font-size:.8rem;color:var(--foot-fg-dim)}
+.flegal nav a:hover{color:var(--foot-head)}
+.flocale{display:inline-flex;align-items:center;gap:.4rem;color:var(--foot-fg-dim);
+  background:rgba(255,255,255,.05);border:1px solid var(--foot-line);border-radius:99px;
+  padding:.28rem .7rem;font-size:.76rem;min-height:32px}
+.flocale::before{content:"";width:8px;height:8px;border-radius:50%;background:#6fdc9b}
+
+/* circular back-to-top (I8) — real button, 44px, gutter on mobile (F4) */
+.f2top{
+  position:absolute;right:clamp(1rem,4vw,2.2rem);top:-22px;
+  width:44px;height:44px;border-radius:50%;border:1px solid var(--foot-line);
+  background:var(--foot-bg-2);color:#fff;cursor:pointer;display:grid;place-items:center;
+  box-shadow:var(--shadow-card);transition:background var(--t-fast),transform var(--t-fast),border-color var(--t-fast)}
+.f2top:hover{background:var(--accent);border-color:var(--accent);transform:translateY(-3px)}
+.f2top:focus-visible{outline:3px solid #fff;outline-offset:2px}
+.f2top svg{width:18px;height:18px;display:block}
+
+/* ---------- A · MEGA ---------- */
+.ftr--mega{background:linear-gradient(180deg,#1b1c1f,#131416)}
+.fmega-grid{display:grid;gap:2.4rem clamp(1.5rem,3vw,3rem);
+  grid-template-columns:1.6fr repeat(4,1fr)}
+.fmega-news{grid-column:1/-1;display:grid;grid-template-columns:1fr auto;gap:1.4rem 2rem;
+  align-items:center;padding:1.6rem clamp(1.2rem,3vw,2rem);margin-bottom:.4rem;
+  background:rgba(255,255,255,.04);border:1px solid var(--foot-line);border-radius:var(--r-panel)}
+.fmega-news h3{font-family:var(--sys-serif);color:var(--foot-head);font-size:clamp(1.25rem,2.4vw,1.7rem);
+  letter-spacing:-.02em}
+.fmega-news p{color:var(--foot-fg-dim);font-size:.9rem;margin:.4rem 0 0;max-width:46ch}
+.fmega-news .fnewswrap{min-width:min(420px,100%)}
+
+/* ---------- B · STANDARD ---------- */
+.fstd-grid{display:grid;gap:2.2rem clamp(1.5rem,3vw,3rem);
+  grid-template-columns:1.5fr 1fr 1fr 1fr;align-items:start}
+.fcontact{list-style:none;margin:.4rem 0 0;padding:0;display:flex;flex-direction:column;gap:.55rem}
+.fcontact li{display:flex;gap:.6rem;align-items:flex-start;font-size:.88rem;color:var(--foot-fg)}
+.fcontact .ic{width:26px;height:26px;flex:0 0 26px;border-radius:7px;display:grid;place-items:center;
+  background:var(--accent-tint);color:#ff7a82;font-size:.78rem;margin-top:.05rem}
+.fcontact a{color:var(--foot-fg)}
+
+/* ---------- C · MINIMAL ---------- */
+.ftr--min .ftr__in{padding-top:clamp(1.8rem,3.5vw,2.4rem);padding-bottom:clamp(1.8rem,3.5vw,2.4rem)}
+.fmin{display:flex;align-items:center;gap:1.2rem 1.6rem;flex-wrap:wrap}
+.fmin nav{display:flex;gap:.2rem 1.3rem;flex-wrap:wrap;margin:0 auto}
+.fmin nav a{font-size:.9rem;font-weight:600;color:var(--foot-fg)}
+.fmin .fsocial{flex:0 0 auto}
+.fmin-legal{border-top:1px solid var(--foot-line-2);margin-top:1.4rem;padding-top:1.1rem;
+  display:flex;gap:.6rem 1.2rem;flex-wrap:wrap;align-items:center;font-size:.78rem;color:var(--foot-fg-dim)}
+.fmin-legal nav{display:flex;gap:.2rem 1.1rem;flex-wrap:wrap;margin-left:auto}
+.fmin-legal nav a{color:var(--foot-fg-dim);font-size:.78rem}
+
+/* ---------- D · NEWSLETTER-LED ---------- */
+.ftr--news{background:
+  radial-gradient(120% 140% at 100% 0%,rgba(213,21,34,.16),transparent 55%),
+  linear-gradient(180deg,#1d1518,#141214)}
+.fnl-hero{display:grid;grid-template-columns:1.1fr 1fr;gap:2rem clamp(2rem,5vw,4rem);
+  align-items:center;padding-bottom:clamp(2rem,4vw,3rem);
+  border-bottom:1px solid var(--foot-line)}
+.fnl-hero .kicker{font-size:.72rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;
+  color:#ff7a82;display:inline-flex;align-items:center;gap:.5rem}
+.fnl-hero .kicker::before{content:"";width:26px;height:2px;background:var(--accent)}
+.fnl-hero h3{font-family:var(--sys-serif);color:var(--foot-head);
+  font-size:clamp(1.7rem,4vw,2.7rem);letter-spacing:-.03em;margin:.6rem 0 .5rem;line-height:1.05}
+.fnl-hero p{color:var(--foot-fg-dim);font-size:.96rem;max-width:42ch}
+.fnl-hero .fnews{max-width:none}
+.fnl-hero .finput{background:rgba(255,255,255,.07)}
+.fnl-proof{display:flex;gap:1.4rem 2rem;flex-wrap:wrap;margin-top:1.2rem;
+  font-size:.8rem;color:var(--foot-fg-dim)}
+.fnl-proof b{color:var(--foot-head);font-family:var(--sys-serif);font-size:1.15rem;display:block;letter-spacing:-.01em}
+.fnl-tail{display:flex;align-items:center;gap:1rem 1.6rem;flex-wrap:wrap;padding-top:1.6rem}
+.fnl-tail nav{display:flex;gap:.2rem 1.2rem;flex-wrap:wrap;margin:0 auto}
+.fnl-tail nav a{font-size:.86rem;color:var(--foot-fg)}
+.fnl-tail .copy{font-size:.78rem;color:var(--foot-fg-dim)}
+
+/* ============================================================
+   RESPONSIVE  (F1 cols->stack @767 · 3-up holds @768-959 ·
+   F2 legal centers · F4 back-to-top 20px gutter)
+   ============================================================ */
+
+/* tablet 768-959: dense grids step DOWN, never jump straight to 1 */
+@media (max-width:960px){
+  .fmega-grid{grid-template-columns:1fr 1fr 1fr;}      /* brand spans, cols 3-up */
+  .fmega-grid .fmega-brand{grid-column:1/-1}
+  .fstd-grid{grid-template-columns:1.4fr 1fr 1fr}      /* contact col wraps under */
+  .fnl-hero{grid-template-columns:1fr 1fr}
+}
+
+/* mobile <=767: the hard single-column stack (F1/F2) */
+@media (max-width:767px){
+  .fmega-grid{grid-template-columns:1fr;gap:1.8rem}
+  .fmega-news{grid-template-columns:1fr;gap:1rem;text-align:left}
+  .fstd-grid{grid-template-columns:1fr;gap:1.8rem}
+  .fnl-hero{grid-template-columns:1fr;text-align:left}
+
+  /* F2: legal/copyright row -> centered vertical stack */
+  .flegal{flex-direction:column;align-items:center;text-align:center;gap:.9rem}
+  .flegal .copy{margin-right:0}
+  .flegal nav{justify-content:center}
+  .fmin{flex-direction:column;align-items:center;text-align:center}
+  .fmin nav{margin:0;justify-content:center}
+  .fmin-legal{flex-direction:column;align-items:center;text-align:center}
+  .fmin-legal nav{margin-left:0;justify-content:center}
+  .fnl-tail{flex-direction:column;align-items:center;text-align:center}
+  .fnl-tail nav{margin:0;justify-content:center}
+
+  /* F4: back-to-top moves to a tidy 20px gutter, never overlapping content */
+  .f2top{right:20px}
+}
+
+/* reduced-motion gate */
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ TOP BAR + SIBLING NAV ============ -->
+<header class="topbar">
+  <div class="topbar__in">
+    <div class="brand"><span class="dot"></span>SGEN <small>Living Styleguide</small></div>
+    <nav class="sibnav" aria-label="Styleguide pages">
+      <a class="hub" href="10-sections.html">&larr; 10 · Sections hub</a>
+      <a href="07-components.html">07 · Components</a>
+      <a href="08-scroll-sticky.html">08 · Scroll / Sticky</a>
+      <a href="index.html">Index</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ============ PAGE HEADER ============ -->
+<div class="pagehead">
+  <span class="eyebrow">Sections — Footers · zone 8 · the page close</span>
+  <h1>Footers</h1>
+  <p>Four production-grade <b>footer section blocks</b> — each a complete <code>&lt;footer&gt;</code> you can drop into a real page, not a description of one. They sit at <b>zone 8</b> of the composition spine (S-FOOTER): the dark-panel close that carries secondary nav, contact recap, social, trust and legal. Built on the SGEN chrome — charcoal <code>#1a1a1a</code>, red <code>#d51522</code>, one 8&nbsp;px button radius, the ink-tinted shadow family. Every block is responsive (columns&rarr;stack at <code>767</code> per the responsive library, legal row centers, back-to-top in a 20&nbsp;px gutter) and copy-ready. CSS-crafted visuals, system fonts, zero external dependencies, motion gated behind <code>prefers-reduced-motion</code>.</p>
+  <div class="legendbar">
+    <span><b>Live blocks</b> — hover links, focus the newsletter input, click subscribe / back-to-top.</span>
+    <span>Each block shows a <span class="pin">when to use</span> caption + its pattern IDs.</span>
+  </div>
+</div>
+
+<!-- ============ JUMP NAV ============ -->
+<nav class="catnav" aria-label="Footer variants">
+  <a href="#mega">A · Mega</a>
+  <a href="#standard">B · Standard columns</a>
+  <a href="#minimal">C · Minimal</a>
+  <a href="#newsletter">D · Newsletter-led</a>
+</nav>
+
+
+<!-- ====================================================================
+     A · MEGA FOOTER
+     ==================================================================== -->
+<section class="spec" id="mega">
+  <div class="spec__head">
+    <h2>A · Mega footer</h2><span class="tag">multi-column + newsletter</span>
+  </div>
+  <p class="spec__when"><b>When to use:</b> content-dense sites (SaaS, ecommerce, enterprise, marketplaces) where the footer doubles as a sitemap — you have 4+ link groups, want a newsletter capture, and need a payment/social/legal close all in one panel.</p>
+  <p class="spec__ids">Composition <span>S-FOOTER (zone 8)</span> · Look <span>J1 dark panel · I10 payment strip · I8 back-to-top</span> · Responsive <span>F1 cols&rarr;stack@767 (3-up@768&ndash;959) · F2 legal centers · F4 gutter</span></p>
+
+  <div class="frame">
+    <div class="frame__bar"><span class="dotrow"><span class="d r"></span><span class="d"></span><span class="d"></span></span><span class="url">acme.example.com</span><span class="vp">footer · drop-in</span></div>
+    <div class="aboveline"><span class="ph a"></span><span class="ph b"></span><span class="ph c"></span></div>
+
+    <footer class="ftr ftr--mega" role="contentinfo" aria-label="Site footer">
+      <button class="f2top" type="button" aria-label="Back to top" data-top>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+      </button>
+      <div class="ftr__in">
+
+        <!-- newsletter band spanning the grid top -->
+        <div class="fmega-news">
+          <div>
+            <h3>Ship better, every week.</h3>
+            <p>Product updates, field notes and the occasional teardown — no spam, unsubscribe in one click.</p>
+          </div>
+          <div class="fnewswrap" data-news>
+            <form class="fnews" novalidate>
+              <span class="grow"><label class="sr" for="mega-email" style="position:absolute;left:-9999px">Email address</label>
+                <input class="finput" id="mega-email" type="email" inputmode="email" placeholder="you@company.com" autocomplete="email" required></span>
+              <button class="fbtn" type="submit">Subscribe</button>
+            </form>
+            <p class="fhint"><span aria-hidden="true">&#9993;</span> Join 24,000 builders. We respect your inbox.</p>
+            <p class="fok"><span aria-hidden="true">&#10003;</span> You're in — check your inbox to confirm.</p>
+          </div>
+        </div>
+
+        <!-- the column grid -->
+        <div class="fmega-grid">
+          <div class="fmega-brand">
+            <div class="fbrand"><span class="mark"></span>SGEN</div>
+            <p class="fblurb">The build platform for teams who ship marketing sites without waiting on engineering. Design, publish, measure.</p>
+            <div class="fsocial" aria-label="Social links" style="margin-top:1.1rem">
+              <a href="#" aria-label="SGEN on X">X</a>
+              <a href="#" aria-label="SGEN on LinkedIn">in</a>
+              <a href="#" aria-label="SGEN on GitHub">GH</a>
+              <a href="#" aria-label="SGEN on YouTube">YT</a>
+            </div>
+          </div>
+
+          <div class="fcol">
+            <h4>Product</h4>
+            <ul>
+              <li><a href="#">Overview</a></li>
+              <li><a href="#">Page builder</a></li>
+              <li><a href="#">Templates</a></li>
+              <li><a href="#">Integrations</a></li>
+              <li><a href="#">Changelog <span class="badge">New</span></a></li>
+            </ul>
+          </div>
+
+          <div class="fcol">
+            <h4>Solutions</h4>
+            <ul>
+              <li><a href="#">For agencies</a></li>
+              <li><a href="#">For ecommerce</a></li>
+              <li><a href="#">For startups</a></li>
+              <li><a href="#">Enterprise</a></li>
+              <li><a href="#">Migrate to SGEN</a></li>
+            </ul>
+          </div>
+
+          <div class="fcol">
+            <h4>Resources</h4>
+            <ul>
+              <li><a href="#">Documentation</a></li>
+              <li><a href="#">Guides</a></li>
+              <li><a href="#">Blog</a></li>
+              <li><a href="#">Community</a></li>
+              <li><a href="#">Status</a></li>
+            </ul>
+          </div>
+
+          <div class="fcol">
+            <h4>Company</h4>
+            <ul>
+              <li><a href="#">About</a></li>
+              <li><a href="#">Careers <span class="badge">3</span></a></li>
+              <li><a href="#">Customers</a></li>
+              <li><a href="#">Contact</a></li>
+              <li><a href="#">Press kit</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- legal + trust close -->
+        <div class="flegal">
+          <span class="copy">&copy; 2026 SGEN, Inc. All rights reserved.</span>
+          <div class="fpay" aria-label="Accepted payment methods">
+            <span class="pc visa">VISA</span>
+            <span class="pc mc">MC</span>
+            <span class="pc amex">AMEX</span>
+            <span class="pc pp">PayPal</span>
+            <span class="pc applepay">&#63743;Pay</span>
+          </div>
+          <nav aria-label="Legal">
+            <a href="#">Privacy</a><a href="#">Terms</a><a href="#">Cookies</a><a href="#">Security</a>
+          </nav>
+        </div>
+
+      </div>
+    </footer>
+  </div>
+</section>
+
+
+<!-- ====================================================================
+     B · STANDARD COLUMNS FOOTER
+     ==================================================================== -->
+<section class="spec" id="standard">
+  <div class="spec__head">
+    <h2>B · Standard columns</h2><span class="tag">brand + link columns + contact</span>
+  </div>
+  <p class="spec__when"><b>When to use:</b> the everyday default — service businesses, clinics, firms, B2B sites. A brand column with a contact recap (address / phone / email / hours) plus three link columns. Enough structure to orient, not a full sitemap.</p>
+  <p class="spec__ids">Composition <span>S-FOOTER (zone 8)</span> · Look <span>dark anchor · contact recap · A3 hairline columns</span> · Responsive <span>F1 4-col&rarr;3-up@960&rarr;stack@767 · F2 legal centers</span></p>
+
+  <div class="frame">
+    <div class="frame__bar"><span class="dotrow"><span class="d r"></span><span class="d"></span><span class="d"></span></span><span class="url">northside-health.example</span><span class="vp">footer · drop-in</span></div>
+    <div class="aboveline"><span class="ph a"></span><span class="ph b"></span><span class="ph c"></span></div>
+
+    <footer class="ftr" role="contentinfo" aria-label="Site footer">
+      <button class="f2top" type="button" aria-label="Back to top" data-top>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+      </button>
+      <div class="ftr__in">
+        <div class="fstd-grid">
+
+          <div class="fcol fcol--brand">
+            <div class="fbrand"><span class="mark"></span>Northside Health</div>
+            <p class="fblurb">Family medicine and same-day urgent care, seven days a week. Walk-ins welcome.</p>
+            <ul class="fcontact" aria-label="Contact details">
+              <li><span class="ic" aria-hidden="true">&#9737;</span><span>128 Maple Avenue, Suite 4<br>Portland, OR 97205</span></li>
+              <li><span class="ic" aria-hidden="true">&#9742;</span><a href="tel:+15035550142">(503)&nbsp;555-0142</a></li>
+              <li><span class="ic" aria-hidden="true">&#9993;</span><a href="mailto:care@northside.example">care@northside.example</a></li>
+              <li><span class="ic" aria-hidden="true">&#9201;</span><span>Mon&ndash;Sat 8am&ndash;8pm · Sun 9am&ndash;5pm</span></li>
+            </ul>
+          </div>
+
+          <div class="fcol">
+            <h4>Care</h4>
+            <ul>
+              <li><a href="#">Primary care</a></li>
+              <li><a href="#">Urgent care</a></li>
+              <li><a href="#">Pediatrics</a></li>
+              <li><a href="#">Lab &amp; imaging</a></li>
+              <li><a href="#">Telehealth</a></li>
+            </ul>
+          </div>
+
+          <div class="fcol">
+            <h4>Patients</h4>
+            <ul>
+              <li><a href="#">Book appointment</a></li>
+              <li><a href="#">Patient portal</a></li>
+              <li><a href="#">Insurance &amp; billing</a></li>
+              <li><a href="#">New patient forms</a></li>
+              <li><a href="#">FAQ</a></li>
+            </ul>
+          </div>
+
+          <div class="fcol">
+            <h4>Practice</h4>
+            <ul>
+              <li><a href="#">Our providers</a></li>
+              <li><a href="#">About us</a></li>
+              <li><a href="#">Careers</a></li>
+              <li><a href="#">Health blog</a></li>
+              <li><a href="#">Contact</a></li>
+            </ul>
+          </div>
+
+        </div>
+
+        <div class="flegal">
+          <span class="copy">&copy; 2026 Northside Health Group. All rights reserved.</span>
+          <div class="fsocial" aria-label="Social links">
+            <a href="#" aria-label="Facebook">f</a>
+            <a href="#" aria-label="Instagram">IG</a>
+            <a href="#" aria-label="LinkedIn">in</a>
+          </div>
+          <nav aria-label="Legal">
+            <a href="#">Privacy</a><a href="#">Terms</a><a href="#">HIPAA notice</a><a href="#">Accessibility</a>
+          </nav>
+        </div>
+
+      </div>
+    </footer>
+  </div>
+</section>
+
+
+<!-- ====================================================================
+     C · MINIMAL FOOTER
+     ==================================================================== -->
+<section class="spec" id="minimal">
+  <div class="spec__head">
+    <h2>C · Minimal</h2><span class="tag">one-row brand · nav · legal</span>
+  </div>
+  <p class="spec__when"><b>When to use:</b> single-page sites, portfolios, landing pages and app shells where the footer should stay out of the way. One row — brand, inline nav, social — over a slim legal line. Collapses to a clean centered stack.</p>
+  <p class="spec__ids">Composition <span>S-FOOTER (lean)</span> · Look <span>dark anchor · inline nav · I8 back-to-top</span> · Responsive <span>F2 row&rarr;centered stack@767 · F4 gutter</span></p>
+
+  <div class="frame">
+    <div class="frame__bar"><span class="dotrow"><span class="d r"></span><span class="d"></span><span class="d"></span></span><span class="url">tobby.example</span><span class="vp">footer · drop-in</span></div>
+    <div class="aboveline"><span class="ph a"></span><span class="ph b"></span><span class="ph c"></span></div>
+
+    <footer class="ftr ftr--min" role="contentinfo" aria-label="Site footer">
+      <button class="f2top" type="button" aria-label="Back to top" data-top>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+      </button>
+      <div class="ftr__in">
+        <div class="fmin">
+          <div class="fbrand"><span class="mark"></span>Tobby&nbsp;Lane</div>
+          <nav aria-label="Footer">
+            <a href="#">Work</a>
+            <a href="#">About</a>
+            <a href="#">Services</a>
+            <a href="#">Journal</a>
+            <a href="#">Contact</a>
+          </nav>
+          <div class="fsocial" aria-label="Social links">
+            <a href="#" aria-label="Instagram">IG</a>
+            <a href="#" aria-label="Dribbble">Dr</a>
+            <a href="#" aria-label="X">X</a>
+          </div>
+        </div>
+        <div class="fmin-legal">
+          <span>&copy; 2026 Tobby Lane · Made with care in Lisbon.</span>
+          <nav aria-label="Legal">
+            <a href="#">Privacy</a><a href="#">Terms</a><a href="#">Cookies</a>
+          </nav>
+        </div>
+      </div>
+    </footer>
+  </div>
+</section>
+
+
+<!-- ====================================================================
+     D · NEWSLETTER-LED FOOTER
+     ==================================================================== -->
+<section class="spec" id="newsletter">
+  <div class="spec__head">
+    <h2>D · Newsletter-led</h2><span class="tag">capture-first close</span>
+  </div>
+  <p class="spec__when"><b>When to use:</b> media, creators, DTC brands and communities whose primary footer goal is list growth. The signup is the hero of the footer — big headline, prominent form, social proof — with a slim link/legal tail underneath.</p>
+  <p class="spec__ids">Composition <span>S-FOOTER + S-CTA (newsletter)</span> · Look <span>accent radial glow · one-accent · I8 back-to-top</span> · Responsive <span>F1 split&rarr;stack@767 · F2 tail centers</span></p>
+
+  <div class="frame">
+    <div class="frame__bar"><span class="dotrow"><span class="d r"></span><span class="d"></span><span class="d"></span></span><span class="url">fieldnotes.example</span><span class="vp">footer · drop-in</span></div>
+    <div class="aboveline"><span class="ph a"></span><span class="ph b"></span><span class="ph c"></span></div>
+
+    <footer class="ftr ftr--news" role="contentinfo" aria-label="Site footer">
+      <button class="f2top" type="button" aria-label="Back to top" data-top>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+      </button>
+      <div class="ftr__in">
+
+        <div class="fnl-hero">
+          <div>
+            <span class="kicker">The Field Notes letter</span>
+            <h3>One sharp idea in your inbox, every Thursday.</h3>
+            <p>Essays on craft, tools and the work behind the work. Free, and you can leave whenever you like.</p>
+            <div class="fnl-proof">
+              <span><b>18,400+</b> subscribers</span>
+              <span><b>4.9/5</b> reader rating</span>
+              <span><b>0</b> spam, ever</span>
+            </div>
+          </div>
+          <div class="fnewswrap" data-news>
+            <form class="fnews" novalidate>
+              <span class="grow"><label for="nl-email" style="position:absolute;left:-9999px">Email address</label>
+                <input class="finput" id="nl-email" type="email" inputmode="email" placeholder="you@example.com" autocomplete="email" required></span>
+              <button class="fbtn" type="submit">Get the letter</button>
+            </form>
+            <p class="fhint"><span aria-hidden="true">&#9993;</span> No spam. Unsubscribe with one click.</p>
+            <p class="fok"><span aria-hidden="true">&#10003;</span> Welcome aboard — confirm via the email we just sent.</p>
+          </div>
+        </div>
+
+        <div class="fnl-tail">
+          <div class="fbrand" style="font-size:1.05rem"><span class="mark"></span>Field&nbsp;Notes</div>
+          <nav aria-label="Footer">
+            <a href="#">Archive</a>
+            <a href="#">About</a>
+            <a href="#">Sponsor</a>
+            <a href="#">RSS</a>
+            <a href="#">Contact</a>
+          </nav>
+          <span class="copy">&copy; 2026 Field Notes Media</span>
+        </div>
+
+      </div>
+    </footer>
+  </div>
+</section>
+
+
+<!-- ============ FOOTER (page chrome, matches 00-08) ============ -->
+<footer class="foot" style="background:var(--ink);color:#9b9b9b;padding:2.2rem 0;font-size:.84rem;margin-top:2rem">
+  <div style="max-width:1200px;margin:0 auto;padding:0 clamp(1rem,4vw,2.5rem);display:flex;gap:1.1rem;flex-wrap:wrap;align-items:center">
+    <span style="color:#fff"><b style="color:#fff">SGEN</b> · Living Styleguide</span>
+    <a href="10-sections.html" style="color:#cfcfcf;font-weight:600">10 · Sections hub</a>
+    <a href="07-components.html" style="color:#cfcfcf;font-weight:600">07 · Components</a>
+    <a href="index.html" style="color:#cfcfcf;font-weight:600">Index</a>
+    <span style="margin-left:auto;font-family:var(--sys-mono);font-size:.72rem;color:#6e6e6e">sections · footers · 4 variants · responsive @390/1440 · 0 external deps</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---- newsletter forms: inline success, no navigation ---- */
+  document.querySelectorAll('[data-news]').forEach(function(wrap){
+    var form = wrap.querySelector('form');
+    if(!form) return;
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      var email = form.querySelector('input[type="email"]');
+      if(email && !email.value.trim()){ email.focus(); return; }
+      wrap.classList.add('is-sent');
+    });
+  });
+
+  /* ---- back-to-top buttons (real <button>, honors reduced-motion) ---- */
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll('[data-top]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      window.scrollTo({ top:0, left:0, behavior: reduce ? 'auto' : 'smooth' });
+    });
+  });
+})();
+</script>
+</body>
+</html>

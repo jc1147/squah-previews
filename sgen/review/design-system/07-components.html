@@ -1,0 +1,1415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SGEN Living Styleguide — 07 · Components & Form States (live)</title>
+<style>
+/* ============================================================
+   SGEN LIVING STYLEGUIDE — 07 · COMPONENTS & FORM STATES
+   charcoal #1a1a1a · red #d51522 · clean editorial
+   Every component shown LIVE in EVERY relevant state.
+   Real interactive states (:hover/:focus-visible/:active) work,
+   AND each state is also "pinned" via .is-* modifier classes so a
+   single screenshot captures all states at once. Both share one
+   source of truth via grouped selectors — no divergence.
+   Self-contained: system fonts, zero external deps, no images.
+   ============================================================ */
+:root{
+  --ink:#1a1a1a;                 /* charcoal */
+  --paper:#f6f5f2;               /* warm off-white, never #fff */
+  --surface:#ffffff;
+  --muted:#626262;               /* recurs verbatim across the harvest */
+  --body:#4a4f55;                /* desaturated tint of ink, not #666 */
+  --hair:rgba(26,26,26,.10);
+  --accent:#d51522;              /* SGEN red */
+  --accent-ink:#a50f19;          /* darker red for text-on-light */
+  --accent-2:#ff5a4d;
+  --accent-tint:rgba(213,21,34,.10);
+
+  /* semantic feedback hues (tinted, never pure) */
+  --ok:#1f8a4c;   --ok-bg:#eaf6ee;   --ok-bd:rgba(31,138,76,.30);
+  --info:#1668c4; --info-bg:#eaf2fb; --info-bd:rgba(22,104,196,.28);
+  --warn:#9a6800; --warn-bg:#fdf4e3; --warn-bd:rgba(154,104,0,.30);
+  --err:#c0121e;  --err-bg:#fdeced;  --err-bd:rgba(192,18,30,.32);
+
+  /* radius — ONE language site-wide: 8px chip / 12px card / 20px panel */
+  --r-chip:6px; --r-card:12px; --r-panel:20px; --r-pill:9999px;
+  --r-btn:8px;                   /* THE one button radius */
+
+  /* shadow — ink/navy-tinted, never #000 (D1) */
+  --shadow-rest:0 2px 6px 0 rgba(26,26,26,.08);
+  --shadow-card:0 15px 30px 0 rgba(1,7,39,.13);      /* the universal one */
+  --shadow-hover:0 32px 64px -12px rgba(16,24,40,.18);
+
+  /* motion (C8) */
+  --ease:cubic-bezier(.05,.5,.3,1);
+  --t-fast:.18s ease-out;        /* confident hover */
+  --t-reveal:.6s var(--ease);
+
+  --ring:0 0 0 3px rgba(213,21,34,.40);   /* the focus-visible ring */
+
+  --sys-sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --sys-serif:ui-serif,Georgia,Cambria,"Times New Roman",Times,serif;
+  --sys-mono:ui-monospace,"SFMono-Regular","Cascadia Code","Consolas",monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;overflow-x:hidden}   /* mandatory safety net, dogfooded */
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--sys-sans);font-size:16px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{font-family:var(--sys-serif);font-weight:600;letter-spacing:-.02em;line-height:1.08;margin:0}
+a{color:var(--accent-ink);text-decoration:none}
+code,kbd{font-family:var(--sys-mono);font-size:.84em;background:rgba(26,26,26,.05);padding:.06em .35em;border-radius:4px}
+
+/* ---------- top bar + sibling nav (matches 00–06) ---------- */
+.topbar{
+  position:sticky;top:0;z-index:50;
+  background:rgba(246,245,242,.82);backdrop-filter:blur(14px) saturate(160%);
+  -webkit-backdrop-filter:blur(14px) saturate(160%);
+  border-bottom:1px solid var(--hair);
+}
+.topbar__in{max-width:1200px;margin:0 auto;padding:.7rem clamp(1rem,4vw,2.5rem);
+  display:flex;align-items:center;gap:1.2rem;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:.55rem;font-weight:800;letter-spacing:-.01em;font-family:var(--sys-sans)}
+.brand .dot{width:11px;height:11px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px rgba(213,21,34,.16)}
+.brand small{font-weight:600;color:var(--muted);letter-spacing:.02em}
+.sibnav{display:flex;gap:.2rem;flex-wrap:wrap;margin-left:auto}
+.sibnav a{
+  font-size:.74rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
+  color:var(--muted);padding:.35rem .6rem;border-radius:var(--r-chip);
+  transition:color var(--t-fast),background var(--t-fast)}
+.sibnav a:hover{color:var(--ink);background:rgba(26,26,26,.05)}
+.sibnav a[aria-current="page"]{color:#fff;background:var(--accent)}
+
+/* ---------- page header ---------- */
+.pagehead{max-width:1200px;margin:0 auto;padding:clamp(2.5rem,6vw,4.5rem) clamp(1rem,4vw,2.5rem) 1rem}
+.eyebrow{display:inline-flex;align-items:center;gap:.5rem;
+  font-family:var(--sys-sans);font-size:.72rem;font-weight:800;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--accent-ink)}
+.eyebrow::before{content:"";width:34px;height:2px;background:var(--accent);display:inline-block}
+.pagehead h1{font-size:clamp(2.2rem,6vw,4rem);margin:.5rem 0 .4rem;letter-spacing:-.035em}
+.pagehead p{max-width:66ch;color:var(--body);font-size:1.05rem}
+.legendbar{display:flex;gap:1.4rem;flex-wrap:wrap;margin-top:1.1rem;font-size:.82rem;color:var(--muted)}
+.legendbar b{color:var(--ink)}
+.legendbar .pin{display:inline-block;font-family:var(--sys-mono);font-size:.72rem;font-weight:700;color:var(--accent-ink);
+  background:var(--accent-tint);border:1px solid var(--accent-bd,rgba(213,21,34,.25));padding:.05rem .4rem;border-radius:5px}
+
+/* ---------- in-page category chips ---------- */
+.catnav{max-width:1200px;margin:1.2rem auto .5rem;padding:0 clamp(1rem,4vw,2.5rem);
+  display:flex;gap:.5rem;flex-wrap:wrap}
+.catnav a{font-size:.78rem;font-weight:700;padding:.45rem .85rem;border:1px solid var(--hair);
+  border-radius:var(--r-pill);color:var(--ink);background:var(--surface);transition:all var(--t-fast)}
+.catnav a:hover{border-color:var(--accent);color:var(--accent-ink)}
+
+/* ---------- category sections ---------- */
+.cat{max-width:1200px;margin:0 auto;padding:clamp(2.4rem,5vw,4rem) clamp(1rem,4vw,2.5rem)}
+.cat + .cat{border-top:1px solid var(--hair)}
+.cat__head{margin-bottom:1.8rem}
+.cat__head h2{font-size:clamp(1.7rem,4vw,2.6rem)}
+.cat__head .num{font-family:var(--sys-serif);font-size:clamp(2.6rem,7vw,4.4rem);color:rgba(213,21,34,.14);
+  line-height:.8;display:block;font-weight:700}
+.cat__head p{color:var(--body);max-width:74ch;margin-top:.4rem}
+
+/* ---------- generic specimen frame + state label ---------- */
+.grid{display:grid;gap:1.1rem}
+.g-auto{grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
+.g-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.subhead{font-family:var(--sys-sans);font-size:.82rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--muted);margin:2rem 0 .9rem;display:flex;align-items:center;gap:.6rem}
+.subhead::after{content:"";flex:1;height:1px;background:var(--hair)}
+.subhead:first-of-type{margin-top:.4rem}
+
+/* the cell: a labeled specimen tile */
+.cell{background:var(--surface);border:1px solid var(--hair);border-radius:var(--r-card);
+  padding:1.15rem 1.15rem 1.25rem;box-shadow:var(--shadow-rest);
+  display:flex;flex-direction:column;gap:.85rem;min-width:0}
+.cell.dark{background:#202124;border-color:rgba(255,255,255,.10)}
+.lbl{font-family:var(--sys-mono);font-size:.7rem;font-weight:700;letter-spacing:.03em;
+  color:var(--muted);text-transform:uppercase;display:flex;align-items:center;gap:.45rem}
+.lbl .tag{font-family:var(--sys-mono);font-size:.62rem;font-weight:700;color:var(--accent-ink);
+  background:var(--accent-tint);padding:.05rem .35rem;border-radius:4px;letter-spacing:.02em}
+.cell.dark .lbl{color:#9b9b9b}
+.demo{display:flex;flex-wrap:wrap;align-items:center;gap:.7rem}
+.note{font-size:.78rem;color:var(--muted);margin:0;line-height:1.5}
+.note code{font-size:.78em}
+
+/* ============================================================
+   A · BUTTONS / CTAs
+   one radius (--r-btn 8px); fill / ghost / flip variants
+   states: default · hover · active · focus-visible · disabled · loading
+   ============================================================ */
+.btn{
+  --bg:var(--accent); --fg:#fff; --bd:var(--accent);
+  font-family:var(--sys-sans);font-size:.95rem;font-weight:700;letter-spacing:.01em;
+  display:inline-flex;align-items:center;justify-content:center;gap:.5rem;
+  padding:.7rem 1.4rem;min-height:44px;            /* 44px tap target */
+  border-radius:var(--r-btn);border:2px solid var(--bd);cursor:pointer;
+  background:var(--bg);color:var(--fg);position:relative;
+  transition:background var(--t-fast),color var(--t-fast),border-color var(--t-fast),box-shadow var(--t-fast),transform var(--t-fast);
+  -webkit-tap-highlight-color:transparent;
+}
+/* FILL variant — default look set above */
+.btn:hover,.btn.is-hover{background:var(--accent-ink);border-color:var(--accent-ink)}
+.btn:active,.btn.is-active{transform:translateY(1px);background:#8a0c15;border-color:#8a0c15}
+.btn:focus-visible,.btn.is-focus{outline:none;box-shadow:var(--ring)}
+.btn:disabled,.btn.is-disabled{cursor:not-allowed;opacity:1;background:#d8d6d2;border-color:#d8d6d2;color:#9a978f;transform:none;box-shadow:none}
+
+/* GHOST variant — transparent, accent text, fills on hover (TOP-12 #9 flip) */
+.btn.ghost{--bg:transparent;--fg:var(--accent-ink);--bd:var(--accent)}
+.btn.ghost:hover,.btn.ghost.is-hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn.ghost:active,.btn.ghost.is-active{background:var(--accent-ink);border-color:var(--accent-ink);color:#fff}
+.btn.ghost:disabled,.btn.ghost.is-disabled{background:transparent;border-color:#d8d6d2;color:#b3b0aa}
+
+/* FLIP variant — solid fill that inverts to ghost on hover */
+.btn.flip{--bg:var(--ink);--fg:#fff;--bd:var(--ink)}
+.btn.flip:hover,.btn.flip.is-hover{background:transparent;color:var(--ink);border-color:var(--ink)}
+.btn.flip:active,.btn.flip.is-active{background:#000;color:#fff;border-color:#000}
+.btn.flip:disabled,.btn.flip.is-disabled{background:#d8d6d2;border-color:#d8d6d2;color:#9a978f}
+
+/* SECONDARY tinted (F6) */
+.btn.soft{--bg:var(--accent-tint);--fg:var(--accent-ink);--bd:transparent}
+.btn.soft:hover,.btn.soft.is-hover{background:rgba(213,21,34,.18);color:var(--accent-ink);border-color:transparent}
+
+/* LOADING — spinner + hidden label, real CSS animation */
+.btn.loading,.btn.is-loading{color:transparent;pointer-events:none}
+.btn.loading::after,.btn.is-loading::after{
+  content:"";position:absolute;width:18px;height:18px;border-radius:50%;
+  border:2.5px solid rgba(255,255,255,.45);border-top-color:#fff;
+  animation:btnspin .7s linear infinite}
+.btn.ghost.loading::after,.btn.ghost.is-loading::after{border-color:rgba(213,21,34,.35);border-top-color:var(--accent)}
+@keyframes btnspin{to{transform:rotate(360deg)}}
+.btn.sm{font-size:.82rem;padding:.45rem .9rem;min-height:36px}
+.btn.lg{font-size:1.05rem;padding:.9rem 1.8rem}
+
+/* ============================================================
+   B · FORMS
+   input / textarea / select / checkbox / radio / toggle
+   states: default · focus · filled · error(msg) · success · disabled
+   inputs >=16px to stop iOS auto-zoom
+   ============================================================ */
+.field{display:flex;flex-direction:column;gap:.4rem}
+.field > label{font-size:.82rem;font-weight:700;color:var(--ink);letter-spacing:.01em}
+.field .req{color:var(--accent)}
+.ctrl{
+  font-family:var(--sys-sans);font-size:16px;             /* >=16px — stops iOS zoom */
+  color:var(--ink);background:var(--surface);
+  border:1.5px solid #cdccc7;border-radius:var(--r-btn);
+  padding:.7rem .85rem;min-height:46px;width:100%;
+  transition:border-color var(--t-fast),box-shadow var(--t-fast),background var(--t-fast);
+  -webkit-appearance:none;appearance:none;
+}
+.ctrl::placeholder{color:#a3a09a}
+.ctrl:hover{border-color:#a8a6a0}
+.ctrl:focus,.ctrl.is-focus{outline:none;border-color:var(--accent);box-shadow:var(--ring)}
+textarea.ctrl{min-height:88px;resize:vertical;line-height:1.5}
+/* native select with custom caret */
+select.ctrl{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23626262' d='M6 8 0 0h12z'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right .9rem center;padding-right:2.2rem}
+/* error state */
+.ctrl.err,.field.err .ctrl{border-color:var(--err);background:var(--err-bg)}
+.ctrl.err:focus,.field.err .ctrl:focus,.ctrl.err.is-focus{box-shadow:0 0 0 3px rgba(192,18,30,.30)}
+.msg.err{font-size:.78rem;font-weight:600;color:var(--err);display:flex;align-items:center;gap:.35rem}
+.msg.err::before{content:"!";display:inline-grid;place-items:center;width:15px;height:15px;border-radius:50%;
+  background:var(--err);color:#fff;font-size:.68rem;font-weight:800}
+/* success state */
+.ctrl.ok,.field.ok .ctrl{border-color:var(--ok);background:var(--ok-bg)}
+.ctrl.ok:focus,.field.ok .ctrl:focus{box-shadow:0 0 0 3px rgba(31,138,76,.28)}
+.msg.ok{font-size:.78rem;font-weight:600;color:var(--ok);display:flex;align-items:center;gap:.35rem}
+.msg.ok::before{content:"\2713";display:inline-grid;place-items:center;width:15px;height:15px;border-radius:50%;
+  background:var(--ok);color:#fff;font-size:.66rem;font-weight:800}
+.ctrl:disabled,.ctrl.is-disabled{background:#f0efec;border-color:#e0dfdb;color:#9a978f;cursor:not-allowed}
+.hint{font-size:.76rem;color:var(--muted)}
+
+/* checkbox + radio — custom, accessible, real :checked */
+.opt{display:inline-flex;align-items:center;gap:.6rem;cursor:pointer;font-size:.92rem;color:var(--ink);min-height:44px}
+.opt input{position:absolute;opacity:0;width:0;height:0}
+.opt .box{width:22px;height:22px;border:2px solid #b9b7b1;border-radius:6px;background:var(--surface);
+  display:inline-grid;place-items:center;transition:all var(--t-fast);flex:0 0 auto}
+.opt .box.round{border-radius:50%}
+.opt input:checked + .box,.opt.is-checked .box{background:var(--accent);border-color:var(--accent)}
+.opt .box::after{content:"";opacity:0;transition:opacity var(--t-fast)}
+.opt input:checked + .box::after,.opt.is-checked .box::after{opacity:1}
+.opt .box:not(.round)::after{width:6px;height:11px;border:2.5px solid #fff;border-top:0;border-left:0;transform:rotate(42deg) translateY(-1px)}
+.opt .box.round::after{width:9px;height:9px;border-radius:50%;background:#fff}
+.opt input:focus-visible + .box,.opt.is-focus .box{box-shadow:var(--ring);border-color:var(--accent)}
+.opt.is-disabled,.opt input:disabled + .box{cursor:not-allowed}
+.opt.is-disabled{color:#9a978f}
+.opt.is-disabled .box{background:#f0efec;border-color:#dcdbd6}
+.opt.is-disabled.is-checked .box{background:#c7c5bf;border-color:#c7c5bf}
+
+/* toggle switch — real checkbox, :checked drives it */
+.switch{display:inline-flex;align-items:center;gap:.6rem;cursor:pointer;min-height:44px;font-size:.92rem;color:var(--ink)}
+.switch input{position:absolute;opacity:0;width:0;height:0}
+.switch .track{width:46px;height:26px;border-radius:var(--r-pill);background:#c9c7c1;position:relative;transition:background var(--t-fast);flex:0 0 auto}
+.switch .track::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;
+  box-shadow:0 1px 3px rgba(0,0,0,.3);transition:transform var(--t-fast)}
+.switch input:checked + .track,.switch.is-on .track{background:var(--accent)}
+.switch input:checked + .track::after,.switch.is-on .track::after{transform:translateX(20px)}
+.switch input:focus-visible + .track,.switch.is-focus .track{box-shadow:var(--ring)}
+.switch.is-disabled{color:#9a978f;cursor:not-allowed}
+.switch.is-disabled .track{background:#e0dfdb}
+
+/* sample form layout */
+.sampleform{background:var(--surface);border:1px solid var(--hair);border-radius:var(--r-panel);
+  padding:1.6rem;box-shadow:var(--shadow-card);max-width:520px}
+.sampleform h3{font-family:var(--sys-sans);font-size:1.1rem;font-weight:800;margin:0 0 .3rem}
+.sampleform > p{font-size:.86rem;color:var(--muted);margin:0 0 1.2rem}
+.sampleform .row{display:flex;flex-direction:column;gap:1rem}
+.sampleform .two{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.sampleform .actions{display:flex;gap:.7rem;margin-top:.4rem;flex-wrap:wrap}
+
+/* ============================================================
+   C · FEEDBACK
+   alert · toast · tooltip · badge/tag · empty-state · skeleton
+   ============================================================ */
+.alert{display:flex;gap:.8rem;align-items:flex-start;border:1px solid;border-left-width:4px;
+  border-radius:var(--r-card);padding:.9rem 1.1rem;font-size:.9rem}
+.alert .ico{flex:0 0 auto;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;
+  font-weight:800;font-size:.8rem;color:#fff;margin-top:1px}
+.alert .bd{min-width:0}
+.alert .at{font-weight:800;color:var(--ink);margin:0 0 .15rem}
+.alert .ax{margin:0;color:var(--body);font-size:.86rem;line-height:1.5}
+.alert.info{background:var(--info-bg);border-color:var(--info-bd)} .alert.info .ico{background:var(--info)}
+.alert.ok{background:var(--ok-bg);border-color:var(--ok-bd)}       .alert.ok .ico{background:var(--ok)}
+.alert.warn{background:var(--warn-bg);border-color:var(--warn-bd)} .alert.warn .ico{background:var(--warn)}
+.alert.err{background:var(--err-bg);border-color:var(--err-bd)}     .alert.err .ico{background:var(--err)}
+.alert .x{margin-left:auto;background:none;border:0;color:var(--muted);font-size:1.1rem;cursor:pointer;line-height:1;padding:.1rem .3rem;border-radius:5px}
+.alert .x:hover{color:var(--ink);background:rgba(0,0,0,.05)}
+
+/* toast (pinned visible for the screenshot; real toasts animate in) */
+.toast{display:inline-flex;align-items:center;gap:.7rem;background:var(--ink);color:#fff;
+  border-radius:var(--r-card);padding:.8rem 1rem;box-shadow:var(--shadow-hover);font-size:.88rem;max-width:340px}
+.toast .dot{width:9px;height:9px;border-radius:50%;background:var(--ok);flex:0 0 auto;box-shadow:0 0 0 3px rgba(31,138,76,.25)}
+.toast .dot.err{background:var(--accent-2);box-shadow:0 0 0 3px rgba(255,90,77,.25)}
+.toast b{color:#fff}.toast span{color:#c9c7c1}
+.toast .x{margin-left:.4rem;color:#9b9b9b;cursor:pointer;background:none;border:0;font-size:1rem}
+
+/* tooltip — real hover, also pinned-open specimen */
+.tip{position:relative;display:inline-flex}
+.tip .trigger{border-bottom:2px dotted var(--muted);cursor:help;font-weight:600;color:var(--ink)}
+.tip .bubble{
+  position:absolute;left:50%;bottom:calc(100% + 10px);transform:translateX(-50%) translateY(4px);
+  background:var(--ink);color:#fff;font-size:.78rem;font-weight:600;line-height:1.4;
+  padding:.5rem .7rem;border-radius:8px;width:max-content;max-width:220px;
+  opacity:0;pointer-events:none;transition:opacity var(--t-fast),transform var(--t-fast);
+  box-shadow:var(--shadow-card);z-index:5}
+.tip .bubble::after{content:"";position:absolute;top:100%;left:50%;transform:translateX(-50%);
+  border:6px solid transparent;border-top-color:var(--ink)}
+.tip:hover .bubble,.tip:focus-within .bubble,.tip.is-open .bubble{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* badges & tags */
+.badge{display:inline-flex;align-items:center;gap:.3rem;font-size:.72rem;font-weight:800;letter-spacing:.02em;
+  padding:.2rem .55rem;border-radius:var(--r-pill);line-height:1.4}
+.badge.solid{background:var(--accent);color:#fff}
+.badge.tint{background:var(--accent-tint);color:var(--accent-ink)}
+.badge.ok{background:var(--ok-bg);color:var(--ok)}
+.badge.warn{background:var(--warn-bg);color:var(--warn)}
+.badge.err{background:var(--err-bg);color:var(--err)}
+.badge.neutral{background:rgba(26,26,26,.06);color:var(--body)}
+.badge .d{width:6px;height:6px;border-radius:50%;background:currentColor}
+.tag{display:inline-flex;align-items:center;gap:.45rem;font-size:.78rem;font-weight:600;color:var(--body);
+  background:var(--surface);border:1px solid var(--hair);border-radius:var(--r-chip);padding:.3rem .6rem}
+.tag .rm{color:var(--muted);cursor:pointer;font-weight:800;font-size:.9rem;line-height:1}
+.tag .rm:hover{color:var(--accent)}
+
+/* empty-state */
+.empty{text-align:center;border:1.5px dashed #cdccc7;border-radius:var(--r-panel);
+  padding:2.4rem 1.5rem;background:rgba(26,26,26,.015)}
+.empty .glyph{width:54px;height:54px;border-radius:14px;background:var(--accent-tint);
+  display:grid;place-items:center;margin:0 auto 1rem;color:var(--accent);font-size:1.5rem}
+.empty h4{font-family:var(--sys-sans);font-size:1.05rem;font-weight:800;margin:0 0 .35rem;color:var(--ink)}
+.empty p{font-size:.86rem;color:var(--muted);margin:0 auto 1.1rem;max-width:34ch}
+
+/* skeleton loader — real shimmer */
+.skel{background:var(--surface);border:1px solid var(--hair);border-radius:var(--r-card);padding:1.1rem;display:flex;gap:.9rem;align-items:flex-start}
+.sk{background:linear-gradient(90deg,#eceae6 25%,#f4f3f0 37%,#eceae6 63%);background-size:400% 100%;
+  border-radius:6px;animation:shimmer 1.3s ease-in-out infinite}
+.sk.avatar{width:46px;height:46px;border-radius:50%;flex:0 0 auto}
+.sk.line{height:11px;margin-bottom:.55rem}
+.sk.w90{width:90%}.sk.w70{width:70%}.sk.w50{width:50%}
+@keyframes shimmer{0%{background-position:100% 0}100%{background-position:-100% 0}}
+
+/* ============================================================
+   D · DISCLOSURE
+   accordion (open+closed) · tabs · modal/lightbox
+   ============================================================ */
+.accordion{border:1px solid var(--hair);border-radius:var(--r-card);overflow:hidden;background:var(--surface)}
+.acc{border-top:1px solid var(--hair)}
+.acc:first-child{border-top:0}
+.acc__btn{width:100%;background:none;border:0;cursor:pointer;text-align:left;font-family:var(--sys-sans);
+  font-size:.98rem;font-weight:700;color:var(--ink);padding:1rem 1.1rem;min-height:44px;
+  display:flex;align-items:center;justify-content:space-between;gap:1rem;transition:background var(--t-fast)}
+.acc__btn:hover{background:rgba(26,26,26,.025)}
+.acc__btn:focus-visible{outline:none;box-shadow:inset var(--ring)}
+.acc__btn .chev{flex:0 0 auto;width:12px;height:12px;border-right:2.5px solid var(--accent);border-bottom:2.5px solid var(--accent);
+  transform:rotate(45deg);transition:transform var(--t-fast);margin-top:-3px}
+.acc__panel{display:grid;grid-template-rows:0fr;transition:grid-template-rows .28s var(--ease)}
+.acc__panel > div{overflow:hidden}
+.acc__panel p{margin:0 1.1rem 1.1rem;color:var(--body);font-size:.9rem;line-height:1.6}
+.acc[open] .acc__btn,.acc.is-open .acc__btn{color:var(--accent-ink)}
+.acc[open] .chev,.acc.is-open .chev{transform:rotate(-135deg);margin-top:2px}
+.acc[open] .acc__panel,.acc.is-open .acc__panel{grid-template-rows:1fr}
+
+/* tabs */
+.tabs{background:var(--surface);border:1px solid var(--hair);border-radius:var(--r-card);overflow:hidden}
+.tabs__strip{display:flex;gap:.2rem;border-bottom:1px solid var(--hair);padding:.4rem .4rem 0;overflow-x:auto}
+.tabbtn{font-family:var(--sys-sans);font-size:.88rem;font-weight:700;color:var(--muted);background:none;border:0;
+  cursor:pointer;padding:.65rem .95rem;min-height:44px;border-radius:8px 8px 0 0;position:relative;white-space:nowrap;
+  transition:color var(--t-fast),background var(--t-fast)}
+.tabbtn:hover{color:var(--ink);background:rgba(26,26,26,.03)}
+.tabbtn:focus-visible{outline:none;box-shadow:var(--ring)}
+.tabbtn[aria-selected="true"]{color:var(--accent-ink)}
+.tabbtn[aria-selected="true"]::after{content:"";position:absolute;left:.6rem;right:.6rem;bottom:-1px;height:3px;
+  background:var(--accent);border-radius:3px 3px 0 0}
+.tabs__panel{padding:1.2rem 1.2rem 1.4rem;font-size:.9rem;color:var(--body);line-height:1.6}
+.tabs__panel[hidden]{display:none}
+.tabs__panel h4{font-family:var(--sys-sans);font-size:.98rem;font-weight:800;color:var(--ink);margin:0 0 .4rem}
+
+/* modal / lightbox — pinned-open specimen showing the scrim */
+.modalwrap{position:relative;background:repeating-linear-gradient(45deg,#ecebe7,#ecebe7 10px,#f3f2ef 10px,#f3f2ef 20px);
+  border:1px solid var(--hair);border-radius:var(--r-card);height:340px;overflow:hidden}
+.modalwrap .scrim{position:absolute;inset:0;background:rgba(20,18,18,.62);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)}
+.modal{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(380px,86%);
+  background:var(--surface);border-radius:var(--r-panel);box-shadow:var(--shadow-hover);padding:1.5rem;text-align:left}
+.modal h3{font-family:var(--sys-sans);font-size:1.15rem;font-weight:800;margin:0 0 .4rem}
+.modal p{font-size:.88rem;color:var(--body);margin:0 0 1.2rem;line-height:1.55}
+.modal .close{position:absolute;top:.7rem;right:.7rem;width:34px;height:34px;border-radius:8px;border:0;background:rgba(26,26,26,.05);
+  color:var(--muted);cursor:pointer;font-size:1.1rem;line-height:1}
+.modal .close:hover{background:rgba(26,26,26,.1);color:var(--ink)}
+.modal .actions{display:flex;gap:.6rem;flex-wrap:wrap}
+/* interactive modal (button-triggered) */
+#liveModal{position:fixed;inset:0;z-index:200;display:none}
+#liveModal.open{display:block}
+#liveModal .scrim{position:fixed;inset:0;background:rgba(20,18,18,.62);backdrop-filter:blur(2px)}
+#liveModal .modal{position:fixed}
+
+/* ============================================================
+   E · DATA DISPLAY
+   pricing card · stat counter · table (+ table->cards) · progress
+   ============================================================ */
+.pricegrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem;align-items:start}
+.price{background:var(--surface);border:1px solid var(--hair);border-radius:var(--r-panel);padding:1.6rem 1.4rem;
+  box-shadow:var(--shadow-rest);position:relative;transition:transform var(--t-fast),box-shadow var(--t-fast)}
+.price:hover{transform:translateY(-4px);box-shadow:var(--shadow-card)}
+.price.feat{border:2px solid var(--accent);box-shadow:var(--shadow-card);transform:scale(1.03)}
+.price .ribbon{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;
+  font-size:.68rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:.3rem .8rem;border-radius:var(--r-pill)}
+.price .pname{font-family:var(--sys-sans);font-size:.82rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.price .pn{font-family:var(--sys-serif);font-size:2.6rem;font-weight:700;color:var(--ink);letter-spacing:-.03em;margin:.5rem 0 0;
+  font-variant-numeric:tabular-nums}
+.price .pn small{font-size:.9rem;font-weight:600;color:var(--muted)}
+.price ul{list-style:none;margin:1.1rem 0 1.4rem;padding:0;display:flex;flex-direction:column;gap:.55rem}
+.price li{font-size:.86rem;color:var(--body);display:flex;gap:.5rem;align-items:flex-start}
+.price li::before{content:"\2713";color:var(--accent);font-weight:800;flex:0 0 auto}
+
+/* stat counters */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1.1rem}
+.statc{background:var(--surface);border:1px solid var(--hair);border-radius:var(--r-card);padding:1.3rem;box-shadow:var(--shadow-rest)}
+.statc .n{font-family:var(--sys-serif);font-size:clamp(2rem,4vw,2.8rem);font-weight:700;color:var(--accent-ink);
+  letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums}
+.statc .n .suf{font-size:.55em;color:var(--accent)}
+.statc .lbl2{margin-top:.5rem;font-size:.74rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+
+/* table */
+.tablewrap{overflow-x:auto;border:1px solid var(--hair);border-radius:var(--r-card);background:var(--surface)}
+table.data{border-collapse:collapse;width:100%;font-size:.88rem;min-width:520px}
+table.data th,table.data td{text-align:left;padding:.8rem 1rem;border-bottom:1px solid var(--hair)}
+table.data thead th{font-size:.72rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);
+  background:rgba(26,26,26,.025)}
+table.data tbody tr{transition:background var(--t-fast)}
+table.data tbody tr:hover{background:var(--accent-tint)}
+table.data tbody tr:last-child td{border-bottom:0}
+table.data td.num{font-variant-numeric:tabular-nums;text-align:right}
+/* progress */
+.prog{display:flex;flex-direction:column;gap:.4rem}
+.prog .top{display:flex;justify-content:space-between;font-size:.8rem;font-weight:700;color:var(--ink)}
+.prog .top .v{color:var(--accent-ink);font-variant-numeric:tabular-nums}
+.bar{height:10px;border-radius:var(--r-pill);background:rgba(26,26,26,.08);overflow:hidden}
+.bar > i{display:block;height:100%;border-radius:var(--r-pill);background:linear-gradient(90deg,var(--accent),var(--accent-2));
+  transition:width 1.1s var(--ease)}
+.bar.indet > i{width:35%;animation:indet 1.4s var(--ease) infinite}
+@keyframes indet{0%{margin-left:-35%}100%{margin-left:100%}}
+.ring{--p:0;width:96px;height:96px;border-radius:50%;
+  background:conic-gradient(var(--accent) calc(var(--p)*1%),rgba(26,26,26,.08) 0);
+  display:grid;place-items:center;flex:0 0 auto}
+.ring::before{content:"";position:absolute;width:72px;height:72px;border-radius:50%;background:var(--surface)}
+.ring b{position:relative;font-family:var(--sys-serif);font-size:1.3rem;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums}
+.ringwrap{position:relative;display:inline-grid;place-items:center}
+
+/* ============================================================
+   F · NAV COMPONENTS
+   breadcrumb · pagination · 44px tap-target good vs bad
+   ============================================================ */
+.crumb{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;font-size:.85rem}
+.crumb a{color:var(--muted);font-weight:600}
+.crumb a:hover{color:var(--accent-ink)}
+.crumb .sep{color:#c2c0ba}
+.crumb .cur{color:var(--ink);font-weight:800}
+.pager{display:flex;gap:.4rem;flex-wrap:wrap;align-items:center}
+.pager a,.pager span{min-width:44px;min-height:44px;display:inline-flex;align-items:center;justify-content:center;
+  border:1px solid var(--hair);border-radius:var(--r-btn);font-weight:700;font-size:.9rem;color:var(--ink);
+  background:var(--surface);padding:0 .5rem;transition:all var(--t-fast)}
+.pager a:hover{border-color:var(--accent);color:var(--accent-ink)}
+.pager .cur{background:var(--accent);border-color:var(--accent);color:#fff}
+.pager .gap{border:0;background:none;color:var(--muted);min-width:24px}
+.pager .nav{font-weight:800}
+.pager .nav.off{color:#bcb9b3;background:#f3f2ef;cursor:not-allowed;border-color:var(--hair)}
+
+/* 44px tap-target good vs bad */
+.tapcmp{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem}
+.tapcell{border:1px solid var(--hair);border-radius:var(--r-card);padding:1.2rem;background:var(--surface)}
+.tapcell.bad{border-color:var(--err-bd);background:var(--err-bg)}
+.tapcell.good{border-color:var(--ok-bd);background:var(--ok-bg)}
+.tapcell .row2{display:flex;gap:.5rem;align-items:center;margin:.6rem 0}
+.tap{display:inline-grid;place-items:center;background:var(--accent);color:#fff;border-radius:8px;border:0;cursor:pointer;font-size:1rem}
+.tap.t28{width:28px;height:28px;font-size:.8rem}
+.tap.t44{width:44px;height:44px}
+.tapcell .verdict{font-size:.78rem;font-weight:700;display:flex;align-items:center;gap:.4rem;margin-top:.3rem}
+.tapcell.bad .verdict{color:var(--err)}
+.tapcell.good .verdict{color:var(--ok)}
+.ghostbox{outline:1px dashed currentColor;outline-offset:2px}
+
+/* footer */
+.foot{background:var(--ink);color:#9b9b9b;padding:2.2rem 0;font-size:.84rem;margin-top:1rem}
+.foot__in{max-width:1200px;margin:0 auto;padding:0 clamp(1rem,4vw,2.5rem);display:flex;gap:1.1rem;flex-wrap:wrap;align-items:center}
+.foot b{color:#fff}.foot a{color:#cfcfcf;font-weight:600}.foot a:hover{color:#fff}
+.foot .meta{margin-left:auto;font-family:var(--sys-mono);font-size:.72rem;color:#6e6e6e}
+
+/* reduced-motion gate (Category C of the desktop library) */
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  .sk{background:#eceae6}
+  .btn.loading::after,.btn.is-loading::after{animation:none;border-top-color:#fff}
+}
+
+/* responsive — table->cards at <=720, grids stack */
+@media (max-width:920px){
+  .pricegrid{grid-template-columns:1fr;gap:1.4rem}
+  .price.feat{transform:none}
+  .g-3,.g-2,.sampleform .two,.tapcmp{grid-template-columns:1fr}
+}
+@media (max-width:720px){
+  /* table -> cards (Comp6 richer variant) */
+  table.data.responsive{min-width:0}
+  table.data.responsive thead{position:absolute;left:-9999px}
+  table.data.responsive,table.data.responsive tbody,table.data.responsive tr,table.data.responsive td{display:block;width:100%}
+  table.data.responsive tr{border:1px solid var(--hair);border-radius:var(--r-card);margin:0 .6rem .8rem;padding:.4rem .2rem}
+  table.data.responsive.first tr:first-child{margin-top:.6rem}
+  table.data.responsive td{border:0;display:flex;justify-content:space-between;gap:1rem;padding:.55rem 1rem;text-align:right}
+  table.data.responsive td::before{content:attr(data-label);font-weight:800;color:var(--muted);text-transform:uppercase;
+    font-size:.7rem;letter-spacing:.04em;text-align:left}
+  table.data.responsive td.num{text-align:right}
+  .tablewrap.cards{overflow:visible;border:0;background:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ TOP BAR + SIBLING NAV ============ -->
+<header class="topbar">
+  <div class="topbar__in">
+    <div class="brand"><span class="dot"></span>SGEN <small>Living Styleguide</small></div>
+    <nav class="sibnav" aria-label="Styleguide pages">
+      <a href="00-top12.html">00 · Top-12</a>
+      <a href="01-transitions-hero-motion.html">01 · Transitions·Hero·Motion</a>
+      <a href="02-depth-type-color.html">02 · Depth·Type·Color</a>
+      <a href="03-layout-imagery-components.html">03 · Layout·Imagery·Components</a>
+      <a href="04-signatures-tokens.html">04 · Signatures·Tokens</a>
+      <a href="06-responsive.html">06 · Responsive</a>
+      <a href="07-components.html" aria-current="page">07 · Components</a>
+      <a href="index.html">Index</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ============ PAGE HEADER ============ -->
+<div class="pagehead">
+  <span class="eyebrow">Page 07 — the component & form-state reference, live</span>
+  <h1>Components &amp; form states</h1>
+  <p>Every reusable component, shown <b>live in every relevant state</b> — not described, not screenshotted-elsewhere, actually rendered here with real working CSS. Buttons carry their full state machine (default · hover · active · focus-ring · disabled · loading). Form controls show default · focus · filled · error · success · disabled. Feedback, disclosure, data and nav components each appear in all their states, on the SGEN chrome: charcoal <code>#1a1a1a</code>, red <code>#d51522</code>, one 8&nbsp;px button radius, the ink-tinted shadow family, motion gated behind <code>prefers-reduced-motion</code>.</p>
+  <div class="legendbar">
+    <span><b>Interactive states work</b> — hover / tab-focus / click any real control.</span>
+    <span>States marked <span class="pin">PINNED</span> are force-applied via a modifier class so one screenshot captures them all.</span>
+  </div>
+</div>
+
+<nav class="catnav" aria-label="Categories on this page">
+  <a href="#catA">A · Buttons / CTAs</a>
+  <a href="#catB">B · Forms</a>
+  <a href="#catC">C · Feedback</a>
+  <a href="#catD">D · Disclosure</a>
+  <a href="#catE">E · Data</a>
+  <a href="#catF">F · Nav</a>
+  <a href="#catG">G · Pricing controls</a>
+  <a href="#catH">H · Proof controls</a>
+</nav>
+
+<!-- ====================================================== -->
+<!-- A · BUTTONS / CTAs -->
+<!-- ====================================================== -->
+<section class="cat" id="catA">
+  <div class="cat__head">
+    <span class="num">A</span>
+    <h2>Buttons &amp; CTAs</h2>
+    <p>One radius (<code>8&nbsp;px</code>), three variants — solid <b>fill</b>, <b>ghost</b>, and dark <b>flip</b> — each with the full state machine. The <span class="pin">PINNED</span> tiles force hover / active / focus / disabled / loading so they all show at once; the live row below them responds to your real mouse, keyboard tab, and click.</p>
+  </div>
+
+  <div class="subhead">Fill variant — full state machine (pinned)</div>
+  <div class="grid g-auto">
+    <div class="cell"><span class="lbl">Default</span><div class="demo"><button class="btn">Get started</button></div></div>
+    <div class="cell"><span class="lbl">Hover <span class="tag">PINNED</span></span><div class="demo"><button class="btn is-hover">Get started</button></div></div>
+    <div class="cell"><span class="lbl">Active / pressed <span class="tag">PINNED</span></span><div class="demo"><button class="btn is-active">Get started</button></div></div>
+    <div class="cell"><span class="lbl">Focus-visible (ring) <span class="tag">PINNED</span></span><div class="demo"><button class="btn is-focus">Get started</button></div></div>
+    <div class="cell"><span class="lbl">Disabled <span class="tag">PINNED</span></span><div class="demo"><button class="btn is-disabled" disabled>Get started</button></div></div>
+    <div class="cell"><span class="lbl">Loading <span class="tag">PINNED</span></span><div class="demo"><button class="btn is-loading">Get started</button></div></div>
+  </div>
+
+  <div class="subhead">Ghost variant — flips to fill on hover (pinned)</div>
+  <div class="grid g-auto">
+    <div class="cell"><span class="lbl">Default</span><div class="demo"><button class="btn ghost">Learn more</button></div></div>
+    <div class="cell"><span class="lbl">Hover → fills <span class="tag">PINNED</span></span><div class="demo"><button class="btn ghost is-hover">Learn more</button></div></div>
+    <div class="cell"><span class="lbl">Active <span class="tag">PINNED</span></span><div class="demo"><button class="btn ghost is-active">Learn more</button></div></div>
+    <div class="cell"><span class="lbl">Focus-visible <span class="tag">PINNED</span></span><div class="demo"><button class="btn ghost is-focus">Learn more</button></div></div>
+    <div class="cell"><span class="lbl">Disabled <span class="tag">PINNED</span></span><div class="demo"><button class="btn ghost is-disabled" disabled>Learn more</button></div></div>
+    <div class="cell"><span class="lbl">Loading <span class="tag">PINNED</span></span><div class="demo"><button class="btn ghost is-loading">Learn more</button></div></div>
+  </div>
+
+  <div class="subhead">Flip (dark) &amp; tinted-secondary variants + sizes</div>
+  <div class="grid g-auto">
+    <div class="cell"><span class="lbl">Flip · default</span><div class="demo"><button class="btn flip">Book a demo</button></div></div>
+    <div class="cell"><span class="lbl">Flip · hover → inverts <span class="tag">PINNED</span></span><div class="demo"><button class="btn flip is-hover">Book a demo</button></div></div>
+    <div class="cell"><span class="lbl">Soft / tinted secondary</span><div class="demo"><button class="btn soft">Maybe later</button></div></div>
+    <div class="cell"><span class="lbl">Size · small / large</span><div class="demo"><button class="btn sm">Small</button><button class="btn lg">Large</button></div></div>
+  </div>
+
+  <div class="subhead">Live row — these respond to your real input</div>
+  <div class="cell">
+    <span class="lbl">Hover, <kbd>Tab</kbd> to focus (ring appears), click to press</span>
+    <div class="demo">
+      <button class="btn">Primary</button>
+      <button class="btn ghost">Ghost</button>
+      <button class="btn flip">Flip</button>
+      <button class="btn soft">Secondary</button>
+      <button class="btn" disabled>Disabled</button>
+      <button class="btn" id="loadBtn">Click to load…</button>
+    </div>
+    <p class="note">Focus ring is <code>box-shadow:0 0 0 3px rgba(213,21,34,.40)</code> via <code>:focus-visible</code> (keyboard only — won't flash on mouse click). The "Click to load…" button toggles a real loading spinner for 1.6&nbsp;s.</p>
+  </div>
+</section>
+
+<!-- ====================================================== -->
+<!-- B · FORMS -->
+<!-- ====================================================== -->
+<section class="cat" id="catB">
+  <div class="cat__head">
+    <span class="num">B</span>
+    <h2>Form controls</h2>
+    <p>Inputs, textarea, select, checkbox, radio and toggle — each across <b>default · focus · filled · error · success · disabled</b>. Every text control is <b>≥16&nbsp;px</b> so iOS never auto-zooms on focus. Error states carry an inline message; checkboxes / radios / toggles are real native inputs styled with <code>:checked</code> so they're keyboard-operable.</p>
+  </div>
+
+  <div class="subhead">Text input — six states</div>
+  <div class="grid g-3">
+    <div class="cell"><div class="field"><label>Default</label><input class="ctrl" placeholder="you@company.com"></div></div>
+    <div class="cell"><div class="field"><label>Focus (ring) <span class="tag">PINNED</span></label><input class="ctrl is-focus" placeholder="you@company.com"></div></div>
+    <div class="cell"><div class="field"><label>Filled</label><input class="ctrl" value="ava@northside.co"></div></div>
+    <div class="cell"><div class="field err"><label>Error</label><input class="ctrl" value="ava@northside"><span class="msg err">Enter a valid email address.</span></div></div>
+    <div class="cell"><div class="field ok"><label>Success</label><input class="ctrl" value="ava@northside.co"><span class="msg ok">Looks good — email verified.</span></div></div>
+    <div class="cell"><div class="field"><label>Disabled</label><input class="ctrl is-disabled" value="locked@account.com" disabled></div></div>
+  </div>
+
+  <div class="subhead">Textarea &amp; select — states</div>
+  <div class="grid g-2">
+    <div class="cell"><div class="field"><label>Textarea · default</label><textarea class="ctrl" placeholder="Tell us about your project…"></textarea></div></div>
+    <div class="cell"><div class="field err"><label>Textarea · error</label><textarea class="ctrl">Too short</textarea><span class="msg err">Please use at least 20 characters.</span></div></div>
+    <div class="cell"><div class="field"><label>Select · default</label><select class="ctrl"><option>Choose a plan…</option><option>Starter</option><option>Growth</option><option>Scale</option></select></div></div>
+    <div class="cell"><div class="field ok"><label>Select · filled / success</label><select class="ctrl"><option>Starter</option><option selected>Growth</option><option>Scale</option></select><span class="msg ok">Plan selected.</span></div></div>
+  </div>
+
+  <div class="subhead">Checkbox · radio · toggle — every state</div>
+  <div class="grid g-3">
+    <div class="cell">
+      <span class="lbl">Checkbox</span>
+      <label class="opt"><input type="checkbox"><span class="box"></span>Unchecked</label>
+      <label class="opt is-checked"><input type="checkbox" checked><span class="box"></span>Checked <span class="tag">PINNED</span></label>
+      <label class="opt is-focus"><input type="checkbox"><span class="box"></span>Focus (ring) <span class="tag">PINNED</span></label>
+      <label class="opt is-disabled"><input type="checkbox" disabled><span class="box"></span>Disabled</label>
+      <label class="opt is-disabled is-checked"><input type="checkbox" checked disabled><span class="box"></span>Disabled + checked</label>
+    </div>
+    <div class="cell">
+      <span class="lbl">Radio</span>
+      <label class="opt"><input type="radio" name="rdemo"><span class="box round"></span>Option A</label>
+      <label class="opt is-checked"><input type="radio" name="rdemo" checked><span class="box round"></span>Option B (selected) <span class="tag">PINNED</span></label>
+      <label class="opt is-focus"><input type="radio" name="rdemo2"><span class="box round"></span>Focus (ring) <span class="tag">PINNED</span></label>
+      <label class="opt is-disabled"><input type="radio" name="rdemo3" disabled><span class="box round"></span>Disabled</label>
+    </div>
+    <div class="cell">
+      <span class="lbl">Toggle switch</span>
+      <label class="switch"><input type="checkbox"><span class="track"></span>Off</label>
+      <label class="switch is-on"><input type="checkbox" checked><span class="track"></span>On <span class="tag">PINNED</span></label>
+      <label class="switch is-focus"><input type="checkbox"><span class="track"></span>Focus (ring) <span class="tag">PINNED</span></label>
+      <label class="switch is-disabled"><input type="checkbox" disabled><span class="track"></span>Disabled</label>
+    </div>
+  </div>
+
+  <div class="subhead">Sample form — composed from the controls above</div>
+  <form class="sampleform" onsubmit="return false">
+    <h3>Start your free trial</h3>
+    <p>A real, keyboard-navigable form. Inputs are 16&nbsp;px; the email field demonstrates the live error state.</p>
+    <div class="row">
+      <div class="two">
+        <div class="field"><label>First name <span class="req">*</span></label><input class="ctrl" value="Ava"></div>
+        <div class="field"><label>Last name <span class="req">*</span></label><input class="ctrl" placeholder="Reyes"></div>
+      </div>
+      <div class="field" id="emailField">
+        <label>Work email <span class="req">*</span></label>
+        <input class="ctrl" id="emailInput" type="email" value="ava@northside" aria-describedby="emailMsg">
+        <span class="msg err" id="emailMsg">Enter a valid email address.</span>
+      </div>
+      <div class="field"><label>Company size</label>
+        <select class="ctrl"><option>1–10</option><option selected>11–50</option><option>51–200</option><option>200+</option></select>
+      </div>
+      <div class="field"><label>What do you need?</label><textarea class="ctrl" placeholder="A few words about your goals…"></textarea></div>
+      <label class="opt"><input type="checkbox" id="tos"><span class="box"></span>I agree to the terms of service</label>
+      <label class="switch is-on"><input type="checkbox" checked><span class="track"></span>Email me product updates</label>
+      <div class="actions">
+        <button class="btn" type="submit">Create account</button>
+        <button class="btn ghost" type="button">Cancel</button>
+      </div>
+    </div>
+  </form>
+</section>
+
+<!-- ====================================================== -->
+<!-- C · FEEDBACK -->
+<!-- ====================================================== -->
+<section class="cat" id="catC">
+  <div class="cat__head">
+    <span class="num">C</span>
+    <h2>Feedback &amp; status</h2>
+    <p>Alerts in all four semantic tones, toasts, a real hover tooltip, badges &amp; removable tags, an empty-state, and a shimmering skeleton loader. Semantic hues are tinted, never pure — green <code>#1f8a4c</code>, blue <code>#1668c4</code>, amber <code>#9a6800</code>, red <code>#c0121e</code>.</p>
+  </div>
+
+  <div class="subhead">Alerts — info · success · warning · error</div>
+  <div class="grid g-2">
+    <div class="alert info"><span class="ico">i</span><div class="bd"><p class="at">Heads up</p><p class="ax">Your trial converts to the Growth plan in 7 days.</p></div><button class="x" aria-label="Dismiss">&times;</button></div>
+    <div class="alert ok"><span class="ico">&#10003;</span><div class="bd"><p class="at">Saved</p><p class="ax">Your changes were published successfully.</p></div><button class="x" aria-label="Dismiss">&times;</button></div>
+    <div class="alert warn"><span class="ico">!</span><div class="bd"><p class="at">Almost out of space</p><p class="ax">You're using 92% of your storage quota.</p></div><button class="x" aria-label="Dismiss">&times;</button></div>
+    <div class="alert err"><span class="ico">&times;</span><div class="bd"><p class="at">Payment failed</p><p class="ax">We couldn't charge your card. Update billing to continue.</p></div><button class="x" aria-label="Dismiss">&times;</button></div>
+  </div>
+
+  <div class="subhead">Toast · tooltip · badges &amp; tags</div>
+  <div class="grid g-3">
+    <div class="cell">
+      <span class="lbl">Toast (pinned visible)</span>
+      <div class="toast"><span class="dot"></span><span><b>Copied</b> to clipboard</span><button class="x" aria-label="close">&times;</button></div>
+      <div class="toast"><span class="dot err"></span><span><b>Upload failed</b> <span>— retry?</span></span><button class="x" aria-label="close">&times;</button></div>
+    </div>
+    <div class="cell">
+      <span class="lbl">Tooltip — hover, also pinned-open</span>
+      <div class="demo" style="padding-top:2.6rem">
+        <span class="tip"><span class="trigger">Hover me</span><span class="bubble">Tooltips appear above the trigger with a caret. Driven by <code>:hover</code> + <code>:focus-within</code>.</span></span>
+        <span class="tip is-open"><span class="trigger">Pinned <span class="tag">PINNED</span></span><span class="bubble">This one is forced open via <code>.is-open</code> so it shows in the capture.</span></span>
+      </div>
+    </div>
+    <div class="cell">
+      <span class="lbl">Badges &amp; tags</span>
+      <div class="demo">
+        <span class="badge solid">New</span>
+        <span class="badge tint">Beta</span>
+        <span class="badge ok"><span class="d"></span>Active</span>
+        <span class="badge warn">Pending</span>
+        <span class="badge err">Overdue</span>
+        <span class="badge neutral">Draft</span>
+      </div>
+      <div class="demo">
+        <span class="tag">design <span class="rm" aria-label="remove">&times;</span></span>
+        <span class="tag">marketing <span class="rm" aria-label="remove">&times;</span></span>
+        <span class="tag">react <span class="rm" aria-label="remove">&times;</span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="subhead">Empty-state · loading skeleton</div>
+  <div class="grid g-2">
+    <div class="empty">
+      <div class="glyph">&#9633;</div>
+      <h4>No projects yet</h4>
+      <p>Create your first project to start tracking builds and deployments.</p>
+      <button class="btn">New project</button>
+    </div>
+    <div class="cell" style="gap:.9rem">
+      <span class="lbl">Skeleton (shimmer) — loading placeholder</span>
+      <div class="skel">
+        <div class="sk avatar"></div>
+        <div style="flex:1">
+          <div class="sk line w50"></div>
+          <div class="sk line w90"></div>
+          <div class="sk line w70"></div>
+        </div>
+      </div>
+      <p class="note">Real CSS shimmer via animated <code>background-position</code>; collapses to a flat tone under <code>prefers-reduced-motion</code>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====================================================== -->
+<!-- D · DISCLOSURE -->
+<!-- ====================================================== -->
+<section class="cat" id="catD">
+  <div class="cat__head">
+    <span class="num">D</span>
+    <h2>Disclosure</h2>
+    <p>Accordion shown <b>open and closed at once</b>, tabs with the active / inactive heads and a live panel, and a modal/lightbox specimen rendered <b>open over its scrim</b> (plus a button that opens the real, scroll-locked modal).</p>
+  </div>
+
+  <div class="subhead">Accordion — open + closed states visible together</div>
+  <div class="accordion" id="acc">
+    <details class="acc is-open" open>
+      <summary class="acc__btn">How does billing work? <span class="chev"></span></summary>
+      <div class="acc__panel"><div><p>You're billed monthly on the plan you choose. Upgrades are prorated instantly; downgrades take effect at the next cycle. This row is the <b>open</b> state — note the accent title and the rotated chevron.</p></div></div>
+    </details>
+    <details class="acc">
+      <summary class="acc__btn">Can I cancel anytime? <span class="chev"></span></summary>
+      <div class="acc__panel"><div><p>Yes — cancel from the dashboard and you keep access until the end of the paid period. This row is the <b>closed</b> state.</p></div></div>
+    </details>
+    <details class="acc">
+      <summary class="acc__btn">Do you offer a student discount? <span class="chev"></span></summary>
+      <div class="acc__panel"><div><p>We offer 40% off for verified students and educators. Closed by default; click any row to expand — keyboard operable via the native <code>&lt;details&gt;</code> element.</p></div></div>
+    </details>
+  </div>
+
+  <div class="subhead">Tabs — active + inactive heads, live panel</div>
+  <div class="tabs" id="tabs">
+    <div class="tabs__strip" role="tablist" aria-label="Plan details">
+      <button class="tabbtn" role="tab" aria-selected="true" aria-controls="tp1" id="tb1">Overview</button>
+      <button class="tabbtn" role="tab" aria-selected="false" aria-controls="tp2" id="tb2">Features</button>
+      <button class="tabbtn" role="tab" aria-selected="false" aria-controls="tp3" id="tb3">Pricing</button>
+    </div>
+    <div class="tabs__panel" role="tabpanel" id="tp1" aria-labelledby="tb1">
+      <h4>Overview</h4>The active tab carries an accent underline; inactive tabs are muted and lift on hover. Click or arrow-key between them — <code>aria-selected</code> drives the styling.
+    </div>
+    <div class="tabs__panel" role="tabpanel" id="tp2" aria-labelledby="tb2" hidden>
+      <h4>Features</h4>Unlimited projects, role-based access, audit log, and priority support. This panel is hidden until its tab is selected.
+    </div>
+    <div class="tabs__panel" role="tabpanel" id="tp3" aria-labelledby="tb3" hidden>
+      <h4>Pricing</h4>Starts at $0 for solo, $29/seat for teams, custom for enterprise.
+    </div>
+  </div>
+
+  <div class="subhead">Modal / lightbox — pinned open, showing the scrim</div>
+  <div class="grid g-2">
+    <div class="modalwrap">
+      <div class="scrim"></div>
+      <div class="modal">
+        <button class="close" aria-label="close">&times;</button>
+        <h3>Delete this project?</h3>
+        <p>This permanently removes the project and all of its builds. This action can't be undone.</p>
+        <div class="actions"><button class="btn">Delete</button><button class="btn ghost">Cancel</button></div>
+      </div>
+    </div>
+    <div class="cell" style="justify-content:center;align-items:flex-start">
+      <span class="lbl">Live modal — real open / scrim / scroll-lock</span>
+      <p class="note">The specimen on the left is pinned open so the dialog and its dimmed, blurred scrim are visible in the capture. The button below opens the real one: it traps the page behind a <code>position:fixed</code> scrim, locks body scroll, and closes on the close button, scrim-click, or <kbd>Esc</kbd>.</p>
+      <button class="btn" id="openModal">Open live modal</button>
+    </div>
+  </div>
+</section>
+
+<!-- ====================================================== -->
+<!-- E · DATA -->
+<!-- ====================================================== -->
+<section class="cat" id="catE">
+  <div class="cat__head">
+    <span class="num">E</span>
+    <h2>Data display</h2>
+    <p>Pricing cards (default + highlighted "featured"), animated stat counters, a hover-highlight table that reflows to cards on mobile, and progress in bar, indeterminate and ring forms.</p>
+  </div>
+
+  <div class="subhead">Pricing cards — default + highlighted</div>
+  <div class="pricegrid">
+    <div class="price">
+      <div class="pname">Starter</div>
+      <div class="pn">$0<small>/mo</small></div>
+      <ul><li>1 project</li><li>Community support</li><li>1 GB storage</li></ul>
+      <button class="btn ghost" style="width:100%">Choose Starter</button>
+    </div>
+    <div class="price feat">
+      <span class="ribbon">Most popular</span>
+      <div class="pname">Growth</div>
+      <div class="pn">$29<small>/seat·mo</small></div>
+      <ul><li>Unlimited projects</li><li>Priority support</li><li>100 GB storage</li><li>Audit log</li></ul>
+      <button class="btn" style="width:100%">Choose Growth</button>
+    </div>
+    <div class="price">
+      <div class="pname">Scale</div>
+      <div class="pn">$99<small>/seat·mo</small></div>
+      <ul><li>Everything in Growth</li><li>SSO &amp; SCIM</li><li>1 TB storage</li></ul>
+      <button class="btn ghost" style="width:100%">Choose Scale</button>
+    </div>
+  </div>
+
+  <div class="subhead">Stat counters — count up on scroll-in</div>
+  <div class="stats" id="statband">
+    <div class="statc"><div class="n" data-to="166">0</div><div class="lbl2">demos inspected</div></div>
+    <div class="statc"><div class="n" data-to="71">0</div><div class="lbl2">patterns distilled</div></div>
+    <div class="statc"><div class="n" data-to="99" data-suffix="%">0</div><div class="lbl2">uptime</div></div>
+    <div class="statc"><div class="n" data-to="24">0</div><div class="lbl2">sites in fan-out</div></div>
+  </div>
+
+  <div class="subhead">Table — hover rows; reflows to cards below 720&nbsp;px</div>
+  <div class="tablewrap cards">
+    <table class="data responsive first">
+      <thead><tr><th>Project</th><th>Owner</th><th>Status</th><th class="num">Builds</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Project">Northside Health</td><td data-label="Owner">Ava R.</td><td data-label="Status"><span class="badge ok"><span class="d"></span>Live</span></td><td class="num" data-label="Builds">128</td></tr>
+        <tr><td data-label="Project">Reid Capital</td><td data-label="Owner">Marcus L.</td><td data-label="Status"><span class="badge warn">Building</span></td><td class="num" data-label="Builds">42</td></tr>
+        <tr><td data-label="Project">Halden Studio</td><td data-label="Owner">Priya S.</td><td data-label="Status"><span class="badge err">Failed</span></td><td class="num" data-label="Builds">7</td></tr>
+        <tr><td data-label="Project">Casa de Maria</td><td data-label="Owner">Dana K.</td><td data-label="Status"><span class="badge neutral">Draft</span></td><td class="num" data-label="Builds">0</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="subhead">Progress — bar · indeterminate · ring</div>
+  <div class="grid g-3">
+    <div class="cell">
+      <span class="lbl">Determinate bar</span>
+      <div class="prog"><div class="top"><span>Build progress</span><span class="v">72%</span></div><div class="bar"><i style="width:72%"></i></div></div>
+      <div class="prog"><div class="top"><span>Storage used</span><span class="v">38%</span></div><div class="bar"><i style="width:38%"></i></div></div>
+    </div>
+    <div class="cell">
+      <span class="lbl">Indeterminate</span>
+      <div class="prog"><div class="top"><span>Deploying…</span><span class="v">—</span></div><div class="bar indet"><i></i></div></div>
+      <p class="note">Slides continuously when the duration is unknown; freezes under reduced-motion.</p>
+    </div>
+    <div class="cell" style="align-items:center">
+      <span class="lbl">Radial / ring</span>
+      <div class="ringwrap"><div class="ring" style="--p:72"></div><b>72%</b></div>
+    </div>
+  </div>
+
+  <!-- Trust + Stats section-block states (live: sections-trust-stats.html) -->
+  <div class="subhead">Trust + Stats section blocks — rest vs active states <span style="text-transform:none;letter-spacing:0;font-weight:600;color:var(--muted)">&middot; full gallery &rarr; <a href="sections-trust-stats.html" style="color:var(--accent)">sections-trust-stats.html</a></span></div>
+  <div class="grid g-2" style="gap:1.1rem">
+
+    <!-- Logo trust cell: rest (grayscale) vs hover (color) -->
+    <div class="cell">
+      <span class="lbl">Logo trust cell &mdash; rest <code style="font-size:.78em">grayscale(1) opacity(.55)</code> vs hover (full color)</span>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--hair);border-radius:var(--r-card);overflow:hidden;background:var(--surface)">
+        <div style="display:grid;place-items:center;min-height:88px;border-right:1px solid var(--hair);padding:14px">
+          <span style="display:inline-flex;align-items:center;gap:8px;filter:grayscale(1) opacity(.55)">
+            <span style="width:24px;height:24px;border-radius:7px;background:linear-gradient(135deg,#d51522,#7a0c13);display:grid;place-items:center;color:#fff;font-weight:800;font-size:12px">N</span>
+            <span style="font-weight:800;font-size:15px;letter-spacing:-.02em;color:var(--accent-ink)">Northwind</span>
+          </span>
+          <span style="margin-top:8px;font-size:.66rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)">:rest</span>
+        </div>
+        <div style="display:grid;place-items:center;min-height:88px;padding:14px;background:var(--paper)">
+          <span style="display:inline-flex;align-items:center;gap:8px;filter:grayscale(0) opacity(1);transform:translateY(-2px)">
+            <span style="width:24px;height:24px;border-radius:7px;background:linear-gradient(135deg,#d51522,#7a0c13);display:grid;place-items:center;color:#fff;font-weight:800;font-size:12px">N</span>
+            <span style="font-weight:800;font-size:15px;letter-spacing:-.02em;color:var(--accent-ink)">Northwind</span>
+          </span>
+          <span style="margin-top:8px;font-size:.66rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent)">:hover</span>
+        </div>
+      </div>
+      <p class="note">Hover resolves grayscale&rarr;color + a 2px lift. The marquee variant adds <code>animation-play-state:paused</code> on hover; both drop motion under reduced-motion (the marquee becomes a static scroller).</p>
+    </div>
+
+    <!-- Count-up states: zero / mid-tween / settled + affixes -->
+    <div class="cell">
+      <span class="lbl">Count-up numeral &mdash; zero &rarr; mid-tween &rarr; settled (incl. <code style="font-size:.78em">.pre</code>/<code style="font-size:.78em">.suf</code> affixes)</span>
+      <div style="display:flex;gap:1.3rem;flex-wrap:wrap;align-items:flex-end">
+        <div><div style="font-family:var(--sys-serif);font-size:2.2rem;font-weight:700;color:var(--accent-ink);font-variant-numeric:tabular-nums;line-height:1">0</div><span style="font-size:.66rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)">start (opacity 0&rarr;1)</span></div>
+        <div><div style="font-family:var(--sys-serif);font-size:2.2rem;font-weight:700;color:var(--accent-ink);font-variant-numeric:tabular-nums;line-height:1">1,480</div><span style="font-size:.66rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)">mid-tween (rAF)</span></div>
+        <div><div style="font-family:var(--sys-serif);font-size:2.2rem;font-weight:700;color:var(--accent-ink);font-variant-numeric:tabular-nums;line-height:1">2,400<span style="font-size:.55em;color:var(--accent)">+</span></div><span style="font-size:.66rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent)">settled :done</span></div>
+      </div>
+      <div style="display:flex;gap:1.3rem;flex-wrap:wrap;align-items:flex-end;margin-top:1rem">
+        <div><div style="font-family:var(--sys-serif);font-size:2.2rem;font-weight:700;color:var(--accent-ink);font-variant-numeric:tabular-nums;line-height:1">99.9<span style="font-size:.55em;color:var(--accent)">%</span></div><span style="font-size:.66rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)">suffix · 1 decimal</span></div>
+        <div><div style="font-family:var(--sys-serif);font-size:2.2rem;font-weight:700;color:var(--accent-ink);font-variant-numeric:tabular-nums;line-height:1"><span style="font-size:.55em;color:var(--accent)">&times;</span>3.2</div><span style="font-size:.66rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)">prefix affix</span></div>
+        <div><div style="font-family:var(--sys-serif);font-size:2.2rem;font-weight:700;color:var(--accent-ink);font-variant-numeric:tabular-nums;line-height:1"><span style="font-size:.55em;color:var(--accent)">&lt;</span>40<span style="font-size:.55em;color:var(--accent)">ms</span></div><span style="font-size:.66rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)">prefix + suffix</span></div>
+      </div>
+      <p class="note"><code>tabular-nums</code> holds digit width so the figure never jitters while counting. Under reduced-motion the final formatted value is written instantly (no tween).</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====================================================== -->
+<!-- F · NAV -->
+<!-- ====================================================== -->
+<section class="cat" id="catF">
+  <div class="cat__head">
+    <span class="num">F</span>
+    <h2>Navigation components</h2>
+    <p>Breadcrumb, pagination (with disabled prev and the current page marked), and a side-by-side <b>44&nbsp;px tap-target good-vs-bad</b> comparison — the single most common mobile accessibility miss.</p>
+  </div>
+
+  <div class="subhead">Breadcrumb</div>
+  <div class="cell">
+    <nav class="crumb" aria-label="Breadcrumb">
+      <a href="#">Home</a><span class="sep">/</span>
+      <a href="#">Styleguide</a><span class="sep">/</span>
+      <a href="#">Components</a><span class="sep">/</span>
+      <span class="cur" aria-current="page">Form states</span>
+    </nav>
+  </div>
+
+  <div class="subhead">Pagination</div>
+  <div class="cell">
+    <nav class="pager" aria-label="Pagination">
+      <span class="nav off" aria-disabled="true">‹ Prev</span>
+      <a href="#">1</a>
+      <span class="cur" aria-current="page">2</span>
+      <a href="#">3</a>
+      <a href="#">4</a>
+      <span class="gap">…</span>
+      <a href="#">12</a>
+      <a href="#" class="nav">Next ›</a>
+    </nav>
+    <p class="note">Each control is a <b>44×44&nbsp;px</b> minimum hit area; the current page is the filled red chip; "Prev" is disabled at page 1.</p>
+  </div>
+
+  <div class="subhead">44&nbsp;px tap target — good vs bad</div>
+  <div class="tapcmp">
+    <div class="tapcell bad">
+      <span class="lbl">Too small — 28&nbsp;px</span>
+      <div class="row2">
+        <button class="tap t28 ghostbox">+</button>
+        <button class="tap t28 ghostbox">&#9829;</button>
+        <button class="tap t28 ghostbox">&#9660;</button>
+        <span class="note">cramped, easy to mis-tap</span>
+      </div>
+      <div class="verdict">&times; Fails — below the 44&nbsp;px minimum</div>
+    </div>
+    <div class="tapcell good">
+      <span class="lbl">Correct — 44&nbsp;px</span>
+      <div class="row2">
+        <button class="tap t44 ghostbox">+</button>
+        <button class="tap t44 ghostbox">&#9829;</button>
+        <button class="tap t44 ghostbox">&#9660;</button>
+        <span class="note">comfortable on touch</span>
+      </div>
+      <div class="verdict">&#10003; Passes — meets the 44&nbsp;px tap-target floor</div>
+    </div>
+  </div>
+
+  <div class="subhead">Header / nav states — see the dedicated gallery</div>
+  <div class="cell">
+    <p class="note">The full <b>header / nav state machinery</b> — the sticky <code>is-stuck</code> ↔ <code>at-top</code> boolean, the transparent→solid flip, the hamburger's <code>aria-expanded</code> true/false, and the off-canvas drawer's <code>nav-open</code> / <code>aria-hidden</code> states (with scrim, scroll-lock, Esc and submenu accordion) — is demonstrated <b>live and in motion</b> across four production header blocks in <a href="sections-headers.html">sections-headers.html</a>. Header states are scroll-driven, so a static specimen here can't prove them; the gallery scopes each header in its own scroll frame so every state flips on demand. The 44&nbsp;px floor above is the same target the gallery's hamburger and drawer close buttons meet.</p>
+  </div>
+</section>
+
+<!-- ============ G · PRICING CONTROLS (live states) ============ -->
+<style>
+/* scoped to this category only — prefixed .pcs- so nothing collides with the page */
+.pcs-row{display:grid;gap:1.1rem;grid-template-columns:repeat(3,minmax(0,1fr))}
+@media (max-width:767px){.pcs-row{grid-template-columns:1fr}}
+.pcs-tier{position:relative;background:var(--surface);border:1px solid var(--hair);border-radius:var(--r-card);
+  padding:1.1rem 1.1rem 1.2rem;box-shadow:var(--shadow-rest)}
+.pcs-tier.is-hover{transform:translateY(-4px);box-shadow:var(--shadow-card);border-color:var(--accent-bd)}
+.pcs-tier.is-feat{border-color:var(--accent);box-shadow:0 24px 50px -18px rgba(213,21,34,.34)}
+.pcs-tier.is-feat::before{content:"";position:absolute;inset:0 0 auto 0;height:5px;border-radius:var(--r-card) var(--r-card) 0 0;
+  background:linear-gradient(135deg,var(--accent-2),var(--accent) 55%,#7a0c13)}
+.pcs-state{font-family:var(--sys-mono);font-size:.68rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.pcs-name{font-weight:800;font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:.3rem}
+.pcs-price{font-family:var(--sys-serif);font-size:1.8rem;font-weight:700;color:var(--ink);letter-spacing:-.03em;line-height:1.1;margin:.15rem 0 .1rem}
+.pcs-tier.is-feat .pcs-price{color:var(--accent-ink)}
+.pcs-ribbon{position:absolute;top:-11px;left:50%;transform:translateX(-50%);font-size:.62rem;font-weight:800;letter-spacing:.07em;
+  text-transform:uppercase;color:#fff;background:linear-gradient(135deg,var(--accent),#7a0c13);padding:.25rem .7rem;border-radius:var(--r-pill)}
+.pcs-cta{display:block;text-align:center;font-weight:700;font-size:.85rem;padding:.6rem;border-radius:var(--r-btn);
+  border:1.5px solid var(--ink);color:var(--ink);background:transparent;margin-top:.7rem;min-height:44px;cursor:pointer}
+.pcs-tier.is-feat .pcs-cta{background:var(--accent);border-color:var(--accent);color:#fff}
+.pcs-toggle-wrap{display:flex;align-items:center;gap:.8rem;flex-wrap:wrap}
+.pcs-switch{position:relative;display:inline-flex;align-items:center;width:60px;height:32px;flex:0 0 auto;
+  background:rgba(26,26,26,.14);border:1px solid var(--hair);border-radius:var(--r-pill);cursor:pointer;padding:0;
+  transition:background var(--t-fast)}
+.pcs-switch[aria-checked="true"]{background:var(--accent);border-color:var(--accent)}
+.pcs-switch::after{content:"";position:absolute;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;
+  box-shadow:0 2px 5px rgba(0,0,0,.28);transition:transform var(--t-fast)}
+.pcs-switch[aria-checked="true"]::after{transform:translateX(28px)}
+.pcs-switch:focus-visible{outline:none;box-shadow:var(--ring)}
+.pcs-save{display:inline-flex;align-items:center;font-size:.74rem;font-weight:800;color:var(--ok);background:var(--ok-bg);
+  border:1px solid var(--ok-bd);padding:.25rem .6rem;border-radius:var(--r-pill)}
+.pcs-yes,.pcs-no{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;font-weight:800}
+.pcs-yes{background:var(--ok-bg);color:var(--ok);border:1px solid var(--ok-bd)}
+.pcs-no{background:rgba(26,26,26,.05);color:#aeb0b3;border:1px solid var(--hair)}
+@media (prefers-reduced-motion:reduce){.pcs-switch::after{transition:none}}
+</style>
+<section class="cat" id="catG">
+  <div class="cat__head">
+    <span class="num">G</span>
+    <h2>Pricing controls</h2>
+    <p>The state-bearing controls of a pricing section, pinned so one capture shows them all: the tier card in <b>rest / hover / featured</b>, the billing <b>toggle off vs on</b> (with the annual save badge), and a comparison cell's <b>included vs excluded</b> marks. The complete, in-motion build of all three pricing sections — 3-tier cards, comparison table&rarr;cards, monthly/annual toggle — lives in <a href="sections-pricing.html">sections-pricing.html</a>.</p>
+  </div>
+
+  <div class="subhead">Tier card — rest · hover · featured (pinned)</div>
+  <div class="pcs-row">
+    <div class="pcs-tier">
+      <span class="pcs-state">state · rest</span>
+      <div class="pcs-name">Starter</div>
+      <div class="pcs-price">$29<span style="font-size:.5em;color:var(--muted);font-weight:600">/mo</span></div>
+      <button type="button" class="pcs-cta">Start free trial</button>
+    </div>
+    <div class="pcs-tier is-feat">
+      <span class="pcs-ribbon">Most popular</span>
+      <span class="pcs-state">state · featured</span>
+      <div class="pcs-name">Studio</div>
+      <div class="pcs-price">$79<span style="font-size:.5em;color:var(--muted);font-weight:600">/mo</span></div>
+      <button type="button" class="pcs-cta">Start free trial</button>
+    </div>
+    <div class="pcs-tier is-hover">
+      <span class="pcs-state">state · hover (pinned)</span>
+      <div class="pcs-name">Scale</div>
+      <div class="pcs-price">$199<span style="font-size:.5em;color:var(--muted);font-weight:600">/mo</span></div>
+      <button type="button" class="pcs-cta">Start free trial</button>
+    </div>
+  </div>
+
+  <div class="subhead">Billing toggle — off (monthly) vs on (annual)</div>
+  <div class="grid g-2">
+    <div class="cell">
+      <div class="pcs-toggle-wrap">
+        <span class="pcs-state">aria-checked="false"</span>
+        <button type="button" class="pcs-switch" role="switch" aria-checked="false" aria-label="Billing period (off / monthly)"></button>
+        <span>Monthly</span>
+      </div>
+      <p class="note">Rest state — knob left, neutral track. Prices show the monthly figure.</p>
+    </div>
+    <div class="cell">
+      <div class="pcs-toggle-wrap">
+        <span class="pcs-state">aria-checked="true"</span>
+        <button type="button" class="pcs-switch" role="switch" aria-checked="true" aria-label="Billing period (on / annual)"></button>
+        <span>Annual</span>
+        <span class="pcs-save">Save 17%</span>
+      </div>
+      <p class="note">On state — knob slides right, accent track, the green save badge appears. Keyboard-operable (Space/Enter); knob glide drops under reduced-motion (the value still recomputes).</p>
+    </div>
+  </div>
+
+  <div class="subhead">Comparison cell — included vs excluded</div>
+  <div class="cell">
+    <p class="note" style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;margin:0">
+      <span style="display:inline-flex;align-items:center;gap:.5rem"><span class="pcs-yes" aria-label="Included">&checkmark;</span> included (<code>--ok</code> disc)</span>
+      <span style="display:inline-flex;align-items:center;gap:.5rem"><span class="pcs-no" aria-label="Not included">&minus;</span> excluded (neutral disc)</span>
+      <span style="display:inline-flex;align-items:center;gap:.5rem"><b style="color:var(--ink)">Unlimited</b> — value cell (text, not a glyph)</span>
+    </p>
+  </div>
+</section>
+
+<!-- ============ H · PROOF CONTROLS (live states) ============ -->
+<style>
+/* scoped to this category only — prefixed .prc- so nothing collides with the page */
+.prc-row{display:grid;gap:1.1rem;grid-template-columns:repeat(3,minmax(0,1fr))}
+@media (max-width:767px){.prc-row{grid-template-columns:1fr}}
+.prc-tcard{position:relative;overflow:hidden;background:var(--surface);border:1px solid var(--hair);border-radius:var(--r-card);
+  padding:1.2rem 1.15rem 1.1rem;box-shadow:var(--shadow-card);display:flex;flex-direction:column;
+  transition:transform var(--t-fast),box-shadow var(--t-fast)}
+.prc-tcard::before{content:"\201C";position:absolute;top:-.32em;right:.18em;font-family:var(--sys-serif);
+  font-size:5.4rem;line-height:1;color:var(--accent-tint);pointer-events:none}
+.prc-tcard:hover,.prc-tcard.is-hover,.prc-tcard.is-focus{transform:translateY(-4px);box-shadow:var(--shadow-hover)}
+.prc-tcard.is-focus{outline:none;box-shadow:var(--shadow-hover),var(--ring)}
+.prc-state{font-family:var(--sys-mono);font-size:.68rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.prc-stars{color:#d8a23a;font-size:.9rem;letter-spacing:1px;margin:.5rem 0 .55rem;line-height:1}
+.prc-quote{font-family:var(--sys-serif);font-size:.96rem;line-height:1.55;color:var(--ink);margin:0 0 1rem;position:relative;z-index:1}
+.prc-who{display:flex;align-items:center;gap:.6rem;margin-top:auto;padding-top:.8rem;border-top:1px solid var(--hair)}
+.prc-av{width:38px;height:38px;border-radius:50%;flex:0 0 auto;display:grid;place-items:center;color:#fff;
+  font-weight:800;font-size:.84rem;background:linear-gradient(135deg,#d51522,#7a0c13);
+  box-shadow:inset 0 0 0 2px rgba(255,255,255,.5)}
+.prc-name{font-weight:700;font-size:.84rem;color:var(--ink);line-height:1.2}
+.prc-role{font-size:.74rem;color:var(--muted)}
+/* carousel controls */
+.prc-ctl{display:flex;align-items:center;gap:1.4rem;flex-wrap:wrap}
+.prc-btn{width:44px;height:44px;border-radius:var(--r-pill);border:1px solid var(--hair);background:var(--surface);
+  color:var(--ink);font-size:1.1rem;cursor:pointer;display:grid;place-items:center;transition:all var(--t-fast)}
+.prc-btn.is-hover,.prc-btn:hover{border-color:var(--accent);color:var(--accent-ink)}
+.prc-btn.is-focus,.prc-btn:focus-visible{outline:none;box-shadow:var(--ring)}
+.prc-dots{display:flex;gap:.5rem;align-items:center}
+.prc-dot{width:9px;height:9px;border-radius:50%;border:none;padding:0;background:rgba(26,26,26,.18)}
+.prc-dot.is-on{background:var(--accent);width:26px;border-radius:var(--r-pill)}
+/* metric count-up specimen */
+.prc-metric{background:#202124;border:1px solid rgba(255,255,255,.1);border-radius:var(--r-card);padding:1.2rem 1.3rem}
+.prc-metric .mn{font-family:var(--sys-serif);font-weight:600;font-size:2.4rem;letter-spacing:-.03em;line-height:1;color:#fff;
+  font-variant-numeric:tabular-nums;display:flex;align-items:baseline}
+.prc-metric .mn .af{font-size:.5em;color:var(--accent-2);font-weight:700;margin-left:.06em}
+.prc-metric .mn .pf{font-size:.5em;color:var(--accent-2);font-weight:700;margin-right:.04em}
+.prc-metric .ml{margin-top:.5rem;text-transform:uppercase;letter-spacing:.12em;font-size:.66rem;font-weight:700;color:#9b9b9b}
+</style>
+<section class="cat" id="catH">
+  <div class="cat__head">
+    <span class="num">H</span>
+    <h2>Proof controls</h2>
+    <p>The state-bearing controls of a proof section, pinned so one capture shows them all: the <b>testimonial card</b> in <b>rest / hover / focus-within</b>, the <b>carousel controls</b> (prev/next button rest·hover·focus + the dot in <b>inactive vs active</b>), and the <b>metric count-up</b> at its <b>final value</b>. The complete, in-motion build of all five proof sections — cards grid, single pull-quote, carousel, metric-led case-study card, and image+result split — lives in <a href="sections-proof.html">sections-proof.html</a>. The reveal + count-up are scroll-driven, so a static specimen here only shows the resting/end state; the gallery flips them on scroll.</p>
+  </div>
+
+  <div class="subhead">Testimonial card — rest · hover · focus-within (pinned)</div>
+  <div class="prc-row">
+    <figure class="prc-tcard">
+      <span class="prc-state">state · rest</span>
+      <span class="prc-stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+      <blockquote class="prc-quote">"Cut our build cycle from three weeks to four days. It paid for itself in the first sprint."</blockquote>
+      <figcaption class="prc-who"><span class="prc-av" aria-hidden="true">MR</span><span><span class="prc-name">Mara Reyes</span><span class="prc-role">VP Eng, Northwind</span></span></figcaption>
+    </figure>
+    <figure class="prc-tcard is-hover">
+      <span class="prc-state">state · hover (pinned)</span>
+      <span class="prc-stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+      <blockquote class="prc-quote">"Onboarding took one afternoon. After two failed migrations, this finally stuck."</blockquote>
+      <figcaption class="prc-who"><span class="prc-av" aria-hidden="true">DK</span><span><span class="prc-name">Daniel Kwon</span><span class="prc-role">Head of Ops, Pamphlet</span></span></figcaption>
+    </figure>
+    <figure class="prc-tcard is-focus" tabindex="0">
+      <span class="prc-state">state · focus-within (pinned)</span>
+      <span class="prc-stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+      <blockquote class="prc-quote">"Conversion on the pages we rebuilt is up 34%. Leadership noticed before I finished the email."</blockquote>
+      <figcaption class="prc-who"><span class="prc-av" aria-hidden="true">PA</span><span><span class="prc-name">Priya Anand</span><span class="prc-role">Growth Lead, Marlow</span></span></figcaption>
+    </figure>
+  </div>
+
+  <div class="subhead">Carousel controls — prev/next (rest · hover · focus) + dots (inactive vs active)</div>
+  <div class="grid g-2">
+    <div class="cell">
+      <div class="prc-ctl">
+        <button type="button" class="prc-btn" aria-label="Previous (rest)">&#8249;</button>
+        <button type="button" class="prc-btn is-hover" aria-label="Next (hover, pinned)">&#8250;</button>
+        <button type="button" class="prc-btn is-focus" aria-label="Next (focus-ring, pinned)">&#8250;</button>
+      </div>
+      <p class="note">Real <code>&lt;button&gt;</code> controls, 44&nbsp;px circular. <b>Rest</b> = hairline; <b>hover</b> = accent border + text; <b>focus-visible</b> = the <code>--ring</code>. Hidden on mobile (swipe replaces them).</p>
+    </div>
+    <div class="cell">
+      <div class="prc-dots" role="tablist" aria-label="Carousel position (specimen)">
+        <button type="button" class="prc-dot is-on" role="tab" aria-current="true" aria-label="Group 1 (active)"></button>
+        <button type="button" class="prc-dot" role="tab" aria-label="Group 2"></button>
+        <button type="button" class="prc-dot" role="tab" aria-label="Group 3"></button>
+        <button type="button" class="prc-dot" role="tab" aria-label="Group 4"></button>
+      </div>
+      <p class="note">The <b>active</b> dot fills with accent and stretches to a pill; inactive dots are neutral discs. Built by JS per page-count, synced to the track's <code>scrollLeft</code>, rebuilt on resize.</p>
+    </div>
+  </div>
+
+  <div class="subhead">Metric count-up — final value (rest of the rAF tween)</div>
+  <div class="grid g-3">
+    <div class="prc-metric"><span class="mn"><span class="pf">+</span>212<span class="af">%</span></span><span class="ml">Qualified demos</span></div>
+    <div class="prc-metric"><span class="mn"><span class="pf">$</span>1.8<span class="af">M</span></span><span class="ml">New pipeline</span></div>
+    <div class="prc-metric"><span class="mn">2.4<span class="af">&times;</span></span><span class="ml">Faster load</span></div>
+  </div>
+  <div class="cell">
+    <p class="note">The count-up animates <code>0 &rarr; data-to</code> over ~1.3&nbsp;s (ease-out-cubic, rAF) when the band enters view, fired by an <code>IntersectionObserver</code> (one-shot, <code>io.unobserve</code> on fire). The <b>prefix</b> (<code>+</code>/<code>$</code>) and <b>suffix</b> (<code>%</code>/<code>M</code>/<code>&times;</code>) are separate spans so only the bare number tweens. Under <code>prefers-reduced-motion</code> the final value is written instantly — no tween. Shown here at the end state.</p>
+  </div>
+</section>
+
+<!-- ============ LIVE MODAL (button-triggered) ============ -->
+<div id="liveModal" aria-hidden="true">
+  <div class="scrim" data-close></div>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="lmTitle">
+    <button class="close" data-close aria-label="Close dialog">&times;</button>
+    <h3 id="lmTitle">Live dialog</h3>
+    <p>This is the real, scroll-locked modal. The page behind it can't scroll. Close with the &times; button, by clicking the dimmed scrim, or by pressing <kbd>Esc</kbd>.</p>
+    <div class="actions"><button class="btn" data-close>Got it</button><button class="btn ghost" data-close>Cancel</button></div>
+  </div>
+</div>
+
+<!-- ============ FOOTER ============ -->
+<footer class="foot">
+  <div class="foot__in">
+    <span><b>SGEN</b> · Living Styleguide</span>
+    <a href="index.html">Index</a>
+    <a href="06-responsive.html">06 · Responsive</a>
+    <a href="07-components.html">07 · Components</a>
+    <span class="meta">07 · components &amp; form states · every state live · 0 external deps</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---- count-up stat counters (fired by IntersectionObserver) ---- */
+  function runCounters(scope){
+    var nums = [].slice.call((scope||document).querySelectorAll('.statc .n'));
+    nums.forEach(function(n){
+      if(n.dataset.done) return; n.dataset.done = "1";
+      var to = parseInt(n.getAttribute('data-to'),10) || 0;
+      var suf = n.getAttribute('data-suffix') || '';
+      if(reduce){ n.innerHTML = to + (suf?'<span class="suf">'+suf+'</span>':''); return; }
+      var dur = 1300, start = null;
+      function ease(t){ return 1 - Math.pow(1 - t, 3); }
+      function step(ts){
+        if(start===null) start = ts;
+        var p = Math.min((ts-start)/dur, 1);
+        n.innerHTML = Math.round(ease(p)*to) + (suf?'<span class="suf">'+suf+'</span>':'');
+        if(p<1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    });
+  }
+  if('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if(e.isIntersecting){ runCounters(); io.disconnect(); } });
+    }, {threshold:0.3});
+    var band = document.getElementById('statband'); if(band) io.observe(band);
+  } else { runCounters(); }
+
+  /* ---- loading button demo ---- */
+  var lb = document.getElementById('loadBtn');
+  if(lb){ lb.addEventListener('click', function(){
+    if(lb.classList.contains('loading')) return;
+    lb.classList.add('loading');
+    setTimeout(function(){ lb.classList.remove('loading'); }, 1600);
+  }); }
+
+  /* ---- sample-form live email validation (error <-> success) ---- */
+  var ei = document.getElementById('emailInput'),
+      ef = document.getElementById('emailField'),
+      em = document.getElementById('emailMsg');
+  if(ei){
+    var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    function check(){
+      var ok = re.test(ei.value.trim());
+      ef.classList.toggle('err', !ok);
+      ef.classList.toggle('ok', ok);
+      em.classList.toggle('err', !ok);
+      em.classList.toggle('ok', ok);
+      em.textContent = ok ? 'Looks good — that email is valid.' : 'Enter a valid email address.';
+    }
+    ei.addEventListener('input', check);
+  }
+
+  /* ---- tabs ---- */
+  var tabs = document.getElementById('tabs');
+  if(tabs){
+    var btns = [].slice.call(tabs.querySelectorAll('.tabbtn'));
+    function select(i){
+      btns.forEach(function(b,j){
+        var on = i===j;
+        b.setAttribute('aria-selected', on?'true':'false');
+        b.tabIndex = on?0:-1;
+        document.getElementById(b.getAttribute('aria-controls')).hidden = !on;
+      });
+    }
+    btns.forEach(function(b,i){
+      b.addEventListener('click', function(){ select(i); b.focus(); });
+      b.addEventListener('keydown', function(e){
+        if(e.key==='ArrowRight'||e.key==='ArrowLeft'){
+          e.preventDefault();
+          var ni = (i + (e.key==='ArrowRight'?1:-1) + btns.length) % btns.length;
+          select(ni); btns[ni].focus();
+        }
+      });
+    });
+  }
+
+  /* ---- live modal: open/close, scroll-lock, Esc, scrim ---- */
+  var lm = document.getElementById('liveModal'),
+      openBtn = document.getElementById('openModal');
+  function openLM(){
+    lm.classList.add('open'); lm.setAttribute('aria-hidden','false');
+    document.documentElement.style.overflow = 'hidden';        // scroll-lock
+    var c = lm.querySelector('.close'); if(c) c.focus();
+  }
+  function closeLM(){
+    lm.classList.remove('open'); lm.setAttribute('aria-hidden','true');
+    document.documentElement.style.overflow = '';
+    if(openBtn) openBtn.focus();
+  }
+  if(openBtn) openBtn.addEventListener('click', openLM);
+  if(lm){
+    lm.addEventListener('click', function(e){ if(e.target.hasAttribute('data-close')) closeLM(); });
+    document.addEventListener('keydown', function(e){ if(e.key==='Escape' && lm.classList.contains('open')) closeLM(); });
+  }
+
+  /* ---- Category G: pricing toggle switches are clickable specimens ---- */
+  [].forEach.call(document.querySelectorAll('.pcs-switch'), function(sw){
+    function flip(){ sw.setAttribute('aria-checked', sw.getAttribute('aria-checked')==='true' ? 'false' : 'true'); }
+    sw.addEventListener('click', flip);
+    sw.addEventListener('keydown', function(e){ if(e.key===' '||e.key==='Enter'){ e.preventDefault(); flip(); } });
+  });
+})();
+</script>
+
+<!-- ============================================================================
+     SECTION-BLOCK STATE REGISTRY  (added with sections-features.html gallery)
+     The Feature/Services row blocks reuse these component states verbatim — no
+     new state vocabulary is introduced, only new compositions of existing states:
+
+       • 3-up card / bento / icon-tile  → REST → :hover/:focus-within lift
+         (translateY(-4/-6px) + --shadow-card + accent border-color),
+         icon-chip flips tint → --grad-icon (svg stroke #fff), top accent rule scaleX 0→1.
+       • zigzag media  → :hover scale(1.05) inside clipped frame (TOP-12 #7 image-zoom).
+       • "learn more" / breadcrumb links  → :hover arrow translateX(+3/4px),
+         :focus-visible → --ring (same ring token as .btn / .ctrl here).
+       • tabbed switcher tabs  → radio :checked drives active (--ink fill, accent dot),
+         :focus-visible → --ring; matches the .seg / segmented-control state model on this page.
+       • checklist tick  → :hover fills tint → solid accent, svg stroke #fff (same flip as icon-chip).
+       • .btn in the checklist block  → the exact .btn fill variant documented in section A above
+         (default/hover/active/focus-visible), unchanged.
+
+     Live specimen of all six compositions:  sections-features.html
+     ============================================================================ -->
+
+
+<!-- ============================================================================
+     SECTION-BLOCK STATE REGISTRY · CONTENT / BLOG  (added with sections-content-blog.html gallery)
+     The Content/Blog row blocks introduce NO new state vocabulary — they are new
+     compositions of states already documented above on this page:
+
+       • post card (variant A)   → REST → :hover/:focus-within LIFT
+         (translateY(-6px) + --shadow-card + accent border-color) — the exact card
+         lift documented in the Cards section above; headline link recolors to
+         --accent-ink on the card :hover (the same link-hover token used site-wide).
+       • cover image (all variants) → :hover scale(1.05–1.07) of the inner .ph inside
+         a clipped overflow:hidden .frame — TOP-12 #7 image-zoom, identical to the
+         media-frame state shown above; the frame clips, the image scales (never the frame).
+       • category chip            → the .chip / tag pill state (rest = tinted accent fill,
+         on a cover = frosted rgba(paper,.92)); no interactive state of its own — a label.
+       • list row (variant B)     → REST is transparent-flush (hairline divider) →
+         :hover "lifts out" = gains --surface bg + --line border + --r-card radius +
+         translateX(3px) + --shadow-rest; the row thumb zooms scale(1.08). A composition
+         of the card-hover + image-zoom states applied to a list-row geometry.
+       • index row (variant C)    → :hover recolors the title link to --accent-ink and
+         reveals the accent → arrow (opacity 0→1 + translateX) — same link-hover + arrow
+         affordance as the "read more" / breadcrumb links documented above.
+       • read-on / "View all" link → :hover arrow translateX(+3px); :focus-visible → --ring
+         (the exact --ring focus token used by .btn / .ctrl on this page).
+       • avatar / gradient mark    → static decoration (circular gradient + --surface ring +
+         --shadow-rest); no state.
+
+     All hover affordances are zeroed under prefers-reduced-motion (verified headless),
+     and no content is hover-gated — every card/row/index item is a real <a>/<article>
+     link, keyboard-reachable, fully legible at rest.
+
+     Live specimen of all three compositions:  sections-content-blog.html
+     ============================================================================ -->
+
+
+<!-- ============================================================================
+     SECTION-BLOCK STATE REGISTRY · HEROES  (added with sections-heroes.html gallery)
+     The 8 hero blocks introduce NO new state vocabulary — they recompose states
+     already documented above on this page (zone-2 S-HERO, 8 B* archetypes):
+
+       • primary / ghost / ghost-light .btn  → the exact .btn fill + invert variants
+         documented in section A (default → :hover translateY(-2px) + deepened shadow,
+         :active, :focus-visible → --ring); ".a" arrow translateX(+4px) on hover is the
+         same "learn more" arrow affordance used site-wide. ghost-light is the
+         on-dark invert (fills #fff on hover) for V2/V3/V5/V6 dark grounds.
+       • V1 split frame visual  → :hover scale(1.04) of the inner .art inside a clipped
+         overflow:hidden squircle .frame — TOP-12 #7 image-zoom, identical to the
+         media-frame state above (the frame clips, the art scales, never the frame).
+       • V8 lead-gen form  → the FORM-STATE machinery documented in the Forms section
+         above, verbatim: .ctrl REST → :focus (accent border + --ring), and the
+         field .err / .ok states (red/green border + tinted ring + the .msg.e / .msg.s
+         message swap) driven live on input/submit. Inputs are font-size:16px (no iOS zoom).
+       • eyebrow + accent rule (TOP-12 #10), gradient-clip headline word, status pill,
+         star rating, avatar stack, scroll-cue chevron  → static decoration, no state.
+       • V3 pulse-play disc / V5 glow-blob breathe / V6 device float / scroll-reveal +
+         stagger  → live MOTION only (no discrete state); all zeroed under
+         prefers-reduced-motion while the underlying content stays legible at rest.
+
+     The one scroll-driven behavior these blocks anchor (the §2.3 sticky-CTA-after-hero
+     bar) is documented in _SCROLL-STICKY-BEHAVIOR-LIBRARY.md, not here (scroll states
+     can't be proven in a static specimen).
+
+     Live specimen of all eight archetypes:  sections-heroes.html
+     ============================================================================ -->
+
+</body>
+</html>

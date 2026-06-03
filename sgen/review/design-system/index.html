@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SGEN Modern Design System — distilled from 166 BeTheme demos</title>
+<style>
+:root{
+  /* SGEN brand chrome */
+  --ink:#1a1a1a;            /* charcoal */
+  --accent:#d51522;         /* SGEN red */
+  --paper:#f6f5f3;          /* warm off-white, never #fff */
+  --surface:#ffffff;        /* cards float on paper */
+  --muted:#626262;          /* recurs verbatim across the harvest */
+  --body:#4a4a4a;           /* desaturated tint of ink, not #666 */
+  --line:rgba(26,26,26,.10);
+
+  /* gradients (constant 135deg) */
+  --grad-brand:linear-gradient(135deg,#d51522,#7a0c13);
+  --fade-to-paper:linear-gradient(180deg,rgba(246,245,243,0) 0%,var(--paper) 70%);
+
+  /* radius */
+  --r-chip:8px; --r-card:16px; --r-panel:24px; --r-pill:9999px;
+
+  /* shadow — ink/navy-tinted, never #000 (D1) */
+  --shadow-rest:0 2px 5px 0 rgba(0,0,0,.08);
+  --shadow-card:0 15px 30px 0 rgba(1,7,39,.13);              /* the universal one */
+  --shadow-hover:0 32px 64px -12px rgba(16,24,40,.18);
+
+  /* motion (C8) */
+  --ease:cubic-bezier(.05,.5,.3,1);   /* BeTheme signature settle */
+  --t-fast:.2s ease-out;
+  --t-reveal:.6s var(--ease);
+
+  --glass:blur(18px) saturate(180%);
+  --wrap:1180px;
+  --mono:ui-monospace,"SFMono-Regular",Menlo,Consolas,"Liberation Mono",monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--paper);color:var(--body);
+  font-family:var(--sans);font-size:16px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 24px}
+h1,h2,h3,h4{color:var(--ink);margin:0;letter-spacing:-.02em;line-height:1.04}
+p{margin:0 0 1em}
+a{color:var(--accent);text-decoration:none}
+code{font-family:var(--mono);font-size:.86em}
+
+/* ---------- glass top nav (TOP-12 #6 — eats own dogfood) ---------- */
+.topnav{
+  position:sticky;top:0;z-index:50;
+  background:rgba(26,26,26,.92);
+  -webkit-backdrop-filter:var(--glass);backdrop-filter:var(--glass);
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+.topnav .wrap{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding-top:12px;padding-bottom:12px}
+.brand{display:flex;align-items:center;gap:10px;margin-right:auto;font-weight:700;color:#fff;letter-spacing:-.01em}
+.brand .dot{width:11px;height:11px;border-radius:3px;background:var(--accent);box-shadow:0 0 0 0 rgba(213,21,34,.6);animation:nudge 3s var(--ease) infinite}
+@keyframes nudge{0%,92%,100%{box-shadow:0 0 0 0 rgba(213,21,34,0)}96%{box-shadow:0 0 0 5px rgba(213,21,34,.18)}}
+.topnav a.nav{
+  color:#cfcfcf;font-size:13px;font-weight:600;letter-spacing:.01em;
+  padding:7px 12px;border-radius:var(--r-pill);transition:var(--t-fast);
+}
+.topnav a.nav:hover{color:#fff;background:rgba(255,255,255,.08)}
+.topnav a.nav[aria-current="page"]{color:#fff;background:var(--accent)}
+
+/* ---------- hero — ambient glow blobs behind charcoal (TOP-12 #12a) ---------- */
+.hero{position:relative;overflow:hidden;background:var(--ink);color:#fff;padding:104px 0 132px}
+.hero::before,.hero::after{content:"";position:absolute;z-index:0;border-radius:50%;filter:blur(72px);pointer-events:none}
+.hero::before{width:560px;height:560px;left:-140px;top:-180px;background:radial-gradient(circle,rgba(213,21,34,.55),transparent 70%)}
+.hero::after{width:480px;height:480px;right:-110px;bottom:-220px;background:radial-gradient(circle,rgba(213,21,34,.26),transparent 70%)}
+.hero .wrap{position:relative;z-index:1}
+.hero .eyebrow{color:#ff5762}
+.hero .eyebrow::before{background:#ff5762}
+.hero h1{
+  color:#fff;font-size:clamp(40px,7.4vw,98px);font-weight:300;letter-spacing:-.045em;line-height:.96;margin:16px 0 0;
+  max-width:14ch;
+}
+.hero h1 b{font-weight:700}
+.hero h1 .clip{
+  background:linear-gradient(135deg,#ff5762,#d51522 60%,#7a0c13);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.hero .sub{margin-top:18px;color:#bdbdbd;font-size:clamp(15px,2vw,18px);font-weight:300;letter-spacing:.01em}
+.hero .lede{margin-top:26px;max-width:660px;color:#d6d6d6;font-size:clamp(16px,2.2vw,20px);line-height:1.62}
+.scroll-fade{position:absolute;left:0;right:0;bottom:0;height:120px;background:var(--fade-to-paper);z-index:1}
+
+/* ---------- stat counters (TOP-12 #5) ---------- */
+.stats{position:relative;z-index:1;display:flex;gap:14px;flex-wrap:wrap;margin-top:44px}
+.stat{
+  flex:1 1 150px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.10);
+  border-radius:var(--r-card);padding:20px 22px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.10);
+}
+.stat .n{font-size:clamp(38px,6vw,58px);font-weight:300;color:#fff;letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums}
+.stat .lbl{margin-top:8px;text-transform:uppercase;letter-spacing:.16em;font-size:11px;font-weight:700;color:#9b9b9b}
+
+/* ---------- shared bits ---------- */
+.eyebrow{display:inline-flex;align-items:center;gap:10px;text-transform:uppercase;letter-spacing:.16em;font-size:12px;font-weight:700;color:var(--accent)}
+.eyebrow::before{content:"";width:34px;height:2px;background:var(--accent);display:inline-block}
+
+/* scroll-reveal entrance + sibling stagger (TOP-12 #4) */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
+.reveal.in-view{opacity:1;transform:none}
+.stagger > *{opacity:0;transform:translateY(22px);transition:opacity .55s var(--ease),transform .55s var(--ease)}
+.stagger.in-view > *{opacity:1;transform:none}
+
+/* ---------- discipline intro ---------- */
+.intro{padding:78px 0 8px}
+.intro h2{font-size:clamp(27px,4vw,42px);margin:14px 0 18px;max-width:18ch}
+.intro .lede{max-width:780px;color:var(--body);font-size:clamp(16px,2vw,19px)}
+.disc{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:38px}
+.disc .d{
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--r-card);
+  padding:22px 22px 20px;box-shadow:var(--shadow-rest);transition:transform var(--t-fast),box-shadow var(--t-fast)
+}
+.disc .d:hover{transform:translateY(-4px);box-shadow:var(--shadow-card)}
+.disc .d .ic{width:38px;height:38px;border-radius:11px;background:rgba(213,21,34,.10);border:1px solid rgba(213,21,34,.22);display:grid;place-items:center;margin-bottom:14px}
+.disc .d .ic i{width:14px;height:14px;border-radius:4px;background:var(--accent);display:block}
+.disc .d h4{font-size:16px;margin-bottom:6px}
+.disc .d p{font-size:13.5px;color:var(--muted);margin:0;line-height:1.6}
+.disc .d b{color:var(--ink)}
+
+/* ---------- TOP-12 listing ---------- */
+.section{padding:72px 0}
+.section .head{max-width:760px;margin-bottom:36px}
+.section .head h2{font-size:clamp(26px,3.6vw,40px);margin:14px 0 12px}
+.section .head p{color:var(--muted);font-size:15px;margin:0}
+.t12{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.t12 a{
+  display:flex;align-items:center;gap:16px;background:var(--surface);
+  border:1px solid var(--line);border-radius:var(--r-card);padding:16px 18px;
+  box-shadow:var(--shadow-rest);transition:transform var(--t-fast),box-shadow var(--t-fast),border-color var(--t-fast);
+  color:var(--ink)
+}
+.t12 a:hover{transform:translateY(-3px);box-shadow:var(--shadow-card);border-color:rgba(213,21,34,.30)}
+.t12 .num{
+  font-family:var(--mono);font-size:14px;font-weight:700;color:#fff;background:var(--ink);
+  width:36px;height:36px;border-radius:10px;display:grid;place-items:center;flex:0 0 auto;transition:background var(--t-fast)
+}
+.t12 a:hover .num{background:var(--accent)}
+.t12 .tx{flex:1;min-width:0}
+.t12 .tx .ti{font-weight:700;font-size:14.5px;color:var(--ink);line-height:1.3}
+.t12 .tx .rc{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:3px;letter-spacing:.02em}
+.t12 .arr{color:var(--muted);font-size:18px;flex:0 0 auto;transition:transform var(--t-fast),color var(--t-fast)}
+.t12 a:hover .arr{transform:translateX(3px);color:var(--accent)}
+
+/* ---------- section nav grid ---------- */
+.navsec{background:var(--ink);position:relative;overflow:hidden}
+.navsec::before{content:"";position:absolute;width:520px;height:520px;left:50%;top:-260px;transform:translateX(-50%);border-radius:50%;filter:blur(80px);background:radial-gradient(circle,rgba(213,21,34,.22),transparent 70%);pointer-events:none}
+.navsec .wrap{position:relative;z-index:1}
+.navsec .head h2{color:#fff}
+.navsec .head .eyebrow{color:#ff5762}.navsec .head .eyebrow::before{background:#ff5762}
+.navsec .head p{color:#9b9b9b}
+.navgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px}
+.navcard{
+  display:flex;flex-direction:column;background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.10);border-radius:var(--r-panel);padding:26px 24px 22px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08);
+  transition:transform var(--t-fast),box-shadow var(--t-fast),background var(--t-fast),border-color var(--t-fast);
+}
+.navcard:hover{transform:translateY(-6px);background:rgba(255,255,255,.07);border-color:rgba(213,21,34,.40);box-shadow:0 24px 48px -16px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.12)}
+.navcard .kn{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--accent);letter-spacing:.06em}
+.navcard h3{color:#fff;font-size:clamp(19px,2.4vw,23px);margin:12px 0 8px;font-weight:600;letter-spacing:-.02em}
+.navcard p{color:#bdbdbd;font-size:13.5px;line-height:1.6;margin:0 0 18px;flex:1}
+.navcard .tags{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:18px}
+.navcard .tags span{font-family:var(--mono);font-size:10.5px;color:#cfcfcf;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.10);padding:3px 8px;border-radius:var(--r-pill)}
+.navcard .go{display:inline-flex;align-items:center;gap:8px;color:#fff;font-weight:700;font-size:13px;letter-spacing:.02em}
+.navcard .go .a{transition:transform var(--t-fast)}
+.navcard:hover .go .a{transform:translateX(4px)}
+.navcard .go b{color:var(--accent)}
+
+/* ---------- token strip (dogfood the system on itself) ---------- */
+.tokens{padding:64px 0 78px}
+.tokstrip{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px}
+.tok{display:flex;flex-direction:column;gap:8px;flex:1 1 140px}
+.tok .sw{height:64px;border-radius:var(--r-card);border:1px solid var(--line);box-shadow:var(--shadow-rest)}
+.tok .meta{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.tok .meta b{color:var(--ink);font-weight:700}
+
+/* ---------- footer ---------- */
+.foot{background:var(--ink);color:#9b9b9b;padding:48px 0;font-size:13px;border-top:1px solid rgba(255,255,255,.08)}
+.foot .wrap{display:flex;gap:18px;flex-wrap:wrap;align-items:center}
+.foot .brand{margin-right:auto;color:#fff}
+.foot a{color:#cfcfcf}.foot a:hover{color:#fff}
+
+/* reduced motion (gate ALL of Category C) */
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  .reveal,.stagger > *{opacity:1!important;transform:none!important}
+}
+@media (max-width:680px){
+  .t12{grid-template-columns:1fr}
+  .hero{padding:80px 0 100px}
+}
+</style>
+</head>
+<body>
+
+<!-- ===================== GLASS TOP NAV (dogfood: TOP-12 #6) ===================== -->
+<nav class="topnav">
+  <div class="wrap">
+    <span class="brand"><span class="dot"></span>SGEN&nbsp;Styleguide</span>
+    <a class="nav" href="index.html" aria-current="page">Index</a>
+    <a class="nav" href="00-top12.html">00 · Top-12</a>
+    <a class="nav" href="01-transitions-hero-motion.html">01 · Transitions / Hero / Motion</a>
+    <a class="nav" href="02-depth-type-color.html">02 · Depth / Type / Color</a>
+    <a class="nav" href="03-layout-imagery-components.html">03 · Layout / Imagery / Components</a>
+    <a class="nav" href="04-signatures-tokens.html">04 · Signatures / Tokens</a><a class="nav" href="06-responsive.html">06 · Responsive</a><a class="nav" href="07-components.html">07 · Components</a><a class="nav" href="08-scroll-sticky.html">08 · Scroll / Sticky</a><a class="nav" href="09-accessibility.html">09 · Accessibility</a><a class="nav" href="10-sections.html">10 · Sections</a><a class="nav" href="11-theming.html">11 · Theming</a><a class="nav" href="12-iconography.html">12 · Iconography</a><a class="nav" href="13-utility-pages.html">13 · Utility</a><a class="nav" href="14-ecommerce.html">14 · Ecommerce</a><a class="nav" href="15-dataviz.html">15 · Data-viz</a>
+  </div>
+</nav>
+
+<!-- ===================== HERO (dogfood: ambient glow #12a · eyebrow #10 · count-up #5) ===================== -->
+<header class="hero">
+  <div class="wrap">
+    <span class="eyebrow">A visual living styleguide</span>
+    <h1>SGEN Modern <b class="clip">Design System</b></h1>
+    <p class="sub">distilled from 166 BeTheme demos</p>
+    <p class="lede">Every pattern below is a <b style="color:#fff">real, working specimen</b> — not a screenshot, not a description. Layered shadows that lift on hover. Staggered reveals fired by a real IntersectionObserver. Count-up stats. Glass-on-scroll. Shape dividers, gradient glows, flip buttons — all rendered live, self-contained, zero dependencies.</p>
+    <div class="stats stagger reveal" id="hero-stats">
+      <div class="stat"><div class="n" data-to="166" data-suffix="">0</div><div class="lbl">demos inspected</div></div>
+      <div class="stat"><div class="n" data-to="71" data-suffix="">0</div><div class="lbl">patterns distilled</div></div>
+      <div class="stat"><div class="n" data-to="16" data-suffix="">0</div><div class="lbl">verticals harvested</div></div>
+      <div class="stat"><div class="n" data-to="12" data-suffix="">0</div><div class="lbl">non-negotiable moves</div></div>
+    </div>
+  </div>
+  <div class="scroll-fade"></div>
+</header>
+
+<!-- ===================== THE DISCIPLINE (dogfood: lift-on-hover cards #3 · reveal #4) ===================== -->
+<section class="intro">
+  <div class="wrap">
+    <span class="eyebrow reveal">The discipline</span>
+    <h2 class="reveal">Wow should be felt, not noticed.</h2>
+    <p class="lede reveal">The bar is not "clean and flat" — it is <b style="color:var(--ink)">premium and alive</b>: the subtle depth, motion, texture and light that read high-end. The premium signal is what you <b style="color:var(--ink)">leave out</b>, not what you pile on. Every demo here obeys the same governing rule that recurred in all sixteen category files — <b style="color:var(--ink)">ruthless restraint</b>.</p>
+    <div class="disc stagger reveal">
+      <div class="d"><div class="ic"><i></i></div><h4>One accent</h4><p>A single saturated hue carries every CTA, link, counter and rule. Everything else is <b>tinted ink</b> on <b>off-white paper</b> — never <code>#000</code>, never <code>#fff</code>.</p></div>
+      <div class="d"><div class="ic"><i></i></div><h4>One display face</h4><p>One expressive face for headings, one neutral grotesk for body. Oversized, tight, negative-tracked — light-at-large reads luxe.</p></div>
+      <div class="d"><div class="ic"><i></i></div><h4>One shadow family</h4><p>The universal ink-tinted soft shadow <code>0 15px 30px rgba(1,7,39,.13)</code> at rest, deepening on a <b>−4px lift</b>. Tint toward the ink, never pure black.</p></div>
+      <div class="d"><div class="ic"><i></i></div><h4>One motion easing</h4><p>The BeTheme settle <code>cubic-bezier(.05,.5,.3,1)</code> on reveals, a fast confident <code>.2s</code> on hover — and the whole of it gated behind <b>reduced-motion</b>.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== TOP-12 LISTING (deep-links into 00-top12.html#p1..p12) ===================== -->
+<section class="section">
+  <div class="wrap">
+    <div class="head reveal">
+      <span class="eyebrow">The floor, not the ceiling</span>
+      <h2>The TOP-12 [ FLAT → ALIVE ]</h2>
+      <p>The highest-leverage upgrades, ranked by cross-category recurrence × visual leverage. The non-negotiable baseline for every SGEN proof site. Each links to its live FLAT↔ALIVE specimen.</p>
+    </div>
+    <div class="t12 stagger reveal">
+      <a href="00-top12.html#p1"><span class="num">01</span><span class="tx"><span class="ti">One accent over a committed neutral base</span><span class="rc">16/16 · universal</span></span><span class="arr">→</span></a>
+      <a href="00-top12.html#p2"><span class="num">02</span><span class="tx"><span class="ti">Display face on headings + oversized tight type</span><span class="rc">15/16</span></span><span class="arr">→</span></a>
+      <a href="00-top12.html#p3"><span class="num">03</span><span class="tx"><span class="ti">Soft ink-tinted card shadow + lift-on-hover</span><span class="rc">14/16</span></span><span class="arr">→</span></a>
+      <a href="00-top12.html#p4"><span class="num">04</span><span class="tx"><span class="ti">Scroll-reveal entrance with sibling stagger</span><span class="rc">16/16</span></span><span class="arr">→</span></a>
+      <a href="00-top12.html#p5"><span class="num">05</span><span class="tx"><span class="ti">Animated count-up stat counters</span><span class="rc">16/16</span></span><span class="arr">→</span></a>
+      <a href="00-top12.html#p6"><span class="num">06</span><span class="tx"><span class="ti">Glass sticky header — transparent → blurred on scroll</span><span class="rc">13/16</span></span><span class="arr">→</span></a>
+      <a href="00-top12.html#p7"><span class="num">07</span><span class="tx"><span class="ti">Image-zoom inside a clipped frame on hover</span><span class="rc">15/16</span></span><span class="arr">→</span></a>
+      <a href="00-top12.html#p8"><span class="num">08</span><span class="tx"><span class="ti">Image bottom-fade / directional scrim into next section</span><span class="rc">12/16</span></span><span class="arr">→</span></a>
+      <a href="00-top12.html#p9"><span class="num">09</span><span class="tx"><span class="ti">2-way invert / accent-flip buttons</span><span class="rc">13/16</span></span><span class="arr">→</span></a>
+      <a href="00-top12.html#p10"><span class="num">10</span><span class="tx"><span class="ti">Eyebrow / kicker + accent rule above every H2</span><span class="rc">13/16</span></span><span class="arr">→</span></a>
+      <a href="00-top12.html#p11"><span class="num">11</span><span class="tx"><span class="ti">Section rhythm — large padding + alternating grounds</span><span class="rc">12/16</span></span><span class="arr">→</span></a>
+      <a href="00-top12.html#p12"><span class="num">12</span><span class="tx"><span class="ti">Ambient depth behind the hero (glow / wash / parallax)</span><span class="rc">12/16</span></span><span class="arr">→</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SECTION NAV GRID (links the 5 section pages) ===================== -->
+<section class="navsec section">
+  <div class="wrap">
+    <div class="head reveal">
+      <span class="eyebrow">The library · 71 patterns across 10 categories</span>
+      <h2>Five specimen pages</h2>
+      <p>Open any page and judge the motion live — staggered reveals, hover-zoom, glass-on-scroll and count-up are visible only in the browser, never in a static capture.</p>
+    </div>
+    <div class="navgrid stagger reveal">
+
+      <a class="navcard" href="00-top12.html">
+        <span class="kn">00</span>
+        <h3>The TOP-12</h3>
+        <p>The flat→alive baseline, each as a side-by-side toggle specimen you can flip from flat to alive.</p>
+        <div class="tags"><span>accent</span><span>shadow</span><span>reveal</span><span>count-up</span><span>glass</span></div>
+        <span class="go">Open page <span class="a"><b>→</b></span></span>
+      </a>
+
+      <a class="navcard" href="01-transitions-hero-motion.html">
+        <span class="kn">01</span>
+        <h3>Transitions · Hero · Motion</h3>
+        <p>Shape dividers, arc &amp; split-band seams, the six hero archetypes, scroll-reveal, marquees, count-up, countdown and pulse-play.</p>
+        <div class="tags"><span>dividers</span><span>heroes</span><span>scroll</span><span>marquee</span><span>easing</span></div>
+        <span class="go">Open page <span class="a"><b>→</b></span></span>
+      </a>
+
+      <a class="navcard" href="02-depth-type-color.html">
+        <span class="kn">02</span>
+        <h3>Depth · Type · Color</h3>
+        <p>The ink-tinted shadow family, real glass with the inset light-catch, glow blobs, the display/grotesk pairing, gradient-clip words and per-vertical skins.</p>
+        <div class="tags"><span>shadow</span><span>glass</span><span>glow</span><span>type</span><span>skins</span></div>
+        <span class="go">Open page <span class="a"><b>→</b></span></span>
+      </a>
+
+      <a class="navcard" href="03-layout-imagery-components.html">
+        <span class="kn">03</span>
+        <h3>Layout · Imagery · Components</h3>
+        <p>Section rhythm, overlapping columns, bento &amp; pricing grids, hover-zoom frames, shape masks, buttons, cards, counters, FAQ and trust strips.</p>
+        <div class="tags"><span>grid</span><span>bento</span><span>masks</span><span>buttons</span><span>FAQ</span></div>
+        <span class="go">Open page <span class="a"><b>→</b></span></span>
+      </a>
+
+      <a class="navcard" href="04-signatures-tokens.html">
+        <span class="kn">04</span>
+        <h3>Signatures · Tokens</h3>
+        <p>The per-vertical signatures worth stealing — inset panel, highlighter swipe, sticker shadow, vertical-roll counters — plus the copy-ready master token block.</p>
+        <div class="tags"><span>inset panel</span><span>highlighter</span><span>sticker</span><span>tokens</span></div>
+        <span class="go">Open page <span class="a"><b>→</b></span></span>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===================== TOKEN STRIP (dogfood: applies its own palette to itself) ===================== -->
+<section class="tokens">
+  <div class="wrap">
+    <span class="eyebrow reveal">The chrome</span>
+    <h2 class="reveal" style="font-size:clamp(24px,3.4vw,36px);margin:14px 0 6px">Five custom properties, reskinned per site.</h2>
+    <p class="reveal" style="max-width:720px;color:var(--muted)">SGEN runs charcoal ink and one red accent over warm paper. Each proof site is a re-set of these props — build the token layer once, reskin per build. Full block on page 04.</p>
+    <div class="tokstrip stagger reveal">
+      <div class="tok"><div class="sw" style="background:#1a1a1a"></div><div class="meta"><b>--ink</b><br>#1a1a1a</div></div>
+      <div class="tok"><div class="sw" style="background:#d51522"></div><div class="meta"><b>--accent</b><br>#d51522</div></div>
+      <div class="tok"><div class="sw" style="background:#f6f5f3"></div><div class="meta"><b>--paper</b><br>#f6f5f3</div></div>
+      <div class="tok"><div class="sw" style="background:#626262"></div><div class="meta"><b>--muted</b><br>#626262</div></div>
+      <div class="tok"><div class="sw" style="background:#4a4a4a"></div><div class="meta"><b>--body</b><br>#4a4a4a</div></div>
+      <div class="tok"><div class="sw" style="background:var(--grad-brand)"></div><div class="meta"><b>--grad-brand</b><br>135°</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="foot">
+  <div class="wrap">
+    <span class="brand"><b style="color:#fff">SGEN</b> · Living Styleguide</span>
+    <a href="00-top12.html">00 · Top-12</a>
+    <a href="01-transitions-hero-motion.html">01 · Transitions</a>
+    <a href="02-depth-type-color.html">02 · Depth</a>
+    <a href="03-layout-imagery-components.html">03 · Layout</a>
+    <a href="04-signatures-tokens.html">04 · Signatures</a>
+    <span style="color:#626262;font-family:var(--mono);font-size:11px">166 demos · 71 patterns · 16 verticals</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ----- scroll-reveal + sibling stagger (TOP-12 #4) ----- */
+  var revealEls = [].slice.call(document.querySelectorAll('.reveal'));
+  function stagger(el){
+    if(!el.classList.contains('stagger')) return;
+    var kids = el.children;
+    for(var i=0;i<kids.length;i++){ kids[i].style.transitionDelay = (i*80)+'ms'; }
+  }
+  if(reduce || !('IntersectionObserver' in window)){
+    revealEls.forEach(function(el){ el.classList.add('in-view'); });
+    runCounters();
+  } else {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){
+          stagger(e.target);
+          e.target.classList.add('in-view');
+          if(e.target.id === 'hero-stats') runCounters();
+          io.unobserve(e.target);
+        }
+      });
+    }, {threshold:0.18, rootMargin:'0px 0px -8% 0px'});
+    revealEls.forEach(function(el){ io.observe(el); });
+  }
+
+  /* ----- animated count-up stats (TOP-12 #5) ----- */
+  var countersDone = false;
+  function runCounters(){
+    if(countersDone) return; countersDone = true;
+    var nums = [].slice.call(document.querySelectorAll('.stat .n'));
+    nums.forEach(function(n){
+      var to = parseInt(n.getAttribute('data-to'),10) || 0;
+      var suffix = n.getAttribute('data-suffix') || '';
+      if(reduce){ n.textContent = to + suffix; return; }
+      var dur = 1300, start = null;
+      function ease(t){ return 1 - Math.pow(1 - t, 3); } /* ease-out cubic */
+      function step(ts){
+        if(start === null) start = ts;
+        var p = Math.min((ts - start)/dur, 1);
+        n.textContent = Math.round(ease(p) * to) + suffix;
+        if(p < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    });
+  }
+})();
+</script>
+
+</body>
+</html>

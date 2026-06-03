@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>SGEN Living Styleguide — 11 · Theming &amp; Dark-Mode (token-driven)</title>
+<style>
+/* ============================================================
+   SGEN LIVING STYLEGUIDE — 11 · THEMING & DARK-MODE
+   charcoal #1a1a1a · red #d51522 · the BUILD-TO-TOKENS page.
+   The whole point: every surface, every ink, every shadow is a
+   CSS custom property. Flip ONE attribute (data-theme) or swap
+   ONE prop (--accent) and an entire sample site re-themes — with
+   no per-element rewrites, because nothing is hard-coded hex.
+   Self-contained: system fonts, 0 external deps, no images.
+   ============================================================ */
+
+/* ---------------------------------------------------------------
+   THE PAGE CHROME — these are the styleguide's OWN tokens.
+   They never change; the live demo below has its OWN scoped set.
+   --------------------------------------------------------------- */
+:root{
+  --ink:#1a1a1a;                 /* charcoal */
+  --paper:#f6f5f3;               /* warm off-white, never #fff */
+  --surface:#ffffff;
+  --muted:#626262;
+  --body:#4a4a4a;
+  --line:rgba(26,26,26,.10);
+  --accent:#d51522;              /* SGEN red */
+  --accent-ink:#a50f19;
+  --accent-2:#ff5762;
+  --ok:#1f8a4c;
+
+  --grad-brand:linear-gradient(135deg,#d51522,#7a0c13);
+  --r-chip:8px; --r-card:16px; --r-panel:24px; --r-pill:9999px;
+  --shadow-rest:0 2px 5px 0 rgba(0,0,0,.08);
+  --shadow-card:0 15px 30px 0 rgba(1,7,39,.13);
+  --shadow-hover:0 32px 64px -12px rgba(16,24,40,.18);
+  --ease:cubic-bezier(.05,.5,.3,1);
+  --t-fast:.2s ease-out;
+  --glass:blur(18px) saturate(180%);
+  --wrap:1180px;
+  --mono:ui-monospace,"SFMono-Regular",Menlo,Consolas,"Liberation Mono",monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+
+  --z-header:1000; --z-skiplink:1100;
+  --header-h:84px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{
+  margin:0;background:var(--paper);color:var(--body);
+  font-family:var(--sans);font-size:16px;line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 24px}
+h1,h2,h3,h4{color:var(--ink);margin:0;letter-spacing:-.02em;line-height:1.06}
+p{margin:0 0 1em}
+a{color:var(--accent-ink);text-decoration:none}
+code{font-family:var(--mono);font-size:.85em;background:rgba(26,26,26,.05);padding:.06em .35em;border-radius:5px}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;text-transform:uppercase;letter-spacing:.16em;font-size:12px;font-weight:700;color:var(--accent)}
+.eyebrow::before{content:"";width:34px;height:2px;background:var(--accent);display:inline-block}
+
+/* ---- skip link (a11y) ---- */
+.skip{position:fixed;left:12px;top:-60px;z-index:var(--z-skiplink);
+  background:var(--ink);color:#fff;padding:10px 16px;border-radius:8px;font-weight:700;font-size:13px;
+  transition:top .2s ease}
+.skip:focus{top:12px;outline:3px solid var(--accent);outline-offset:2px}
+
+/* ---------- glass top nav (dogfood: TOP-12 #6) ---------- */
+.topnav{
+  position:sticky;top:0;z-index:var(--z-header);
+  background:rgba(26,26,26,.92);
+  -webkit-backdrop-filter:var(--glass);backdrop-filter:var(--glass);
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+.topnav .wrap{display:flex;align-items:center;gap:8px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;
+  padding-top:12px;padding-bottom:12px}
+.topnav .wrap::-webkit-scrollbar{display:none}
+.brand{display:flex;align-items:center;gap:10px;margin-right:auto;font-weight:700;color:#fff;
+  letter-spacing:-.01em;white-space:nowrap}
+.brand .dot{width:11px;height:11px;border-radius:3px;background:var(--accent);flex:0 0 auto;
+  box-shadow:0 0 0 0 rgba(213,21,34,.6);animation:nudge 3s var(--ease) infinite}
+.brand small{font-weight:600;font-size:.78em;opacity:.7}
+@keyframes nudge{0%,92%,100%{box-shadow:0 0 0 0 rgba(213,21,34,0)}96%{box-shadow:0 0 0 5px rgba(213,21,34,.18)}}
+.topnav a.nav{
+  color:#cfcfcf;font-size:13px;font-weight:600;letter-spacing:.01em;white-space:nowrap;
+  padding:7px 12px;border-radius:var(--r-pill);transition:var(--t-fast)}
+.topnav a.nav:hover{color:#fff;background:rgba(255,255,255,.10)}
+.topnav a.nav[aria-current="page"]{color:#fff;background:var(--accent)}
+
+/* ---------- hero — ambient glow blobs behind charcoal ---------- */
+.hero{position:relative;overflow:hidden;background:var(--ink);color:#fff;padding:96px 0 120px}
+.hero::before,.hero::after{content:"";position:absolute;z-index:0;border-radius:50%;filter:blur(72px);pointer-events:none}
+.hero::before{width:560px;height:560px;left:-150px;top:-170px;background:radial-gradient(circle,rgba(213,21,34,.55),transparent 70%)}
+.hero::after{width:480px;height:480px;right:-120px;bottom:-210px;background:radial-gradient(circle,rgba(213,21,34,.24),transparent 70%)}
+.hero .wrap{position:relative;z-index:1}
+.hero .eyebrow{color:var(--accent-2)}.hero .eyebrow::before{background:var(--accent-2)}
+.hero h1{color:#fff;font-size:clamp(38px,7vw,92px);font-weight:300;letter-spacing:-.045em;
+  line-height:.97;margin:16px 0 0;max-width:15ch}
+.hero h1 b{font-weight:700}
+.hero h1 .clip{background:linear-gradient(135deg,#ff5762,#d51522 60%,#7a0c13);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .lede{margin-top:24px;max-width:720px;color:#d6d6d6;font-size:clamp(16px,2.1vw,20px);line-height:1.6}
+.hero .lede b{color:#fff}
+.scroll-fade{position:absolute;left:0;right:0;bottom:0;height:120px;z-index:1;
+  background:linear-gradient(180deg,rgba(246,245,243,0) 0%,var(--paper) 78%)}
+
+/* ---------- section shell ---------- */
+.section{padding:64px 0}
+.section:nth-of-type(even){background:linear-gradient(180deg,#fff,var(--paper))}
+.section .head{max-width:840px;margin-bottom:28px}
+.section .head h2{font-size:clamp(24px,3.4vw,38px);margin:12px 0 10px}
+.section .head p{color:var(--body);font-size:15.5px;margin:0}
+.num{display:inline-flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:13px;font-weight:700;color:#fff;background:var(--ink);
+  min-width:30px;height:30px;padding:0 9px;border-radius:9px;margin-right:6px;vertical-align:middle}
+
+/* ---------- the five-token key card ---------- */
+.tokcard{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-panel);
+  box-shadow:var(--shadow-card);padding:30px clamp(20px,4vw,36px);margin-top:26px}
+.tokcard table{width:100%;border-collapse:collapse;font-size:14px}
+.tokcard th,.tokcard td{text-align:left;padding:12px;border-bottom:1px solid var(--line);vertical-align:middle}
+.tokcard th{font-family:var(--mono);font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.tokcard tr:last-child td{border-bottom:0}
+.tokcard td.prop{font-family:var(--mono);font-weight:700;color:var(--ink);white-space:nowrap}
+.tokcard .sw{width:30px;height:30px;border-radius:8px;border:1px solid var(--line);
+  box-shadow:var(--shadow-rest);display:inline-block;vertical-align:middle;margin-right:10px}
+.tokcard .swr{display:flex;align-items:center}
+.tokcard .role{color:var(--body);font-size:13.5px}
+.tokcard td.hex{font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+
+/* the rule callouts */
+.tat{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin:18px 0 4px}
+.tat .cell{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-card);
+  padding:13px 15px;box-shadow:var(--shadow-rest)}
+.tat .k{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);display:block;margin-bottom:5px}
+.tat .v{font-size:13px;color:var(--ink);line-height:1.45}
+
+/* ======================================================================
+   THE LIVE DEMO STAGE — a self-contained sample "site" that re-themes.
+   ALL of its visuals read from a SCOPED token set on #stage. Flip the
+   data-theme attribute on #stage (light/dark) or set data-skin and the
+   whole thing re-paints — because not one rule below uses a literal hex.
+   ====================================================================== */
+
+/* the control deck that drives the stage */
+.deck{display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-top:24px;
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--r-panel);
+  box-shadow:var(--shadow-card);padding:18px 20px}
+.deck .grp{display:flex;align-items:center;gap:10px}
+.deck .lbl{font-family:var(--mono);font-size:10.5px;font-weight:700;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--muted);white-space:nowrap}
+
+/* the light/dark switch — a real button, aria-pressed */
+.switch{display:inline-flex;align-items:center;gap:10px;background:rgba(26,26,26,.06);
+  border:1px solid var(--line);border-radius:var(--r-pill);padding:5px;cursor:pointer}
+.switch button{appearance:none;border:0;background:transparent;cursor:pointer;
+  font-family:var(--sans);font-weight:700;font-size:13px;color:var(--muted);
+  padding:8px 16px;border-radius:var(--r-pill);min-height:40px;display:inline-flex;align-items:center;gap:7px;
+  transition:var(--t-fast)}
+.switch button .ic{width:13px;height:13px;border-radius:50%;border:2px solid currentColor;position:relative}
+.switch button[data-mode="dark"] .ic{border-color:currentColor;background:
+  conic-gradient(from -90deg,currentColor 0 50%,transparent 50% 100%)}
+.switch button[aria-pressed="true"]{background:var(--ink);color:#fff;box-shadow:var(--shadow-rest)}
+
+/* the accent-skin chips */
+.skins{display:flex;gap:8px}
+.skinchip{width:34px;height:34px;border-radius:var(--r-pill);border:2px solid transparent;cursor:pointer;
+  position:relative;box-shadow:var(--shadow-rest);transition:var(--t-fast);padding:0}
+.skinchip:hover{transform:translateY(-2px)}
+.skinchip[aria-pressed="true"]{border-color:var(--ink);box-shadow:0 0 0 3px rgba(26,26,26,.12)}
+.skinchip[data-skin="red"]{background:#d51522}
+.skinchip[data-skin="indigo"]{background:#4f46e5}
+.skinchip[data-skin="emerald"]{background:#0e9f6e}
+.skinchip .nm{position:absolute;left:50%;bottom:-20px;transform:translateX(-50%);
+  font-family:var(--mono);font-size:9px;color:var(--muted);white-space:nowrap}
+.deck .live{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--muted);white-space:nowrap}
+.deck .live b{color:var(--ink)}
+
+/* ----- THE STAGE: its own scoped token set (light defaults) ----- */
+#stage{
+  /* skin (accent family) — overridable per data-skin */
+  --s-accent:#d51522;
+  --s-accent-2:#ff5762;
+  --s-accent-ink:#a50f19;
+  --s-grad:linear-gradient(135deg,var(--s-accent),color-mix(in srgb,var(--s-accent) 55%,#000));
+
+  /* theme (light defaults) — overridden by [data-theme="dark"] */
+  --s-bg:#f6f5f3;
+  --s-surface:#ffffff;
+  --s-ink:#1a1a1a;
+  --s-body:#4a4a4a;
+  --s-muted:#6b6b6b;
+  --s-line:rgba(26,26,26,.10);
+  --s-shadow:0 15px 30px 0 rgba(1,7,39,.13);
+  --s-hero-bg:#161616;
+  --s-hero-ink:#ffffff;
+  --s-hero-sub:#d6d6d6;
+  --s-radius:16px;
+
+  margin-top:24px;border-radius:var(--r-panel);overflow:hidden;
+  border:1px solid var(--line);box-shadow:var(--shadow-hover);
+  background:var(--s-bg);
+  transition:background .45s var(--ease);
+}
+/* THE DARK THEME — only the token values change, no structural rules */
+#stage[data-theme="dark"]{
+  --s-bg:#0e0f12;
+  --s-surface:#191b20;
+  --s-ink:#f5f6f8;
+  --s-body:#c4c8d0;
+  --s-muted:#8b929e;
+  --s-line:rgba(255,255,255,.10);
+  --s-shadow:0 18px 36px 0 rgba(0,0,0,.55);
+  --s-hero-bg:#070809;
+  --s-hero-ink:#ffffff;
+  --s-hero-sub:#aab0bb;
+}
+/* THE SKINS — each re-sets ONLY the accent family, theme-agnostic */
+#stage[data-skin="indigo"]{--s-accent:#4f46e5;--s-accent-2:#818cf8;--s-accent-ink:#3730a3}
+#stage[data-skin="emerald"]{--s-accent:#0e9f6e;--s-accent-2:#34d399;--s-accent-ink:#067a52}
+
+/* every element below paints from --s-* ONLY — never a literal hex */
+.stage-head{display:flex;align-items:center;gap:8px;padding:14px 22px;
+  background:color-mix(in srgb,var(--s-hero-bg) 92%,transparent);
+  border-bottom:1px solid rgba(255,255,255,.08);
+  transition:background .45s var(--ease)}
+.stage-head .sbrand{display:flex;align-items:center;gap:9px;margin-right:auto;
+  font-weight:700;color:#fff;font-size:14px;letter-spacing:-.01em}
+.stage-head .sbrand .d{width:10px;height:10px;border-radius:3px;background:var(--s-accent);
+  transition:background .35s var(--ease)}
+.stage-head a{color:rgba(255,255,255,.72);font-size:12px;font-weight:600;padding:6px 11px;border-radius:var(--r-pill)}
+.stage-head a.cur{color:#fff;background:var(--s-accent);transition:background .35s var(--ease)}
+@media(max-width:560px){.stage-head a:not(.cur){display:none}}
+
+.stage-hero{position:relative;overflow:hidden;padding:54px 30px 60px;
+  background:var(--s-hero-bg);color:var(--s-hero-ink);
+  transition:background .45s var(--ease),color .45s var(--ease)}
+.stage-hero::before{content:"";position:absolute;width:380px;height:380px;left:-110px;top:-130px;
+  border-radius:50%;filter:blur(64px);pointer-events:none;
+  background:radial-gradient(circle,color-mix(in srgb,var(--s-accent) 55%,transparent),transparent 70%);
+  transition:background .45s var(--ease)}
+.stage-hero .in{position:relative;z-index:1;max-width:560px}
+.stage-hero .ey{display:inline-flex;align-items:center;gap:9px;text-transform:uppercase;
+  letter-spacing:.16em;font-size:11px;font-weight:700;color:var(--s-accent-2);transition:color .35s var(--ease)}
+.stage-hero .ey::before{content:"";width:28px;height:2px;background:var(--s-accent-2);transition:background .35s var(--ease)}
+.stage-hero h3{color:var(--s-hero-ink);font-size:clamp(26px,4.2vw,42px);font-weight:300;
+  letter-spacing:-.03em;line-height:1.02;margin:13px 0 0}
+.stage-hero h3 b{font-weight:700}
+.stage-hero h3 .clip{background:var(--s-grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.stage-hero p{margin:14px 0 0;color:var(--s-hero-sub);font-size:14.5px;line-height:1.55;transition:color .45s var(--ease)}
+.stage-hero .cta{margin-top:22px;display:inline-flex;align-items:center;gap:9px;
+  background:var(--s-accent);color:#fff;font-weight:700;font-size:13.5px;
+  padding:11px 22px;border-radius:var(--r-pill);min-height:44px;
+  box-shadow:0 10px 22px -6px color-mix(in srgb,var(--s-accent) 60%,transparent);
+  transition:background .35s var(--ease),transform var(--t-fast)}
+.stage-hero .cta:hover{transform:translateY(-2px)}
+.stage-hero .ghost{margin-left:10px;display:inline-flex;align-items:center;
+  color:var(--s-hero-ink);font-weight:600;font-size:13.5px;padding:11px 16px;border-radius:var(--r-pill);
+  border:1px solid rgba(255,255,255,.22)}
+
+.stage-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;
+  padding:28px 30px;background:var(--s-bg);transition:background .45s var(--ease)}
+@media(max-width:680px){.stage-cards{grid-template-columns:1fr}}
+.scard{background:var(--s-surface);border:1px solid var(--s-line);border-radius:var(--s-radius);
+  padding:20px 20px 18px;box-shadow:var(--s-shadow);
+  transition:background .45s var(--ease),border-color .45s var(--ease),box-shadow .45s var(--ease),transform var(--t-fast)}
+.scard:hover{transform:translateY(-4px)}
+.scard .ic{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;margin-bottom:13px;
+  background:color-mix(in srgb,var(--s-accent) 12%,transparent);
+  border:1px solid color-mix(in srgb,var(--s-accent) 28%,transparent);transition:.45s var(--ease)}
+.scard .ic i{width:14px;height:14px;border-radius:4px;background:var(--s-accent);display:block;transition:background .35s var(--ease)}
+.scard h4{color:var(--s-ink);font-size:15.5px;margin:0 0 6px;transition:color .45s var(--ease)}
+.scard p{color:var(--s-body);font-size:13px;line-height:1.55;margin:0;transition:color .45s var(--ease)}
+.scard .kick{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--s-accent-ink);margin-bottom:8px;transition:color .35s var(--ease)}
+
+.stage-foot{display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+  padding:20px 30px;background:var(--s-hero-bg);color:var(--s-muted);font-size:12px;
+  border-top:1px solid rgba(255,255,255,.07);transition:background .45s var(--ease)}
+.stage-foot .fb{margin-right:auto;color:#fff;font-weight:700}
+.stage-foot a{color:rgba(255,255,255,.6);font-size:12px}
+.stage-foot .ac{color:var(--s-accent-2);font-family:var(--mono);transition:color .35s var(--ease)}
+
+/* badge that names the live state, sitting on the stage */
+.stage-badge{font-family:var(--mono);font-size:10.5px;font-weight:700;letter-spacing:.04em;
+  display:inline-flex;align-items:center;gap:8px;padding:5px 11px;border-radius:var(--r-pill);
+  background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.2)}
+.stage-badge b{color:var(--s-accent-2)}
+
+/* ---------- the build-to-tokens rule (before / after) ---------- */
+.ba{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:24px}
+@media(max-width:760px){.ba{grid-template-columns:1fr}}
+.bacol{border-radius:var(--r-card);overflow:hidden;border:1px solid var(--line);box-shadow:var(--shadow-rest)}
+.bacol .cap{display:flex;align-items:center;gap:8px;padding:11px 16px;font-family:var(--mono);
+  font-size:11px;font-weight:700;letter-spacing:.04em}
+.bacol.bad .cap{background:rgba(213,21,34,.10);color:var(--accent-ink)}
+.bacol.good .cap{background:rgba(31,138,76,.12);color:#0d6b39}
+.bacol .cap .tag{margin-left:auto;font-size:10px;opacity:.85}
+.bacol pre{margin:0;padding:16px;background:var(--ink);color:#e6e6e6;overflow-x:auto;
+  font-family:var(--mono);font-size:12px;line-height:1.7}
+.bacol pre .c{color:#7f8694}      /* comment */
+.bacol pre .h{color:#ff8b93}      /* literal hex (the smell) */
+.bacol pre .v{color:#7ee0b0}      /* var() (the cure) */
+.bacol pre .p{color:#9ec5ff}      /* property */
+
+/* ---------- the cascade explainer cards ---------- */
+.flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin-top:8px}
+.flowcard{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-card);
+  padding:18px 18px 16px;box-shadow:var(--shadow-rest)}
+.flowcard .n{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--accent);letter-spacing:.04em}
+.flowcard h4{font-size:15px;margin:9px 0 5px}
+.flowcard p{font-size:13px;color:var(--body);line-height:1.55;margin:0}
+.flowcard code{font-size:.92em}
+
+/* ---------- dark explainer band ---------- */
+.darkband{padding:60px 0;background:var(--ink);color:#cfcfcf;position:relative;overflow:hidden}
+.darkband::before{content:"";position:absolute;width:520px;height:520px;left:50%;top:-260px;transform:translateX(-50%);
+  border-radius:50%;filter:blur(80px);background:radial-gradient(circle,rgba(213,21,34,.22),transparent 70%);pointer-events:none}
+.darkband .wrap{position:relative;z-index:1}
+.darkband h2{color:#fff;font-size:clamp(23px,3.2vw,34px);margin:12px 0 10px}
+.darkband .eyebrow{color:var(--accent-2)}.darkband .eyebrow::before{background:var(--accent-2)}
+.darkband .lede{max-width:760px;color:#bdbdbd}
+.dgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:24px}
+.dcard{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:var(--r-card);
+  padding:16px 18px;box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
+.dcard .dn{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--accent-2)}
+.dcard h4{color:#fff;font-size:14.5px;margin:8px 0 4px}
+.dcard p{color:#9b9b9b;font-size:12.5px;margin:0;line-height:1.5}
+
+/* ---------- footer ---------- */
+.foot{background:#111;color:#9b9b9b;padding:46px 0;font-size:13px;border-top:1px solid rgba(255,255,255,.08)}
+.foot .wrap{display:flex;gap:16px;flex-wrap:wrap;align-items:center}
+.foot .fbrand{margin-right:auto;color:#fff;font-weight:700}
+.foot a{color:#cfcfcf}.foot a:hover{color:#fff}
+.foot .meta{color:#666;font-family:var(--mono);font-size:11px}
+
+/* ---------- reduced motion ---------- */
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *{animation:none!important;transition:none!important}
+}
+@media (max-width:680px){
+  .hero{padding:76px 0 96px}
+  .tat{grid-template-columns:1fr}
+  .deck .live{margin-left:0}
+}
+</style>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- ===================== GLASS TOP NAV ===================== -->
+<nav class="topnav">
+  <div class="wrap">
+    <span class="brand"><span class="dot"></span>SGEN&nbsp;<small>Living Styleguide</small></span>
+    <a class="nav" href="index.html">Index</a>
+    <a class="nav" href="00-top12.html">00 · Top-12</a>
+    <a class="nav" href="01-transitions-hero-motion.html">01 · Transitions</a>
+    <a class="nav" href="02-depth-type-color.html">02 · Depth</a>
+    <a class="nav" href="03-layout-imagery-components.html">03 · Layout</a>
+    <a class="nav" href="04-signatures-tokens.html">04 · Signatures</a>
+    <a class="nav" href="06-responsive.html">06 · Responsive</a>
+    <a class="nav" href="07-components.html">07 · Components</a>
+    <a class="nav" href="08-scroll-sticky.html">08 · Scroll / Sticky</a>
+    <a class="nav" href="09-accessibility.html">09 · Accessibility</a>
+    <a class="nav" href="10-sections.html">10 · Sections</a>
+    <a class="nav" href="11-theming.html" aria-current="page">11 · Theming</a><a class="nav" href="12-iconography.html">12 · Iconography</a><a class="nav" href="13-utility-pages.html">13 · Utility</a><a class="nav" href="14-ecommerce.html">14 · Ecommerce</a><a class="nav" href="15-dataviz.html">15 · Data-viz</a>
+  </div>
+</nav>
+
+<!-- ===================== HERO ===================== -->
+<header class="hero" id="main" tabindex="-1">
+  <div class="wrap">
+    <span class="eyebrow">Page 11 — build to tokens, not hex</span>
+    <h1>Theme by <b class="clip">token</b>, not by hand.</h1>
+    <p class="lede">A site themed properly is themed in <b>one place</b>. Every surface, ink, line and shadow reads from a CSS custom property — so a whole site flips <b>light↔dark</b>, or re-skins to a new accent, by changing <b>values</b>, never markup. Below: a live sample site (header + hero + cards + footer) that you re-theme with the controls. Nothing in it carries a hard-coded color.</p>
+  </div>
+  <div class="scroll-fade"></div>
+</header>
+
+<!-- ===================== §1 — THE TOKEN LAYER ===================== -->
+<section class="section">
+  <div class="wrap">
+    <div class="head">
+      <span class="eyebrow">The chrome · five custom properties</span>
+      <h2><span class="num">1</span>The design tokens — accent, ink, paper, shadow, radius.</h2>
+      <p>This is the whole system. Five families of custom property declared once in <code>:root</code>. Every component on every page references them — so the brand lives in one block, and a re-skin is a re-set of these values, not a search-and-replace across the codebase.</p>
+    </div>
+    <div class="tokcard">
+      <table>
+        <thead><tr><th style="width:34%">Token</th><th>Role</th><th>Value</th></tr></thead>
+        <tbody>
+          <tr><td class="prop"><span class="swr"><span class="sw" style="background:#d51522"></span>--accent</span></td><td class="role">the one saturated hue — every CTA, link, counter &amp; rule</td><td class="hex">#d51522</td></tr>
+          <tr><td class="prop"><span class="swr"><span class="sw" style="background:#1a1a1a"></span>--ink</span></td><td class="role">charcoal — headings, body on light, dark grounds</td><td class="hex">#1a1a1a</td></tr>
+          <tr><td class="prop"><span class="swr"><span class="sw" style="background:#f6f5f3"></span>--paper</span></td><td class="role">warm off-white page ground — never <code>#fff</code></td><td class="hex">#f6f5f3</td></tr>
+          <tr><td class="prop"><span class="swr"><span class="sw" style="background:linear-gradient(135deg,#1a1a1a,#3a3a45)"></span>--shadow</span></td><td class="role">one ink-tinted soft shadow family, deepening on lift</td><td class="hex">rgba(1,7,39,.13)</td></tr>
+          <tr><td class="prop"><span class="swr"><span class="sw" style="background:#fff;border-radius:16px"></span>--radius</span></td><td class="role">chip 8 · card 16 · panel 24 · pill ∞ — one corner scale</td><td class="hex">16px</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="tat">
+      <div class="cell"><span class="k">Declared once</span><span class="v">all five families live in <code>:root</code> — a single source of truth</span></div>
+      <div class="cell"><span class="k">Referenced everywhere</span><span class="v">components read <code>var(--accent)</code>, never the literal <code>#d51522</code></span></div>
+      <div class="cell"><span class="k">Themed by value</span><span class="v">override the values under a scope and the whole subtree re-paints</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== §2 — THE LIVE THEME STAGE ===================== -->
+<section class="section">
+  <div class="wrap">
+    <div class="head">
+      <span class="eyebrow">See it work · re-theme this live</span>
+      <h2><span class="num">2</span>One sample site — light↔dark + three accent skins.</h2>
+      <p>The block below is a complete little site: header, hero, three cards, footer. Flip the switch and every surface re-themes; pick a skin and every accent re-tints. <b>It is the same markup the entire time</b> — only token values change. Watch the cards, the CTA, the glow and the footer all move together.</p>
+    </div>
+
+    <!-- the control deck -->
+    <div class="deck" role="group" aria-label="Theme controls for the sample site">
+      <div class="grp">
+        <span class="lbl">Theme</span>
+        <span class="switch" id="theme-switch" role="group" aria-label="Light or dark theme">
+          <button type="button" data-mode="light" aria-pressed="true"><span class="ic" aria-hidden="true"></span>Light</button>
+          <button type="button" data-mode="dark" aria-pressed="false"><span class="ic" aria-hidden="true"></span>Dark</button>
+        </span>
+      </div>
+      <div class="grp">
+        <span class="lbl">Accent skin</span>
+        <span class="skins" id="skin-picker" role="group" aria-label="Accent skin">
+          <button type="button" class="skinchip" data-skin="red" aria-pressed="true" aria-label="Red accent skin (SGEN default)"><span class="nm">red</span></button>
+          <button type="button" class="skinchip" data-skin="indigo" aria-pressed="false" aria-label="Indigo accent skin"><span class="nm">indigo</span></button>
+          <button type="button" class="skinchip" data-skin="emerald" aria-pressed="false" aria-label="Emerald accent skin"><span class="nm">emerald</span></button>
+        </span>
+      </div>
+      <span class="live" id="deck-live">theme: <b>light</b> · skin: <b>red</b></span>
+    </div>
+
+    <!-- THE STAGE — re-themes entirely from scoped --s-* tokens -->
+    <div id="stage" data-theme="light" data-skin="red">
+      <div class="stage-head">
+        <span class="sbrand"><span class="d"></span>Northwind</span>
+        <a href="#" class="cur">Product</a>
+        <a href="#">Pricing</a>
+        <a href="#">Docs</a>
+      </div>
+      <div class="stage-hero">
+        <div class="in">
+          <span class="ey">Token-driven sample</span>
+          <h3>Ship a brand, <b class="clip">re-skin</b> in one line.</h3>
+          <p>Every pixel of this sample reads from a scoped custom-property set. Flip the theme above and this hero, the cards below and the footer all re-paint at once — because not one rule here hard-codes a color.</p>
+          <span class="cta">Get started</span>
+          <span class="ghost">Live demo</span>
+        </div>
+        <span class="stage-badge" style="position:absolute;right:22px;top:18px;z-index:2">
+          theme <b id="badge-theme">light</b> · skin <b id="badge-skin">red</b>
+        </span>
+      </div>
+      <div class="stage-cards">
+        <div class="scard">
+          <div class="ic"><i></i></div>
+          <div class="kick">surface</div>
+          <h4>Cards float on surface</h4>
+          <p>Background, border and shadow all read from <code>--s-surface</code>, <code>--s-line</code>, <code>--s-shadow</code>. In dark mode the same card sits on a raised dark surface — same rule, new values.</p>
+        </div>
+        <div class="scard">
+          <div class="ic"><i></i></div>
+          <div class="kick">accent</div>
+          <h4>Accent re-tints live</h4>
+          <p>The icon chip, kicker and any CTA pull <code>--s-accent</code>. Pick a skin above and every accent across the block re-tints together — no element edited.</p>
+        </div>
+        <div class="scard">
+          <div class="ic"><i></i></div>
+          <div class="kick">ink</div>
+          <h4>Ink inverts for contrast</h4>
+          <p>Heading uses <code>--s-ink</code>, body uses <code>--s-body</code>. Light mode = charcoal on paper; dark mode = near-white on deep slate. The contrast ratio holds because the token, not the element, carries the value.</p>
+        </div>
+      </div>
+      <div class="stage-foot">
+        <span class="fb">Northwind</span>
+        <a href="#">Terms</a>
+        <a href="#">Privacy</a>
+        <span class="ac" id="foot-token">--s-accent</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== §3 — BUILD TO TOKENS, NOT HEX ===================== -->
+<section class="section">
+  <div class="wrap">
+    <div class="head">
+      <span class="eyebrow">The one rule</span>
+      <h2><span class="num">3</span>Build to tokens, not hard-coded hex.</h2>
+      <p>A literal hex in a component is a <b>theme leak</b> — it can't follow the light/dark flip and it can't re-skin. The fix is mechanical: a color in a rule is always a <code>var()</code> reference, and the literal only ever appears once, in the token declaration. The left column can't theme. The right column does, for free.</p>
+    </div>
+    <div class="ba">
+      <div class="bacol bad">
+        <div class="cap">✗ hard-coded — a theme leak<span class="tag">can't flip, can't re-skin</span></div>
+<pre><span class="c">/* color baked into the component */</span>
+<span class="p">.card</span>{
+  <span class="p">background</span>:<span class="h">#ffffff</span>;
+  <span class="p">color</span>:<span class="h">#1a1a1a</span>;
+  <span class="p">border</span>:1px solid <span class="h">#e6e6e6</span>;
+  <span class="p">box-shadow</span>:0 15px 30px <span class="h">rgba(1,7,39,.13)</span>;
+}
+<span class="p">.cta</span>{ <span class="p">background</span>:<span class="h">#d51522</span>; }
+<span class="c">/* dark mode? rewrite every rule. */</span></pre>
+      </div>
+      <div class="bacol good">
+        <div class="cap">✓ tokenized — themes itself<span class="tag">flip + re-skin = free</span></div>
+<pre><span class="c">/* color lives in the token layer only */</span>
+<span class="p">.card</span>{
+  <span class="p">background</span>:<span class="v">var(--s-surface)</span>;
+  <span class="p">color</span>:<span class="v">var(--s-ink)</span>;
+  <span class="p">border</span>:1px solid <span class="v">var(--s-line)</span>;
+  <span class="p">box-shadow</span>:<span class="v">var(--s-shadow)</span>;
+}
+<span class="p">.cta</span>{ <span class="p">background</span>:<span class="v">var(--s-accent)</span>; }
+<span class="c">/* dark mode = re-set the tokens. done. */</span></pre>
+      </div>
+    </div>
+    <div class="flow">
+      <div class="flowcard">
+        <span class="n">STEP 1</span>
+        <h4>Declare on a scope</h4>
+        <p>Light values on <code>:root</code> (or the stage root). Every token is named for its <b>role</b> (surface, ink, accent), not its color.</p>
+      </div>
+      <div class="flowcard">
+        <span class="n">STEP 2</span>
+        <h4>Override under a flag</h4>
+        <p><code>[data-theme="dark"]</code> re-sets the same token <i>values</i>. The skins re-set only the accent family. Structure is untouched.</p>
+      </div>
+      <div class="flowcard">
+        <span class="n">STEP 3</span>
+        <h4>Reference, never inline</h4>
+        <p>Components only ever say <code>var(--token)</code>. The cascade does the theming — flip the flag and the whole subtree re-paints.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== DARK-MODE PRINCIPLES BAND ===================== -->
+<section class="darkband">
+  <div class="wrap">
+    <span class="eyebrow">Dark-mode done right</span>
+    <h2>Dark mode is not "invert the colors."</h2>
+    <p class="lede">A proper dark theme re-tunes the token <i>values</i> with intent — softer ink so it doesn't glare, raised surfaces instead of pure black, a tinted shadow that still reads on a dark ground, and an accent that holds its contrast. Same five tokens, re-valued for the dark surround.</p>
+    <div class="dgrid">
+      <div class="dcard"><span class="dn">surface</span><h4>Raise, don't blacken</h4><p>Dark surfaces sit a step above the page ground (<code>#191b20</code> on <code>#0e0f12</code>) so cards still read as lifted — never pure <code>#000</code>.</p></div>
+      <div class="dcard"><span class="dn">ink</span><h4>Soften the text</h4><p>Body ink is near-white, not <code>#fff</code> — full white on dark vibrates. Dial it to a calm light grey for long reads.</p></div>
+      <div class="dcard"><span class="dn">accent</span><h4>Hold the contrast</h4><p>The accent must clear contrast on <i>both</i> grounds. A skin that passes on paper can fail on slate — verify on each.</p></div>
+      <div class="dcard"><span class="dn">shadow</span><h4>Deeper, still tinted</h4><p>Shadows go heavier and darker on a dark ground, but stay slightly ink-tinted so depth survives where black-on-black would vanish.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="foot">
+  <div class="wrap">
+    <span class="fbrand">SGEN · Living Styleguide</span>
+    <a href="index.html">Index</a>
+    <a href="08-scroll-sticky.html">08 · Scroll / Sticky</a>
+    <a href="09-accessibility.html">09 · Accessibility</a>
+    <a href="10-sections.html">10 · Sections</a>
+    <a href="11-theming.html">11 · Theming</a><a href="12-iconography.html">12 · Iconography</a><a href="13-utility-pages.html">13 · Utility</a><a href="14-ecommerce.html">14 · Ecommerce</a><a href="15-dataviz.html">15 · Data-viz</a>
+    <span class="meta">5 tokens · light↔dark + 3 skins · build to tokens, not hex</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  var stage     = document.getElementById('stage');
+  var themeSw    = document.getElementById('theme-switch');
+  var skinPick   = document.getElementById('skin-picker');
+  var deckLive   = document.getElementById('deck-live');
+  var badgeTheme = document.getElementById('badge-theme');
+  var badgeSkin  = document.getElementById('badge-skin');
+  var footTok    = document.getElementById('foot-token');
+
+  function syncReadout(){
+    var theme = stage.getAttribute('data-theme');
+    var skin  = stage.getAttribute('data-skin');
+    if(deckLive)   deckLive.innerHTML = 'theme: <b>' + theme + '</b> · skin: <b>' + skin + '</b>';
+    if(badgeTheme) badgeTheme.textContent = theme;
+    if(badgeSkin)  badgeSkin.textContent = skin;
+  }
+
+  /* ---- LIGHT / DARK: flip ONE attribute → the scoped tokens re-set ---- */
+  themeSw.addEventListener('click', function(e){
+    var btn = e.target.closest('button[data-mode]'); if(!btn) return;
+    var mode = btn.getAttribute('data-mode');
+    stage.setAttribute('data-theme', mode);
+    [].forEach.call(themeSw.querySelectorAll('button'), function(b){
+      b.setAttribute('aria-pressed', b === btn ? 'true' : 'false');
+    });
+    syncReadout();
+  });
+
+  /* ---- ACCENT SKINS: re-set ONLY the accent family, theme-agnostic ---- */
+  skinPick.addEventListener('click', function(e){
+    var btn = e.target.closest('button[data-skin]'); if(!btn) return;
+    var skin = btn.getAttribute('data-skin');
+    stage.setAttribute('data-skin', skin);
+    [].forEach.call(skinPick.querySelectorAll('button'), function(b){
+      b.setAttribute('aria-pressed', b === btn ? 'true' : 'false');
+    });
+    syncReadout();
+  });
+
+  syncReadout();
+})();
+</script>
+
+</body>
+</html>

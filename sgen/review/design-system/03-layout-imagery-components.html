@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Living Styleguide 03 — Layout, Imagery &amp; Components · SGEN</title>
+<style>
+/* ============================================================
+   SGEN LIVING STYLEGUIDE 03 — Layout (G) · Imagery (H) · Components (I)
+   Self-contained. Zero external deps. System fonts. CSS-crafted visuals.
+   Tokens distilled from _MODERN-DESIGN-PATTERN-LIBRARY.md (verified values).
+   ============================================================ */
+:root{
+  /* COLOR — SGEN brand chrome */
+  --ink:#1a1a1a;            /* charcoal, never #000 */
+  --accent:#d51522;         /* SGEN red */
+  --paper:#f6f5f3;          /* warm off-white, never #fff */
+  --surface:#ffffff;
+  --muted:#626262;          /* recurs verbatim across the harvest */
+  --body:#4a4a4a;
+  --hairline:rgba(26,26,26,.10);
+  --tint-accent:rgba(213,21,34,.08);
+
+  /* GRADIENTS — constant 135deg */
+  --grad-brand:linear-gradient(135deg,var(--accent),#7a0a12);
+  --fade-to-paper:linear-gradient(180deg,rgba(246,245,243,0) 0%,var(--paper) 65%);
+
+  /* RADIUS */
+  --r-chip:8px; --r-card:16px; --r-panel:24px;
+  --r-squircle:clamp(24px,4vw,64px); --r-pill:9999px;
+
+  /* SHADOW — ink-tinted, never #000 */
+  --shadow-rest:0 2px 5px 0 rgba(0,0,0,.08);
+  --shadow-card:0 15px 30px 0 rgba(1,7,39,.13);            /* the universal one */
+  --shadow-card-2stop:0 12px 16px -4px rgba(16,24,40,.08),0 4px 6px -2px rgba(16,24,40,.03);
+  --shadow-hover:0 32px 64px -12px rgba(16,24,40,.14);     /* real-estate gold standard */
+
+  /* MOTION */
+  --ease:cubic-bezier(.05,.5,.3,1);   /* BeTheme signature settle */
+  --t-fast:.2s ease-out;              /* confident hover */
+  --t-reveal:.6s var(--ease);
+
+  /* TYPE — system fonts only */
+  --font-ui:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --font-display:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+  --font-num:"SFMono-Regular",ui-monospace,"Cascadia Mono","Segoe UI Mono",Consolas,monospace;
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:var(--font-ui);
+  color:var(--body);
+  background:var(--paper);
+  -webkit-font-smoothing:antialiased;
+  line-height:1.6;
+}
+h1,h2,h3,h4{font-family:var(--font-display);color:var(--ink);line-height:1.05;letter-spacing:-.02em;margin:0}
+a{color:var(--accent);text-decoration:none}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+
+/* ---------- TOP NAV (sibling pages) ---------- */
+.topnav{
+  position:sticky;top:0;z-index:50;
+  background:rgba(26,26,26,.92);
+  backdrop-filter:blur(14px) saturate(160%);
+  -webkit-backdrop-filter:blur(14px) saturate(160%);
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+.topnav .wrap{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding-top:12px;padding-bottom:12px}
+.topnav .brand{display:flex;align-items:center;gap:8px;font-weight:800;color:#fff;letter-spacing:-.02em;margin-right:8px}
+.topnav .brand .dot{width:11px;height:11px;border-radius:3px;background:var(--accent)}
+.topnav a.nl{
+  color:rgba(255,255,255,.62);font-size:13px;font-weight:600;
+  padding:6px 11px;border-radius:var(--r-pill);
+  transition:color .2s,background-color .2s;white-space:nowrap;
+}
+.topnav a.nl:hover{color:#fff;background:rgba(255,255,255,.08)}
+.topnav a.nl[aria-current="page"]{color:#fff;background:var(--accent)}
+
+/* ---------- PAGE HEADER ---------- */
+.pagehead{padding:72px 0 40px;text-align:center}
+.pagehead .kicker{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
+.pagehead h1{font-size:clamp(34px,6vw,62px);font-weight:600}
+.pagehead p{max-width:640px;margin:18px auto 0;color:var(--muted);font-size:17px}
+
+/* ---------- CATEGORY HEADER ---------- */
+.cat{padding:56px 0 8px}
+.cat .eyebrow{display:flex;align-items:center;gap:14px;margin-bottom:8px}
+.cat .eyebrow .rule{height:2px;width:48px;background:var(--accent);border-radius:2px}
+.cat .eyebrow span{font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--accent)}
+.cat h2{font-size:clamp(26px,4vw,40px);font-weight:600}
+.cat .lede{color:var(--muted);margin-top:8px;max-width:680px}
+
+/* ---------- SPECIMEN GRID + CARD ---------- */
+.specimens{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:24px;padding:28px 0 8px}
+.specimen{
+  background:var(--surface);
+  border:1px solid var(--hairline);
+  border-radius:var(--r-card);
+  box-shadow:var(--shadow-card-2stop);
+  overflow:hidden;display:flex;flex-direction:column;
+}
+.specimen.span2{grid-column:span 2}
+.specimen .head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:18px 20px 12px}
+.specimen .head .name{font-family:var(--font-display);font-weight:600;font-size:18px;color:var(--ink);letter-spacing:-.01em}
+.specimen .head .name .id{font-family:var(--font-num);font-size:11px;color:var(--accent);font-weight:700;letter-spacing:.04em;margin-right:7px}
+.badge{
+  flex:none;font-family:var(--font-num);font-size:11px;font-weight:700;
+  color:var(--accent);background:var(--tint-accent);
+  border:1px solid rgba(213,21,34,.18);
+  padding:3px 9px;border-radius:var(--r-pill);white-space:nowrap;
+}
+.stage{
+  position:relative;margin:0 20px;border-radius:12px;overflow:hidden;
+  background:linear-gradient(180deg,#fafafa,#f0efec);
+  border:1px solid var(--hairline);
+  min-height:200px;display:flex;align-items:center;justify-content:center;
+}
+.stage.dark{background:linear-gradient(160deg,#16161a,#26262d)}
+.stage.flush{margin:0;border-radius:0;border-left:0;border-right:0}
+.specimen .how{
+  margin-top:auto;padding:14px 20px 18px;font-size:12.5px;color:var(--muted);
+  border-top:1px solid var(--hairline);
+}
+.specimen .how b{color:var(--ink);font-weight:700}
+.specimen .how code{font-family:var(--font-num);font-size:11.5px;background:#f2f1ee;color:#a01019;padding:1px 5px;border-radius:4px}
+
+/* ===== reveal (shared) ===== */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity var(--t-reveal),transform var(--t-reveal)}
+.reveal.in-view{opacity:1;transform:none}
+
+/* =====================================================================
+   CATEGORY G — LAYOUT & GRID
+   ===================================================================== */
+
+/* G1 — section rhythm + alternating grounds */
+.g1-demo{width:100%;font-size:11px}
+.g1-band{padding:22px 18px;position:relative}
+.g1-band .lbl{font-family:var(--font-num);font-size:10px;color:var(--muted);position:absolute;top:6px;right:10px}
+.g1-band.paper{background:var(--paper)}
+.g1-band.tint{background:var(--tint-accent)}
+.g1-band.anchor{background:var(--ink);color:#fff}
+.g1-band .blk{height:8px;border-radius:4px;background:rgba(26,26,26,.18);margin:6px 0}
+.g1-band.anchor .blk{background:rgba(255,255,255,.22)}
+.g1-band .blk.w70{width:70%}.g1-band .blk.w45{width:45%}
+.g1-pad-a{padding-top:34px;padding-bottom:18px}/* top != bottom on purpose */
+
+/* G2 — overlapping columns */
+.g2{position:relative;width:86%;height:200px;margin:0 auto}
+.g2 .col-text{position:absolute;left:0;top:34px;width:64%;background:var(--ink);color:#fff;border-radius:10px;padding:18px;z-index:1}
+.g2 .col-text h4{color:#fff;font-size:15px;margin-bottom:6px}
+.g2 .col-text p{margin:0;font-size:11px;color:rgba(255,255,255,.7)}
+.g2 .col-img{
+  position:absolute;right:0;top:0;width:46%;height:170px;z-index:2;
+  border-radius:10px;box-shadow:var(--shadow-card);
+  margin-left:50px;margin-bottom:-95px;
+  background:linear-gradient(150deg,#d51522,#7a0a12 60%,#3a0508);
+}
+@media(max-width:520px){.g2 .col-text{position:static;width:100%}.g2 .col-img{position:static;width:100%;margin:10px 0 0;height:90px}.g2{height:auto}}
+
+/* G3 — bento */
+.bento{display:grid;width:100%;gap:8px;padding:0;grid-template-columns:repeat(4,1fr);grid-auto-rows:52px}
+.bento .t{border-radius:9px;display:flex;align-items:flex-end;padding:8px;font-size:10px;font-weight:700;color:#fff;letter-spacing:.02em}
+.bento .t1{grid-column:span 2;grid-row:span 2;background:var(--grad-brand)}
+.bento .t2{grid-column:span 2;background:var(--ink)}
+.bento .t3{background:#d51522}
+.bento .t4{background:#2a2a30}
+.bento .t5{grid-column:span 2;background:linear-gradient(135deg,#3a3a42,#1a1a1a)}
+.bento .t6{background:#e23a45}
+
+/* G4 — icon-tile feature grid */
+.g4{display:grid;width:100%;gap:14px;grid-template-columns:repeat(2,1fr)}
+.g4 .cell{background:var(--surface)}
+.g4 .chip{width:46px;height:46px;border-radius:13px;background:var(--tint-accent);display:grid;place-items:center;margin-bottom:9px}
+.g4 .chip svg{width:22px;height:22px;stroke:var(--accent);fill:none;stroke-width:2}
+.g4 h4{font-size:14px;font-family:var(--font-ui);font-weight:700;color:var(--ink)}
+.g4 p{margin:3px 0 6px;font-size:11px;color:var(--muted)}
+.g4 .lnk{font-size:11px;font-weight:700;color:var(--accent)}
+
+/* G5 — full-bleed inside constrained wrap */
+.g5{width:100%}
+.g5 .fb{height:62px;background:linear-gradient(120deg,#2a2a30,#16161a);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.55);font-size:10px;font-family:var(--font-num)}
+.g5 .narrow{max-width:62%;margin:14px auto;text-align:center}
+.g5 .narrow .h{height:9px;width:60%;margin:0 auto 6px;background:rgba(26,26,26,.2);border-radius:4px}
+.g5 .narrow .l{height:6px;background:rgba(26,26,26,.12);border-radius:3px;margin:4px 0}
+
+/* G6 — pricing tiers */
+.g6{display:grid;width:100%;gap:12px;grid-template-columns:repeat(3,1fr);align-items:center}
+.tier{background:var(--surface);border:1px solid var(--hairline);border-radius:14px;padding:16px 14px;text-align:center;box-shadow:var(--shadow-rest)}
+.tier .pn{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.tier .pr{font-family:var(--font-display);font-size:30px;color:var(--ink);margin:6px 0 2px;letter-spacing:-.02em}
+.tier .pr span{font-size:12px;color:var(--muted);font-family:var(--font-ui)}
+.tier ul{list-style:none;padding:0;margin:10px 0 12px;font-size:11px;text-align:left}
+.tier li{padding:4px 0 4px 18px;position:relative;color:var(--body)}
+.tier li::before{content:"";position:absolute;left:0;top:9px;width:9px;height:5px;border-left:2px solid var(--accent);border-bottom:2px solid var(--accent);transform:rotate(-45deg)}
+.tier .pcta{display:block;padding:9px;border-radius:var(--r-pill);font-size:12px;font-weight:700;border:1.5px solid var(--ink);color:var(--ink);transition:background-color .2s,color .2s}
+.tier .pcta:hover{background:var(--ink);color:#fff}
+.tier.feat{transform:scale(1.05);border:1.5px solid var(--accent);box-shadow:var(--shadow-hover);position:relative;z-index:1}
+.tier.feat .ribbon{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 11px;border-radius:var(--r-pill)}
+.tier.feat .pcta{background:var(--accent);border-color:var(--accent);color:#fff}
+.tier.feat .pcta:hover{background:#a01019;border-color:#a01019}
+@media(max-width:520px){.g6{grid-template-columns:1fr}.tier.feat{transform:none}}
+
+/* G7 — load-more grid */
+.g7{width:100%}
+.g7 .lmgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.g7 .lmcell{height:46px;border-radius:8px;background:linear-gradient(135deg,#e9e8e5,#d9d8d4);opacity:0;transform:translateY(10px);transition:opacity .45s var(--ease),transform .45s var(--ease)}
+.g7 .lmcell.show{opacity:1;transform:none}
+.g7 .lmbtn{display:block;margin:12px auto 0;padding:9px 22px;border-radius:var(--r-pill);background:transparent;border:1.5px solid var(--accent);color:var(--accent);font-weight:700;font-size:12px;cursor:pointer;transition:background-color .2s,color .2s}
+.g7 .lmbtn:hover{background:var(--accent);color:#fff}
+.g7 .lmbtn:disabled{opacity:.4;cursor:default;border-color:var(--muted);color:var(--muted);background:transparent}
+
+/* =====================================================================
+   CATEGORY H — IMAGERY & MASKS
+   ===================================================================== */
+
+/* H1 — clipped frame zoom + exposure (mask + rising caption + growing underline) */
+.frame{position:relative;width:78%;aspect-ratio:4/3;border-radius:12px;overflow:hidden;cursor:pointer}
+.frame .photo{position:absolute;inset:0;transition:transform .45s var(--ease);
+  background:
+    radial-gradient(circle at 30% 25%,#ff5a64 0,transparent 42%),
+    radial-gradient(circle at 78% 70%,#7a0a12 0,transparent 50%),
+    linear-gradient(150deg,#d51522,#2a0306);}
+.frame:hover .photo{transform:scale(1.08)}
+.frame .mask{position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.62),rgba(0,0,0,.05));opacity:0;transition:opacity .5s ease-in-out}
+.frame:hover .mask{opacity:1}
+.frame .cap{position:absolute;left:0;right:0;bottom:14px;padding:0 16px;color:#fff;opacity:0;transform:translateY(18px);transition:opacity .5s ease-in-out,transform .5s ease-in-out}
+.frame:hover .cap{opacity:1;transform:none}
+.frame .cap .line{display:block;width:0;height:3px;background:#fff;margin-bottom:9px;transition:width .5s ease-in-out .05s}
+.frame:hover .cap .line{width:40px}
+.frame .cap .t{font-family:var(--font-display);font-size:17px}
+.frame .cap .s{font-size:10px;letter-spacing:.1em;text-transform:uppercase;opacity:.8}
+
+/* H2 — shape-masked imagery */
+.h2{display:flex;gap:16px;width:100%;justify-content:center;align-items:center;flex-wrap:wrap}
+.h2 .m{width:84px;height:84px;background:linear-gradient(150deg,#d51522,#2a0306);box-shadow:var(--shadow-card)}
+.h2 .circle{border-radius:50%}
+.h2 .squircle{border-radius:26px}
+.h2 .asym{border-radius:42px 42px 8px 42px}
+.h2 .blob{border-radius:42% 58% 70% 30%/45% 45% 55% 55%;animation:blobmorph 8s ease-in-out infinite}
+@keyframes blobmorph{0%,100%{border-radius:42% 58% 70% 30%/45% 45% 55% 55%}50%{border-radius:65% 35% 38% 62%/58% 62% 38% 42%}}
+.h2 .cap{font-size:9px;font-family:var(--font-num);color:var(--muted);text-align:center;margin-top:6px}
+.h2 figure{margin:0}
+
+/* H3 — bg image + controlled overlay (graded vs raw) */
+.h3{display:flex;width:100%;gap:0}
+.h3 .half{flex:1;height:150px;position:relative;display:flex;align-items:flex-end;padding:12px;overflow:hidden}
+.h3 .pic{position:absolute;inset:0;background:
+  radial-gradient(circle at 70% 30%,#ffd0d4 0,transparent 40%),
+  linear-gradient(135deg,#e23a45,#5a0810);}
+.h3 .raw .ov{display:none}
+.h3 .graded .ov{position:absolute;inset:0;background:linear-gradient(0deg,rgba(26,26,26,.7),rgba(26,26,26,.15))}
+.h3 .txt{position:relative;color:#fff;font-weight:700;font-size:12px;text-shadow:0 1px 3px rgba(0,0,0,.4)}
+.h3 .tag{position:absolute;top:8px;left:10px;font-family:var(--font-num);font-size:9px;color:#fff;background:rgba(0,0,0,.45);padding:2px 6px;border-radius:4px;z-index:2}
+
+/* H4/H5 — squircle frame + circular medallion */
+.h45{display:flex;gap:18px;width:100%;justify-content:center;align-items:center}
+.h45 .squircle{width:150px;height:108px;border-radius:var(--r-squircle);background:linear-gradient(140deg,#2a2a30,#16161a);box-shadow:var(--shadow-card);position:relative;overflow:hidden}
+.h45 .squircle::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 25% 20%,rgba(213,21,34,.5),transparent 55%)}
+.h45 .medal{width:84px;height:84px;border-radius:50%;background:linear-gradient(150deg,#d51522,#7a0a12);box-shadow:var(--shadow-card);border:3px solid #fff}
+.h45 .lab{font-size:9px;font-family:var(--font-num);color:var(--muted);text-align:center;margin-top:6px}
+.h45 figure{margin:0}
+
+/* H6 — image bottom-fade into next section (#8) */
+.h6{width:100%}
+.h6 .img{height:120px;position:relative;background:
+  radial-gradient(circle at 40% 30%,#ff5a64 0,transparent 45%),
+  linear-gradient(160deg,#d51522,#2a0306);}
+.h6 .img::after{content:"";position:absolute;left:0;right:0;bottom:0;height:70%;background:var(--fade-to-paper)}
+.h6 .next{background:var(--paper);padding:14px;text-align:center;font-size:11px;color:var(--muted)}
+.h6 .next b{color:var(--ink);font-family:var(--font-display)}
+
+/* =====================================================================
+   CATEGORY I — COMPONENT POLISH
+   ===================================================================== */
+
+/* I1 — 2-way invert / accent-flip buttons + ::before fill-sweep */
+.i1{display:flex;flex-direction:column;gap:14px;align-items:center;width:100%}
+.btn{position:relative;overflow:hidden;font-family:var(--font-ui);font-weight:700;font-size:13px;
+  padding:11px 30px;border-radius:var(--r-pill);cursor:pointer;border:1.5px solid var(--accent);
+  z-index:0;transition:color .2s,background-color .2s,border-color .2s}
+.btn-fill{background:var(--accent);color:#fff}
+.btn-fill:hover{background:transparent;color:var(--accent)}
+.btn-ghost{background:transparent;color:var(--accent)}
+.btn-ghost:hover{color:#fff}
+.btn-sweep{background:transparent;color:var(--ink);border-color:var(--ink)}
+.btn-sweep::before{content:"";position:absolute;inset:0;background:var(--ink);transform:scaleX(0);transform-origin:left;transition:transform .3s var(--ease);z-index:-1}
+.btn-sweep:hover{color:#fff}
+.btn-sweep:hover::before{transform:scaleX(1)}
+.btn-ghost::before{content:"";position:absolute;inset:0;background:var(--accent);transform:scaleX(0);transform-origin:left;transition:transform .3s var(--ease);z-index:-1}
+.btn-ghost:hover::before{transform:scaleX(1)}
+.i1 .lab{font-size:9px;font-family:var(--font-num);color:var(--muted)}
+
+/* I2 — card lift + scale on hover */
+.i2{display:flex;gap:16px;width:100%;justify-content:center;flex-wrap:wrap}
+.lcard{width:150px;background:var(--surface);border:1px solid var(--hairline);border-radius:14px;padding:16px;
+  box-shadow:var(--shadow-card-2stop);transition:transform .3s var(--ease),box-shadow .3s var(--ease)}
+.lcard:hover{transform:scale(1.05) translateY(-4px);box-shadow:var(--shadow-hover)}
+.lcard .ico{width:40px;height:40px;border-radius:11px;background:var(--tint-accent);display:grid;place-items:center;margin-bottom:10px}
+.lcard .ico svg{width:20px;height:20px;stroke:var(--accent);fill:none;stroke-width:2}
+.lcard h4{font-family:var(--font-ui);font-size:13px;font-weight:700;color:var(--ink)}
+.lcard p{margin:4px 0 0;font-size:11px;color:var(--muted)}
+
+/* I3 — count-up stat counters */
+.i3{display:flex;gap:14px;width:100%;justify-content:space-around;text-align:center;flex-wrap:wrap}
+.stat .num{font-family:var(--font-display);font-size:clamp(30px,7vw,46px);color:var(--accent);line-height:1;letter-spacing:-.03em}
+.stat .num .suf{font-size:.55em;color:var(--ink)}
+.stat .cl{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:6px}
+
+/* I4 — scroll-snap carousel */
+.i4{width:100%}
+.i4 .track{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:8px;-webkit-overflow-scrolling:touch}
+.i4 .track::-webkit-scrollbar{height:6px}
+.i4 .track::-webkit-scrollbar-thumb{background:var(--hairline);border-radius:3px}
+.i4 .quote{flex:0 0 78%;scroll-snap-align:center;background:var(--surface);border:1px solid var(--hairline);border-radius:14px;padding:16px;box-shadow:var(--shadow-rest)}
+.i4 .quote p{margin:0 0 10px;font-family:var(--font-display);font-size:14px;color:var(--ink);line-height:1.4}
+.i4 .who{display:flex;align-items:center;gap:9px}
+.i4 .av{width:32px;height:32px;border-radius:50%;background:linear-gradient(150deg,#d51522,#7a0a12)}
+.i4 .who .nm{font-size:11px;font-weight:700;color:var(--ink)}
+.i4 .who .rl{font-size:10px;color:var(--muted)}
+.i4 .dots{display:flex;gap:6px;justify-content:center;margin-top:10px}
+.i4 .dots .d{width:7px;height:7px;border-radius:50%;background:var(--hairline);border:none;padding:0;cursor:pointer;transition:background-color .2s,transform .2s}
+.i4 .dots .d.on{background:var(--accent);transform:scale(1.3)}
+
+/* I5 — icon-box fill-on-hover */
+.i5{display:flex;gap:16px;width:100%;justify-content:center;flex-wrap:wrap}
+.iconbox{text-align:center;cursor:default}
+.iconbox .chip{width:56px;height:56px;border-radius:16px;background:var(--tint-accent);display:grid;place-items:center;margin:0 auto;transition:background-color .3s var(--ease)}
+.iconbox .chip svg{width:26px;height:26px;stroke:var(--accent);fill:none;stroke-width:2;transition:stroke .3s var(--ease)}
+.iconbox:hover .chip{background:var(--accent)}
+.iconbox:hover .chip svg{stroke:#fff}
+.iconbox .lab{font-size:11px;font-weight:700;color:var(--ink);margin-top:8px}
+
+/* I6 — pricing/menu rows with dotted leaders */
+.i6{width:88%}
+.i6 .row{display:flex;align-items:baseline;padding:9px 0;border-bottom:1px solid var(--hairline)}
+.i6 .nm{font-family:var(--font-display);font-size:14px;color:var(--ink)}
+.i6 .nm small{display:block;font-family:var(--font-ui);font-size:10px;color:var(--muted);letter-spacing:0}
+.i6 .lead{flex:1;border-bottom:1px dotted rgba(26,26,26,.3);margin:0 8px;transform:translateY(-3px)}
+.i6 .pr{font-family:var(--font-num);font-weight:700;color:var(--accent)}
+
+/* I7 — sticky shrink-on-scroll glass header (mini scroll-viewport demo) */
+.i7{width:100%;height:200px;overflow-y:auto;border-radius:10px;position:relative;background:linear-gradient(180deg,#1a1a1a 0,#1a1a1a 64px,#f6f5f3 64px)}
+.i7 .mhead{position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;
+  padding:14px 16px;transition:padding .25s var(--ease),background-color .25s,box-shadow .25s,backdrop-filter .25s;
+  background:transparent}
+.i7 .mhead.stuck{padding:8px 16px;background:rgba(255,255,255,.78);backdrop-filter:blur(16px) saturate(180%);-webkit-backdrop-filter:blur(16px) saturate(180%);box-shadow:0 6px 18px -8px rgba(16,24,40,.18);border-bottom:1px solid var(--hairline)}
+.i7 .mhead .lg{font-family:var(--font-display);font-weight:700;font-size:15px;color:#fff;transition:color .25s}
+.i7 .mhead.stuck .lg{color:var(--ink)}
+.i7 .mhead .nav{display:flex;gap:12px;font-size:11px;font-weight:600;color:rgba(255,255,255,.8);transition:color .25s}
+.i7 .mhead.stuck .nav{color:var(--muted)}
+.i7 .scrollbody{padding:0 16px}
+.i7 .scrollbody .hh{height:10px;width:55%;background:rgba(26,26,26,.18);border-radius:5px;margin:16px 0 8px}
+.i7 .scrollbody .ll{height:7px;background:rgba(26,26,26,.1);border-radius:4px;margin:6px 0}
+.i7 .cue{font-family:var(--font-num);font-size:9px;color:var(--muted);text-align:center;padding:6px 0 10px}
+
+/* I8 — FAQ accordion (grid-template-rows expand) */
+.i8{width:90%}
+.i8 .q{border-bottom:1px solid var(--hairline)}
+.i8 .qbtn{width:100%;text-align:left;background:none;border:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;
+  padding:13px 4px;font-family:var(--font-ui);font-weight:700;font-size:13px;color:var(--ink)}
+.i8 .qbtn[aria-expanded="true"]{color:var(--accent)}
+.i8 .qbtn .pm{font-size:18px;line-height:1;transition:transform .3s var(--ease);color:var(--accent)}
+.i8 .qbtn[aria-expanded="true"] .pm{transform:rotate(45deg)}
+.i8 .ans{display:grid;grid-template-rows:0fr;transition:grid-template-rows .35s var(--ease)}
+.i8 .ans.open{grid-template-rows:1fr}
+.i8 .ans>div{overflow:hidden}
+.i8 .ans p{margin:0 4px 14px;font-size:12px;color:var(--muted)}
+
+/* I9 — trust / logo strip grayscale -> color */
+.i9{display:flex;gap:18px;width:100%;justify-content:center;align-items:center;flex-wrap:wrap}
+.i9 .logo{display:flex;align-items:center;gap:6px;filter:grayscale(1) opacity(.55);transition:filter .3s var(--ease)}
+.i9 .logo:hover{filter:grayscale(0) opacity(1)}
+.i9 .logo .gm{width:24px;height:24px;border-radius:6px;background:var(--accent)}
+.i9 .logo .gm.b{border-radius:50%;background:var(--ink)}
+.i9 .logo .gm.c{border-radius:6px;background:linear-gradient(135deg,#d51522,#7a0a12)}
+.i9 .logo .wm{font-family:var(--font-display);font-weight:700;font-size:13px;color:var(--ink);letter-spacing:-.02em}
+
+/* I10 — range slider (live, polished) */
+.i10{width:88%;text-align:center}
+.i10 .rangeval{font-family:var(--font-display);font-size:34px;color:var(--accent);letter-spacing:-.02em}
+.i10 .rangeval span{font-size:14px;color:var(--muted);font-family:var(--font-ui)}
+.i10 input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:3px;outline:none;margin:14px 0 6px;
+  background:linear-gradient(90deg,var(--accent) 0%,var(--accent) 50%,var(--hairline) 50%,var(--hairline) 100%)}
+.i10 input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:22px;height:22px;border-radius:50%;background:#fff;border:3px solid var(--accent);box-shadow:var(--shadow-card);cursor:pointer;transition:transform .15s}
+.i10 input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.12)}
+.i10 input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:#fff;border:3px solid var(--accent);cursor:pointer}
+.i10 .rl{display:flex;justify-content:space-between;font-size:10px;font-family:var(--font-num);color:var(--muted)}
+
+/* ---------- FOOTER ---------- */
+.foot{margin-top:64px;padding:36px 0 56px;background:var(--ink);color:rgba(255,255,255,.55);text-align:center}
+.foot .dot{display:inline-block;width:9px;height:9px;border-radius:3px;background:var(--accent);margin-right:7px;vertical-align:middle}
+.foot a{color:rgba(255,255,255,.8);font-size:13px}
+.foot .links{margin-top:10px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.foot .meta{margin-top:18px;font-size:11px;font-family:var(--font-num);color:rgba(255,255,255,.35)}
+
+@media(max-width:520px){
+  .specimen.span2{grid-column:span 1}
+  .g4,.g6,.g7 .lmgrid{grid-template-columns:1fr 1fr}
+}
+
+/* reduced-motion: kill all motion, force reveals visible */
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  .reveal{opacity:1!important;transform:none!important}
+  .h2 .blob{border-radius:42% 58% 70% 30%/45% 45% 55% 55%}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ TOP NAV ============ -->
+<nav class="topnav" aria-label="Styleguide sections">
+  <div class="wrap">
+    <span class="brand"><span class="dot"></span>SGEN&nbsp;Styleguide</span>
+    <a class="nl" href="index.html">Index</a>
+    <a class="nl" href="00-top12.html">00 · Top&nbsp;12</a>
+    <a class="nl" href="01-transitions-hero-motion.html">01 · Transitions &amp; Motion</a>
+    <a class="nl" href="02-depth-type-color.html">02 · Depth, Type &amp; Color</a>
+    <a class="nl" href="03-layout-imagery-components.html" aria-current="page">03 · Layout, Imagery &amp; Components</a>
+    <a class="nl" href="04-signatures-tokens.html">04 · Signatures &amp; Tokens</a><a class="nl" href="06-responsive.html">06 · Responsive</a><a class="nl" href="07-components.html">07 · Components</a><a class="nl" href="08-scroll-sticky.html">08 · Scroll / Sticky</a><a class="nl" href="09-accessibility.html">09 · Accessibility</a><a class="nl" href="10-sections.html">10 · Sections</a><a class="nl" href="11-theming.html">11 · Theming</a><a class="nl" href="12-iconography.html">12 · Iconography</a><a class="nl" href="13-utility-pages.html">13 · Utility</a><a class="nl" href="14-ecommerce.html">14 · Ecommerce</a><a class="nl" href="15-dataviz.html">15 · Data-viz</a>
+  </div>
+</nav>
+
+<!-- ============ PAGE HEADER ============ -->
+<header class="pagehead">
+  <div class="wrap">
+    <span class="kicker">Living Styleguide · Page 03</span>
+    <h1>Layout, Imagery &amp; Components</h1>
+    <p>Live, working specimens of categories <b>G</b> (layout &amp; grid), <b>H</b> (imagery, masks &amp; frames) and <b>I</b> (component polish) from the modern-design pattern library — 166 BeTheme demos, deduped. Every card below is a <em>real rendered technique</em>, not a screenshot. Hover, scroll, and drag to feel the motion. Recurrence badges show how many of the 16 vertical categories independently ranked the move.</p>
+  </div>
+</header>
+
+<main class="wrap">
+
+<!-- ====================================================== CATEGORY G -->
+<section class="cat" id="g">
+  <div class="eyebrow"><span class="rule"></span><span>Category G</span></div>
+  <h2>Layout &amp; grid</h2>
+  <p class="lede">Rhythm, asymmetry and the one non-uniform grid moment per page. Whitespace plus figure/ground is the depth system — structure carries the premium signal.</p>
+</section>
+
+<div class="specimens">
+
+  <!-- G1 -->
+  <article class="specimen reveal">
+    <div class="head">
+      <div class="name"><span class="id">G1</span>Section rhythm + alternating grounds</div>
+      <span class="badge">12/16</span>
+    </div>
+    <div class="stage flush">
+      <div class="g1-demo">
+        <div class="g1-band paper g1-pad-a"><span class="lbl">paper · 34/18px</span><div class="blk w70"></div><div class="blk w45"></div></div>
+        <div class="g1-band tint"><span class="lbl">tinted band</span><div class="blk w70"></div><div class="blk"></div></div>
+        <div class="g1-band anchor"><span class="lbl">anchor</span><div class="blk w45"></div><div class="blk w70"></div></div>
+      </div>
+    </div>
+    <p class="how"><b>How:</b> <code>padding-block:clamp(80px,10vw,180px)</code> with top ≠ bottom on purpose; alternate paper → 3–8% tint → one near-black anchor band per page.</p>
+  </article>
+
+  <!-- G2 -->
+  <article class="specimen reveal">
+    <div class="head">
+      <div class="name"><span class="id">G2</span>Asymmetric overlapping columns</div>
+      <span class="badge">5/16</span>
+    </div>
+    <div class="stage">
+      <div class="g2">
+        <div class="col-text"><h4>Studio Ethos</h4><p>The image column pushes down and across, straddling the seam for magazine-spread depth.</p></div>
+        <div class="col-img"></div>
+      </div>
+    </div>
+    <p class="how"><b>How:</b> image column <code>z-index:2;margin-bottom:-95px;margin-left:50px</code> over a sibling at <code>z-index:1</code> (architect6 verbatim). Collapse to flat under 768px.</p>
+  </article>
+
+  <!-- G3 -->
+  <article class="specimen reveal">
+    <div class="head">
+      <div class="name"><span class="id">G3</span>Bento / offset grid moment</div>
+      <span class="badge">~6/16</span>
+    </div>
+    <div class="stage">
+      <div class="bento">
+        <div class="t t1">Feature</div><div class="t t2">Wide</div>
+        <div class="t t3">A</div><div class="t t4">B</div>
+        <div class="t t5">Span</div><div class="t t6">C</div>
+      </div>
+    </div>
+    <p class="how"><b>How:</b> CSS Grid with <code>grid-column/row:span N</code> on select tiles + one <code>--grid-gap</code> token. One non-uniform moment per page, not everywhere.</p>
+  </article>
+
+  <!-- G4 -->
+  <article class="specimen reveal">
+    <div class="head">
+      <div class="name"><span class="id">G4</span>Icon-tile feature grid</div>
+      <span class="badge">~12/16</span>
+    </div>
+    <div class="stage">
+      <div class="g4">
+        <div class="cell">
+          <div class="chip"><svg viewBox="0 0 24 24"><path d="M3 12l9-9 9 9M5 10v10h14V10"/></svg></div>
+          <h4>Hosted</h4><p>Fast global edge.</p><span class="lnk">Learn →</span>
+        </div>
+        <div class="cell">
+          <div class="chip"><svg viewBox="0 0 24 24"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/></svg></div>
+          <h4>Secure</h4><p>SSL by default.</p><span class="lnk">Learn →</span>
+        </div>
+      </div>
+    </div>
+    <p class="how"><b>How:</b> <code>repeat(auto-fit,minmax(220px,1fr))</code>; each cell = tinted rounded icon chip (<code>border-radius:14px</code>) + H4 + muted copy + accent <code>→</code> link.</p>
+  </article>
+
+  <!-- G5 -->
+  <article class="specimen reveal">
+    <div class="head">
+      <div class="name"><span class="id">G5</span>Full-bleed inside constrained wrap</div>
+      <span class="badge">~6/16</span>
+    </div>
+    <div class="stage flush">
+      <div class="g5">
+        <div class="fb">100vw full-bleed band</div>
+        <div class="narrow"><div class="h"></div><div class="l"></div><div class="l" style="width:80%;margin-inline:auto"></div></div>
+        <div class="fb">100vw full-bleed band</div>
+      </div>
+    </div>
+    <p class="how"><b>How:</b> section = <code>100vw</code> bg; inner <code>.wrap{max-width:1200px;margin:0 auto}</code>. Alternate full-bleed photo bands with narrow centered text (lookbook rhythm).</p>
+  </article>
+
+  <!-- G6 -->
+  <article class="specimen reveal span2">
+    <div class="head">
+      <div class="name"><span class="id">G6</span>Pricing tiers · one emphasized plan</div>
+      <span class="badge">~9/16</span>
+    </div>
+    <div class="stage">
+      <div class="g6">
+        <div class="tier"><div class="pn">Starter</div><div class="pr">$0<span>/mo</span></div><ul><li>1 site</li><li>SSL included</li><li>Community support</li></ul><a class="pcta" href="#g">Choose</a></div>
+        <div class="tier feat"><div class="ribbon">Most popular</div><div class="pn">Pro</div><div class="pr">$29<span>/mo</span></div><ul><li>10 sites</li><li>Priority support</li><li>Custom domains</li></ul><a class="pcta" href="#g">Choose</a></div>
+        <div class="tier"><div class="pn">Scale</div><div class="pr">$99<span>/mo</span></div><ul><li>Unlimited</li><li>SLA + SSO</li><li>Dedicated CSM</li></ul><a class="pcta" href="#g">Choose</a></div>
+      </div>
+    </div>
+    <p class="how"><b>How:</b> 3 cards, middle <code>transform:scale(1.05)</code> + accent border + deeper shadow + "Most popular" ribbon + accent CTA; accent <code>::before</code> checkmarks on features.</p>
+  </article>
+
+  <!-- G7 -->
+  <article class="specimen reveal">
+    <div class="head">
+      <div class="name"><span class="id">G7</span>Load-more grid over pagination</div>
+      <span class="badge">~3/16</span>
+    </div>
+    <div class="stage">
+      <div class="g7">
+        <div class="lmgrid" id="lmgrid"></div>
+        <button class="lmbtn" id="lmbtn" type="button">Load more</button>
+      </div>
+    </div>
+    <p class="how"><b>How:</b> render N cards; button appends the next N with identical markup so no reflow, fading each in (<code>opacity 0→1</code> + <code>translateY</code>). JS.</p>
+  </article>
+
+</div>
+
+<!-- ====================================================== CATEGORY H -->
+<section class="cat" id="h">
+  <div class="eyebrow"><span class="rule"></span><span>Category H</span></div>
+  <h2>Imagery, masks &amp; frames</h2>
+  <p class="lede">Every product / gallery / team / blog image is a clipped, framed, zoom-able object. One masked focal shape per page; the rest stay clean consistent-radius rectangles. (Visuals here are CSS-crafted gradients — no external images by design.)</p>
+</section>
+
+<div class="specimens">
+
+  <!-- H1 -->
+  <article class="specimen reveal">
+    <div class="head">
+      <div class="name"><span class="id">H1</span>Clipped frame · zoom + exposure hover</div>
+      <span class="badge">15/16</span>
+    </div>
+    <div class="stage">
+      <figure class="frame" tabindex="0">
+        <div class="photo"></div>
+        <div class="mask"></div>
+        <figcaption class="cap"><span class="line"></span><span class="t">Coastal Pavilion</span><span class="s">Architecture · 2026</span></figcaption>
+      </figure>
+    </div>
+    <p class="how"><b>How:</b> <code>.frame{overflow:hidden}</code> + <code>img{transition:transform .45s}</code> → <code>scale(1.08)</code> on hover; dark <code>.mask</code> fades in, caption rises (<code>translateY</code>) and an underline grows <code>width 0→40px</code>.</p>
+  </article>
+
+  <!-- H2 -->
+  <article class="specimen reveal">
+    <div class="head">
+      <div class="name"><span class="id">H2</span>Shape-masked imagery</div>
+      <span class="badge">~9/16</span>
+    </div>
+    <div class="stage">
+      <div class="h2">
+        <figure><div class="m circle"></div><figcaption class="cap">border-radius:50%</figcaption></figure>
+        <figure><div class="m squircle"></div><figcaption class="cap">squircle 26px</figcaption></figure>
+        <figure><div class="m asym"></div><figcaption class="cap">asym 42/8/42</figcaption></figure>
+        <figure><div class="m blob"></div><figcaption class="cap">animated blob</figcaption></figure>
+      </div>
+    </div>
+    <p class="how"><b>How:</b> clip to non-rectangle via <code>border-radius</code> — circles, squircles, asymmetric, or an animated blob <code>30% 70% 70% 30%/...</code>. ONE masked focal image per page.</p>
+  </article>
+
+  <!-- H3 -->
+  <article class="specimen reveal">
+    <div class="head">
+      <div class="name"><span class="id">H3</span>Bg image + controlled overlay</div>
+      <span class="badge">H3 · grading</span>
+    </div>
+    <div class="stage flush">
+      <div class="h3">
+        <div class="half raw"><span class="tag">raw</span><div class="pic"></div><span class="txt">low contrast</span></div>
+        <div class="half graded"><span class="tag">graded</span><div class="pic"></div><div class="ov"></div><span class="txt">text always legible</span></div>
+      </div>
+    </div>
+    <p class="how"><b>How:</b> an absolute <code>.overlay</code> covering the bg image — color / gradient / <code>brightness</code> so foreground text always has contrast and the image reads "graded," not raw.</p>
+  </article>
+
+  <!-- H4/H5 -->
+  <article class="specimen reveal">
+    <div class="head">
+      <div class="name"><span class="id">H4/5</span>Squircle frames + medallions</div>
+      <span class="badge">~9/16</span>
+    </div>
+    <div class="stage">
+      <div class="h45">
+        <figure><div class="squircle"></div><figcaption class="lab">clamp(24,4vw,64px)</figcaption></figure>
+        <figure><div class="medal"></div><figcaption class="lab">border-radius:100%</figcaption></figure>
+      </div>
+    </div>
+    <p class="how"><b>How:</b> <code>border-radius:clamp(24px,4vw,94px)</code> squircles on hero/feature imagery; <code>100%</code> circular portraits/medallions. The radius mismatch (tiny inputs, huge imagery) is deliberate.</p>
+  </article>
+
+  <!-- H6 bottom-fade -->
+  <article class="specimen reveal span2">
+    <div class="head">
+      <div class="name"><span class="id">H6</span>Image bottom-fade into next section</div>
+      <span class="badge">12/16</span>
+    </div>
+    <div class="stage flush">
+      <div class="h6">
+        <div class="img"></div>
+        <div class="next">…the photo dissolves into the <b>next section's bg color</b> — no hard "image stops, white begins" seam.</div>
+      </div>
+    </div>
+    <p class="how"><b>How:</b> an <code>::after</code> gradient on the full-bleed image fading to the following section's bg — <code>linear-gradient(180deg,rgba(255,255,255,0) 0%,paper 65%)</code> (recurs 9×). The most broadly applicable transition device.</p>
+  </article>
+
+</div>
+
+<!-- ====================================================== CATEGORY I -->
+<section class="cat" id="i">
+  <div class="eyebrow"><span class="rule"></span><span>Category I</span></div>
+  <h2>Component polish</h2>
+  <p class="lede">No static buttons, no flat cards. Token-driven invert buttons, lifting cards, count-up stats, glass-on-scroll headers, live sliders and accordions — the tactile layer that reads "expensive."</p>
+</section>
+
+<div class="specimens">
+
+  <!-- I1 flip buttons -->
+  <article class="specimen reveal">
+    <div class="head">
+      <div class="name"><span class="id">I1</span>Flip buttons (2-way invert + sweep)</div>
+      <span class="badge">13/16</span>
+    </div>
+    <div class="stage">
+      <div class="i1">
+        <button class="btn btn-fill" type="button">Fill → ghost</button>
+        <button class="btn btn-ghost" type="button">Ghost → fills (sweep)</button>
+        <button class="btn btn-sweep" type="button">::before fill-sweep</button>
+        <span class="lab">hover each</span>
+      </div>
+    </div>
+    <p class="how"><b>How:</b> solid-fill ↔ transparent-accent over named props <code>transition:background-color .2s,color .2s</code> (never <code>all</code>); <code>overflow:hidden</code> + <code>::before</code> <code>scaleX(0)→1</code> for the sweep. One radius dialect site-wide.</p>
+  </article>
+
+  <!-- I2 cards -->
+  <article class="specimen reveal">
+    <div class="head">
+      <div class="name"><span class="id">I2</span>Cards · lift + scale on hover</div>
+      <span class="badge">14/16</span>
+    </div>
+    <div class="stage">
+      <div class="i2">
+        <div class="lcard"><div class="ico"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h7l-1 8 10-12h-7z"/></svg></div><h4>Fast</h4><p>Hover to lift.</p></div>
+        <div class="lcard"><div class="ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></svg></div><h4>Reliable</h4><p>99.99% uptime.</p></div>
+      </div>
+    </div>
+    <p class="how"><b>How:</b> resting two-stop shadow → on hover <code>transform:scale(1.05) translateY(-4px)</code> + <code>0 32px 64px -12px rgba(16,24,40,.14)</code> with the BeTheme settle easing. Real-estate gold standard.</p>
+  </article>
+
+  <!-- I3 counters -->
+  <article class="specimen reveal">
+    <div class="head">
+      <div class="name"><span class="id">I3</span>Count-up stat counters</div>
+      <span class="badge">16/16</span>
+    </div>
+    <div class="stage" id="i3stage">
+      <div class="i3">
+        <div class="stat"><div class="num"><span class="counter" data-to="166">0</span></div><div class="cl">Demos studied</div></div>
+        <div class="stat"><div class="num"><span class="counter" data-to="99">0</span><span class="suf">%</span></div><div class="cl">Uptime</div></div>
+        <div class="stat"><div class="num"><span class="counter" data-to="24">0</span><span class="suf">+</span></div><div class="cl">Sites shipped</div></div>
+      </div>
+    </div>
+    <p class="how"><b>How:</b> <code>requestAnimationFrame</code> ease-out tween 0→<code>data-to</code> over ~1.4s, fired once by the same IntersectionObserver as the reveals. Big display numeral + tiny label.</p>
+  </article>
+
+  <!-- I4 carousel -->
+  <article class="specimen reveal">
+    <div class="head">
+      <div class="name"><span class="id">I4</span>Scroll-snap testimonial carousel</div>
+      <span class="badge">I4 · CSS-first</span>
+    </div>
+    <div class="stage">
+      <div class="i4">
+        <div class="track" id="i4track">
+          <div class="quote"><p>"The polish layer made our flat template feel custom-built overnight."</p><div class="who"><span class="av"></span><span><span class="nm">A. Mercer</span><br><span class="rl">Founder, Northwind</span></span></div></div>
+          <div class="quote"><p>"Felt, not noticed — exactly the brief. Clients assume we hired an agency."</p><div class="who"><span class="av"></span><span><span class="nm">J. Okafor</span><br><span class="rl">Studio Lead</span></span></div></div>
+          <div class="quote"><p>"Zero plugins, all CSS. Loads instantly and still reads premium."</p><div class="who"><span class="av"></span><span><span class="nm">R. Sato</span><br><span class="rl">Engineer</span></span></div></div>
+        </div>
+        <div class="dots" id="i4dots"><button class="d on" type="button" aria-label="Slide 1"></button><button class="d" type="button" aria-label="Slide 2"></button><button class="d" type="button" aria-label="Slide 3"></button></div>
+      </div>
+    </div>
+    <p class="how"><b>How:</b> <code>scroll-snap-type:x mandatory</code> track + <code>scroll-snap-align:center</code> cards; dots reflect/scroll-to position. No plugin — Swiper only if truly needed.</p>
+  </article>
+
+  <!-- I5 icon-box fill -->
+  <article class="specimen reveal">
+    <div class="head">
+      <div class="name"><span class="id">I5</span>Icon-boxes · fill-on-hover</div>
+      <span class="badge">~12/16</span>
+    </div>
+    <div class="stage">
+      <div class="i5">
+        <div class="iconbox"><div class="chip"><svg viewBox="0 0 24 24"><path d="M3 11l18-8-8 18-2-7-8-3z"/></svg></div><div class="lab">Send</div></div>
+        <div class="iconbox"><div class="chip"><svg viewBox="0 0 24 24"><path d="M12 3v18M3 12h18"/></svg></div><div class="lab">Add</div></div>
+        <div class="iconbox"><div class="chip"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></div><div class="lab">Done</div></div>
+      </div>
+    </div>
+    <p class="how"><b>How:</b> single accent line-icon in a rounded chip; on hover the chip fills with accent and the icon flips to white over <code>.3s</code> with the settle easing.</p>
+  </article>
+
+  <!-- I6 menu rows -->
+  <article class="specimen reveal">
+    <div class="head">
+      <div class="name"><span class="id">I6</span>List rows · dotted leaders</div>
+      <span class="badge">I6 · menu/price</span>
+    </div>
+    <div class="stage">
+      <div class="i6">
+        <div class="row"><span class="nm">Heirloom Tomato<small>burrata · basil oil</small></span><span class="lead"></span><span class="pr">$14</span></div>
+        <div class="row"><span class="nm">Charred Octopus<small>romesco · lemon</small></span><span class="lead"></span><span class="pr">$22</span></div>
+        <div class="row"><span class="nm">Saffron Risotto<small>parmesan crisp</small></span><span class="lead"></span><span class="pr">$19</span></div>
+      </div>
+    </div>
+    <p class="how"><b>How:</b> <code>li{display:flex;justify-content:space-between}</code> with a flex-1 <code>border-bottom:1px dotted</code> leader between name and right-aligned price; hairline row dividers.</p>
+  </article>
+
+  <!-- I7 sticky glass header -->
+  <article class="specimen reveal">
+    <div class="head">
+      <div class="name"><span class="id">I7</span>Glass header · shrink on scroll</div>
+      <span class="badge">13/16</span>
+    </div>
+    <div class="stage flush">
+      <div class="i7" id="i7scroll">
+        <header class="mhead" id="i7head"><span class="lg">Aperture</span><nav class="nav"><span>Work</span><span>About</span><span>Contact</span></nav></header>
+        <div class="scrollbody">
+          <div class="hh"></div><div class="ll"></div><div class="ll" style="width:85%"></div><div class="ll" style="width:70%"></div>
+          <div class="hh"></div><div class="ll"></div><div class="ll" style="width:80%"></div><div class="ll" style="width:60%"></div>
+          <div class="ll"></div><div class="ll" style="width:75%"></div>
+        </div>
+        <div class="cue">↑ scroll inside me ↑</div>
+      </div>
+    </div>
+    <p class="how"><b>How:</b> header <code>position:sticky</code> transparent over the hero; past the hero add <code>.stuck</code> → translucent fill + <code>backdrop-filter:blur(16px) saturate(180%)</code> + hairline + shadow, shrink padding. Real glass beats the source's flat opacity.</p>
+  </article>
+
+  <!-- I8 FAQ -->
+  <article class="specimen reveal">
+    <div class="head">
+      <div class="name"><span class="id">I8</span>FAQ accordion</div>
+      <span class="badge">I8 · accordion</span>
+    </div>
+    <div class="stage">
+      <div class="i8" id="i8faq">
+        <div class="q"><button class="qbtn" type="button" aria-expanded="false"><span>Is this really zero-dependency?</span><span class="pm">+</span></button><div class="ans"><div><p>Yes — single HTML file, inline CSS/JS, system fonts, no external requests.</p></div></div></div>
+        <div class="q"><button class="qbtn" type="button" aria-expanded="false"><span>Does it respect reduced motion?</span><span class="pm">+</span></button><div class="ans"><div><p>Every animation and transition is gated behind <code>prefers-reduced-motion</code>.</p></div></div></div>
+        <div class="q"><button class="qbtn" type="button" aria-expanded="false"><span>Why CSS-crafted visuals?</span><span class="pm">+</span></button><div class="ans"><div><p>So the styleguide stays self-contained and portable — gradients stand in for photography.</p></div></div></div>
+      </div>
+    </div>
+    <p class="how"><b>How:</b> smooth expand via <code>grid-template-rows:0fr→1fr</code> (animatable, content-height-aware) on an <code>overflow:hidden</code> inner; accent active row + rotating <code>+</code>. <code>aria-expanded</code> for a11y.</p>
+  </article>
+
+  <!-- I9 trust strip -->
+  <article class="specimen reveal">
+    <div class="head">
+      <div class="name"><span class="id">I9</span>Logo / trust strip</div>
+      <span class="badge">I9 · grayscale→color</span>
+    </div>
+    <div class="stage">
+      <div class="i9">
+        <span class="logo"><span class="gm"></span><span class="wm">Northwind</span></span>
+        <span class="logo"><span class="gm b"></span><span class="wm">Lumen</span></span>
+        <span class="logo"><span class="gm c"></span><span class="wm">Vertex</span></span>
+        <span class="logo"><span class="gm"></span><span class="wm">Cobalt</span></span>
+      </div>
+    </div>
+    <p class="how"><b>How:</b> <code>filter:grayscale(1) opacity(.55)</code> at rest → full color on hover. Use real payment SVGs (Visa/Stripe/ApplePay) for commerce/finance.</p>
+  </article>
+
+  <!-- I10 slider -->
+  <article class="specimen reveal">
+    <div class="head">
+      <div class="name"><span class="id">I10</span>Range slider · live</div>
+      <span class="badge">I10 · control</span>
+    </div>
+    <div class="stage">
+      <div class="i10">
+        <div class="rangeval"><span id="rvprefix">$</span><span id="rangeval">2,400</span><span>/mo</span></div>
+        <input type="range" id="range" min="0" max="10000" step="100" value="2400" aria-label="Monthly budget">
+        <div class="rl"><span>$0</span><span>$10,000</span></div>
+      </div>
+    </div>
+    <p class="how"><b>How:</b> styled <code>::-webkit-slider-thumb</code> (white disc, accent ring, soft shadow) + a live <code>linear-gradient</code> track fill recomputed on <code>input</code>; big display value updates in real time.</p>
+  </article>
+
+</div>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="foot">
+  <div class="wrap">
+    <div><span class="dot"></span>SGEN Living Styleguide — premium &amp; alive, felt not noticed.</div>
+    <div class="links">
+      <a href="index.html">Index</a>
+      <a href="00-top12.html">00 · Top 12</a>
+      <a href="01-transitions-hero-motion.html">01 · Transitions &amp; Motion</a>
+      <a href="02-depth-type-color.html">02 · Depth, Type &amp; Color</a>
+      <a href="03-layout-imagery-components.html">03 · Layout, Imagery &amp; Components</a>
+      <a href="04-signatures-tokens.html">04 · Signatures &amp; Tokens</a>
+    </div>
+    <div class="meta">Categories G · H · I — 22 live specimens · CSS/JS rendered · zero external deps</div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion:reduce)").matches;
+
+  /* ---- shared IntersectionObserver: reveals + counters ---- */
+  var io = null;
+  if ("IntersectionObserver" in window && !reduce){
+    io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(!e.isIntersecting) return;
+        var el = e.target;
+        el.classList.add("in-view");
+        // fire counters living inside this revealed node
+        var counters = el.querySelectorAll ? el.querySelectorAll(".counter") : [];
+        for(var i=0;i<counters.length;i++){ countUp(counters[i]); }
+        io.unobserve(el);
+      });
+    }, {threshold:0.12, rootMargin:"0px 0px 0px 0px"});
+    document.querySelectorAll(".reveal").forEach(function(el){ io.observe(el); });
+  } else {
+    // reduced motion / no IO: show everything, set counters to final
+    document.querySelectorAll(".reveal").forEach(function(el){ el.classList.add("in-view"); });
+    document.querySelectorAll(".counter").forEach(function(c){ c.textContent = (+c.getAttribute("data-to")).toLocaleString(); });
+  }
+
+  /* ---- I3 count-up ---- */
+  function countUp(el){
+    if(el.dataset.done) return; el.dataset.done = "1";
+    var to = +el.getAttribute("data-to") || 0, dur = 1400, start = null;
+    function step(ts){
+      if(start===null) start = ts;
+      var p = Math.min((ts-start)/dur, 1);
+      var eased = 1 - Math.pow(1-p, 3); // ease-out cubic
+      el.textContent = Math.round(eased*to).toLocaleString();
+      if(p<1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  /* ---- G7 load-more ---- */
+  var grid = document.getElementById("lmgrid"), btn = document.getElementById("lmbtn");
+  if(grid && btn){
+    var total = 9, batch = 3, shown = 0;
+    function addCells(n){
+      for(var i=0;i<n && shown<total;i++,shown++){
+        var c = document.createElement("div");
+        c.className = "lmcell";
+        grid.appendChild(c);
+        // force reflow then reveal so transition runs
+        (function(cell){ requestAnimationFrame(function(){ requestAnimationFrame(function(){ cell.classList.add("show"); }); }); })(c);
+      }
+      if(shown>=total){ btn.disabled = true; btn.textContent = "All loaded"; }
+    }
+    addCells(batch);
+    btn.addEventListener("click", function(){ addCells(batch); });
+  }
+
+  /* ---- I4 carousel dots <-> scroll ---- */
+  var track = document.getElementById("i4track"), dotsWrap = document.getElementById("i4dots");
+  if(track && dotsWrap){
+    var dots = dotsWrap.querySelectorAll(".d");
+    dots.forEach(function(d,i){
+      d.addEventListener("click", function(){
+        var q = track.children[i];
+        if(q) track.scrollTo({left:q.offsetLeft - track.offsetLeft, behavior: reduce ? "auto":"smooth"});
+      });
+    });
+    var raf;
+    track.addEventListener("scroll", function(){
+      if(raf) return;
+      raf = requestAnimationFrame(function(){
+        raf = null;
+        var idx = Math.round(track.scrollLeft / (track.scrollWidth/track.children.length));
+        idx = Math.max(0, Math.min(dots.length-1, idx));
+        dots.forEach(function(d,i){ d.classList.toggle("on", i===idx); });
+      });
+    });
+  }
+
+  /* ---- I7 sticky glass header (scroll inside the demo viewport) ---- */
+  var sc = document.getElementById("i7scroll"), hd = document.getElementById("i7head");
+  if(sc && hd){
+    sc.addEventListener("scroll", function(){
+      hd.classList.toggle("stuck", sc.scrollTop > 30);
+    });
+  }
+
+  /* ---- I8 FAQ accordion ---- */
+  var faq = document.getElementById("i8faq");
+  if(faq){
+    faq.querySelectorAll(".qbtn").forEach(function(b){
+      b.addEventListener("click", function(){
+        var open = b.getAttribute("aria-expanded")==="true";
+        b.setAttribute("aria-expanded", String(!open));
+        var ans = b.parentNode.querySelector(".ans");
+        if(ans) ans.classList.toggle("open", !open);
+      });
+    });
+  }
+
+  /* ---- I10 range slider (live fill + value) ---- */
+  var range = document.getElementById("range"), out = document.getElementById("rangeval");
+  if(range && out){
+    function paint(){
+      var min = +range.min, max = +range.max, v = +range.value;
+      var pct = ((v-min)/(max-min))*100;
+      range.style.background = "linear-gradient(90deg, var(--accent) 0%, var(--accent) "+pct+"%, var(--hairline) "+pct+"%, var(--hairline) 100%)";
+      out.textContent = v.toLocaleString();
+    }
+    range.addEventListener("input", paint);
+    paint();
+  }
+})();
+</script>
+</body>
+</html>

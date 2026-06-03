@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SGEN Living Styleguide — 14 · E-commerce Flow Components (live)</title>
+<style>
+/* ============================================================
+   SGEN LIVING STYLEGUIDE — 14 · E-COMMERCE FLOW COMPONENTS
+   charcoal #1a1a1a · red #d51522 · warm paper · clean editorial
+   The full commerce set, shown LIVE in every relevant state:
+   PDP buybox (gallery + variant swatches + qty stepper +
+   add-to-cart state machine), cart line-items + sticky order-
+   summary, a 3-step checkout stepper, and an order receipt.
+   Real interactive states work; each is also "pinned" via .is-*
+   modifiers so one screenshot captures them all. One source of
+   truth via grouped selectors — no divergence.
+   Self-contained: system fonts, zero external deps, no images;
+   all visuals CSS-crafted. Motion gated behind prefers-reduced-
+   motion. Verified 390 + 1440. Tokens lifted verbatim from 07.
+   ============================================================ */
+:root{
+  --ink:#1a1a1a;                 /* charcoal */
+  --paper:#f6f5f2;               /* warm off-white, never #fff */
+  --surface:#ffffff;
+  --muted:#626262;
+  --body:#4a4f55;
+  --hair:rgba(26,26,26,.10);
+  --accent:#d51522;              /* SGEN red */
+  --accent-ink:#a50f19;          /* darker red for text-on-light */
+  --accent-2:#ff5a4d;
+  --accent-tint:rgba(213,21,34,.10);
+
+  /* semantic feedback hues (tinted, never pure) */
+  --ok:#1f8a4c;   --ok-bg:#eaf6ee;   --ok-bd:rgba(31,138,76,.30);
+  --info:#1668c4; --info-bg:#eaf2fb; --info-bd:rgba(22,104,196,.28);
+  --warn:#9a6800; --warn-bg:#fdf4e3; --warn-bd:rgba(154,104,0,.30);
+  --err:#c0121e;  --err-bg:#fdeced;  --err-bd:rgba(192,18,30,.32);
+
+  /* radius — ONE language site-wide */
+  --r-chip:6px; --r-card:12px; --r-panel:20px; --r-pill:9999px;
+  --r-btn:8px;
+
+  /* shadow — ink/navy-tinted, never #000 */
+  --shadow-rest:0 2px 6px 0 rgba(26,26,26,.08);
+  --shadow-card:0 15px 30px 0 rgba(1,7,39,.13);
+  --shadow-hover:0 32px 64px -12px rgba(16,24,40,.18);
+
+  /* motion */
+  --ease:cubic-bezier(.05,.5,.3,1);
+  --t-fast:.18s ease-out;
+  --t-reveal:.6s var(--ease);
+
+  --ring:0 0 0 3px rgba(213,21,34,.40);   /* the focus-visible ring */
+  --glass:blur(14px) saturate(160%);
+
+  --sys-sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --sys-serif:ui-serif,Georgia,Cambria,"Times New Roman",Times,serif;
+  --sys-mono:ui-monospace,"SFMono-Regular","Cascadia Code","Consolas",monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--sys-sans);font-size:16px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{font-family:var(--sys-serif);font-weight:600;letter-spacing:-.02em;line-height:1.08;margin:0}
+a{color:var(--accent-ink);text-decoration:none}
+code,kbd{font-family:var(--sys-mono);font-size:.84em;background:rgba(26,26,26,.05);padding:.06em .35em;border-radius:4px}
+img{max-width:100%}
+
+/* ---------- glass top bar + sibling nav (matches 00–13) ---------- */
+.topbar{
+  position:sticky;top:0;z-index:50;
+  background:rgba(246,245,242,.82);backdrop-filter:var(--glass);
+  -webkit-backdrop-filter:var(--glass);
+  border-bottom:1px solid var(--hair);
+}
+.topbar__in{max-width:1200px;margin:0 auto;padding:.7rem clamp(1rem,4vw,2.5rem);
+  display:flex;align-items:center;gap:1.2rem;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:.55rem;font-weight:800;letter-spacing:-.01em;font-family:var(--sys-sans)}
+.brand .dot{width:11px;height:11px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px rgba(213,21,34,.16)}
+.brand small{font-weight:600;color:var(--muted);letter-spacing:.02em}
+.sibnav{display:flex;gap:.2rem;flex-wrap:wrap;margin-left:auto}
+.sibnav a{
+  font-size:.74rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
+  color:var(--muted);padding:.35rem .6rem;border-radius:var(--r-chip);
+  transition:color var(--t-fast),background var(--t-fast)}
+.sibnav a:hover{color:var(--ink);background:rgba(26,26,26,.05)}
+.sibnav a[aria-current="page"]{color:#fff;background:var(--accent)}
+
+/* ---------- page header ---------- */
+.pagehead{max-width:1200px;margin:0 auto;padding:clamp(2.5rem,6vw,4.5rem) clamp(1rem,4vw,2.5rem) 1rem}
+.eyebrow{display:inline-flex;align-items:center;gap:.5rem;
+  font-family:var(--sys-sans);font-size:.72rem;font-weight:800;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--accent-ink)}
+.eyebrow::before{content:"";width:34px;height:2px;background:var(--accent);display:inline-block}
+.pagehead h1{font-size:clamp(2.2rem,6vw,4rem);margin:.5rem 0 .4rem;letter-spacing:-.035em}
+.pagehead p{max-width:70ch;color:var(--body);font-size:1.05rem}
+.legendbar{display:flex;gap:1.4rem;flex-wrap:wrap;margin-top:1.1rem;font-size:.82rem;color:var(--muted)}
+.legendbar b{color:var(--ink)}
+.legendbar .pin{display:inline-block;font-family:var(--sys-mono);font-size:.72rem;font-weight:700;color:var(--accent-ink);
+  background:var(--accent-tint);border:1px solid rgba(213,21,34,.25);padding:.05rem .4rem;border-radius:5px}
+
+/* ---------- in-page category chips ---------- */
+.catnav{max-width:1200px;margin:1.2rem auto .5rem;padding:0 clamp(1rem,4vw,2.5rem);
+  display:flex;gap:.5rem;flex-wrap:wrap}
+.catnav a{font-size:.78rem;font-weight:700;padding:.45rem .85rem;border:1px solid var(--hair);
+  border-radius:var(--r-pill);color:var(--ink);background:var(--surface);transition:all var(--t-fast)}
+.catnav a:hover{border-color:var(--accent);color:var(--accent-ink)}
+
+/* ---------- category sections ---------- */
+.cat{max-width:1200px;margin:0 auto;padding:clamp(2.4rem,5vw,4rem) clamp(1rem,4vw,2.5rem)}
+.cat + .cat{border-top:1px solid var(--hair)}
+.cat__head{margin-bottom:1.8rem}
+.cat__head h2{font-size:clamp(1.7rem,4vw,2.6rem)}
+.cat__head .num{font-family:var(--sys-serif);font-size:clamp(2.6rem,7vw,4.4rem);color:rgba(213,21,34,.14);
+  line-height:.8;display:block;font-weight:700}
+.cat__head p{color:var(--body);max-width:74ch;margin-top:.4rem}
+.subhead{font-family:var(--sys-sans);font-size:.82rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--muted);margin:2.2rem 0 .9rem;display:flex;align-items:center;gap:.6rem}
+.subhead::after{content:"";flex:1;height:1px;background:var(--hair)}
+.subhead:first-of-type{margin-top:.4rem}
+.lbl{font-family:var(--sys-mono);font-size:.7rem;font-weight:700;letter-spacing:.03em;
+  color:var(--muted);text-transform:uppercase;display:flex;align-items:center;gap:.45rem}
+.lbl .tag{font-family:var(--sys-mono);font-size:.62rem;font-weight:700;color:var(--accent-ink);
+  background:var(--accent-tint);padding:.05rem .35rem;border-radius:4px;letter-spacing:.02em}
+.note{font-size:.78rem;color:var(--muted);margin:0;line-height:1.5}
+.note code{font-size:.78em}
+
+/* ---------- breadcrumb (shared with 07) ---------- */
+.crumb{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;font-size:.85rem;margin-bottom:1.4rem}
+.crumb a{color:var(--muted);font-weight:600}
+.crumb a:hover{color:var(--accent-ink)}
+.crumb .sep{color:#c2c0ba}
+.crumb .cur{color:var(--ink);font-weight:800}
+
+/* ---------- shared button (verbatim from 07) ---------- */
+.btn{
+  --bg:var(--accent); --fg:#fff; --bd:var(--accent);
+  font-family:var(--sys-sans);font-size:.95rem;font-weight:700;letter-spacing:.01em;
+  display:inline-flex;align-items:center;justify-content:center;gap:.5rem;
+  padding:.7rem 1.4rem;min-height:44px;
+  border-radius:var(--r-btn);border:2px solid var(--bd);cursor:pointer;
+  background:var(--bg);color:var(--fg);position:relative;
+  transition:background var(--t-fast),color var(--t-fast),border-color var(--t-fast),box-shadow var(--t-fast),transform var(--t-fast);
+  -webkit-tap-highlight-color:transparent;
+}
+.btn:hover,.btn.is-hover{background:var(--accent-ink);border-color:var(--accent-ink)}
+.btn:active,.btn.is-active{transform:translateY(1px);background:#8a0c15;border-color:#8a0c15}
+.btn:focus-visible,.btn.is-focus{outline:none;box-shadow:var(--ring)}
+.btn:disabled,.btn.is-disabled{cursor:not-allowed;opacity:1;background:#d8d6d2;border-color:#d8d6d2;color:#9a978f;transform:none;box-shadow:none}
+.btn.ghost{--bg:transparent;--fg:var(--accent-ink);--bd:var(--accent)}
+.btn.ghost:hover,.btn.ghost.is-hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn.ghost:active,.btn.ghost.is-active{background:var(--accent-ink);border-color:var(--accent-ink);color:#fff}
+.btn.ghost:disabled,.btn.ghost.is-disabled{background:transparent;border-color:#d8d6d2;color:#b3b0aa}
+.btn.flip{--bg:var(--ink);--fg:#fff;--bd:var(--ink)}
+.btn.flip:hover,.btn.flip.is-hover{background:transparent;color:var(--ink);border-color:var(--ink)}
+.btn.soft{--bg:var(--accent-tint);--fg:var(--accent-ink);--bd:transparent}
+.btn.soft:hover,.btn.soft.is-hover{background:rgba(213,21,34,.18);color:var(--accent-ink);border-color:transparent}
+.btn.loading,.btn.is-loading{color:transparent;pointer-events:none}
+.btn.loading::after,.btn.is-loading::after{
+  content:"";position:absolute;width:18px;height:18px;border-radius:50%;
+  border:2.5px solid rgba(255,255,255,.45);border-top-color:#fff;
+  animation:btnspin .7s linear infinite}
+.btn.ghost.loading::after,.btn.ghost.is-loading::after{border-color:rgba(213,21,34,.35);border-top-color:var(--accent)}
+@keyframes btnspin{to{transform:rotate(360deg)}}
+.btn.sm{font-size:.82rem;padding:.45rem .9rem;min-height:36px}
+.btn.lg{font-size:1.05rem;padding:.9rem 1.8rem}
+.btn.block{width:100%}
+/* SUCCESS / "added" flash variant */
+.btn.is-added{background:var(--ok);border-color:var(--ok);color:#fff;pointer-events:none}
+.btn.is-added::before{content:"\2713 ";font-weight:900}
+
+/* ---------- form controls (verbatim from 07) ---------- */
+.field{display:flex;flex-direction:column;gap:.4rem}
+.field > label{font-size:.82rem;font-weight:700;color:var(--ink);letter-spacing:.01em}
+.field .req{color:var(--accent)}
+.ctrl{
+  font-family:var(--sys-sans);font-size:16px;
+  color:var(--ink);background:var(--surface);
+  border:1.5px solid #cdccc7;border-radius:var(--r-btn);
+  padding:.7rem .85rem;min-height:46px;width:100%;
+  transition:border-color var(--t-fast),box-shadow var(--t-fast),background var(--t-fast);
+  -webkit-appearance:none;appearance:none;
+}
+.ctrl::placeholder{color:#a3a09a}
+.ctrl:hover{border-color:#a8a6a0}
+.ctrl:focus,.ctrl.is-focus{outline:none;border-color:var(--accent);box-shadow:var(--ring)}
+select.ctrl{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23626262' d='M6 8 0 0h12z'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right .9rem center;padding-right:2.2rem}
+.ctrl.err,.field.err .ctrl{border-color:var(--err);background:var(--err-bg)}
+.ctrl.err:focus,.field.err .ctrl:focus,.ctrl.err.is-focus{box-shadow:0 0 0 3px rgba(192,18,30,.30)}
+.msg.err{font-size:.78rem;font-weight:600;color:var(--err);display:flex;align-items:center;gap:.35rem}
+.msg.err::before{content:"!";display:inline-grid;place-items:center;width:15px;height:15px;border-radius:50%;
+  background:var(--err);color:#fff;font-size:.68rem;font-weight:800}
+.ctrl.ok,.field.ok .ctrl{border-color:var(--ok);background:var(--ok-bg)}
+.ctrl.ok:focus,.field.ok .ctrl:focus{box-shadow:0 0 0 3px rgba(31,138,76,.28)}
+.msg.ok{font-size:.78rem;font-weight:600;color:var(--ok);display:flex;align-items:center;gap:.35rem}
+.msg.ok::before{content:"\2713";display:inline-grid;place-items:center;width:15px;height:15px;border-radius:50%;
+  background:var(--ok);color:#fff;font-size:.66rem;font-weight:800}
+.ctrl:disabled,.ctrl.is-disabled{background:#f0efec;border-color:#e0dfdb;color:#9a978f;cursor:not-allowed}
+.hint{font-size:.76rem;color:var(--muted)}
+.opt{display:inline-flex;align-items:center;gap:.6rem;cursor:pointer;font-size:.92rem;color:var(--ink);min-height:44px}
+.opt input{position:absolute;opacity:0;width:0;height:0}
+.opt .box{width:22px;height:22px;border:2px solid #b9b7b1;border-radius:6px;background:var(--surface);
+  display:inline-grid;place-items:center;transition:all var(--t-fast);flex:0 0 auto}
+.opt .box.round{border-radius:50%}
+.opt input:checked + .box,.opt.is-checked .box{background:var(--accent);border-color:var(--accent)}
+.opt .box::after{content:"";opacity:0;transition:opacity var(--t-fast)}
+.opt input:checked + .box::after,.opt.is-checked .box::after{opacity:1}
+.opt .box:not(.round)::after{width:6px;height:11px;border:2.5px solid #fff;border-top:0;border-left:0;transform:rotate(42deg) translateY(-1px)}
+.opt .box.round::after{width:9px;height:9px;border-radius:50%;background:#fff}
+.opt input:focus-visible + .box,.opt.is-focus .box{box-shadow:var(--ring);border-color:var(--accent)}
+
+/* ---------- badges (verbatim from 07) ---------- */
+.badge{display:inline-flex;align-items:center;gap:.3rem;font-size:.72rem;font-weight:800;letter-spacing:.02em;
+  padding:.2rem .55rem;border-radius:var(--r-pill);line-height:1.4}
+.badge.solid{background:var(--accent);color:#fff}
+.badge.tint{background:var(--accent-tint);color:var(--accent-ink)}
+.badge.ok{background:var(--ok-bg);color:var(--ok)}
+.badge.warn{background:var(--warn-bg);color:var(--warn)}
+.badge.neutral{background:rgba(26,26,26,.06);color:var(--body)}
+.badge .d{width:6px;height:6px;border-radius:50%;background:currentColor}
+
+/* star rating (CSS-crafted, no images) */
+.stars{display:inline-flex;align-items:center;gap:.5rem}
+.stars .row{--pct:90%;display:inline-block;position:relative;font-size:1rem;line-height:1;
+  font-family:var(--sys-sans);letter-spacing:2px}
+.stars .row::before{content:"\2605\2605\2605\2605\2605";color:#dcdad4}
+.stars .row .fill{position:absolute;inset:0;width:var(--pct);overflow:hidden;color:#f5a623}
+.stars .row .fill::before{content:"\2605\2605\2605\2605\2605"}
+.stars .cnt{font-size:.82rem;color:var(--muted);font-weight:600}
+
+/* ============================================================
+   A · PDP BUYBOX
+   gallery (main + thumb rail + zoom) | buybox (title, price+
+   compare-at, rating, variant swatches size/color, qty stepper,
+   add-to-cart state machine + wishlist) | trust micro-row
+   ============================================================ */
+.pdp{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:clamp(1.4rem,3vw,2.6rem);align-items:start}
+
+/* --- gallery --- */
+.gallery{display:grid;grid-template-columns:74px 1fr;gap:.9rem;position:sticky;top:84px}
+.thumbs{display:flex;flex-direction:column;gap:.6rem}
+.thumb{width:74px;height:74px;border-radius:var(--r-card);border:2px solid var(--hair);cursor:pointer;overflow:hidden;
+  padding:0;background:var(--surface);transition:border-color var(--t-fast),box-shadow var(--t-fast);position:relative}
+.thumb:hover{border-color:#a8a6a0}
+.thumb:focus-visible{outline:none;box-shadow:var(--ring)}
+.thumb[aria-current="true"],.thumb.is-active{border-color:var(--accent)}
+.thumb .ph{position:absolute;inset:0}
+.stage{position:relative;border-radius:var(--r-panel);overflow:hidden;border:1px solid var(--hair);
+  background:var(--surface);box-shadow:var(--shadow-card);aspect-ratio:4/5}
+.stage .ph{position:absolute;inset:0;transition:transform .4s var(--ease)}
+.stage:hover .ph{transform:scale(1.06)}
+.stage .ztag{position:absolute;right:.7rem;bottom:.7rem;z-index:2;display:inline-flex;align-items:center;gap:.35rem;
+  font-size:.7rem;font-weight:700;color:#fff;background:rgba(26,26,26,.72);backdrop-filter:blur(4px);
+  -webkit-backdrop-filter:blur(4px);padding:.3rem .6rem;border-radius:var(--r-pill)}
+.stage .flag{position:absolute;left:.8rem;top:.8rem;z-index:2}
+/* CSS-crafted "photo" placeholders — gradient + weave, no external image */
+.ph{background:
+   radial-gradient(120% 90% at 30% 18%, rgba(255,255,255,.30), transparent 55%),
+   linear-gradient(135deg,#2a2c31,#15161a 70%);}
+.ph.p1{background:radial-gradient(120% 90% at 30% 18%,rgba(255,255,255,.28),transparent 55%),linear-gradient(135deg,#3a2326,#181012 72%)}
+.ph.p2{background:radial-gradient(120% 90% at 70% 20%,rgba(255,255,255,.26),transparent 55%),linear-gradient(150deg,#23303a,#101820 72%)}
+.ph.p3{background:radial-gradient(120% 90% at 40% 80%,rgba(255,255,255,.22),transparent 55%),linear-gradient(120deg,#332a1c,#16120a 72%)}
+.ph.p4{background:radial-gradient(120% 90% at 60% 30%,rgba(255,255,255,.24),transparent 55%),linear-gradient(160deg,#2c2230,#140f17 72%)}
+.ph::after{content:"";position:absolute;inset:0;opacity:.5;mix-blend-mode:overlay;
+  background:repeating-linear-gradient(45deg,rgba(255,255,255,.05) 0 2px,transparent 2px 5px)}
+
+/* --- buybox --- */
+.buybox .vendor{font-size:.78rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.buybox h3{font-family:var(--sys-serif);font-size:clamp(1.6rem,3vw,2.2rem);letter-spacing:-.02em;margin:.3rem 0 .5rem;color:var(--ink)}
+.priced{display:flex;align-items:baseline;gap:.7rem;flex-wrap:wrap;margin:.6rem 0 .2rem}
+.priced .now{font-family:var(--sys-serif);font-size:1.9rem;font-weight:700;color:var(--ink);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.priced .was{font-size:1.05rem;color:var(--muted);text-decoration:line-through;font-variant-numeric:tabular-nums}
+.priced .off{font-size:.74rem}
+.buybox .desc{color:var(--body);font-size:.92rem;margin:.9rem 0 1.2rem;max-width:48ch}
+
+/* variant — swatch groups */
+.varblock{margin:1.1rem 0}
+.varblock .vh{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.55rem}
+.varblock .vh .t{font-size:.8rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--ink)}
+.varblock .vh .v{font-size:.86rem;color:var(--muted);font-weight:600}
+.swatches{display:flex;gap:.55rem;flex-wrap:wrap}
+/* color swatch */
+.csw{width:38px;height:38px;border-radius:50%;cursor:pointer;border:0;padding:0;position:relative;
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.12);transition:transform var(--t-fast)}
+.csw::after{content:"";position:absolute;inset:-5px;border-radius:50%;border:2px solid transparent;transition:border-color var(--t-fast)}
+.csw:hover{transform:translateY(-2px)}
+.csw:focus-visible{outline:none}
+.csw:focus-visible::after{border-color:rgba(213,21,34,.5)}
+.csw[aria-pressed="true"],.csw.is-sel{}
+.csw[aria-pressed="true"]::after,.csw.is-sel::after{border-color:var(--accent)}
+/* size swatch (text chips) */
+.ssw{min-width:46px;height:44px;padding:0 .7rem;border-radius:var(--r-btn);cursor:pointer;
+  font-family:var(--sys-sans);font-size:.9rem;font-weight:700;color:var(--ink);
+  background:var(--surface);border:1.5px solid #cdccc7;display:inline-flex;align-items:center;justify-content:center;
+  transition:all var(--t-fast)}
+.ssw:hover{border-color:#8a8881}
+.ssw:focus-visible{outline:none;box-shadow:var(--ring);border-color:var(--accent)}
+.ssw[aria-pressed="true"],.ssw.is-sel{background:var(--ink);border-color:var(--ink);color:#fff}
+.ssw:disabled,.ssw.is-oos{cursor:not-allowed;color:#bcb9b3;background:#f3f2ef;border-color:var(--hair);
+  position:relative;overflow:hidden}
+.ssw.is-oos::after{content:"";position:absolute;left:-10%;right:-10%;top:50%;height:1.5px;background:#cbc8c2;transform:rotate(-18deg)}
+
+/* qty stepper */
+.qtyrow{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;margin:1.2rem 0}
+.qty{display:inline-flex;align-items:center;border:1.5px solid #cdccc7;border-radius:var(--r-btn);background:var(--surface);overflow:hidden}
+.qty button{width:44px;height:46px;border:0;background:none;cursor:pointer;font-size:1.25rem;font-weight:700;color:var(--ink);
+  display:grid;place-items:center;transition:background var(--t-fast)}
+.qty button:hover{background:rgba(26,26,26,.05)}
+.qty button:focus-visible{outline:none;box-shadow:inset var(--ring)}
+.qty button:disabled{color:#c2bfb9;cursor:not-allowed;background:none}
+.qty input{width:48px;height:46px;border:0;border-left:1px solid var(--hair);border-right:1px solid var(--hair);
+  text-align:center;font-family:var(--sys-sans);font-size:1rem;font-weight:700;color:var(--ink);background:none;
+  font-variant-numeric:tabular-nums;-moz-appearance:textfield}
+.qty input::-webkit-outer-spin-button,.qty input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.qty input:focus-visible{outline:none;box-shadow:inset var(--ring)}
+.qtyrow .stock{font-size:.82rem;font-weight:700;color:var(--ok);display:inline-flex;align-items:center;gap:.4rem}
+.qtyrow .stock .d{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 3px rgba(31,138,76,.2)}
+
+/* add-to-cart row + wishlist */
+.cartrow{display:flex;gap:.7rem;align-items:stretch;margin:.4rem 0 1.2rem}
+.cartrow .btn{flex:1}
+.wish{width:54px;flex:0 0 auto;border:1.5px solid #cdccc7;border-radius:var(--r-btn);background:var(--surface);cursor:pointer;
+  display:grid;place-items:center;color:var(--muted);transition:all var(--t-fast)}
+.wish:hover{border-color:var(--accent);color:var(--accent)}
+.wish:focus-visible{outline:none;box-shadow:var(--ring);border-color:var(--accent)}
+.wish[aria-pressed="true"],.wish.is-on{border-color:var(--accent);color:var(--accent);background:var(--accent-tint)}
+.wish .heart{width:20px;height:20px;display:inline-block;
+  background:currentColor;-webkit-mask:var(--heart);mask:var(--heart)}
+:root{--heart:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 21s-8.5-5.4-11-10.2C-0.3 6.9 2 3.5 5.6 3.5c2 0 3.4 1.1 4.4 2.6 1-1.5 2.4-2.6 4.4-2.6C18 3.5 20.3 6.9 23 10.8 20.5 15.6 12 21 12 21z'/%3E%3C/svg%3E") center/contain no-repeat}
+
+/* trust micro-row (I5) */
+.trustrow{display:flex;gap:1.3rem;flex-wrap:wrap;border-top:1px solid var(--hair);padding-top:1.2rem;margin-top:.4rem}
+.trustrow .ti{display:flex;align-items:center;gap:.55rem;font-size:.82rem;color:var(--body);font-weight:600}
+.trustrow .ti .ic{width:30px;height:30px;border-radius:8px;background:var(--accent-tint);color:var(--accent-ink);
+  display:grid;place-items:center;flex:0 0 auto;font-weight:900;font-size:.85rem}
+
+/* ============================================================
+   B · CART + STICKY ORDER SUMMARY
+   line-item rows (image · name+variant · price · qty · subtotal
+   · remove) + sticky summary panel (subtotal/shipping/total +
+   promo field [default/applied/error] + checkout CTA)
+   ============================================================ */
+.cartlayout{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(300px,.9fr);gap:clamp(1.4rem,3vw,2.4rem);align-items:start}
+.cartcard{background:var(--surface);border:1px solid var(--hair);border-radius:var(--r-panel);box-shadow:var(--shadow-rest);overflow:hidden}
+.cartcard .ch{display:flex;justify-content:space-between;align-items:center;padding:1.1rem 1.3rem;border-bottom:1px solid var(--hair)}
+.cartcard .ch h4{font-family:var(--sys-sans);font-size:1rem;font-weight:800}
+.cartcard .ch .ct{font-size:.82rem;color:var(--muted);font-weight:700}
+.litem{display:grid;grid-template-columns:84px 1fr auto;gap:1.1rem;padding:1.2rem 1.3rem;border-bottom:1px solid var(--hair);align-items:start}
+.litem:last-child{border-bottom:0}
+.litem .pic{width:84px;height:96px;border-radius:var(--r-card);overflow:hidden;position:relative;border:1px solid var(--hair);flex:0 0 auto}
+.litem .mid .nm{font-weight:800;font-size:.98rem;color:var(--ink);line-height:1.3}
+.litem .mid .meta{font-size:.8rem;color:var(--muted);margin-top:.25rem;display:flex;gap:.5rem;flex-wrap:wrap}
+.litem .mid .meta .pip{display:inline-flex;align-items:center;gap:.35rem}
+.litem .mid .meta .sw{width:12px;height:12px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(0,0,0,.15)}
+.litem .mid .controls{display:flex;align-items:center;gap:1rem;margin-top:.8rem;flex-wrap:wrap}
+.litem .qty button{width:36px;height:38px;font-size:1.1rem}
+.litem .qty input{height:38px;width:42px}
+.litem .rm{background:none;border:0;color:var(--muted);cursor:pointer;font-size:.8rem;font-weight:700;
+  display:inline-flex;align-items:center;gap:.35rem;padding:.3rem .2rem;border-radius:6px;transition:color var(--t-fast)}
+.litem .rm:hover{color:var(--accent)}
+.litem .rm:focus-visible{outline:none;box-shadow:var(--ring)}
+.litem .price{text-align:right;min-width:78px}
+.litem .price .sub{font-weight:800;font-size:1rem;color:var(--ink);font-variant-numeric:tabular-nums}
+.litem .price .ea{font-size:.74rem;color:var(--muted);margin-top:.2rem;font-variant-numeric:tabular-nums}
+/* removed (undo) state */
+.litem.is-removed{opacity:.55}
+.litem.is-removed .mid,.litem.is-removed .pic,.litem.is-removed .price{filter:grayscale(.6)}
+.litem .undo{display:none;font-size:.8rem;color:var(--accent-ink);font-weight:800;cursor:pointer;background:none;border:0}
+.litem.is-removed .undo{display:inline-flex;align-items:center;gap:.35rem}
+.litem.is-removed .controls{display:none}
+
+/* sticky order summary */
+.summary{position:sticky;top:84px;background:var(--surface);border:1px solid var(--hair);border-radius:var(--r-panel);
+  box-shadow:var(--shadow-card);padding:1.5rem}
+.summary h4{font-family:var(--sys-sans);font-size:1rem;font-weight:800;margin-bottom:1rem}
+.sline{display:flex;justify-content:space-between;font-size:.9rem;color:var(--body);padding:.5rem 0}
+.sline .v{font-variant-numeric:tabular-nums;font-weight:700;color:var(--ink)}
+.sline.disc .v{color:var(--ok)}
+.sline.muted{color:var(--muted)}.sline.muted .v{color:var(--muted);font-weight:600}
+.summary hr{border:0;border-top:1px solid var(--hair);margin:.7rem 0}
+.sline.total{font-size:1.05rem;font-weight:800;color:var(--ink);padding-top:.3rem}
+.sline.total .v{font-family:var(--sys-serif);font-size:1.4rem}
+.summary .promo{display:flex;gap:.5rem;margin:1rem 0 .3rem}
+.summary .promo .ctrl{min-height:44px;padding:.55rem .75rem}
+.summary .promo .btn{min-height:44px;padding:.55rem 1rem}
+.promo-msg{margin-top:.5rem}
+.summary .secure{display:flex;align-items:center;gap:.45rem;justify-content:center;margin-top:1rem;font-size:.78rem;color:var(--muted);font-weight:600}
+.summary .secure .lock{width:14px;height:14px;background:currentColor;
+  -webkit-mask:var(--lock);mask:var(--lock)}
+:root{--lock:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5zm-3 8V7a3 3 0 0 1 6 0v3H9z'/%3E%3C/svg%3E") center/contain no-repeat}
+/* payment method chips (CSS, no svg files) */
+.paychips{display:flex;gap:.45rem;justify-content:center;margin-top:.9rem;flex-wrap:wrap}
+.paychip{height:24px;min-width:38px;border-radius:5px;border:1px solid var(--hair);background:var(--surface);
+  display:grid;place-items:center;font-size:.6rem;font-weight:800;letter-spacing:.02em;color:var(--muted);padding:0 .45rem}
+
+/* ============================================================
+   C · CHECKOUT — 3-STEP STEPPER
+   progress rail (done · current · upcoming) → step panels for
+   1 Information · 2 Shipping · 3 Payment, with live nav
+   ============================================================ */
+.checkout{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(290px,.85fr);gap:clamp(1.4rem,3vw,2.4rem);align-items:start}
+/* stepper rail */
+.stepper{display:flex;align-items:center;gap:0;margin-bottom:1.8rem}
+.step{display:flex;align-items:center;gap:.6rem;flex:0 0 auto}
+.step .dot{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:.9rem;
+  background:var(--surface);border:2px solid #cdccc7;color:var(--muted);transition:all var(--t-fast);flex:0 0 auto}
+.step .stxt{display:flex;flex-direction:column;line-height:1.1}
+.step .stxt .k{font-size:.66rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.step .stxt .l{font-size:.9rem;font-weight:700;color:var(--ink)}
+.step .bar{width:clamp(20px,5vw,64px);height:2px;background:var(--hair);margin:0 .7rem;flex:0 1 auto}
+.step.done .dot{background:var(--ok);border-color:var(--ok);color:#fff}
+.step.done .dot::after{content:"\2713"}.step.done .dot span{display:none}
+.step.done + .step .bar,.step.done .bar{background:var(--ok)}
+.step.current .dot{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 0 0 4px rgba(213,21,34,.16)}
+.step.current .stxt .k{color:var(--accent-ink)}
+/* step panels */
+.steppanel{background:var(--surface);border:1px solid var(--hair);border-radius:var(--r-panel);box-shadow:var(--shadow-rest);padding:1.6rem}
+.steppanel[hidden]{display:none}
+.steppanel h4{font-family:var(--sys-sans);font-size:1.15rem;font-weight:800;margin-bottom:.3rem}
+.steppanel > p.sub{font-size:.86rem;color:var(--muted);margin:0 0 1.3rem}
+.frow{display:flex;flex-direction:column;gap:1.1rem}
+.ftwo{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.fthree{display:grid;grid-template-columns:2fr 1fr 1fr;gap:1rem}
+.stepnav{display:flex;justify-content:space-between;gap:.8rem;margin-top:1.5rem;flex-wrap:wrap}
+.stepnav .back{background:none;border:0;color:var(--muted);font-weight:700;cursor:pointer;font-size:.9rem;
+  display:inline-flex;align-items:center;gap:.4rem;padding:.6rem .2rem}
+.stepnav .back:hover{color:var(--ink)}
+.stepnav .back:focus-visible{outline:none;box-shadow:var(--ring);border-radius:6px}
+/* shipping method radios as cards */
+.shipopt{display:flex;align-items:center;gap:.9rem;border:1.5px solid #cdccc7;border-radius:var(--r-card);
+  padding:.95rem 1.05rem;cursor:pointer;transition:all var(--t-fast);background:var(--surface)}
+.shipopt:hover{border-color:#a8a6a0}
+.shipopt input{position:absolute;opacity:0}
+.shipopt .rd{width:22px;height:22px;border-radius:50%;border:2px solid #b9b7b1;display:grid;place-items:center;flex:0 0 auto;transition:all var(--t-fast)}
+.shipopt .rd::after{content:"";width:10px;height:10px;border-radius:50%;background:var(--accent);opacity:0;transition:opacity var(--t-fast)}
+.shipopt.is-sel,.shipopt input:checked ~ .rd{}
+.shipopt.is-sel{border-color:var(--accent);background:var(--accent-tint)}
+.shipopt.is-sel .rd{border-color:var(--accent)}
+.shipopt.is-sel .rd::after{opacity:1}
+.shipopt .so-mid{flex:1}
+.shipopt .so-mid .t{font-weight:800;font-size:.92rem;color:var(--ink)}
+.shipopt .so-mid .d{font-size:.8rem;color:var(--muted)}
+.shipopt .so-price{font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums}
+.shipopt .so-price.free{color:var(--ok)}
+/* payment card mock */
+.paycard{border:1px solid var(--hair);border-radius:var(--r-card);padding:1.1rem;background:rgba(26,26,26,.015)}
+.cardicon{display:inline-flex;gap:.3rem;align-items:center}
+.cardicon .b{width:26px;height:17px;border-radius:3px}
+.cardicon .b.visa{background:linear-gradient(135deg,#1a1f71,#2a5298)}
+.cardicon .b.mc{background:linear-gradient(135deg,#eb001b,#f79e1b)}
+.cardicon .b.amex{background:linear-gradient(135deg,#1379bf,#1c8ed6)}
+/* mini order summary reused in checkout/right rail */
+.ministub{background:var(--surface);border:1px solid var(--hair);border-radius:var(--r-panel);box-shadow:var(--shadow-rest);padding:1.3rem;position:sticky;top:84px}
+.ministub h4{font-family:var(--sys-sans);font-size:.92rem;font-weight:800;margin-bottom:.9rem}
+.ministub .mi{display:flex;gap:.8rem;align-items:center;padding:.5rem 0;border-bottom:1px solid var(--hair)}
+.ministub .mi:last-of-type{border-bottom:0;margin-bottom:.3rem}
+.ministub .mi .pic{width:48px;height:54px;border-radius:8px;overflow:hidden;position:relative;flex:0 0 auto;border:1px solid var(--hair)}
+.ministub .mi .pic .q{position:absolute;top:-7px;right:-7px;z-index:2;width:20px;height:20px;border-radius:50%;
+  background:var(--ink);color:#fff;font-size:.68rem;font-weight:800;display:grid;place-items:center}
+.ministub .mi .nm{font-size:.82rem;font-weight:700;color:var(--ink);line-height:1.25}
+.ministub .mi .vr{font-size:.74rem;color:var(--muted)}
+.ministub .mi .pr{margin-left:auto;font-weight:800;font-size:.86rem;font-variant-numeric:tabular-nums}
+
+/* ============================================================
+   D · ORDER CONFIRMATION / RECEIPT
+   success header + order meta + itemized receipt + totals +
+   delivery timeline + next actions
+   ============================================================ */
+.receipt{max-width:680px;margin:0 auto}
+.confhead{text-align:center;margin-bottom:1.8rem}
+.confhead .check{width:72px;height:72px;border-radius:50%;background:var(--ok-bg);border:1px solid var(--ok-bd);
+  display:grid;place-items:center;margin:0 auto 1rem;color:var(--ok);position:relative}
+.confhead .check::after{content:"";width:18px;height:32px;border:4px solid var(--ok);border-top:0;border-left:0;
+  transform:rotate(42deg) translateY(-3px)}
+.confhead h3{font-family:var(--sys-serif);font-size:clamp(1.6rem,4vw,2.3rem);color:var(--ink);margin-bottom:.4rem}
+.confhead p{color:var(--body);font-size:.95rem;margin:0}
+.confhead .ord{font-family:var(--sys-mono);font-size:.82rem;color:var(--accent-ink);background:var(--accent-tint);
+  display:inline-block;padding:.25rem .7rem;border-radius:var(--r-pill);margin-top:.7rem;font-weight:700}
+.rcard{background:var(--surface);border:1px solid var(--hair);border-radius:var(--r-panel);box-shadow:var(--shadow-card);overflow:hidden}
+.rmeta{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--hair)}
+.rmeta .m{background:var(--surface);padding:1.1rem 1.2rem}
+.rmeta .m .k{font-size:.68rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.rmeta .m .v{font-size:.9rem;font-weight:700;color:var(--ink);margin-top:.3rem;line-height:1.3}
+.rmeta .m .v small{display:block;font-weight:500;color:var(--muted);font-size:.82rem}
+.ritems{padding:1.3rem;border-top:1px solid var(--hair)}
+.ritem{display:grid;grid-template-columns:54px 1fr auto;gap:.9rem;align-items:center;padding:.6rem 0}
+.ritem + .ritem{border-top:1px solid var(--hair)}
+.ritem .pic{width:54px;height:62px;border-radius:8px;overflow:hidden;position:relative;border:1px solid var(--hair)}
+.ritem .nm{font-size:.9rem;font-weight:700;color:var(--ink)}
+.ritem .vr{font-size:.78rem;color:var(--muted)}
+.ritem .amt{font-weight:800;font-variant-numeric:tabular-nums}
+.rtotals{padding:1.1rem 1.3rem;background:rgba(26,26,26,.02);border-top:1px solid var(--hair)}
+.rtotals .sline{padding:.35rem 0}
+/* delivery timeline */
+.timeline{display:flex;justify-content:space-between;position:relative;margin:1.6rem 0 .5rem;padding:0 .3rem}
+.timeline::before{content:"";position:absolute;left:8%;right:8%;top:13px;height:2px;background:var(--hair);z-index:0}
+.tstep{display:flex;flex-direction:column;align-items:center;gap:.5rem;text-align:center;flex:1;position:relative;z-index:1}
+.tstep .nd{width:28px;height:28px;border-radius:50%;background:var(--surface);border:2px solid #cdccc7;display:grid;place-items:center;
+  font-size:.7rem;font-weight:800;color:var(--muted)}
+.tstep.done .nd{background:var(--ok);border-color:var(--ok);color:#fff}
+.tstep.done .nd::after{content:"\2713"}
+.tstep.now .nd{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 0 0 4px rgba(213,21,34,.16)}
+.tstep .tl{font-size:.74rem;font-weight:700;color:var(--ink)}
+.tstep .td{font-size:.7rem;color:var(--muted)}
+.tstep.upcoming .tl{color:var(--muted)}
+.confactions{display:flex;gap:.7rem;flex-wrap:wrap;justify-content:center;margin-top:1.6rem}
+
+/* ============================================================
+   STICKY MOBILE ADD-TO-CART BAR (conversion primitive)
+   appears past the hero/buybox; reduced-motion-safe
+   ============================================================ */
+.sticky-cta{
+  position:fixed;left:0;right:0;bottom:0;z-index:80;
+  background:rgba(255,255,255,.92);backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass);
+  border-top:1px solid var(--hair);box-shadow:0 -8px 24px -12px rgba(16,24,40,.22);
+  padding:.7rem clamp(1rem,4vw,2.5rem);
+  display:flex;align-items:center;gap:1rem;
+  transform:translateY(110%);transition:transform .32s var(--ease)}
+.sticky-cta.is-visible{transform:translateY(0)}
+.sticky-cta .info{min-width:0}
+.sticky-cta .info .nm{font-size:.86rem;font-weight:800;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sticky-cta .info .pr{font-size:.82rem;color:var(--muted);font-weight:700;font-variant-numeric:tabular-nums}
+.sticky-cta .btn{margin-left:auto;white-space:nowrap}
+.sticky-note{display:flex;align-items:center;gap:.5rem;font-size:.8rem;color:var(--muted);
+  background:var(--accent-tint);border:1px dashed rgba(213,21,34,.3);border-radius:var(--r-card);
+  padding:.6rem .9rem;margin-top:1rem}
+
+/* footer */
+.foot{background:var(--ink);color:#9b9b9b;padding:2.2rem 0;font-size:.84rem;margin-top:1rem}
+.foot__in{max-width:1200px;margin:0 auto;padding:0 clamp(1rem,4vw,2.5rem);display:flex;gap:1.1rem;flex-wrap:wrap;align-items:center}
+.foot b{color:#fff}.foot a{color:#cfcfcf;font-weight:600}.foot a:hover{color:#fff}
+.foot .meta{margin-left:auto;font-family:var(--sys-mono);font-size:.72rem;color:#6e6e6e}
+
+/* reduced-motion gate */
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  .stage:hover .ph{transform:none}
+  .sticky-cta{transition:none}
+}
+
+/* responsive */
+@media (max-width:980px){
+  .pdp{grid-template-columns:1fr}
+  .gallery{position:static}
+  .cartlayout,.checkout{grid-template-columns:1fr}
+  .summary,.ministub{position:static}
+  .rmeta{grid-template-columns:1fr}
+  .fthree{grid-template-columns:1fr}
+}
+@media (max-width:560px){
+  .gallery{grid-template-columns:60px 1fr}
+  .thumb{width:60px;height:60px}
+  .ftwo{grid-template-columns:1fr}
+  .litem{grid-template-columns:64px 1fr;gap:.8rem}
+  .litem .price{grid-column:2;text-align:left;margin-top:.6rem}
+  .step .stxt{display:none}
+  .step .bar{width:auto;flex:1}
+  .stepper{width:100%}
+  .timeline{font-size:.66rem}
+  .confactions .btn{width:100%}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ GLASS TOP BAR + SIBLING NAV ============ -->
+<header class="topbar">
+  <div class="topbar__in">
+    <div class="brand"><span class="dot"></span>SGEN <small>Living Styleguide</small></div>
+    <nav class="sibnav" aria-label="Styleguide pages">
+      <a href="00-top12.html">00 · Top-12</a>
+      <a href="07-components.html">07 · Components</a>
+      <a href="08-scroll-sticky.html">08 · Scroll·Sticky</a>
+      <a href="09-accessibility.html">09 · A11y</a>
+      <a href="10-sections.html">10 · Sections</a>
+      <a href="11-theming.html">11 · Theming</a><a href="12-iconography.html">12 · Iconography</a><a href="13-utility-pages.html">13 · Utility</a><a href="14-ecommerce.html">14 · Ecommerce</a><a href="15-dataviz.html">15 · Data-viz</a>
+      <a href="14-ecommerce.html" aria-current="page">14 · E-commerce</a>
+      <a href="index.html">Index</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ============ PAGE HEADER ============ -->
+<div class="pagehead">
+  <span class="eyebrow">Page 14 — the e-commerce flow, live</span>
+  <h1>E-commerce flow components</h1>
+  <p>The full commerce set — <b>shown live in every relevant state</b>, not described. A PDP <b>buybox</b> (gallery with thumbnail rail + hover-zoom, color &amp; size variant swatches, a real quantity stepper, and the add-to-cart state machine with wishlist), a <b>cart</b> with editable line-items + a sticky <b>order-summary</b>, a 3-step <b>checkout stepper</b> you can walk through, and an <b>order-confirmation receipt</b>. Built on the SGEN chrome: charcoal <code>#1a1a1a</code>, red <code>#d51522</code>, one 8&nbsp;px button radius, the ink-tinted shadow family, motion gated behind <code>prefers-reduced-motion</code>. Self-contained — system fonts, CSS-crafted visuals, zero external dependencies.</p>
+  <div class="legendbar">
+    <span><b>Interactive states work</b> — pick a swatch, step the qty, add to cart, walk the checkout, apply <code>SGEN10</code>.</span>
+    <span>States marked <span class="pin">PINNED</span> are force-applied via a modifier class so one screenshot captures them.</span>
+  </div>
+</div>
+
+<nav class="catnav" aria-label="Categories on this page">
+  <a href="#catA">A · PDP buybox</a>
+  <a href="#catB">B · Cart + order summary</a>
+  <a href="#catC">C · Checkout stepper</a>
+  <a href="#catD">D · Order confirmation</a>
+</nav>
+
+<!-- ====================================================== -->
+<!-- A · PDP BUYBOX -->
+<!-- ====================================================== -->
+<section class="cat" id="catA">
+  <div class="cat__head">
+    <span class="num">A</span>
+    <h2>PDP buybox</h2>
+    <p>The conversion engine of any product page: a sticky <b>gallery</b> (main stage with hover-zoom + a thumbnail rail) paired with the <b>buy box</b> — title, price with compare-at, star rating, <b>variant swatches</b> (color + size, with an out-of-stock option), a <b>quantity stepper</b>, and the <b>add-to-cart state machine</b> (idle → loading → added) plus a wishlist toggle. The trust micro-row closes it out.</p>
+  </div>
+
+  <div class="crumb" aria-label="Breadcrumb">
+    <a href="#catA">Shop</a><span class="sep">/</span>
+    <a href="#catA">Outerwear</a><span class="sep">/</span>
+    <span class="cur" aria-current="page">Atlas Field Jacket</span>
+  </div>
+
+  <div class="pdp">
+    <!-- GALLERY -->
+    <div class="gallery">
+      <div class="thumbs" id="thumbs" role="group" aria-label="Product images">
+        <button class="thumb is-active" aria-current="true" data-img="p1" aria-label="View image 1"><span class="ph p1"></span></button>
+        <button class="thumb" data-img="p2" aria-label="View image 2"><span class="ph p2"></span></button>
+        <button class="thumb" data-img="p3" aria-label="View image 3"><span class="ph p3"></span></button>
+        <button class="thumb" data-img="p4" aria-label="View image 4"><span class="ph p4"></span></button>
+      </div>
+      <div class="stage">
+        <span class="badge solid flag" style="position:absolute">−20%</span>
+        <span class="ph p1" id="stageImg"></span>
+        <span class="ztag">⌕ Hover to zoom</span>
+      </div>
+    </div>
+
+    <!-- BUYBOX -->
+    <div class="buybox">
+      <div class="vendor">Trailhand Supply Co.</div>
+      <h3>Atlas Field Jacket</h3>
+      <div class="stars">
+        <span class="row"><span class="fill" style="width:92%"></span></span>
+        <span class="cnt">4.6 · <a href="#catA">218 reviews</a></span>
+      </div>
+      <div class="priced">
+        <span class="now" id="pdpPrice">$152.00</span>
+        <span class="was">$190.00</span>
+        <span class="badge ok off">Save $38</span>
+      </div>
+      <p class="desc">Waxed-cotton shell, brass hardware, four-season liner. The everyday layer that earns its place on the peg by the door.</p>
+
+      <!-- COLOR SWATCHES -->
+      <div class="varblock">
+        <div class="vh"><span class="t">Color</span><span class="v" id="colorVal">Field Olive</span></div>
+        <div class="swatches" id="colorSw" role="group" aria-label="Color">
+          <button class="csw is-sel" aria-pressed="true" style="background:#5b6043" data-name="Field Olive" aria-label="Field Olive"></button>
+          <button class="csw" aria-pressed="false" style="background:#2b2f36" data-name="Slate" aria-label="Slate"></button>
+          <button class="csw" aria-pressed="false" style="background:#7a3b2e" data-name="Rust" aria-label="Rust"></button>
+          <button class="csw" aria-pressed="false" style="background:#c9bfa8" data-name="Sand" aria-label="Sand"></button>
+        </div>
+      </div>
+
+      <!-- SIZE SWATCHES (incl. disabled out-of-stock) -->
+      <div class="varblock">
+        <div class="vh"><span class="t">Size</span><a class="v" href="#catA">Size guide</a></div>
+        <div class="swatches" id="sizeSw" role="group" aria-label="Size">
+          <button class="ssw" aria-pressed="false" data-name="XS">XS</button>
+          <button class="ssw is-sel" aria-pressed="true" data-name="S">S</button>
+          <button class="ssw" aria-pressed="false" data-name="M">M</button>
+          <button class="ssw" aria-pressed="false" data-name="L">L</button>
+          <button class="ssw is-oos" disabled aria-disabled="true" data-name="XL" title="Out of stock">XL</button>
+        </div>
+        <p class="note" style="margin-top:.5rem">The <code>XL</code> chip shows the <b>out-of-stock</b> state — struck through, non-interactive.</p>
+      </div>
+
+      <!-- QTY STEPPER + STOCK -->
+      <div class="qtyrow">
+        <div class="qty" role="group" aria-label="Quantity">
+          <button id="qMinus" aria-label="Decrease quantity">−</button>
+          <input id="qInput" type="number" inputmode="numeric" value="1" min="1" max="9" aria-label="Quantity">
+          <button id="qPlus" aria-label="Increase quantity">+</button>
+        </div>
+        <span class="stock"><span class="d"></span>In stock — ships in 1–2 days</span>
+      </div>
+
+      <!-- ADD TO CART + WISHLIST -->
+      <div class="cartrow">
+        <button class="btn lg" id="addCart">Add to cart — <span id="addPrice">$152.00</span></button>
+        <button class="wish" id="wishBtn" aria-pressed="false" aria-label="Add to wishlist"><span class="heart"></span></button>
+      </div>
+
+      <!-- TRUST MICRO-ROW (I5) -->
+      <div class="trustrow">
+        <span class="ti"><span class="ic">⇄</span>Free 30-day returns</span>
+        <span class="ti"><span class="ic">⚑</span>Free shipping over $75</span>
+        <span class="ti"><span class="ic">🔒</span>Secure checkout</span>
+      </div>
+
+      <div class="sticky-note">
+        <span>↓</span><span>Scroll down — the <b>sticky add-to-cart bar</b> slides up from the bottom once the buybox leaves the viewport (it hides again when you scroll back up). It is hidden for reduced-motion users only at the transition, never functionally.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- PINNED add-to-cart state machine (one screenshot shows all) -->
+  <div class="subhead">Add-to-cart — full state machine <span class="tag" style="font-family:var(--sys-mono);font-size:.62rem;font-weight:700;color:var(--accent-ink);background:var(--accent-tint);padding:.05rem .35rem;border-radius:4px">PINNED</span></div>
+  <div style="display:flex;gap:.9rem;flex-wrap:wrap;align-items:center">
+    <div><div class="lbl" style="margin-bottom:.4rem">Idle</div><button class="btn lg">Add to cart — $152.00</button></div>
+    <div><div class="lbl" style="margin-bottom:.4rem">Loading <span class="tag">PINNED</span></div><button class="btn lg is-loading">Add to cart — $152.00</button></div>
+    <div><div class="lbl" style="margin-bottom:.4rem">Added <span class="tag">PINNED</span></div><button class="btn lg is-added">Added to cart</button></div>
+    <div><div class="lbl" style="margin-bottom:.4rem">Disabled (sold out) <span class="tag">PINNED</span></div><button class="btn lg is-disabled" disabled>Sold out</button></div>
+  </div>
+</section>
+
+<!-- ====================================================== -->
+<!-- B · CART + STICKY ORDER SUMMARY -->
+<!-- ====================================================== -->
+<section class="cat" id="catB">
+  <div class="cat__head">
+    <span class="num">B</span>
+    <h2>Cart &amp; order summary</h2>
+    <p>The editable basket: line-items with image, name + chosen variant, per-unit price, a compact <b>quantity stepper</b>, line subtotal, and a <b>remove</b> action with undo. The sticky <b>order-summary</b> panel holds the running totals, a <b>promo-code</b> field (try <code>SGEN10</code> for applied, anything else for the error state), the checkout CTA, and the secure-payment trust strip.</p>
+  </div>
+
+  <div class="cartlayout">
+    <!-- LINE ITEMS -->
+    <div class="cartcard" id="cart">
+      <div class="ch"><h4>Your cart</h4><span class="ct" id="cartCount">3 items</span></div>
+
+      <div class="litem" data-line="1" data-price="152">
+        <div class="pic"><span class="ph p1"></span></div>
+        <div class="mid">
+          <div class="nm">Atlas Field Jacket</div>
+          <div class="meta">
+            <span class="pip"><span class="sw" style="background:#5b6043"></span>Field Olive</span>
+            <span class="pip">Size S</span>
+          </div>
+          <div class="controls">
+            <div class="qty" role="group" aria-label="Quantity">
+              <button class="lq-minus" aria-label="Decrease">−</button>
+              <input class="lq-input" type="number" value="1" min="1" max="9" aria-label="Quantity">
+              <button class="lq-plus" aria-label="Increase">+</button>
+            </div>
+            <button class="rm" aria-label="Remove Atlas Field Jacket">✕ Remove</button>
+          </div>
+          <button class="undo">↺ Undo remove</button>
+        </div>
+        <div class="price"><div class="sub">$152.00</div><div class="ea">$152.00 each</div></div>
+      </div>
+
+      <div class="litem" data-line="2" data-price="68">
+        <div class="pic"><span class="ph p2"></span></div>
+        <div class="mid">
+          <div class="nm">Merino Watch Cap</div>
+          <div class="meta">
+            <span class="pip"><span class="sw" style="background:#2b2f36"></span>Slate</span>
+            <span class="pip">One size</span>
+          </div>
+          <div class="controls">
+            <div class="qty" role="group" aria-label="Quantity">
+              <button class="lq-minus" aria-label="Decrease">−</button>
+              <input class="lq-input" type="number" value="2" min="1" max="9" aria-label="Quantity">
+              <button class="lq-plus" aria-label="Increase">+</button>
+            </div>
+            <button class="rm" aria-label="Remove Merino Watch Cap">✕ Remove</button>
+          </div>
+          <button class="undo">↺ Undo remove</button>
+        </div>
+        <div class="price"><div class="sub">$136.00</div><div class="ea">$68.00 each</div></div>
+      </div>
+
+      <div class="litem" data-line="3" data-price="44">
+        <div class="pic"><span class="ph p3"></span></div>
+        <div class="mid">
+          <div class="nm">Waxed Canvas Tote</div>
+          <div class="meta">
+            <span class="pip"><span class="sw" style="background:#c9bfa8"></span>Sand</span>
+            <span class="pip">Standard</span>
+          </div>
+          <div class="controls">
+            <div class="qty" role="group" aria-label="Quantity">
+              <button class="lq-minus" aria-label="Decrease">−</button>
+              <input class="lq-input" type="number" value="1" min="1" max="9" aria-label="Quantity">
+              <button class="lq-plus" aria-label="Increase">+</button>
+            </div>
+            <button class="rm" aria-label="Remove Waxed Canvas Tote">✕ Remove</button>
+          </div>
+          <button class="undo">↺ Undo remove</button>
+        </div>
+        <div class="price"><div class="sub">$44.00</div><div class="ea">$44.00 each</div></div>
+      </div>
+    </div>
+
+    <!-- STICKY ORDER SUMMARY -->
+    <aside class="summary" aria-label="Order summary">
+      <h4>Order summary</h4>
+      <div class="sline">Subtotal <span class="v" id="sumSubtotal">$332.00</span></div>
+      <div class="sline disc" id="discLine" hidden>Promo <code>SGEN10</code> <span class="v" id="sumDisc">−$33.20</span></div>
+      <div class="sline">Shipping <span class="v">$0.00</span></div>
+      <div class="sline muted">Estimated tax <span class="v" id="sumTax">$26.56</span></div>
+      <hr>
+      <div class="sline total">Total <span class="v" id="sumTotal">$358.56</span></div>
+
+      <label for="promoInput" style="display:block;font-size:.8rem;font-weight:700;margin-top:1rem">Promo code</label>
+      <div class="promo">
+        <input class="ctrl" id="promoInput" placeholder="Enter code" aria-label="Promo code" autocomplete="off">
+        <button class="btn soft" id="promoBtn">Apply</button>
+      </div>
+      <div class="promo-msg" id="promoMsg" aria-live="polite"></div>
+
+      <a href="#catC"><button class="btn block lg" style="margin-top:1rem">Checkout</button></a>
+
+      <div class="secure"><span class="lock"></span>Secure 256-bit SSL checkout</div>
+      <div class="paychips">
+        <span class="paychip">VISA</span><span class="paychip">MC</span><span class="paychip">AMEX</span>
+        <span class="paychip">PAYPAL</span><span class="paychip">APPLE</span>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<!-- ====================================================== -->
+<!-- C · CHECKOUT STEPPER (3 STEPS) -->
+<!-- ====================================================== -->
+<section class="cat" id="catC">
+  <div class="cat__head">
+    <span class="num">C</span>
+    <h2>Checkout — 3-step stepper</h2>
+    <p>A real, walkable three-step flow: <b>1 Information</b> → <b>2 Shipping</b> → <b>3 Payment</b>. The progress rail shows done / current / upcoming states; <b>Continue</b> advances and marks the prior step done, <b>Back</b> returns. The right rail carries a sticky mini-summary. Step 1 demonstrates the form error/success states from page 07; step 2 the shipping-method radio cards; step 3 the payment card mock.</p>
+  </div>
+
+  <div class="checkout">
+    <div>
+      <!-- STEPPER RAIL -->
+      <div class="stepper" id="stepperRail" role="list" aria-label="Checkout progress">
+        <div class="step current" data-step="1" role="listitem">
+          <div class="dot"><span>1</span></div>
+          <div class="stxt"><span class="k">Step 1</span><span class="l">Information</span></div>
+        </div>
+        <div class="bar"></div>
+        <div class="step" data-step="2" role="listitem">
+          <div class="dot"><span>2</span></div>
+          <div class="stxt"><span class="k">Step 2</span><span class="l">Shipping</span></div>
+        </div>
+        <div class="bar"></div>
+        <div class="step" data-step="3" role="listitem">
+          <div class="dot"><span>3</span></div>
+          <div class="stxt"><span class="k">Step 3</span><span class="l">Payment</span></div>
+        </div>
+      </div>
+
+      <!-- STEP 1 — INFORMATION -->
+      <div class="steppanel" id="sp1">
+        <h4>Contact &amp; address</h4>
+        <p class="sub">We'll send the receipt and tracking to your email.</p>
+        <div class="frow">
+          <div class="field">
+            <label for="coEmail">Email <span class="req">*</span></label>
+            <input class="ctrl" id="coEmail" type="email" value="ava@trailhand" autocomplete="email">
+            <span class="msg err" id="coEmailMsg">Enter a valid email address.</span>
+          </div>
+          <div class="ftwo">
+            <div class="field">
+              <label for="coFirst">First name</label>
+              <input class="ctrl ok" id="coFirst" value="Ava">
+            </div>
+            <div class="field">
+              <label for="coLast">Last name</label>
+              <input class="ctrl" id="coLast" value="Bennett">
+            </div>
+          </div>
+          <div class="field">
+            <label for="coAddr">Address</label>
+            <input class="ctrl" id="coAddr" value="118 Cedar Hollow Rd" autocomplete="address-line1">
+          </div>
+          <div class="fthree">
+            <div class="field"><label for="coCity">City</label><input class="ctrl" id="coCity" value="Asheville"></div>
+            <div class="field"><label for="coState">State</label>
+              <select class="ctrl" id="coState"><option>NC</option><option>TN</option><option>SC</option><option>GA</option></select>
+            </div>
+            <div class="field"><label for="coZip">ZIP</label><input class="ctrl" id="coZip" value="28801" inputmode="numeric"></div>
+          </div>
+          <label class="opt"><input type="checkbox" checked><span class="box"></span>Save this address for next time</label>
+        </div>
+        <div class="stepnav">
+          <a href="#catB" class="back">‹ Return to cart</a>
+          <button class="btn" data-next="2">Continue to shipping ›</button>
+        </div>
+      </div>
+
+      <!-- STEP 2 — SHIPPING -->
+      <div class="steppanel" id="sp2" hidden>
+        <h4>Shipping method</h4>
+        <p class="sub">Choose how fast you want the Atlas to arrive.</p>
+        <div class="frow" id="shipOpts">
+          <label class="shipopt is-sel"><input type="radio" name="ship" checked>
+            <span class="rd"></span>
+            <span class="so-mid"><span class="t">Standard</span><span class="d">4–6 business days · carbon-neutral</span></span>
+            <span class="so-price free">Free</span></label>
+          <label class="shipopt"><input type="radio" name="ship">
+            <span class="rd"></span>
+            <span class="so-mid"><span class="t">Express</span><span class="d">2 business days</span></span>
+            <span class="so-price">$12.00</span></label>
+          <label class="shipopt"><input type="radio" name="ship">
+            <span class="rd"></span>
+            <span class="so-mid"><span class="t">Overnight</span><span class="d">Next business day by 12pm</span></span>
+            <span class="so-price">$28.00</span></label>
+        </div>
+        <div class="stepnav">
+          <button class="back" data-back="1">‹ Back</button>
+          <button class="btn" data-next="3">Continue to payment ›</button>
+        </div>
+      </div>
+
+      <!-- STEP 3 — PAYMENT -->
+      <div class="steppanel" id="sp3" hidden>
+        <h4>Payment</h4>
+        <p class="sub" style="display:flex;align-items:center;gap:.6rem">
+          <span class="cardicon"><span class="b visa"></span><span class="b mc"></span><span class="b amex"></span></span>
+          All transactions are encrypted.
+        </p>
+        <div class="paycard">
+          <div class="frow">
+            <div class="field">
+              <label for="ccNum">Card number</label>
+              <input class="ctrl" id="ccNum" inputmode="numeric" value="4242 4242 4242 4242" autocomplete="cc-number">
+            </div>
+            <div class="ftwo">
+              <div class="field"><label for="ccExp">Expiry</label><input class="ctrl" id="ccExp" placeholder="MM / YY" value="08 / 28"></div>
+              <div class="field">
+                <label for="ccCvc">CVC</label>
+                <input class="ctrl err" id="ccCvc" value="12">
+                <span class="msg err">CVC must be 3 digits.</span>
+              </div>
+            </div>
+            <div class="field">
+              <label for="ccName">Name on card</label>
+              <input class="ctrl ok" id="ccName" value="Ava Bennett">
+            </div>
+            <label class="opt"><input type="checkbox" checked><span class="box round"></span>Billing address same as shipping</label>
+          </div>
+        </div>
+        <div class="stepnav">
+          <button class="back" data-back="2">‹ Back</button>
+          <a href="#catD"><button class="btn lg">Pay $358.56</button></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT RAIL MINI SUMMARY -->
+    <aside class="ministub" aria-label="Order recap">
+      <h4>In your order</h4>
+      <div class="mi">
+        <div class="pic"><span class="ph p1"></span><span class="q">1</span></div>
+        <div><div class="nm">Atlas Field Jacket</div><div class="vr">Olive · S</div></div>
+        <div class="pr">$152.00</div>
+      </div>
+      <div class="mi">
+        <div class="pic"><span class="ph p2"></span><span class="q">2</span></div>
+        <div><div class="nm">Merino Watch Cap</div><div class="vr">Slate</div></div>
+        <div class="pr">$136.00</div>
+      </div>
+      <div class="mi">
+        <div class="pic"><span class="ph p3"></span><span class="q">1</span></div>
+        <div><div class="nm">Waxed Canvas Tote</div><div class="vr">Sand</div></div>
+        <div class="pr">$44.00</div>
+      </div>
+      <div class="sline" style="margin-top:.8rem">Subtotal <span class="v">$332.00</span></div>
+      <div class="sline disc">Promo SGEN10 <span class="v">−$33.20</span></div>
+      <div class="sline">Shipping <span class="v">Free</span></div>
+      <div class="sline muted">Tax <span class="v">$26.56</span></div>
+      <hr style="border:0;border-top:1px solid var(--hair);margin:.6rem 0">
+      <div class="sline total">Total <span class="v">$325.36</span></div>
+    </aside>
+  </div>
+</section>
+
+<!-- ====================================================== -->
+<!-- D · ORDER CONFIRMATION / RECEIPT -->
+<!-- ====================================================== -->
+<section class="cat" id="catD">
+  <div class="cat__head">
+    <span class="num">D</span>
+    <h2>Order confirmation &amp; receipt</h2>
+    <p>The end of the flow: a success header with order number, the order meta grid (date · payment · ship-to), an itemized receipt with totals, a delivery <b>timeline</b> (placed → packed → shipped → delivered), and the next-action CTAs. This is the page the customer screenshots — so the chrome stays on-brand and the hierarchy stays calm.</p>
+  </div>
+
+  <div class="receipt">
+    <div class="confhead">
+      <div class="check" role="img" aria-label="Order confirmed"></div>
+      <h3>Thank you, Ava!</h3>
+      <p>Your order is confirmed. A receipt is on its way to <b>ava@trailhand.co</b>.</p>
+      <span class="ord">Order #SG-48217-A</span>
+    </div>
+
+    <div class="rcard">
+      <div class="rmeta">
+        <div class="m"><div class="k">Order date</div><div class="v">Jun 2, 2026</div></div>
+        <div class="m"><div class="k">Payment</div><div class="v">Visa •••• 4242 <small>$325.36 charged</small></div></div>
+        <div class="m"><div class="k">Ship to</div><div class="v">Ava Bennett <small>Asheville, NC 28801</small></div></div>
+      </div>
+
+      <div class="ritems">
+        <div class="ritem">
+          <div class="pic"><span class="ph p1"></span></div>
+          <div><div class="nm">Atlas Field Jacket</div><div class="vr">Field Olive · Size S · Qty 1</div></div>
+          <div class="amt">$152.00</div>
+        </div>
+        <div class="ritem">
+          <div class="pic"><span class="ph p2"></span></div>
+          <div><div class="nm">Merino Watch Cap</div><div class="vr">Slate · One size · Qty 2</div></div>
+          <div class="amt">$136.00</div>
+        </div>
+        <div class="ritem">
+          <div class="pic"><span class="ph p3"></span></div>
+          <div><div class="nm">Waxed Canvas Tote</div><div class="vr">Sand · Standard · Qty 1</div></div>
+          <div class="amt">$44.00</div>
+        </div>
+      </div>
+
+      <div class="rtotals">
+        <div class="sline">Subtotal <span class="v">$332.00</span></div>
+        <div class="sline disc">Promo SGEN10 <span class="v">−$33.20</span></div>
+        <div class="sline">Shipping (Standard) <span class="v">Free</span></div>
+        <div class="sline muted">Tax <span class="v">$26.56</span></div>
+        <hr style="border:0;border-top:1px solid var(--hair);margin:.6rem 0">
+        <div class="sline total">Total paid <span class="v">$325.36</span></div>
+      </div>
+    </div>
+
+    <!-- DELIVERY TIMELINE -->
+    <div class="timeline" aria-label="Delivery progress">
+      <div class="tstep done"><span class="nd"></span><span class="tl">Placed</span><span class="td">Jun 2</span></div>
+      <div class="tstep now"><span class="nd">2</span><span class="tl">Packed</span><span class="td">Jun 3</span></div>
+      <div class="tstep upcoming"><span class="nd">3</span><span class="tl">Shipped</span><span class="td">Jun 4</span></div>
+      <div class="tstep upcoming"><span class="nd">4</span><span class="tl">Delivered</span><span class="td">Jun 8–10</span></div>
+    </div>
+
+    <div class="confactions">
+      <button class="btn">Track order</button>
+      <a href="#catA"><button class="btn ghost">Continue shopping</button></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ STICKY MOBILE/SCROLL ADD-TO-CART BAR ============ -->
+<div class="sticky-cta" id="stickyCta" aria-hidden="true">
+  <div class="info">
+    <div class="nm">Atlas Field Jacket</div>
+    <div class="pr"><span id="stickyPrice">$152.00</span> · Olive / S</div>
+  </div>
+  <button class="btn" id="stickyAdd">Add to cart</button>
+</div>
+
+<!-- sentinel: when this leaves the top, the sticky bar reveals -->
+<span id="ctaSentinel" aria-hidden="true"></span>
+
+<!-- ============ FOOTER ============ -->
+<footer class="foot">
+  <div class="foot__in">
+    <span><b>SGEN</b> Living Styleguide — 14 · E-commerce flow</span>
+    <a href="index.html">Index</a>
+    <a href="07-components.html">07 · Components</a>
+    <a href="10-sections.html">10 · Sections</a>
+    <span class="meta">charcoal #1a1a1a · red #d51522 · 0 external deps</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var money = function(n){ return '$' + n.toFixed(2); };
+
+  /* ---------- A · PDP: gallery thumbnail switching ---------- */
+  var thumbs = [].slice.call(document.querySelectorAll('#thumbs .thumb'));
+  var stageImg = document.getElementById('stageImg');
+  thumbs.forEach(function(t){
+    t.addEventListener('click', function(){
+      thumbs.forEach(function(x){ x.classList.remove('is-active'); x.setAttribute('aria-current','false'); });
+      t.classList.add('is-active'); t.setAttribute('aria-current','true');
+      stageImg.className = 'ph ' + t.getAttribute('data-img');
+    });
+  });
+
+  /* ---------- A · color swatches ---------- */
+  var colorSw = [].slice.call(document.querySelectorAll('#colorSw .csw'));
+  var colorVal = document.getElementById('colorVal');
+  colorSw.forEach(function(s){
+    s.addEventListener('click', function(){
+      colorSw.forEach(function(x){ x.classList.remove('is-sel'); x.setAttribute('aria-pressed','false'); });
+      s.classList.add('is-sel'); s.setAttribute('aria-pressed','true');
+      colorVal.textContent = s.getAttribute('data-name');
+    });
+  });
+
+  /* ---------- A · size swatches ---------- */
+  var sizeSw = [].slice.call(document.querySelectorAll('#sizeSw .ssw'));
+  sizeSw.forEach(function(s){
+    if(s.disabled) return;
+    s.addEventListener('click', function(){
+      sizeSw.forEach(function(x){ if(!x.disabled){ x.classList.remove('is-sel'); x.setAttribute('aria-pressed','false'); } });
+      s.classList.add('is-sel'); s.setAttribute('aria-pressed','true');
+    });
+  });
+
+  /* ---------- A · qty stepper + price reflow ---------- */
+  var UNIT = 152;
+  var qInput = document.getElementById('qInput');
+  var addPrice = document.getElementById('addPrice');
+  var stickyPrice = document.getElementById('stickyPrice');
+  function clampQ(v){ v = parseInt(v,10); if(isNaN(v)||v<1) v=1; if(v>9) v=9; return v; }
+  function syncQty(){
+    var q = clampQ(qInput.value); qInput.value = q;
+    var t = money(UNIT*q);
+    addPrice.textContent = t; stickyPrice.textContent = t;
+    document.getElementById('qMinus').disabled = (q<=1);
+    document.getElementById('qPlus').disabled = (q>=9);
+  }
+  document.getElementById('qMinus').addEventListener('click', function(){ qInput.value = clampQ(qInput.value)-1; syncQty(); });
+  document.getElementById('qPlus').addEventListener('click', function(){ qInput.value = clampQ(qInput.value)+1; syncQty(); });
+  qInput.addEventListener('input', syncQty);
+  syncQty();
+
+  /* ---------- A · add-to-cart state machine (idle->loading->added) ---------- */
+  function runAdd(btn, restoreLabel){
+    if(btn.classList.contains('is-loading') || btn.classList.contains('is-added')) return;
+    var original = btn.innerHTML;
+    btn.classList.add('is-loading');
+    setTimeout(function(){
+      btn.classList.remove('is-loading');
+      btn.classList.add('is-added');
+      btn.textContent = 'Added to cart';
+      setTimeout(function(){
+        btn.classList.remove('is-added');
+        btn.innerHTML = restoreLabel || original;
+      }, 1600);
+    }, reduce ? 0 : 750);
+  }
+  var addCart = document.getElementById('addCart');
+  addCart.addEventListener('click', function(){ runAdd(addCart); });
+  var stickyAdd = document.getElementById('stickyAdd');
+  stickyAdd.addEventListener('click', function(){ runAdd(stickyAdd, 'Add to cart'); });
+
+  /* ---------- A · wishlist toggle ---------- */
+  var wishBtn = document.getElementById('wishBtn');
+  wishBtn.addEventListener('click', function(){
+    var on = wishBtn.getAttribute('aria-pressed') === 'true';
+    wishBtn.setAttribute('aria-pressed', String(!on));
+    wishBtn.classList.toggle('is-on', !on);
+  });
+
+  /* ---------- B · cart line qty + totals ---------- */
+  var TAX_RATE = 0.08; var promoApplied = false;
+  function recalc(){
+    var subtotal = 0, count = 0;
+    [].slice.call(document.querySelectorAll('#cart .litem')).forEach(function(li){
+      if(li.classList.contains('is-removed')) return;
+      var price = parseFloat(li.getAttribute('data-price'));
+      var q = clampQ(li.querySelector('.lq-input').value);
+      var line = price*q;
+      li.querySelector('.price .sub').textContent = money(line);
+      li.querySelector('.price .ea').textContent = money(price) + ' each';
+      subtotal += line; count += q;
+    });
+    document.getElementById('cartCount').textContent = count + (count===1?' item':' items');
+    document.getElementById('sumSubtotal').textContent = money(subtotal);
+    var disc = promoApplied ? subtotal*0.10 : 0;
+    var discLine = document.getElementById('discLine');
+    if(promoApplied){ discLine.hidden = false; document.getElementById('sumDisc').textContent = '−'+money(disc); }
+    else discLine.hidden = true;
+    var taxed = (subtotal - disc) * TAX_RATE;
+    document.getElementById('sumTax').textContent = money(taxed);
+    document.getElementById('sumTotal').textContent = money(subtotal - disc + taxed);
+  }
+  [].slice.call(document.querySelectorAll('#cart .litem')).forEach(function(li){
+    var input = li.querySelector('.lq-input');
+    li.querySelector('.lq-minus').addEventListener('click', function(){ input.value = clampQ(input.value)-1; recalc(); });
+    li.querySelector('.lq-plus').addEventListener('click', function(){ input.value = clampQ(input.value)+1; recalc(); });
+    input.addEventListener('input', recalc);
+    li.querySelector('.rm').addEventListener('click', function(){ li.classList.add('is-removed'); recalc(); });
+    li.querySelector('.undo').addEventListener('click', function(){ li.classList.remove('is-removed'); recalc(); });
+  });
+  recalc();
+
+  /* ---------- B · promo code (SGEN10 -> applied; else error) ---------- */
+  var promoInput = document.getElementById('promoInput');
+  var promoMsg = document.getElementById('promoMsg');
+  document.getElementById('promoBtn').addEventListener('click', function(){
+    var code = (promoInput.value || '').trim().toUpperCase();
+    if(code === 'SGEN10'){
+      promoApplied = true;
+      promoInput.classList.remove('err'); promoInput.classList.add('ok');
+      promoMsg.innerHTML = '<span class="msg ok">Code SGEN10 applied — 10% off.</span>';
+    } else if(code === ''){
+      promoApplied = false; promoInput.classList.remove('ok');
+      promoMsg.innerHTML = '<span class="msg err">Enter a promo code.</span>';
+    } else {
+      promoApplied = false;
+      promoInput.classList.remove('ok'); promoInput.classList.add('err');
+      promoMsg.innerHTML = '<span class="msg err">"'+code+'" isn\'t a valid code.</span>';
+    }
+    recalc();
+  });
+
+  /* ---------- C · checkout stepper navigation ---------- */
+  var steps = [].slice.call(document.querySelectorAll('#stepperRail .step'));
+  var panels = { '1':document.getElementById('sp1'), '2':document.getElementById('sp2'), '3':document.getElementById('sp3') };
+  function gotoStep(n){
+    Object.keys(panels).forEach(function(k){ panels[k].hidden = (k !== n); });
+    steps.forEach(function(s){
+      var sn = s.getAttribute('data-step');
+      s.classList.remove('current','done');
+      if(sn < n) s.classList.add('done');
+      else if(sn === n) s.classList.add('current');
+    });
+  }
+  [].slice.call(document.querySelectorAll('[data-next]')).forEach(function(b){
+    b.addEventListener('click', function(){ gotoStep(b.getAttribute('data-next')); });
+  });
+  [].slice.call(document.querySelectorAll('[data-back]')).forEach(function(b){
+    b.addEventListener('click', function(){ gotoStep(b.getAttribute('data-back')); });
+  });
+
+  /* ---------- C · shipping radio cards ---------- */
+  [].slice.call(document.querySelectorAll('#shipOpts .shipopt')).forEach(function(opt){
+    opt.addEventListener('click', function(){
+      document.querySelectorAll('#shipOpts .shipopt').forEach(function(o){ o.classList.remove('is-sel'); });
+      opt.classList.add('is-sel');
+      opt.querySelector('input').checked = true;
+    });
+  });
+
+  /* ---------- C · live email validation (07 pattern) ---------- */
+  var coEmail = document.getElementById('coEmail');
+  var coEmailMsg = document.getElementById('coEmailMsg');
+  function validEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+  function checkEmail(){
+    var f = coEmail.closest('.field'); var ok = validEmail(coEmail.value);
+    coEmail.classList.toggle('ok', ok); coEmail.classList.toggle('err', !ok);
+    if(ok){ coEmailMsg.className = 'msg ok'; coEmailMsg.textContent = 'Looks good.'; }
+    else { coEmailMsg.className = 'msg err'; coEmailMsg.textContent = 'Enter a valid email address.'; }
+  }
+  coEmail.addEventListener('input', checkEmail);
+
+  /* ---------- STICKY ADD-TO-CART BAR (IntersectionObserver sentinel) ---------- */
+  var cta = document.getElementById('stickyCta');
+  var sentinel = document.getElementById('ctaSentinel');
+  // position sentinel at the bottom of the buybox so the bar reveals "past the buybox"
+  var buybox = document.querySelector('.buybox');
+  function showCta(v){ cta.classList.toggle('is-visible', v); cta.setAttribute('aria-hidden', String(!v)); }
+  if('IntersectionObserver' in window && buybox){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ showCta(!e.isIntersecting && e.boundingClientRect.top < 0); });
+    }, {threshold:0, rootMargin:'-120px 0px 0px 0px'});
+    io.observe(buybox);
+  }
+})();
+</script>
+
+</body>
+</html>
