@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SGEN — Bundle A · §4 Lock Preview</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<style>
+/* =============================================================================
+ * SGEN — Bundle A (Clarity White) §4 Lock Preview
+ * Every value below comes from verticals/sgen.md §4 bundles.A.
+ * ============================================================================= */
+:root {
+  /* Palette — bundle A */
+  --sg-primary:        #d51522;
+  --sg-primary-deep:   #b00000;
+  --sg-primary-soft:   #FCE7E8;
+  --sg-accent:         #e61938;
+  --sg-accent-soft:    #fff1f1;
+  --sg-bg:             #ffffff;
+  --sg-bg-2:           #f9f9f9;
+  --sg-ink:            #000000;
+  --sg-ink-soft:       #868279;
+  --sg-line:           #F2F1ED;
+  --sg-signature:      #d51522;
+
+  /* Typography — bundle A */
+  --sg-font-display:   'Inter', Georgia, serif;
+  --sg-font-body:      'Inter', system-ui, sans-serif;
+  --sg-font-mono:      'JetBrains Mono', ui-monospace, monospace;
+
+  /* Surface radii — bundle A (from SURFACE-PATTERNS.md §1) */
+  --sg-radius-sm:      8px;
+  --sg-radius-md:      12px;
+  --sg-radius-lg:      16px;
+
+  /* Cross-vertical comparison */
+  --sgold-primary:       #d51522;
+  --sgold-accent:        #d51522;
+  --sgold-signature:     #d51522;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: var(--sg-font-body);
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--sg-ink);
+  background: var(--sg-bg);
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--sg-primary); text-decoration: underline; text-decoration-color: var(--sg-accent); text-underline-offset: 4px; }
+
+/* ===== Spec annotation chrome (mono) ===== */
+.spec-label {
+  font-family: var(--sg-font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--sg-accent);
+}
+.spec-meta {
+  font-family: var(--sg-font-mono);
+  font-size: 11px;
+  color: var(--sg-ink-soft);
+  letter-spacing: 0.06em;
+}
+
+/* ===== Page chrome ===== */
+.page { max-width: 1280px; margin: 0 auto; padding: 80px 32px 120px; }
+
+/* ===== Bundle banner ===== */
+.bundle-banner {
+  background: var(--sg-ink);
+  color: var(--sg-bg);
+  padding: 20px 32px;
+  margin: -80px -32px 64px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+.bundle-banner-id {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+}
+.bundle-id-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: var(--sg-accent);
+  color: var(--sg-ink);
+  font-family: var(--sg-font-mono);
+  font-size: 18px;
+  font-weight: 800;
+  border-radius: 9999px;
+  letter-spacing: 0;
+}
+.bundle-banner-name {
+  font-family: var(--sg-font-display);
+  font-size: 22px;
+  font-weight: 600;
+  margin: 0;
+  font-variation-settings: "opsz" 24;
+}
+.bundle-banner-vibe {
+  font-family: var(--sg-font-body);
+  font-size: 13px;
+  color: var(--sg-bg-2);
+  margin: 2px 0 0;
+  letter-spacing: 0.04em;
+}
+.bundle-banner-siblings {
+  display: flex;
+  gap: 12px;
+  font-family: var(--sg-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.bundle-banner-siblings a {
+  color: var(--sg-bg-2);
+  text-decoration: underline;
+  text-decoration-color: var(--sg-accent);
+  text-underline-offset: 4px;
+}
+.bundle-banner-siblings a:hover { color: var(--sg-accent); }
+
+.doc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-bottom: 1px solid var(--sg-line);
+  padding-bottom: 32px;
+  margin-bottom: 64px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.doc-header h1 {
+  font-family: var(--sg-font-mono);
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--sg-primary-deep);
+  margin: 0 0 8px;
+}
+.doc-header p { margin: 0; color: var(--sg-ink-soft); font-size: 14px; }
+
+/* ===== Section chrome ===== */
+.sec { margin-bottom: 96px; }
+.sec-head { display: flex; align-items: baseline; gap: 18px; margin-bottom: 32px; flex-wrap: wrap; }
+.sec-head .num {
+  font-family: var(--sg-font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: var(--sg-accent);
+}
+.sec-head h2 {
+  font-family: var(--sg-font-display);
+  font-size: 36px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  margin: 0;
+  color: var(--sg-ink);
+  font-variation-settings: "opsz" 48;
+}
+
+/* ===== §1 Hero preview ===== */
+.hero {
+  background: var(--sg-bg-2);
+  border: 1px solid var(--sg-line);
+  border-radius: var(--sg-radius-md);
+  padding: 80px 64px;
+  position: relative;
+}
+.hero-eyebrow {
+  font-family: var(--sg-font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--sg-accent);
+  margin: 0 0 28px;
+}
+.hero h1 {
+  font-family: var(--sg-font-display);
+  font-size: 76px;
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  font-weight: 600;
+  margin: 0 0 24px;
+  color: var(--sg-ink);
+  font-variation-settings: "opsz" 120;
+  max-width: 16ch;
+}
+.hero h1 .accent {
+  font-style: italic;
+  font-weight: 500;
+  color: var(--sg-accent);
+}
+.hero-sub {
+  font-family: var(--sg-font-body);
+  font-size: 19px;
+  line-height: 1.5;
+  font-weight: 400;
+  color: var(--sg-ink-soft);
+  max-width: 50ch;
+  margin: 0 0 40px;
+}
+
+/* ===== Bundle button (used in hero + §6 surface samples) ===== */
+/* The primary button style for THIS bundle — paste from SURFACE-PATTERNS.md §3 */
+.bundle-btn{display:inline-flex;align-items:center;gap:8px;font-family:var(--sg-font-body);font-weight:600;font-size:16px;cursor:pointer;text-decoration:none;border:0;line-height:1;}
+.hero h1 .accent{font-style:normal;font-weight:inherit;background:linear-gradient(to right,#780101,#e80000,#a30000);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;}
+.bundle-btn-primary{padding:14px 26px;background:linear-gradient(135deg,#b00000,#e53935);color:#fff;border-radius:7px;box-shadow:0 10px 25px rgba(229,57,53,.3);}
+.bundle-btn-primary::after{content:"\2192";transition:transform .2s ease;}
+/* The secondary button style — paste from SURFACE-PATTERNS.md §3 (or §3.20 underline) */
+.bundle-btn-secondary{padding:14px 26px;background:transparent;color:#d51522;border:1px solid #d51522;border-radius:7px;}
+/* Button hover behavior — paste from MOTION-PATTERNS.md §1 */
+.bundle-btn-primary{transition:filter .16s ease,box-shadow .2s ease;}
+.bundle-btn-primary:hover{filter:brightness(.93);box-shadow:0 14px 30px rgba(229,57,53,.4);}
+.bundle-btn-primary:hover::after{transform:translateX(4px);}
+.bundle-btn-secondary{transition:background .18s ease,color .18s ease;}
+.bundle-btn-secondary:hover{background:#d51522;color:#fff;}
+.bundle-btn:active{transform:scale(.97);}
+
+/* ===== Bundle card chrome (used in voice cards + §6 + §8 trust + §9 distinctness) ===== */
+/* Card chrome — paste from SURFACE-PATTERNS.md §2 */
+.bundle-card{background:var(--sg-bg);border:1px solid var(--sg-line);border-radius:16px;box-shadow:0 20px 50px rgba(0,0,0,.08);}
+/* Card hover — paste from MOTION-PATTERNS.md §2 */
+.bundle-card{transition:transform .22s cubic-bezier(.65,0,.35,1),box-shadow .22s ease;}
+.bundle-card:hover{transform:translateY(-4px);box-shadow:0 24px 56px rgba(0,0,0,.12);}
+
+/* ===== Bundle link hover (used in all body links) ===== */
+.bundle-link{color:var(--sg-ink);text-decoration:underline;text-decoration-color:var(--sg-line);text-underline-offset:4px;transition:color .16s ease,text-decoration-color .16s ease;}
+.bundle-link:hover{color:#d51522;text-decoration-color:#d51522;}
+
+/* ===== Bundle section divider style ===== */
+.bundle-divider{height:2px;border:0;background:linear-gradient(to right,rgba(213,21,34,0),rgba(213,21,34,.9) 50%,rgba(213,21,34,0));margin:0;}
+
+/* ===== Bundle image treatment (used in §6 sample) ===== */
+.bundle-img{border-radius:12px;height:140px;}
+
+/* ===== Bundle form field style (used in §6 sample) ===== */
+.bundle-input{padding:12px 20px;background:var(--sg-bg-2);border:1px solid var(--sg-line);border-radius:9999px;font-family:var(--sg-font-body);font-size:15px;color:var(--sg-ink);width:100%;}
+.bundle-input:focus{outline:0;border-color:#d51522;}
+
+/* ===== §2 Palette swatches ===== */
+.palette-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+.swatch {
+  background: var(--sg-bg-2);
+  border: 1px solid var(--sg-line);
+  border-radius: var(--sg-radius-sm);
+  overflow: hidden;
+}
+.swatch-chip { height: 110px; border-bottom: 1px solid var(--sg-line); }
+.swatch-meta { padding: 14px 16px 16px; }
+.swatch-name {
+  font-family: var(--sg-font-display);
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 4px;
+  color: var(--sg-ink);
+  font-variation-settings: "opsz" 24;
+}
+.swatch-hex {
+  font-family: var(--sg-font-mono);
+  font-size: 11px;
+  color: var(--sg-ink-soft);
+  margin: 0 0 6px;
+  letter-spacing: 0.08em;
+}
+.swatch-use {
+  font-family: var(--sg-font-body);
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--sg-ink-soft);
+  margin: 0;
+}
+
+/* ===== §3 Typography specimen ===== */
+.type-spec {
+  background: var(--sg-bg-2);
+  border: 1px solid var(--sg-line);
+  border-radius: var(--sg-radius-md);
+  padding: 56px 48px;
+}
+.type-spec-row { padding: 24px 0; border-bottom: 1px solid var(--sg-line); }
+.type-spec-row:last-child { border-bottom: 0; }
+.type-spec-row .annotation {
+  font-family: var(--sg-font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--sg-accent);
+  display: block;
+  margin-bottom: 12px;
+}
+.display-w700 { font-family: var(--sg-font-display); font-weight: 700; font-size: 64px; line-height: 1.02; letter-spacing: -0.035em; color: var(--sg-ink); font-variation-settings: "opsz" 120; margin: 0; }
+.display-w600 { font-family: var(--sg-font-display); font-weight: 600; font-size: 44px; line-height: 1.1; letter-spacing: -0.02em; color: var(--sg-ink); font-variation-settings: "opsz" 64; margin: 0; }
+.display-w500 { font-family: var(--sg-font-display); font-weight: 500; font-size: 28px; line-height: 1.2; letter-spacing: -0.01em; color: var(--sg-ink); font-variation-settings: "opsz" 32; margin: 0; }
+.display-italic { font-family: var(--sg-font-display); font-weight: 500; font-style: italic; font-size: 32px; color: var(--sg-accent); font-variation-settings: "opsz" 48; margin: 0; }
+.body-w700 { font-family: var(--sg-font-body); font-weight: 700; font-size: 18px; color: var(--sg-ink); margin: 0; }
+.body-w500 { font-family: var(--sg-font-body); font-weight: 500; font-size: 17px; line-height: 1.6; color: var(--sg-ink); margin: 0; max-width: 64ch; }
+.body-w400 { font-family: var(--sg-font-body); font-weight: 400; font-size: 17px; line-height: 1.6; color: var(--sg-ink-soft); margin: 0; max-width: 64ch; }
+
+/* ===== §4 Voice cards (uses bundle card chrome) ===== */
+.voice-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.voice-card {
+  padding: 32px 36px;
+  border-top: 4px solid var(--sg-accent);
+}
+.voice-card.never { border-top-color: var(--sg-primary); }
+.voice-card h3 {
+  font-family: var(--sg-font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin: 0 0 24px;
+  color: var(--sg-accent);
+}
+.voice-card.never h3 { color: var(--sg-primary); }
+.voice-card ul { list-style: none; padding: 0; margin: 0; }
+.voice-card li {
+  font-family: var(--sg-font-display);
+  font-size: 19px;
+  font-weight: 500;
+  line-height: 1.4;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--sg-line);
+  color: var(--sg-ink);
+  font-variation-settings: "opsz" 32;
+}
+.voice-card li:last-child { border-bottom: 0; }
+.voice-card.never li { color: var(--sg-ink-soft); text-decoration: line-through; text-decoration-color: rgba(0,0,0,0.3); }
+
+/* ===== §5 Section flow ===== */
+.flow { display: flex; flex-direction: column; gap: 6px; }
+.flow-step {
+  background: var(--sg-bg-2);
+  border: 1px solid var(--sg-line);
+  border-radius: var(--sg-radius-sm);
+  padding: 20px 28px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  border-left: 4px solid var(--sg-line);
+}
+.flow-step.universal { border-left-color: var(--sg-ink-soft); }
+.flow-step.hero-row { border-left-color: var(--sg-primary); }
+.flow-step.middle { border-left-color: var(--sg-accent); }
+.flow-step.conv { border-left-color: var(--sg-signature); background: linear-gradient(90deg, rgba(0,0,0,0.04), var(--sg-bg-2) 60%); }
+.flow-step .id {
+  font-family: var(--sg-font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--sg-primary-deep);
+  min-width: 30px;
+  text-align: right;
+}
+.flow-step .label {
+  font-family: var(--sg-font-display);
+  font-weight: 600;
+  font-size: 19px;
+  color: var(--sg-ink);
+  flex: 1;
+  font-variation-settings: "opsz" 32;
+}
+.flow-step .label .tag {
+  font-family: var(--sg-font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--sg-ink-soft);
+  margin-left: 12px;
+}
+.flow-step .desc {
+  font-family: var(--sg-font-body);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--sg-ink-soft);
+  flex: 2;
+}
+
+/* ===== §6 Surface samples ===== */
+.surface-samples {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+}
+.surface-block {
+  background: var(--sg-bg-2);
+  border: 1px solid var(--sg-line);
+  border-radius: var(--sg-radius-md);
+  padding: 36px 40px;
+}
+.surface-block-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  border-bottom: 1px solid var(--sg-line);
+  padding-bottom: 16px;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.surface-block-title {
+  font-family: var(--sg-font-display);
+  font-size: 22px;
+  font-weight: 600;
+  margin: 0;
+  color: var(--sg-ink);
+  font-variation-settings: "opsz" 24;
+}
+.surface-block-name {
+  font-family: var(--sg-font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--sg-accent);
+}
+.surface-block-content {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 24px;
+}
+.radius-sample {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.radius-box {
+  width: 80px;
+  height: 80px;
+  background: var(--sg-primary);
+}
+.radius-box.sm { border-radius: var(--sg-radius-sm); }
+.radius-box.md { border-radius: var(--sg-radius-md); }
+.radius-box.lg { border-radius: var(--sg-radius-lg); }
+.radius-label {
+  font-family: var(--sg-font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--sg-ink-soft);
+}
+
+/* Sample card shape used in §6 (uses bundle card chrome via cascade) */
+.sample-card-wrap { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; width: 100%; }
+.sample-card-content { padding: 12px; }
+.sample-card-content h4 {
+  font-family: var(--sg-font-display);
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 0 8px;
+  color: var(--sg-ink);
+  font-variation-settings: "opsz" 24;
+}
+.sample-card-content p {
+  font-family: var(--sg-font-body);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--sg-ink-soft);
+  margin: 0;
+}
+
+.sample-img-wrap { display: flex; gap: 16px; flex-wrap: wrap; }
+.sample-img-placeholder {
+  width: 220px;
+  background: linear-gradient(135deg, var(--sg-primary-soft) 0%, var(--sg-accent-soft) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--sg-primary-deep);
+  font-family: var(--sg-font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.sample-form { display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 420px; }
+.sample-form label {
+  font-family: var(--sg-font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--sg-ink-soft);
+}
+
+/* ===== §7 Motion samples (live hoverable demos) ===== */
+.motion-block {
+  background: var(--sg-bg-2);
+  border: 1px solid var(--sg-line);
+  border-radius: var(--sg-radius-md);
+  padding: 36px 40px;
+  margin-bottom: 24px;
+}
+.motion-demo-stage {
+  background: var(--sg-bg);
+  border: 1px dashed var(--sg-line);
+  padding: 56px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 24px;
+  min-height: 140px;
+}
+.motion-hover-hint {
+  position: absolute;
+  font-family: var(--sg-font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--sg-ink-soft);
+  margin-top: 100px;
+}
+.motion-spec-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.motion-spec-table th,
+.motion-spec-table td {
+  text-align: left;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--sg-line);
+  font-family: var(--sg-font-body);
+  font-size: 14px;
+}
+.motion-spec-table th {
+  font-family: var(--sg-font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--sg-accent);
+  width: 30%;
+}
+.motion-spec-table td { color: var(--sg-ink); }
+.motion-spec-table td .pat-name {
+  font-family: var(--sg-font-display);
+  font-weight: 600;
+  color: var(--sg-ink);
+}
+
+/* ===== §8 Trust strip ===== */
+.trust-strip {
+  background: var(--sg-bg-2);
+  border: 1px solid var(--sg-line);
+  border-radius: var(--sg-radius-md);
+  padding: 40px 48px;
+}
+.trust-logos {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+  gap: 24px;
+  flex-wrap: wrap;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--sg-line);
+}
+.trust-logo {
+  font-family: var(--sg-font-display);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--sg-ink-soft);
+  letter-spacing: -0.01em;
+  opacity: 0.75;
+  font-variation-settings: "opsz" 32;
+}
+.pull-quote {
+  font-family: var(--sg-font-display);
+  font-size: 26px;
+  font-weight: 500;
+  font-style: italic;
+  line-height: 1.4;
+  color: var(--sg-ink);
+  margin: 0 0 16px;
+  font-variation-settings: "opsz" 32;
+  max-width: 60ch;
+}
+.pull-quote-attr {
+  font-family: var(--sg-font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--sg-accent);
+  margin: 0;
+}
+
+/* ===== §9 Cross-vertical distinctness ===== */
+.compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+.compare-card {
+  padding: 32px 36px;
+  border: 1px solid var(--sg-line);
+  border-radius: var(--sg-radius-md);
+}
+.compare-card.this { background: var(--sg-bg-2); border-left: 4px solid var(--sg-primary); }
+.compare-card.other { background: var(--sg-bg-2); border-left: 4px solid var(--sgold-primary); }
+.compare-card .label {
+  font-family: var(--sg-font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin: 0 0 8px;
+}
+.compare-card.this .label { color: var(--sg-primary); }
+.compare-card.other .label { color: var(--sgold-primary); }
+.compare-card .name {
+  font-family: var(--sg-font-display);
+  font-size: 26px;
+  font-weight: 600;
+  margin: 0 0 20px;
+  color: var(--sg-ink);
+  font-variation-settings: "opsz" 32;
+}
+.compare-row { display: flex; gap: 16px; padding: 10px 0; border-bottom: 1px solid var(--sg-line); align-items: center; }
+.compare-row:last-child { border-bottom: 0; }
+.compare-row .row-label {
+  font-family: var(--sg-font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--sg-ink-soft);
+  min-width: 90px;
+}
+.compare-row .row-value { font-size: 14px; color: var(--sg-ink); }
+.dot { display: inline-block; width: 14px; height: 14px; border-radius: 50%; vertical-align: middle; margin-right: 6px; }
+
+/* ===== Footer ===== */
+.foot-note {
+  margin-top: 96px;
+  padding-top: 32px;
+  border-top: 1px solid var(--sg-line);
+  font-family: var(--sg-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--sg-ink-soft);
+  text-transform: uppercase;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 960px) {
+  .hero { padding: 56px 32px; }
+  .hero h1 { font-size: 56px; }
+  .palette-grid { grid-template-columns: repeat(2, 1fr); }
+  .voice-grid, .compare { grid-template-columns: 1fr; }
+  .sample-card-wrap { grid-template-columns: 1fr; }
+  .flow-step { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .flow-step .id { min-width: auto; }
+  .type-spec { padding: 32px 28px; }
+  .display-w700 { font-size: 44px; }
+  .bundle-banner { flex-direction: column; align-items: flex-start; gap: 16px; }
+}
+
+/* ===== §10 Section visual rhythm full-flow preview ===== */
+/* Each .rhythm-band represents one section in shared.section_list with its declared section_rhythm (bg / imagery / chrome). */
+/* H9 verify-section-visual-rhythm enforces rhythm thresholds — preview reveals drift BEFORE James picks a bundle. */
+.rhythm-stack {
+  display: flex; flex-direction: column;
+  gap: 6px;
+  border-radius: var(--sg-radius-md);
+  overflow: hidden;
+  border: 1px solid var(--sg-line);
+}
+.rhythm-band {
+  display: grid;
+  grid-template-columns: 56px 1fr 240px;
+  gap: 24px;
+  align-items: center;
+  padding: 20px 28px;
+  min-height: 80px;
+  position: relative;
+}
+.rhythm-band[data-bg="dark"] { background: var(--sg-primary-deep); color: var(--sg-bg-2); }
+.rhythm-band[data-bg="light"] { background: var(--sg-bg-2); color: var(--sg-ink); }
+.rhythm-band[data-bg="warm"] { background: var(--sg-bg); color: var(--sg-ink); }
+.rhythm-band[data-bg="accent"] { background: var(--sg-accent-soft); color: var(--sg-ink); }
+.rhythm-band[data-bg="gradient"] { background: linear-gradient(135deg, var(--sg-accent-soft), var(--sg-bg)); color: var(--sg-ink); }
+.rhythm-band[data-bg=""], .rhythm-band[data-bg="unknown"] { display: none; }
+.rhythm-band-num {
+  font-family: var(--sg-font-mono);
+  font-size: 18px; font-weight: 700;
+  opacity: 0.55; letter-spacing: 0.05em;
+}
+.rhythm-band-content { min-width: 0; }
+.rhythm-band-label {
+  font-family: var(--sg-font-display);
+  font-size: 20px; font-weight: 500;
+  margin: 0; line-height: 1.2;
+}
+.rhythm-band-meta {
+  font-family: var(--sg-font-mono);
+  font-size: 10px; font-weight: 500;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  opacity: 0.65; margin: 6px 0 0;
+}
+.rhythm-band-meta code {
+  font-family: var(--sg-font-mono);
+  font-size: 10px;
+  padding: 1px 5px;
+  background: rgba(127,127,127,0.15);
+  border-radius: 3px;
+  margin: 0 2px;
+}
+.rhythm-band-card {
+  height: 56px;
+  border-radius: var(--sg-radius-sm);
+  background: transparent;
+}
+.rhythm-band[data-chrome="hairline-card"] .rhythm-band-card { border: 1px solid currentColor; opacity: 0.4; }
+.rhythm-band[data-chrome="shadow-lift"] .rhythm-band-card { background: var(--sg-bg-2); box-shadow: 0 8px 24px rgba(0,0,0,0.18); }
+.rhythm-band[data-chrome="image-overlay"] .rhythm-band-card { background: linear-gradient(135deg, var(--sg-primary), var(--sg-accent)); }
+.rhythm-band[data-chrome="dark-anchor-panel"] .rhythm-band-card { background: rgba(255,255,255,0.10); border: 1px solid rgba(255,255,255,0.22); }
+.rhythm-band[data-chrome="open-layout"] .rhythm-band-card { background: transparent; border: 1px dashed currentColor; opacity: 0.25; }
+.rhythm-band-tag {
+  position: absolute; top: 8px; right: 12px;
+  font-family: var(--sg-font-mono);
+  font-size: 9px; font-weight: 700;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 9999px;
+  background: rgba(127,127,127,0.18);
+}
+.rhythm-band[data-imagery="full-bleed-photo"] .rhythm-band-tag::before { content: "PHOTO"; }
+.rhythm-band[data-imagery="inset-photo"] .rhythm-band-tag::before { content: "INSET PHOTO"; }
+.rhythm-band[data-imagery="decorative-illustration"] .rhythm-band-tag::before { content: "MOTIF"; }
+.rhythm-band[data-imagery="none-with-justification"] .rhythm-band-tag::before { content: "NO IMAGERY"; opacity: 0.7; }
+.rhythm-band[data-imagery=""] .rhythm-band-tag { display: none; }
+
+</style>
+</head>
+<body>
+<main class="page">
+
+  <!-- Bundle banner — varies per A / B / C -->
+  <div class="bundle-banner">
+    <div class="bundle-banner-id">
+      <span class="bundle-id-chip">A</span>
+      <div>
+        <h2 class="bundle-banner-name">Clarity White</h2>
+        <p class="bundle-banner-vibe">Webflow-grade clean white + load-bearing red</p>
+      </div>
+    </div>
+    <div class="bundle-banner-siblings">
+      <a href="lock-preview-B.html">→ Bundle B · Dark Signal</a>
+      <a href="lock-preview-C.html">→ Bundle C · Editorial Press</a>
+    </div>
+  </div>
+
+  <!-- Doc header -->
+  <header class="doc-header">
+    <div>
+      <h1>SGEN — Bundle A · §4 Lock Preview</h1>
+      <p>Visual mockup of Bundle A (Clarity White) decisions in <code>verticals/sgen.md §4.bundles.A</code>. Compare against the other 2 bundle previews (siblings linked above), then pick one. The picked bundle becomes the build's lock.</p>
+    </div>
+    <div class="spec-meta">2026-05-31 · draft</div>
+  </header>
+
+  <!-- §1 — Hero preview -->
+  <section class="sec">
+    <div class="sec-head"><span class="num">§1</span><h2>The hero, applied.</h2></div>
+    <div class="hero">
+      <p class="hero-eyebrow">MANAGED WEBSITE PLATFORM</p>
+      <h1>The WordPress alternative, <span class="accent">minus the plugin tax.</span></h1>
+      <p class="hero-sub">Hosting, CMS, a real drag-and-drop builder, and module suites in one managed platform — a fraction of WP Engine's cost, none of the plugin sprawl.</p>
+      <a class="bundle-btn bundle-btn-primary" href="#">Start free Sandbox</a>
+      <a class="bundle-btn bundle-btn-secondary" href="#" style="margin-left: 12px;">Secondary action</a>
+    </div>
+  </section>
+
+  <!-- §2 — Palette (11 swatches) -->
+  <section class="sec">
+    <div class="sec-head"><span class="num">§2</span><h2>The palette, eleven tokens.</h2></div>
+    <div class="palette-grid">
+      <div class="swatch"><div class="swatch-chip" style="background: var(--sg-primary);"></div><div class="swatch-meta"><p class="swatch-name">Primary</p><p class="swatch-hex">--sg-primary · #d51522</p><p class="swatch-use">CTAs · primary brand surfaces</p></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background: var(--sg-primary-deep);"></div><div class="swatch-meta"><p class="swatch-name">Primary deep</p><p class="swatch-hex">--sg-primary-deep · #b00000</p><p class="swatch-use">Hero overlay · footer bg</p></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background: var(--sg-primary-soft);"></div><div class="swatch-meta"><p class="swatch-name">Primary soft</p><p class="swatch-hex">--sg-primary-soft · #FCE7E8</p><p class="swatch-use">Tinted surfaces · eyebrows</p></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background: var(--sg-accent);"></div><div class="swatch-meta"><p class="swatch-name">Accent</p><p class="swatch-hex">--sg-accent · #e61938</p><p class="swatch-use">Secondary CTA · hover · decor pop</p></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background: var(--sg-accent-soft);"></div><div class="swatch-meta"><p class="swatch-name">Accent soft</p><p class="swatch-hex">--sg-accent-soft · #fff1f1</p><p class="swatch-use">Tinted accent backgrounds</p></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background: var(--sg-signature);"></div><div class="swatch-meta"><p class="swatch-name">Signature</p><p class="swatch-hex">--sg-signature · #d51522</p><p class="swatch-use">Premium signature · dividers · badges</p></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background: var(--sg-bg); border-bottom: 1px solid var(--sg-line);"></div><div class="swatch-meta"><p class="swatch-name">Background</p><p class="swatch-hex">--sg-bg · #ffffff</p><p class="swatch-use">Default page background</p></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background: var(--sg-bg-2); border-bottom: 1px solid var(--sg-line);"></div><div class="swatch-meta"><p class="swatch-name">Background 2</p><p class="swatch-hex">--sg-bg-2 · #f9f9f9</p><p class="swatch-use">Card · alternate band</p></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background: var(--sg-ink);"></div><div class="swatch-meta"><p class="swatch-name">Ink</p><p class="swatch-hex">--sg-ink · #000000</p><p class="swatch-use">Primary text</p></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background: var(--sg-ink-soft);"></div><div class="swatch-meta"><p class="swatch-name">Ink soft</p><p class="swatch-hex">--sg-ink-soft · #868279</p><p class="swatch-use">Secondary text · captions</p></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background: var(--sg-line);"></div><div class="swatch-meta"><p class="swatch-name">Line</p><p class="swatch-hex">--sg-line · #F2F1ED</p><p class="swatch-use">Dividers · hairlines</p></div></div>
+    </div>
+  </section>
+
+  <!-- §3 — Typography specimen -->
+  <section class="sec">
+    <div class="sec-head"><span class="num">§3</span><h2>Type — Inter + Inter.</h2></div>
+    <div class="type-spec">
+      <div class="type-spec-row">
+        <span class="annotation">Inter · 700 · 64px · opsz 120 · -0.035em · hero scale</span>
+        <p class="display-w700">The WordPress alternative, minus the plugin tax.</p>
+      </div>
+      <div class="type-spec-row">
+        <span class="annotation">Inter · 600 · 44px · opsz 64 · section h2</span>
+        <p class="display-w600">Host fast. Sleep easy.</p>
+      </div>
+      <div class="type-spec-row">
+        <span class="annotation">Inter · 500 italic · 32px · opsz 48 · accent treatment</span>
+        <p class="display-italic">minus the plugin tax.</p>
+      </div>
+      <div class="type-spec-row">
+        <span class="annotation">Inter · 500 · 28px · opsz 32 · card h3</span>
+        <p class="display-w500">Ship like a real product.</p>
+      </div>
+      <div class="type-spec-row">
+        <span class="annotation">Inter · 700 · 18px · body emphasis / button label</span>
+        <p class="body-w700">Start free Sandbox</p>
+      </div>
+      <div class="type-spec-row">
+        <span class="annotation">Inter · 500 · 17px · body</span>
+        <p class="body-w500">Hosting, CMS, a real drag-and-drop builder, and module suites in one managed platform — a fraction of WP Engine's cost, none of the plugin sprawl.</p>
+      </div>
+      <div class="type-spec-row">
+        <span class="annotation">Inter · 400 · 17px · body soft / caption</span>
+        <p class="body-w400">Built without plugins.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- §4 — Voice cards (using bundle card chrome) -->
+  <section class="sec">
+    <div class="sec-head"><span class="num">§4</span><h2>Voice — sounds-like, never-sounds-like.</h2></div>
+    <div class="voice-grid">
+      <div class="bundle-card voice-card">
+        <h3>Sounds like</h3>
+        <ul>
+          <li>No plugin tax.</li>
+          <li>Host fast. Sleep easy.</li>
+          <li>Ship like a real product.</li>
+          <li>Built without plugins.</li>
+          <li>10% cheaper. Suites a la carte.</li>
+        </ul>
+      </div>
+      <div class="bundle-card voice-card never">
+        <h3>Never sounds like</h3>
+        <ul>
+          <li>Get started today!</li>
+          <li>industry-leading</li>
+          <li>powerful and flexible</li>
+          <li>the best website builder, ever!</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- §5 — Section flow -->
+  <section class="sec">
+    <div class="sec-head"><span class="num">§5</span><h2>The section flow.</h2></div>
+    <div class="flow">
+      <!-- Repeat <div class="flow-step"> for each section in shared.sections.
+           Use role class: .universal · .hero-row · .middle · .conv -->
+      <div class="flow-step universal"><span class="id">01</span><span class="label">Hero <span class="tag">SC#1 · HERO</span></span><span class="desc">Benefit headline + concrete product/comparison visual</span></div>
+      <div class="flow-step hero-row"><span class="id">02</span><span class="label">Trust strip / logo wall <span class="tag">SC#2</span></span><span class="desc">Grayscale customer logos, high on the page</span></div>
+      <div class="flow-step middle"><span class="id">03</span><span class="label">Stat / metric band <span class="tag">SC#3</span></span><span class="desc">Sites shipped · Lighthouse · uptime — numbers are the visual</span></div>
+      <div class="flow-step middle"><span class="id">04</span><span class="label">SGEN vs WordPress matrix <span class="tag">SC#15</span></span><span class="desc">Head-to-head comparison, surfaced early</span></div>
+      <div class="flow-step middle"><span class="id">05</span><span class="label">Service pillars — SG-Core / Modules / Dashboard <span class="tag">SC#11</span></span><span class="desc">The 3 product pillars, 2-col with product UI</span></div>
+      <div class="flow-step middle"><span class="id">06</span><span class="label">Host fast. Sleep easy. <span class="tag">SC#12</span></span><span class="desc">Hosting & reliability — screenshot-led, dark</span></div>
+      <div class="flow-step middle"><span class="id">07</span><span class="label">Bento feature grid <span class="tag">SC#13</span></span><span class="desc">Rebuilt-in-2026 architecture, varied tile sizes</span></div>
+      <div class="flow-step middle"><span class="id">08</span><span class="label">SG-Builder showcase <span class="tag">SC#12</span></span><span class="desc">Real drag-drop editor screenshot — Design like Elementor</span></div>
+      <div class="flow-step middle"><span class="id">09</span><span class="label">Testimonials grid <span class="tag">SC#24</span></span><span class="desc">Customer voice with avatars</span></div>
+      <div class="flow-step conv"><span class="id">10</span><span class="label">Pricing 3-tier teaser <span class="tag">SC#31</span></span><span class="desc">Cost clarity vs WP Engine; full detail on pricing page</span></div>
+      <div class="flow-step universal"><span class="id">11</span><span class="label">FAQ accordion <span class="tag">SC#34</span></span><span class="desc">Pre-empts switching objections before the close</span></div>
+      <div class="flow-step universal"><span class="id">12</span><span class="label">Closing CTA <span class="tag">SC#41</span></span><span class="desc">Dark, intent-segmented action</span></div>
+    </div>
+  </section>
+
+  <!-- §6 — Surface samples -->
+  <section class="sec">
+    <div class="sec-head"><span class="num">§6</span><h2>Surface samples — Bundle A.</h2></div>
+    <div class="surface-samples">
+
+      <!-- 6.1 Corner radius scale -->
+      <div class="surface-block">
+        <div class="surface-block-head">
+          <h3 class="surface-block-title">Corner radius scale</h3>
+          <span class="surface-block-name">SURFACE #3 Modern 8-12px</span>
+        </div>
+        <div class="surface-block-content">
+          <div class="radius-sample">
+            <div class="radius-box sm"></div>
+            <span class="radius-label">sm · 8px</span>
+          </div>
+          <div class="radius-sample">
+            <div class="radius-box md"></div>
+            <span class="radius-label">md · 12px</span>
+          </div>
+          <div class="radius-sample">
+            <div class="radius-box lg"></div>
+            <span class="radius-label">lg · 16px</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6.2 Card chrome (live render of the bundle card style) -->
+      <div class="surface-block">
+        <div class="surface-block-head">
+          <h3 class="surface-block-title">Card chrome</h3>
+          <span class="surface-block-name">SURFACE #10 Soft-shadow-lift</span>
+        </div>
+        <div class="surface-block-content">
+          <div class="sample-card-wrap">
+            <div class="bundle-card">
+              <div class="sample-card-content">
+                <h4>Host fast. Sleep easy.</h4>
+                <p>Sample card body. The bundle's card chrome (paste from SURFACE-PATTERNS.md) is what makes this rectangle a card. Hover to see card-hover behavior.</p>
+              </div>
+            </div>
+            <div class="bundle-card">
+              <div class="sample-card-content">
+                <h4>Ship like a real product.</h4>
+                <p>Three cards demonstrate the chrome at scale — consistency across a real grid.</p>
+              </div>
+            </div>
+            <div class="bundle-card">
+              <div class="sample-card-content">
+                <h4>Built without plugins.</h4>
+                <p>Card chrome includes background fill, border, radius, shadow, padding.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6.3 Button styles -->
+      <div class="surface-block">
+        <div class="surface-block-head">
+          <h3 class="surface-block-title">Buttons</h3>
+          <span class="surface-block-name">SURFACE #21 Icon-led-arrow</span>
+        </div>
+        <div class="surface-block-content">
+          <a class="bundle-btn bundle-btn-primary" href="#">Start free Sandbox</a>
+          <a class="bundle-btn bundle-btn-secondary" href="#">Secondary action</a>
+          <a class="bundle-link" href="#">Tertiary text link</a>
+        </div>
+      </div>
+
+      <!-- 6.4 Section divider -->
+      <div class="surface-block">
+        <div class="surface-block-head">
+          <h3 class="surface-block-title">Section divider</h3>
+          <span class="surface-block-name">SURFACE #26 None / pure-spacing</span>
+        </div>
+        <div class="surface-block-content" style="flex-direction: column; align-items: stretch;">
+          <p class="body-w400" style="margin: 0;">Sample content above the divider — body copy at default register.</p>
+          <hr class="bundle-divider" />
+          <p class="body-w400" style="margin: 0;">Sample content below the divider — visualizes the bundle's section separator.</p>
+        </div>
+      </div>
+
+      <!-- 6.5 Image treatment -->
+      <div class="surface-block">
+        <div class="surface-block-head">
+          <h3 class="surface-block-title">Image treatment</h3>
+          <span class="surface-block-name">SURFACE #34 Soft-rounded</span>
+        </div>
+        <div class="surface-block-content">
+          <div class="sample-img-wrap">
+            <div class="bundle-img sample-img-placeholder" style="aspect-ratio: 16 / 10;">SAMPLE 16:10</div>
+            <div class="bundle-img sample-img-placeholder" style="aspect-ratio: 4 / 5;">SAMPLE 4:5</div>
+            <div class="bundle-img sample-img-placeholder" style="aspect-ratio: 1 / 1; width: 140px;">SQUARE</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6.6 Form field -->
+      <div class="surface-block">
+        <div class="surface-block-head">
+          <h3 class="surface-block-title">Form field</h3>
+          <span class="surface-block-name">SURFACE #43 Pill-input</span>
+        </div>
+        <div class="surface-block-content">
+          <div class="sample-form">
+            <label for="sample-email">Email</label>
+            <input type="email" id="sample-email" class="bundle-input" placeholder="you@example.com" />
+            <label for="sample-msg">Message</label>
+            <input type="text" id="sample-msg" class="bundle-input" placeholder="What can we help with?" />
+            <button class="bundle-btn bundle-btn-primary" type="button" style="margin-top: 12px;">Submit</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6.7 Decoration motifs (legacy decoration showcase if present) -->
+      <div class="surface-block">
+        <div class="surface-block-head">
+          <h3 class="surface-block-title">Decoration motifs</h3>
+          <span class="surface-block-name">shared · Red text-clip emphasis</span>
+        </div>
+        <div class="surface-block-content" style="flex-direction: column; align-items: stretch; gap: 16px;">
+          <div>
+            <p class="spec-label" style="margin: 0 0 8px;">Red text-clip emphasis</p>
+            <p class="body-w400" style="margin: 0;">The load-bearing word carries linear-gradient(#780101 to #e80000 to #a30000), clipped to text. The gradient IS the emphasis — never italic.</p>
+          </div>
+          <div>
+            <p class="spec-label" style="margin: 0 0 8px;">Feathered red line-divider</p>
+            <p class="body-w400" style="margin: 0;">A 2px horizontal red gradient that fades to transparent at both ends. The single recurring decorative mark.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- §7 — Motion samples -->
+  <section class="sec">
+    <div class="sec-head"><span class="num">§7</span><h2>Motion samples — Bundle A.</h2></div>
+
+    <div class="motion-block">
+      <div class="surface-block-head">
+        <h3 class="surface-block-title">Button hover (live demo · hover to test)</h3>
+        <span class="surface-block-name">MOTION #2 Color-shift</span>
+      </div>
+      <div class="motion-demo-stage">
+        <a class="bundle-btn bundle-btn-primary" href="#">Start free Sandbox</a>
+      </div>
+    </div>
+
+    <div class="motion-block">
+      <div class="surface-block-head">
+        <h3 class="surface-block-title">Card hover (live demo · hover to test)</h3>
+        <span class="surface-block-name">MOTION #10 Lift</span>
+      </div>
+      <div class="motion-demo-stage" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">
+        <div class="bundle-card">
+          <div class="sample-card-content">
+            <h4>No plugin tax.</h4>
+            <p>Hover this card to see the bundle's card-hover behavior.</p>
+          </div>
+        </div>
+        <div class="bundle-card">
+          <div class="sample-card-content">
+            <h4>Host fast. Sleep easy.</h4>
+            <p>Hover register is paired with surface card chrome.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="motion-block">
+      <div class="surface-block-head">
+        <h3 class="surface-block-title">Link hover (live demo · hover to test)</h3>
+        <span class="surface-block-name">MOTION #18 Color-shift</span>
+      </div>
+      <div class="motion-demo-stage" style="flex-direction: column; gap: 16px;">
+        <a class="bundle-link" href="#">Hover this link to see the underline / color / highlight behavior</a>
+        <a class="bundle-link" href="#">A second link to compare consistency</a>
+      </div>
+    </div>
+
+    <div class="motion-block">
+      <div class="surface-block-head">
+        <h3 class="surface-block-title">Other motion (not interactively previewable here)</h3>
+        <span class="surface-block-name">spec only</span>
+      </div>
+      <table class="motion-spec-table">
+        <tbody>
+          <tr><th>Page entrance</th><td><span class="pat-name">MOTION #21 Fade-up</span></td></tr>
+          <tr><th>Scroll-triggered</th><td><span class="pat-name">MOTION #26 Fade-in-on-view</span></td></tr>
+          <tr><th>Cursor effects</th><td><span class="pat-name">MOTION #31 Default (native)</span></td></tr>
+          <tr><th>Micro-interactions</th><td><span class="pat-name">MOTION #36 Button press</span></td></tr>
+          <tr><th>Page transitions</th><td><span class="pat-name">MOTION #43 View Transitions API</span></td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top: 16px; font-size: 13px; color: var(--sg-ink-soft);">These motion patterns affect the full built site (index.html), not this single preview. The bundle's choices are listed here for completeness and verification against MOTION-PATTERNS.md entries.</p>
+    </div>
+  </section>
+
+  <!-- §8 — Trust strip -->
+  <section class="sec">
+    <div class="sec-head"><span class="num">§8</span><h2>Trust strip.</h2></div>
+    <div class="trust-strip">
+      <div class="trust-logos">
+        <span class="trust-logo">ACME CO</span>
+        <span class="trust-logo">NORTHWIND</span>
+        <span class="trust-logo">VELA</span>
+        <span class="trust-logo">MERIDIAN</span>
+      </div>
+      <p class="pull-quote">"We moved nine client sites off WP Engine in a weekend and cut our hosting bill by a third."</p>
+      <p class="pull-quote-attr">— — SAMPLE TESTIMONIAL · AGENCY OWNER</p>
+    </div>
+  </section>
+
+  <!-- §9 — Cross-vertical distinctness -->
+  <section class="sec">
+    <div class="sec-head"><span class="num">§9</span><h2>Distinctness — SGEN Bundle A vs sgen.com (current).</h2></div>
+    <div class="compare">
+      <div class="compare-card this">
+        <p class="label">SGEN · managed website platform · Bundle A</p>
+        <h3 class="name">The WordPress alternative, minus the plugin tax.</h3>
+        <div class="compare-row"><span class="row-label">Primary</span><span class="row-value"><span class="dot" style="background: var(--sg-primary);"></span>#d51522</span></div>
+        <div class="compare-row"><span class="row-label">Accent</span><span class="row-value"><span class="dot" style="background: var(--sg-accent);"></span>#e61938</span></div>
+        <div class="compare-row"><span class="row-label">Signature</span><span class="row-value"><span class="dot" style="background: var(--sg-signature);"></span>#d51522</span></div>
+        <div class="compare-row"><span class="row-label">Display</span><span class="row-value" style="font-family: var(--sg-font-display);">Inter</span></div>
+        <div class="compare-row"><span class="row-label">Body</span><span class="row-value" style="font-family: var(--sg-font-body);">Inter</span></div>
+        <div class="compare-row"><span class="row-label">Surface</span><span class="row-value">SURFACE #10 Soft-shadow-lift</span></div>
+        <div class="compare-row"><span class="row-label">Motion</span><span class="row-value">MOTION #2 Color-shift</span></div>
+        <div class="compare-row"><span class="row-label">Nav</span><span class="row-value">NAV #2 Classic full-bar over hero</span></div>
+        <div class="compare-row"><span class="row-label">Hero</span><span class="row-value">HERO #7 Full-bleed + floating stat cards</span></div>
+        <div class="compare-row"><span class="row-label">Footer</span><span class="row-value">FOOTER #2 4-col light, brand-left</span></div>
+        <div class="compare-row"><span class="row-label">Card</span><span class="row-value">CARD #4 Circle-icon service card</span></div>
+        <div class="compare-row"><span class="row-label">CTA</span><span class="row-value">CTA #7 Multi-CTA cluster</span></div>
+        <div class="compare-row"><span class="row-label">Divider</span><span class="row-value">DIVIDER #1 Hard edge (feathered red)</span></div>
+        <div class="compare-row"><span class="row-label">Form</span><span class="row-value">FORM #6 Inline newsletter <span style="color: var(--sg-ink-soft); font-size: 11px;">(shared)</span></span></div>
+        <div class="compare-row"><span class="row-label">FAQ</span><span class="row-value">FAQ #5 Centered + eyebrow <span style="color: var(--sg-ink-soft); font-size: 11px;">(shared)</span></span></div>
+        <div class="compare-row"><span class="row-label">Sticky CTA</span><span class="row-value">STICKY #6 Floating pill <span style="color: var(--sg-ink-soft); font-size: 11px;">(shared)</span></span></div>
+        <div class="compare-row"><span class="row-label">Voice</span><span class="row-value">No plugin tax.</span></div>
+      </div>
+      <div class="compare-card other">
+        <p class="label">sgen.com (current) · the live site we are overhauling</p>
+        <h3 class="name">(comparison anchor)</h3>
+        <div class="compare-row"><span class="row-label">Primary</span><span class="row-value"><span class="dot" style="background: var(--sgold-primary);"></span>#d51522</span></div>
+        <div class="compare-row"><span class="row-label">Accent</span><span class="row-value"><span class="dot" style="background: var(--sgold-accent);"></span>#d51522</span></div>
+        <div class="compare-row"><span class="row-label">Signature</span><span class="row-value"><span class="dot" style="background: var(--sgold-signature);"></span>#d51522</span></div>
+        <div class="compare-row"><span class="row-label">Display</span><span class="row-value" style="font-family: 'Inter', serif;">Inter</span></div>
+        <div class="compare-row"><span class="row-label">Body</span><span class="row-value" style="font-family: 'Inter', sans-serif;">Inter</span></div>
+        <div class="compare-row"><span class="row-label">Nav</span><span class="row-value">Flat dark masthead (4 links)</span></div>
+        <div class="compare-row"><span class="row-label">Hero</span><span class="row-value">Abstract-art + multi-paragraph</span></div>
+        <div class="compare-row"><span class="row-label">Footer</span><span class="row-value">True-black 4-col block</span></div>
+        <div class="compare-row"><span class="row-label">Card</span><span class="row-value">Four identical 4-card grids</span></div>
+        <div class="compare-row"><span class="row-label">CTA</span><span class="row-value">5x repeated Start Building</span></div>
+        <div class="compare-row"><span class="row-label">Divider</span><span class="row-value">Hard dark/light bands</span></div>
+        <div class="compare-row"><span class="row-label">Voice</span><span class="row-value">Editorial-confident but buried: multi-paragraph hello-world hero + four near-identical 4-card grids + 5x repeated Start Building.</span></div>
+      </div>
+    </div>
+    <p style="margin-top: 24px; font-size: 15px; color: var(--sg-ink-soft); max-width: 760px;">Confirm distinctness across palette, accent, signature, display type, body type, surface chrome, motion register, voice. Any axis convergence should be intentional (independent reference convergence per playbook no-reuse rule) and documented in <code style="font-family: var(--sg-font-mono); font-size: 13px;">verticals/sgen.md §3</code>.</p>
+  </section>
+
+  <!-- §10 — Section visual rhythm full-flow preview (added 2026-05-21 per v6.1; surfaces section_rhythm declarations from audit shared.section_rhythm so visual drift gets caught at lock-preview time, not post-build) -->
+  <section class="sec">
+    <div class="sec-head"><span class="num">§10</span><h2>Section visual rhythm — full page flow.</h2></div>
+    <p style="margin: 0 0 32px; max-width: 760px; font-size: 15px; color: var(--sg-ink-soft);">Each band = one section in <code style="font-family: var(--sg-font-mono); font-size: 13px;">shared.section_list</code> with its declared <code>section_rhythm</code> (bg / imagery / chrome). Use this to verify the page won't drift to "2 dark bookends + flat-light middle" — the Coast & Crown 2026-05-21 pattern. H9 verify-section-visual-rhythm enforces: ≥2 non-light anchors, ≥1 middle-band anchor, no 4 consecutive same bg, ≥60% imagery, no 4 consecutive same chrome.</p>
+    <div class="rhythm-stack">
+      <div class="rhythm-band" data-bg="light" data-imagery="inset-photo" data-chrome="shadow-lift"><span class="rhythm-band-num">01</span><div class="rhythm-band-content"><p class="rhythm-band-label">Hero</p><p class="rhythm-band-meta">bg <code>light</code> · img <code>inset-photo</code> · chrome <code>shadow-lift</code></p></div><div class="rhythm-band-card"></div><span class="rhythm-band-tag"></span></div>
+      <div class="rhythm-band" data-bg="warm" data-imagery="decorative-illustration" data-chrome="open-layout"><span class="rhythm-band-num">02</span><div class="rhythm-band-content"><p class="rhythm-band-label">Trust strip / logo wall</p><p class="rhythm-band-meta">bg <code>warm</code> · img <code>decorative-illustration</code> · chrome <code>open-layout</code></p></div><div class="rhythm-band-card"></div><span class="rhythm-band-tag"></span></div>
+      <div class="rhythm-band" data-bg="accent" data-imagery="none-with-justification" data-chrome="hairline-card"><span class="rhythm-band-num">03</span><div class="rhythm-band-content"><p class="rhythm-band-label">Stat / metric band</p><p class="rhythm-band-meta">bg <code>accent</code> · img <code>none-with-justification</code> · chrome <code>hairline-card</code></p></div><div class="rhythm-band-card"></div><span class="rhythm-band-tag"></span></div>
+      <div class="rhythm-band" data-bg="light" data-imagery="inset-photo" data-chrome="hairline-card"><span class="rhythm-band-num">04</span><div class="rhythm-band-content"><p class="rhythm-band-label">SGEN vs WordPress matrix</p><p class="rhythm-band-meta">bg <code>light</code> · img <code>inset-photo</code> · chrome <code>hairline-card</code></p></div><div class="rhythm-band-card"></div><span class="rhythm-band-tag"></span></div>
+      <div class="rhythm-band" data-bg="dark" data-imagery="inset-photo" data-chrome="dark-anchor-panel"><span class="rhythm-band-num">05</span><div class="rhythm-band-content"><p class="rhythm-band-label">Service pillars — SG-Core / Modules / Dashboard</p><p class="rhythm-band-meta">bg <code>dark</code> · img <code>inset-photo</code> · chrome <code>dark-anchor-panel</code></p></div><div class="rhythm-band-card"></div><span class="rhythm-band-tag"></span></div>
+      <div class="rhythm-band" data-bg="dark" data-imagery="full-bleed-photo" data-chrome="image-overlay"><span class="rhythm-band-num">06</span><div class="rhythm-band-content"><p class="rhythm-band-label">Host fast. Sleep easy.</p><p class="rhythm-band-meta">bg <code>dark</code> · img <code>full-bleed-photo</code> · chrome <code>image-overlay</code></p></div><div class="rhythm-band-card"></div><span class="rhythm-band-tag"></span></div>
+      <div class="rhythm-band" data-bg="light" data-imagery="decorative-illustration" data-chrome="hairline-card"><span class="rhythm-band-num">07</span><div class="rhythm-band-content"><p class="rhythm-band-label">Bento feature grid</p><p class="rhythm-band-meta">bg <code>light</code> · img <code>decorative-illustration</code> · chrome <code>hairline-card</code></p></div><div class="rhythm-band-card"></div><span class="rhythm-band-tag"></span></div>
+      <div class="rhythm-band" data-bg="warm" data-imagery="full-bleed-photo" data-chrome="shadow-lift"><span class="rhythm-band-num">08</span><div class="rhythm-band-content"><p class="rhythm-band-label">SG-Builder showcase</p><p class="rhythm-band-meta">bg <code>warm</code> · img <code>full-bleed-photo</code> · chrome <code>shadow-lift</code></p></div><div class="rhythm-band-card"></div><span class="rhythm-band-tag"></span></div>
+      <div class="rhythm-band" data-bg="accent" data-imagery="inset-photo" data-chrome="hairline-card"><span class="rhythm-band-num">09</span><div class="rhythm-band-content"><p class="rhythm-band-label">Testimonials grid</p><p class="rhythm-band-meta">bg <code>accent</code> · img <code>inset-photo</code> · chrome <code>hairline-card</code></p></div><div class="rhythm-band-card"></div><span class="rhythm-band-tag"></span></div>
+      <div class="rhythm-band" data-bg="light" data-imagery="none-with-justification" data-chrome="shadow-lift"><span class="rhythm-band-num">10</span><div class="rhythm-band-content"><p class="rhythm-band-label">Pricing 3-tier teaser</p><p class="rhythm-band-meta">bg <code>light</code> · img <code>none-with-justification</code> · chrome <code>shadow-lift</code></p></div><div class="rhythm-band-card"></div><span class="rhythm-band-tag"></span></div>
+      <div class="rhythm-band" data-bg="warm" data-imagery="none-with-justification" data-chrome="open-layout"><span class="rhythm-band-num">11</span><div class="rhythm-band-content"><p class="rhythm-band-label">FAQ accordion</p><p class="rhythm-band-meta">bg <code>warm</code> · img <code>none-with-justification</code> · chrome <code>open-layout</code></p></div><div class="rhythm-band-card"></div><span class="rhythm-band-tag"></span></div>
+      <div class="rhythm-band" data-bg="dark" data-imagery="decorative-illustration" data-chrome="image-overlay"><span class="rhythm-band-num">12</span><div class="rhythm-band-content"><p class="rhythm-band-label">Closing CTA</p><p class="rhythm-band-meta">bg <code>dark</code> · img <code>decorative-illustration</code> · chrome <code>image-overlay</code></p></div><div class="rhythm-band-card"></div><span class="rhythm-band-tag"></span></div>
+    </div>
+    <p style="margin-top: 32px; font-size: 14px; color: var(--sg-ink-soft); max-width: 760px;">Bands with no <code>data-bg</code> populated (empty token) are hidden via CSS — only sections declared in <code>shared.section_rhythm</code> render. Sections beyond 12 require manual template extension.</p>
+  </section>
+
+  <footer class="foot-note">
+    <span>SGEN · Bundle A · §4 Lock Preview</span>
+    <span>Audit · .claude/skills/mockup-demo-build/verticals/sgen.md</span>
+    <span>Generated 2026-05-31</span>
+  </footer>
+
+</main>
+</body>
+</html>

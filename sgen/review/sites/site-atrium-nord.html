@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Atrium Nord — Architecture & Design Studio, Copenhagen</title>
+<meta name="description" content="Atrium Nord is a seven-person Copenhagen architecture studio working in concrete, oak and north light. Houses, cultural buildings and considered interiors.">
+<meta name="robots" content="noindex">
+<!-- ============================================================
+     ATRIUM NORD — believable showcase site
+     PLACEHOLDER: Atrium Nord is a FABRICATED brand. All copy,
+       quotes, names, metrics and contact details are invented for
+       demonstration. Photography is fal-generated (local, on-brand).
+     Built FROM the SGEN design system, no freelancing:
+       COMPOSITION : _PAGE-COMPOSITION-LIBRARY S2 V11
+                     (construction-architecture, STUDIO sub-vertical)
+                     8-zone spine: NAV HERO INTRO STATS SERVICES
+                     PORTFOLIO(* center of gravity) TEAM FAQ CTA FOOTER
+       BLOCKS      : styleguide/sections-* galleries -
+                     heroes V2 (B1 bleed) - trust-stats Block4 (big-number
+                     band) - features V1 (G4 services) - team-gallery C
+                     (masonry exposure) + B (circular roster) -
+                     cta-faq 1 (centered) + 5 (FAQ accordion) -
+                     footers B (standard, J1 dark panel)
+       LIBRARIES   : MODERN master :root tokens + TOP-12 -
+                     RESPONSIVE S0 essentials + drawer + 4-tier ladder -
+                     SCROLL sticky-header(IO sentinel)+smart-nav+reveals+
+                     back-to-top - component states (07-components)
+       Cool accent (#0a6cbf architecture blue) over tinted near-black ink
+       + warm off-white paper. Serif display on headings, sans body.
+       Numbered 01/02/03 editorial eyebrows = the architectural tell.
+       Self-contained except local fal images in assets/atrium-nord/.
+     ============================================================ -->
+<style>
+/* ============================================================
+   TOKENS - MODERN master :root, reskinned for Atrium Nord
+   (cool architecture accent; one accent, one display+body face,
+    one radius language, one easing, one shadow family)
+   ============================================================ */
+:root{
+  /* COLOR - tinted, never pure (TOP-12 #1) */
+  --ink:#191b1e;            /* tinted near-black, NEVER #000 */
+  --ink-2:#23262a;
+  --paper:#f5f3ee;          /* warm off-white concrete paper, NEVER #fff */
+  --paper-2:#ebe8e1;        /* tint band ground */
+  --surface:#ffffff;        /* cards float on paper */
+  --muted:#6c6f73;          /* recurs across the harvest */
+  --body:#52575c;           /* desaturated tint of ink, not #666 */
+  --accent:#0a6cbf;         /* ONE cool architecture-blue accent */
+  --accent-ink:#085693;     /* darker for text-on-light */
+  --accent-2:#3d9be0;       /* lighter, for dark grounds */
+  --accent-tint:rgba(10,108,191,.10);
+  --accent-bd:rgba(10,108,191,.26);
+  --line:rgba(25,27,30,.10);
+  --line-2:rgba(25,27,30,.16);
+
+  /* GRADIENTS - constant 135deg (F2) */
+  --grad-brand:linear-gradient(135deg,#3d9be0,#0a6cbf 55%,#06467c);
+
+  /* RADIUS - ONE editorial language: small + sharp-ish (luxe/blueprint) */
+  --r-chip:6px; --r-card:10px; --r-panel:16px; --r-pill:9999px; --r-btn:6px;
+  --r-squircle:clamp(14px,2.4vw,22px);
+
+  /* SHADOW - ink/navy-tinted, never #000 (D1) */
+  --shadow-rest:0 2px 6px 0 rgba(25,27,30,.08);
+  --shadow-card:0 15px 30px 0 rgba(1,7,39,.13);                 /* the universal one */
+  --shadow-card-2stop:0 12px 16px -4px rgba(16,24,40,.08),0 4px 6px -2px rgba(16,24,40,.03);
+  --shadow-hover:0 32px 64px -12px rgba(16,24,40,.16);
+
+  /* MOTION (C8) */
+  --ease:cubic-bezier(.05,.5,.3,1);    /* BeTheme signature settle */
+  --t-fast:.2s ease-out;               /* confident hover */
+  --t-img:.45s var(--ease);
+  --t-reveal:.6s var(--ease);
+
+  --glass:blur(18px) saturate(180%);
+  --ring:0 0 0 3px rgba(10,108,191,.40);
+
+  /* dark-footer / anchor palette */
+  --foot-bg:#15171a; --foot-bg-2:#1f2226;
+  --foot-line:rgba(255,255,255,.10); --foot-line-2:rgba(255,255,255,.06);
+  --foot-fg:#c8cacd; --foot-fg-dim:#8a8d92; --foot-head:#ffffff;
+
+  /* RESPONSIVE container ladder (single source of truth) */
+  --page-max:1240px; --content-max:1180px; --gutter:clamp(20px,4vw,33px);
+  --sect-pad:clamp(64px,9vw,140px);
+
+  --sans:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,"Cormorant Garamond",ui-serif,Georgia,"Times New Roman",serif;
+  --mono:ui-monospace,"SFMono-Regular",Menlo,Consolas,"Liberation Mono",monospace;
+
+  /* z-scale (SCROLL S3.2) */
+  --z-header:60; --z-drawer:80; --z-scrim:75; --z-backtotop:50;
+}
+
+*{box-sizing:border-box}
+html{overflow-x:hidden;scroll-behavior:smooth;-webkit-text-size-adjust:100%}  /* MANDATORY safety net (RESP #1) */
+body{
+  margin:0;background:var(--paper);color:var(--body);
+  font-family:var(--sans);font-size:16px;line-height:1.62;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+}
+h1,h2,h3,h4{font-family:var(--serif);color:var(--ink);margin:0;letter-spacing:-.015em;line-height:1.06;font-weight:600}
+p{margin:0 0 1em}
+a{color:var(--accent-ink);text-decoration:none}
+img{max-width:100%;display:block}
+ul{margin:0;padding:0}
+:focus-visible{outline:none;box-shadow:var(--ring);border-radius:4px}
+
+/* container (RESP S1.3 clamp ladder) */
+.wrap{max-width:var(--content-max);margin:0 auto;padding:0 var(--gutter)}
+
+/* fluid type ladder (RESP S1.4) */
+.h1{font-size:clamp(2.75rem,2.2rem+3.2vw,5.2rem);line-height:.98;letter-spacing:-.03em;font-weight:500}
+.h2{font-size:clamp(1.9rem,1.5rem+1.9vw,3.1rem);line-height:1.04;letter-spacing:-.025em}
+.h3{font-size:clamp(1.4rem,1.2rem+1vw,2.1rem)}
+.lede{font-size:clamp(1.04rem,.98rem+.5vw,1.28rem);color:var(--body);font-weight:300;line-height:1.6}
+
+/* ---------- shared bits (eyebrow + numbered tell + buttons) ---------- */
+.eyebrow{display:inline-flex;align-items:center;gap:11px;text-transform:uppercase;
+  letter-spacing:.18em;font-size:12px;font-weight:700;color:var(--accent);font-family:var(--sans)}
+.eyebrow::before{content:"";width:34px;height:2px;background:var(--accent);display:inline-block;flex:0 0 auto}
+.eyebrow.light{color:var(--accent-2)} .eyebrow.light::before{background:var(--accent-2)}
+.eyebrow.num{gap:13px}
+.eyebrow.num .no{font-family:var(--mono);font-size:13px;letter-spacing:.06em;color:var(--accent);font-weight:700}
+
+/* buttons - #9 accent-flip, named-prop transition, ONE radius */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  font-family:var(--sans);font-size:15px;font-weight:700;letter-spacing:.01em;
+  padding:15px 28px;min-height:48px;border-radius:var(--r-btn);border:2px solid var(--accent);cursor:pointer;
+  background:var(--accent);color:#fff;line-height:1;text-align:center;
+  transition:background var(--t-fast),color var(--t-fast),border-color var(--t-fast),transform var(--t-fast),box-shadow var(--t-fast);
+}
+.btn .arr{transition:transform var(--t-fast)}
+.btn:hover{background:var(--accent-ink);border-color:var(--accent-ink);transform:translateY(-2px);box-shadow:var(--shadow-card-2stop)}
+.btn:hover .arr{transform:translateX(4px)}
+.btn:active{transform:translateY(0)}
+.btn.ghost{background:transparent;color:var(--accent-ink)}
+.btn.ghost:hover{background:var(--accent);color:#fff;transform:translateY(-2px)}
+.btn.ghost-d{background:transparent;color:#fff;border-color:rgba(255,255,255,.4)}
+.btn.ghost-d:hover{background:#fff;color:var(--ink);border-color:#fff}
+.btn.light{background:#fff;color:var(--ink);border-color:#fff}
+.btn.light:hover{background:var(--paper-2);border-color:var(--paper-2);color:var(--ink)}
+.btn.lg{padding:17px 32px;font-size:16px;min-height:54px}
+
+/* scroll-reveal base (TOP-12 #4) */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity var(--t-reveal),transform var(--t-reveal)}
+.reveal.in-view{opacity:1;transform:none}
+.stagger.in-view>*{opacity:1;transform:none}
+.stagger>*{opacity:0;transform:translateY(20px);transition:opacity var(--t-reveal),transform var(--t-reveal)}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  .reveal,.stagger>*{opacity:1!important;transform:none!important}
+}
+
+/* ============================================================
+   1 - HEADER / NAV - sticky transparent->solid glass (TOP-12 #6, I8)
+   + off-canvas drawer (RESP S3). One pinned accent CTA + phone.
+   ============================================================ */
+.site-header{position:fixed;top:0;left:0;right:0;z-index:var(--z-header);
+  transition:background var(--t-fast),box-shadow var(--t-fast),backdrop-filter var(--t-fast),height var(--t-fast)}
+.site-header .bar{display:flex;align-items:center;gap:18px;height:88px;
+  max-width:var(--page-max);margin:0 auto;padding:0 var(--gutter);transition:height var(--t-fast)}
+.site-header.at-top{background:transparent}
+.site-header.at-top .nav-link,.site-header.at-top .brand,.site-header.at-top .ph-link{color:#fff}
+.site-header.at-top .brand .mk{border-color:rgba(255,255,255,.6)}
+.site-header.at-top .brand small{color:rgba(255,255,255,.72)}
+.site-header.is-stuck{background:rgba(245,243,238,.86);-webkit-backdrop-filter:var(--glass);backdrop-filter:var(--glass);
+  box-shadow:0 1px 0 var(--line),0 6px 24px -12px rgba(16,24,40,.28)}
+.site-header.is-stuck .bar{height:66px}
+
+.brand{display:inline-flex;align-items:center;gap:11px;font-family:var(--serif);font-weight:600;
+  font-size:21px;letter-spacing:-.01em;color:var(--ink);flex:0 0 auto}
+.brand .mk{width:30px;height:30px;border:1.5px solid var(--ink);border-radius:3px;display:grid;place-items:center;
+  font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:-.04em;color:inherit;flex:0 0 auto}
+.brand small{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--muted);font-weight:600;display:block;margin-top:1px}
+
+.nav{display:flex;align-items:center;gap:30px;margin-left:auto}
+.nav-list{display:flex;align-items:center;gap:28px;list-style:none}
+.nav-link{font-family:var(--sans);font-size:14px;font-weight:600;letter-spacing:.01em;color:var(--ink);
+  position:relative;padding:6px 0;transition:color var(--t-fast)}
+.nav-link::after{content:"";position:absolute;left:0;right:100%;bottom:0;height:2px;background:var(--accent);transition:right var(--t-fast)}
+.nav-link:hover{color:var(--accent-ink)} .nav-link:hover::after{right:0}
+.site-header.at-top .nav-link:hover{color:var(--accent-2)}
+.nav-cta-wrap{display:flex;align-items:center;gap:16px}
+.ph-link{font-family:var(--sans);font-size:14px;font-weight:700;color:var(--ink);white-space:nowrap;display:inline-flex;align-items:center;gap:7px;transition:color var(--t-fast)}
+.ph-link .ico{width:15px;height:15px;flex:0 0 auto}
+.ph-link:hover{color:var(--accent-ink)}
+
+/* hamburger - 44px tap target (RESP #5) */
+.nav-toggle{display:none;width:46px;height:46px;margin-left:auto;border:1px solid var(--line-2);border-radius:8px;
+  background:rgba(255,255,255,.7);cursor:pointer;align-items:center;justify-content:center;flex-direction:column;gap:5px;flex:0 0 auto}
+.site-header.at-top .nav-toggle{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.35)}
+.nav-toggle span{display:block;width:22px;height:2px;background:var(--ink);transition:transform var(--t-fast),opacity var(--t-fast)}
+.site-header.at-top .nav-toggle span{background:#fff}
+
+/* off-canvas drawer (RESP S3) */
+.scrim{position:fixed;inset:0;background:rgba(15,17,20,.5);opacity:0;visibility:hidden;
+  transition:opacity .3s ease,visibility .3s ease;z-index:var(--z-scrim)}
+.scrim.open{opacity:1;visibility:visible}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(86vw,360px);background:var(--ink);color:#fff;
+  transform:translateX(100%);transition:transform .32s var(--ease);z-index:var(--z-drawer);
+  display:flex;flex-direction:column;padding:26px 26px 32px;overflow-y:auto;
+  box-shadow:-24px 0 60px -20px rgba(0,0,0,.5)}
+.drawer.open{transform:translateX(0)}
+.drawer-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.drawer-head .brand{color:#fff} .drawer-head .brand .mk{border-color:rgba(255,255,255,.6)} .drawer-head .brand small{color:#9aa0a6}
+.drawer-close{width:46px;height:46px;border:1px solid rgba(255,255,255,.2);border-radius:8px;background:transparent;color:#fff;cursor:pointer;font-size:22px;line-height:1;display:grid;place-items:center}
+.drawer-close:hover{background:rgba(255,255,255,.08)}
+.drawer-nav{list-style:none;margin:14px 0 0;border-top:1px solid rgba(255,255,255,.1)}
+.drawer-nav li{border-bottom:1px solid rgba(255,255,255,.1)}
+.drawer-nav a{display:flex;align-items:center;min-height:54px;color:#fff;font-size:18px;font-weight:600;font-family:var(--serif)}
+.drawer-nav a:hover{color:var(--accent-2)}
+.drawer-foot{margin-top:auto;padding-top:24px}
+.drawer-foot .btn{width:100%}
+.drawer-foot .ph{display:flex;align-items:center;gap:9px;margin-top:16px;color:#c8cacd;font-size:15px;font-weight:600}
+
+/* ============================================================
+   2 - HERO - B1 full-bleed photo + bottom-weighted scrim (Hero8 - F5)
+   metadata proof line + dual CTA + scroll cue (V11 trade/studio idiom)
+   ============================================================ */
+.hero{position:relative;min-height:88svh;display:flex;align-items:flex-end;color:#fff;background:#0e0f12;overflow:hidden}
+.hero .photo{position:absolute;inset:0;z-index:0;background-size:cover;background-position:center 38%;
+  background-image:url("assets/atrium-nord/hero-facade.jpg");transform:scale(1.04)}
+.hero .scrim{position:absolute;inset:0;z-index:1;
+  background:linear-gradient(180deg,rgba(12,14,18,.56) 0%,rgba(12,14,18,.20) 30%,rgba(12,14,18,.42) 66%,rgba(12,14,18,.84) 100%)}
+/* dedicated header gradient strip - guarantees white-nav contrast on a pale sky (A2) */
+.hero .topscrim{position:absolute;left:0;right:0;top:0;height:128px;z-index:1;pointer-events:none;
+  background:linear-gradient(180deg,rgba(12,14,18,.52) 0%,rgba(12,14,18,.22) 55%,transparent 100%)}
+.hero .wrap{position:relative;z-index:2;padding-top:120px;padding-bottom:120px;width:100%}
+.hero .eyebrow{color:var(--accent-2)} .hero .eyebrow::before{background:var(--accent-2)}
+.hero h1{color:#fff;font-weight:400;max-width:16ch;margin:20px 0 0;text-shadow:0 2px 34px rgba(0,0,0,.4)}
+.hero h1 em{font-style:italic}
+.hero .sub{color:#e6e7ea;max-width:50ch;margin:22px 0 0;font-size:clamp(1rem,.95rem+.5vw,1.22rem);font-weight:300;line-height:1.58}
+.hero .meta{display:flex;flex-wrap:wrap;gap:14px 34px;margin:30px 0 0;align-items:center}
+.hero .meta .stat{display:flex;flex-direction:column;gap:2px}
+.hero .meta .stat b{font-family:var(--serif);font-size:clamp(22px,3vw,30px);font-weight:500;color:#fff;letter-spacing:-.02em;line-height:1}
+.hero .meta .stat span{font-size:11.5px;text-transform:uppercase;letter-spacing:.13em;color:#b9bcc0;font-weight:600}
+.hero .meta .vr{width:1px;height:40px;background:rgba(255,255,255,.22)}
+.hero .actions{display:flex;flex-wrap:wrap;gap:13px;margin:34px 0 0}
+.hero .scroll-cue{position:absolute;right:var(--gutter);bottom:30px;z-index:3;color:#fff;display:inline-flex;flex-direction:column;align-items:center;gap:8px;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;font-weight:600;opacity:.85}
+.hero .scroll-cue .ln{width:1px;height:42px;background:linear-gradient(180deg,#fff,transparent);animation:cue 2.2s var(--ease) infinite}
+@keyframes cue{0%{transform:scaleY(.3);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}50.01%{transform-origin:bottom}100%{transform:scaleY(.3);transform-origin:bottom}}
+
+/* ============================================================
+   3 - INTRO / ABOUT - G2 asymmetric overlapping image+copy
+   (the magazine-spread move) + numbered eyebrow tell
+   ============================================================ */
+.about{padding:var(--sect-pad) 0;background:var(--paper);position:relative}
+.about .grid{display:grid;grid-template-columns:.95fr 1.05fr;gap:clamp(34px,6vw,90px);align-items:center}
+.about .fig{position:relative}
+.about .fig .frame{position:relative;border-radius:var(--r-squircle);overflow:hidden;aspect-ratio:4/5;
+  box-shadow:var(--shadow-card);border:1px solid var(--line)}
+.about .fig .frame img{width:100%;height:100%;object-fit:cover;transition:transform .6s var(--ease)}
+.about .fig:hover .frame img{transform:scale(1.04)}
+/* the overlap card (G2 margin-bottom:-95px;margin-left:50px;z-index:2 verbatim move) */
+.about .fig .over{position:absolute;right:-26px;bottom:-30px;z-index:2;background:var(--ink);color:#fff;
+  border-radius:var(--r-panel);padding:24px 26px;max-width:260px;box-shadow:var(--shadow-hover)}
+.about .fig .over .yr{font-family:var(--mono);font-size:12px;letter-spacing:.1em;color:var(--accent-2);font-weight:700}
+.about .fig .over p{margin:8px 0 0;font-size:14px;color:#d6d8db;line-height:1.55}
+.about .copy h2{margin:18px 0 0}
+.about .copy .lede{margin:22px 0 0}
+.about .copy .body{margin:18px 0 0;color:var(--body);font-size:16px;line-height:1.7;max-width:52ch}
+.about .copy .sig{margin:26px 0 0;display:flex;align-items:center;gap:14px}
+.about .copy .sig .nm{font-family:var(--serif);font-style:italic;font-size:20px;color:var(--ink)}
+.about .copy .sig .ro{font-size:13px;color:var(--muted);border-left:1px solid var(--line-2);padding-left:14px}
+.about .copy .more{display:inline-flex;align-items:center;gap:8px;margin-top:26px;font-weight:700;color:var(--accent-ink);font-size:15px}
+.about .copy .more .ar{transition:transform var(--t-fast)}
+.about .copy .more:hover .ar{transform:translateX(4px)}
+
+/* ============================================================
+   4 - STATS - big-number band on the dark anchor (Block4 - C3/I3)
+   count-up. The "they rebuilt on SGEN" proof.
+   ============================================================ */
+.statband{background:var(--ink);color:#fff;padding:clamp(64px,9vw,116px) 0;position:relative;overflow:hidden}
+.statband::before{content:"";position:absolute;width:620px;height:620px;left:50%;top:-320px;transform:translateX(-50%);
+  border-radius:50%;filter:blur(90px);background:radial-gradient(circle,rgba(10,108,191,.26),transparent 70%);pointer-events:none}
+.statband .wrap{position:relative;z-index:1}
+.statband .head{max-width:680px;margin-bottom:50px}
+.statband .head h2{color:#fff;font-weight:300;margin:14px 0 0}
+.statband .head h2 b{font-weight:600}
+.statband .head p{color:#b3b6ba;margin:14px 0 0;font-size:15.5px;max-width:54ch;line-height:1.6}
+.bandgrid{display:grid;grid-template-columns:repeat(4,1fr)}
+.bandstat{padding:8px 30px;border-left:1px solid rgba(255,255,255,.12)}
+.bandstat:first-child{padding-left:0;border-left:0}
+.bandstat .n{font-size:clamp(40px,5.6vw,72px);font-weight:300;color:#fff;letter-spacing:-.05em;line-height:.92;
+  font-variant-numeric:tabular-nums;display:flex;align-items:baseline;font-family:var(--serif)}
+.bandstat .n .pre{font-size:.42em;font-weight:600;color:var(--accent-2);margin-right:2px;align-self:flex-start;font-family:var(--sans)}
+.bandstat .n .suf{font-size:.38em;font-weight:600;color:var(--accent-2);margin-left:3px;font-family:var(--sans)}
+.bandstat .lbl{margin-top:16px;text-transform:uppercase;letter-spacing:.14em;font-size:11.5px;font-weight:700;color:#9b9ea2}
+.bandstat .lbl b{display:block;color:#dcdee0;text-transform:none;letter-spacing:-.01em;font-size:13.5px;font-weight:600;margin-top:6px;font-family:var(--sans)}
+
+/* ============================================================
+   5 - SERVICES - G4 icon-tile grid, numbered 01-04 (I5 fill-on-hover)
+   ============================================================ */
+.services{padding:var(--sect-pad) 0;background:var(--paper-2)}
+.sec-head{max-width:720px}
+.sec-head.center{margin:0 auto;text-align:center}
+.sec-head.center .eyebrow{justify-content:center}
+.sec-head h2{margin:16px 0 0}
+.sec-head p{margin:14px 0 0;color:var(--body);font-size:16px;line-height:1.62}
+.svc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:52px}
+.svc-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-card);padding:28px 24px 26px;
+  position:relative;overflow:hidden;display:flex;flex-direction:column;
+  transition:transform var(--t-fast),box-shadow var(--t-fast),border-color var(--t-fast)}
+.svc-card::before{content:"";position:absolute;left:0;top:0;height:3px;width:100%;background:var(--grad-brand);transform:scaleX(0);transform-origin:left;transition:transform var(--t-fast)}
+.svc-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-card);border-color:var(--accent-bd)}
+.svc-card:hover::before{transform:scaleX(1)}
+.svc-card .no{font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.08em;color:var(--accent);margin-bottom:16px}
+.svc-card .ichip{width:46px;height:46px;border-radius:11px;background:var(--accent-tint);border:1px solid var(--accent-bd);
+  display:grid;place-items:center;margin-bottom:18px;transition:background var(--t-fast),border-color var(--t-fast),transform var(--t-fast)}
+.svc-card .ichip svg{width:23px;height:23px;stroke:var(--accent);fill:none;stroke-width:1.7;transition:stroke var(--t-fast)}
+.svc-card:hover .ichip{background:var(--grad-brand);border-color:transparent;transform:translateY(-2px)}
+.svc-card:hover .ichip svg{stroke:#fff}
+.svc-card h4{font-size:19px;margin:0 0 9px;font-weight:600}
+.svc-card p{font-size:14px;color:var(--muted);margin:0 0 18px;line-height:1.6;flex:1}
+.svc-card .more{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:700;color:var(--accent-ink);align-self:flex-start}
+.svc-card .more .ar{transition:transform var(--t-fast)}
+.svc-card:hover .more .ar{transform:translateX(4px)}
+
+/* ============================================================
+   6 - * PORTFOLIO - masonry exposure gallery (Block C - H1 exposure)
+   the STUDIO center of gravity. Real fal imagery in clipped frames.
+   ============================================================ */
+.work{padding:var(--sect-pad) 0;background:var(--paper)}
+.work .sec-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:18px;max-width:none}
+.work .sec-head .lk{font-weight:700;color:var(--accent-ink);font-size:15px;display:inline-flex;align-items:center;gap:8px;white-space:nowrap}
+.work .sec-head .lk .ar{transition:transform var(--t-fast)}
+.work .sec-head .lk:hover .ar{transform:translateX(4px)}
+.masonry{column-count:3;column-gap:clamp(14px,1.6vw,20px);margin-top:46px}
+.mtile{break-inside:avoid;margin:0 0 clamp(14px,1.6vw,20px);position:relative;border-radius:var(--r-card);
+  overflow:hidden;box-shadow:var(--shadow-rest);display:block;transition:box-shadow var(--t-fast)}
+.mtile:hover,.mtile:focus-visible{box-shadow:var(--shadow-card);outline:none}
+.mtile .frame{width:100%;overflow:hidden}
+.mtile .frame img{width:100%;height:100%;object-fit:cover;display:block;transition:transform var(--t-img)}
+.mtile.t-tall .frame{aspect-ratio:3/4}
+.mtile.t-wide .frame{aspect-ratio:4/3}
+.mtile.t-sq .frame{aspect-ratio:1/1}
+.mtile:hover .frame img,.mtile:focus-visible .frame img{transform:scale(1.07)}
+.mtile .mask{position:absolute;inset:0;background:linear-gradient(180deg,rgba(16,18,22,0) 38%,rgba(16,18,22,.74));opacity:.35;transition:opacity var(--t-img)}
+.mtile:hover .mask,.mtile:focus-visible .mask{opacity:1}
+.mtile .cap{position:absolute;left:0;right:0;bottom:0;padding:18px 18px;color:#fff;transform:translateY(12px);opacity:0;transition:transform var(--t-img),opacity var(--t-img)}
+.mtile:hover .cap,.mtile:focus-visible .cap{transform:none;opacity:1}
+.mtile .cap .ttl{font-family:var(--serif);font-size:1.12rem;font-weight:600;line-height:1.18}
+.mtile .cap .sub{font-family:var(--mono);font-size:.64rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#bcd9f1;margin-top:6px;display:inline-block}
+.mtile .cap .sub::after{content:"";display:block;height:2px;width:0;background:var(--accent-2);margin-top:.45rem;transition:width var(--t-img)}
+.mtile:hover .cap .sub::after,.mtile:focus-visible .cap .sub::after{width:46px}
+
+/* ============================================================
+   7 - TEAM - circular roster (Block B - H5 ring + H2 mask)
+   ============================================================ */
+.team{padding:var(--sect-pad) 0;background:var(--paper-2)}
+.roster{display:grid;grid-template-columns:repeat(4,1fr);gap:30px 26px;margin-top:52px}
+.member{text-align:center}
+.member .ring{width:128px;height:128px;margin:0 auto 18px;border-radius:50%;padding:4px;
+  background:conic-gradient(from 210deg,var(--accent),var(--accent-2),var(--accent));position:relative}
+.member .ringin{width:100%;height:100%;border-radius:50%;overflow:hidden;background:var(--ink);position:relative}
+.member .ringin img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease)}
+.member:hover .ringin img{transform:scale(1.07)}
+.member .badge{position:absolute;right:6px;bottom:6px;z-index:2;width:34px;height:34px;border-radius:50%;
+  background:var(--accent);color:#fff;display:grid;place-items:center;font-size:12px;font-weight:800;
+  border:2px solid var(--paper-2);transform:scale(0);transition:transform var(--t-fast)}
+.member:hover .badge{transform:scale(1)}
+.member .nm{font-family:var(--serif);font-size:18px;font-weight:600;color:var(--ink)}
+.member .ro{font-size:12.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent-ink);font-weight:700;margin-top:5px}
+.member .bio{font-size:13.5px;color:var(--muted);margin:11px 0 0;line-height:1.55;max-width:30ch;margin-left:auto;margin-right:auto}
+
+/* ============================================================
+   8 - FAQ accordion (Block 5 - I9 native <details>, accent active row)
+   ============================================================ */
+.faq{padding:var(--sect-pad) 0;background:var(--paper)}
+.faq__in{max-width:780px;margin:0 auto}
+.faq .sec-head{text-align:center;margin:0 auto 36px}
+.faq .sec-head .eyebrow{justify-content:center}
+.accordion{border:1px solid var(--line);border-radius:var(--r-card);overflow:hidden;background:var(--surface);box-shadow:var(--shadow-rest)}
+.acc{border-top:1px solid var(--line)}
+.acc:first-child{border-top:0}
+.acc__btn{width:100%;background:none;border:0;cursor:pointer;text-align:left;font-family:var(--sans);
+  font-size:1rem;font-weight:700;color:var(--ink);padding:1.15rem 1.3rem;min-height:44px;list-style:none;
+  display:flex;align-items:center;justify-content:space-between;gap:1rem;transition:background var(--t-fast),color var(--t-fast)}
+.acc__btn::-webkit-details-marker{display:none}
+.acc__btn:hover{background:rgba(25,27,30,.025)}
+.acc__btn .chev{flex:0 0 auto;width:12px;height:12px;border-right:2.5px solid var(--accent);border-bottom:2.5px solid var(--accent);transform:rotate(45deg);transition:transform var(--t-fast);margin-top:-3px}
+.acc__panel{display:grid;grid-template-rows:0fr;transition:grid-template-rows .28s var(--ease)}
+.acc__panel>div{overflow:hidden}
+.acc__panel p{margin:0 1.3rem 1.3rem;color:var(--body);font-size:.95rem;line-height:1.66}
+.acc.is-open .acc__btn{color:var(--accent-ink);background:var(--accent-tint)}
+.acc.is-open .chev{transform:rotate(-135deg);margin-top:2px}
+.acc.is-open .acc__panel{grid-template-rows:1fr}
+
+/* ============================================================
+   9 - CTA - centered close on dark anchor (Block 1 - B2 on G1)
+   + phone (the trade/contractor conversion convention, V11)
+   ============================================================ */
+.cta{position:relative;background:var(--ink);color:#fff;overflow:hidden;padding:clamp(68px,10vw,128px) 0;text-align:center}
+.cta::before{content:"";position:absolute;left:50%;top:-26%;width:120%;height:90%;transform:translateX(-50%);
+  background:radial-gradient(closest-side,rgba(10,108,191,.30),transparent 72%);pointer-events:none}
+.cta__in{position:relative;z-index:1;max-width:740px;margin:0 auto}
+.cta .eyebrow{color:var(--accent-2);justify-content:center}.cta .eyebrow::before{background:var(--accent-2)}
+.cta h2{color:#fff;margin:14px 0 0;font-weight:400}
+.cta h2 em{font-style:italic}
+.cta p{color:#cfd1d4;font-size:clamp(1rem,2vw,1.18rem);max-width:54ch;margin:18px auto 0;line-height:1.6;font-weight:300}
+.cta .actions{display:flex;gap:13px;justify-content:center;flex-wrap:wrap;margin-top:32px}
+.cta .phone{margin-top:26px;font-size:14px;color:#aeb1b5}
+.cta .phone a{color:#fff;font-weight:700;border-bottom:1px solid var(--accent-2)}
+.cta .hours{margin-top:8px;font-size:12.5px;color:#8a8d92;letter-spacing:.04em}
+
+/* ============================================================
+   10 - FOOTER - standard, J1 dark panel (Block B) + back-to-top (I8)
+   ============================================================ */
+.ftr{background:linear-gradient(180deg,#1a1c1f,#131517);color:var(--foot-fg);font-size:.92rem;line-height:1.65;position:relative}
+.ftr__in{max-width:1180px;margin:0 auto;padding:clamp(2.6rem,5vw,3.8rem) var(--gutter)}
+.ftr a{color:var(--foot-fg);transition:color var(--t-fast)} .ftr a:hover{color:var(--foot-head)}
+.ftr h4{font-family:var(--sans);font-size:.74rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:var(--foot-fg-dim);margin:0 0 1rem}
+.fstd-grid{display:grid;gap:2.2rem clamp(1.5rem,3vw,3rem);grid-template-columns:1.6fr 1fr 1fr 1fr;align-items:start}
+.fbrand{display:flex;align-items:center;gap:.6rem;font-family:var(--serif);font-weight:600;font-size:1.22rem;color:var(--foot-head)}
+.fbrand .mk{width:30px;height:30px;border:1.5px solid rgba(255,255,255,.6);border-radius:3px;display:grid;place-items:center;font-family:var(--mono);font-size:12px;font-weight:700;color:#fff;letter-spacing:-.04em}
+.fblurb{color:var(--foot-fg-dim);max-width:34ch;margin:.95rem 0 0;font-size:.88rem;line-height:1.6}
+.fcontact{list-style:none;margin:1rem 0 0;display:flex;flex-direction:column;gap:.55rem}
+.fcontact li{display:flex;gap:.6rem;align-items:flex-start;font-size:.88rem;color:var(--foot-fg)}
+.fcontact .ic{width:26px;height:26px;flex:0 0 26px;border-radius:7px;display:grid;place-items:center;background:var(--accent-tint);color:var(--accent-2);font-size:.82rem;margin-top:.05rem}
+.fcol ul{list-style:none;display:flex;flex-direction:column;gap:.1rem}
+.fcol li a{display:inline-flex;align-items:center;min-height:34px;padding:.18rem 0;font-size:.9rem;color:var(--foot-fg)}
+.flegal{border-top:1px solid var(--foot-line);margin-top:clamp(2rem,3.5vw,2.8rem);padding-top:1.5rem;
+  display:flex;align-items:center;gap:1rem 1.4rem;flex-wrap:wrap;font-size:.8rem;color:var(--foot-fg-dim)}
+.flegal .copy{margin-right:auto}
+.flegal .copy .ph-note{color:#6f7378;display:block;margin-top:4px;font-size:.72rem}
+.fsocial{display:flex;gap:.5rem}
+.fsocial a{width:40px;height:40px;border-radius:9px;display:grid;place-items:center;background:rgba(255,255,255,.06);border:1px solid var(--foot-line);color:var(--foot-fg);font-weight:800;font-size:.84rem;transition:background var(--t-fast),border-color var(--t-fast),transform var(--t-fast)}
+.fsocial a:hover{background:var(--accent);border-color:var(--accent);color:#fff;transform:translateY(-2px)}
+.flegal nav{display:flex;gap:.2rem 1.1rem;flex-wrap:wrap}
+.flegal nav a{font-size:.8rem;color:var(--foot-fg-dim)} .flegal nav a:hover{color:var(--foot-head)}
+.sgen-credit{display:flex;align-items:center;gap:.5rem;border-top:1px solid var(--foot-line-2);margin-top:1.3rem;padding-top:1.2rem;font-family:var(--mono);font-size:.72rem;color:#6f7378;flex-wrap:wrap}
+.sgen-credit b{color:#aeb1b5;font-weight:700} .sgen-credit .ph-flag{color:#5d6064;margin-left:auto}
+
+/* circular back-to-top FAB (SCROLL S2.5 - I8) */
+#back-to-top{position:fixed;right:24px;bottom:24px;z-index:var(--z-backtotop);width:46px;height:46px;border:0;
+  border-radius:50%;background:var(--accent);color:#fff;cursor:pointer;display:grid;place-items:center;
+  opacity:0;transform:translateY(10px);visibility:hidden;box-shadow:var(--shadow-card);
+  transition:opacity .25s ease,transform .25s ease,background var(--t-fast),visibility .25s ease}
+#back-to-top.is-visible{opacity:1;transform:translateY(0);visibility:visible}
+#back-to-top:hover{background:var(--accent-ink);transform:translateY(-3px)}
+#back-to-top:focus-visible{outline:3px solid #fff;outline-offset:2px}
+#back-to-top svg{width:19px;height:19px}
+
+/* ============================================================
+   RESPONSIVE LADDER - 4 tiers (RESP S1.1): >1240 - 960-1240 - 768-959 - <=767
+   nav-collapse @1024 (separate from grid-stack @767)
+   ============================================================ */
+@media (max-width:1024px){
+  .nav-list,.nav .ph-link{display:none}
+  .nav-toggle{display:flex}
+  .nav{margin-left:auto;gap:12px}
+  .nav .nav-cta-wrap{display:none}
+  .svc-grid{grid-template-columns:repeat(2,1fr)}
+  .roster{grid-template-columns:repeat(4,1fr);gap:24px 18px}
+  .bandgrid{grid-template-columns:repeat(2,1fr);gap:40px 0}
+  .bandstat:nth-child(3),.bandstat:nth-child(4){padding-top:0}
+  .bandstat:nth-child(odd){padding-left:0;border-left:0}
+  .bandstat:nth-child(even){border-left:1px solid rgba(255,255,255,.12)}
+  .fstd-grid{grid-template-columns:1.4fr 1fr 1fr}
+}
+/* tablet portrait 768-959 */
+@media (max-width:959px){
+  .masonry{column-count:2}
+  .roster{grid-template-columns:repeat(2,1fr)}
+  .about .grid{grid-template-columns:1fr;gap:60px}
+  .about .fig{max-width:460px}
+  .about .fig .over{right:0}
+}
+/* mobile <=767 - hard single-column stack (RESP #2) */
+@media (max-width:767px){
+  .hero{min-height:auto}                                /* RESP #9 release 100vh lock */
+  .hero .wrap{padding-top:112px;padding-bottom:64px}
+  .hero .meta .vr{display:none}
+  .hero .meta{gap:18px 26px}
+  .hero .actions .btn{flex:1 1 100%}
+  .hero .scroll-cue{display:none}
+  .svc-grid{grid-template-columns:1fr;gap:14px;margin-top:38px}
+  .masonry{column-count:1}
+  .roster{grid-template-columns:repeat(2,1fr);gap:26px 16px}
+  .bandgrid{grid-template-columns:repeat(2,1fr);gap:34px 22px}
+  .bandstat{padding:0!important;border-left:0!important;border-top:1px solid rgba(255,255,255,.12);padding-top:24px!important}
+  .bandstat:nth-child(1),.bandstat:nth-child(2){border-top:0;padding-top:0!important}
+  .fstd-grid{grid-template-columns:1fr;gap:1.9rem}
+  .flegal{flex-direction:column;align-items:center;text-align:center;gap:1rem}
+  .flegal .copy{margin-right:0}
+  .flegal nav{justify-content:center}
+  .sgen-credit{justify-content:center;text-align:center} .sgen-credit .ph-flag{margin-left:0}
+  .cta .actions .btn{flex:1 1 100%}
+  .work .sec-head{flex-direction:column;align-items:flex-start}
+}
+/* tiny phones - roster safety floor to 1-up only below 360 */
+@media (max-width:359px){ .roster{grid-template-columns:1fr} }
+</style>
+</head>
+<body>
+
+<!-- ===================== 1 - HEADER / NAV ===================== -->
+<header class="site-header at-top" id="siteHeader">
+  <div class="bar">
+    <a class="brand" href="#top" aria-label="Atrium Nord home">
+      <span class="mk">AN</span>
+      <span>Atrium Nord<small>Arkitekter - Kobenhavn</small></span>
+    </a>
+    <nav class="nav" aria-label="Primary">
+      <ul class="nav-list">
+        <li><a class="nav-link" href="#work">Work</a></li>
+        <li><a class="nav-link" href="#studio">Studio</a></li>
+        <li><a class="nav-link" href="#services">Services</a></li>
+        <li><a class="nav-link" href="#team">People</a></li>
+        <li><a class="nav-link" href="#faq">Journal</a></li>
+      </ul>
+      <div class="nav-cta-wrap">
+        <a class="ph-link" href="tel:+4533445500">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.6a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.5-1.2a2 2 0 0 1 2.1-.5c.8.3 1.7.6 2.6.7a2 2 0 0 1 1.7 2Z"/></svg>
+          +45 33 44 55 00
+        </a>
+        <a class="btn" href="#contact">Request a quote <span class="arr">&rarr;</span></a>
+      </div>
+      <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="drawer">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<!-- off-canvas drawer -->
+<div class="scrim" id="scrim" hidden></div>
+<aside class="drawer" id="drawer" aria-label="Menu" aria-hidden="true">
+  <div class="drawer-head">
+    <span class="brand"><span class="mk">AN</span><span>Atrium Nord<small>Arkitekter</small></span></span>
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">&times;</button>
+  </div>
+  <ul class="drawer-nav">
+    <li><a href="#work">Work</a></li>
+    <li><a href="#studio">Studio</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#team">People</a></li>
+    <li><a href="#faq">Journal</a></li>
+  </ul>
+  <div class="drawer-foot">
+    <a class="btn" href="#contact">Request a quote <span class="arr">&rarr;</span></a>
+    <a class="ph" href="tel:+4533445500">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.6a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.5-1.2a2 2 0 0 1 2.1-.5c.8.3 1.7.6 2.6.7a2 2 0 0 1 1.7 2Z"/></svg>
+      +45 33 44 55 00
+    </a>
+  </div>
+</aside>
+
+<main id="main" tabindex="-1">
+<span id="top"></span>
+
+<!-- ===================== 2 - HERO (B1 full-bleed photo) ===================== -->
+<section class="hero" aria-label="Introduction">
+  <div class="photo" role="img" aria-label="The studio's atrium building in Copenhagen at dusk, north-light concrete facade glowing from within"></div>
+  <div class="scrim"></div>
+  <div class="topscrim" aria-hidden="true"></div>
+  <div id="header-sentinel" aria-hidden="true" style="position:absolute;top:88px;height:1px;width:1px"></div>
+  <div class="wrap">
+    <span class="eyebrow">Architecture &amp; design studio - est. 2009</span>
+    <h1 class="h1">Buildings that hold the <em>light.</em></h1>
+    <p class="sub">A seven-person Copenhagen studio working in concrete, oak and north light - houses, cultural buildings, and interiors built to be lived in slowly.</p>
+    <div class="meta">
+      <div class="stat"><b>100+</b><span>Projects realised</span></div>
+      <div class="vr"></div>
+      <div class="stat"><b>16</b><span>Years in practice</span></div>
+      <div class="vr"></div>
+      <div class="stat"><b>97%</b><span>Clients who return</span></div>
+    </div>
+    <div class="actions">
+      <a class="btn lg" href="#work">View selected work <span class="arr">&rarr;</span></a>
+      <a class="btn ghost-d lg" href="#contact">Start a project</a>
+    </div>
+  </div>
+  <span class="scroll-cue" aria-hidden="true">Scroll<span class="ln"></span></span>
+</section>
+
+<!-- ===================== 3 - INTRO / ABOUT (G2 overlap) ===================== -->
+<section class="about" id="studio" aria-label="About the studio">
+  <div class="wrap">
+    <div class="grid">
+      <div class="fig reveal">
+        <div class="frame"><img src="assets/atrium-nord/project-atrium.jpg" alt="A double-height concrete atrium with a floating oak staircase and a single tree, lit by north-facing clerestory windows" loading="eager" decoding="sync"></div>
+        <div class="over">
+          <span class="yr">Studio, Norrebro</span>
+          <p>Our own workshop - board-formed concrete, a borrowed tree, and the north light we build everything around.</p>
+        </div>
+      </div>
+      <div class="copy reveal">
+        <span class="eyebrow num"><span class="no">01</span> The studio</span>
+        <h2 class="h2">A small studio that builds quietly, and finishes things.</h2>
+        <p class="lede">Atrium Nord is seven people. The principal you meet at the first sketch is the one who walks the site on the last day. No account layer, no hand-off.</p>
+        <p class="body">We work the way the city does - in concrete and oak, around daylight, at a human pace. Every project starts with the section before the plan, and with the question of how a room feels at four o'clock in February. We take on a handful of commissions a year so each one gets the attention it was hired for.</p>
+        <div class="sig">
+          <span class="nm">Soren Vik</span>
+          <span class="ro">Founding Principal</span>
+        </div>
+        <a class="more" href="#team">Meet the people <span class="ar">&rarr;</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 4 - STATS BAND (count-up, dark anchor) ===================== -->
+<section class="statband" aria-label="The studio in numbers">
+  <div class="wrap">
+    <div class="head reveal">
+      <span class="eyebrow light">The studio's own rebuild</span>
+      <h2 class="h2">We rebuilt the studio's own site <b>on one platform.</b></h2>
+      <p>The old site was a premium WordPress theme drowning in nine plugins - and the project pages, the whole point, took nearly five seconds to show a single photograph. We moved to SGEN: one stack, every drawing served light.</p>
+    </div>
+    <div class="bandgrid stagger reveal" id="statGrid">
+      <div class="bandstat">
+        <div class="n"><span class="count" data-to="0.6" data-decimals="1"></span><span class="suf">s</span></div>
+        <div class="lbl">Largest-image load<b>Down from 4.7s on project pages</b></div>
+      </div>
+      <div class="bandstat">
+        <div class="n"><span class="count" data-to="9" data-decimals="0"></span><span class="suf">&rarr;0</span></div>
+        <div class="lbl">Plugins retired<b>Theme dropped entirely</b></div>
+      </div>
+      <div class="bandstat">
+        <div class="n"><span class="pre">+</span><span class="count" data-to="33" data-decimals="0"></span><span class="suf">%</span></div>
+        <div class="lbl">Project enquiries<b>Within two quarters</b></div>
+      </div>
+      <div class="bandstat">
+        <div class="n"><span class="count" data-to="100" data-decimals="0"></span><span class="suf">/100</span></div>
+        <div class="lbl">Lighthouse performance<b>On the new build</b></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 5 - SERVICES (G4 grid, numbered) ===================== -->
+<section class="services" id="services" aria-label="What we do">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">What we do</span>
+      <h2 class="h2">Four ways we work - under one accountable roof.</h2>
+      <p>From the first measured survey to the day the keys turn. No drawings thrown over a wall, no contractor we've never met.</p>
+    </div>
+    <div class="svc-grid stagger reveal">
+      <div class="svc-card">
+        <span class="no">01</span>
+        <div class="ichip"><svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V8l7-5 7 5v13" stroke-linejoin="round"/><path d="M9 21v-6h6v6" stroke-linejoin="round"/></svg></div>
+        <h4>Architecture</h4>
+        <p>New houses, extensions and cultural buildings - from feasibility and planning through to detailed design and site.</p>
+        <a class="more" href="#contact">Learn more <span class="ar">&rarr;</span></a>
+      </div>
+      <div class="svc-card">
+        <span class="no">02</span>
+        <div class="ichip"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+        <h4>Interiors</h4>
+        <p>Considered interiors that read as one piece with the architecture - joinery, light and material specified in-house.</p>
+        <a class="more" href="#contact">Learn more <span class="ar">&rarr;</span></a>
+      </div>
+      <div class="svc-card">
+        <span class="no">03</span>
+        <div class="ichip"><svg viewBox="0 0 24 24"><path d="M12 2 2 7l10 5 10-5-10-5Z" stroke-linejoin="round"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5" stroke-linejoin="round"/></svg></div>
+        <h4>3D &amp; visualisation</h4>
+        <p>Photoreal models and walkthroughs so a room can be judged at four o'clock in February before a wall is poured.</p>
+        <a class="more" href="#contact">Learn more <span class="ar">&rarr;</span></a>
+      </div>
+      <div class="svc-card">
+        <span class="no">04</span>
+        <div class="ichip"><svg viewBox="0 0 24 24"><path d="M4 17l6-6 4 4 6-7" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 8h6v6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <h4>Furniture</h4>
+        <p>A small line of made-to-order oak pieces, drawn for our projects and available to take home from them.</p>
+        <a class="more" href="#contact">Learn more <span class="ar">&rarr;</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 6 - * PORTFOLIO (masonry exposure) ===================== -->
+<section class="work" id="work" aria-label="Selected work">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div>
+        <span class="eyebrow num"><span class="no">02</span> Selected work</span>
+        <h2 class="h2" style="margin-top:16px">Our realisations</h2>
+      </div>
+      <a class="lk" href="#contact">View the full portfolio <span class="ar">&rarr;</span></a>
+    </div>
+    <div class="masonry stagger reveal">
+      <a class="mtile t-wide" href="#work" aria-label="Project: Vinterhus">
+        <div class="frame"><img src="assets/atrium-nord/hero-facade.jpg" alt="Pale-concrete civic building with a strict grid of windows, glowing at dusk" loading="eager" decoding="sync"></div>
+        <div class="mask"></div><div class="cap"><div class="ttl">Vinterhus</div><span class="sub">Copenhagen - 2 130 m2 - 2024</span></div>
+      </a>
+      <a class="mtile t-tall" href="#work" aria-label="Project: Sohuset">
+        <div class="frame"><img src="assets/atrium-nord/project-pavilion.jpg" alt="A cultural pavilion with a cantilevered concrete roof over a reflecting pool" loading="eager" decoding="sync"></div>
+        <div class="mask"></div><div class="cap"><div class="ttl">Sohuset Pavilion</div><span class="sub">Aarhus - 880 m2 - 2023</span></div>
+      </a>
+      <a class="mtile t-sq" href="#work" aria-label="Project: Birk House">
+        <div class="frame"><img src="assets/atrium-nord/project-lakehouse.jpg" alt="A low lakeside house clad in charred timber and pale concrete reflected in a still lake" loading="eager" decoding="sync"></div>
+        <div class="mask"></div><div class="cap"><div class="ttl">Birk House</div><span class="sub">Silkeborg - 240 m2 - 2023</span></div>
+      </a>
+      <a class="mtile t-wide" href="#work" aria-label="Project: Material study">
+        <div class="frame"><img src="assets/atrium-nord/project-material.jpg" alt="Board-formed concrete meeting a warm oak-slatted ceiling in raking north light" loading="eager" decoding="sync"></div>
+        <div class="mask"></div><div class="cap"><div class="ttl">Concrete &amp; Oak</div><span class="sub">Material study - ongoing</span></div>
+      </a>
+      <a class="mtile t-tall" href="#work" aria-label="Project: Atriumhuset">
+        <div class="frame"><img src="assets/atrium-nord/project-atrium.jpg" alt="A double-height concrete atrium with a floating oak staircase and a single tree" loading="eager" decoding="sync"></div>
+        <div class="mask"></div><div class="cap"><div class="ttl">Atriumhuset</div><span class="sub">Copenhagen - 410 m2 - 2022</span></div>
+      </a>
+      <!-- PLACEHOLDER: a sixth tile ("Norreport Loft") was removed in refinement -
+           it reused project-material.jpg as a second "project", duplicating the
+           Concrete & Oak material study. project-material.jpg is now the material
+           study only. Restore a sixth tile when a NEW distinct project image
+           (e.g. a warm timber interior) is generated [IMG]. -->
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 7 - TEAM (circular roster) ===================== -->
+<section class="team" id="team" aria-label="The people">
+  <div class="wrap">
+    <div class="sec-head center reveal">
+      <span class="eyebrow">The people</span>
+      <h2 class="h2">Seven people, one studio.</h2>
+      <p style="max-width:54ch;margin-left:auto;margin-right:auto">No account layer, no hand-off. The person you meet is the person who does the work.</p>
+    </div>
+    <div class="roster stagger reveal">
+      <div class="member">
+        <div class="ring"><div class="ringin"><img src="assets/atrium-nord/project-atrium.jpg" alt="Portrait placeholder for Soren Vik" loading="eager" decoding="sync"></div><span class="badge">in</span></div>
+        <div class="nm">Soren Vik</div><div class="ro">Founding Principal</div>
+        <p class="bio">Sets the section before the plan. Walks every site.</p>
+      </div>
+      <div class="member">
+        <div class="ring"><div class="ringin"><img src="assets/atrium-nord/project-material.jpg" alt="Portrait placeholder for Astrid Holm" loading="eager" decoding="sync"></div><span class="badge">@</span></div>
+        <div class="nm">Astrid Holm</div><div class="ro">Partner, Interiors</div>
+        <p class="bio">Joinery, light and material. Specifies it all in-house.</p>
+      </div>
+      <div class="member">
+        <div class="ring"><div class="ringin"><img src="assets/atrium-nord/project-pavilion.jpg" alt="Portrait placeholder for Mikkel Dahl" loading="eager" decoding="sync"></div><span class="badge">in</span></div>
+        <div class="nm">Mikkel Dahl</div><div class="ro">Associate, Technical</div>
+        <p class="bio">Details and delivery. Where the drawing meets the pour.</p>
+      </div>
+      <div class="member">
+        <div class="ring"><div class="ringin"><img src="assets/atrium-nord/project-lakehouse.jpg" alt="Portrait placeholder for Freja Berg" loading="eager" decoding="sync"></div><span class="badge">@</span></div>
+        <div class="nm">Freja Berg</div><div class="ro">Architect, Visualisation</div>
+        <p class="bio">Builds the models that let us judge a room early.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 8 - FAQ (accordion) ===================== -->
+<section class="faq" id="faq" aria-label="Common questions">
+  <div class="wrap">
+    <div class="faq__in">
+      <div class="sec-head reveal">
+        <span class="eyebrow">Before you write</span>
+        <h2 class="h2">Questions we're often asked</h2>
+      </div>
+      <div class="accordion reveal">
+        <details class="acc" open>
+          <summary class="acc__btn">How do we start a project with you?<span class="chev" aria-hidden="true"></span></summary>
+          <div class="acc__panel"><div><p>It begins with a conversation and a site visit - no fee, no commitment. If it's a fit, we propose a feasibility stage that ends in a measured brief, a section, and a clear scope before any design fee is agreed.</p></div></div>
+        </details>
+        <details class="acc">
+          <summary class="acc__btn">What size of project do you take on?<span class="chev" aria-hidden="true"></span></summary>
+          <div class="acc__panel"><div><p>From a single considered room to a 2 500 m2 cultural building. We deliberately keep a handful of commissions live at once so every one gets a principal's attention - if we can't give yours that, we'll say so and recommend someone who can.</p></div></div>
+        </details>
+        <details class="acc">
+          <summary class="acc__btn">Do you work outside Copenhagen?<span class="chev" aria-hidden="true"></span></summary>
+          <div class="acc__panel"><div><p>Most of our work is within an hour of the studio, which is how we keep walking sites. We take selected commissions across Denmark and southern Sweden where the brief is right and the travel makes sense for both of us.</p></div></div>
+        </details>
+        <details class="acc">
+          <summary class="acc__btn">Can you handle planning and the contractor too?<span class="chev" aria-hidden="true"></span></summary>
+          <div class="acc__panel"><div><p>Yes. We run planning applications in-house and stay on through construction as your representative on site - one accountable studio from the first sketch to the day the keys turn.</p></div></div>
+        </details>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 9 - CTA (dark anchor + phone) ===================== -->
+<section class="cta" id="contact" aria-label="Start a project">
+  <div class="wrap">
+    <div class="cta__in">
+      <span class="eyebrow">Make your first step the right one</span>
+      <h2 class="h2">Let's sit down and talk about <em>your space.</em></h2>
+      <p>Tell us about the site, the budget and the feeling you're after. We'll come back within two working days - and the first conversation is always on us.</p>
+      <div class="actions">
+        <a class="btn light lg" href="mailto:studio@atriumnord.example">Request a quote <span class="arr">&rarr;</span></a>
+        <a class="btn ghost-d lg" href="tel:+4533445500">Call the studio</a>
+      </div>
+      <p class="phone">Or speak to us directly - <a href="tel:+4533445500">+45 33 44 55 00</a></p>
+      <p class="hours">Studio open Mon-Fri 9-17 - Ryesgade 42, 2200 Kobenhavn N</p>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ===================== 10 - FOOTER ===================== -->
+<footer class="ftr" role="contentinfo" aria-label="Site footer">
+  <div class="ftr__in">
+    <div class="fstd-grid">
+      <div class="fcol fcol--brand">
+        <div class="fbrand"><span class="mk">AN</span>Atrium Nord</div>
+        <p class="fblurb">An architecture &amp; design studio working in concrete, oak and north light. Copenhagen, since 2009.</p>
+        <ul class="fcontact" aria-label="Contact details">
+          <li><span class="ic" aria-hidden="true">&#9737;</span><span>Ryesgade 42<br>2200 Kobenhavn N, Denmark</span></li>
+          <li><span class="ic" aria-hidden="true">&#9742;</span><a href="tel:+4533445500">+45 33 44 55 00</a></li>
+          <li><span class="ic" aria-hidden="true">&#9993;</span><a href="mailto:studio@atriumnord.example">studio@atriumnord.example</a></li>
+          <li><span class="ic" aria-hidden="true">&#9201;</span><span>Mon-Fri 9-17 - site visits by appointment</span></li>
+        </ul>
+      </div>
+      <div class="fcol">
+        <h4>Studio</h4>
+        <ul>
+          <li><a href="#studio">About</a></li>
+          <li><a href="#team">People</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#faq">Journal</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div class="fcol">
+        <h4>Work</h4>
+        <ul>
+          <li><a href="#work">Houses</a></li>
+          <li><a href="#work">Cultural</a></li>
+          <li><a href="#work">Interiors</a></li>
+          <li><a href="#work">Furniture</a></li>
+          <li><a href="#work">All projects</a></li>
+        </ul>
+      </div>
+      <div class="fcol">
+        <h4>Connect</h4>
+        <ul>
+          <li><a href="#contact">Start a project</a></li>
+          <li><a href="#contact">Press &amp; awards</a></li>
+          <li><a href="#contact">Work with us</a></li>
+          <li><a href="#contact">Newsletter</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="flegal">
+      <span class="copy">&copy; 2026 Atrium Nord Arkitekter ApS. All rights reserved.<span class="ph-note">Placeholder - Atrium Nord is a fabricated brand built to demonstrate the SGEN design system.</span></span>
+      <div class="fsocial" aria-label="Social links">
+        <a href="#contact" aria-label="Instagram">IG</a>
+        <a href="#contact" aria-label="LinkedIn">in</a>
+        <a href="#contact" aria-label="Pinterest">P</a>
+      </div>
+      <nav aria-label="Legal">
+        <a href="#contact">Privacy</a><a href="#contact">Terms</a><a href="#contact">Cookies</a>
+      </nav>
+    </div>
+
+    <div class="sgen-credit">
+      <span>Built on <b>SGEN</b> - one stack, no plugins underneath.</span>
+      <span class="ph-flag">demonstration site - not a real practice</span>
+    </div>
+  </div>
+</footer>
+
+<!-- back-to-top FAB -->
+<button id="back-to-top" type="button" aria-label="Back to top">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+</button>
+
+<script>
+(function(){
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var header = document.getElementById('siteHeader');
+
+  /* ---- 1 - sticky header: transparent->solid via IO sentinel (SCROLL S2.1 preferred build) ---- */
+  var sentinel = document.getElementById('header-sentinel');
+  if('IntersectionObserver' in window && sentinel){
+    var hio = new IntersectionObserver(function(entries){
+      var stuck = !entries[0].isIntersecting;
+      header.classList.toggle('is-stuck', stuck);
+      header.classList.toggle('at-top', !stuck);
+    }, {threshold:0});
+    hio.observe(sentinel);
+  } else {
+    header.classList.remove('at-top'); header.classList.add('is-stuck');
+  }
+
+  /* ---- 2 - off-canvas drawer (RESP S3): scroll-lock, scrim, Esc, link-tap ---- */
+  var toggle=document.getElementById('navToggle'), drawer=document.getElementById('drawer'),
+      scrim=document.getElementById('scrim'), closeBtn=document.getElementById('drawerClose'),
+      lastFocus=null;
+  function openDrawer(){
+    lastFocus=document.activeElement;
+    drawer.classList.add('open'); scrim.hidden=false; requestAnimationFrame(function(){scrim.classList.add('open');});
+    drawer.setAttribute('aria-hidden','false'); toggle.setAttribute('aria-expanded','true');
+    document.body.style.overflow='hidden'; closeBtn.focus();
+  }
+  function closeDrawer(){
+    drawer.classList.remove('open'); scrim.classList.remove('open');
+    drawer.setAttribute('aria-hidden','true'); toggle.setAttribute('aria-expanded','false');
+    document.body.style.overflow=''; setTimeout(function(){scrim.hidden=true;},300);
+    if(lastFocus)lastFocus.focus();
+  }
+  toggle.addEventListener('click',openDrawer);
+  closeBtn.addEventListener('click',closeDrawer);
+  scrim.addEventListener('click',closeDrawer);
+  drawer.querySelectorAll('a').forEach(function(a){a.addEventListener('click',closeDrawer);});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&drawer.classList.contains('open'))closeDrawer();});
+
+  /* ---- 3 - scroll-reveal + sibling stagger + count-up (TOP-12 #4/#5; shared engine) ---- */
+  var revealEls=[].slice.call(document.querySelectorAll('.reveal'));
+  function stagger(el){ if(!el.classList.contains('stagger'))return; var k=el.children; for(var i=0;i<k.length;i++){k[i].style.transitionDelay=(i*70)+'ms';} }
+  function fireCounters(scope){
+    [].slice.call(scope.querySelectorAll('.count')).forEach(function(n){
+      if(n.getAttribute('data-done')==='1')return; n.setAttribute('data-done','1');
+      var to=parseFloat(n.getAttribute('data-to'))||0, dec=parseInt(n.getAttribute('data-decimals')||'0',10);
+      function fmt(v){return v.toLocaleString(undefined,{minimumFractionDigits:dec,maximumFractionDigits:dec});}
+      if(reduce){n.textContent=fmt(to);return;}
+      var dur=1400,start=null;
+      function ease(t){return 1-Math.pow(1-t,3);}
+      function step(ts){if(start===null)start=ts;var p=Math.min((ts-start)/dur,1);n.textContent=fmt(ease(p)*to);if(p<1)requestAnimationFrame(step);}
+      requestAnimationFrame(step);
+    });
+  }
+  if(reduce || !('IntersectionObserver' in window)){
+    revealEls.forEach(function(el){el.classList.add('in-view');}); fireCounters(document);
+  } else {
+    var io=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){
+          stagger(e.target); e.target.classList.add('in-view');
+          if(e.target.querySelector && e.target.querySelector('.count'))fireCounters(e.target);
+          io.unobserve(e.target);
+        }
+      });
+    },{threshold:0.16,rootMargin:'0px 0px -8% 0px'});
+    revealEls.forEach(function(el){io.observe(el);});
+  }
+
+  /* ---- 4 - FAQ accordion: one-open + .is-open class for the grid-rows animation (07-components) ---- */
+  var accs=[].slice.call(document.querySelectorAll('.acc'));
+  accs.forEach(function(d){
+    d.querySelector('.acc__btn').addEventListener('click',function(e){
+      e.preventDefault();
+      var willOpen=!d.classList.contains('is-open');
+      accs.forEach(function(o){o.classList.remove('is-open');o.removeAttribute('open');});
+      if(willOpen){d.classList.add('is-open');d.setAttribute('open','');}
+    });
+  });
+  accs.forEach(function(d){ if(d.hasAttribute('open'))d.classList.add('is-open'); });
+
+  /* ---- 5 - back-to-top FAB (SCROLL S2.5): gate on position, smooth-scroll, move focus ---- */
+  var btt=document.getElementById('back-to-top'), SHOW_AT=Math.max(800,innerHeight);
+  var ticking=false;
+  function onScroll(){ if(ticking)return; ticking=true; requestAnimationFrame(function(){
+    btt.classList.toggle('is-visible', window.pageYOffset>SHOW_AT); ticking=false;
+  }); }
+  window.addEventListener('scroll',onScroll,{passive:true}); onScroll();
+  btt.addEventListener('click',function(){
+    window.scrollTo({top:0,behavior:reduce?'auto':'smooth'});
+    var m=document.getElementById('main'); if(m){m.focus({preventScroll:true});}
+  });
+})();
+</script>
+</body>
+</html>

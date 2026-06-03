@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Marrow &amp; Vine — Wood-Fire Kitchen</title>
+<meta name="description" content="Marrow &amp; Vine — a neighborhood wood-fire kitchen across three rooms. Seasonal menus from the hearth, supper-club nights, and a table waiting for you.">
+<!--
+  ============================================================================
+  PLACEHOLDER / FABRICATED BRAND — Marrow & Vine is a demonstration brand.
+  Owner persona (Renata Calloway), the three locations, hours, phone, metrics
+  and reviews are fabricated for this showcase. Replace with owner-confirmed
+  details before any real publish. Imagery is fal-generated (local assets).
+  Built deterministically from the SGEN design system:
+    · V15 RESTAURANT/CAFE/FOOD blueprint (_PAGE-COMPOSITION-LIBRARY.md §2)
+    · master :root tokens + TOP-12 (_MODERN-DESIGN-PATTERN-LIBRARY.md)
+    · responsive §0 essentials + drawer + 6-bp (_RESPONSIVE-PATTERN-LIBRARY.md)
+    · sticky header / smart-nav / reveals / back-to-top (_SCROLL-STICKY-…)
+    · component states (styleguide/07-components.html)
+  Warm-paper + earthy single-accent skin (F3) · NO cold white · color-band
+  depth, NOT shape dividers (restaurant is a 0.5 verified-absent vertical).
+  Self-contained except the 4 local fal images under assets/marrow-vine/.
+  ============================================================================
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================ TOKENS
+   master :root (distilled verified values) reskinned to the restaurant
+   warm-earth palette (F1/F3): espresso ink + warm cream paper + ONE ember
+   accent + a brass second accent. Body text = desaturated tint of ink. */
+:root{
+  --ink:#211512;            /* espresso near-black, NEVER #000 */
+  --ink-2:#160d0b;          /* deeper anchor band */
+  --paper:#f7efe2;          /* warm cream off-white, NEVER #fff */
+  --paper-2:#f0e4d2;        /* 6% tint band */
+  --surface:#fffdf8;        /* cards float on paper (warm, not #fff) */
+  --muted:#8a7866;          /* warm muted grey */
+  --accent:#b54a2b;         /* ONE accent — ember / terracotta */
+  --accent-deep:#8f3620;    /* pressed/hover */
+  --accent-2:#c9853f;       /* brass — second pop / counter numerals */
+  --body:#5c4d42;           /* body = desaturated tint of ink, NOT #666 */
+  --line:#e2d4bf;           /* hairline on paper */
+  --ok:#5b7d4f;             /* sage — confirm/checks */
+  --grad-ember:linear-gradient(135deg,var(--accent),var(--accent-2));
+  --scrim-hero:linear-gradient(180deg,rgba(22,13,11,.20) 0%,rgba(22,13,11,.05) 38%,rgba(22,13,11,.84) 100%);
+  --fade-to-paper:linear-gradient(180deg,rgba(247,239,226,0) 0%,var(--paper) 88%);
+  --r-sm:4px; --r-chip:8px; --r-card:14px; --r-panel:22px; --r-pill:9999px;
+  --shadow-rest:0 2px 5px 0 rgba(33,21,18,.08);
+  --shadow-card:0 15px 34px -8px rgba(33,21,18,.20);
+  --shadow-hover:0 30px 60px -14px rgba(33,21,18,.30);
+  --shadow-stuck:0 8px 28px -10px rgba(33,21,18,.28);
+  --ease:cubic-bezier(.05,.5,.3,1);
+  --t-fast:.2s ease-out;
+  --t-reveal:.6s var(--ease);
+  --serif:"Fraunces",Georgia,"Times New Roman",serif;
+  --sans:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+
+/* ============================================================ RESET / BASE */
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--paper);
+  font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{max-width:100%;height:auto;display:block}
+a{color:inherit;text-decoration:none}
+h1,h2,h3,h4{font-family:var(--serif);font-weight:400;line-height:1.04;letter-spacing:-.02em;margin:0}
+p{margin:0 0 1em}
+.wrap{max-width:1200px;margin:0 auto;padding:0 clamp(20px,5vw,40px)}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;font-family:var(--sans);
+  font-size:12.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:18px}
+.eyebrow::before{content:"";width:30px;height:2px;background:var(--accent);display:inline-block}
+.eyebrow.center{justify-content:center}
+.section{padding-block:clamp(64px,9vw,128px)}
+.section.tight{padding-block:clamp(52px,7vw,96px)}
+.lead{font-size:clamp(18px,2.1vw,21px);color:var(--body);max-width:56ch}
+
+/* buttons (#9 / I1) */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;font-family:var(--sans);
+  font-weight:700;font-size:15px;letter-spacing:.01em;padding:15px 26px;border-radius:var(--r-sm);
+  border:1.5px solid transparent;cursor:pointer;min-height:48px;
+  transition:background-color var(--t-fast),color var(--t-fast),border-color var(--t-fast),transform var(--t-fast),box-shadow var(--t-fast)}
+.btn .a{transition:transform var(--t-fast)}
+.btn:hover .a{transform:translateX(4px)}
+.btn-primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn-primary:hover,.btn-primary:focus-visible{background:var(--accent-deep);border-color:var(--accent-deep);box-shadow:var(--shadow-card);outline:none;transform:translateY(-2px)}
+.btn-ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn-ghost:hover,.btn-ghost:focus-visible{background:var(--ink);color:var(--paper);border-color:var(--ink);outline:none}
+.btn-ghost-light{background:transparent;color:#fff;border-color:rgba(255,255,255,.5)}
+.btn-ghost-light:hover,.btn-ghost-light:focus-visible{background:#fff;color:var(--ink);border-color:#fff;outline:none}
+:focus-visible{outline:3px solid var(--accent-2);outline-offset:3px;border-radius:3px}
+
+/* reveal (TOP-12 #4) */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity var(--t-reveal),transform var(--t-reveal)}
+.reveal.in{opacity:1;transform:none}
+.stagger.in > *{animation:rise .6s var(--ease) both}
+.stagger.in > *:nth-child(2){animation-delay:.08s}
+.stagger.in > *:nth-child(3){animation-delay:.16s}
+.stagger.in > *:nth-child(4){animation-delay:.24s}
+.stagger.in > *:nth-child(5){animation-delay:.32s}
+.stagger.in > *:nth-child(6){animation-delay:.40s}
+@keyframes rise{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+
+/* ============================================================ 1 · NAV (I8 + #6) */
+.nav{position:fixed;top:0;left:0;right:0;z-index:90;
+  transition:background-color .3s var(--ease),box-shadow .3s var(--ease),border-color .3s var(--ease),backdrop-filter .3s var(--ease),transform .35s var(--ease)}
+.nav .bar{display:flex;align-items:center;gap:18px;padding:18px clamp(20px,5vw,40px);transition:padding .3s var(--ease)}
+.nav .logo{font-family:var(--serif);font-size:23px;font-weight:500;color:#fff;letter-spacing:-.01em;margin-right:auto;display:flex;align-items:center;gap:9px}
+.nav .logo .amp{color:var(--accent-2);font-style:italic}
+.nav .logo .mark{width:26px;height:26px;border-radius:50%;background:var(--grad-ember);box-shadow:0 0 0 4px rgba(181,74,43,.22);flex:none}
+.nav nav.links{display:flex;align-items:center;gap:2px}
+.nav nav.links a{color:rgba(255,255,255,.86);font-size:14px;font-weight:600;padding:9px 13px;border-radius:var(--r-pill);transition:var(--t-fast)}
+.nav nav.links a:hover,.nav nav.links a:focus-visible{color:#fff;background:rgba(255,255,255,.14);outline:none}
+.nav .right{display:flex;align-items:center;gap:12px}
+.nav .phone{color:rgba(255,255,255,.9);font-weight:600;font-size:14px;display:inline-flex;align-items:center;gap:7px;white-space:nowrap}
+.nav .phone svg{width:15px;height:15px;fill:var(--accent-2)}
+.nav .bar .btn{padding:11px 20px;min-height:44px;font-size:14px}
+.nav.stuck{background:rgba(33,21,18,.92);-webkit-backdrop-filter:blur(16px) saturate(160%);backdrop-filter:blur(16px) saturate(160%);box-shadow:var(--shadow-stuck);border-bottom:1px solid rgba(255,255,255,.08)}
+.nav.stuck .bar{padding-top:11px;padding-bottom:11px}
+.nav.hide{transform:translateY(-100%)}
+.burger{display:none;width:46px;height:46px;border:0;background:rgba(255,255,255,.12);border-radius:10px;cursor:pointer;align-items:center;justify-content:center;flex-direction:column;gap:5px}
+.burger span{width:20px;height:2px;background:#fff;border-radius:2px;transition:var(--t-fast)}
+
+/* drawer */
+.drawer-scrim{position:fixed;inset:0;background:rgba(22,13,11,.55);opacity:0;visibility:hidden;z-index:95;transition:opacity .3s var(--ease),visibility .3s}
+.drawer-scrim.open{opacity:1;visibility:visible}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(86vw,360px);background:var(--ink);z-index:96;
+  transform:translateX(100%);transition:transform .34s var(--ease);display:flex;flex-direction:column;padding:24px;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.drawer.open{transform:none}
+.drawer .dhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.drawer .dlogo{font-family:var(--serif);font-size:21px;color:#fff}
+.drawer .dlogo .amp{color:var(--accent-2);font-style:italic}
+.drawer .dclose{width:46px;height:46px;border:0;background:rgba(255,255,255,.1);border-radius:10px;color:#fff;font-size:24px;cursor:pointer;line-height:1}
+.drawer a.dlink{color:rgba(255,255,255,.9);font-size:18px;font-weight:600;padding:15px 4px;border-bottom:1px solid rgba(255,255,255,.08);min-height:48px;display:flex;align-items:center}
+.drawer a.dlink:active{color:var(--accent-2)}
+.drawer .dphone{color:rgba(255,255,255,.7);font-size:14px;margin:18px 0 14px}
+.drawer .btn{width:100%}
+
+/* ============================================================ 2 · HERO (B1 + scrim) */
+.hero{position:relative;min-height:100svh;display:flex;align-items:flex-end;overflow:hidden;background:var(--ink-2)}
+.hero .photo{position:absolute;inset:0;background:url("assets/marrow-vine/hero-woodfire.jpg") center/cover no-repeat}
+.hero .scrim{position:absolute;inset:0;background:var(--scrim-hero)}
+.hero .ember-glow{position:absolute;left:6%;bottom:18%;width:42vw;max-width:560px;height:42vw;max-height:560px;border-radius:50%;filter:blur(80px);background:radial-gradient(circle,rgba(181,74,43,.42),transparent 68%);pointer-events:none}
+.hero .inner{position:relative;z-index:2;width:100%;padding:0 clamp(20px,5vw,40px) clamp(96px,12vh,150px)}
+.hero .hgrid{max-width:1200px;margin:0 auto}
+.hero .eyebrow{color:var(--accent-2)}
+.hero .eyebrow::before{background:var(--accent-2)}
+.hero h1{color:#fff;font-size:clamp(44px,8vw,104px);line-height:.98;font-weight:300;letter-spacing:-.03em;max-width:15ch;text-shadow:0 2px 40px rgba(0,0,0,.4)}
+.hero h1 em{font-style:italic;color:var(--accent-2)}
+.hero .sub{color:rgba(255,255,255,.86);max-width:54ch;font-size:clamp(16px,2vw,20px);margin:22px 0 30px;line-height:1.6}
+.hero .actions{display:flex;flex-wrap:wrap;gap:14px}
+.hero .strip{display:flex;flex-wrap:wrap;align-items:center;gap:10px 22px;margin-top:34px;
+  padding-top:24px;border-top:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.82);font-size:13.5px;letter-spacing:.04em;font-weight:600;text-transform:uppercase}
+.hero .strip .dot{width:5px;height:5px;border-radius:50%;background:var(--accent-2)}
+.hero .scroll-cue{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);z-index:3;color:rgba(255,255,255,.6);font-size:11px;letter-spacing:.18em;text-transform:uppercase;display:flex;flex-direction:column;align-items:center;gap:8px}
+.hero .scroll-cue .chev{width:11px;height:11px;border-right:2px solid rgba(255,255,255,.55);border-bottom:2px solid rgba(255,255,255,.55);transform:rotate(45deg);animation:bob 1.8s var(--ease) infinite}
+@keyframes bob{0%,100%{transform:rotate(45deg) translate(0,0);opacity:.5}50%{transform:rotate(45deg) translate(3px,3px);opacity:1}}
+
+/* ============================================================ 3 · STORY (G2 + I3) */
+.story{background:var(--paper)}
+.story .grid{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(36px,6vw,80px);align-items:center}
+.story .figure{position:relative}
+.story .frame{position:relative;overflow:hidden;border-radius:var(--r-panel);box-shadow:var(--shadow-card);aspect-ratio:4/5}
+.story .frame img{width:100%;height:100%;object-fit:cover;transition:transform .6s var(--ease)}
+.story .frame:hover img{transform:scale(1.04)}
+.story .figcap{position:absolute;left:18px;bottom:18px;right:18px;background:rgba(22,13,11,.78);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:#fff;padding:14px 18px;border-radius:var(--r-card);border:1px solid rgba(255,255,255,.12)}
+.story .figcap .nm{font-family:var(--serif);font-size:18px;display:block}
+.story .figcap .ro{font-size:12.5px;color:rgba(255,255,255,.7);letter-spacing:.06em;text-transform:uppercase}
+.story h2{font-size:clamp(30px,4.4vw,52px)}
+.story p{color:var(--body);margin-top:18px}
+.story .stats{display:flex;flex-wrap:wrap;gap:30px 44px;margin-top:34px;padding-top:30px;border-top:1px solid var(--line)}
+.story .stat .n{font-family:var(--serif);font-size:clamp(34px,5vw,48px);font-weight:500;color:var(--accent);line-height:1;font-variant-numeric:tabular-nums}
+.story .stat .l{font-size:13px;color:var(--muted);letter-spacing:.04em;text-transform:uppercase;margin-top:8px;max-width:16ch}
+
+/* ============================================================ 4 · MENU (I6 rows + A4 split-band) */
+.menu{position:relative;background:linear-gradient(180deg,var(--paper) 0%,var(--paper) 46%,var(--ink) 46%,var(--ink) 100%)}
+.menu .head{text-align:center;max-width:60ch;margin:0 auto clamp(40px,5vw,64px)}
+.menu .head h2{font-size:clamp(32px,5vw,58px)}
+.menu .head .lead{margin:18px auto 0}
+.menu .card{background:var(--surface);border-radius:var(--r-panel);box-shadow:var(--shadow-card);
+  border:1px solid var(--line);overflow:hidden;display:grid;grid-template-columns:1fr 1fr}
+.menu .card .lists{padding:clamp(28px,4vw,52px)}
+.menu .cat + .cat{margin-top:38px}
+.menu .cat h3{font-size:24px;color:var(--ink);display:flex;align-items:baseline;gap:12px;margin-bottom:6px}
+.menu .cat h3 .tag{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);background:rgba(181,74,43,.1);padding:4px 9px;border-radius:var(--r-pill)}
+.menu .cat .cnote{font-size:13.5px;color:var(--muted);margin:0 0 14px}
+.menu .row{display:grid;grid-template-columns:auto 1fr auto;align-items:baseline;gap:6px;padding:11px 0;border-bottom:1px solid var(--line)}
+.menu .row:last-child{border-bottom:0}
+.menu .row .dish{font-family:var(--serif);font-size:18px;color:var(--ink)}
+.menu .row .dish .desc{display:block;font-family:var(--sans);font-size:13.5px;color:var(--body);font-weight:400;margin-top:3px;max-width:40ch}
+.menu .row .leader{border-bottom:1.5px dotted var(--line);transform:translateY(-4px);min-width:18px}
+.menu .row .price{font-family:var(--sans);font-weight:700;font-size:16px;color:var(--accent);font-variant-numeric:tabular-nums;white-space:nowrap}
+.menu .row .dish .desc .gf{font-size:10px;color:var(--muted);font-weight:700;letter-spacing:.08em;vertical-align:middle}
+.menu .row .dish .desc .gf::before{content:"\00B7";margin:0 5px 0 0;color:var(--line);font-weight:400}
+.menu .feature{position:relative;overflow:hidden;background:var(--ink);min-height:340px}
+.menu .feature img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .6s var(--ease)}
+.menu .feature:hover img{transform:scale(1.05)}
+.menu .feature::after{content:"";position:absolute;inset:0;background:linear-gradient(160deg,transparent 30%,rgba(22,13,11,.82) 100%)}
+.menu .feature .fcap{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:clamp(24px,4vw,40px);color:#fff}
+.menu .feature .fcap .tag{font-size:11.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-2)}
+.menu .feature .fcap h3{color:#fff;font-size:clamp(24px,3.2vw,34px);margin:10px 0 8px}
+.menu .feature .fcap p{color:rgba(255,255,255,.82);font-size:14.5px;margin:0;max-width:34ch}
+.menu .feature .fcap .pr{display:inline-block;margin-top:14px;font-weight:700;color:#fff;border:1.5px solid rgba(255,255,255,.4);border-radius:var(--r-pill);padding:6px 16px;font-size:14px}
+.menu .menucta{text-align:center;margin-top:36px}
+.menu .menucta .note{color:rgba(255,255,255,.6);font-size:13.5px;margin-top:14px}
+
+/* ============================================================ 5 · FEATURED (G2 / A4) */
+.featured{background:var(--ink);color:#fff;position:relative}
+.featured .grid{display:grid;grid-template-columns:.95fr 1.05fr;gap:clamp(36px,6vw,72px);align-items:center}
+.featured .frame{position:relative;overflow:hidden;border-radius:var(--r-panel);aspect-ratio:5/4;box-shadow:var(--shadow-hover);transition:transform .5s var(--ease)}
+.featured .frame:hover{transform:translateY(-6px)}
+.featured .frame img{width:100%;height:100%;object-fit:cover;transition:transform .6s var(--ease)}
+.featured .frame:hover img{transform:scale(1.05)}
+.featured .frame .chip{position:absolute;top:18px;left:18px;z-index:2;background:var(--accent);color:#fff;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:7px 14px;border-radius:var(--r-pill)}
+.featured .eyebrow{color:var(--accent-2)}
+.featured .eyebrow::before{background:var(--accent-2)}
+.featured h2{color:#fff;font-size:clamp(30px,4.6vw,52px)}
+.featured h2 em{font-style:italic;color:var(--accent-2)}
+.featured p{color:rgba(255,255,255,.78);margin-top:18px;max-width:48ch}
+.featured .specrow{display:flex;flex-wrap:wrap;gap:12px;margin:26px 0 30px}
+.featured .specrow span{font-size:13px;color:rgba(255,255,255,.86);border:1px solid rgba(255,255,255,.18);border-radius:var(--r-pill);padding:7px 15px}
+
+/* ============================================================ 6 · MARQUEE (C5) + WHY-US (G4 + I5) */
+.marquee{background:var(--accent);color:#fff;overflow:hidden;padding:16px 0;border-block:1px solid rgba(255,255,255,.12)}
+.marquee .track{display:flex;width:max-content;animation:scroll 32s linear infinite}
+.marquee:hover .track{animation-play-state:paused}
+.marquee .track span{font-family:var(--serif);font-style:italic;font-size:21px;padding:0 30px;display:inline-flex;align-items:center;gap:30px;white-space:nowrap}
+.marquee .track span::after{content:"\2726";font-style:normal;font-size:13px;color:rgba(255,255,255,.55)}
+@keyframes scroll{to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){.marquee .track{animation:none;justify-content:center;flex-wrap:wrap;width:auto}}
+.why{background:var(--paper-2)}
+.why .head{max-width:60ch;margin-bottom:clamp(40px,5vw,60px)}
+.why .head h2{font-size:clamp(30px,4.4vw,50px)}
+.why .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+.why .cell{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-card);padding:30px 26px;
+  transition:transform var(--t-fast),box-shadow var(--t-fast),border-color var(--t-fast);position:relative;overflow:hidden}
+.why .cell::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:var(--grad-ember);transform:scaleX(0);transform-origin:left;transition:transform .4s var(--ease)}
+.why .cell:hover{transform:translateY(-6px);box-shadow:var(--shadow-card);border-color:transparent}
+.why .cell:hover::before{transform:scaleX(1)}
+.why .cell .ic{width:52px;height:52px;border-radius:14px;background:rgba(181,74,43,.1);display:flex;align-items:center;justify-content:center;margin-bottom:18px;transition:background var(--t-fast)}
+.why .cell:hover .ic{background:var(--grad-ember)}
+.why .cell .ic svg{width:26px;height:26px;stroke:var(--accent);stroke-width:1.6;fill:none;transition:stroke var(--t-fast)}
+.why .cell:hover .ic svg{stroke:#fff}
+.why .cell h3{font-size:21px;margin-bottom:9px}
+.why .cell p{color:var(--body);font-size:14.5px;margin:0}
+
+/* ============================================================ 7 · GALLERY (G3 + H1 zoom) */
+.gallery{background:var(--paper)}
+.gallery .head{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:18px;margin-bottom:clamp(34px,4vw,50px)}
+.gallery .head h2{font-size:clamp(30px,4.4vw,50px)}
+.gallery .grid{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:200px;gap:16px}
+.gallery .tile{position:relative;overflow:hidden;border-radius:var(--r-card);box-shadow:var(--shadow-rest);background:var(--ink)}
+.gallery .tile.wide{grid-column:span 2}
+.gallery .tile.tall{grid-row:span 2}
+.gallery .tile img,.gallery .tile .art{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .6s var(--ease)}
+.gallery .tile:hover img,.gallery .tile:hover .art{transform:scale(1.07)}
+.gallery .tile .mask{position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,rgba(22,13,11,.74));opacity:0;transition:opacity .4s var(--ease)}
+.gallery .tile:hover .mask{opacity:1}
+.gallery .tile .cap{position:absolute;left:16px;bottom:14px;right:16px;z-index:2;color:#fff;transform:translateY(10px);opacity:0;transition:transform .4s var(--ease),opacity .4s var(--ease)}
+.gallery .tile:hover .cap{transform:none;opacity:1}
+.gallery .tile .cap .t{font-family:var(--serif);font-size:18px}
+.gallery .tile .cap .u{display:block;width:0;height:2px;background:var(--accent-2);margin-top:6px;transition:width .45s var(--ease)}
+.gallery .tile:hover .cap .u{width:42px}
+.art.a1{background:radial-gradient(120% 100% at 30% 10%,#7a3a1e,transparent 60%),linear-gradient(150deg,#3a2014,#1c0f0a)}
+.art.a2{background:radial-gradient(110% 110% at 80% 20%,#c9853f,transparent 55%),linear-gradient(150deg,#4a2c16,#23130c)}
+.art.a3{background:radial-gradient(120% 100% at 20% 90%,#b54a2b,transparent 60%),linear-gradient(150deg,#2c1810,#160d0b)}
+.art::before{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 42%,rgba(255,255,255,.08) 50%,transparent 58%)}
+
+/* ============================================================ 8 · STATS band (C3 anchor) */
+.statband{background:var(--ink-2);color:#fff;position:relative;overflow:hidden}
+.statband::before{content:"";position:absolute;right:-8%;top:-20%;width:46vw;height:46vw;max-width:620px;max-height:620px;border-radius:50%;filter:blur(90px);background:radial-gradient(circle,rgba(181,74,43,.30),transparent 68%)}
+.statband .head{text-align:center;margin-bottom:clamp(40px,5vw,58px);position:relative;z-index:1}
+.statband .eyebrow{color:var(--accent-2)}
+.statband .eyebrow::before{background:var(--accent-2)}
+.statband .head h2{color:#fff;font-size:clamp(30px,4.4vw,50px)}
+.statband .head h2 b{font-weight:400;font-style:italic;color:var(--accent-2)}
+.statband .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:30px;position:relative;z-index:1}
+.statband .s{text-align:center;padding:0 10px}
+.statband .s + .s{border-left:1px solid rgba(255,255,255,.1)}
+.statband .s .n{font-family:var(--serif);font-size:clamp(44px,6vw,66px);font-weight:300;line-height:1;color:#fff;font-variant-numeric:tabular-nums;letter-spacing:-.03em}
+.statband .s .n .suf,.statband .s .n .pre{color:var(--accent-2);font-size:.5em}
+.statband .s .l{font-size:13px;color:rgba(255,255,255,.62);letter-spacing:.05em;text-transform:uppercase;margin-top:14px;line-height:1.4}
+
+/* ============================================================ 9 · REVIEWS (I4 + rating) */
+.reviews{background:var(--paper-2)}
+.reviews .head{text-align:center;max-width:54ch;margin:0 auto clamp(40px,5vw,56px)}
+.reviews .head h2{font-size:clamp(30px,4.4vw,50px)}
+.reviews .ratingline{display:inline-flex;align-items:center;gap:12px;margin-top:18px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-pill);padding:9px 20px}
+.reviews .stars{color:var(--accent-2);letter-spacing:3px;font-size:16px}
+.reviews .ratingline .rt{font-weight:700;color:var(--ink)}
+.reviews .ratingline .rv{color:var(--muted);font-size:14px}
+.reviews .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.reviews .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-card);padding:30px 28px;box-shadow:var(--shadow-rest);
+  display:flex;flex-direction:column;transition:transform var(--t-fast),box-shadow var(--t-fast)}
+.reviews .card:hover{transform:translateY(-5px);box-shadow:var(--shadow-card)}
+.reviews .card .qstars{color:var(--accent-2);letter-spacing:2px;font-size:14px;margin-bottom:14px}
+.reviews .card .q{font-family:var(--serif);font-size:18.5px;line-height:1.5;color:var(--ink);margin:0 0 22px;flex:1}
+.reviews .card .who{display:flex;align-items:center;gap:13px}
+.reviews .card .av{width:46px;height:46px;border-radius:50%;flex:none;background:var(--grad-ember);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:18px;font-weight:500}
+.reviews .card .nm{font-weight:700;font-size:14.5px;color:var(--ink)}
+.reviews .card .mt{font-size:12.5px;color:var(--muted)}
+
+/* ============================================================ 10 · RESERVE (G5 + form) */
+.reserve{background:var(--ink);color:#fff;position:relative;overflow:hidden}
+.reserve::before{content:"";position:absolute;left:-6%;bottom:-30%;width:48vw;height:48vw;max-width:620px;max-height:620px;border-radius:50%;filter:blur(95px);background:radial-gradient(circle,rgba(201,133,63,.22),transparent 68%)}
+.reserve .grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:clamp(40px,6vw,72px);position:relative;z-index:1}
+.reserve .eyebrow{color:var(--accent-2)}
+.reserve .eyebrow::before{background:var(--accent-2)}
+.reserve h2{color:#fff;font-size:clamp(30px,4.6vw,52px)}
+.reserve h2 em{font-style:italic;color:var(--accent-2)}
+.reserve .info{color:rgba(255,255,255,.78);margin-top:18px;max-width:42ch}
+.reserve .hours{margin-top:30px;border-top:1px solid rgba(255,255,255,.14);padding-top:24px}
+.reserve .hours .hrow{display:flex;justify-content:space-between;gap:16px;padding:8px 0;font-size:14.5px;color:rgba(255,255,255,.82);border-bottom:1px solid rgba(255,255,255,.07)}
+.reserve .hours .hrow:last-child{border-bottom:0}
+.reserve .hours .hrow b{font-weight:600;color:#fff}
+.reserve .hours .hrow .h{color:var(--accent-2);font-variant-numeric:tabular-nums}
+.reserve .addr{margin-top:24px;display:flex;flex-wrap:wrap;gap:8px 26px;font-size:14px;color:rgba(255,255,255,.72)}
+.reserve .addr a{color:var(--accent-2);font-weight:600}
+.reserve .formcard{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);border-radius:var(--r-panel);padding:clamp(26px,4vw,40px)}
+.reserve .formcard h3{color:#fff;font-size:24px;margin-bottom:6px}
+.reserve .formcard .fnote{color:rgba(255,255,255,.6);font-size:13.5px;margin-bottom:24px}
+.field{margin-bottom:18px}
+.field label{display:block;font-size:13px;font-weight:600;letter-spacing:.03em;color:rgba(255,255,255,.8);margin-bottom:7px}
+.field input,.field select,.field textarea{width:100%;font-family:var(--sans);font-size:16px;color:#fff;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);border-radius:var(--r-sm);padding:13px 15px;min-height:48px;
+  transition:border-color var(--t-fast),background var(--t-fast)}
+.field textarea{min-height:96px;resize:vertical}
+.field input::placeholder,.field textarea::placeholder{color:rgba(255,255,255,.4)}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--accent-2);background:rgba(255,255,255,.09)}
+.field select{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' stroke='%23c9853f' stroke-width='2'%3E%3Cpath d='M1 1l5 5 5-5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 15px center}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.reserve .formcard .btn{width:100%;margin-top:6px}
+.reserve .formcard .legal{font-size:12px;color:rgba(255,255,255,.45);margin:16px 0 0;text-align:center}
+
+/* ============================================================ 11 · FINAL CTA (F5 / anchor) */
+.finalcta{position:relative;overflow:hidden;background:var(--ink-2);color:#fff;text-align:center}
+.finalcta .photo{position:absolute;inset:0;background:url("assets/marrow-vine/dish-marrow.jpg") center/cover;opacity:.22;filter:saturate(1.1)}
+.finalcta::after{content:"";position:absolute;inset:0;background:radial-gradient(120% 120% at 50% 0%,rgba(181,74,43,.34),transparent 60%)}
+.finalcta .inner{position:relative;z-index:2;max-width:46ch;margin:0 auto}
+.finalcta .eyebrow{justify-content:center;color:var(--accent-2)}
+.finalcta .eyebrow::before{background:var(--accent-2)}
+.finalcta h2{color:#fff;font-size:clamp(34px,6vw,72px);font-weight:300;line-height:1.02}
+.finalcta h2 em{font-style:italic;color:var(--accent-2)}
+.finalcta p{color:rgba(255,255,255,.8);margin:20px auto 32px;font-size:18px}
+.finalcta .actions{display:flex;flex-wrap:wrap;gap:14px;justify-content:center}
+
+/* ============================================================ 12 · FOOTER */
+.footer{background:var(--ink-2);color:#9a8a7c;padding-top:clamp(56px,7vw,84px);border-top:3px solid var(--accent)}
+.footer .top{display:grid;grid-template-columns:1.6fr 1fr 1fr 1.2fr;gap:38px;padding-bottom:48px}
+.footer .brand .logo{font-family:var(--serif);font-size:26px;color:#fff;display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.footer .brand .logo .amp{color:var(--accent-2);font-style:italic}
+.footer .brand .logo .mark{width:24px;height:24px;border-radius:50%;background:var(--grad-ember)}
+.footer .brand p{font-size:14.5px;max-width:34ch;line-height:1.6}
+.footer .social{display:flex;gap:10px;margin-top:18px}
+.footer .social a{width:42px;height:42px;border-radius:50%;border:1px solid rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;transition:var(--t-fast)}
+.footer .social a:hover{background:var(--accent);border-color:var(--accent)}
+.footer .social svg{width:17px;height:17px;fill:#cfc0b2;transition:var(--t-fast)}
+.footer .social a:hover svg{fill:#fff}
+.footer .col h4{font-family:var(--sans);font-size:12.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#fff;margin-bottom:16px}
+.footer .col a,.footer .col p{display:block;font-size:14.5px;color:#a89a8c;padding:6px 0;margin:0;transition:var(--t-fast)}
+.footer .col a:hover{color:var(--accent-2)}
+.footer .col .hr{display:flex;justify-content:space-between;gap:14px}
+.footer .col .hr .h{color:#cfc0b2;font-variant-numeric:tabular-nums}
+.footer .bottom{border-top:1px solid rgba(255,255,255,.08);padding:24px 0 30px;display:flex;flex-wrap:wrap;gap:12px 24px;align-items:center;font-size:13px}
+.footer .bottom .legal{color:#7d6f62}
+.footer .bottom .legal a{color:#9a8a7c}
+.footer .bottom .built{margin-left:auto;color:#8a7c6e;display:inline-flex;align-items:center;gap:8px}
+.footer .bottom .built b{color:var(--accent-2);font-weight:600}
+.footer .bottom .built .sg{width:18px;height:18px;border-radius:5px;background:var(--grad-ember);display:inline-block}
+
+/* back-to-top */
+.totop{position:fixed;right:22px;bottom:22px;z-index:80;width:50px;height:50px;border-radius:50%;border:0;cursor:pointer;
+  background:var(--accent);color:#fff;box-shadow:var(--shadow-card);opacity:0;visibility:hidden;transform:translateY(12px);
+  transition:opacity .3s var(--ease),transform .3s var(--ease),background var(--t-fast);display:flex;align-items:center;justify-content:center}
+.totop.show{opacity:1;visibility:visible;transform:none}
+.totop:hover{background:var(--accent-deep)}
+.totop svg{width:20px;height:20px;stroke:#fff;stroke-width:2.4;fill:none}
+
+/* ============================================================ RESPONSIVE (6-bp) */
+@media (max-width:1100px){
+  .footer .top{grid-template-columns:1fr 1fr}
+  .footer .brand{grid-column:1/-1}
+}
+@media (max-width:1024px){
+  .nav nav.links,.nav .phone{display:none}
+  .nav .bar .btn{display:none}
+  .burger{display:flex}
+  .why .grid{grid-template-columns:repeat(2,1fr)}
+  .statband .grid{grid-template-columns:repeat(2,1fr);gap:36px 24px}
+  .statband .s + .s{border-left:0}
+  .reviews .grid{grid-template-columns:1fr 1fr}
+  .reviews .card:last-child{grid-column:1/-1}
+}
+@media (max-width:880px){
+  .story .grid{grid-template-columns:1fr;gap:40px}
+  .story .figure{max-width:440px}
+  .menu{background:var(--paper)}
+  /* menu flattens to cream at ≤880 — re-style the white-on-dark CTA for the paper bg */
+  .menu .menucta .btn-ghost-light{background:transparent;color:var(--ink);border-color:var(--line)}
+  .menu .menucta .btn-ghost-light:hover,.menu .menucta .btn-ghost-light:focus-visible{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .menu .menucta .note{color:var(--muted)}
+  .menu .card{grid-template-columns:1fr}
+  .menu .feature{min-height:300px;order:-1}
+  .featured .grid{grid-template-columns:1fr;gap:34px}
+  .featured .frame{order:-1}
+  .reserve .grid{grid-template-columns:1fr;gap:40px}
+  .gallery .grid{grid-template-columns:repeat(2,1fr);grid-auto-rows:170px}
+  .gallery .tile.tall{grid-row:span 1}
+}
+@media (max-width:640px){
+  body{font-size:16px}
+  .hero{min-height:92svh}
+  .hero h1{font-size:clamp(38px,11vw,58px)}
+  .hero .strip{font-size:11.5px;gap:8px 16px}
+  .why .grid{grid-template-columns:1fr}
+  .reviews .grid{grid-template-columns:1fr}
+  .reviews .card:last-child{grid-column:auto}
+  .reviews .card,.why .cell{padding:24px 22px}
+  .statband .grid{gap:28px 18px}
+  .field-row{grid-template-columns:1fr}
+  .footer .top{grid-template-columns:1fr;gap:30px}
+  .footer .bottom .built{margin-left:0;width:100%}
+  .menu .row .dish .desc{max-width:none}
+}
+@media (max-width:400px){
+  .wrap{padding:0 18px}
+  .hero .inner{padding-left:18px;padding-right:18px}
+  .gallery .grid{grid-template-columns:1fr;grid-auto-rows:200px}
+  .gallery .tile.wide{grid-column:auto}
+  .totop{right:16px;bottom:16px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
+  .reveal{opacity:1!important;transform:none!important}
+}
+</style>
+</head>
+<body>
+
+<!-- 1 · NAV -->
+<header class="nav" id="nav">
+  <div class="bar">
+    <a class="logo" href="#top" aria-label="Marrow and Vine home"><span class="mark" aria-hidden="true"></span>Marrow <span class="amp">&amp;</span> Vine</a>
+    <nav class="links" aria-label="Primary">
+      <a href="#story">Our Story</a>
+      <a href="#menu">Menu</a>
+      <a href="#supper">Supper Club</a>
+      <a href="#gallery">Gallery</a>
+      <a href="#reserve">Visit</a>
+    </nav>
+    <div class="right">
+      <a class="phone" href="tel:+15035550182" aria-label="Call the restaurant">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.6 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1 11.4 11.4 0 0 0 .6 3.6 1 1 0 0 1-.25 1z"/></svg>
+        (503) 555-0182
+      </a>
+      <a class="btn btn-primary" href="#reserve">Book a Table</a>
+    </div>
+    <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="drawer">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<div class="drawer-scrim" id="scrim" hidden></div>
+<aside class="drawer" id="drawer" aria-label="Mobile menu" aria-hidden="true">
+  <div class="dhead">
+    <span class="dlogo">Marrow <span class="amp">&amp;</span> Vine</span>
+    <button class="dclose" id="dclose" aria-label="Close menu">&times;</button>
+  </div>
+  <a class="dlink" href="#story">Our Story</a>
+  <a class="dlink" href="#menu">Menu</a>
+  <a class="dlink" href="#supper">Supper Club</a>
+  <a class="dlink" href="#gallery">Gallery</a>
+  <a class="dlink" href="#reserve">Visit &amp; Hours</a>
+  <p class="dphone">Reservations &middot; <a href="tel:+15035550182" style="color:var(--accent-2)">(503) 555-0182</a></p>
+  <a class="btn btn-primary" href="#reserve">Book a Table</a>
+</aside>
+
+<span id="top"></span>
+
+<!-- 2 · HERO (B1) -->
+<section class="hero" aria-label="Marrow and Vine — wood-fire kitchen">
+  <div class="photo" aria-hidden="true"></div>
+  <div class="scrim" aria-hidden="true"></div>
+  <div class="ember-glow" aria-hidden="true"></div>
+  <div class="inner">
+    <div class="hgrid reveal">
+      <span class="eyebrow">Wood-Fire Kitchen &middot; Est. 2014</span>
+      <h1>Cooked over <em>live fire.</em><br>Served like you live here.</h1>
+      <p class="sub">A neighborhood kitchen that grew into three rooms — and never stopped cooking everything over a wood hearth. The menu changes with the farms; the fire never does.</p>
+      <div class="actions">
+        <a class="btn btn-primary" href="#reserve">Book a Table <span class="a" aria-hidden="true">&rarr;</span></a>
+        <a class="btn btn-ghost-light" href="#menu">See Tonight's Menu</a>
+      </div>
+      <div class="strip">
+        <span class="dot" aria-hidden="true"></span><span>Open 7 nights &middot; 5pm til late</span>
+        <span class="dot" aria-hidden="true"></span><span>Three rooms &middot; Portland, OR</span>
+        <span class="dot" aria-hidden="true"></span><span>Supper-club Thursdays</span>
+      </div>
+    </div>
+  </div>
+  <span class="scroll-cue" aria-hidden="true">Scroll<span class="chev"></span></span>
+</section>
+
+<!-- 3 · STORY (G2 + I3) -->
+<section class="story section" id="story">
+  <div class="wrap">
+    <div class="grid">
+      <div class="figure reveal">
+        <div class="frame">
+          <img src="assets/marrow-vine/chef-renata.jpg" alt="Renata Calloway, owner and chef of Marrow and Vine, by the wood-fire oven" loading="lazy">
+          <div class="figcap">
+            <span class="nm">Renata Calloway</span>
+            <span class="ro">Owner &amp; Chef</span>
+          </div>
+        </div>
+      </div>
+      <div class="copy reveal">
+        <span class="eyebrow">Our Story</span>
+        <h2>It started with twelve tables and one chalkboard.</h2>
+        <p>Renata opened the first room one winter with a wood oven, a single seasonal menu, and a chalkboard she rewrote whenever the farms sent something new. People drove in for it. A second room opened across the river, then a third — and the seasonal supper-club nights became the thing the neighborhood plans its week around.</p>
+        <p>What hasn't changed: every plate still comes off live fire, the menu still moves with the season, and the chalkboard still gets rewritten by hand. Bigger rooms, same kitchen.</p>
+        <div class="stats stagger">
+          <div class="stat"><div class="n"><span class="count" data-to="2014" data-plain="1">2014</span></div><div class="l">The year we lit the first fire</div></div>
+          <div class="stat"><div class="n"><span class="count" data-to="3">0</span></div><div class="l">Rooms across the city</div></div>
+          <div class="stat"><div class="n"><span class="count" data-to="40" data-suffix="+">0</span></div><div class="l">Seasonal dishes a year</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4 · MENU (payload — I6 rows + A4 split-band) -->
+<section class="menu section" id="menu">
+  <div class="wrap">
+    <div class="head reveal">
+      <span class="eyebrow center">From the Hearth</span>
+      <h2>Tonight's menu</h2>
+      <p class="lead">A short, changing list — written the morning it's cooked. What's below is a recent night; the room you book sets its own. Everything's shareable.</p>
+    </div>
+    <div class="card reveal">
+      <div class="lists">
+        <div class="cat">
+          <h3>To Begin <span class="tag">small &amp; shared</span></h3>
+          <p class="cnote">Built for the middle of the table.</p>
+          <div class="row"><span class="dish">Roasted Bone Marrow<span class="desc">grilled sourdough, charred-shallot jam, parsley</span></span><span class="leader" aria-hidden="true"></span><span class="price">16</span></div>
+          <div class="row"><span class="dish">Ember Carrots<span class="desc">whipped feta, hazelnut dukkah, honey<span class="gf">GF</span></span></span><span class="leader" aria-hidden="true"></span><span class="price">14</span></div>
+          <div class="row"><span class="dish">Wood-Grilled Bread &amp; Cultured Butter<span class="desc">sea salt, smoked fat</span></span><span class="leader" aria-hidden="true"></span><span class="price">9</span></div>
+          <div class="row"><span class="dish">Little Gem &amp; Anchovy<span class="desc">aged parmesan, lemon, black pepper</span></span><span class="leader" aria-hidden="true"></span><span class="price">13</span></div>
+        </div>
+        <div class="cat">
+          <h3>From the Fire <span class="tag">mains</span></h3>
+          <p class="cnote">Cooked over oak &amp; applewood.</p>
+          <div class="row"><span class="dish">Hearth Half-Chicken<span class="desc">confit potato, jus, charred lemon<span class="gf">GF</span></span></span><span class="leader" aria-hidden="true"></span><span class="price">29</span></div>
+          <div class="row"><span class="dish">Wood-Fired Steelhead<span class="desc">braised greens, brown-butter, capers</span></span><span class="leader" aria-hidden="true"></span><span class="price">34</span></div>
+          <div class="row"><span class="dish">Dry-Aged Ribeye for Two<span class="desc">bone marrow butter, fire-roasted roots</span></span><span class="leader" aria-hidden="true"></span><span class="price">82</span></div>
+          <div class="row"><span class="dish">Charred Cabbage &amp; White Beans<span class="desc">salsa verde, breadcrumb<span class="gf">VG</span></span></span><span class="leader" aria-hidden="true"></span><span class="price">24</span></div>
+        </div>
+        <div class="cat">
+          <h3>To Finish <span class="tag">desserts</span></h3>
+          <div class="row"><span class="dish">Burnt Honey Tart<span class="desc">creme fraiche, sea salt</span></span><span class="leader" aria-hidden="true"></span><span class="price">12</span></div>
+          <div class="row"><span class="dish">Wood-Smoked Chocolate Pot<span class="desc">olive oil, flake salt<span class="gf">GF</span></span></span><span class="leader" aria-hidden="true"></span><span class="price">11</span></div>
+        </div>
+      </div>
+      <div class="feature">
+        <img src="assets/marrow-vine/dish-marrow.jpg" alt="Wood-grilled seasonal plate with charred vegetables and herbs on a dark ceramic plate" loading="lazy">
+        <div class="fcap">
+          <span class="tag">Chef's plate tonight</span>
+          <h3>Wood-Grilled Steelhead</h3>
+          <p>From the morning's catch, over applewood, with whatever the river-farms sent this week.</p>
+          <span class="pr">34</span>
+        </div>
+      </div>
+    </div>
+    <div class="menucta">
+      <a class="btn btn-ghost-light" href="#reserve">See the full menu &amp; book <span class="a" aria-hidden="true">&rarr;</span></a>
+      <p class="note">Prices &amp; dishes shown are a recent evening &middot; <span style="color:var(--accent-2)">sample menu</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- 5 · FEATURED / SUPPER CLUB (G2 / A4) -->
+<section class="featured section" id="supper">
+  <div class="wrap">
+    <div class="grid">
+      <div class="frame reveal">
+        <span class="chip">Thursdays</span>
+        <img src="assets/marrow-vine/dining-room.jpg" alt="The warm, candlelit Marrow and Vine dining room set for a supper-club night" loading="lazy">
+      </div>
+      <div class="copy reveal">
+        <span class="eyebrow">Supper Club</span>
+        <h2>One long table.<br>One <em>changing</em> menu.</h2>
+        <p>Every Thursday we clear a room, light the fire early, and cook a single five-course menu built entirely around what came in that week. One seating, one price, the whole table eating together. It's the night people drive across town for.</p>
+        <div class="specrow">
+          <span>Five courses</span>
+          <span>One seating, 7:00pm</span>
+          <span>$78 per guest</span>
+          <span>Wine pairing optional</span>
+        </div>
+        <a class="btn btn-primary" href="#reserve">Join the supper-club list <span class="a" aria-hidden="true">&rarr;</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 6 · MARQUEE (C5) + WHY-US (G4 + I5) -->
+<div class="marquee" aria-hidden="true">
+  <div class="track">
+    <span>Wood-Fired</span><span>Local Farms</span><span>Seasonal</span><span>By Hand</span><span>Open Hearth</span><span>Neighborhood</span>
+    <span>Wood-Fired</span><span>Local Farms</span><span>Seasonal</span><span>By Hand</span><span>Open Hearth</span><span>Neighborhood</span>
+  </div>
+</div>
+<section class="why section" aria-label="What makes us, us">
+  <div class="wrap">
+    <div class="head reveal">
+      <span class="eyebrow">Few words about us</span>
+      <h2>Why it tastes the way it does.</h2>
+    </div>
+    <div class="grid stagger">
+      <div class="cell reveal">
+        <div class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c1.5 3 4 4 4 7a4 4 0 0 1-8 0c0-2 2-3.5 2-5"/><path d="M12 14c2 0 3.5 1.5 3.5 3.5A3.5 3.5 0 0 1 8.5 17.5C8.5 15.5 10 14 12 14z"/></svg></div>
+        <h3>Live fire only</h3>
+        <p>Every main comes off a wood hearth — oak and applewood, no gas line. It's slower, and it's the whole point.</p>
+      </div>
+      <div class="cell reveal">
+        <div class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 21V8l7-5 7 5v13"/><path d="M9 21v-6h6v6"/></svg></div>
+        <h3>Farm-led menu</h3>
+        <p>We write the list around what local growers send that week. If it's not in season here, it's not on the board.</p>
+      </div>
+      <div class="cell reveal">
+        <div class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-8 9 8"/><path d="M5 9.5V20h14V9.5"/><path d="M9 20v-5h6v5"/></svg></div>
+        <h3>Three rooms, one kitchen</h3>
+        <p>Each room has its own character and its own menu — but the same cooks, the same fire, the same standard.</p>
+      </div>
+      <div class="cell reveal">
+        <div class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+        <h3>Changes by hand</h3>
+        <p>The chalkboard still gets rewritten the morning it's cooked. No two weeks read the same.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 7 · GALLERY (G3 + H1 zoom) -->
+<section class="gallery section" id="gallery">
+  <div class="wrap">
+    <div class="head reveal">
+      <div>
+        <span class="eyebrow">The Rooms</span>
+        <h2>A look at the fire.</h2>
+      </div>
+      <a class="btn btn-ghost" href="#reserve">Plan your visit</a>
+    </div>
+    <div class="grid reveal">
+      <div class="tile tall wide">
+        <img src="assets/marrow-vine/hero-woodfire.jpg" alt="The open wood-fire hearth at Marrow and Vine during dinner service" loading="lazy">
+        <div class="mask" aria-hidden="true"></div>
+        <div class="cap"><span class="t">The hearth at service</span><span class="u" aria-hidden="true"></span></div>
+      </div>
+      <div class="tile">
+        <img src="assets/marrow-vine/dish-marrow.jpg" alt="A wood-grilled seasonal plate" loading="lazy">
+        <div class="mask" aria-hidden="true"></div>
+        <div class="cap"><span class="t">From the fire</span><span class="u" aria-hidden="true"></span></div>
+      </div>
+      <div class="tile">
+        <div class="art a2" role="img" aria-label="Warm-toned detail of the dining room"></div>
+        <div class="mask" aria-hidden="true"></div>
+        <div class="cap"><span class="t">Brass &amp; candlelight</span><span class="u" aria-hidden="true"></span></div>
+      </div>
+      <div class="tile wide">
+        <img src="assets/marrow-vine/dining-room.jpg" alt="The candlelit Marrow and Vine dining room in the evening" loading="lazy">
+        <div class="mask" aria-hidden="true"></div>
+        <div class="cap"><span class="t">The river room, after dark</span><span class="u" aria-hidden="true"></span></div>
+      </div>
+      <div class="tile">
+        <div class="art a1" role="img" aria-label="Warm-toned detail of the wood pile"></div>
+        <div class="mask" aria-hidden="true"></div>
+        <div class="cap"><span class="t">Oak &amp; applewood</span><span class="u" aria-hidden="true"></span></div>
+      </div>
+      <div class="tile">
+        <div class="art a3" role="img" aria-label="Warm-toned detail of the chef's pass"></div>
+        <div class="mask" aria-hidden="true"></div>
+        <div class="cap"><span class="t">The pass</span><span class="u" aria-hidden="true"></span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 8 · STATS band (C3 anchor) -->
+<section class="statband section tight" aria-label="By the numbers">
+  <div class="wrap">
+    <div class="head reveal">
+      <span class="eyebrow center">A Decade In</span>
+      <h2>Ten years of <b>one fire.</b></h2>
+    </div>
+    <div class="grid stagger reveal">
+      <div class="s"><div class="n"><span class="count" data-to="2014" data-plain="1">2014</span></div><div class="l">Year the first room opened</div></div>
+      <div class="s"><div class="n"><span class="count" data-to="3"></span></div><div class="l">Rooms across the city</div></div>
+      <div class="s"><div class="n"><span class="count" data-to="312" data-suffix="k"></span></div><div class="l">Plates off the hearth</div></div>
+      <div class="s"><div class="n"><span class="count" data-to="4.8" data-decimals="1"></span></div><div class="l">Average guest rating</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 9 · REVIEWS (I4 + rating) -->
+<section class="reviews section" aria-label="What guests say">
+  <div class="wrap">
+    <div class="head reveal">
+      <span class="eyebrow center">Guest Book</span>
+      <h2>The neighborhood weighs in.</h2>
+      <div class="ratingline"><span class="stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span class="rt">4.8 / 5</span><span class="rv">&middot; 1,240 reviews</span></div>
+    </div>
+    <div class="grid stagger">
+      <div class="card reveal">
+        <div class="qstars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p class="q">"The supper-club night ruined every other Thursday for me. One table, one menu, and somehow it's different every week. We've stopped booking anywhere else."</p>
+        <div class="who"><span class="av" aria-hidden="true">M</span><div><div class="nm">Marisol P.</div><div class="mt">Regular &middot; River Room</div></div></div>
+      </div>
+      <div class="card reveal">
+        <div class="qstars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p class="q">"You can taste the fire in everything. The half-chicken alone is worth the drive across town. It tastes like someone's actually cooking back there — because they are."</p>
+        <div class="who"><span class="av" aria-hidden="true">D</span><div><div class="nm">Dev R.</div><div class="mt">First visit</div></div></div>
+      </div>
+      <div class="card reveal">
+        <div class="qstars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p class="q">"Three different rooms, three different moods, and every one of them feels like it's run by people who care. The marrow is non-negotiable. So is going back."</p>
+        <div class="who"><span class="av" aria-hidden="true">A</span><div><div class="nm">Aisha &amp; Tom</div><div class="mt">Anniversary dinner</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 10 · RESERVE (G5 + booking form) -->
+<section class="reserve section" id="reserve">
+  <div class="wrap">
+    <div class="grid">
+      <div class="copy reveal">
+        <span class="eyebrow">Visit Us</span>
+        <h2>Come sit by the <em>fire.</em></h2>
+        <p class="info">Reserve a table at any of our three rooms, or get on the supper-club list. Walk-ins are always welcome at the bar.</p>
+        <div class="hours">
+          <div class="hrow"><b>Monday &ndash; Thursday</b><span class="h">5:00pm &ndash; 10:00pm</span></div>
+          <div class="hrow"><b>Friday &ndash; Saturday</b><span class="h">5:00pm &ndash; 11:30pm</span></div>
+          <div class="hrow"><b>Sunday</b><span class="h">4:00pm &ndash; 9:00pm</span></div>
+          <div class="hrow"><b>Supper Club</b><span class="h">Thursdays, 7:00pm</span></div>
+        </div>
+        <div class="addr">
+          <span>214 Kindling Row, Portland, OR &middot; <a href="tel:+15035550182">(503) 555-0182</a></span>
+          <span><a href="mailto:hello@marrowandvine.example">hello@marrowandvine.example</a></span>
+        </div>
+      </div>
+      <div class="formcard reveal">
+        <h3>Request a table</h3>
+        <p class="fnote">We'll confirm by text within the hour during service.</p>
+        <form id="bookform" novalidate>
+          <div class="field-row">
+            <div class="field"><label for="bf-name">Name</label><input id="bf-name" name="name" type="text" placeholder="Your name" autocomplete="name" required></div>
+            <div class="field"><label for="bf-phone">Phone</label><input id="bf-phone" name="phone" type="tel" placeholder="(503) 555-0000" autocomplete="tel" required></div>
+          </div>
+          <div class="field-row">
+            <div class="field"><label for="bf-date">Date</label><input id="bf-date" name="date" type="date" required></div>
+            <div class="field"><label for="bf-party">Party size</label>
+              <select id="bf-party" name="party" required>
+                <option value="">Select&hellip;</option>
+                <option>1 &ndash; 2 guests</option>
+                <option>3 &ndash; 4 guests</option>
+                <option>5 &ndash; 6 guests</option>
+                <option>7+ (we'll call you)</option>
+              </select>
+            </div>
+          </div>
+          <div class="field"><label for="bf-room">Which room?</label>
+            <select id="bf-room" name="room">
+              <option>Any room &mdash; whatever's open</option>
+              <option>The River Room</option>
+              <option>The Hearth Room</option>
+              <option>The Cellar</option>
+              <option>Supper Club (Thursdays)</option>
+            </select>
+          </div>
+          <div class="field"><label for="bf-note">Anything we should know?</label><textarea id="bf-note" name="note" placeholder="Allergies, a birthday, a window seat&hellip;"></textarea></div>
+          <button class="btn btn-primary" type="submit" id="bf-submit">Request this table <span class="a" aria-hidden="true">&rarr;</span></button>
+          <p class="legal">Demo form — no data is sent or stored.</p>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 11 · FINAL CTA (F5 / anchor) -->
+<section class="finalcta section" aria-label="Visit tonight">
+  <div class="photo" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="inner reveal">
+      <span class="eyebrow">The Fire's Lit</span>
+      <h2>Hungry? <em>Come tonight.</em></h2>
+      <p>The board's been rewritten, the oven's hot, and there's a table with your name on it. Book it, or just walk in — the bar's always open.</p>
+      <div class="actions">
+        <a class="btn btn-primary" href="#reserve">Book a Table <span class="a" aria-hidden="true">&rarr;</span></a>
+        <a class="btn btn-ghost-light" href="tel:+15035550182">Call (503) 555-0182</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 12 · FOOTER -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="top">
+      <div class="brand">
+        <span class="logo"><span class="mark" aria-hidden="true"></span>Marrow <span class="amp">&amp;</span> Vine</span>
+        <p>A neighborhood wood-fire kitchen across three rooms. Seasonal menus from the hearth, supper-club Thursdays, and a table waiting for you.</p>
+        <div class="social">
+          <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.2c3.2 0 3.6 0 4.9.07 1.2.06 1.8.25 2.2.42.6.2 1 .5 1.4.9.4.4.7.8.9 1.4.17.4.36 1 .42 2.2.06 1.3.07 1.7.07 4.9s0 3.6-.07 4.9c-.06 1.2-.25 1.8-.42 2.2-.2.6-.5 1-.9 1.4-.4.4-.8.7-1.4.9-.4.17-1 .36-2.2.42-1.3.06-1.7.07-4.9.07s-3.6 0-4.9-.07c-1.2-.06-1.8-.25-2.2-.42-.6-.2-1-.5-1.4-.9-.4-.4-.7-.8-.9-1.4-.17-.4-.36-1-.42-2.2C2.2 15.6 2.2 15.2 2.2 12s0-3.6.07-4.9c.06-1.2.25-1.8.42-2.2.2-.6.5-1 .9-1.4.4-.4.8-.7 1.4-.9.4-.17 1-.36 2.2-.42C8.4 2.2 8.8 2.2 12 2.2zm0 3.2A6.6 6.6 0 1 0 18.6 12 6.6 6.6 0 0 0 12 5.4zm0 10.9A4.3 4.3 0 1 1 16.3 12 4.3 4.3 0 0 1 12 16.3zm6.8-11.2a1.54 1.54 0 1 1-1.54-1.54 1.54 1.54 0 0 1 1.54 1.54z"/></svg></a>
+          <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.5 1.49-3.89 3.78-3.89 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56V12h2.78l-.44 2.89h-2.34v6.99A10 10 0 0 0 22 12z"/></svg></a>
+          <a href="#" aria-label="OpenTable"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.4" fill="#160d0b"/></svg></a>
+        </div>
+      </div>
+      <div class="col">
+        <h4>Visit</h4>
+        <a href="#story">Our Story</a>
+        <a href="#menu">Menu</a>
+        <a href="#supper">Supper Club</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#reserve">Reservations</a>
+      </div>
+      <div class="col">
+        <h4>The Rooms</h4>
+        <p>The River Room</p>
+        <p>The Hearth Room</p>
+        <p>The Cellar</p>
+        <p style="color:var(--accent-2);font-size:12px;margin-top:6px">placeholder locations</p>
+      </div>
+      <div class="col">
+        <h4>Hours &amp; Contact</h4>
+        <div class="hr"><span>Mon&ndash;Thu</span><span class="h">5&ndash;10pm</span></div>
+        <div class="hr"><span>Fri&ndash;Sat</span><span class="h">5&ndash;11:30pm</span></div>
+        <div class="hr"><span>Sun</span><span class="h">4&ndash;9pm</span></div>
+        <a href="tel:+15035550182" style="margin-top:10px">(503) 555-0182</a>
+        <a href="mailto:hello@marrowandvine.example">hello@marrowandvine.example</a>
+      </div>
+    </div>
+    <div class="bottom">
+      <span class="legal">&copy; 2026 Marrow &amp; Vine &middot; <a href="#">Privacy</a> &middot; <a href="#">Accessibility</a> &middot; <span style="color:var(--accent-2)">fabricated demo brand</span></span>
+      <span class="built"><span class="sg" aria-hidden="true"></span>Built on <b>SGEN</b></span>
+    </div>
+  </div>
+</footer>
+
+<button class="totop" id="totop" aria-label="Back to top">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+</button>
+
+<script>
+(function(){
+  "use strict";
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* scroll reveals (TOP-12 #4) */
+  var revs = document.querySelectorAll(".reveal");
+  if("IntersectionObserver" in window && !reduce){
+    var ro = new IntersectionObserver(function(es){
+      es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add("in"); ro.unobserve(e.target); } });
+    },{threshold:.14, rootMargin:"0px 0px -8% 0px"});
+    revs.forEach(function(el){ ro.observe(el); });
+  } else { revs.forEach(function(el){ el.classList.add("in"); }); }
+
+  /* count-up stats (TOP-12 #5) */
+  function animateCount(el){
+    if(el.dataset.plain){ return; }
+    var to = parseFloat(el.dataset.to);
+    var dec = parseInt(el.dataset.decimals||"0",10);
+    var suf = el.dataset.suffix||"";
+    if(reduce){ el.textContent = to.toFixed(dec)+suf; return; }
+    var start=null, dur=1400;
+    function step(ts){
+      if(!start) start=ts;
+      var p=Math.min((ts-start)/dur,1);
+      var eased=1-Math.pow(1-p,3);
+      el.textContent=(to*eased).toFixed(dec)+ (p>=1?suf:"");
+      if(p<1) requestAnimationFrame(step); else el.textContent=to.toFixed(dec)+suf;
+    }
+    requestAnimationFrame(step);
+  }
+  var counters = document.querySelectorAll(".count");
+  if("IntersectionObserver" in window){
+    var co = new IntersectionObserver(function(es){
+      es.forEach(function(e){ if(e.isIntersecting){ animateCount(e.target); co.unobserve(e.target); } });
+    },{threshold:.5});
+    counters.forEach(function(c){ co.observe(c); });
+  } else { counters.forEach(animateCount); }
+
+  /* sticky + smart (hide-on-scroll-down) nav */
+  var nav=document.getElementById("nav"), lastY=0, ticking=false, totop=document.getElementById("totop");
+  function onScroll(){
+    var y=window.pageYOffset;
+    if(y>40) nav.classList.add("stuck"); else nav.classList.remove("stuck");
+    if(y>640 && y>lastY+6 && !document.body.classList.contains("nav-locked")) nav.classList.add("hide");
+    else if(y<lastY-6 || y<=640) nav.classList.remove("hide");
+    lastY=y;
+    totop.classList.toggle("show", y>700);
+    ticking=false;
+  }
+  window.addEventListener("scroll",function(){ if(!ticking){ requestAnimationFrame(onScroll); ticking=true; } },{passive:true});
+  onScroll();
+
+  totop.addEventListener("click",function(){ window.scrollTo({top:0,behavior:reduce?"auto":"smooth"}); });
+
+  /* mobile drawer */
+  var burger=document.getElementById("burger"),
+      drawer=document.getElementById("drawer"),
+      scrim=document.getElementById("scrim"),
+      dclose=document.getElementById("dclose");
+  function openDrawer(){
+    drawer.classList.add("open"); scrim.hidden=false;
+    requestAnimationFrame(function(){ scrim.classList.add("open"); });
+    drawer.setAttribute("aria-hidden","false"); burger.setAttribute("aria-expanded","true");
+    document.body.style.overflow="hidden"; document.body.classList.add("nav-locked");
+  }
+  function closeDrawer(){
+    drawer.classList.remove("open"); scrim.classList.remove("open");
+    drawer.setAttribute("aria-hidden","true"); burger.setAttribute("aria-expanded","false");
+    document.body.style.overflow=""; document.body.classList.remove("nav-locked");
+    setTimeout(function(){ scrim.hidden=true; },300);
+  }
+  burger.addEventListener("click",openDrawer);
+  dclose.addEventListener("click",closeDrawer);
+  scrim.addEventListener("click",closeDrawer);
+  drawer.querySelectorAll("a").forEach(function(a){ a.addEventListener("click",closeDrawer); });
+  document.addEventListener("keydown",function(e){ if(e.key==="Escape" && drawer.classList.contains("open")) closeDrawer(); });
+
+  /* demo booking form (no network) */
+  var form=document.getElementById("bookform");
+  if(form){
+    form.addEventListener("submit",function(e){
+      e.preventDefault();
+      var btn=document.getElementById("bf-submit");
+      if(!form.checkValidity()){ form.reportValidity(); return; }
+      btn.textContent="Table requested";
+      btn.style.background="var(--ok)"; btn.style.borderColor="var(--ok)";
+      btn.disabled=true;
+    });
+  }
+})();
+</script>
+</body>
+</html>

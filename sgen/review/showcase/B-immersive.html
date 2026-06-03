@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>SGEN Showcase — Immersive Canvas (Direction B / preview)</title>
+<style>
+  /* ============================================================
+     SGEN SHOWCASE — DIRECTION B "IMMERSIVE CANVAS"
+     Framer-grade cinematic exhibition. Image-first, dark
+     exhibition chrome, full-bleed immersive panels, hover-reveal
+     of metric + brand, CSS parallax/scale motion, minimal text.
+     Self-contained: zero external refs, system-font stack only,
+     all "imagery" is crafted CSS (mesh / gradient / pattern /
+     type-as-image). 10 fabricated placeholder entries.
+     ============================================================ */
+
+  :root{
+    /* SGEN anchor */
+    --ink:#1a1a1a;
+    --red:#d51522;
+    --red-hot:#ff2d3d;
+    --paper:#f6f4ef;
+
+    /* exhibition chrome — charcoal expressed boldly, not flat */
+    --stage:#0d0d0f;
+    --stage-2:#121214;
+    --panel:#16161a;
+    --line:rgba(255,255,255,.10);
+    --line-2:rgba(255,255,255,.06);
+    --fog:rgba(255,255,255,.55);
+    --fog-2:rgba(255,255,255,.38);
+    --white:#f4f2ee;
+
+    /* per-brand accents (exhibition palettes, keyed to entries) */
+    --c-agency:#1f5c43;     /* Fernwood — deep forest */
+    --c-creator:#d98a3d;    /* Wildgraze — warm amber/slab */
+    --c-ecom:#b98a4e;       /* Trailhand — waxed canvas tan */
+    --c-free:#9aa7b4;       /* Tidewater — sand/slate */
+    --c-health:#2fa8a0;     /* Clearwater — clinical teal */
+    --c-cafe:#7a5230;       /* Kettleback — espresso + brass */
+    --c-nonprofit:#5e8c5a;  /* Riverbend — river-green */
+    --c-pro:#3b4a73;        /* Halloran & Vint — institutional navy */
+    --c-rest:#7a2533;       /* Marrow & Vine — walnut/wine */
+    --c-smb:#6f7f3a;        /* Thornbury — soil green */
+
+    --font: "Helvetica Neue", Helvetica, "Segoe UI", Arial, system-ui, sans-serif;
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Mono", "Segoe UI Mono", Menlo, Consolas, monospace;
+
+    --maxw:1320px;
+    --ease:cubic-bezier(.16,.84,.36,1);
+    --ease-soft:cubic-bezier(.22,.61,.36,1);
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+  body{
+    font-family:var(--font);
+    background:var(--stage);
+    color:var(--white);
+    line-height:1.5;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+  img{max-width:100%;display:block}
+  a{color:inherit;text-decoration:none}
+  ::selection{background:var(--red);color:#fff}
+
+  /* film-grain + vignette over the whole stage for "exhibition" depth */
+  body::before{
+    content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:
+      radial-gradient(120% 80% at 50% -10%, rgba(213,21,34,.10), transparent 55%),
+      radial-gradient(140% 120% at 50% 120%, rgba(0,0,0,.65), transparent 60%);
+    mix-blend-mode:screen;opacity:.9;
+  }
+  body::after{
+    content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.045;
+    background-image:
+      repeating-linear-gradient(0deg, rgba(255,255,255,.6) 0 1px, transparent 1px 3px);
+    mix-blend-mode:overlay;
+  }
+  .wrap{position:relative;z-index:1}
+
+  /* ---------- PREVIEW MARKER (fixed, persistent) ---------- */
+  .preview-flag{
+    position:fixed;top:0;left:0;right:0;z-index:200;
+    background:repeating-linear-gradient(135deg, #1a1a1a 0 14px, #211d0a 14px 28px);
+    border-bottom:1px solid rgba(255,210,0,.35);
+    color:#ffd23a;
+    font:600 11px/1 var(--mono);
+    letter-spacing:.14em;text-transform:uppercase;
+    padding:8px 18px;text-align:center;
+  }
+  .preview-flag b{color:#fff;font-weight:700}
+
+  /* ============================== NAV ============================== */
+  header.nav{
+    position:sticky;top:31px;z-index:150;
+    backdrop-filter:saturate(140%) blur(14px);
+    background:linear-gradient(180deg, rgba(13,13,15,.86), rgba(13,13,15,.4));
+    border-bottom:1px solid var(--line-2);
+  }
+  .nav-in{
+    max-width:var(--maxw);margin:0 auto;padding:16px 28px;
+    display:flex;align-items:center;justify-content:space-between;gap:24px;
+  }
+  .brand{display:flex;align-items:center;gap:11px;font-weight:800;letter-spacing:.02em}
+  .brand .glyph{
+    width:30px;height:30px;border-radius:8px;flex:none;
+    background:conic-gradient(from 210deg at 35% 30%, var(--red-hot), var(--red) 40%, #7a0c14 75%, var(--red-hot));
+    box-shadow:0 0 0 1px rgba(255,255,255,.08), 0 8px 24px rgba(213,21,34,.4);
+    position:relative;
+  }
+  .brand .glyph::after{
+    content:"";position:absolute;inset:8px;border-radius:3px;
+    background:#0d0d0f;
+    clip-path:polygon(0 0,100% 0,100% 62%,38% 62%,38% 100%,0 100%);
+  }
+  .brand .wm{font-size:18px}
+  .brand .wm small{color:var(--fog-2);font-weight:500;font-size:11px;letter-spacing:.16em;display:block;margin-top:-2px}
+  nav.links{display:flex;align-items:center;gap:26px;font-size:13.5px;color:var(--fog)}
+  nav.links a{transition:color .25s var(--ease)}
+  nav.links a:hover{color:#fff}
+  nav.links .cur{color:#fff}
+  nav.links .cur::after{content:"";display:block;height:2px;margin-top:5px;background:var(--red);border-radius:2px}
+  .nav-cta{display:flex;align-items:center;gap:14px}
+  .btn{
+    font:600 13.5px/1 var(--font);letter-spacing:.01em;
+    padding:11px 18px;border-radius:10px;cursor:pointer;border:1px solid transparent;
+    transition:transform .3s var(--ease), box-shadow .3s var(--ease), background .3s, border-color .3s;
+    display:inline-flex;align-items:center;gap:8px;white-space:nowrap;
+  }
+  .btn-primary{background:var(--red);color:#fff;box-shadow:0 10px 30px -8px rgba(213,21,34,.6)}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 16px 40px -8px rgba(213,21,34,.8);background:var(--red-hot)}
+  .btn-ghost{border-color:var(--line);color:var(--fog)}
+  .btn-ghost:hover{border-color:#fff;color:#fff}
+  .arrow{transition:transform .3s var(--ease)}
+  .btn:hover .arrow,a:hover .arrow{transform:translateX(4px)}
+
+  /* ============================== HERO ============================== */
+  .hero{position:relative;padding:130px 28px 90px;overflow:hidden}
+  .hero-in{max-width:var(--maxw);margin:0 auto;position:relative;z-index:2}
+  .eyebrow{
+    font:600 11.5px/1 var(--mono);letter-spacing:.34em;text-transform:uppercase;
+    color:var(--red-hot);display:inline-flex;align-items:center;gap:12px;margin-bottom:30px;
+  }
+  .eyebrow::before{content:"";width:34px;height:1px;background:var(--red)}
+  .hero h1{
+    font-weight:800;letter-spacing:-.035em;line-height:.94;
+    font-size:clamp(46px,9.2vw,128px);
+    max-width:16ch;
+  }
+  .hero h1 .em{
+    background:linear-gradient(100deg,var(--red-hot),var(--red) 60%,#ff6b75);
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
+  }
+  .hero h1 .out{
+    -webkit-text-fill-color:transparent;-webkit-text-stroke:1.4px rgba(255,255,255,.45);color:transparent;
+  }
+  .hero-sub{
+    margin-top:34px;max-width:54ch;font-size:clamp(16px,1.6vw,19px);color:var(--fog);line-height:1.65;
+  }
+  .hero-sub b{color:#fff;font-weight:600}
+  .hero-actions{display:flex;flex-wrap:wrap;gap:14px;margin-top:40px}
+  .scrollcue{margin-top:64px;display:flex;align-items:center;gap:14px;color:var(--fog-2);font:500 11px/1 var(--mono);letter-spacing:.24em;text-transform:uppercase}
+  .scrollcue .rail{width:1px;height:44px;background:linear-gradient(var(--red),transparent);position:relative;overflow:hidden}
+  .scrollcue .rail::after{content:"";position:absolute;top:-50%;left:0;width:100%;height:50%;background:var(--red-hot);animation:drop 2.4s var(--ease) infinite}
+  @keyframes drop{0%{top:-50%}60%,100%{top:120%}}
+
+  /* hero cinematic mosaic — overlapping floating site-tiles w/ parallax drift */
+  .hero-stage{position:absolute;inset:0;z-index:1;pointer-events:none}
+  .htile{
+    position:absolute;border-radius:14px;overflow:hidden;
+    border:1px solid var(--line);
+    box-shadow:0 40px 90px -30px rgba(0,0,0,.8);
+    opacity:.5;
+    will-change:transform;
+  }
+  .htile .chrome{height:22px;background:#0a0a0c;border-bottom:1px solid var(--line-2);display:flex;align-items:center;gap:5px;padding:0 10px}
+  .htile .chrome i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.18)}
+  .htile .face{height:calc(100% - 22px)}
+  .h1t{width:300px;height:200px;top:8%;right:3%;animation:float1 14s ease-in-out infinite}
+  .h2t{width:230px;height:160px;top:46%;right:16%;animation:float2 17s ease-in-out infinite}
+  .h3t{width:200px;height:140px;top:70%;right:1%;animation:float3 12s ease-in-out infinite}
+  @keyframes float1{0%,100%{transform:translateY(0) rotate(2.5deg)}50%{transform:translateY(-22px) rotate(2.5deg)}}
+  @keyframes float2{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(18px) rotate(-3deg)}}
+  @keyframes float3{0%,100%{transform:translateY(0) rotate(4deg)}50%{transform:translateY(-14px) rotate(4deg)}}
+
+  /* ---- crafted CSS "screenshots" (type-as-image / mesh / pattern) ---- */
+  .face{position:relative;background:#101013}
+  .face .meta{position:absolute;bottom:8px;left:10px;font:700 13px/1 var(--font);letter-spacing:-.01em;color:rgba(255,255,255,.85)}
+  .face .meta small{display:block;font-weight:500;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:3px}
+
+  /* ============================ COUNTER RAIL ============================ */
+  .counters{border-top:1px solid var(--line-2);border-bottom:1px solid var(--line-2);background:var(--stage-2)}
+  .counters-in{max-width:var(--maxw);margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr)}
+  .counter{padding:34px 28px;border-left:1px solid var(--line-2)}
+  .counter:first-child{border-left:none}
+  .counter .n{font-size:clamp(30px,4vw,46px);font-weight:800;letter-spacing:-.03em;line-height:1}
+  .counter .n .z{color:var(--red-hot)}
+  .counter .l{margin-top:10px;font-size:12.5px;color:var(--fog-2);line-height:1.45;max-width:24ch}
+  .counter .flag{display:inline-block;margin-top:8px;font:600 9px/1 var(--mono);letter-spacing:.14em;color:#ffd23a;opacity:.8}
+
+  /* ============================ SECTION TITLES ============================ */
+  .sec-head{max-width:var(--maxw);margin:0 auto;padding:96px 28px 12px;display:flex;align-items:flex-end;justify-content:space-between;gap:32px;flex-wrap:wrap}
+  .sec-head .lead{max-width:40ch}
+  .sec-tag{font:600 11px/1 var(--mono);letter-spacing:.3em;text-transform:uppercase;color:var(--red-hot);display:block;margin-bottom:16px}
+  .sec-head h2{font-size:clamp(30px,4.4vw,56px);font-weight:800;letter-spacing:-.03em;line-height:1.02}
+  .sec-head p{color:var(--fog-2);font-size:14.5px;max-width:34ch;line-height:1.6}
+
+  /* ============================================================
+     THE EXHIBITION — full-bleed immersive panels, not a card grid.
+     Alternating full-bleed cinematic panels + asymmetric split
+     stages. Each = a crafted CSS visual that fills its region.
+     ============================================================ */
+  .exhibit{display:flex;flex-direction:column;gap:0;margin-top:30px}
+
+  /* shared panel canvas (the "screenshot" treatment) */
+  .canvas{position:relative;overflow:hidden;background:#0c0c0e}
+  .canvas .grain{position:absolute;inset:0;opacity:.05;background-image:repeating-linear-gradient(0deg,rgba(255,255,255,.6) 0 1px,transparent 1px 4px);mix-blend-mode:overlay;pointer-events:none;z-index:3}
+  .canvas .scrim{position:absolute;inset:0;z-index:2;pointer-events:none;
+    background:linear-gradient(180deg, rgba(0,0,0,.05) 0%, rgba(0,0,0,.35) 60%, rgba(0,0,0,.85) 100%);}
+  /* zoom-on-hover for the whole visual layer */
+  .canvas .art{position:absolute;inset:0;z-index:1;transition:transform 1.1s var(--ease-soft);will-change:transform}
+  .panel:hover .canvas .art{transform:scale(1.06)}
+
+  /* type-as-image: the brand wordmark rendered huge inside the art */
+  .bigtype{
+    position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    font-family:var(--serif);font-weight:700;letter-spacing:-.04em;
+    font-size:clamp(60px,13vw,200px);line-height:.8;text-align:center;
+    color:rgba(255,255,255,.06);
+    -webkit-text-stroke:1px rgba(255,255,255,.10);
+    user-select:none;white-space:nowrap;
+  }
+
+  /* ---- FULL-BLEED PANEL (cinematic, hero-tier site) ---- */
+  .panel-full{position:relative;border-top:1px solid var(--line-2)}
+  .panel-full .canvas{height:clamp(440px,62vw,720px)}
+  .panel-full .content{
+    position:absolute;inset:0;z-index:5;
+    max-width:var(--maxw);margin:0 auto;padding:0 28px;
+    display:flex;flex-direction:column;justify-content:flex-end;
+  }
+  .panel-full .content .inner{padding-bottom:54px;max-width:760px}
+
+  /* index numbers as exhibition plaques */
+  .plaque{font:600 12px/1 var(--mono);letter-spacing:.26em;text-transform:uppercase;color:var(--fog-2);display:flex;align-items:center;gap:14px;margin-bottom:22px}
+  .plaque .no{color:#fff;font-size:14px}
+  .plaque .dot{width:6px;height:6px;border-radius:50%}
+  .panel .vert{color:rgba(255,255,255,.7)}
+
+  .panel-title{font-family:var(--serif);font-size:clamp(34px,5.5vw,72px);font-weight:700;letter-spacing:-.02em;line-height:.98}
+  .panel-sub{margin-top:16px;font-size:clamp(14px,1.5vw,17px);color:var(--fog);max-width:50ch;line-height:1.6}
+
+  /* metric — hover-reveal: present but understated, surges on hover */
+  .metric{display:flex;align-items:baseline;gap:18px;margin-top:26px}
+  .metric .big{
+    font-size:clamp(40px,6vw,84px);font-weight:800;letter-spacing:-.04em;line-height:.9;
+    background:linear-gradient(120deg,#fff,rgba(255,255,255,.55));
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+    transition:transform .5s var(--ease);
+  }
+  .panel:hover .metric .big{transform:translateY(-2px)}
+  .metric .lab{font-size:13px;color:var(--fog-2);max-width:20ch;line-height:1.4;padding-bottom:6px}
+
+  /* hover-reveal cluster (chips + CTAs) — fades up on hover */
+  .reveal{margin-top:28px;opacity:.0;transform:translateY(14px);transition:opacity .5s var(--ease),transform .5s var(--ease);pointer-events:none}
+  .panel:hover .reveal, .panel:focus-within .reveal{opacity:1;transform:none;pointer-events:auto}
+  @media (hover:none){.reveal{opacity:1;transform:none;pointer-events:auto}}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+  .chip{font:500 11.5px/1 var(--mono);letter-spacing:.02em;color:var(--fog);
+    border:1px solid var(--line);border-radius:999px;padding:7px 12px;background:rgba(255,255,255,.03);}
+  .chip.acc{color:#fff}
+  .panel-actions{display:flex;flex-wrap:wrap;gap:12px}
+  .link-cta{font:600 13.5px/1 var(--font);display:inline-flex;align-items:center;gap:9px;
+    padding:11px 16px;border-radius:10px;border:1px solid var(--line);transition:border-color .3s,background .3s,transform .3s}
+  .link-cta:hover{border-color:#fff;transform:translateY(-2px)}
+  .link-cta.solid{background:#fff;color:#0d0d0f;border-color:#fff}
+  .link-cta.solid:hover{background:var(--red);color:#fff;border-color:var(--red)}
+  .owner-note{font:600 10px/1.4 var(--mono);letter-spacing:.06em;color:#ffd23a;opacity:.7;margin-top:14px}
+
+  /* ---- SPLIT STAGE (asymmetric two-up; alternating sides) ---- */
+  .panel-split{position:relative;border-top:1px solid var(--line-2)}
+  .split-in{max-width:var(--maxw);margin:0 auto;display:grid;grid-template-columns:1.05fr .95fr;min-height:clamp(420px,48vw,560px)}
+  .panel-split.flip .split-in{grid-template-columns:.95fr 1.05fr}
+  .panel-split.flip .stage-art{order:2}
+  .panel-split.flip .stage-txt{order:1}
+  .stage-art{position:relative}
+  .stage-art .canvas{position:absolute;inset:0}
+  .stage-txt{padding:clamp(40px,5vw,72px) clamp(28px,4vw,60px);display:flex;flex-direction:column;justify-content:center;background:var(--stage-2);border-left:1px solid var(--line-2)}
+  .panel-split.flip .stage-txt{border-left:none;border-right:1px solid var(--line-2)}
+  .stage-txt .panel-title{font-size:clamp(28px,3.6vw,46px)}
+  .stage-txt .reveal{opacity:1;transform:none;pointer-events:auto} /* split text col stays legible */
+  .stage-txt .metric .big{background:linear-gradient(120deg,#fff,rgba(255,255,255,.6));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+
+  /* corner brand seal that reveals on hover over the art */
+  .seal{position:absolute;top:22px;left:22px;z-index:5;display:flex;align-items:center;gap:10px;
+    font:700 14px/1 var(--font);letter-spacing:-.01em;color:#fff;
+    opacity:.0;transform:translateY(-8px);transition:opacity .45s var(--ease),transform .45s var(--ease)}
+  .panel:hover .seal{opacity:1;transform:none}
+  @media(hover:none){.seal{opacity:1;transform:none}}
+  .seal .mk{width:26px;height:26px;border-radius:7px;flex:none;border:1px solid rgba(255,255,255,.3)}
+
+  /* =====================================================================
+     PER-BRAND CRAFTED CSS VISUAL TREATMENTS (the "imagery")
+     Each is a distinct mesh / gradient / pattern composition keyed to
+     the entry's palette + vertical character. No external images.
+     ===================================================================== */
+
+  /* 01 Fernwood Digital — agency / multi-site fleet → tile grid of "sites" */
+  .art-agency{background:
+    radial-gradient(120% 90% at 80% 10%, color-mix(in srgb,var(--c-agency) 70%, #000), #06120d 70%),
+    #06120d;}
+  .art-agency .grid23{position:absolute;inset:8% 6%;display:grid;grid-template-columns:repeat(6,1fr);grid-auto-rows:1fr;gap:10px}
+  .art-agency .grid23 span{border-radius:6px;border:1px solid rgba(255,255,255,.08);
+    background:linear-gradient(160deg, color-mix(in srgb,var(--c-agency) 30%, #0a1a13), #07140e);position:relative;overflow:hidden}
+  .art-agency .grid23 span::before{content:"";position:absolute;top:7px;left:7px;width:18px;height:3px;border-radius:2px;background:rgba(255,255,255,.18)}
+  .art-agency .grid23 span::after{content:"";position:absolute;top:7px;right:7px;width:6px;height:6px;border-radius:50%;background:#5fd39a;box-shadow:0 0 8px #5fd39a}
+  .art-agency .grid23 span:nth-child(3n)::after{background:#ffd23a;box-shadow:0 0 8px #ffd23a}
+
+  /* 02 Wildgraze — creator/media → editorial ridge-line + big slab type */
+  .art-creator{background:
+    linear-gradient(180deg,#2a1a0c 0%, #160d05 60%, #0c0703 100%);}
+  .art-creator .ridge{position:absolute;inset:0;
+    background:
+      radial-gradient(60% 30% at 50% 22%, rgba(217,138,61,.5), transparent 70%),
+      conic-gradient(from 220deg at 30% 90%, transparent 0 40%, rgba(217,138,61,.14) 50%, transparent 60%);}
+  .art-creator .mtn{position:absolute;bottom:0;left:0;right:0;height:46%;
+    background:linear-gradient(180deg,#1a1006,#0c0703);
+    clip-path:polygon(0 60%,16% 30%,30% 52%,46% 18%,62% 46%,78% 22%,100% 50%,100% 100%,0 100%);}
+  .art-creator .sun{position:absolute;top:18%;left:50%;transform:translateX(-50%);width:120px;height:120px;border-radius:50%;
+    background:radial-gradient(circle,#ffd9a3,#d98a3d 60%,transparent 72%);filter:blur(2px);opacity:.85}
+
+  /* 03 Trailhand — DTC ecommerce / speed → waxed canvas weave + speed streaks */
+  .art-ecom{background:
+    linear-gradient(150deg, color-mix(in srgb,var(--c-ecom) 55%, #1c140a), #100b05);}
+  .art-ecom .weave{position:absolute;inset:0;opacity:.5;
+    background-image:
+      repeating-linear-gradient(45deg, rgba(255,255,255,.05) 0 2px, transparent 2px 9px),
+      repeating-linear-gradient(-45deg, rgba(0,0,0,.25) 0 2px, transparent 2px 9px);}
+  .art-ecom .streak{position:absolute;height:3px;border-radius:3px;background:linear-gradient(90deg,transparent,#ffd9a3,transparent);opacity:.6}
+  .art-ecom .streak:nth-child(2){top:32%;left:-20%;width:80%;animation:zoom 5s linear infinite}
+  .art-ecom .streak:nth-child(3){top:54%;left:-10%;width:60%;animation:zoom 4s linear .8s infinite}
+  .art-ecom .streak:nth-child(4){top:71%;left:-30%;width:90%;animation:zoom 6s linear .3s infinite}
+  @keyframes zoom{0%{transform:translateX(0)}100%{transform:translateX(160%)}}
+
+  /* 04 Tidewater — freelancer / 6 sites one dashboard → slate panels + tide line */
+  .art-free{background:linear-gradient(160deg,#1b2128,#0c1014);}
+  .art-free .six{position:absolute;inset:14% 12%;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(2,1fr);gap:14px}
+  .art-free .six span{border-radius:8px;border:1px solid rgba(255,255,255,.10);
+    background:linear-gradient(160deg,#222b34,#161d24);box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
+  .art-free .six span::after{content:"";position:absolute;left:10px;bottom:10px;width:40%;height:3px;background:var(--c-free);border-radius:2px;opacity:.7}
+  .art-free .tide{position:absolute;left:0;right:0;bottom:0;height:30%;background:linear-gradient(180deg,transparent,rgba(154,167,180,.18))}
+
+  /* 05 Clearwater — healthcare → calm teal grid + pulse line */
+  .art-health{background:linear-gradient(165deg,#06201f,#03100f);}
+  .art-health .glow{position:absolute;inset:0;background:radial-gradient(70% 60% at 30% 25%,rgba(47,168,160,.4),transparent 65%)}
+  .art-health .pulse{position:absolute;left:0;right:0;top:55%;height:2px;
+    background:linear-gradient(90deg,transparent,var(--c-health),transparent);opacity:.7}
+  .art-health .ecg{position:absolute;left:8%;right:8%;top:50%;height:60px;
+    background:
+      linear-gradient(var(--c-health),var(--c-health)) 0 50%/100% 1px no-repeat;}
+  .art-health .ecg::after{content:"";position:absolute;left:38%;top:0;width:60px;height:100%;
+    background:linear-gradient(transparent 45%, var(--c-health) 45% 47%, transparent 47% 50%, var(--c-health) 50% 52%, transparent 52%);
+    clip-path:polygon(0 50%,30% 50%,42% 8%,54% 92%,66% 50%,100% 50%,100% 60%,0 60%);background:var(--c-health);opacity:.9}
+
+  /* 06 Kettleback — café franchise / 34 sites → espresso map of dots + brass */
+  .art-cafe{background:radial-gradient(120% 100% at 50% 0%, #2a1a0e, #120a04 70%);}
+  .art-cafe .dots{position:absolute;inset:0;background-image:radial-gradient(rgba(196,150,84,.5) 1.5px, transparent 1.6px);background-size:26px 26px;opacity:.5}
+  .art-cafe .map{position:absolute;inset:16% 14%}
+  .art-cafe .pin{position:absolute;width:10px;height:10px;border-radius:50%;background:#c49654;box-shadow:0 0 0 4px rgba(196,150,84,.15),0 0 12px rgba(196,150,84,.6)}
+  .art-cafe .hub{position:absolute;width:18px;height:18px;border-radius:50%;background:var(--red);box-shadow:0 0 0 6px rgba(213,21,34,.18),0 0 18px rgba(213,21,34,.7);top:48%;left:50%}
+
+  /* 07 Riverbend — nonprofit / community → warm dusk + string-light bokeh */
+  .art-nonprofit{background:linear-gradient(180deg,#15281a,#0a160d);}
+  .art-nonprofit .dusk{position:absolute;inset:0;background:radial-gradient(80% 50% at 50% 80%,rgba(94,140,90,.4),transparent 70%)}
+  .art-nonprofit .lights{position:absolute;top:18%;left:0;right:0;height:50px}
+  .art-nonprofit .lights span{position:absolute;width:8px;height:8px;border-radius:50%;background:#ffe1a8;box-shadow:0 0 12px #ffce7a;top:0}
+  .art-nonprofit .lights span:nth-child(odd){top:14px}
+
+  /* 08 Halloran & Vint — pro services / attribution → navy ledger + flow lines */
+  .art-pro{background:linear-gradient(160deg,#10182e,#070b16);}
+  .art-pro .ledger{position:absolute;inset:0;opacity:.5;
+    background-image:repeating-linear-gradient(0deg,rgba(255,255,255,.05) 0 1px,transparent 1px 34px)}
+  .art-pro .flow{position:absolute;left:10%;right:10%;top:30%;bottom:30%}
+  .art-pro .flow b{position:absolute;height:2px;background:linear-gradient(90deg,transparent,#7d8fc4,transparent);left:0;right:0}
+  .art-pro .flow b:nth-child(1){top:0;transform:scaleX(.6);transform-origin:left}
+  .art-pro .flow b:nth-child(2){top:50%;transform:scaleX(.85);transform-origin:left}
+  .art-pro .flow b:nth-child(3){top:100%;transform:scaleX(1);transform-origin:left}
+  .art-pro .node{position:absolute;right:9%;width:14px;height:14px;border-radius:50%;background:#fff;box-shadow:0 0 16px rgba(125,143,196,.8)}
+
+  /* 09 Marrow & Vine — restaurant / wood-fire → ember glow + walnut grain */
+  .art-rest{background:radial-gradient(110% 90% at 50% 100%, #4a1118, #160608 65%);}
+  .art-rest .grainw{position:absolute;inset:0;opacity:.45;
+    background-image:repeating-linear-gradient(92deg, rgba(0,0,0,.4) 0 3px, rgba(122,37,51,.10) 3px 7px)}
+  .art-rest .ember{position:absolute;bottom:0;left:0;right:0;height:48%;
+    background:radial-gradient(60% 100% at 50% 100%, rgba(255,110,60,.55), transparent 70%);filter:blur(4px)}
+  .art-rest .spark{position:absolute;width:3px;height:3px;border-radius:50%;background:#ffb15a;box-shadow:0 0 8px #ff7a3a;bottom:10%}
+  .art-rest .spark:nth-child(3){left:40%;animation:rise 4s ease-in infinite}
+  .art-rest .spark:nth-child(4){left:55%;animation:rise 5s ease-in 1s infinite}
+  .art-rest .spark:nth-child(5){left:48%;animation:rise 3.6s ease-in .5s infinite}
+  @keyframes rise{0%{transform:translateY(0);opacity:0}20%{opacity:1}100%{transform:translateY(-180px);opacity:0}}
+
+  /* 10 Thornbury — small biz garden → soil rows + sprouting type */
+  .art-smb{background:linear-gradient(180deg,#1c2410,#0c1107);}
+  .art-smb .rows{position:absolute;inset:0;bottom:0;
+    background-image:repeating-linear-gradient(0deg, rgba(111,127,58,.0) 0 22px, rgba(111,127,58,.16) 22px 24px);
+    transform:perspective(400px) rotateX(58deg);transform-origin:bottom;opacity:.7}
+  .art-smb .leaf{position:absolute;width:18px;height:26px;border-radius:0 100% 0 100%;background:var(--c-smb);opacity:.7}
+  .art-smb .leaf:nth-child(3){left:24%;top:40%;transform:rotate(-20deg)}
+  .art-smb .leaf:nth-child(4){left:62%;top:34%;transform:rotate(18deg) scale(1.3)}
+  .art-smb .leaf:nth-child(5){left:45%;top:50%;transform:rotate(-6deg) scale(.8)}
+
+  /* ============================ FEATURED REEL ============================ */
+  .reel-wrap{background:var(--stage-2);border-top:1px solid var(--line-2);border-bottom:1px solid var(--line-2);overflow:hidden}
+  .reel{display:flex;gap:22px;padding:40px 28px;max-width:none;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:thin;scrollbar-color:var(--red) transparent}
+  .reel::-webkit-scrollbar{height:8px}
+  .reel::-webkit-scrollbar-thumb{background:var(--red);border-radius:8px}
+  .reel::-webkit-scrollbar-track{background:rgba(255,255,255,.04)}
+  .reel-card{flex:0 0 clamp(280px,32vw,420px);scroll-snap-align:start;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#0c0c0e;transition:transform .5s var(--ease),border-color .4s}
+  .reel-card:hover{transform:translateY(-6px);border-color:rgba(255,255,255,.3)}
+  .reel-card .canvas{height:200px}
+  .reel-card .body{padding:22px}
+  .reel-card .body .commend{font-family:var(--serif);font-size:18px;line-height:1.4;color:#fff;letter-spacing:-.01em}
+  .reel-card .body .by{margin-top:14px;font:600 11px/1 var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--fog-2);display:flex;align-items:center;gap:10px}
+  .reel-card .body .by .pip{width:8px;height:8px;border-radius:50%}
+
+  /* ============================ HOW-BUILT STRIP ============================ */
+  .built{max-width:var(--maxw);margin:0 auto;padding:90px 28px;display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .built .b{border:1px solid var(--line-2);border-radius:16px;padding:34px;background:linear-gradient(180deg,var(--stage-2),var(--stage));position:relative;overflow:hidden}
+  .built .b::after{content:"";position:absolute;top:-30px;right:-30px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,rgba(213,21,34,.18),transparent 70%)}
+  .built .b .k{font:800 13px/1 var(--mono);color:var(--red-hot);letter-spacing:.1em;margin-bottom:18px}
+  .built .b h3{font-size:21px;font-weight:700;letter-spacing:-.01em;margin-bottom:12px}
+  .built .b p{font-size:14px;color:var(--fog-2);line-height:1.6}
+  .built .b p b{color:#fff;font-weight:600}
+
+  /* ============================ TESTIMONIALS ============================ */
+  .voices{background:var(--stage-2);border-top:1px solid var(--line-2)}
+  .voices-in{max-width:var(--maxw);margin:0 auto;padding:90px 28px;display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  .voice{border:1px solid var(--line-2);border-radius:16px;padding:34px;background:var(--stage);position:relative;transition:transform .5s var(--ease),border-color .4s}
+  .voice:hover{transform:translateY(-5px);border-color:rgba(255,255,255,.2)}
+  .voice .qm{font-family:var(--serif);font-size:70px;line-height:.6;color:var(--red);height:34px}
+  .voice blockquote{font-size:15.5px;line-height:1.6;color:#eae7e1;margin:14px 0 22px}
+  .voice .who{display:flex;align-items:center;gap:13px}
+  .voice .who .av{width:42px;height:42px;border-radius:50%;flex:none;border:1px solid var(--line)}
+  .voice .who .nm{font-weight:700;font-size:13.5px}
+  .voice .who .nm small{display:block;font-weight:500;color:var(--fog-2);font-size:11.5px;margin-top:2px}
+
+  /* ============================ CLOSING CTA ============================ */
+  .closer{position:relative;overflow:hidden;border-top:1px solid var(--line-2)}
+  .closer .glowbg{position:absolute;inset:0;background:
+    radial-gradient(60% 120% at 50% 120%, rgba(213,21,34,.35), transparent 60%),
+    linear-gradient(180deg,var(--stage),#080809);z-index:0}
+  .closer-in{position:relative;z-index:1;max-width:var(--maxw);margin:0 auto;padding:120px 28px;text-align:center}
+  .closer h2{font-size:clamp(34px,6vw,80px);font-weight:800;letter-spacing:-.035em;line-height:.96;max-width:18ch;margin:0 auto}
+  .closer h2 .em{color:var(--red-hot)}
+  .closer p{margin:26px auto 0;max-width:50ch;color:var(--fog);font-size:16px;line-height:1.6}
+  .closer .acts{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-top:38px}
+  .seg{margin-top:36px;display:flex;flex-wrap:wrap;gap:10px 26px;justify-content:center;font:500 13px/1 var(--font);color:var(--fog-2)}
+  .seg a{color:var(--fog);border-bottom:1px solid var(--line);padding-bottom:3px;transition:color .3s,border-color .3s}
+  .seg a:hover{color:#fff;border-color:#fff}
+  .fineprint{margin-top:30px;font-size:12px;color:var(--fog-2);letter-spacing:.01em}
+
+  /* ============================ FOOTER ============================ */
+  footer.foot{background:#080809;border-top:1px solid var(--line-2)}
+  .foot-in{max-width:var(--maxw);margin:0 auto;padding:56px 28px 30px;display:grid;grid-template-columns:1.4fr repeat(4,1fr);gap:32px}
+  .foot .brand{margin-bottom:16px}
+  .foot p.mini{font-size:13px;color:var(--fog-2);line-height:1.6;max-width:30ch}
+  .foot h4{font:600 11px/1 var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--fog-2);margin-bottom:16px}
+  .foot ul{list-style:none}
+  .foot ul li{margin-bottom:10px}
+  .foot ul li a{font-size:13.5px;color:var(--fog);transition:color .3s}
+  .foot ul li a:hover{color:#fff}
+  .foot-bottom{max-width:var(--maxw);margin:0 auto;padding:22px 28px;border-top:1px solid var(--line-2);display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px;font-size:12px;color:var(--fog-2)}
+
+  /* ============================ RESPONSIVE ============================ */
+  @media(max-width:1020px){
+    .built,.voices-in{grid-template-columns:1fr 1fr}
+    .foot-in{grid-template-columns:1fr 1fr 1fr}
+  }
+  @media(max-width:860px){
+    .hero-stage{display:none}
+    nav.links{display:none}
+    .counters-in{grid-template-columns:1fr 1fr}
+    .counter:nth-child(3),.counter:nth-child(4){border-top:1px solid var(--line-2)}
+    .counter:nth-child(odd){border-left:none}
+    .split-in,.panel-split.flip .split-in{grid-template-columns:1fr}
+    .stage-art{min-height:300px;order:1 !important}
+    .stage-txt{order:2 !important;border-left:none !important;border-right:none !important;border-top:1px solid var(--line-2)}
+    .panel-full .content .inner{padding-bottom:34px}
+    .reveal{opacity:1;transform:none;pointer-events:auto}
+    .seal{opacity:1;transform:none}
+  }
+  @media(max-width:640px){
+    .built,.voices-in,.foot-in{grid-template-columns:1fr}
+    .counters-in{grid-template-columns:1fr 1fr}
+    .hero{padding-top:110px}
+    .panel-full .canvas{height:440px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none !important;transition:none !important;scroll-behavior:auto}
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ FIXED PREVIEW MARKER ============ -->
+<div class="preview-flag">PREVIEW &mdash; <b>fabricated placeholders, not live customers</b> &middot; SGEN capabilities cited are real &middot; Direction&nbsp;B / Immersive&nbsp;Canvas</div>
+
+<div class="wrap">
+
+<!-- ================= NAV ================= -->
+<header class="nav">
+  <div class="nav-in">
+    <a class="brand" href="#top">
+      <span class="glyph"></span>
+      <span class="wm">SGEN<small>SHOWCASE</small></span>
+    </a>
+    <nav class="links">
+      <a href="#exhibit" class="cur">Showcase</a>
+      <a href="#reel">Featured</a>
+      <a href="#built">How it's built</a>
+      <a href="#voices">Voices</a>
+      <a href="#close">Pricing</a>
+    </nav>
+    <div class="nav-cta">
+      <a class="btn btn-ghost" href="#built">See the Builder</a>
+      <a class="btn btn-primary" href="#close">Start free <span class="arrow">&rarr;</span></a>
+    </div>
+  </div>
+</header>
+
+<!-- ================= HERO ================= -->
+<section class="hero" id="top">
+  <!-- cinematic floating site-tiles (crafted CSS, parallax drift) -->
+  <div class="hero-stage" aria-hidden="true">
+    <div class="htile h1t">
+      <div class="chrome"><i></i><i></i><i></i></div>
+      <div class="face art-rest"><div class="grainw"></div><div class="ember"></div>
+        <div class="meta"><small>Restaurant</small>Marrow &amp; Vine</div></div>
+    </div>
+    <div class="htile h2t">
+      <div class="chrome"><i></i><i></i><i></i></div>
+      <div class="face art-agency"><div class="grid23"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        <div class="meta"><small>Agency fleet</small>Fernwood Digital</div></div>
+    </div>
+    <div class="htile h3t">
+      <div class="chrome"><i></i><i></i><i></i></div>
+      <div class="face art-health"><div class="glow"></div><div class="pulse"></div>
+        <div class="meta"><small>Healthcare</small>Clearwater</div></div>
+    </div>
+  </div>
+
+  <div class="hero-in">
+    <span class="eyebrow">The SGEN Exhibition</span>
+    <h1>Real sites.<br><span class="out">Not</span> <span class="em">mockups.</span></h1>
+    <p class="hero-sub">A curated reel of businesses built on SGEN &mdash; the whole platform in one stack.
+      Every site below ships with <b>zero plugins underneath it</b>: the forms, the store, the SEO, the
+      attribution, the hosting, the security &mdash; all native, all in the box. Step into the gallery.</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="#exhibit">Enter the exhibition <span class="arrow">&rarr;</span></a>
+      <a class="btn btn-ghost" href="#reel">Featured builds</a>
+    </div>
+    <div class="scrollcue"><span class="rail"></span> Scroll to explore</div>
+  </div>
+</section>
+
+<!-- ================= COUNTER RAIL ================= -->
+<section class="counters">
+  <div class="counters-in">
+    <div class="counter">
+      <div class="n">10<span class="z">+</span></div>
+      <div class="l">businesses in this preview exhibition</div>
+      <span class="flag">&#9888; placeholder count</span>
+    </div>
+    <div class="counter">
+      <div class="n"><span class="z">0</span></div>
+      <div class="l">plugins running under any of them</div>
+      <span class="flag" style="color:#5fd39a;opacity:.7">&#10003; true at any volume</span>
+    </div>
+    <div class="counter">
+      <div class="n">1</div>
+      <div class="l">all-inclusive stack &mdash; no plugin tax, no suite tax</div>
+    </div>
+    <div class="counter">
+      <div class="n">10</div>
+      <div class="l">industries represented across the reel</div>
+      <span class="flag">&#9888; placeholder count</span>
+    </div>
+  </div>
+</section>
+
+<!-- ================= THE EXHIBITION ================= -->
+<div class="sec-head" id="exhibit">
+  <div class="lead">
+    <span class="sec-tag">The exhibition &middot; 10 builds</span>
+    <h2>One stack.<br>Ten ways to win.</h2>
+  </div>
+  <p>Each panel is a real build on SGEN &mdash; full-bleed, art-directed, and backed by a single platform.
+    Hover any panel to reveal its metric, the modules it used, and the live links.</p>
+</div>
+
+<div class="exhibit">
+
+  <!-- ===== 01 FERNWOOD DIGITAL — full-bleed, agency ===== -->
+  <article class="panel panel-full">
+    <div class="canvas">
+      <div class="art art-agency">
+        <div class="grid23">
+          <span></span><span></span><span></span><span></span><span></span><span></span>
+          <span></span><span></span><span></span><span></span><span></span><span></span>
+          <span></span><span></span><span></span><span></span><span></span><span></span>
+          <span></span><span></span><span></span><span></span><span></span>
+        </div>
+      </div>
+      <div class="bigtype" aria-hidden="true">fernwood</div>
+      <div class="scrim"></div><div class="grain"></div>
+    </div>
+    <div class="content"><div class="inner">
+      <div class="plaque"><span class="no">01 / 10</span><span class="dot" style="background:var(--c-agency)"></span><span class="vert">Web Agency &middot; Multi-site</span></div>
+      <h3 class="panel-title">Fernwood Digital</h3>
+      <p class="panel-sub">A 12-person Portland studio escaped WordPress plugin-maintenance hell across its whole client book &mdash; one dashboard, no plugin tax, no per-site licence sprawl.</p>
+      <div class="metric">
+        <span class="big">23 &rarr; 1</span>
+        <span class="lab">client sites consolidated onto one stack, one login</span>
+      </div>
+      <div class="reveal">
+        <div class="chips">
+          <span class="chip acc">Multi-site dashboard</span>
+          <span class="chip">Login-as-client</span>
+          <span class="chip">Users &amp; Roles</span>
+          <span class="chip">Templates</span>
+          <span class="chip">Attribution</span>
+          <span class="chip">Foundation Pack</span>
+        </div>
+        <div class="panel-actions">
+          <a class="link-cta solid" href="#">Read the story <span class="arrow">&rarr;</span></a>
+          <span class="link-cta" style="opacity:.5;cursor:default">Live site &mdash; n/a</span>
+        </div>
+        <div class="owner-note">&#9888; OWNER: fabricated brand, person (Priya Raman), metrics &amp; quote &mdash; replace before publish</div>
+      </div>
+    </div></div>
+  </article>
+
+  <!-- ===== 02 WILDGRAZE — split, creator (art left) ===== -->
+  <article class="panel panel-split">
+    <div class="split-in">
+      <div class="stage-art">
+        <div class="canvas">
+          <div class="art art-creator">
+            <div class="ridge"></div><div class="sun"></div><div class="mtn"></div>
+          </div>
+          <div class="bigtype" aria-hidden="true" style="font-size:clamp(40px,9vw,120px)">wildgraze</div>
+          <div class="scrim"></div><div class="grain"></div>
+        </div>
+        <div class="seal"><span class="mk" style="background:var(--c-creator)"></span>Wildgraze</div>
+      </div>
+      <div class="stage-txt">
+        <div class="plaque"><span class="no">02 / 10</span><span class="dot" style="background:var(--c-creator)"></span><span class="vert">Creator / Media &middot; Membership</span></div>
+        <h3 class="panel-title">Field notes, films &amp; a membership &mdash; on one stack.</h3>
+        <p class="panel-sub">A solo media brand ran its content, store and members area on twelve plugins. They rebuilt the whole thing on SGEN. "I write and shoot. I do not babysit plugins anymore."</p>
+        <div class="metric">
+          <span class="big">12 &rarr; 0</span>
+          <span class="lab">plugins retired &middot; 2.9s &rarr; 0.7s archive load</span>
+        </div>
+        <div class="reveal">
+          <div class="chips">
+            <span class="chip acc">Custom Objects</span>
+            <span class="chip">Blog &amp; Posts</span>
+            <span class="chip">SEO Manager</span>
+            <span class="chip">Ecommerce</span>
+            <span class="chip">Popups</span>
+          </div>
+          <div class="panel-actions">
+            <a class="link-cta solid" href="#">Read the story <span class="arrow">&rarr;</span></a>
+            <a class="link-cta" href="#">Visit site <span class="arrow">&rarr;</span></a>
+          </div>
+          <div class="owner-note">&#9888; OWNER: fabricated brand, person (Mara Okonkwo-Reyes), metrics &amp; quote</div>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- ===== 03 TRAILHAND — full-bleed, ecommerce/speed ===== -->
+  <article class="panel panel-full">
+    <div class="canvas">
+      <div class="art art-ecom">
+        <div class="weave"></div>
+        <span class="streak"></span><span class="streak"></span><span class="streak"></span>
+      </div>
+      <div class="bigtype" aria-hidden="true">TRAILHAND</div>
+      <div class="scrim"></div><div class="grain"></div>
+    </div>
+    <div class="content"><div class="inner">
+      <div class="plaque"><span class="no">03 / 10</span><span class="dot" style="background:var(--c-ecom)"></span><span class="vert">Ecommerce &middot; DTC outdoor gear</span></div>
+      <h3 class="panel-title">Trailhand Supply Co.</h3>
+      <p class="panel-sub">A small-batch trail-gear brand left a 14-plugin WooCommerce stack for SGEN's native store &mdash; and got its checkout, its speed, and its Saturdays back.</p>
+      <div class="metric">
+        <span class="big">3.8s &rarr; 0.9s</span>
+        <span class="lab">storefront LCP &middot; about 4&times; faster &middot; 14 plugins &rarr; 0</span>
+      </div>
+      <div class="reveal">
+        <div class="chips">
+          <span class="chip acc">Ecommerce</span>
+          <span class="chip">Native checkout (Stripe + PayPal)</span>
+          <span class="chip">Coupons</span>
+          <span class="chip">Reviews</span>
+          <span class="chip">Attribution</span>
+          <span class="chip">Foundation Pack</span>
+        </div>
+        <div class="panel-actions">
+          <a class="link-cta solid" href="#">Read the story <span class="arrow">&rarr;</span></a>
+          <a class="link-cta" href="#">Visit site <span class="arrow">&rarr;</span></a>
+        </div>
+        <div class="owner-note">&#9888; OWNER: fabricated brand, person (Mara Vance), metrics &amp; quote</div>
+      </div>
+    </div></div>
+  </article>
+
+  <!-- ===== 04 TIDEWATER — split flipped, freelancer (art right) ===== -->
+  <article class="panel panel-split flip">
+    <div class="split-in">
+      <div class="stage-txt">
+        <div class="plaque"><span class="no">04 / 10</span><span class="dot" style="background:var(--c-free)"></span><span class="vert">Freelancer &middot; Solo studio</span></div>
+        <h3 class="panel-title">Six client sites, one dashboard, zero update-night calls.</h3>
+        <p class="panel-sub">A one-person brand-and-web studio rebuilt her own site and five client sites in a single quarter &mdash; and now hosts and maintains all six from one place, by herself.</p>
+        <div class="metric">
+          <span class="big">6 &middot; 1 &middot; 0</span>
+          <span class="lab">sites &middot; dashboard &middot; update-night calls (4.2s &rarr; 0.7s)</span>
+        </div>
+        <div class="reveal">
+          <div class="chips">
+            <span class="chip acc">SG Builder</span>
+            <span class="chip">Templates</span>
+            <span class="chip">Forms</span>
+            <span class="chip">Image Optimization</span>
+            <span class="chip">Backups</span>
+          </div>
+          <div class="panel-actions">
+            <a class="link-cta solid" href="#">Read the story <span class="arrow">&rarr;</span></a>
+            <span class="link-cta" style="opacity:.5;cursor:default">Live site &mdash; n/a</span>
+          </div>
+          <div class="owner-note">&#9888; OWNER: fabricated studio (Tidewater &amp; Co.), person (Renata Okafor), metrics &amp; quote</div>
+        </div>
+      </div>
+      <div class="stage-art">
+        <div class="canvas">
+          <div class="art art-free">
+            <div class="six"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+            <div class="tide"></div>
+          </div>
+          <div class="bigtype" aria-hidden="true" style="font-size:clamp(40px,9vw,120px)">tidewater</div>
+          <div class="scrim"></div><div class="grain"></div>
+        </div>
+        <div class="seal"><span class="mk" style="background:var(--c-free)"></span>Tidewater &amp; Co.</div>
+      </div>
+    </div>
+  </article>
+
+  <!-- ===== 05 CLEARWATER — full-bleed, healthcare ===== -->
+  <article class="panel panel-full">
+    <div class="canvas">
+      <div class="art art-health">
+        <div class="glow"></div><div class="pulse"></div><div class="ecg"></div>
+      </div>
+      <div class="bigtype" aria-hidden="true">clearwater</div>
+      <div class="scrim"></div><div class="grain"></div>
+    </div>
+    <div class="content"><div class="inner">
+      <div class="plaque"><span class="no">05 / 10</span><span class="dot" style="background:var(--c-health)"></span><span class="vert">Healthcare &middot; Multi-location clinic</span></div>
+      <h3 class="panel-title">Clearwater Family Health</h3>
+      <p class="panel-sub">A four-location family-medicine group wanted the boring, dependable site a practice actually needs &mdash; security, backups, consent log and forms all native, nothing to patch themselves.</p>
+      <div class="metric">
+        <span class="big">7 &rarr; 0</span>
+        <span class="lab">plugins retired &middot; 4.6s &rarr; 0.9s load &middot; 4 sites live in 9 days</span>
+      </div>
+      <div class="reveal">
+        <div class="chips">
+          <span class="chip acc">Security</span>
+          <span class="chip">Consent &amp; Tracking</span>
+          <span class="chip">Backups</span>
+          <span class="chip">Forms</span>
+          <span class="chip">Location Selector</span>
+          <span class="chip">Foundation Pack (WAF / SSL)</span>
+        </div>
+        <div class="panel-actions">
+          <a class="link-cta solid" href="#">Read the story <span class="arrow">&rarr;</span></a>
+          <span class="link-cta" style="opacity:.5;cursor:default">Live site &mdash; n/a</span>
+        </div>
+        <div class="owner-note">&#9888; OWNER: fabricated clinic (Clearwater), person (Diane Reyes), metrics &amp; quote &middot; security/compliance posture only &mdash; no HIPAA/SOC2 claim</div>
+      </div>
+    </div></div>
+  </article>
+
+  <!-- ===== 06 KETTLEBACK — split, café franchise (art left) ===== -->
+  <article class="panel panel-split">
+    <div class="split-in">
+      <div class="stage-art">
+        <div class="canvas">
+          <div class="art art-cafe">
+            <div class="dots"></div>
+            <div class="map">
+              <span class="pin" style="top:12%;left:18%"></span>
+              <span class="pin" style="top:30%;left:62%"></span>
+              <span class="pin" style="top:58%;left:22%"></span>
+              <span class="pin" style="top:70%;left:74%"></span>
+              <span class="pin" style="top:42%;left:84%"></span>
+              <span class="pin" style="top:80%;left:46%"></span>
+              <span class="pin" style="top:20%;left:40%"></span>
+              <span class="hub"></span>
+            </div>
+          </div>
+          <div class="bigtype" aria-hidden="true" style="font-size:clamp(40px,8vw,108px)">kettleback</div>
+          <div class="scrim"></div><div class="grain"></div>
+        </div>
+        <div class="seal"><span class="mk" style="background:var(--c-cafe)"></span>Kettleback Coffee Co.</div>
+      </div>
+      <div class="stage-txt">
+        <div class="plaque"><span class="no">06 / 10</span><span class="dot" style="background:var(--c-cafe)"></span><span class="vert">Café Franchise &middot; Multi-location</span></div>
+        <h3 class="panel-title">One dashboard for 34 storefronts.</h3>
+        <p class="panel-sub">A regional café-and-bakery franchise ran 34 location sites on a WordPress Multisite network they were terrified to update. They rebuilt the whole fleet on SGEN.</p>
+        <div class="metric">
+          <span class="big">34 &rarr; 1</span>
+          <span class="lab">location sites, now one dashboard &middot; 2.9s &rarr; 0.8s fleet-wide</span>
+        </div>
+        <div class="reveal">
+          <div class="chips">
+            <span class="chip acc">Multi-location</span>
+            <span class="chip">Multi-site dashboard</span>
+            <span class="chip">Attribution + Call Tracking</span>
+            <span class="chip">Local SEO / schema</span>
+            <span class="chip">Templates</span>
+          </div>
+          <div class="panel-actions">
+            <a class="link-cta solid" href="#">Read the story <span class="arrow">&rarr;</span></a>
+            <a class="link-cta" href="#">Visit site <span class="arrow">&rarr;</span></a>
+          </div>
+          <div class="owner-note">&#9888; OWNER: fabricated brand (Kettleback), person (Renata Salcedo), metrics &amp; quote</div>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- ===== 07 RIVERBEND — split flipped, nonprofit (art right) ===== -->
+  <article class="panel panel-split flip">
+    <div class="split-in">
+      <div class="stage-txt">
+        <div class="plaque"><span class="no">07 / 10</span><span class="dot" style="background:var(--c-nonprofit)"></span><span class="vert">Nonprofit &middot; Community foundation</span></div>
+        <h3 class="panel-title">A neighborhood foundation that runs its own site now.</h3>
+        <p class="panel-sub">Nine staff, no engineers. Events, donations and the newsletter used to live in three plugins that never spoke. Now they are one system &mdash; "we stopped paying a stack of plugins to argue every Tuesday."</p>
+        <div class="metric">
+          <span class="big">6.1s &rarr; 1.3s</span>
+          <span class="lab">load &middot; 12 plugins &rarr; 0 &middot; +41% recurring donors</span>
+        </div>
+        <div class="reveal">
+          <div class="chips">
+            <span class="chip acc">Events (RSVP / iCal)</span>
+            <span class="chip">Ecommerce (donations)</span>
+            <span class="chip">Forms</span>
+            <span class="chip">Popups</span>
+            <span class="chip">First-party Analytics</span>
+          </div>
+          <div class="panel-actions">
+            <a class="link-cta solid" href="#">Read the story <span class="arrow">&rarr;</span></a>
+            <a class="link-cta" href="#">Visit site <span class="arrow">&rarr;</span></a>
+          </div>
+          <div class="owner-note">&#9888; OWNER: fabricated org (Riverbend Commons), person (Dana Okonkwo), metrics &amp; quote</div>
+        </div>
+      </div>
+      <div class="stage-art">
+        <div class="canvas">
+          <div class="art art-nonprofit">
+            <div class="dusk"></div>
+            <div class="lights">
+              <span style="left:6%"></span><span style="left:18%"></span><span style="left:30%"></span>
+              <span style="left:42%"></span><span style="left:54%"></span><span style="left:66%"></span>
+              <span style="left:78%"></span><span style="left:90%"></span>
+            </div>
+          </div>
+          <div class="bigtype" aria-hidden="true" style="font-size:clamp(36px,8vw,100px)">riverbend</div>
+          <div class="scrim"></div><div class="grain"></div>
+        </div>
+        <div class="seal"><span class="mk" style="background:var(--c-nonprofit)"></span>Riverbend Commons</div>
+      </div>
+    </div>
+  </article>
+
+  <!-- ===== 08 HALLORAN & VINT — full-bleed, pro services / FLAGSHIP attribution ===== -->
+  <article class="panel panel-full">
+    <div class="canvas">
+      <div class="art art-pro">
+        <div class="ledger"></div>
+        <div class="flow"><b></b><b></b><b></b><span class="node" style="top:0"></span><span class="node" style="top:50%"></span><span class="node" style="top:100%"></span></div>
+      </div>
+      <div class="bigtype" aria-hidden="true" style="font-size:clamp(40px,9vw,150px)">H&amp;V</div>
+      <div class="scrim"></div><div class="grain"></div>
+    </div>
+    <div class="content"><div class="inner">
+      <div class="plaque"><span class="no">08 / 10</span><span class="dot" style="background:var(--c-pro)"></span><span class="vert">Professional Services &middot; Flagship: Attribution</span></div>
+      <h3 class="panel-title">Halloran &amp; Vint</h3>
+      <p class="panel-sub">A management consultancy left a custom site it couldn't edit &mdash; and finally saw which campaigns sent the partners' phones ringing. The one capability with no native competitor.</p>
+      <div class="metric">
+        <span class="big">$2,940/yr</span>
+        <span class="lab">in plugin + tracking fees eliminated &middot; 3 logins &rarr; 1 &middot; +38% qualified consults</span>
+      </div>
+      <div class="reveal">
+        <div class="chips">
+          <span class="chip acc">Attribution</span>
+          <span class="chip acc">Call Tracking</span>
+          <span class="chip">Forms &amp; Lead Reports</span>
+          <span class="chip">SG Builder</span>
+          <span class="chip">On-Page Optimization</span>
+        </div>
+        <div class="panel-actions">
+          <a class="link-cta solid" href="#">Read the story <span class="arrow">&rarr;</span></a>
+          <a class="link-cta" href="#">Visit site <span class="arrow">&rarr;</span></a>
+        </div>
+        <div class="owner-note">&#9888; OWNER: fabricated firm (Halloran &amp; Vint), person (Marcus Vint), metrics &amp; quote</div>
+      </div>
+    </div></div>
+  </article>
+
+  <!-- ===== 09 MARROW & VINE — split, restaurant (art left) ===== -->
+  <article class="panel panel-split">
+    <div class="split-in">
+      <div class="stage-art">
+        <div class="canvas">
+          <div class="art art-rest">
+            <div class="grainw"></div><div class="ember"></div>
+            <span class="spark"></span><span class="spark"></span><span class="spark"></span>
+          </div>
+          <div class="bigtype" aria-hidden="true" style="font-family:var(--serif);font-size:clamp(34px,7vw,92px)">Marrow &amp; Vine</div>
+          <div class="scrim"></div><div class="grain"></div>
+        </div>
+        <div class="seal"><span class="mk" style="background:var(--c-rest)"></span>Marrow &amp; Vine</div>
+      </div>
+      <div class="stage-txt">
+        <div class="plaque"><span class="no">09 / 10</span><span class="dot" style="background:var(--c-rest)"></span><span class="vert">Restaurant &middot; Wood-fire &middot; 3 rooms</span></div>
+        <h3 class="panel-title">The website finally moves at the speed of the menu.</h3>
+        <p class="panel-sub">A neighborhood restaurant that grew into three rooms outgrew a Squarespace site held together with six booking, ordering and pop-up add-ons. They rebuilt on SGEN &mdash; one stack, no plugins.</p>
+        <div class="metric">
+          <span class="big">2.9s &rarr; 0.8s</span>
+          <span class="lab">menu-page load &middot; 6 add-ons &rarr; 0 &middot; +34% pickup orders</span>
+        </div>
+        <div class="reveal">
+          <div class="chips">
+            <span class="chip acc">Menus</span>
+            <span class="chip">Events</span>
+            <span class="chip">Ecommerce (cart)</span>
+            <span class="chip">Location Selector</span>
+            <span class="chip">Local SEO</span>
+          </div>
+          <div class="panel-actions">
+            <a class="link-cta solid" href="#">Read the story <span class="arrow">&rarr;</span></a>
+            <a class="link-cta" href="#">Visit site <span class="arrow">&rarr;</span></a>
+          </div>
+          <div class="owner-note">&#9888; OWNER: fabricated brand (Marrow &amp; Vine), person (Renata Calloway), metrics &amp; quote</div>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- ===== 10 THORNBURY — full-bleed, small business ===== -->
+  <article class="panel panel-full">
+    <div class="canvas">
+      <div class="art art-smb">
+        <div class="rows"></div>
+        <span class="leaf"></span><span class="leaf"></span><span class="leaf"></span>
+      </div>
+      <div class="bigtype" aria-hidden="true" style="font-size:clamp(36px,8vw,120px)">thornbury</div>
+      <div class="scrim"></div><div class="grain"></div>
+    </div>
+    <div class="content"><div class="inner">
+      <div class="plaque"><span class="no">10 / 10</span><span class="dot" style="background:var(--c-smb)"></span><span class="vert">Small Business &middot; Garden &amp; supply</span></div>
+      <h3 class="panel-title">Thornbury Garden &amp; Supply</h3>
+      <p class="panel-sub">A family-run garden center loaded above five seconds on a phone in the parking lot &mdash; exactly where customers checked before driving over. "I sell mulch and perennials &mdash; I never signed up to be a part-time web developer."</p>
+      <div class="metric">
+        <span class="big">5.9s &rarr; 0.8s</span>
+        <span class="lab">mobile load &middot; 19 plugins &rarr; 0 &middot; ~$2,300/yr saved</span>
+      </div>
+      <div class="reveal">
+        <div class="chips">
+          <span class="chip acc">SG Builder</span>
+          <span class="chip">Forms</span>
+          <span class="chip">On-Page Optimization</span>
+          <span class="chip">Attribution</span>
+          <span class="chip">Backups</span>
+        </div>
+        <div class="panel-actions">
+          <a class="link-cta solid" href="#">Read the story <span class="arrow">&rarr;</span></a>
+          <span class="link-cta" style="opacity:.5;cursor:default">Live site &mdash; n/a</span>
+        </div>
+        <div class="owner-note">&#9888; OWNER: fabricated brand (Thornbury), person (Dana Reyes), metrics &amp; quote</div>
+      </div>
+    </div></div>
+  </article>
+
+</div><!-- /.exhibit -->
+
+<!-- ================= FEATURED REEL (horizontal-scroll spotlight) ================= -->
+<div class="sec-head" id="reel">
+  <div class="lead">
+    <span class="sec-tag">Curator's reel</span>
+    <h2>Built to be seen.</h2>
+  </div>
+  <p>A hand-picked strip of the builds that best show the craft &mdash; scroll sideways. No metrics here, just the work.</p>
+</div>
+<div class="reel-wrap">
+  <div class="reel">
+    <div class="reel-card">
+      <div class="canvas"><div class="art art-rest"><div class="grainw"></div><div class="ember"></div></div><div class="scrim"></div><div class="grain"></div></div>
+      <div class="body">
+        <p class="commend">Wood-fire warmth that never tips into clutter &mdash; the menu leads, the type stays out of its way.</p>
+        <p class="by"><span class="pip" style="background:var(--c-rest)"></span>Marrow &amp; Vine &middot; Restaurant</p>
+      </div>
+    </div>
+    <div class="reel-card">
+      <div class="canvas"><div class="art art-creator"><div class="ridge"></div><div class="sun"></div><div class="mtn"></div></div><div class="scrim"></div><div class="grain"></div></div>
+      <div class="body">
+        <p class="commend">Editorial, unhurried, photographic. A media brand that reads like a printed field journal.</p>
+        <p class="by"><span class="pip" style="background:var(--c-creator)"></span>Wildgraze &middot; Creator / Media</p>
+      </div>
+    </div>
+    <div class="reel-card">
+      <div class="canvas"><div class="art art-pro"><div class="ledger"></div><div class="flow"><b></b><b></b><b></b></div></div><div class="scrim"></div><div class="grain"></div></div>
+      <div class="body">
+        <p class="commend">Sober, institutional, confident &mdash; expertise signalled in restraint, not flash.</p>
+        <p class="by"><span class="pip" style="background:var(--c-pro)"></span>Halloran &amp; Vint &middot; Consulting</p>
+      </div>
+    </div>
+    <div class="reel-card">
+      <div class="canvas"><div class="art art-cafe"><div class="dots"></div><div class="map"><span class="hub"></span></div></div><div class="scrim"></div><div class="grain"></div></div>
+      <div class="body">
+        <p class="commend">Thirty-four storefronts, one identity &mdash; every room rendered from the same warm template.</p>
+        <p class="by"><span class="pip" style="background:var(--c-cafe)"></span>Kettleback &middot; Café Franchise</p>
+      </div>
+    </div>
+    <div class="reel-card">
+      <div class="canvas"><div class="art art-nonprofit"><div class="dusk"></div><div class="lights"><span style="left:14%"></span><span style="left:34%"></span><span style="left:54%"></span><span style="left:74%"></span></div></div><div class="scrim"></div><div class="grain"></div></div>
+      <div class="body">
+        <p class="commend">Warm, photo-led, generous &mdash; a community page that feels built by neighbors, for the neighborhood.</p>
+        <p class="by"><span class="pip" style="background:var(--c-nonprofit)"></span>Riverbend Commons &middot; Nonprofit</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= HOW THESE GET BUILT ================= -->
+<div class="sec-head" id="built">
+  <div class="lead">
+    <span class="sec-tag">Attribution-forward</span>
+    <h2>The work <em style="font-style:normal;color:var(--red-hot)">is</em> the platform.</h2>
+  </div>
+  <p>Every site in this exhibition was built on SGEN itself. Same builder, same box, same baseline &mdash; nothing stitched together underneath.</p>
+</div>
+<div class="built">
+  <div class="b">
+    <div class="k">01</div>
+    <h3>One builder, no code</h3>
+    <p>Each site is built in <b>SG Builder</b> &mdash; a visual, drag-and-drop builder with 48 components &mdash; from a finished template, not a blank page. Designers ship; developers optional.</p>
+  </div>
+  <div class="b">
+    <div class="k">02</div>
+    <h3>Plugins already in the box</h3>
+    <p>Forms, SEO, store, events, attribution, popups, backups &mdash; <b>native modules, not plugins</b>. No plugin tax, no suite tax, nothing to license or update against each other.</p>
+  </div>
+  <div class="b">
+    <div class="k">03</div>
+    <h3>A free baseline under it all</h3>
+    <p>The <b>Foundation Pack</b> ships free on every plan: hosting, auto-renewing SSL, global CDN, a WAF, automatic security patching, and the multi-site dashboard.</p>
+  </div>
+</div>
+
+<!-- ================= TESTIMONIALS ================= -->
+<div class="sec-head" id="voices">
+  <div class="lead">
+    <span class="sec-tag">In their words</span>
+    <h2>Operators, not engineers.</h2>
+  </div>
+  <p>The work sells the result. These sell the experience of running it. <span style="color:#ffd23a">&#9888; placeholder voices.</span></p>
+</div>
+<section class="voices">
+  <div class="voices-in">
+    <div class="voice">
+      <div class="qm">&ldquo;</div>
+      <blockquote>WordPress made us a maintenance company. On SGEN there's one dashboard and there are no plugins to break &mdash; I got my design studio back, and my clients can finally see which campaign is actually working.</blockquote>
+      <div class="who">
+        <span class="av" style="background:linear-gradient(135deg,var(--c-agency),#0a1a13)"></span>
+        <span class="nm">Priya Raman<small>Founder &middot; Fernwood Digital</small></span>
+      </div>
+    </div>
+    <div class="voice">
+      <div class="qm">&ldquo;</div>
+      <blockquote>The morning our cart went down during a launch I was on the phone with a plugin's support queue. On SGEN there's nothing to update against each other &mdash; it just stays up. I spend my Saturdays making gear again.</blockquote>
+      <div class="who">
+        <span class="av" style="background:linear-gradient(135deg,var(--c-ecom),#100b05)"></span>
+        <span class="nm">Mara Vance<small>Founder &middot; Trailhand Supply Co.</small></span>
+      </div>
+    </div>
+    <div class="voice">
+      <div class="qm">&ldquo;</div>
+      <blockquote>We're a clinic, not a software team. On SGEN the security, the backups, the consent log and the forms are just part of the platform &mdash; one stack, nothing to renew, nothing to patch ourselves. It's the boring, dependable site a practice actually needs.</blockquote>
+      <div class="who">
+        <span class="av" style="background:linear-gradient(135deg,var(--c-health),#03100f)"></span>
+        <span class="nm">Diane Reyes<small>Practice Administrator &middot; Clearwater Family Health</small></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CLOSING CTA ================= -->
+<section class="closer" id="close">
+  <div class="glowbg"></div>
+  <div class="closer-in">
+    <h2>Your site could be the <span class="em">next</span> one in here.</h2>
+    <p>Start free on the Sandbox &mdash; the whole platform, every module, on a staging URL with no credit card and no time limit. Ship when you're ready, from $17/mo.</p>
+    <div class="acts">
+      <a class="btn btn-primary" href="#" style="padding:15px 26px;font-size:15px">Start Building <span class="arrow">&rarr;</span></a>
+      <a class="btn btn-ghost" href="#" style="padding:15px 26px;font-size:15px">Talk to Sales</a>
+    </div>
+    <div class="seg">
+      <span>Building for others?</span>
+      <a href="#">For agencies &rarr;</a>
+      <a href="#">For multi-location &rarr;</a>
+      <a href="#">See the Builder &rarr;</a>
+    </div>
+    <p class="fineprint">Sandbox $0 &mdash; no credit card, no time limit. 2-week free trial on paid plans. Cancel anytime, prorated.</p>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer class="foot">
+  <div class="foot-in">
+    <div>
+      <a class="brand" href="#top"><span class="glyph"></span><span class="wm">SGEN<small>SHOWCASE</small></span></a>
+      <p class="mini">One all-inclusive platform. Build the whole site &mdash; no plugins underneath. This page is a fabricated preview exhibition.</p>
+    </div>
+    <div>
+      <h4>Platform</h4>
+      <ul><li><a href="#">SG-Core</a></li><li><a href="#">SG-Modules</a></li><li><a href="#">SG-Dashboard</a></li><li><a href="#">Foundation Pack</a></li></ul>
+    </div>
+    <div>
+      <h4>Proof</h4>
+      <ul><li><a href="#exhibit">Showcase</a></li><li><a href="#voices">Customers</a></li><li><a href="#reel">Featured</a></li><li><a href="#">Compare</a></li></ul>
+    </div>
+    <div>
+      <h4>Company</h4>
+      <ul><li><a href="#">About</a></li><li><a href="#">Partners</a></li><li><a href="#">Trust &amp; Legal</a></li><li><a href="#">Resources</a></li></ul>
+    </div>
+    <div>
+      <h4>Start</h4>
+      <ul><li><a href="#close">Free Sandbox</a></li><li><a href="#close">Pricing</a></li><li><a href="#">Contact Sales</a></li><li><a href="#">Sign in</a></li></ul>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <span>&copy; 2026 SGEN &mdash; preview build, not a live site.</span>
+    <span style="color:#ffd23a;font-family:var(--mono);font-size:11px">&#9888; PREVIEW &mdash; all brands, people, metrics &amp; quotes are fabricated placeholders</span>
+  </div>
+</footer>
+
+</div><!-- /.wrap -->
+
+<script>
+/* Minimal, dependency-free: scroll-linked staggered fade-up for panels
+   + light parallax drift on the hero tiles. Paradigm-serving motion only. */
+(function(){
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduce) return;
+
+  /* fade-up on enter */
+  var targets = document.querySelectorAll('.panel, .reel-card, .built .b, .voice, .counter');
+  targets.forEach(function(el){
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(34px)';
+    el.style.transition = 'opacity .9s cubic-bezier(.16,.84,.36,1), transform .9s cubic-bezier(.16,.84,.36,1)';
+  });
+  if('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){
+          e.target.style.opacity='1';
+          e.target.style.transform='none';
+          io.unobserve(e.target);
+        }
+      });
+    }, {threshold:.14, rootMargin:'0px 0px -8% 0px'});
+    targets.forEach(function(el){ io.observe(el); });
+  } else {
+    targets.forEach(function(el){ el.style.opacity='1'; el.style.transform='none'; });
+  }
+
+  /* subtle parallax on hero floating tiles */
+  var tiles = document.querySelectorAll('.htile');
+  var ticking = false;
+  function park(){
+    var y = window.scrollY;
+    tiles.forEach(function(t,i){
+      var depth = (i+1) * 0.06;
+      t.style.marginTop = (y * depth * -1) + 'px';
+    });
+    ticking = false;
+  }
+  window.addEventListener('scroll', function(){
+    if(!ticking){ window.requestAnimationFrame(park); ticking = true; }
+  }, {passive:true});
+})();
+</script>
+
+</body>
+</html>

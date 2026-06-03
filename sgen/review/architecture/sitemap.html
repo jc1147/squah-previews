@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SGEN — Site Architecture &amp; Positioning Map (v3 · live-grounded)</title>
+<style>
+  :root{
+    --red:#d51522; --red-2:#b30f08; --red-ink:#7d0a06;
+    --ink:#0e0f12; --ink-2:#23262d; --slate:#4b515d; --mut:#7b828f;
+    --line:#e4e7ec; --line-2:#eef1f5; --bg:#f6f7f9; --card:#ffffff; --chip:#f1f3f7;
+    --new:#0a7d4d; --new-bg:#e7f6ee; --warn:#b8870c;
+    --shadow:0 1px 2px rgba(16,18,22,.04),0 8px 24px rgba(16,18,22,.06);
+    --shadow-lg:0 2px 6px rgba(16,18,22,.06),0 30px 60px rgba(16,18,22,.12);
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --mono:"SF Mono",ui-monospace,"Cascadia Mono","Roboto Mono",Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+  body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--bg);line-height:1.5;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  h1,h2,h3,h4{margin:0;line-height:1.15;letter-spacing:-.02em}
+  .wrap{max-width:1280px;margin:0 auto;padding:0 28px}
+  .mono{font-family:var(--mono)}
+
+  .topbar{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.86);backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid var(--line)}
+  .topbar .wrap{display:flex;align-items:center;gap:18px;height:58px}
+  .brand{display:flex;align-items:center;gap:9px;font-weight:800;letter-spacing:-.03em;font-size:18px}
+  .brand .dot{width:22px;height:22px;border-radius:6px;background:var(--red);display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:900}
+  .topnav{display:flex;gap:2px;margin-left:6px;flex-wrap:wrap}
+  .topnav a{font-size:13px;color:var(--slate);padding:7px 10px;border-radius:8px;font-weight:600}
+  .topnav a:hover{background:var(--chip);color:var(--ink)}
+  .topbar .spacer{flex:1}
+  .tag{font-size:11px;font-weight:700;color:var(--mut);font-family:var(--mono);letter-spacing:.02em}
+
+  .hero{background:linear-gradient(180deg,#0e0f12 0%, #16181d 62%, #1b1e24 100%);color:#fff;padding:60px 0 50px;position:relative;overflow:hidden}
+  .hero::after{content:"";position:absolute;right:-160px;top:-120px;width:520px;height:520px;border-radius:50%;background:radial-gradient(closest-side,rgba(213,21,34,.34),transparent 70%);pointer-events:none}
+  .hero .eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#ff6a63;background:rgba(213,21,34,.12);border:1px solid rgba(213,21,34,.32);padding:6px 12px;border-radius:999px}
+  .hero h1{font-size:clamp(2.1rem,4.6vw,3.6rem);font-weight:850;margin:18px 0 14px;max-width:16ch}
+  .hero h1 .hl{color:#ff5247}
+  .hero p.lede{font-size:clamp(1rem,1.4vw,1.18rem);color:#c4c8d2;max-width:64ch;margin:0 0 14px}
+  .hero .src{font-size:11.5px;color:#7e8696;font-family:var(--mono)}
+  .statrow{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px}
+  .stat{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:12px 16px;min-width:118px}
+  .stat b{display:block;font-size:1.55rem;font-weight:850;letter-spacing:-.03em;color:#fff}
+  .stat span{font-size:11px;color:#9aa0ad;font-weight:600}
+  .stat b .u{font-size:.95rem;color:var(--red);font-weight:800}
+
+  .slopbar{background:#fff6f6;border-bottom:1px solid #f3d6d6}
+  .slopbar .wrap{padding:13px 28px;font-size:12.5px;color:#8a3a3a;display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap}
+  .slopbar b{color:var(--red-2)}
+  .slopbar .strike{text-decoration:line-through;opacity:.7}
+
+  section.band{padding:52px 0;border-bottom:1px solid var(--line)}
+  .khead{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:8px}
+  .khead .kn{font-family:var(--mono);font-size:12px;color:var(--red);font-weight:800;letter-spacing:.1em}
+  .khead h2{font-size:clamp(1.4rem,2.4vw,2rem);font-weight:820}
+  .ksub{color:var(--slate);max-width:76ch;margin:0 0 26px;font-size:15px}
+
+  /* pains */
+  .pains{display:grid;grid-template-columns:repeat(4,1fr);gap:13px}
+  @media(max-width:980px){.pains{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:540px){.pains{grid-template-columns:1fr}}
+  .pain{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+  .pain::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--red)}
+  .pain .pn{font-family:var(--mono);font-size:11px;color:var(--mut);font-weight:700}
+  .pain h4{font-size:15px;margin:7px 0 7px;color:var(--red-ink)}
+  .pain .pp{font-size:12px;color:var(--slate);margin:0 0 10px;font-style:italic}
+  .pain .fix{font-size:12.5px;color:var(--ink-2);font-weight:600;display:flex;gap:7px;align-items:flex-start}
+  .pain .fix::before{content:"\2192";color:var(--new);font-weight:800;flex:none}
+  .twoliner{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px}
+  @media(max-width:780px){.twoliner{grid-template-columns:1fr}}
+  .oneL{background:#101216;color:#fff;border-radius:14px;padding:20px 22px}
+  .oneL b{color:#ff6a63;font-size:1.05rem;display:block;margin-bottom:4px}
+  .oneL span{font-size:13px;color:#b9bec9}
+
+  .wedges{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-top:30px}
+  @media(max-width:880px){.wedges{grid-template-columns:1fr 1fr}}
+  @media(max-width:540px){.wedges{grid-template-columns:1fr}}
+  .wedge{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:16px;box-shadow:var(--shadow)}
+  .wedge h4{font-size:14px;margin:0 0 5px;display:flex;align-items:center;gap:8px}
+  .wedge h4 .wn{font-family:var(--mono);font-size:10.5px;color:#fff;background:var(--red);border-radius:5px;padding:2px 6px;font-weight:800}
+  .wedge p{font-size:12.3px;color:var(--slate);margin:0}
+
+  /* pricing */
+  .price-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  @media(max-width:860px){.price-steps{grid-template-columns:1fr}}
+  .pstep{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:var(--shadow);position:relative}
+  .pstep .sx{position:absolute;top:-12px;left:18px;width:28px;height:28px;border-radius:8px;background:var(--ink);color:#fff;font-weight:850;display:flex;align-items:center;justify-content:center;font-size:14px}
+  .pstep h4{font-size:15px;margin:8px 0 10px}
+  .pstep ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:7px}
+  .pstep li{font-size:12.5px;color:var(--ink-2);display:flex;gap:8px}
+  .pstep li b{font-weight:750}
+  .pstep li::before{content:"";margin-top:6px;width:5px;height:5px;border-radius:50%;background:var(--red);flex:none}
+  .foundation{margin-top:16px;background:var(--new-bg);border:1px solid #cdeedd;border-radius:12px;padding:14px 16px;font-size:13px;color:#0a6a43}
+  .foundation b{color:#085436}
+  .pricenote{margin-top:12px;font-size:12px;color:var(--mut);font-family:var(--mono)}
+
+  /* options */
+  .opt-wrap{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  @media(max-width:900px){.opt-wrap{grid-template-columns:1fr}}
+  .opt{background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:18px;cursor:pointer;transition:border-color .15s,transform .15s,box-shadow .15s;box-shadow:var(--shadow)}
+  .opt:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg)}
+  .opt[aria-pressed="true"]{border-color:var(--red);box-shadow:0 0 0 1px var(--red),var(--shadow-lg)}
+  .opt .ol{display:flex;align-items:center;justify-content:space-between;gap:8px}
+  .opt .oid{font-family:var(--mono);font-size:11px;color:var(--mut);font-weight:800}
+  .opt .rec{font-size:10px;font-weight:800;color:#fff;background:var(--red);padding:3px 8px;border-radius:999px;letter-spacing:.04em}
+  .opt .liv{font-size:10px;font-weight:800;color:#fff;background:var(--ink);padding:3px 8px;border-radius:999px}
+  .opt h4{font-size:14.5px;margin:9px 0 8px}
+  .navmock{display:flex;gap:5px;flex-wrap:wrap;margin:8px 0 10px}
+  .navmock span{font-size:11px;font-weight:700;color:var(--ink-2);background:var(--chip);border:1px solid var(--line);padding:4px 9px;border-radius:7px}
+  .navmock span.cta{background:var(--red);color:#fff;border-color:var(--red)}
+  .navmock span.add{background:var(--new-bg);color:var(--new);border-color:#bfe7d2}
+  .opt p{font-size:12px;color:var(--slate);margin:0}
+
+  .controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 22px}
+  .seg{display:inline-flex;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:3px;gap:2px;box-shadow:var(--shadow);flex-wrap:wrap}
+  .seg button{border:0;background:transparent;font-family:var(--sans);font-size:12.5px;font-weight:600;color:var(--slate);padding:7px 12px;border-radius:7px;cursor:pointer}
+  .seg button[aria-pressed="true"]{background:var(--ink);color:#fff}
+  .toggle{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--slate);cursor:pointer;user-select:none;margin-left:auto}
+  .toggle input{position:absolute;opacity:0;pointer-events:none}
+  .toggle .tb{width:38px;height:22px;border-radius:999px;background:#cfd4dd;position:relative;transition:background .15s;flex:none}
+  .toggle .tb::after{content:"";position:absolute;left:2px;top:2px;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:left .15s}
+  .toggle input:checked + .tb{background:var(--new)}
+  .toggle input:checked + .tb::after{left:18px}
+
+  .tier{margin:0 0 26px;scroll-margin-top:70px}
+  .tier-h{display:flex;align-items:center;gap:12px;margin:0 0 13px;padding-bottom:9px;border-bottom:2px solid var(--ink)}
+  .tier-h .tid{font-family:var(--mono);font-size:12px;font-weight:800;color:#fff;background:var(--ink);border-radius:6px;padding:3px 9px}
+  .tier-h h3{font-size:1.15rem;font-weight:800}
+  .tier-h .tnote{font-size:12.5px;color:var(--mut);font-weight:600}
+  .tier-h .tcount{margin-left:auto;font-family:var(--mono);font-size:11.5px;color:var(--mut)}
+  .grp-label{font-family:var(--mono);font-size:11px;font-weight:800;letter-spacing:.1em;color:var(--red);margin:14px 0 8px;text-transform:uppercase}
+  .nodes{display:grid;grid-template-columns:repeat(auto-fill,minmax(248px,1fr));gap:11px}
+  .node{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;box-shadow:var(--shadow);position:relative;transition:transform .12s,box-shadow .12s}
+  .node:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg)}
+  .node .path{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--red-ink);display:flex;align-items:center;gap:7px}
+  .node .star{color:var(--red)}
+  .node h5{font-size:13.5px;margin:5px 0 5px;font-weight:750;letter-spacing:-.01em}
+  .node p{font-size:11.8px;color:var(--slate);margin:0}
+  .node .nb{position:absolute;top:11px;right:11px;font-size:9px;font-weight:800;letter-spacing:.04em;padding:2px 6px;border-radius:5px;text-transform:uppercase}
+  .node[data-new="1"] .nb{background:var(--new-bg);color:var(--new)}
+  .node[data-new="1"]{border-color:#bfe7d2}
+  body.hl .node[data-new="1"]{box-shadow:0 0 0 1.5px var(--new),var(--shadow)}
+  body.hl .node[data-new="0"]{opacity:.42}
+  .node[data-new="0"] .nb{display:none}
+  .hidden{display:none!important}
+
+  .feat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(238px,1fr));gap:13px}
+  .fmod{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:15px 16px;box-shadow:var(--shadow)}
+  .fmod h4{font-size:13.5px;display:flex;align-items:center;gap:8px;margin-bottom:9px;padding-bottom:8px;border-bottom:1px solid var(--line-2)}
+  .fmod h4 .ic{width:22px;height:22px;border-radius:6px;background:var(--red);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:900;flex:none}
+  .fmod ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:5px}
+  .fmod li{font-size:12px;color:var(--ink-2);display:flex;gap:7px;align-items:flex-start}
+  .fmod li::before{content:"";margin-top:6px;width:5px;height:5px;border-radius:50%;background:var(--red);flex:none}
+  .fmod li b{font-weight:700}
+
+  .cmp3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:22px}
+  @media(max-width:900px){.cmp3{grid-template-columns:1fr}}
+  .cmpcol{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:var(--shadow)}
+  .cmpcol.sg{border-color:rgba(213,21,34,.4);box-shadow:0 0 0 1px rgba(213,21,34,.22),var(--shadow-lg)}
+  .cmpcol .cname{font-size:1.05rem;font-weight:820;display:flex;align-items:center;gap:8px}
+  .cmpcol.sg .cname{color:var(--red)}
+  .cmpcol .cmodel{font-size:11.5px;color:var(--mut);font-family:var(--mono);margin:3px 0 12px}
+  .cmpcol ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:7px}
+  .cmpcol li{font-size:12.3px;color:var(--ink-2);display:flex;justify-content:space-between;gap:10px;border-bottom:1px dashed var(--line-2);padding-bottom:6px}
+  .cmpcol li span{color:var(--mut);font-family:var(--mono);font-weight:700;flex:none}
+  table.score{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:var(--shadow);font-size:13px}
+  table.score th,table.score td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--line-2)}
+  table.score thead th{background:#101216;color:#fff;font-size:12px;font-weight:700}
+  table.score thead th.sg{background:var(--red)}
+  table.score td.dim{font-weight:700;color:var(--ink)}
+  table.score tbody tr:hover{background:#fafbfc}
+  table.score td.c{text-align:center;font-family:var(--mono);font-weight:700}
+  .yes{color:var(--new)} .no{color:#c2353a;opacity:.75} .par{color:var(--warn)}
+  table.score td.sgcell{background:rgba(213,21,34,.05);font-weight:800;color:var(--red-ink);text-align:center;font-family:var(--mono)}
+  .refnote{margin-top:16px;background:var(--chip);border:1px solid var(--line);border-radius:12px;padding:13px 16px;font-size:12.5px;color:var(--slate)}
+  .refnote b{color:var(--ink)}
+
+  .flows{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:13px}
+  .flow{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:15px 16px;box-shadow:var(--shadow)}
+  .flow .ft{font-size:12.5px;font-weight:800;margin-bottom:10px;color:var(--ink)}
+  .flow .ft .pp{color:var(--red);font-family:var(--mono);font-size:10.5px;border:1px solid rgba(213,21,34,.3);background:rgba(213,21,34,.06);padding:2px 7px;border-radius:999px;margin-right:7px}
+  .chain{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+  .chain .pg{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--ink-2);background:var(--chip);border:1px solid var(--line);padding:4px 8px;border-radius:7px}
+  .chain .pg.end{background:var(--red);color:#fff;border-color:var(--red)}
+  .chain .ar{color:var(--mut);font-weight:800;font-size:12px}
+
+  footer{padding:36px 0 56px;color:var(--mut);font-size:12px}
+  footer .wrap{display:flex;flex-wrap:wrap;gap:18px;justify-content:space-between;align-items:center}
+  .legend{display:flex;gap:16px;flex-wrap:wrap}
+  .legend span{display:inline-flex;align-items:center;gap:6px;font-weight:600}
+  .legend .sw{width:11px;height:11px;border-radius:3px;display:inline-block}
+
+  .reveal{opacity:0;transform:translateY(14px);transition:opacity .5s ease,transform .5s ease}
+  .reveal.in{opacity:1;transform:none}
+  @media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<div class="topbar"><div class="wrap">
+  <div class="brand"><span class="dot">S</span>SGEN</div>
+  <nav class="topnav">
+    <a href="#positioning">Positioning</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#options">Nav</a>
+    <a href="#sitemap">Sitemap</a>
+    
+    <a href="#compare">vs WordPress</a>
+    <a href="#flows">Flows</a>
+  </nav>
+  <span class="spacer"></span>
+  <span class="tag">ARCHITECTURE v3 &middot; live-grounded</span>
+</div></div>
+
+<header class="hero"><div class="wrap">
+  <span class="eyebrow">Site Architecture &amp; Positioning Map</span>
+  <h1>Finally a <span class="hl">WordPress alternative</span>.</h1>
+  <p class="lede">SGEN takes the familiar layout of the WordPress + Elementor franken-stack and performs a long-overdue exorcism on the technical debt &mdash; zero plugin roulette, zero update anxiety, zero plugin tax. <b style="color:#e9ebef">Design like Elementor. Ship like a real product.</b></p>
+  <p class="src">Positioning &amp; pricing pulled verbatim from the live sgen.com (2026-06-01). The page map adds the missing-pages overhaul on top of the real product.</p>
+  <div class="statrow">
+    <div class="stat"><b id="page-count">&mdash;</b><span>pages mapped</span></div>
+    <div class="stat"><b>21</b><span>first-party modules</span></div>
+    <div class="stat"><b>Foundation&nbsp;Pack</b><span>free, every plan</span></div>
+    <div class="stat"><b>From $17</b><span>/mo entry plan</span></div>
+    <div class="stat"><b id="new-count">&mdash;</b><span>new pages (the overhaul)</span></div>
+  </div>
+</div></header>
+
+<div class="slopbar"><div class="wrap">
+  <b>v3 corrected from the live site.</b>
+  <span>Removed as outdated slop (May-19 strategy doc, contradicts sgen.com):
+  <span class="strike">native CRM</span>, <span class="strike">email-marketing</span>, <span class="strike">vertical-kit product</span>, <span class="strike">"100% reseller margin"</span>, <span class="strike">$87 founder bundle</span>, <span class="strike">$222&ndash;540 calculator</span>, <span class="strike">fixed 6-tier numbers</span>, <span class="strike">/website-builder /restaurant-website /landing-page-builder</span>. Kept: the real WordPress-alternative positioning, the 21-module configurator, and the missing-pages overhaul.</span>
+</div></div>
+
+<!-- ============ POSITIONING ============ -->
+<section class="band reveal" id="positioning"><div class="wrap">
+  <div class="khead"><span class="kn">01 / POSITIONING</span><h2>Four WordPress pains &mdash; four native fixes</h2></div>
+  <p class="ksub">The live homepage runs a pain&rarr;fix narrative, not a price calculator. This is the real story the overhaul amplifies.</p>
+  <div class="pains">
+    <div class="pain"><div class="pn">PAIN 01</div><h4>Bleeding Traffic</h4><p class="pp">"Every second of delay slashes your audience by half. Under 3 seconds or you pay for traffic you never keep."</p><div class="fix">Server-side rendering delivers finished content to users &mdash; and Google &mdash; instantly.</div></div>
+    <div class="pain"><div class="pn">PAIN 02</div><h4>Broken UX</h4><p class="pp">"Most sites choke on background scripts. To convert, content must render the moment a user clicks."</p><div class="fix">Smart-Loading Logic: above-the-fold renders in a flash, instant-on.</div></div>
+    <div class="pain"><div class="pn">PAIN 03</div><h4>Legal Vulnerability</h4><p class="pp">"The 2025 ADA lawsuit surge proves 'good enough' accessibility is a legal target."</p><div class="fix">Compliance-grade security posture + audit-ready logging, built in.</div></div>
+    <div class="pain"><div class="pn">PAIN 04</div><h4>The Update Anxiety</h4><p class="pp">"30% of site failures are self-inflicted through plugin updates."</p><div class="fix">Immutable Stability &mdash; native features replace plugins, removing the #1 source of vulnerabilities.</div></div>
+  </div>
+  <div class="twoliner">
+    <div class="oneL"><b>"Host fast. Sleep easy."</b><span>Managed, hardened hosting with the Foundation Pack on every plan.</span></div>
+    <div class="oneL"><b>"What WordPress would look like if it were rebuilt in 2026."</b><span>Familiar Elementor-style layout, real-product engineering underneath &mdash; real code you own, not a black-box AI prompt you can't ship from.</span></div>
+  </div>
+
+  <div class="wedges">
+    <div class="wedge"><h4><span class="wn">W1</span>Zero plugin tax</h4><p>Native features replace the plugin franken-stack &mdash; no add-ons, no maintenance, no roulette.</p></div>
+    <div class="wedge"><h4><span class="wn">W2</span>Server-first speed</h4><p>SSR + smart-loading deliver instant-on content for users and crawlers.</p></div>
+    <div class="wedge"><h4><span class="wn">W3</span>Immutable stability</h4><p>No plugin updates to break your site &mdash; the #1 failure source, gone.</p></div>
+    <div class="wedge"><h4><span class="wn">W4</span>Compliance-grade</h4><p>ADA posture + audit-ready logging against the lawsuit surge.</p></div>
+    <div class="wedge"><h4><span class="wn">W5</span>Native attribution</h4><p>The Attributions module tracks session + phone-tap source on every lead &mdash; no CallRail.</p></div>
+    <div class="wedge"><h4><span class="wn">W6</span>Foundation Pack free</h4><p>Hosting + SSL + CDN + WAF + security + multi-site, included on every plan &mdash; even Sandbox.</p></div>
+  </div>
+</div></section>
+
+<!-- ============ PRICING ============ -->
+<section class="band reveal" id="pricing"><div class="wrap">
+  <div class="khead"><span class="kn">02 / PRICING</span><h2>Configure your plan &mdash; build your stack in three steps</h2></div>
+  <p class="ksub">The live model is a configurator, not a fixed tier ladder: a base plan, then the modules you actually need, à la carte. (Exact tier prices render in the live configurator &mdash; not invented here.)</p>
+  <div class="price-steps">
+    <div class="pstep"><div class="sx">1</div><h4>Pick a base plan</h4><ul><li><b>Sandbox $0</b> &mdash; free forever, 1K visits, subdomain</li><li><b>Launch $17 &middot; Grow $42 &middot; Scale $89 &middot; Multi $199</b>/mo (Launch = popular)</li><li><b>Enterprise &mdash; contact sales</b> (custom, sales-quoted; no public price)</li><li>2-week trial &middot; founder pricing locks in for life</li></ul></div>
+    <div class="pstep"><div class="sx">2</div><h4>Add module suites</h4><ul><li><b>Add Suites</b> &mdash; the 21 modules grouped into <b>7 Suites</b></li><li>Marketing/SEO &middot; Performance Pro &middot; Ecommerce</li><li>Content&amp;Dev &middot; Multi-Location &middot; Agency &middot; Compliance</li><li><b>5-Suite Bundle</b> &mdash; save ~30% (sliding ~$63&ndash;80/site/mo)</li></ul></div>
+    <div class="pstep"><div class="sx">3</div><h4>Review &amp; checkout</h4><ul><li>See your stack + total before paying</li><li>Scale modules up/down anytime</li><li>One bill, one platform &mdash; no plugin invoices</li></ul></div>
+  </div>
+  <div class="foundation"><b>Foundation Pack &mdash; free with every plan, even Sandbox:</b> Hosting, SSL, CDN, WAF, security patching, multi-site dashboard. WP Engine includes basic SSL/CDN too &mdash; but its advanced WAF + auto-updates are paid add-ons; here they're free.</div>
+  <div class="pricenote">// Live (sgen.com/pricing 2026-06-01): base ladder $0/$17/$42/$89/$199 + Enterprise sales-quoted + 7 Suites (per-site sliding) + a 5-Suite Bundle (save ~30%, ~$63&ndash;80/site). No $99/$119/$299 &mdash; those were drift. Only the $87 founder bundle was discontinued.</div>
+</div></section>
+
+<!-- ============ NAV OPTIONS ============ -->
+<section class="band reveal" id="options"><div class="wrap">
+  <div class="khead"><span class="kn">03 / NAVIGATION</span><h2>Nav model &mdash; build on what's live</h2></div>
+  <p class="ksub">Live nav today is <span class="mono">Product &middot; Why SGEN &middot; Pricing</span>. The overhaul adds a <b>Customers</b> title for social proof (DECIDED) and a <b>Compare</b> title for the acquisition engine. Tap to compare.</p>
+  <div class="opt-wrap" data-group="nav">
+    <button class="opt" aria-pressed="false">
+      <div class="ol"><span class="oid">OPTION A</span><span class="liv">LIVE TODAY</span></div>
+      <h4>As-is</h4>
+      <div class="navmock"><span>Product &#9662;</span><span>Why SGEN</span><span>Pricing</span><span class="cta">Start Building</span></div>
+      <p>What's on sgen.com now. Clean, but no home for social proof or the comparison pages the overhaul adds.</p>
+    </button>
+    <button class="opt" aria-pressed="false">
+      <div class="ol"><span class="oid">OPTION B</span></div>
+      <h4>+ Customers</h4>
+      <div class="navmock"><span>Product &#9662;</span><span>Why SGEN &#9662;</span><span class="add">Customers &#9662;</span><span>Pricing</span><span class="cta">Start Building</span></div>
+      <p>Minimal add: promotes the 3 social-proof items into the nav. Keeps compare in the footer.</p>
+    </button>
+    <button class="opt" aria-pressed="true">
+      <div class="ol"><span class="oid">OPTION C</span><span class="rec">RECOMMENDED</span></div>
+      <h4>+ Customers + Compare</h4>
+      <div class="navmock"><span>Product &#9662;</span><span>Why SGEN &#9662;</span><span class="add">Customers &#9662;</span><span class="add">Compare &#9662;</span><span>Pricing</span><span class="cta">Start Building</span></div>
+      <p>Social proof <em>and</em> the WordPress/WP-Engine/Elementor comparison engine in the nav &mdash; you <em>are</em> the WordPress alternative, so lead with it.</p>
+    </button>
+  </div>
+</div></section>
+
+<!-- ============ SITEMAP ============ -->
+<section class="band reveal" id="sitemap"><div class="wrap">
+  <div class="khead"><span class="kn">04 / SITEMAP</span><h2>The full architecture</h2></div>
+  <p class="ksub">Real product taxonomy (SG-Core / SG-Modules / SG-Dashboard) + the overhaul's missing pages. <b style="color:var(--new)">Green = new vs what's live.</b></p>
+  <div class="controls">
+    <div class="seg" id="tierfilter">
+      <button data-f="all" aria-pressed="true">All</button>
+      <button data-f="t1" aria-pressed="false">Product</button>
+      <button data-f="t2" aria-pressed="false">Why/Solutions</button>
+      <button data-f="t3" aria-pressed="false">Customers</button>
+      <button data-f="t4" aria-pressed="false">Compare</button>
+      <button data-f="t6" aria-pressed="false">Resources</button>
+      <button data-f="t8" aria-pressed="false">Company/Legal</button>
+    </div>
+    <label class="toggle"><input type="checkbox" id="hltoggle"><span class="tb"></span>Highlight new pages</label>
+  </div>
+
+  <div id="map">
+
+    <div class="tier" data-tier="t0">
+      <div class="tier-h"><span class="tid">0</span><h3>Homepage</h3><span class="tnote">the pain&rarr;fix narrative, live today</span></div>
+      <div class="nodes">
+        <div class="node" data-new="0"><div class="path"><span class="star">&#9733;</span>/</div><h5>Home</h5><p>"Finally a WordPress alternative." 4 pains &rarr; native fixes, speed proof, Foundation Pack, Start Building.</p></div>
+      </div>
+    </div>
+
+    <div class="tier" data-tier="t1">
+      <div class="tier-h"><span class="tid">1</span><h3>Product</h3><span class="tnote">real taxonomy: SG-Core &middot; SG-Modules (21) &middot; SG-Dashboard</span></div>
+      <div class="grp-label">SG-Core</div>
+      <div class="nodes">
+        <div class="node" data-new="0"><div class="path">/overview-core</div><h5>SG-Core Overview</h5><p>The content engine: pages, posts, media, users, menus.</p></div>
+        <div class="node" data-new="0"><div class="path">/pages-posts</div><h5>Pages &amp; Posts</h5><p>Create/edit/publish/draft, revisions, blog, scheduled publish.</p></div>
+        <div class="node" data-new="1"><div class="path">/custom-objects</div><span class="nb">new</span><h5>Custom Objects &amp; Fields</h5><p>Custom content types + fields &mdash; CPT + ACF parity, no code.</p></div>
+        <div class="node" data-new="0"><div class="path">/media</div><h5>Media Library</h5><p>Drag-drop, optimization, GCP cloud sync, multi-site sharing.</p></div>
+        <div class="node" data-new="0"><div class="path">/users</div><h5>Users &amp; Roles</h5><p>Multi-user + RBAC, sessions, login-as for client support.</p></div>
+        <div class="node" data-new="0"><div class="path">/menus</div><h5>Menus</h5><p>Header/footer/nav builder + mega menus + mobile menu.</p></div>
+        <div class="node" data-new="1"><div class="path">/events</div><span class="nb">new</span><h5>Events</h5><p>Event CRUD + recurring + public calendar + add-to-calendar.</p></div>
+      </div>
+      <div class="grp-label">SG-Modules &mdash; 21 first-party, à la carte</div>
+      <div class="nodes">
+        <div class="node" data-new="0"><div class="path"><span class="star">&#9733;</span>/page-builder</div><h5>Page Builder</h5><p>Drag-drop canvas, 48 components, 52 blocks, 6 breakpoints, theme switch, inline code.</p></div>
+        <div class="node" data-new="0"><div class="path">/forms</div><h5>Forms</h5><p>Builder + Airtable/Slack/Webhook + Test-Connection + CSV/JSON + submissions inbox.</p></div>
+        <div class="node" data-new="0"><div class="path"><span class="star">&#9733;</span>/attributions</div><h5>Attributions</h5><p>Native session + phone-tap tracking, UTM/journey/referrer, per-lead source. No CallRail.</p></div>
+        <div class="node" data-new="0"><div class="path">/seo-performance</div><h5>SEO &amp; Performance</h5><p>SEO Manager (18 signals), redirects, schema, caching/minify, Site Vitals.</p></div>
+        <div class="node" data-new="0"><div class="path">/analytics</div><h5>Analytics</h5><p>Built-in events, top paths, lead analytics, reports + CSV.</p></div>
+        <div class="node" data-new="1"><div class="path">/ecommerce</div><span class="nb">new</span><h5>E-commerce</h5><p>Products + variations, Stripe/PayPal checkout, coupons, orders + refunds, storefront.</p></div>
+        <div class="node" data-new="1"><div class="path">/design</div><span class="nb">new</span><h5>Theme &amp; Design</h5><p>Theme editor, presets, fonts, custom CSS/code, popups, ADA toggle.</p></div>
+        <div class="node" data-new="1"><div class="path">/tracking-consent</div><span class="nb">new</span><h5>Tracking Consent</h5><p>GDPR banner + consent forensic log + per-script/per-page gating.</p></div>
+        <div class="node" data-new="1"><div class="path">/multi-location</div><span class="nb">new</span><h5>Multi-Location</h5><p>Locations dashboard, Google Business Profile sync, per-location analytics.</p></div>
+        <div class="node" data-new="1"><div class="path">/overview-modules</div><span class="nb">new</span><h5>All Modules index</h5><p>The full 21-module catalog &mdash; the "everything native, à la carte" proof.</p></div>
+      </div>
+      <div class="grp-label">SG-Dashboard</div>
+      <div class="nodes">
+        <div class="node" data-new="0"><div class="path">/overview-dashboard</div><h5>SG-Dashboard Overview</h5><p>Account command center across every site.</p></div>
+        <div class="node" data-new="0"><div class="path">/site-manager</div><h5>Site Manager</h5><p>Multi-site portfolio, provisioning, per-site actions.</p></div>
+        <div class="node" data-new="0"><div class="path">/stage-live</div><h5>Stage &amp; Live</h5><p>Staging environment + publish flow.</p></div>
+        <div class="node" data-new="1"><div class="path">/security</div><span class="nb">new</span><h5>Security</h5><p>WAF, IP blacklist, site protection, maintenance, 2FA, activity log.</p></div>
+        <div class="node" data-new="1"><div class="path">/backups-migration</div><span class="nb">new</span><h5>Backups &amp; Migration</h5><p>Full backup/restore, import/export, site migration.</p></div>
+        <div class="node" data-new="0"><div class="path">/advanced-settings</div><h5>Advanced Settings</h5><p>Globals, identity, integrations, configuration.</p></div>
+      </div>
+      <div class="grp-label">&#9670; /sg-admin/ upgrade candidates &mdash; documented, not yet marketed</div>
+      <div class="nodes">
+        <div class="node" data-new="1"><div class="path"><span class="star">&#9733;</span>/custom-fields</div><span class="nb">surface now</span><h5>Custom Fields</h5><p>Field-group builder, attach to any content type. <b>DECIDED: surface now.</b></p></div>
+        <div class="node" data-new="1"><div class="path"><span class="star">&#9733;</span>/comments-reviews</div><span class="nb">surface now</span><h5>Comments &amp; Reviews</h5><p>Threaded comments, ratings, moderation inbox. <b>DECIDED: surface now.</b></p></div>
+        <div class="node" data-new="0"><div class="path">(held &times;5)</div><h5>5 more held</h5><p>Custom CSS &middot; Notifications &middot; Search &amp; Replace &middot; Import/Export &middot; Settings extras &mdash; documented, held as admin utilities.</p></div>
+      </div>
+    </div>
+
+    <div class="tier" data-tier="t2">
+      <div class="tier-h"><span class="tid">2</span><h3>Why SGEN &amp; Solutions</h3><span class="tnote">the differentiation story + audience pages</span></div>
+      <div class="grp-label">Why SGEN</div>
+      <div class="nodes">
+        <div class="node" data-new="0"><div class="path">/why-sgen</div><h5>Why SGEN</h5><p>The franken-stack exorcism: the 4 pains, native-vs-plugin, "rebuilt in 2026". Live today.</p></div>
+        <div class="node" data-new="1"><div class="path">/why-sgen/speed</div><span class="nb">new</span><h5>Speed &amp; SSR</h5><p>Deep-dive on server-side rendering + instant-on for traffic + Google.</p></div>
+        <div class="node" data-new="1"><div class="path">/why-sgen/no-plugins</div><span class="nb">new</span><h5>No Plugin Tax</h5><p>Native features vs the plugin franken-stack &mdash; cost + stability + security.</p></div>
+      </div>
+      <div class="grp-label">Solutions (audience &amp; industry)</div>
+      <div class="nodes">
+        <div class="node" data-new="1"><div class="path"><span class="star">&#9733;</span>/solutions/agencies</div><span class="nb">new</span><h5>For Agencies</h5><p>Highest-LTV: white-label dashboard + client portal + bulk site cloning + RBAC + login-as (live Agency Suite).</p></div>
+        <div class="node" data-new="1"><div class="path">/solutions/small-business</div><span class="nb">new</span><h5>For Small Business</h5><p>Bundled native platform + fast setup, no plugin maintenance.</p></div>
+        <div class="node" data-new="1"><div class="path">/solutions/restaurants</div><span class="nb">new</span><h5>For Restaurants</h5><p>Phone-tap attribution (calls matter), events, online ordering.</p></div>
+        <div class="node" data-new="1"><div class="path">/solutions/multi-location</div><span class="nb">new</span><h5>For Multi-Location</h5><p>Locations dashboard + GBP sync + per-location analytics.</p></div>
+        <div class="node" data-new="1"><div class="path">/solutions/healthcare</div><span class="nb">new</span><h5>For Healthcare</h5><p>Compliance posture + consent tooling + accessibility.</p></div>
+        <div class="node" data-new="1"><div class="path">/solutions/freelancers</div><span class="nb">new</span><h5>For Freelancers</h5><p>Free hosting + builder + single-site plans at solo scale.</p></div>
+      </div>
+    </div>
+
+    <div class="tier" data-tier="t3">
+      <div class="tier-h"><span class="tid">3</span><h3>Customers</h3><span class="tnote">★ promoted to the top nav (DECIDED)</span></div>
+      <div class="nodes">
+        <div class="node" data-new="1"><div class="path"><span class="star">&#9733;</span>/customers</div><span class="nb">new</span><h5>Customer Stories</h5><p>Case-study index &mdash; seed with Noire / Evergreen + agency clients.</p></div>
+        <div class="node" data-new="1"><div class="path">/customers/&lt;name&gt;</div><span class="nb">new</span><h5>Case Study</h5><p>Per-customer detail template.</p></div>
+        <div class="node" data-new="1"><div class="path">/showcase</div><span class="nb">new</span><h5>Built with SGEN</h5><p>Gallery of live SGEN sites.</p></div>
+      </div>
+    </div>
+
+    <div class="tier" data-tier="t4">
+      <div class="tier-h"><span class="tid">4</span><h3>Compare</h3><span class="tnote">the acquisition engine &mdash; you ARE the WordPress alternative</span></div>
+      <div class="nodes">
+        <div class="node" data-new="1"><div class="path">/compare</div><span class="nb">new</span><h5>Compare Hub</h5><p>Indexes every head-to-head.</p></div>
+        <div class="node" data-new="1"><div class="path"><span class="star">&#9733;</span>/compare/vs-wordpress</div><span class="nb">new</span><h5>vs WordPress</h5><p>Your core identity. Native platform vs plugin-stack sprawl + update anxiety.</p></div>
+        <div class="node" data-new="1"><div class="path"><span class="star">&#9733;</span>/compare/vs-elementor</div><span class="nb">new</span><h5>vs Elementor</h5><p>"Design like Elementor, ship like a real product" &mdash; the named franken-stack.</p></div>
+        <div class="node" data-new="1"><div class="path"><span class="star">&#9733;</span>/compare/vs-wp-engine</div><span class="nb">new</span><h5>vs WP Engine</h5><p>Foundation Pack (WAF/CDN/SSL) free + native attribution vs WPE's paid add-ons.</p></div>
+        <div class="node" data-new="1"><div class="path">/compare/vs-wix</div><span class="nb">new</span><h5>vs Wix</h5><p>SMB term; wins on speed, SEO depth, agency/multi-site.</p></div>
+        <div class="node" data-new="1"><div class="path">/compare/vs-squarespace</div><span class="nb">new</span><h5>vs Squarespace</h5><p>All-in-one segment; wins on attribution + ecommerce + multi-site.</p></div>
+        <div class="node" data-new="1"><div class="path">/compare/vs-godaddy</div><span class="nb">new</span><h5>vs GoDaddy</h5><p>Huge SMB volume; easy win on builder + speed + SEO.</p></div>
+        <div class="node" data-new="1"><div class="path"><span class="star">&#9733;</span>/migrate</div><span class="nb">new</span><h5>Switch to SGEN</h5><p>No importer &mdash; moving off WordPress is a REBUILD. White-glove (we rebuild for a price) or DIY on the builder.</p></div>
+      </div>
+    </div>
+
+    <div class="tier" data-tier="t5">
+      <div class="tier-h"><span class="tid">5</span><h3>Pricing</h3><span class="tnote">the configurator</span></div>
+      <div class="nodes">
+        <div class="node" data-new="0"><div class="path">/pricing</div><h5>Pricing</h5><p>3-step configurator: base plan + 7 Suites à la carte + Foundation Pack free. Live today.</p></div>
+        <div class="node" data-new="1"><div class="path">/enterprise</div><span class="nb">new</span><h5>Enterprise</h5><p>The sales-led top tier (Custom / contact sales). RBAC + multi-site + custom SLA.</p></div>
+      </div>
+    </div>
+
+    <div class="tier" data-tier="t6">
+      <div class="tier-h"><span class="tid">6</span><h3>Resources</h3><span class="tnote">organic-search + support surface</span></div>
+      <div class="nodes">
+        <div class="node" data-new="1"><div class="path">/resources</div><span class="nb">new</span><h5>Resources Hub</h5><p>"View all" destination over blog/docs/templates/changelog.</p></div>
+        <div class="node" data-new="1"><div class="path">/blog</div><span class="nb">new</span><h5>Blog</h5><p>Primary SEO content engine; dogfoods the CMS.</p></div>
+        <div class="node" data-new="1"><div class="path">/guides</div><span class="nb">new</span><h5>Guides</h5><p>Evergreen how-to library, esp. WordPress-migration guides.</p></div>
+        <div class="node" data-new="1"><div class="path">/glossary</div><span class="nb">new</span><h5>Glossary</h5><p>Lightweight web/CMS/SEO term library &mdash; organic entry points.</p></div>
+        <div class="node" data-new="0"><div class="path">/docs</div><h5>Documentation</h5><p>Links to documentation.sgen.com (live).</p></div>
+        <div class="node" data-new="1"><div class="path">/templates</div><span class="nb">new</span><h5>Templates</h5><p>52 blocks + full-page templates + theme presets.</p></div>
+        <div class="node" data-new="0"><div class="path">/changelog</div><h5>Changelog</h5><p>Momentum signal for WP refugees.</p></div>
+        <div class="node" data-new="0"><div class="path">/roadmap</div><h5>Roadmap</h5><p>Direction + transparency.</p></div>
+        <div class="node" data-new="0"><div class="path">/status</div><h5>Status</h5><p>Uptime trust for the managed-hosting pitch.</p></div>
+        
+      </div>
+    </div>
+
+    <div class="tier" data-tier="t7">
+      <div class="tier-h"><span class="tid">7</span><h3>Integrations &amp; Developer</h3><span class="tnote">your REST API had no home</span></div>
+      <div class="nodes">
+        <div class="node" data-new="1"><div class="path">/integrations</div><span class="nb">new</span><h5>Integrations</h5><p>First-party Stripe/PayPal/Google/Zapier/Airtable/Slack overview.</p></div>
+        <div class="node" data-new="1"><div class="path">/developers</div><span class="nb">new</span><h5>Developers</h5><p>REST API (10 controllers, headless) + inline code + custom code.</p></div>
+      </div>
+    </div>
+
+    <div class="tier" data-tier="t8">
+      <div class="tier-h"><span class="tid">8</span><h3>Company &amp; Legal</h3><span class="tnote">company pages kept separate from the trust/legal set</span></div>
+      <div class="grp-label">Company</div>
+      <div class="nodes">
+        <div class="node" data-new="1"><div class="path">/about</div><span class="nb">new</span><h5>About</h5><p>Company / credibility.</p></div>
+        <div class="node" data-new="1"><div class="path">/contact</div><span class="nb">new</span><h5>Contact</h5><p>Dogfoods forms + attribution.</p></div>
+      </div>
+      <div class="grp-label">Trust &amp; Legal</div>
+      <div class="nodes">
+        <div class="node" data-new="1"><div class="path"><span class="star">&#9733;</span>/trust</div><span class="nb">new</span><h5>Trust Center</h5><p>WAF, SSL, GDPR consent, backups, audit logging.</p></div>
+        <div class="node" data-new="1"><div class="path">/accessibility</div><span class="nb">new</span><h5>Accessibility</h5><p>Backed by the ADA toggle &mdash; the answer to the Legal-Vulnerability pain.</p></div>
+        <div class="node" data-new="0"><div class="path">/legal/privacy</div><h5>Privacy Policy</h5><p>Live today.</p></div>
+        <div class="node" data-new="0"><div class="path">/legal/terms</div><h5>Terms of Service</h5><p>Live today.</p></div>
+        <div class="node" data-new="1"><div class="path">/legal/dpa</div><span class="nb">new</span><h5>DPA</h5><p>Required before agency/enterprise GDPR buyers sign.</p></div>
+        <div class="node" data-new="1"><div class="path">/legal/cookie-policy</div><span class="nb">new</span><h5>Cookie Policy</h5><p>Backed by the consent banner.</p></div>
+      </div>
+    </div>
+
+    <div class="tier" data-tier="t9">
+      <div class="tier-h"><span class="tid">9</span><h3>Partner Program</h3><span class="tnote">agencies are your asset &mdash; v1 had zero partner pages</span></div>
+      <div class="nodes">
+        <div class="node" data-new="1"><div class="path"><span class="star">&#9733;</span>/partners</div><span class="nb">new</span><h5>Partner Program</h5><p>Program hub for agencies/resellers (terms TBD with you &mdash; no fabricated margin claim).</p></div>
+        <div class="node" data-new="1"><div class="path">/partners/apply</div><span class="nb">new</span><h5>Become a Partner</h5><p>Enrollment; dogfoods forms + attribution.</p></div>
+        <div class="node" data-new="1"><div class="path">/partners/directory</div><span class="nb">new</span><h5>Partner Directory</h5><p>Find-a-partner &mdash; seedable with your real agencies day one.</p></div>
+      </div>
+    </div>
+
+  </div>
+</div></section>
+
+<!-- ============ COMPARE ============ -->
+<section class="band reveal" id="compare"><div class="wrap">
+  <div class="khead"><span class="kn">05 / BENCHMARK</span><h2>vs WordPress, WP Engine &amp; Elementor</h2></div>
+  <p class="ksub">Your real competitive frame &mdash; the franken-stack you replace. SGEN wins where it's positioned: native (no plugins), server-first speed, Foundation Pack free, attribution, and no update anxiety.</p>
+
+  <div class="cmp3">
+    <div class="cmpcol">
+      <div class="cname">WordPress + Elementor</div>
+      <div class="cmodel">DIY plugin stack</div>
+      <ul>
+        <li>Hosting <span>you buy it</span></li>
+        <li>Speed <span>plugin-dependent</span></li>
+        <li>Attribution <span>CallRail $$$</span></li>
+        <li>Stability <span>plugin roulette</span></li>
+        <li>Cost <span>free + plugin sprawl</span></li>
+      </ul>
+    </div>
+    <div class="cmpcol">
+      <div class="cname">WP Engine</div>
+      <div class="cmodel">managed WordPress</div>
+      <ul>
+        <li>Hosting <span>tiered</span></li>
+        <li>SSL/CDN/DDoS <span>included</span></li>
+        <li>Advanced WAF <span>GES ~$450/yr</span></li>
+        <li>Attribution <span>none</span></li>
+        <li>Stability <span>still plugins</span></li>
+        <li>Cost <span>per-site tiers + add-ons</span></li>
+      </ul>
+    </div>
+    <div class="cmpcol sg">
+      <div class="cname"><span class="brand"><span class="dot" style="width:18px;height:18px;font-size:11px">S</span></span>SGEN</div>
+      <div class="cmodel">native platform &middot; the alternative</div>
+      <ul>
+        <li>Hosting <span>Foundation Pack free</span></li>
+        <li>Speed <span>native SSR</span></li>
+        <li>Attribution <span>native module</span></li>
+        <li>Stability <span>immutable, no plugins</span></li>
+        <li>Cost <span>base + à-la-carte modules</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <table class="score">
+    <thead><tr><th>Differentiator</th><th class="c">WordPress + Elementor</th><th class="c">WP Engine</th><th class="sg">SGEN</th></tr></thead>
+    <tbody>
+      <tr><td class="dim">No plugin tax (native features)</td><td class="c no">&#10007; franken-stack</td><td class="c no">&#10007; still plugins</td><td class="sgcell">&#10003;</td></tr>
+      <tr><td class="dim">Server-side rendering / instant-on</td><td class="c par">plugin-dependent</td><td class="c par">caching add-on</td><td class="sgcell">&#10003; native</td></tr>
+      <tr><td class="dim">Basic SSL + CDN + L3/4 DDoS</td><td class="c no">self-host</td><td class="c par">included, all tiers</td><td class="sgcell">&#10003; free, even Sandbox</td></tr>
+      <tr><td class="dim">WAF + security patching</td><td class="c no">plugin</td><td class="c no">GES paid add-on (~$450/yr)</td><td class="sgcell">&#10003; in Foundation Pack</td></tr>
+      <tr><td class="dim">Native attribution + call tracking</td><td class="c no">CallRail $$$</td><td class="c no">&#10007;</td><td class="sgcell">&#10003; only SGEN</td></tr>
+      <tr><td class="dim">No update anxiety (immutable)</td><td class="c no">30% of failures</td><td class="c par">managed, still plugins</td><td class="sgcell">&#10003;</td></tr>
+      <tr><td class="dim">ADA / compliance posture + audit logging</td><td class="c no">plugin</td><td class="c par">plugin</td><td class="sgcell">&#10003; native</td></tr>
+      <tr><td class="dim">Multi-site + agency dashboard</td><td class="c par">multisite (hacky)</td><td class="c par">tiered</td><td class="sgcell">&#10003;</td></tr>
+      <tr><td class="dim">Pricing model</td><td class="c par">free + plugin costs</td><td class="c par">per-site tiers</td><td class="sgcell">base + à-la-carte</td></tr>
+    </tbody>
+  </table>
+
+  <div class="refnote"><b>Architecture reference (not a competitor):</b> the overhaul borrows <b>Webflow's information architecture</b> (page-type taxonomy: feature pages, compare engine, solutions, resources) and <b>Framer's UX motion</b> &mdash; but SGEN's competitive frame is WordPress / WP&nbsp;Engine / Elementor, not greenfield builders. That's why the compare pages target the franken-stack, not Webflow/Framer.</div>
+</div></section>
+
+<!-- ============ FLOWS ============ -->
+<section class="band reveal" id="flows"><div class="wrap">
+  <div class="khead"><span class="kn">06 / FLOWS</span><h2>Primary conversion paths</h2></div>
+  <p class="ksub">Built for the WordPress refugee first.</p>
+  <div class="flows">
+    <div class="flow"><div class="ft"><span class="pp">PRIMARY</span>WordPress / Elementor refugee</div><div class="chain"><span class="pg">/</span><span class="ar">&rarr;</span><span class="pg">vs-wordpress</span><span class="ar">&rarr;</span><span class="pg">/migrate</span><span class="ar">&rarr;</span><span class="pg end">Start Building</span></div></div>
+    <div class="flow"><div class="ft"><span class="pp">FEATURE</span>Module-led</div><div class="chain"><span class="pg">/</span><span class="ar">&rarr;</span><span class="pg">page-builder</span><span class="ar">&rarr;</span><span class="pg">/pricing</span><span class="ar">&rarr;</span><span class="pg end">Start Building</span></div></div>
+    <div class="flow"><div class="ft"><span class="pp">PROOF</span>Proof-led</div><div class="chain"><span class="pg">/customers</span><span class="ar">&rarr;</span><span class="pg">/showcase</span><span class="ar">&rarr;</span><span class="pg">/pricing</span><span class="ar">&rarr;</span><span class="pg end">Start Building</span></div></div>
+    <div class="flow"><div class="ft"><span class="pp">AGENCY</span>Agency / reseller</div><div class="chain"><span class="pg">/solutions/agencies</span><span class="ar">&rarr;</span><span class="pg">/partners</span><span class="ar">&rarr;</span><span class="pg end">Apply</span></div></div>
+  </div>
+</div></section>
+
+<footer><div class="wrap">
+  <div class="legend">
+    <span><i class="sw" style="background:var(--red)"></i> SGEN brand</span>
+    <span><i class="sw" style="background:var(--new)"></i> New vs live site</span>
+    <span>&#9733; flagship</span>
+  </div>
+  <div>v3 &mdash; positioning + pricing grounded in live sgen.com (2026-06-01). Slop from the May-19 strategy docs removed. Self-contained &mdash; open via file://.</div>
+</div></footer>
+
+<script>
+(function(){
+  "use strict";
+  try{
+    var nodes = document.querySelectorAll('.node');
+    var pc = document.getElementById('page-count'); if(pc) pc.textContent = nodes.length;
+    var nc = document.getElementById('new-count');
+    if(nc){ var nw=0; nodes.forEach(function(n){ if(n.getAttribute('data-new')==='1') nw++; }); nc.textContent = nw; }
+  }catch(e){}
+
+  try{
+    var fbtns = document.querySelectorAll('#tierfilter button');
+    var tiers = document.querySelectorAll('#map .tier');
+    fbtns.forEach(function(b){
+      b.addEventListener('click', function(){
+        fbtns.forEach(function(x){ x.setAttribute('aria-pressed','false'); });
+        b.setAttribute('aria-pressed','true');
+        var f = b.getAttribute('data-f');
+        tiers.forEach(function(t){
+          var show = (f === 'all') || (t.getAttribute('data-tier') === f);
+          t.classList.toggle('hidden', !show);
+        });
+      });
+    });
+  }catch(e){}
+
+  try{
+    var hl = document.getElementById('hltoggle');
+    if(hl){ hl.addEventListener('change', function(){ document.body.classList.toggle('hl', hl.checked); }); }
+  }catch(e){}
+
+  try{
+    document.querySelectorAll('.opt-wrap').forEach(function(grp){
+      var opts = grp.querySelectorAll('.opt');
+      opts.forEach(function(o){
+        o.addEventListener('click', function(){
+          opts.forEach(function(x){ x.setAttribute('aria-pressed','false'); });
+          o.setAttribute('aria-pressed','true');
+        });
+      });
+    });
+  }catch(e){}
+
+  try{
+    if('IntersectionObserver' in window){
+      var io = new IntersectionObserver(function(es){
+        es.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } });
+      }, {rootMargin:'0px 0px -8% 0px'});
+      document.querySelectorAll('.reveal').forEach(function(r){ io.observe(r); });
+    } else { document.querySelectorAll('.reveal').forEach(function(r){ r.classList.add('in'); }); }
+  }catch(e){ document.querySelectorAll('.reveal').forEach(function(r){ r.classList.add('in'); }); }
+  setTimeout(function(){ document.querySelectorAll('.reveal').forEach(function(r){ r.classList.add('in'); }); }, 1200);
+})();
+</script>
+</body>
+</html>

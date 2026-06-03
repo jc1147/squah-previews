@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Showcase — Real Sites Built on SGEN (PREVIEW)</title>
+<style>
+  /* ============================================================
+     SGEN SHOWCASE — self-contained preview
+     Brand: charcoal #1a1a1a + red #d51522
+     No external dependencies. All visuals are CSS.
+     ============================================================ */
+
+  :root{
+    --ink:#1a1a1a;
+    --ink-2:#2a2a2c;
+    --red:#d51522;
+    --red-2:#ff3a47;
+    --paper:#ffffff;
+    --paper-2:#f6f6f4;
+    --paper-3:#efeeea;
+    --line:#e4e3df;
+    --muted:#6b6b70;
+    --muted-2:#8c8c92;
+    --maxw:1240px;
+    --r:18px;
+    --shadow-1:0 1px 2px rgba(20,20,22,.04), 0 8px 24px rgba(20,20,22,.06);
+    --shadow-2:0 2px 6px rgba(20,20,22,.06), 0 30px 60px -20px rgba(20,20,22,.22);
+    --grad-red:linear-gradient(100deg,#ff3a47 0%,#d51522 55%,#9c0d16 100%);
+  }
+
+  *,*::before,*::after{box-sizing:border-box}
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+  body{
+    margin:0;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
+    color:var(--ink);
+    background:var(--paper);
+    line-height:1.55;
+    letter-spacing:-0.011em;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+  img{max-width:100%;display:block}
+  a{color:inherit;text-decoration:none}
+
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 32px}
+  @media(max-width:640px){.wrap{padding:0 20px}}
+
+  /* gradient red text */
+  .grad{
+    background:var(--grad-red);
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;color:transparent;
+  }
+
+  /* ===== PREVIEW RIBBON (fixed) ===== */
+  .ribbon{
+    position:fixed;top:18px;right:-46px;z-index:9999;
+    transform:rotate(45deg);
+    background:var(--grad-red);
+    color:#fff;
+    font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;
+    padding:8px 60px;
+    box-shadow:0 6px 18px rgba(213,21,34,.45);
+    pointer-events:none;
+    text-align:center;
+  }
+  .preview-pill{
+    position:fixed;left:18px;bottom:18px;z-index:9999;
+    background:rgba(26,26,26,.92);color:#fff;
+    border:1px solid rgba(255,255,255,.14);
+    backdrop-filter:blur(6px);
+    font-size:11.5px;font-weight:700;letter-spacing:.04em;
+    padding:9px 14px;border-radius:999px;
+    box-shadow:var(--shadow-2);
+    display:flex;align-items:center;gap:8px;
+  }
+  .preview-pill .dot{width:7px;height:7px;border-radius:50%;background:var(--red-2);
+    box-shadow:0 0 0 4px rgba(213,21,34,.18);animation:pulse 2.4s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.45}}
+
+  /* ===== NAV ===== */
+  header.nav{
+    position:sticky;top:0;z-index:900;
+    background:rgba(255,255,255,.82);
+    backdrop-filter:saturate(180%) blur(14px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-inner{display:flex;align-items:center;justify-content:space-between;height:70px}
+  .brand{display:flex;align-items:center;gap:11px;font-weight:800;font-size:19px;letter-spacing:-.02em}
+  .brand .logo{
+    width:30px;height:30px;border-radius:9px;background:var(--grad-red);
+    display:grid;place-items:center;color:#fff;font-weight:900;font-size:16px;
+    box-shadow:0 6px 16px rgba(213,21,34,.34);
+  }
+  .nav-links{display:flex;gap:30px;align-items:center;font-size:14.5px;color:var(--ink-2);font-weight:500}
+  .nav-links a:hover{color:var(--red)}
+  .nav-cta{display:flex;gap:12px;align-items:center}
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;justify-content:center;
+    font-weight:700;font-size:14.5px;border-radius:11px;padding:11px 20px;
+    cursor:pointer;border:1px solid transparent;transition:transform .18s ease, box-shadow .18s ease, background .18s ease;
+    white-space:nowrap;
+  }
+  .btn-primary{background:var(--ink);color:#fff}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 14px 28px -10px rgba(26,26,26,.5)}
+  .btn-red{background:var(--grad-red);color:#fff;box-shadow:0 10px 24px -8px rgba(213,21,34,.5)}
+  .btn-red:hover{transform:translateY(-2px);box-shadow:0 18px 36px -10px rgba(213,21,34,.6)}
+  .btn-ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+  .btn-ghost:hover{border-color:var(--ink);transform:translateY(-1px)}
+  .btn-light{background:#fff;color:var(--ink)}
+  .btn-light:hover{transform:translateY(-2px);box-shadow:0 14px 30px -12px rgba(0,0,0,.45)}
+  .btn-outline-light{background:transparent;color:#fff;border-color:rgba(255,255,255,.32)}
+  .btn-outline-light:hover{border-color:#fff;transform:translateY(-1px)}
+  @media(max-width:900px){.nav-links{display:none}}
+
+  /* ===== HERO ===== */
+  .hero{
+    position:relative;overflow:hidden;
+    padding:96px 0 64px;
+    background:
+      radial-gradient(1100px 460px at 82% -8%, rgba(213,21,34,.10), transparent 60%),
+      radial-gradient(700px 360px at 8% 0%, rgba(26,26,26,.05), transparent 55%),
+      var(--paper);
+  }
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:9px;
+    font-size:12.5px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--red);
+    background:rgba(213,21,34,.07);
+    border:1px solid rgba(213,21,34,.18);
+    padding:7px 14px;border-radius:999px;margin-bottom:24px;
+  }
+  .eyebrow .sq{width:7px;height:7px;border-radius:2px;background:var(--grad-red)}
+  h1.hero-h1{
+    font-size:clamp(40px,6.4vw,76px);line-height:1.02;font-weight:800;
+    letter-spacing:-.035em;margin:0 0 22px;max-width:16ch;
+  }
+  .hero-sub{font-size:clamp(17px,2vw,20px);color:var(--muted);max-width:60ch;margin:0 0 16px;font-weight:450}
+  .hero-body{font-size:15.5px;color:var(--muted-2);max-width:62ch;margin:0 0 34px;line-height:1.7}
+  .hero-actions{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .hero-note{font-size:13px;color:var(--muted-2);margin-top:18px}
+
+  /* hero mosaic of fake site thumbs */
+  .hero-mosaic{
+    margin-top:62px;display:grid;grid-template-columns:repeat(4,1fr);gap:18px;
+  }
+  .mosaic-card{
+    border-radius:14px;overflow:hidden;border:1px solid var(--line);
+    box-shadow:var(--shadow-1);background:#fff;
+    transform:translateY(0) rotate(0);
+    transition:transform .35s cubic-bezier(.2,.7,.2,1), box-shadow .35s ease;
+  }
+  .mosaic-card:nth-child(odd){transform:translateY(14px)}
+  .hero-mosaic:hover .mosaic-card{transform:translateY(0)}
+  .mosaic-card:hover{transform:translateY(-6px) !important;box-shadow:var(--shadow-2)}
+  .mosaic-thumb{height:118px;position:relative}
+  .mosaic-chrome{height:18px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:4px;padding:0 8px}
+  .mosaic-chrome i{width:6px;height:6px;border-radius:50%;background:#dcdcd9;display:block}
+  .mosaic-foot{padding:9px 11px;font-size:11.5px;font-weight:700;color:var(--ink-2);display:flex;justify-content:space-between;align-items:center}
+  .mosaic-foot span{font-size:10px;color:var(--muted-2);font-weight:600}
+  @media(max-width:900px){.hero-mosaic{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:520px){.hero-mosaic{grid-template-columns:1fr}.mosaic-card:nth-child(odd){transform:none}}
+
+  /* ===== SECTION SHELL ===== */
+  section{position:relative}
+  .gallery-sec{padding:78px 0 40px;background:var(--paper-2)}
+  .sec-head{max-width:760px;margin-bottom:30px}
+  .sec-kicker{font-size:12.5px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--red);margin-bottom:14px}
+  .sec-title{font-size:clamp(28px,3.6vw,42px);line-height:1.08;font-weight:800;letter-spacing:-.03em;margin:0 0 14px}
+  .sec-sub{font-size:16px;color:var(--muted);margin:0;max-width:58ch}
+
+  /* ===== FILTER CHIPS ===== */
+  .filters{display:flex;gap:10px;flex-wrap:wrap;margin:30px 0 36px}
+  .filter-label{width:100%;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted-2);margin-bottom:4px}
+  .chip{
+    font-size:14px;font-weight:650;padding:9px 17px;border-radius:999px;
+    border:1px solid var(--line);background:#fff;color:var(--ink-2);cursor:pointer;
+    transition:all .18s ease;display:inline-flex;align-items:center;gap:8px;
+  }
+  .chip .count{font-size:11px;font-weight:800;color:var(--muted-2);background:var(--paper-3);border-radius:999px;padding:1px 8px;transition:all .18s ease}
+  .chip:hover{border-color:var(--ink);transform:translateY(-1px)}
+  .chip.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .chip.active .count{background:rgba(255,255,255,.16);color:#fff}
+
+  /* ===== MASONRY GALLERY ===== */
+  .gallery{
+    column-count:3;column-gap:26px;
+  }
+  @media(max-width:1000px){.gallery{column-count:2}}
+  @media(max-width:660px){.gallery{column-count:1}}
+
+  .card{
+    break-inside:avoid;margin:0 0 26px;
+    background:#fff;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;
+    box-shadow:var(--shadow-1);
+    transition:transform .3s cubic-bezier(.2,.7,.2,1), box-shadow .3s ease, border-color .3s ease;
+    position:relative;cursor:pointer;
+  }
+  .card:hover{transform:translateY(-8px);box-shadow:var(--shadow-2);border-color:#d8d7d2}
+  .card.hide{display:none}
+
+  /* fake browser-chrome + CSS-art thumbnail */
+  .thumb{position:relative;overflow:hidden}
+  .chrome{
+    height:34px;background:#fff;border-bottom:1px solid var(--line);
+    display:flex;align-items:center;gap:6px;padding:0 14px;position:relative;z-index:2;
+  }
+  .chrome i{width:9px;height:9px;border-radius:50%;background:#e0dfdb;display:block}
+  .chrome .url{
+    margin-left:10px;height:16px;flex:1;border-radius:6px;background:var(--paper-2);
+    font-size:10px;color:var(--muted-2);display:flex;align-items:center;padding:0 10px;font-weight:600;
+    overflow:hidden;white-space:nowrap;
+  }
+  .art{height:200px;position:relative;overflow:hidden}
+  /* the CSS-art "site" inside */
+  .art .skeleton{position:absolute;inset:0;padding:20px 22px;display:flex;flex-direction:column;justify-content:flex-end;gap:9px}
+  .art .sk-hero{font-weight:800;font-size:18px;line-height:1.15;color:#fff;text-shadow:0 1px 12px rgba(0,0,0,.28);max-width:80%}
+  .art .sk-bar{height:8px;border-radius:5px;background:rgba(255,255,255,.55)}
+  .art .sk-bar.sm{width:38%}
+  .art .sk-bar.md{width:62%}
+  .art .sk-btn{margin-top:4px;width:108px;height:26px;border-radius:7px;background:rgba(255,255,255,.92);display:flex;align-items:center;padding-left:10px;font-size:9.5px;font-weight:800;color:var(--ink)}
+  .art .sk-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:2px}
+  .art .sk-grid div{height:26px;border-radius:6px;background:rgba(255,255,255,.30)}
+  .art .badge-speed{
+    position:absolute;top:14px;right:14px;background:rgba(26,26,26,.86);color:#fff;
+    font-size:10.5px;font-weight:800;padding:5px 10px;border-radius:8px;letter-spacing:.02em;
+    border:1px solid rgba(255,255,255,.18);
+  }
+
+  .card-body{padding:20px 22px 22px}
+  .card-tags{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:13px}
+  .vbadge{
+    font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--red);background:rgba(213,21,34,.08);border:1px solid rgba(213,21,34,.16);
+    padding:4px 10px;border-radius:7px;
+  }
+  .vbadge.neutral{color:var(--ink-2);background:var(--paper-2);border-color:var(--line)}
+  .card-brand{font-size:20px;font-weight:800;letter-spacing:-.02em;margin:0 0 4px}
+  .card-desc{font-size:13.5px;color:var(--muted);line-height:1.55;margin:0 0 17px}
+  .metric{
+    display:flex;align-items:baseline;gap:9px;padding:13px 15px;margin:0 0 16px;
+    background:var(--paper-2);border:1px solid var(--line);border-radius:12px;
+  }
+  .metric .num{font-size:23px;font-weight:850;letter-spacing:-.03em;line-height:1}
+  .metric .num em{font-style:normal;background:var(--grad-red);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+  .metric .lbl{font-size:11.5px;color:var(--muted-2);font-weight:600;line-height:1.3}
+  .modchips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px}
+  .modchip{font-size:11px;font-weight:650;color:var(--ink-2);background:var(--paper-2);border:1px solid var(--line);border-radius:999px;padding:4px 10px}
+  .card-foot{display:flex;align-items:center;justify-content:space-between;padding-top:14px;border-top:1px solid var(--line)}
+  .visit{font-size:13.5px;font-weight:800;color:var(--ink);display:inline-flex;align-items:center;gap:6px}
+  .visit .arr{transition:transform .2s ease;color:var(--red)}
+  .card:hover .visit .arr{transform:translate(4px,-1px)}
+  .story-link{font-size:12.5px;font-weight:700;color:var(--muted-2)}
+  .card:hover .story-link{color:var(--red)}
+
+  /* ===== DEEP CASE STUDY ===== */
+  .case{padding:0 0 0;background:var(--paper)}
+  .case-hero{
+    background:
+      radial-gradient(900px 460px at 88% 0%, rgba(213,21,34,.16), transparent 58%),
+      var(--ink);
+    color:#fff;padding:84px 0 78px;position:relative;overflow:hidden;
+  }
+  .case-hero::after{
+    content:"";position:absolute;inset:0;
+    background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);
+    background-size:46px 46px;mask-image:radial-gradient(700px 380px at 80% 10%,#000,transparent 75%);
+    pointer-events:none;
+  }
+  .case-hero .wrap{position:relative;z-index:2}
+  .case-eyebrow{font-size:12.5px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--red-2);margin-bottom:20px;display:flex;align-items:center;gap:10px}
+  .case-eyebrow .lg{width:26px;height:26px;border-radius:7px;background:var(--grad-red);display:grid;place-items:center;font-weight:900;font-size:13px;color:#fff}
+  .case-h1{font-size:clamp(30px,4.6vw,56px);line-height:1.04;font-weight:800;letter-spacing:-.035em;margin:0 0 26px;max-width:18ch}
+  .case-pull{font-size:clamp(17px,2.1vw,21px);color:#d8d8da;max-width:60ch;line-height:1.55;border-left:3px solid var(--red);padding-left:20px;margin:0 0 30px;font-weight:450}
+  .case-glance{display:flex;flex-wrap:wrap;gap:0;margin-top:38px;border-top:1px solid rgba(255,255,255,.14)}
+  .glance{flex:1;min-width:160px;padding:22px 24px 6px 0;border-right:1px solid rgba(255,255,255,.10)}
+  .glance:last-child{border-right:none}
+  .glance .k{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-2);margin-bottom:7px}
+  .glance .v{font-size:15px;font-weight:700;color:#fff;line-height:1.3}
+  @media(max-width:720px){.glance{min-width:46%;border-right:none}}
+
+  /* big number band */
+  .numband{background:var(--ink-2);padding:0}
+  .numband-inner{display:grid;grid-template-columns:repeat(3,1fr);max-width:var(--maxw);margin:0 auto}
+  .nbox{padding:48px 36px;color:#fff;border-right:1px solid rgba(255,255,255,.09);position:relative}
+  .nbox:last-child{border-right:none}
+  .nbox .big{font-size:clamp(38px,5vw,58px);font-weight:850;letter-spacing:-.04em;line-height:1;background:var(--grad-red);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+  .nbox .cap{font-size:14px;color:#bcbcc0;margin-top:14px;line-height:1.5;max-width:30ch}
+  @media(max-width:760px){.numband-inner{grid-template-columns:1fr}.nbox{border-right:none;border-bottom:1px solid rgba(255,255,255,.09)}}
+
+  /* case body */
+  .case-body{padding:78px 0}
+  .cb-grid{display:grid;grid-template-columns:1fr;gap:64px}
+  .block .blk-kick{font-size:12.5px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--red);margin-bottom:14px;display:flex;align-items:center;gap:11px}
+  .block .blk-kick::before{content:"";width:30px;height:2px;background:var(--grad-red);border-radius:2px}
+  .block h2{font-size:clamp(26px,3.2vw,38px);font-weight:800;letter-spacing:-.03em;line-height:1.1;margin:0 0 22px;max-width:20ch}
+  .block p{font-size:16.5px;color:#34343a;line-height:1.72;max-width:68ch;margin:0 0 18px}
+  .block p strong{color:var(--ink);font-weight:750}
+  .twocol{display:grid;grid-template-columns:1.05fr .95fr;gap:54px;align-items:start}
+  @media(max-width:860px){.twocol{grid-template-columns:1fr;gap:34px}}
+
+  /* solution module list */
+  .modlist{display:flex;flex-direction:column;gap:2px;border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:var(--shadow-1)}
+  .modrow{padding:18px 20px;background:#fff;border-bottom:1px solid var(--line);transition:background .18s ease}
+  .modrow:last-child{border-bottom:none}
+  .modrow:hover{background:var(--paper-2)}
+  .modrow .mn{font-size:15px;font-weight:800;color:var(--ink);display:flex;align-items:center;gap:10px;margin-bottom:5px}
+  .modrow .mn .pin{width:8px;height:8px;border-radius:3px;background:var(--grad-red);flex:none}
+  .modrow .md{font-size:13.5px;color:var(--muted);line-height:1.55}
+  .modrow .md b{color:var(--ink-2);font-weight:700}
+
+  /* results list */
+  .reslist{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:14px}
+  .reslist li{display:flex;gap:14px;align-items:flex-start;font-size:16px;color:#34343a;line-height:1.6}
+  .reslist li .tick{flex:none;width:24px;height:24px;border-radius:7px;background:rgba(213,21,34,.09);color:var(--red);display:grid;place-items:center;font-weight:900;font-size:13px;margin-top:1px}
+  .reslist li b{color:var(--ink);font-weight:800}
+
+  /* big pull quote */
+  .quoteband{background:var(--paper-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:84px 0}
+  .quote-inner{max-width:880px;margin:0 auto;text-align:center;position:relative}
+  .quote-mark{font-size:120px;line-height:.5;font-weight:900;color:var(--red);opacity:.16;font-family:Georgia,serif;height:46px}
+  .quote-text{font-size:clamp(21px,2.7vw,30px);font-weight:650;letter-spacing:-.02em;line-height:1.4;color:var(--ink);margin:0 0 30px}
+  .quote-attr{display:flex;align-items:center;justify-content:center;gap:14px}
+  .quote-avatar{width:48px;height:48px;border-radius:50%;background:var(--grad-red);display:grid;place-items:center;color:#fff;font-weight:800;font-size:17px;box-shadow:0 8px 20px -6px rgba(213,21,34,.5)}
+  .quote-who{text-align:left}
+  .quote-who .n{font-weight:800;font-size:15px}
+  .quote-who .t{font-size:13px;color:var(--muted);font-weight:600}
+
+  /* fab note inside case */
+  .fabnote{font-size:12px;color:var(--muted-2);text-align:center;margin-top:24px;font-style:italic}
+
+  /* ===== CLOSING CTA ===== */
+  .closing{background:var(--ink);color:#fff;padding:92px 0;text-align:center;position:relative;overflow:hidden}
+  .closing::before{content:"";position:absolute;inset:0;background:radial-gradient(700px 360px at 50% -10%,rgba(213,21,34,.22),transparent 60%)}
+  .closing .wrap{position:relative;z-index:2}
+  .closing .eyebrow{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.16);color:var(--red-2)}
+  .closing h2{font-size:clamp(28px,4vw,46px);font-weight:800;letter-spacing:-.03em;line-height:1.08;margin:0 auto 18px;max-width:20ch}
+  .closing p{font-size:16.5px;color:#c4c4c8;max-width:58ch;margin:0 auto 14px;line-height:1.65}
+  .closing .actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:30px}
+  .closing .fine{font-size:12.5px;color:var(--muted-2);margin-top:24px}
+
+  /* ===== FOOTER ===== */
+  footer.site{background:#111113;color:#9a9aa0;padding:54px 0 30px;font-size:13.5px}
+  .foot-top{display:flex;justify-content:space-between;flex-wrap:wrap;gap:30px;align-items:center;border-bottom:1px solid rgba(255,255,255,.08);padding-bottom:26px;margin-bottom:24px}
+  .foot-links{display:flex;gap:24px;flex-wrap:wrap}
+  .foot-links a:hover{color:#fff}
+  .foot-bottom{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-size:12px;color:var(--muted-2)}
+  .foot-brand{display:flex;align-items:center;gap:10px;color:#fff;font-weight:800;font-size:17px}
+
+  .count-pill{display:inline-flex;align-items:center;gap:7px;font-size:13px;color:var(--muted);font-weight:600;margin-bottom:6px}
+  .count-pill b{color:var(--ink);font-weight:800}
+</style>
+</head>
+<body>
+
+  <!-- PREVIEW MARKERS -->
+  <div class="ribbon">PREVIEW</div>
+  <div class="preview-pill"><span class="dot"></span>PREVIEW — fabricated placeholders, not live customers</div>
+
+  <!-- NAV -->
+  <header class="nav">
+    <div class="wrap nav-inner">
+      <div class="brand"><span class="logo">S</span>SGEN</div>
+      <nav class="nav-links">
+        <a href="#">Product</a>
+        <a href="#">Why SGEN</a>
+        <a href="#gallery">Customers</a>
+        <a href="#">Compare</a>
+        <a href="#">Pricing</a>
+      </nav>
+      <div class="nav-cta">
+        <a class="btn btn-ghost" href="#">Log in</a>
+        <a class="btn btn-red" href="#">Start Building</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap">
+      <span class="eyebrow"><span class="sq"></span>Built on SGEN</span>
+      <h1 class="hero-h1">Real sites. <span class="grad">Not mockups.</span></h1>
+      <p class="hero-sub">From freelancer client work to multi-location operators, every site below is live and in production — built with SGEN's native builder and modules, not a concept frame.</p>
+      <p class="hero-body">You are looking at the actual output of the platform. No plugin stack underneath, no custom code required to ship these. Want the story behind a site — who built it, what problem it solved, what they measured? The written case studies are one click away.</p>
+      <div class="hero-actions">
+        <a class="btn btn-red" href="#">Start Building</a>
+        <a class="btn btn-ghost" href="#gallery">Browse the gallery ↓</a>
+      </div>
+      <p class="hero-note">2-week free trial · the $0 Sandbox is available any time, no credit card.</p>
+
+      <!-- mosaic of fake site thumbs -->
+      <div class="hero-mosaic">
+        <div class="mosaic-card">
+          <div class="mosaic-chrome"><i></i><i></i><i></i></div>
+          <div class="mosaic-thumb" style="background:linear-gradient(135deg,#1f3d2f,#3c7a55)"></div>
+          <div class="mosaic-foot">Fernwood Digital <span>Agency</span></div>
+        </div>
+        <div class="mosaic-card">
+          <div class="mosaic-chrome"><i></i><i></i><i></i></div>
+          <div class="mosaic-thumb" style="background:linear-gradient(135deg,#2a1c12,#7c5a36)"></div>
+          <div class="mosaic-foot">Marrow &amp; Vine <span>Restaurant</span></div>
+        </div>
+        <div class="mosaic-card">
+          <div class="mosaic-chrome"><i></i><i></i><i></i></div>
+          <div class="mosaic-thumb" style="background:linear-gradient(135deg,#3a2e1a,#7e6a3a)"></div>
+          <div class="mosaic-foot">Trailhand Supply <span>Store</span></div>
+        </div>
+        <div class="mosaic-card">
+          <div class="mosaic-chrome"><i></i><i></i><i></i></div>
+          <div class="mosaic-thumb" style="background:linear-gradient(135deg,#16323b,#2f7d8c)"></div>
+          <div class="mosaic-foot">Clearwater Health <span>Clinic</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section class="gallery-sec" id="gallery">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="sec-kicker">The Showcase</div>
+        <h2 class="sec-title">Every site here is live. Click any card to visit it.</h2>
+        <p class="sec-sub">Browse real SGEN-built sites. Each card opens the live site — see the speed and finish for yourself, not in a screenshot we picked.</p>
+      </div>
+
+      <!-- FILTER CHIPS -->
+      <div class="filters" id="filters">
+        <span class="filter-label">Filter by use case</span>
+        <button class="chip active" data-filter="all">All <span class="count">10</span></button>
+        <button class="chip" data-filter="agency">Agency Build <span class="count">1</span></button>
+        <button class="chip" data-filter="small-business">Small Business <span class="count">5</span></button>
+        <button class="chip" data-filter="restaurant">Restaurant <span class="count">1</span></button>
+        <button class="chip" data-filter="freelancer">Freelancer Build <span class="count">1</span></button>
+        <button class="chip" data-filter="multi-location">Multi-Location <span class="count">2</span></button>
+      </div>
+
+      <p class="count-pill"><b id="showing">10</b>&nbsp;sites shown</p>
+
+      <!-- MASONRY GRID -->
+      <div class="gallery" id="grid">
+
+        <!-- 1 · Fernwood Digital (Agency) -->
+        <article class="card" data-persona="agency" onclick="document.getElementById('casestudy').scrollIntoView({behavior:'smooth'})">
+          <div class="thumb">
+            <div class="chrome"><i></i><i></i><i></i><span class="url">fernwooddigital.example</span></div>
+            <div class="art" style="background:linear-gradient(135deg,#16302430,#1f3d2f 35%,#3c7a55)">
+              <div class="skeleton">
+                <div class="sk-hero">23 client sites.<br>One stack. One login.</div>
+                <div class="sk-grid"><div></div><div></div><div></div><div></div><div></div><div></div></div>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-tags"><span class="vbadge">Web Agency</span><span class="vbadge neutral">Agency Build</span></div>
+            <h3 class="card-brand">Fernwood Digital</h3>
+            <p class="card-desc">A 12-person Portland studio escaped WordPress plugin-maintenance hell across its whole client book — one dashboard, no plugin tax.</p>
+            <div class="metric"><span class="num"><em>23 → 1</em></span><span class="lbl">client sites consolidated onto one stack &amp; one fleet dashboard</span></div>
+            <div class="modchips"><span class="modchip">Multi-site dashboard</span><span class="modchip">Login-as-client</span><span class="modchip">Users &amp; Roles</span><span class="modchip">Templates</span><span class="modchip">Attribution</span></div>
+            <div class="card-foot"><span class="visit">Visit site <span class="arr">→</span></span><span class="story-link">Read the story →</span></div>
+          </div>
+        </article>
+
+        <!-- 2 · Thornbury Garden & Supply (Small Business) -->
+        <article class="card" data-persona="small-business">
+          <div class="thumb">
+            <div class="chrome"><i></i><i></i><i></i><span class="url">thornburygarden.example</span></div>
+            <div class="art" style="background:linear-gradient(140deg,#27401f,#4d7a32 60%,#86a84a)">
+              <span class="badge-speed">0.8s load</span>
+              <div class="skeleton">
+                <div class="sk-hero">Mulch, perennials &amp; delivery</div>
+                <div class="sk-bar md"></div>
+                <div class="sk-btn">Request a delivery quote</div>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-tags"><span class="vbadge">Garden Center</span><span class="vbadge neutral">Small Business</span></div>
+            <h3 class="card-brand">Thornbury Garden &amp; Supply</h3>
+            <p class="card-desc">A family-run garden center rebuilt its storefront after dropping 19 plugins — the delivery-quote form stopped breaking.</p>
+            <div class="metric"><span class="num">5.9s <em>→ 0.8s</em></span><span class="lbl">mobile page load — the parking-lot test</span></div>
+            <div class="modchips"><span class="modchip">SG Builder</span><span class="modchip">Forms</span><span class="modchip">On-Page SEO</span><span class="modchip">Attribution</span><span class="modchip">Backups</span></div>
+            <div class="card-foot"><span class="visit">Visit site <span class="arr">→</span></span><span class="story-link">Read the story →</span></div>
+          </div>
+        </article>
+
+        <!-- 3 · Marrow & Vine (Restaurant) -->
+        <article class="card" data-persona="restaurant">
+          <div class="thumb">
+            <div class="chrome"><i></i><i></i><i></i><span class="url">marrowandvine.example</span></div>
+            <div class="art" style="background:linear-gradient(135deg,#1a0f08,#3d2414 45%,#7c5a36)">
+              <span class="badge-speed">0.8s menu</span>
+              <div class="skeleton">
+                <div class="sk-hero">Marrow &amp; Vine</div>
+                <div class="sk-bar sm"></div>
+                <div class="sk-btn">Order Pickup</div>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-tags"><span class="vbadge">Restaurant</span><span class="vbadge neutral">Restaurant</span></div>
+            <h3 class="card-brand">Marrow &amp; Vine</h3>
+            <p class="card-desc">A wood-fire restaurant that grew to three rooms put menus, the supper-club calendar, and online ordering behind one login.</p>
+            <div class="metric"><span class="num">2.9s <em>→ 0.8s</em></span><span class="lbl">menu-page first load · 6 add-ons retired</span></div>
+            <div class="modchips"><span class="modchip">Menus</span><span class="modchip">Events</span><span class="modchip">Ecommerce</span><span class="modchip">Location Selector</span><span class="modchip">Popups</span></div>
+            <div class="card-foot"><span class="visit">Visit site <span class="arr">→</span></span><span class="story-link">Read the story →</span></div>
+          </div>
+        </article>
+
+        <!-- 4 · Tidewater & Co. (Freelancer) -->
+        <article class="card" data-persona="freelancer">
+          <div class="thumb">
+            <div class="chrome"><i></i><i></i><i></i><span class="url">tidewaterstudio.example</span></div>
+            <div class="art" style="background:linear-gradient(135deg,#2b2620,#6b6354 55%,#a99e85)">
+              <div class="skeleton">
+                <div class="sk-hero">Tidewater &amp; Co.</div>
+                <div class="sk-bar sm"></div>
+                <div class="sk-bar md"></div>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-tags"><span class="vbadge">Design Studio</span><span class="vbadge neutral">Freelancer Build</span></div>
+            <h3 class="card-brand">Tidewater &amp; Co.</h3>
+            <p class="card-desc">A one-person studio rebuilt her own site and five client sites on SGEN — and now maintains all six from one dashboard, alone.</p>
+            <div class="metric"><span class="num"><em>6 · 1 · 0</em></span><span class="lbl">6 sites · 1 dashboard · 0 update-night calls</span></div>
+            <div class="modchips"><span class="modchip">SG Builder</span><span class="modchip">Templates</span><span class="modchip">Image Optimization</span><span class="modchip">Site Manager</span><span class="modchip">Forms</span></div>
+            <div class="card-foot"><span class="visit">Visit site <span class="arr">→</span></span><span class="story-link">Read the story →</span></div>
+          </div>
+        </article>
+
+        <!-- 5 · Kettleback Coffee Co. (Multi-Location) -->
+        <article class="card" data-persona="multi-location">
+          <div class="thumb">
+            <div class="chrome"><i></i><i></i><i></i><span class="url">kettleback.example</span></div>
+            <div class="art" style="background:linear-gradient(135deg,#1c120b,#43291a 50%,#8a6a3f)">
+              <span class="badge-speed">34 stores</span>
+              <div class="skeleton">
+                <div class="sk-hero">One dashboard.<br>34 storefronts.</div>
+                <div class="sk-grid"><div></div><div></div><div></div><div></div><div></div><div></div></div>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-tags"><span class="vbadge">Café Franchise</span><span class="vbadge neutral">Multi-Location</span></div>
+            <h3 class="card-brand">Kettleback Coffee Co.</h3>
+            <p class="card-desc">A 34-location café franchise rebuilt its whole fleet off WordPress Multisite — one platform, no plugins to babysit.</p>
+            <div class="metric"><span class="num"><em>34 → 1</em></span><span class="lbl">location sites, now one fleet dashboard</span></div>
+            <div class="modchips"><span class="modchip">Multi-site dashboard</span><span class="modchip">Multi-location</span><span class="modchip">Templates</span><span class="modchip">Attribution</span><span class="modchip">Local SEO</span></div>
+            <div class="card-foot"><span class="visit">Visit site <span class="arr">→</span></span><span class="story-link">Read the story →</span></div>
+          </div>
+        </article>
+
+        <!-- 6 · Clearwater Family Health (Healthcare / Small Business) -->
+        <article class="card" data-persona="small-business">
+          <div class="thumb">
+            <div class="chrome"><i></i><i></i><i></i><span class="url">clearwaterhealth.example</span></div>
+            <div class="art" style="background:linear-gradient(135deg,#10303a,#1f6675 55%,#4fb0c0)">
+              <span class="badge-speed">0.9s load</span>
+              <div class="skeleton">
+                <div class="sk-hero">Clearwater Family Health</div>
+                <div class="sk-bar md"></div>
+                <div class="sk-btn">Request an appointment</div>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-tags"><span class="vbadge">Healthcare</span><span class="vbadge neutral">Small Business</span></div>
+            <h3 class="card-brand">Clearwater Family Health</h3>
+            <p class="card-desc">A four-location clinic group wanted a boring, dependable site — security, backups, consent log, and forms, all native.</p>
+            <div class="metric"><span class="num">7 plugins <em>→ 0</em></span><span class="lbl">4.6s → 0.9s load · audit-ready posture</span></div>
+            <div class="modchips"><span class="modchip">SG Builder</span><span class="modchip">Forms</span><span class="modchip">Security</span><span class="modchip">Consent &amp; Tracking</span><span class="modchip">Location Selector</span></div>
+            <div class="card-foot"><span class="visit">Visit site <span class="arr">→</span></span><span class="story-link">Read the story →</span></div>
+          </div>
+        </article>
+
+        <!-- 7 · Wildgraze (Creator/Media / Small Business) -->
+        <article class="card" data-persona="small-business">
+          <div class="thumb">
+            <div class="chrome"><i></i><i></i><i></i><span class="url">wildgraze.example</span></div>
+            <div class="art" style="background:linear-gradient(135deg,#181410,#3a2c1d 45%,#8a5a2f)">
+              <span class="badge-speed">0.7s archive</span>
+              <div class="skeleton">
+                <div class="sk-hero">Field notes from<br>the edge of the map</div>
+                <div class="sk-bar sm"></div>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-tags"><span class="vbadge">Creator / Media</span><span class="vbadge neutral">Small Business</span></div>
+            <h3 class="card-brand">Wildgraze</h3>
+            <p class="card-desc">A solo media brand ran field journals, films, and a paid membership on 12 plugins. Rebuilt on SGEN as one stack.</p>
+            <div class="metric"><span class="num">12 plugins <em>→ 0</em></span><span class="lbl">2.9s → 0.7s on the photo-heavy archive</span></div>
+            <div class="modchips"><span class="modchip">Blog &amp; Posts</span><span class="modchip">Custom Objects</span><span class="modchip">SEO Manager</span><span class="modchip">Ecommerce</span><span class="modchip">Popups</span></div>
+            <div class="card-foot"><span class="visit">Visit site <span class="arr">→</span></span><span class="story-link">Read the story →</span></div>
+          </div>
+        </article>
+
+        <!-- 8 · Trailhand Supply Co. (Ecommerce / Small Business) -->
+        <article class="card" data-persona="small-business">
+          <div class="thumb">
+            <div class="chrome"><i></i><i></i><i></i><span class="url">trailhandsupply.example</span></div>
+            <div class="art" style="background:linear-gradient(135deg,#241c10,#574321 50%,#9a7a3e)">
+              <span class="badge-speed">0.9s LCP</span>
+              <div class="skeleton">
+                <div class="sk-hero">Small-batch trail gear</div>
+                <div class="sk-grid"><div></div><div></div><div></div></div>
+                <div class="sk-btn">Add to cart</div>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-tags"><span class="vbadge">Ecommerce</span><span class="vbadge neutral">Small Business</span></div>
+            <h3 class="card-brand">Trailhand Supply Co.</h3>
+            <p class="card-desc">A DTC outdoor-gear brand left a 14-plugin WooCommerce stack for SGEN's native store — and got its Saturdays back.</p>
+            <div class="metric"><span class="num">3.8s <em>→ 0.9s</em></span><span class="lbl">storefront LCP — about 4× faster · 14 → 0 plugins</span></div>
+            <div class="modchips"><span class="modchip">Ecommerce</span><span class="modchip">Native checkout</span><span class="modchip">Reviews</span><span class="modchip">Attribution</span><span class="modchip">SG Builder</span></div>
+            <div class="card-foot"><span class="visit">Visit site <span class="arr">→</span></span><span class="story-link">Read the story →</span></div>
+          </div>
+        </article>
+
+        <!-- 9 · Riverbend Commons (Nonprofit / Small Business) -->
+        <article class="card" data-persona="small-business">
+          <div class="thumb">
+            <div class="chrome"><i></i><i></i><i></i><span class="url">riverbendcommons.org</span></div>
+            <div class="art" style="background:linear-gradient(135deg,#15281b,#2f5a35 55%,#6f9a55)">
+              <span class="badge-speed">1.3s load</span>
+              <div class="skeleton">
+                <div class="sk-hero">Built by neighbors,<br>for the neighborhood</div>
+                <div class="sk-btn">Donate</div>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-tags"><span class="vbadge">Nonprofit</span><span class="vbadge neutral">Small Business</span></div>
+            <h3 class="card-brand">Riverbend Commons</h3>
+            <p class="card-desc">A nine-person community foundation now runs its own site — events, donations, and the newsletter in one system, no developer.</p>
+            <div class="metric"><span class="num">6.1s <em>→ 1.3s</em></span><span class="lbl">mobile load · recurring donors up 41% in two quarters</span></div>
+            <div class="modchips"><span class="modchip">Events</span><span class="modchip">Ecommerce</span><span class="modchip">Forms</span><span class="modchip">Popups</span><span class="modchip">Analytics</span></div>
+            <div class="card-foot"><span class="visit">Visit site <span class="arr">→</span></span><span class="story-link">Read the story →</span></div>
+          </div>
+        </article>
+
+        <!-- 10 · Halloran & Vint (Professional Services / Multi-Location) -->
+        <article class="card" data-persona="multi-location">
+          <div class="thumb">
+            <div class="chrome"><i></i><i></i><i></i><span class="url">halloranvint.example</span></div>
+            <div class="art" style="background:linear-gradient(135deg,#10141f,#22304d 55%,#445a86)">
+              <div class="skeleton">
+                <div class="sk-hero">Operational clarity for<br>complex businesses</div>
+                <div class="sk-bar sm"></div>
+                <div class="sk-bar md"></div>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-tags"><span class="vbadge">Professional Services</span><span class="vbadge neutral">Multi-Location</span></div>
+            <h3 class="card-brand">Halloran &amp; Vint</h3>
+            <p class="card-desc">A management consultancy left a custom site it couldn't edit — and finally saw which campaigns sent the partners' phones ringing.</p>
+            <div class="metric"><span class="num"><em>$2,940/yr</em></span><span class="lbl">in plugin + tracking fees eliminated · 3 logins → 1</span></div>
+            <div class="modchips"><span class="modchip">SG Builder</span><span class="modchip">Attribution</span><span class="modchip">Call Tracking</span><span class="modchip">Forms</span><span class="modchip">Redirects</span></div>
+            <div class="card-foot"><span class="visit">Visit site <span class="arr">→</span></span><span class="story-link">Read the story →</span></div>
+          </div>
+        </article>
+
+      </div><!-- /grid -->
+    </div>
+  </section>
+
+  <!-- ===== DEEP CASE STUDY · Fernwood Digital ===== -->
+  <section class="case" id="casestudy">
+
+    <div class="case-hero">
+      <div class="wrap">
+        <div class="case-eyebrow"><span class="lg">F</span>Customer Story — Agency Build</div>
+        <h1 class="case-h1">Fernwood Digital: 23 client sites, <span class="grad">one stack, one login.</span></h1>
+        <p class="case-pull">Fernwood ran 23 client sites on WordPress, each a hand-stitched tower of plugins that broke on a different schedule. They rebuilt the whole book on SGEN — native features replaced the plugins, and the maintenance treadmill stopped.</p>
+
+        <div class="case-glance">
+          <div class="glance"><div class="k">Industry</div><div class="v">Web design &amp; marketing agency</div></div>
+          <div class="glance"><div class="k">Company</div><div class="v">12-person studio · Portland, OR</div></div>
+          <div class="glance"><div class="k">Sites managed</div><div class="v">23 active client sites</div></div>
+          <div class="glance"><div class="k">Prior platform</div><div class="v">WordPress + Elementor + plugins</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3-big-number band -->
+    <div class="numband">
+      <div class="numband-inner">
+        <div class="nbox"><div class="big">9 → 0</div><div class="cap">Average paid plugins per client site, eliminated by switching to native SGEN features.</div></div>
+        <div class="nbox"><div class="big">14 → 2 hrs</div><div class="cap">Weekly time on cross-portfolio plugin updates and break-fixes, before vs. after.</div></div>
+        <div class="nbox"><div class="big">0 in 8 mo</div><div class="cap">Emergency "the-update-broke-the-site" client incidents since the migration.</div></div>
+      </div>
+    </div>
+
+    <!-- CHALLENGE -->
+    <div class="case-body">
+      <div class="wrap">
+        <div class="cb-grid">
+
+          <div class="block">
+            <div class="blk-kick">The Challenge</div>
+            <h2>A design studio that had quietly become a plugin-maintenance company.</h2>
+            <p>Fernwood Digital is a 12-person studio that designs and maintains websites for local businesses — dental groups, law firms, a regional grocery chain, a handful of restaurants. Over nine years the agency had accumulated <strong>23 active client sites, every one on WordPress</strong>, and every one assembled the same way: Elementor for layout, plus a forms plugin, an SEO plugin, a popup plugin, a caching plugin, a backup plugin, a cookie-consent plugin, and a call-tracking plugin.</p>
+            <p>The problem was never any single site. The problem was <strong>23 of them, each on its own update schedule</strong>. A plugin would push an update on a Tuesday and silently break a checkout form on one site; a WordPress core update would white-screen another. Because each site had a slightly different stack, there was no single fix — there were 23 fixes, found one panicked client email at a time. Premium licences for forms, SEO, popups, call tracking, and backups stacked up on <em>every</em> site, renewing in different months on different cards, with nobody owning the total.</p>
+          </div>
+
+          <!-- SOLUTION -->
+          <div class="block">
+            <div class="blk-kick">The Solution</div>
+            <h2>One all-inclusive platform — no plugin tax, and no suite tax.</h2>
+            <div class="twocol">
+              <div>
+                <p>Fernwood rebuilt the client book on SGEN as one platform — not a base product plus à-la-carte add-ons, and not a per-site pile of plugin licences. The whole stack came in the box. The migration was a <strong>rebuild, not an import</strong>: Fernwood re-laid each site on SGEN's visual builder from its house templates, then ran a redirect map so search equity carried over. Roughly two sites a week, finished in a quarter.</p>
+                <p>The agency leaned on the Agency / multi-site capability set — every feature below is a real, native part of the platform, no add-on to license.</p>
+              </div>
+              <div class="modlist">
+                <div class="modrow"><div class="mn"><span class="pin"></span>Multi-site dashboard</div><div class="md">All 23 client sites in <b>one fleet dashboard</b> — status, traffic, forms, backups — from a single login. Free on every plan via Foundation Pack.</div></div>
+                <div class="modrow"><div class="mn"><span class="pin"></span>Login-as-client</div><div class="md">Impersonation drops the team straight into a client's site as the client sees it — <b>no credential hunt, no shared passwords.</b></div></div>
+                <div class="modrow"><div class="mn"><span class="pin"></span>Users &amp; Roles (RBAC)</div><div class="md">Designers, account managers, and clients each get the right scope of access natively — no third-party roles plugin to patch.</div></div>
+                <div class="modrow"><div class="mn"><span class="pin"></span>Templates</div><div class="md">A small house template kit so a new client site <b>starts finished, not blank.</b></div></div>
+                <div class="modrow"><div class="mn"><span class="pin"></span>Backups &amp; restore</div><div class="md">On-demand and daily backups with retention, per site, from the same dashboard.</div></div>
+                <div class="modrow"><div class="mn"><span class="pin"></span>Attribution</div><div class="md">First-party, native — each client can <b>see which campaign actually drove their leads.</b> No CallRail-style per-line tax.</div></div>
+                <div class="modrow"><div class="mn"><span class="pin"></span>Foundation Pack</div><div class="md">Hosting, free auto-renewing SSL, global CDN, a WAF, and automatic security patching ship free on every site — so the patch anxiety simply went away.</div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- RESULTS -->
+          <div class="block">
+            <div class="blk-kick">The Results</div>
+            <h2>The maintenance treadmill stopped — and attribution became a retention tool.</h2>
+            <ul class="reslist">
+              <li><span class="tick">✓</span><span><b>23 client sites consolidated</b> onto one all-inclusive stack and one fleet dashboard.</span></li>
+              <li><span class="tick">✓</span><span><b>An average of 9 paid plugins per site eliminated</b> — forms, SEO, popups, caching, backups, cookie consent, call tracking, a roles plugin, and a security plugin — all replaced by native features.</span></li>
+              <li><span class="tick">✓</span><span><b>Cross-portfolio maintenance dropped from ~14 hours/week to ~2</b> — the freed time went back into billable design work and a new retainer tier.</span></li>
+              <li><span class="tick">✓</span><span><b>Zero "the-update-broke-the-site" emergencies in 8 months</b>, versus roughly two a month before.</span></li>
+              <li><span class="tick">✓</span><span><b>New-client time-to-launch fell from ~3 weeks to ~5 days</b>, working from the house templates library.</span></li>
+              <li><span class="tick">✓</span><span><b>Attribution renewed 6 wobbling retainers</b> — clients can now see the marketing working, in a leads-by-source view.</span></li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- PULL QUOTE -->
+    <div class="quoteband">
+      <div class="wrap">
+        <div class="quote-inner">
+          <div class="quote-mark">&ldquo;</div>
+          <p class="quote-text">WordPress made us a maintenance company. Twenty-three sites, twenty-three update schedules, and a Tuesday-night ritual of finding out which plugin broke which client overnight. On SGEN there's one dashboard and there are no plugins to break — the features are just part of the platform. I got my design studio back, and my clients can finally see which campaign is actually working.</p>
+          <div class="quote-attr">
+            <div class="quote-avatar">PR</div>
+            <div class="quote-who">
+              <div class="n">Priya Raman</div>
+              <div class="t">Founder &amp; Creative Director, Fernwood Digital</div>
+            </div>
+          </div>
+          <p class="fabnote">Fabricated placeholder — brand, person, metrics, and quote are illustrative. Every SGEN capability cited is real. Swap in a real agency story before publish.</p>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ===== CLOSING CTA ===== -->
+  <section class="closing">
+    <div class="wrap">
+      <span class="eyebrow"><span class="sq"></span>Ready to build your own?</span>
+      <h2>Start in the free Sandbox — no credit card, no time limit.</h2>
+      <p>Every site in this gallery began as a blank SGEN project. The builder is identical on the free Sandbox and on a paid plan — nothing is locked behind a paywall before you can see what SGEN does with a real page.</p>
+      <p>From $17/mo when you're ready to go live. 2-week free trial. Founder pricing locks in for life. Cancel anytime, prorated.</p>
+      <div class="actions">
+        <a class="btn btn-light" href="#">Try the Free Sandbox</a>
+        <a class="btn btn-outline-light" href="#">See the Builder</a>
+      </div>
+      <p class="fine">Sandbox $0 — no credit card, no time limit. The 2-week free trial applies to the Launch, Grow, Scale, and Multi plans.</p>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="site">
+    <div class="wrap">
+      <div class="foot-top">
+        <div class="foot-brand"><span class="brand"><span class="logo">S</span></span>SGEN</div>
+        <nav class="foot-links">
+          <a href="#">SG-Core</a><a href="#">SG-Modules</a><a href="#">SG-Dashboard</a><a href="#">Compare</a><a href="#">Resources</a><a href="#">Company</a><a href="#">Trust &amp; Legal</a><a href="#">Partners</a>
+        </nav>
+      </div>
+      <div class="foot-bottom">
+        <span>&copy; 2026 SGEN. Real sites, not mockups.</span>
+        <span>PREVIEW build — all showcase entries are fabricated placeholders.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ---- Filter chips ----
+    (function(){
+      var chips = document.querySelectorAll('.chip');
+      var cards = Array.prototype.slice.call(document.querySelectorAll('#grid .card'));
+      var showing = document.getElementById('showing');
+      chips.forEach(function(chip){
+        chip.addEventListener('click', function(){
+          chips.forEach(function(c){c.classList.remove('active');});
+          chip.classList.add('active');
+          var f = chip.getAttribute('data-filter');
+          var n = 0;
+          cards.forEach(function(card){
+            var match = (f === 'all') || (card.getAttribute('data-persona') === f);
+            card.classList.toggle('hide', !match);
+            if(match){ n++; }
+          });
+          if(showing){ showing.textContent = n; }
+        });
+      });
+    })();
+  </script>
+
+</body>
+</html>

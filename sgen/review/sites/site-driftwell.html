@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Driftwell — One stack for the marketing site, the blog, and SEO</title>
+<meta name="description" content="Driftwell retired a four-service headless setup and moved the whole marketing surface — site, blog, and SEO — onto one platform. Marketing ships content without an engineer in the loop.">
+<meta name="robots" content="noindex">
+<!-- ============================================================================
+     FABRICATED PLACEHOLDER SITE — "Driftwell" is a fictional brand.
+     Person (Saoirse Brennan), logo, all metrics, the quote, and the screenshots
+     are owner-directed placeholders (OWNER-DECISIONS D3, 2026-06-02). NOT a real
+     SGEN customer. Every SGEN capability shown is real. Built from the SGEN
+     design system (V9 app-saas-tech blueprint) — _PAGE-COMPOSITION-LIBRARY §2 V9.
+     Replace brand/person/metrics/quote/assets with a real, consented story
+     before any publish. Tracked in _FABRICATED-PROOF-MANIFEST.md.
+     Local fal-generated imagery in /assets/driftwell/ is the only non-inline asset.
+============================================================================= -->
+<style>
+/* ============================================================================
+   DRIFTWELL — SGEN proof site · vertical: app-saas-tech (V9)
+   LIBRARIES APPLIED:
+     LOOK  : master :root + TOP-12  (one accent · display-on-headings · ink-tinted
+             shadow · scroll-reveal+stagger · count-up · glass header · image-zoom
+             frame · bottom-fade · accent-flip buttons · eyebrow rule · section
+             rhythm/alt grounds · ambient glow blob)
+     RESP  : §0 essentials (overflow-x · 1-col@767 · drawer@1024 · 44px taps ·
+             container ladder · clamp type · release 100vh · full-bleed cap)
+             + drawer recipe §3 + 6-bp matrix
+     SCROLL: sticky glass header (§2.1 IO-sentinel) · smart-nav-safe ·
+             reveals (§2.7) · back-to-top (§2.5) · sticky-CTA-after-hero (§2.3) ·
+             progress bar (§2.6) · smooth-anchor
+     STATE : 07-components (buttons accent-flip · inputs focus-ring · faq accordion)
+   SKIN   : dark + large-type + minimal · electric-indigo accent (brand axis-2 tags)
+============================================================================= */
+:root{
+  /* COLOR — dark dev-tools skin (F1/F3); ink is tinted near-black, never #000 */
+  --ink:#0c1020;             /* near-black charcoal base (V9 dark base #0c1020-class) */
+  --ink-2:#11152a;           /* one step up for banded depth */
+  --ink-3:#161b34;           /* card on dark */
+  --paper:#f5f6fb;           /* cool off-white, never #fff */
+  --paper-2:#eef0f8;         /* tint ground */
+  --surface:#ffffff;         /* cards float on paper */
+  --muted:#6a7088;           /* muted grey, desaturated toward ink */
+  --body:#3a3f55;            /* body on light = desaturated tint of ink, not #666 */
+  --body-dark:#aeb4cc;       /* body on dark grounds */
+  --accent:#5e44ff;          /* electric indigo — THE one accent */
+  --accent-2:#19c8f5;        /* cool cyan — duotone partner / link */
+  --accent-ink:#4a32e0;      /* darker indigo for text-on-light */
+  --ok:#22b27a;              /* checkmarks / positive delta */
+  --line:rgba(12,16,32,.10);
+  --line-2:rgba(12,16,32,.16);
+  --line-d:rgba(255,255,255,.10);   /* hairline on dark */
+  --line-d2:rgba(255,255,255,.16);
+
+  /* GRADIENTS — constant 135deg (F2) */
+  --grad-brand:linear-gradient(135deg,var(--accent),var(--accent-2));
+  --grad-wash:linear-gradient(135deg,#5e44ff,#3b2cc9 50%,#19c8f5);
+  --fade-to-paper:linear-gradient(180deg,rgba(245,246,251,0) 0%,var(--paper) 72%);
+
+  /* RADIUS — ONE language: fintech 8/14 (I1) */
+  --r-sm:4px; --r-chip:8px; --r-btn:10px; --r-card:14px; --r-panel:22px;
+  --r-squircle:clamp(20px,3vw,36px); --r-pill:9999px;
+
+  /* SHADOW — ink-tinted (navy), never #000 (D1) */
+  --shadow-rest:0 2px 6px 0 rgba(12,16,40,.10);
+  --shadow-card:0 15px 30px 0 rgba(1,7,39,.13);
+  --shadow-card-2stop:0 12px 16px -4px rgba(16,24,40,.08),0 4px 6px -2px rgba(16,24,40,.03);
+  --shadow-hover:0 32px 64px -12px rgba(16,24,40,.18);
+  --shadow-dir:18px 36px 80px -24px rgba(4,6,20,.7);   /* D6 directional, device-on-dark */
+
+  /* MOTION (C8) */
+  --ease:cubic-bezier(.05,.5,.3,1);
+  --t-fast:.2s ease-out;
+  --t-reveal:.6s var(--ease);
+
+  --glass:blur(16px) saturate(180%);
+  --ring:0 0 0 3px rgba(94,68,255,.40);
+  --wrap:1200px;
+  --header-h:74px;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --display:"Space Grotesk",ui-sans-serif,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:ui-monospace,"SFMono-Regular",Menlo,Consolas,"Liberation Mono",monospace;
+
+  /* z-scale (scroll lib §3) */
+  --z-header:1000; --z-sticky-cta:1100; --z-backtotop:900; --z-drawer:100000; --z-scrim:9000;
+}
+
+/* ---------- font (display = Space Grotesk via system fallback if unavailable) ---------- */
+@font-face{font-family:"Space Grotesk";src:local("Space Grotesk");font-display:swap}
+
+/* ============================ BASE / RESET ============================ */
+*{box-sizing:border-box}
+html{overflow-x:hidden;scroll-behavior:smooth}          /* §0 #1 mandatory safety net */
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{
+  margin:0;background:var(--paper);color:var(--body);
+  font-family:var(--sans);font-size:16px;line-height:1.65;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+h1,h2,h3,h4{font-family:var(--display);font-weight:600;letter-spacing:-.02em;line-height:1.05;color:var(--ink);margin:0}
+p{margin:0}
+::selection{background:rgba(94,68,255,.24)}
+
+/* ---------- container ladder (RESP §1.3, clamp gutter) ---------- */
+.wrap{max-width:var(--wrap);margin:0 auto;padding-left:clamp(20px,4vw,40px);padding-right:clamp(20px,4vw,40px)}
+
+/* ---------- type ladder (RESP §1.4 clamp) ---------- */
+.h1{font-size:clamp(2.5rem,1.9rem+3.2vw,4.5rem);line-height:1.0;letter-spacing:-.035em}   /* 40→72px */
+.h2{font-size:clamp(1.9rem,1.5rem+1.9vw,3.05rem);line-height:1.04;letter-spacing:-.025em} /* 30→49px */
+.h3{font-size:clamp(1.3rem,1.15rem+.7vw,1.7rem);letter-spacing:-.015em}
+.lead{font-size:clamp(1.05rem,1rem+.4vw,1.28rem);line-height:1.55}
+
+/* ---------- eyebrow (TOP-12 #10) ---------- */
+.eyebrow{display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);
+  font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--accent-ink);margin-bottom:18px}
+.eyebrow::before{content:"";width:30px;height:2px;background:var(--accent);border-radius:2px}
+.on-dark .eyebrow,.dark .eyebrow{color:var(--accent-2)}
+
+/* ---------- section rhythm (TOP-12 #11 · G1) ---------- */
+.section{padding-block:clamp(64px,9vw,128px);position:relative}
+.section.tint{background:var(--paper-2)}
+.section.dark{background:var(--ink);color:var(--body-dark)}
+.section.dark h2,.section.dark h3,.section.dark h4{color:#fff}
+.section-head{max-width:680px;margin-bottom:clamp(36px,5vw,64px)}
+.section-head.center{margin-left:auto;margin-right:auto;text-align:center}
+.section-head p{margin-top:18px;color:var(--body)}
+.section.dark .section-head p{color:var(--body-dark)}
+
+/* ---------- buttons (TOP-12 #9 accent-flip · I1) ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  min-height:46px;padding:0 26px;border-radius:var(--r-btn);border:1.5px solid transparent;
+  font-family:var(--display);font-size:15px;font-weight:600;letter-spacing:-.01em;cursor:pointer;
+  transition:background-color var(--t-fast),color var(--t-fast),border-color var(--t-fast),box-shadow var(--t-fast),transform var(--t-fast)}
+.btn .arr{transition:transform var(--t-fast)}
+.btn:hover .arr{transform:translateX(4px)}
+.btn-primary{background:var(--accent);color:#fff;box-shadow:0 8px 22px -8px rgba(94,68,255,.7)}
+.btn-primary:hover{background:var(--accent-ink);box-shadow:0 12px 28px -8px rgba(94,68,255,.85);transform:translateY(-2px)}
+.btn-grad{background:var(--grad-brand);color:#fff;box-shadow:0 8px 24px -8px rgba(94,68,255,.7)}
+.btn-grad:hover{filter:brightness(1.07);transform:translateY(-2px)}
+.btn-ghost{background:transparent;border-color:var(--line-2);color:var(--ink)}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent-ink)}
+.on-dark .btn-ghost,.dark .btn-ghost{border-color:var(--line-d2);color:#fff}
+.on-dark .btn-ghost:hover,.dark .btn-ghost:hover{border-color:var(--accent-2);color:var(--accent-2)}
+.btn:focus-visible{outline:none;box-shadow:var(--ring)}
+
+/* ============================ HEADER (glass sticky · SCROLL §2.1) ============================ */
+#header-sentinel{position:absolute;top:0;height:1px;width:1px}
+.site-header{position:sticky;top:0;z-index:var(--z-header);height:var(--header-h);
+  background:rgba(12,16,32,0);color:#fff;
+  transition:background-color .3s ease,box-shadow .3s ease,backdrop-filter .3s ease,height .3s ease,border-color .3s ease;
+  border-bottom:1px solid transparent}
+.site-header.is-stuck{height:62px;background:rgba(11,14,28,.82);
+  -webkit-backdrop-filter:var(--glass);backdrop-filter:var(--glass);
+  box-shadow:0 6px 24px -12px rgba(0,0,0,.7);border-bottom-color:var(--line-d)}
+.site-header .wrap{display:flex;align-items:center;gap:20px;height:100%}
+.brand{display:inline-flex;align-items:center;gap:10px;font-family:var(--display);font-weight:600;
+  font-size:20px;letter-spacing:-.03em;color:#fff}
+.brand .mark{width:26px;height:26px;border-radius:7px;background:var(--grad-brand);
+  box-shadow:0 4px 14px -3px rgba(94,68,255,.7);display:grid;place-items:center;flex:0 0 auto}
+.brand .mark::after{content:"";width:11px;height:11px;border-radius:50%;
+  background:#fff;mask:radial-gradient(circle at 32% 32%,transparent 38%,#000 40%);
+  -webkit-mask:radial-gradient(circle at 32% 32%,transparent 38%,#000 40%)}
+.site-nav-desktop{display:flex;gap:6px;margin-left:18px}
+.nav-link{padding:9px 12px;border-radius:8px;font-size:14.5px;font-weight:500;color:#d6d9ea;
+  transition:color var(--t-fast),background-color var(--t-fast)}
+.nav-link:hover{color:#fff;background:rgba(255,255,255,.07)}
+.header-cta{margin-left:auto;display:flex;align-items:center;gap:12px}
+.header-cta .btn{min-height:42px;padding:0 20px;font-size:14px}
+.header-login{font-size:14.5px;font-weight:500;color:#d6d9ea}
+.header-login:hover{color:#fff}
+
+/* hamburger */
+.nav-toggle{display:none;width:44px;height:44px;align-items:center;justify-content:center;
+  background:transparent;border:0;cursor:pointer;margin-left:auto}
+.nav-toggle .bars,.nav-toggle .bars::before,.nav-toggle .bars::after{
+  content:"";display:block;width:22px;height:2px;background:#fff;border-radius:2px;transition:transform .3s ease,opacity .2s ease}
+.nav-toggle .bars{position:relative}
+.nav-toggle .bars::before{position:absolute;top:-7px}
+.nav-toggle .bars::after{position:absolute;top:7px}
+
+/* ============================ DRAWER (RESP §3) ============================ */
+.drawer{position:fixed;top:0;right:0;width:min(330px,86vw);height:100dvh;overflow-y:auto;
+  -webkit-overflow-scrolling:touch;background:#0e1226;color:#c8ccdf;
+  transform:translateX(100%);transition:transform .3s ease;z-index:var(--z-drawer);
+  padding:26px 22px;border-left:1px solid var(--line-d)}
+.drawer.open{transform:translateX(0)}
+.drawer[aria-hidden="true"]{visibility:hidden}
+.drawer.open{visibility:visible}
+.drawer__close{width:44px;height:44px;line-height:44px;font-size:30px;position:absolute;top:10px;right:12px;
+  background:none;border:0;color:#c8ccdf;cursor:pointer}
+.drawer__brand{font-family:var(--display);font-weight:600;font-size:19px;color:#fff;margin:2px 0 18px;letter-spacing:-.03em}
+.drawer__menu{list-style:none;margin:0;padding:0}
+.drawer__menu a{display:block;min-height:46px;line-height:46px;padding:0 6px;color:#c8ccdf;
+  border-top:1px solid rgba(255,255,255,.07);font-size:16px;font-weight:500}
+.drawer__menu a:hover{color:#fff}
+.drawer__cta{display:flex;width:100%;margin-top:22px}
+html.nav-open{overflow:hidden}
+.scrim{position:fixed;inset:0;background:rgba(4,6,16,.62);opacity:0;transition:opacity .3s;z-index:var(--z-scrim)}
+.scrim.show{opacity:1}
+
+/* ============================ HERO (B4 dark split + device + glow · zone 2) ============================ */
+.hero{position:relative;overflow:hidden;background:
+   radial-gradient(120% 90% at 78% -10%,rgba(94,68,255,.16),transparent 55%),
+   linear-gradient(180deg,#0c1020 0%,#0a0d1a 100%);
+  color:#fff;margin-top:calc(-1 * var(--header-h));padding-top:calc(var(--header-h) + clamp(40px,7vw,86px));
+  padding-bottom:clamp(48px,8vw,110px)}
+.hero::before{content:"";position:absolute;width:680px;height:680px;right:-10%;top:-18%;z-index:0;
+  border-radius:50%;filter:blur(100px);pointer-events:none;
+  background:radial-gradient(circle,rgba(94,68,255,.42),transparent 66%)}
+.hero::after{content:"";position:absolute;width:520px;height:520px;left:-14%;bottom:-30%;z-index:0;
+  border-radius:50%;filter:blur(110px);pointer-events:none;
+  background:radial-gradient(circle,rgba(25,200,245,.22),transparent 70%)}
+.hero .wrap{position:relative;z-index:1}
+.hero .grid{display:grid;grid-template-columns:1fr 1.06fr;gap:clamp(30px,5vw,64px);align-items:center}
+.hero .badge{display:inline-flex;align-items:center;gap:9px;background:rgba(255,255,255,.05);
+  border:1px solid var(--line-d2);border-radius:var(--r-pill);padding:7px 15px;font-size:12.5px;
+  font-weight:600;color:#d6d9ea;margin-bottom:24px}
+.hero .badge i{width:7px;height:7px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 4px rgba(34,178,122,.18)}
+.hero h1{color:#fff;max-width:17ch;text-wrap:balance}
+.hero h1 .clip{background:var(--grad-wash);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .sub{color:#c4c8dd;max-width:48ch;margin-top:22px}
+.hero .cta-row{display:flex;flex-wrap:wrap;gap:14px;margin-top:34px}
+.hero .proof{display:flex;flex-wrap:wrap;align-items:center;gap:10px 20px;margin-top:34px;
+  font-size:13.5px;color:#aeb4cc}
+.hero .proof .avatars{display:flex}
+.hero .proof .avatars span{width:30px;height:30px;border-radius:50%;border:2px solid #0c1020;margin-left:-9px;
+  background:linear-gradient(135deg,#4a4f6e,#2a2d44)}
+.hero .proof .avatars span:first-child{margin-left:0}
+.hero .proof .avatars span:nth-child(2){background:var(--grad-brand)}
+.hero .proof .avatars span:nth-child(3){background:linear-gradient(135deg,#19c8f5,#1577c9)}
+.hero .proof .avatars span:nth-child(4){background:linear-gradient(135deg,#8a6bff,#5e44ff)}
+.hero .proof b{color:#fff}
+.hero .proof .stars{color:#ffc24b;letter-spacing:1px}
+.hero .proof .sep{width:1px;height:18px;background:var(--line-d2)}
+
+/* device mock (B4 — real fal image floating in browser chrome over glow) */
+.device{position:relative;z-index:1;border-radius:14px;overflow:hidden;background:#0b0c10;
+  border:1px solid var(--line-d2);box-shadow:var(--shadow-dir);
+  animation:float 8s var(--ease) infinite alternate}
+@keyframes float{0%{transform:translateY(-9px)}100%{transform:translateY(9px)}}
+.device .bar{display:flex;align-items:center;gap:7px;padding:11px 14px;background:#13162a;border-bottom:1px solid var(--line-d)}
+.device .bar i{width:11px;height:11px;border-radius:50%;background:#33364a}
+.device .bar i:nth-child(1){background:#ff5f56}.device .bar i:nth-child(2){background:#ffbd2e}.device .bar i:nth-child(3){background:#27c93f}
+.device .bar .url{margin-left:10px;flex:1;height:22px;border-radius:6px;background:rgba(255,255,255,.06);
+  display:flex;align-items:center;padding:0 10px;font-family:var(--mono);font-size:11px;color:#8d92ad;max-width:260px}
+.device .shot{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;object-position:top center}
+
+/* ============================ HOW IT WORKS (process · zone 3 · EARLY) ============================ */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(18px,2.6vw,30px)}
+.step{position:relative;padding:30px 26px 28px;background:var(--surface);border:1px solid var(--line);
+  border-radius:var(--r-card);box-shadow:var(--shadow-card-2stop);transition:transform var(--t-fast),box-shadow var(--t-fast)}
+.step:hover{transform:translateY(-5px);box-shadow:var(--shadow-hover)}
+.step .n{font-family:var(--display);font-size:13px;font-weight:600;letter-spacing:.12em;color:var(--accent-ink)}
+.step .ico{width:54px;height:54px;border-radius:14px;display:grid;place-items:center;margin:14px 0 18px;
+  background:rgba(94,68,255,.10);border:1px solid rgba(94,68,255,.2);transition:background var(--t-fast),border-color var(--t-fast)}
+.step:hover .ico{background:var(--grad-brand);border-color:transparent}
+.step .ico svg{width:26px;height:26px;stroke:var(--accent-ink);transition:stroke var(--t-fast)}
+.step:hover .ico svg{stroke:#fff}
+.step h3{margin-bottom:9px;font-size:1.18rem}
+.step p{font-size:14.5px;color:var(--body)}
+.steps .connect{position:absolute;top:56px;left:0;right:0;height:2px;
+  background:repeating-linear-gradient(90deg,rgba(94,68,255,.34) 0 7px,transparent 7px 14px);z-index:0}
+
+/* ============================ FEATURES (icon-tile grid · G4+I5 · zone 4) ============================ */
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(16px,2.4vw,26px)}
+.feat{padding:28px 26px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-card);
+  box-shadow:var(--shadow-card-2stop);position:relative;overflow:hidden;
+  transition:transform var(--t-fast),box-shadow var(--t-fast),border-color var(--t-fast)}
+.feat::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:var(--grad-brand);
+  transform:scaleX(0);transform-origin:left;transition:transform .35s var(--ease)}
+.feat:hover{transform:translateY(-5px);box-shadow:var(--shadow-hover);border-color:rgba(94,68,255,.3)}
+.feat:hover::before{transform:scaleX(1)}
+.feat .chip{width:50px;height:50px;border-radius:13px;display:grid;place-items:center;margin-bottom:18px;
+  background:rgba(94,68,255,.10);border:1px solid rgba(94,68,255,.2);transition:background var(--t-fast),border-color var(--t-fast)}
+.feat:hover .chip{background:var(--grad-brand);border-color:transparent}
+.feat .chip svg{width:24px;height:24px;stroke:var(--accent-ink);transition:stroke var(--t-fast)}
+.feat:hover .chip svg{stroke:#fff}
+.feat h3{font-size:1.12rem;margin-bottom:8px}
+.feat p{font-size:14px;color:var(--body)}
+.feat .tag{display:inline-block;margin-top:14px;font-family:var(--mono);font-size:11px;letter-spacing:.06em;
+  color:var(--accent-ink);background:rgba(94,68,255,.08);padding:4px 9px;border-radius:6px}
+/* focal tile — gives the eye an anchor in the 6-up grid (the flagship Visual builder) */
+.feat--focal{background:linear-gradient(160deg,rgba(94,68,255,.07),rgba(25,200,245,.04) 60%,var(--surface));
+  border-color:rgba(94,68,255,.28);box-shadow:0 20px 44px -16px rgba(94,68,255,.28)}
+.feat--focal::before{transform:scaleX(1)}            /* accent bar stays lit on the focal tile */
+.feat--focal .chip{background:var(--grad-brand);border-color:transparent}
+.feat--focal .chip svg{stroke:#fff}
+.feat--focal .tag{background:rgba(94,68,255,.14)}
+
+/* ============================ STATS (count-up band · dark anchor · zone 5) ============================ */
+.stats-band{position:relative;overflow:hidden}
+.stats-band .bg{position:absolute;inset:0;object-fit:cover;width:100%;height:100%;opacity:.5;z-index:0}
+.stats-band::after{content:"";position:absolute;inset:0;z-index:0;
+  background:linear-gradient(180deg,rgba(12,16,32,.78),rgba(12,16,32,.93))}
+.stats-band .wrap{position:relative;z-index:1}
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(22px,4vw,48px);margin-top:6px}
+.stat{text-align:center;padding:8px 6px}
+.stat .num{font-family:var(--display);font-weight:600;letter-spacing:-.03em;
+  font-size:clamp(2.6rem,2rem+3vw,4.1rem);line-height:1;color:#fff;font-variant-numeric:tabular-nums}
+.stat .num .u{color:var(--accent-2)}
+.stat .lbl{margin-top:14px;font-size:14px;color:var(--body-dark);max-width:30ch;margin-left:auto;margin-right:auto;line-height:1.5}
+.stats-row2{display:grid;grid-template-columns:repeat(4,1fr);gap:0;
+  margin-top:clamp(44px,6vw,70px);padding-top:clamp(36px,5vw,52px);border-top:1px solid var(--line-d)}
+.mini{text-align:center;position:relative;padding:0 clamp(14px,2vw,28px)}
+.mini + .mini::before{content:"";position:absolute;left:0;top:50%;transform:translateY(-50%);
+  width:1px;height:58px;background:linear-gradient(180deg,transparent,var(--line-d2) 22%,var(--line-d2) 78%,transparent)}
+.mini .num{display:inline-flex;align-items:baseline;justify-content:center;gap:1px;
+  font-family:var(--display);font-weight:600;font-size:clamp(1.85rem,1.4rem+1.7vw,2.55rem);color:#fff;
+  letter-spacing:-.02em;line-height:1;font-variant-numeric:tabular-nums}
+.mini .num .u{color:var(--accent-2);font-size:.62em;font-weight:600}
+.mini .lbl{margin-top:11px;font-size:12.5px;color:var(--muted);letter-spacing:.02em}
+
+/* ============================ SHOWCASE (see it in action · B3 split + framed shot · zone 6) ============================ */
+.showcase .grid{display:grid;grid-template-columns:1fr 1.1fr;gap:clamp(30px,5vw,66px);align-items:center}
+.showcase .copy .ticks{list-style:none;margin:26px 0 0;padding:0;display:grid;gap:14px}
+.showcase .copy .ticks li{display:flex;gap:12px;align-items:flex-start;font-size:15px;color:var(--body-dark)}
+.showcase .copy .ticks .tk{width:23px;height:23px;border-radius:50%;flex:0 0 auto;margin-top:1px;
+  background:rgba(94,68,255,.16);border:1px solid rgba(94,68,255,.4);display:grid;place-items:center}
+.showcase .copy .ticks .tk::after{content:"";width:8px;height:4px;border-left:2px solid var(--accent-2);
+  border-bottom:2px solid var(--accent-2);transform:rotate(-45deg) translateY(-1px)}
+.showcase .copy .ticks b{color:#fff;font-weight:600}
+.showcase .frame{position:relative;border-radius:var(--r-panel);overflow:hidden;border:1px solid var(--line-d2);
+  box-shadow:var(--shadow-dir);background:#0b0c10}
+.showcase .frame::after{content:"";position:absolute;inset:0;pointer-events:none;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08);border-radius:inherit}
+.showcase .frame .glow{position:absolute;width:420px;height:420px;left:-12%;bottom:-30%;z-index:0;
+  border-radius:50%;filter:blur(90px);background:radial-gradient(circle,rgba(25,200,245,.3),transparent 70%);pointer-events:none}
+.showcase .frame .barchrome{display:flex;align-items:center;gap:7px;padding:11px 14px;background:#13162a;
+  border-bottom:1px solid var(--line-d);position:relative;z-index:1}
+.showcase .frame .barchrome i{width:10px;height:10px;border-radius:50%;background:#33364a}
+.showcase .frame .barchrome i:nth-child(1){background:#ff5f56}.showcase .frame .barchrome i:nth-child(2){background:#ffbd2e}.showcase .frame .barchrome i:nth-child(3){background:#27c93f}
+.showcase .frame .barchrome .lbl{margin-left:8px;font-family:var(--mono);font-size:11px;color:#8d92ad}
+.showcase .frame .shot{display:block;width:100%;position:relative;z-index:1;transition:transform .5s var(--ease)}
+.showcase .frame:hover .shot{transform:scale(1.03)}
+.showcase .caption{margin-top:16px;font-size:13px;color:var(--muted);font-style:italic}
+
+/* ============================ PRICING (G6 tier cards · zone 7 fork) ============================ */
+.allin-pill{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;font-weight:600;
+  letter-spacing:.05em;color:var(--accent-ink);background:rgba(94,68,255,.09);border:1px solid rgba(94,68,255,.22);
+  padding:7px 15px;border-radius:var(--r-pill);margin-bottom:18px}
+.tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(18px,2.5vw,26px);align-items:stretch}
+.tier{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-panel);
+  padding:32px 28px;display:flex;flex-direction:column;box-shadow:var(--shadow-card-2stop);
+  transition:transform var(--t-fast),box-shadow var(--t-fast)}
+.tier:hover{transform:translateY(-4px);box-shadow:var(--shadow-hover)}
+.tier.feat{border-color:transparent;box-shadow:0 30px 60px -18px rgba(94,68,255,.4);z-index:1}
+.tier.feat::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1.5px;
+  background:var(--grad-brand);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
+@media (min-width:861px){.tier.feat{transform:scale(1.045)}.tier.feat:hover{transform:scale(1.045) translateY(-4px)}}
+.tier .ribbon{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--grad-brand);
+  color:#fff;font-family:var(--display);font-size:11.5px;font-weight:600;letter-spacing:.04em;
+  padding:6px 16px;border-radius:var(--r-pill);box-shadow:0 8px 20px -6px rgba(94,68,255,.7);white-space:nowrap}
+.tier .tname{font-family:var(--display);font-size:14px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+.tier .price{font-family:var(--display);font-weight:600;letter-spacing:-.03em;font-size:clamp(2.4rem,2rem+1.5vw,3rem);
+  color:var(--ink);margin:14px 0 2px;line-height:1}
+.tier .price .per{font-size:1rem;font-weight:500;color:var(--muted);letter-spacing:0}
+.tier .tdesc{font-size:13.5px;color:var(--body);min-height:40px;margin-bottom:20px}
+.tier .btn{width:100%;margin-bottom:22px}
+.tier ul{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.tier li{display:flex;gap:11px;align-items:flex-start;font-size:14px;color:var(--body)}
+.tier li .ck{width:19px;height:19px;border-radius:50%;flex:0 0 auto;margin-top:1px;
+  background:rgba(34,178,122,.14);display:grid;place-items:center}
+.tier li .ck::after{content:"";width:7px;height:3.5px;border-left:2px solid var(--ok);border-bottom:2px solid var(--ok);
+  transform:rotate(-45deg) translateY(-1px)}
+.pricing-note{text-align:center;margin-top:34px;font-size:13.5px;color:var(--muted)}
+
+/* ============================ TESTIMONIAL (T2 single pull-quote · dark anchor) ============================ */
+.quote-band{position:relative;overflow:hidden;background:var(--ink);text-align:center}
+.quote-band::before{content:"";position:absolute;width:560px;height:560px;left:-8%;top:-30%;z-index:0;
+  border-radius:50%;filter:blur(110px);background:radial-gradient(circle,rgba(94,68,255,.3),transparent 68%)}
+.quote-band::after{content:"";position:absolute;width:480px;height:480px;right:-10%;bottom:-34%;z-index:0;
+  border-radius:50%;filter:blur(110px);background:radial-gradient(circle,rgba(25,200,245,.18),transparent 70%)}
+.quote-band .wrap{position:relative;z-index:1;max-width:920px}
+.quote-band .qmark{font-family:var(--display);font-size:clamp(64px,9vw,108px);line-height:.6;color:var(--accent-2);
+  opacity:.55;height:.5em;display:block}
+.quote-band blockquote{margin:0;font-family:var(--display);font-weight:300;letter-spacing:-.02em;
+  font-size:clamp(1.45rem,1.1rem+1.9vw,2.4rem);line-height:1.32;color:#fff}
+.quote-band blockquote .clip{background:var(--grad-wash);-webkit-background-clip:text;background-clip:text;color:transparent;font-weight:500}
+.quote-band .attr{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:38px}
+.quote-band .attr .av{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#5e44ff,#19c8f5);
+  display:grid;place-items:center;font-family:var(--display);font-weight:600;color:#fff;font-size:18px;flex:0 0 auto;
+  box-shadow:0 8px 22px -8px rgba(94,68,255,.7)}
+.quote-band .attr .who{text-align:left}
+.quote-band .attr .who b{display:block;color:#fff;font-family:var(--display);font-weight:600;font-size:15.5px}
+.quote-band .attr .who span{font-size:13.5px;color:var(--body-dark)}
+
+/* ============================ BEFORE/AFTER (4 services retired · logo-cloud variant) ============================ */
+.swap-grid{display:grid;grid-template-columns:1fr auto 1fr;gap:clamp(20px,4vw,48px);align-items:center}
+.swap-col h4{font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+  margin-bottom:20px;color:var(--muted)}
+.swap-col.after h4{color:var(--accent-ink)}
+.swap-chips{display:flex;flex-wrap:wrap;gap:10px}
+.swap-chips .chip{font-size:13px;font-weight:500;padding:9px 15px;border-radius:var(--r-pill);
+  background:var(--surface);border:1px solid var(--line);color:var(--body)}
+.swap-col.before .chip{text-decoration:line-through;color:var(--muted);opacity:.85}
+.swap-col.after .one{display:inline-flex;align-items:center;gap:10px;font-family:var(--display);font-weight:600;
+  font-size:18px;color:var(--ink);background:var(--surface);border:1.5px solid rgba(94,68,255,.34);
+  padding:14px 22px;border-radius:var(--r-pill);box-shadow:var(--shadow-card-2stop)}
+.swap-col.after .one .dot{width:10px;height:10px;border-radius:50%;background:var(--grad-brand)}
+.swap-arrow{width:54px;height:54px;border-radius:50%;background:var(--grad-brand);display:grid;place-items:center;
+  box-shadow:0 12px 28px -10px rgba(94,68,255,.7);flex:0 0 auto}
+.swap-arrow svg{width:24px;height:24px;stroke:#fff}
+
+/* ============================ FAQ (I9 accordion · zone 7 pre-close) ============================ */
+.faq{max-width:840px;margin:0 auto}
+.faq details{border-bottom:1px solid var(--line);padding:4px 0}
+.faq summary{list-style:none;cursor:pointer;padding:22px 48px 22px 4px;position:relative;
+  font-family:var(--display);font-size:1.1rem;font-weight:600;color:var(--ink);letter-spacing:-.01em}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"";position:absolute;right:8px;top:50%;width:13px;height:13px;
+  border-right:2.5px solid var(--accent);border-bottom:2.5px solid var(--accent);
+  transform:translateY(-65%) rotate(45deg);transition:transform .3s var(--ease)}
+.faq details[open] summary{color:var(--accent-ink)}
+.faq details[open] summary::after{transform:translateY(-35%) rotate(225deg)}
+.faq .ans{padding:0 48px 24px 4px;color:var(--body);font-size:15px;line-height:1.65}
+
+/* ============================ CLOSING CTA (zone 7 close) ============================ */
+.close-cta{position:relative;overflow:hidden;background:
+   radial-gradient(110% 130% at 50% 120%,rgba(94,68,255,.32),transparent 60%),var(--ink);
+  text-align:center}
+.close-cta::before{content:"";position:absolute;width:600px;height:600px;left:50%;top:-40%;transform:translateX(-50%);
+  z-index:0;border-radius:50%;filter:blur(120px);background:radial-gradient(circle,rgba(94,68,255,.3),transparent 66%)}
+.close-cta .wrap{position:relative;z-index:1;max-width:760px}
+.close-cta h2{color:#fff}
+.close-cta p{color:var(--body-dark);margin-top:18px;max-width:54ch;margin-left:auto;margin-right:auto}
+.close-cta .cta-row{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-top:34px}
+.close-cta .fineprint{margin-top:22px;font-size:13px;color:var(--muted)}
+
+/* ============================ FOOTER (multi-col dark · J1 inset top edge) ============================ */
+.site-footer{background:#080b16;color:var(--body-dark);border-radius:var(--r-panel) var(--r-panel) 0 0;
+  margin-top:-2px;padding-top:clamp(56px,8vw,84px);padding-bottom:34px;border-top:1px solid var(--line-d)}
+.foot-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:clamp(28px,4vw,56px)}
+.foot-brand .brand{margin-bottom:16px}
+.foot-brand p{font-size:14px;color:var(--muted);max-width:34ch}
+.foot-col h5{font-family:var(--display);font-size:12.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  color:#fff;margin:0 0 16px}
+.foot-col ul{list-style:none;margin:0;padding:0;display:grid;gap:11px}
+.foot-col a{font-size:14px;color:var(--body-dark);transition:color var(--t-fast)}
+.foot-col a:hover{color:#fff}
+.foot-bottom{display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-top:clamp(40px,5vw,60px);
+  padding-top:26px;border-top:1px solid var(--line-d)}
+.foot-bottom .legal{font-size:12.5px;color:var(--muted)}
+.foot-bottom .built{margin-left:auto;display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);
+  font-size:11.5px;letter-spacing:.04em;color:var(--muted)}
+.foot-bottom .built .sg{display:inline-flex;align-items:center;gap:6px;color:#d6d9ea;font-weight:600}
+.foot-bottom .built .sg .m{width:16px;height:16px;border-radius:5px;background:var(--grad-brand)}
+.placeholder-note{margin-top:18px;font-size:11px;color:#4a5070;font-family:var(--mono);line-height:1.6}
+
+/* ============================ STICKY CTA (SCROLL §2.3 · appears past hero) ============================ */
+#sticky-cta{position:fixed;left:0;right:0;bottom:0;z-index:var(--z-sticky-cta);
+  transform:translateY(115%);transition:transform .32s var(--ease);
+  background:rgba(11,14,28,.95);-webkit-backdrop-filter:var(--glass);backdrop-filter:var(--glass);
+  border-top:1px solid var(--line-d2);box-shadow:0 -10px 34px -14px rgba(0,0,0,.7)}
+#sticky-cta.show{transform:translateY(0)}
+#sticky-cta .wrap{display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+  padding-top:12px;padding-bottom:max(12px,env(safe-area-inset-bottom))}
+#sticky-cta .lbl{color:#fff;font-family:var(--display);font-weight:600;font-size:14.5px;margin-right:auto}
+#sticky-cta .lbl small{display:block;color:#9aa0bb;font-weight:400;font-family:var(--sans);font-size:12px;margin-top:2px}
+#sticky-cta .btn{min-height:42px;padding:0 22px;font-size:14px}
+#sticky-cta .close{background:transparent;border:0;color:#9aa0bb;font-size:22px;cursor:pointer;
+  padding:6px 10px;line-height:1;border-radius:8px}
+#sticky-cta .close:hover{color:#fff;background:rgba(255,255,255,.08)}
+
+/* ============================ BACK-TO-TOP (SCROLL §2.5) ============================ */
+#back-to-top{position:fixed;right:22px;bottom:88px;z-index:var(--z-backtotop);width:46px;height:46px;border:0;
+  border-radius:50%;background:var(--accent);color:#fff;cursor:pointer;opacity:0;transform:translateY(10px);
+  transition:opacity .25s ease,transform .25s ease,background .2s ease;box-shadow:0 10px 26px -8px rgba(94,68,255,.7);
+  display:grid;place-items:center}
+#back-to-top.is-visible{opacity:1;transform:translateY(0)}
+#back-to-top:hover{background:var(--accent-ink)}
+#back-to-top:focus-visible{outline:none;box-shadow:0 0 0 3px #fff,0 0 0 6px var(--accent)}
+#back-to-top svg{width:20px;height:20px;stroke:#fff}
+
+/* ============================ PROGRESS BAR (SCROLL §2.6) ============================ */
+#scroll-progress{position:fixed;inset:0 0 auto 0;height:3px;z-index:calc(var(--z-header) + 1);pointer-events:none}
+#scroll-progress .bar{height:100%;width:100%;transform:scaleX(0);transform-origin:left center;
+  background:var(--grad-brand);will-change:transform}
+
+/* ============================ SCROLL-REVEAL (TOP-12 #4 · SCROLL §2.7) ============================ */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity var(--t-reveal),transform var(--t-reveal)}
+.reveal.in-view{opacity:1;transform:none}
+.stagger > *{opacity:0;transform:translateY(22px);transition:opacity var(--t-reveal),transform var(--t-reveal)}
+.stagger.in-view > *{opacity:1;transform:none}
+.stagger.in-view > *:nth-child(1){transition-delay:0ms}
+.stagger.in-view > *:nth-child(2){transition-delay:90ms}
+.stagger.in-view > *:nth-child(3){transition-delay:180ms}
+.stagger.in-view > *:nth-child(4){transition-delay:270ms}
+.stagger.in-view > *:nth-child(5){transition-delay:360ms}
+.stagger.in-view > *:nth-child(6){transition-delay:450ms}
+
+/* ============================ RESPONSIVE (RESP §0/§1/§3) ============================ */
+/* laptop / tablet-landscape — collapse nav onto ONE line @1024 */
+@media (max-width:1023px){
+  .site-nav-desktop,.header-login{display:none}
+  .nav-toggle{display:inline-flex}
+  .header-cta{margin-left:auto}
+  .header-cta .btn{display:none}        /* CTA lives in the drawer on mobile */
+}
+/* tablet portrait + small: 3-up grids → 2-up */
+@media (max-width:980px){
+  .feat-grid,.steps{grid-template-columns:repeat(2,1fr)}
+  .steps .connect{display:none}
+  .stats-row2{grid-template-columns:repeat(2,1fr);gap:30px}
+  .mini{padding:0}
+  .mini + .mini::before{display:none}   /* dividers are a 4-up desktop flourish; use gap when wrapped */
+}
+/* the split layouts stack */
+@media (max-width:860px){
+  .hero .grid,.showcase .grid{grid-template-columns:1fr}
+  .hero .device{order:-1;max-width:560px;margin:0 auto 6px}      /* Hero2: visual context first */
+  .showcase .frame{order:-1;max-width:600px;margin:0 auto}
+  .tiers{grid-template-columns:1fr;max-width:460px;margin:0 auto}
+  .tier.feat{transform:none}
+  .swap-grid{grid-template-columns:1fr;text-align:center;gap:26px;max-width:440px;margin:0 auto}
+  .swap-arrow{transform:rotate(90deg);margin:0 auto}
+  .swap-chips{justify-content:center}
+}
+/* mobile hard stack @767 (RESP §0 #2) */
+@media (max-width:767px){
+  .feat-grid,.steps,.stats-grid{grid-template-columns:1fr;gap:18px}
+  .stats-grid .stat{padding:14px 6px}
+  .hero h1{max-width:18ch}
+  .hero .cta-row .btn,.close-cta .cta-row .btn{width:100%}
+  .foot-grid{grid-template-columns:1fr 1fr;gap:32px 28px}
+  .foot-brand{grid-column:1 / -1}
+  .foot-bottom{flex-direction:column;align-items:flex-start}
+  .foot-bottom .built{margin-left:0}
+  .section-head{margin-bottom:34px}
+  #back-to-top{right:16px;bottom:84px}
+}
+@media (max-width:479px){
+  .stats-row2{grid-template-columns:1fr 1fr;gap:24px}
+  .foot-grid{grid-template-columns:1fr}
+}
+
+/* ============================ REDUCED MOTION ============================ */
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  .reveal,.stagger > *{opacity:1!important;transform:none!important}
+  .device{animation:none!important}
+}
+/* no-JS safety — never strand hidden reveal content */
+.no-js .reveal,.no-js .stagger > *{opacity:1!important;transform:none!important}
+</style>
+</head>
+<body class="no-js">
+<script>document.body.classList.remove('no-js');</script>
+
+<!-- progress bar (SCROLL §2.6) -->
+<div id="scroll-progress" aria-hidden="true"><div class="bar"></div></div>
+
+<!-- ============================ HEADER ============================ -->
+<div id="header-sentinel" aria-hidden="true"></div>
+<header class="site-header" id="siteHeader">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Driftwell home">
+      <span class="mark" aria-hidden="true"></span> driftwell
+    </a>
+    <nav class="site-nav-desktop" aria-label="Primary">
+      <a class="nav-link" href="#how">How it works</a>
+      <a class="nav-link" href="#features">Platform</a>
+      <a class="nav-link" href="#showcase">In action</a>
+      <a class="nav-link" href="#pricing">Pricing</a>
+      <a class="nav-link" href="#faq">FAQ</a>
+    </nav>
+    <div class="header-cta">
+      <a class="header-login" href="#">Sign in</a>
+      <a class="btn btn-grad" href="#demo">Request a demo <span class="arr">&rarr;</span></a>
+    </div>
+    <button class="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="drawer">
+      <span class="bars" aria-hidden="true"></span>
+    </button>
+  </div>
+</header>
+
+<!-- mobile drawer (RESP §3) -->
+<nav id="drawer" class="drawer" aria-label="Mobile menu" aria-hidden="true">
+  <button class="drawer__close" aria-label="Close menu">&times;</button>
+  <div class="drawer__brand">driftwell</div>
+  <ul class="drawer__menu">
+    <li><a href="#how">How it works</a></li>
+    <li><a href="#features">Platform</a></li>
+    <li><a href="#showcase">In action</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#faq">FAQ</a></li>
+    <li><a href="#">Sign in</a></li>
+  </ul>
+  <a class="btn btn-grad drawer__cta" href="#demo">Request a demo</a>
+</nav>
+<div class="scrim" hidden></div>
+
+<main id="top">
+
+<!-- ============================ ZONE 2 · HERO (B4 device + glow) ============================ -->
+<section class="hero on-dark">
+  <div class="wrap">
+    <div class="grid">
+      <div class="copy reveal">
+        <span class="badge"><i aria-hidden="true"></i> One stack for site, blog &amp; SEO</span>
+        <h1 class="h1">One stack for your site, your blog, and your <span class="clip">SEO.</span></h1>
+        <p class="sub lead">Driftwell retires the four-service headless setup and puts your whole marketing
+          surface on one platform — so marketing ships content without an engineer in the loop.</p>
+        <div class="cta-row">
+          <a class="btn btn-grad" href="#demo">Request a demo <span class="arr">&rarr;</span></a>
+          <a class="btn btn-ghost" href="#how">See how it works</a>
+        </div>
+        <div class="proof">
+          <span class="avatars" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+          <span>Trusted by <b>1,200+</b> ops teams</span>
+          <span class="sep" aria-hidden="true"></span>
+          <span class="stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+          <span><b>4.9</b>/5 across 163 reviews</span>
+        </div>
+      </div>
+      <!-- device: product image in browser chrome (B4) · [IMG] swap to real builder canvas pending MCP -->
+      <div class="device reveal" role="img" aria-label="Driftwell visual page builder, in the browser">
+        <div class="bar"><i></i><i></i><i></i><span class="url">app.driftwell.io/builder</span></div>
+        <img class="shot" src="assets/driftwell/hero-flow.jpg" alt="" loading="eager" width="1024" height="576">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ ZONE 3 · HOW IT WORKS (EARLY — the V9 defining move) ============================ -->
+<section class="section" id="how">
+  <div class="wrap">
+    <div class="section-head center reveal">
+      <span class="eyebrow">How it works</span>
+      <h2 class="h2">Three steps from blank page to live</h2>
+      <p>No headless setup, no engineer in the loop. Build the page in the browser, publish it the moment
+         it's approved, and measure exactly what it earned — all on one platform.</p>
+    </div>
+    <div class="steps stagger">
+      <div class="connect" aria-hidden="true"></div>
+      <div class="step">
+        <span class="n">01</span>
+        <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></span>
+        <h3>Build the page</h3>
+        <p>Drag-and-drop a page, post, or landing flow in the browser with 48 components — no repo, no build step, no deploy pipeline.</p>
+      </div>
+      <div class="step">
+        <span class="n">02</span>
+        <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></span>
+        <h3>Publish it live</h3>
+        <p>Hit publish and it's live — SEO, Open Graph, and schema set inline on the same screen. No deploy window, no engineer, no round-trip.</p>
+      </div>
+      <div class="step">
+        <span class="n">03</span>
+        <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m7 14 4-4 3 3 5-6"/></svg></span>
+        <h3>Measure what it earned</h3>
+        <p>First-party attribution ties every demo request back to the post, channel, and campaign that produced it — on one screen, no CSV exports.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ ZONE 4 · FEATURES (icon-tile grid · G4) ============================ -->
+<section class="section tint" id="features">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">The platform</span>
+      <h2 class="h2">Everything your marketing site needs, in one place</h2>
+      <p>One stack instead of six. Build, publish, and measure your whole marketing surface — without
+         stitching together a separate service for every job, and without an engineer servicing the seams.</p>
+    </div>
+    <div class="feat-grid stagger">
+      <div class="feat feat--focal">
+        <span class="chip" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></span>
+        <h3>Visual builder</h3>
+        <p>Drag-and-drop precision with 48 components. A marketing hire ships a new page in the browser — no repo, no build, no deploy.</p>
+        <span class="tag">SG Builder</span>
+      </div>
+      <div class="feat">
+        <span class="chip" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></span>
+        <h3>Native blog &amp; posts</h3>
+        <p>Drafts, revisions, and scheduling live where the site is built. No headless CMS, no round-trip — a post goes live the moment it's approved.</p>
+        <span class="tag">Blog &amp; Posts</span>
+      </div>
+      <div class="feat">
+        <span class="chip" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></span>
+        <h3>On-page SEO</h3>
+        <p>Meta titles, Open Graph, canonicals, JSON-LD schema, and sitemap — edited inline on the very page you publish, so metadata never drifts.</p>
+        <span class="tag">SEO Manager</span>
+      </div>
+      <div class="feat">
+        <span class="chip" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 17H5a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h4M15 7h4a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-4M8 12h8"/></svg></span>
+        <h3>Redirect manager</h3>
+        <p>301/302 mapping that carries hard-won search equity through any rebuild. Every legacy URL lands where it should.</p>
+        <span class="tag">Redirects</span>
+      </div>
+      <div class="feat">
+        <span class="chip" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v12H4z"/><path d="M8 20h8M12 16v4M8 8h8M8 11h5"/></svg></span>
+        <h3>Forms &amp; lead reports</h3>
+        <p>A native submissions inbox with leads-by-source reporting, honeypot + reCAPTCHA protection, and CSV export. The forms SaaS retires.</p>
+        <span class="tag">Forms &amp; Lead Reports</span>
+      </div>
+      <div class="feat">
+        <span class="chip" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m7 14 4-4 3 3 5-6"/></svg></span>
+        <h3>First-party attribution</h3>
+        <p>Native UTM, first-touch, last-touch, and multi-touch tracking. Finally see which post, channel, and campaign produced the demo request.</p>
+        <span class="tag">Attribution</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ ZONE 5 · STATS (count-up · dark anchor band) ============================ -->
+<section class="section dark stats-band">
+  <img class="bg" src="assets/driftwell/ambient-bg.jpg" alt="" aria-hidden="true" loading="lazy" width="1024" height="576">
+  <div class="wrap">
+    <div class="section-head center reveal" style="margin-bottom:clamp(28px,4vw,48px)">
+      <span class="eyebrow">By the numbers</span>
+      <h2 class="h2">What one stack replaced</h2>
+    </div>
+    <div class="stats-grid stagger">
+      <div class="stat">
+        <div class="num"><span class="counter" data-to="6">0</span> <span class="u">&rarr;</span> 1</div>
+        <div class="lbl">Services in the publishing pipeline — headless CMS, SEO layer, forms SaaS, CDN, hosting, and the front-end repo — collapsed onto one platform</div>
+      </div>
+      <div class="stat">
+        <div class="num">~2d <span class="u">&rarr;</span> ~20<span class="u">m</span></div>
+        <div class="lbl">From "draft approved" to "post live," before vs. after — no deploy window, no engineer in the loop</div>
+      </div>
+      <div class="stat">
+        <div class="num"><span class="u">$</span><span class="counter" data-to="7080">0</span> <span class="u">&rarr; $0</span></div>
+        <div class="lbl">Combined headless CMS seat, managed SEO service, forms SaaS, and CDN line items — eliminated into one all-inclusive plan</div>
+      </div>
+    </div>
+    <div class="stats-row2 stagger">
+      <div class="mini"><div class="num"><span class="counter" data-to="0.8" data-decimals="1">0</span><span class="u">s</span></div><div class="lbl">Median blog load (from 2.6s)</div></div>
+      <div class="mini"><div class="num"><span class="u">+</span><span class="counter" data-to="34">0</span><span class="u">%</span></div><div class="lbl">Qualified demo requests, QoQ</div></div>
+      <div class="mini"><div class="num"><span class="counter" data-to="100">0</span><span class="u">%</span></div><div class="lbl">Inbound forms attributed</div></div>
+      <div class="mini"><div class="num">~<span class="counter" data-to="6">0</span><span class="u">h</span></div><div class="lbl">Eng. hours reclaimed / week</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ ZONE 6 · SHOWCASE (see it in action · B3 split + framed shot) ============================ -->
+<section class="section dark showcase on-dark" id="showcase" style="background:var(--ink-2)">
+  <div class="wrap">
+    <div class="grid">
+      <div class="copy reveal">
+        <span class="eyebrow">See it in action</span>
+        <h2 class="h2">The answer the old stack could never give</h2>
+        <p style="color:var(--body-dark);margin-top:18px">With analytics in one service, content in another, and forms in a third, "which article
+           drove a demo?" meant exporting three CSVs and hoping the timestamps lined up. Now it's one screen.</p>
+        <ul class="ticks">
+          <li><span class="tk" aria-hidden="true"></span><span><b>Leads by source, natively.</b> First-party UTM and multi-touch attribution, no per-line tax.</span></li>
+          <li><span class="tk" aria-hidden="true"></span><span><b>Content tied to pipeline.</b> See the two long-tail posts quietly producing the best demo requests.</span></li>
+          <li><span class="tk" aria-hidden="true"></span><span><b>One login.</b> Traffic, SEO, forms, and content in the same place — no reconciliation.</span></li>
+        </ul>
+        <div class="cta-row" style="display:flex;gap:14px;margin-top:30px">
+          <a class="btn btn-grad" href="#demo">Request a demo <span class="arr">&rarr;</span></a>
+        </div>
+      </div>
+      <!-- framed real fal attribution UI -->
+      <div class="frame">
+        <span class="glow" aria-hidden="true"></span>
+        <div class="barchrome"><i></i><i></i><i></i><span class="lbl">Attribution &middot; Leads by source</span></div>
+        <img class="shot" src="assets/driftwell/attribution-ui.jpg" alt="Driftwell attribution dashboard showing leads by source, with the top-producing channel highlighted" loading="lazy" width="1024" height="768">
+      </div>
+    </div>
+    <p class="caption">Inline platform detail — the leads-by-source view. <em>Placeholder UI; representative of the real Attribution capability.</em></p>
+  </div>
+</section>
+
+<!-- ============================ ZONE 7a · PRICING (G6 tiers · SaaS fork) ============================ -->
+<section class="section" id="pricing">
+  <div class="wrap">
+    <div class="section-head center reveal">
+      <span class="allin-pill"><span style="width:7px;height:7px;border-radius:50%;background:var(--accent)"></span> One stack, one price — no add-ons</span>
+      <h2 class="h2">No plugin tax. No suite tax.</h2>
+      <p>Hosting, SSL, a global CDN, a WAF, and automatic patching ship on every plan — including the free one.
+         Prototype the whole thing on the $0 Sandbox before you commit.</p>
+    </div>
+    <div class="tiers stagger">
+      <div class="tier">
+        <span class="tname">Sandbox</span>
+        <div class="price">$0<span class="per"> / forever</span></div>
+        <p class="tdesc">Prototype the full platform — no card, no clock.</p>
+        <a class="btn btn-ghost" href="#demo">Start free</a>
+        <ul>
+          <li><span class="ck" aria-hidden="true"></span> Visual builder + 48 components</li>
+          <li><span class="ck" aria-hidden="true"></span> Native blog &amp; posts</li>
+          <li><span class="ck" aria-hidden="true"></span> Foundation Pack (hosting, SSL, CDN, WAF)</li>
+          <li><span class="ck" aria-hidden="true"></span> On-page SEO &amp; redirects</li>
+        </ul>
+      </div>
+      <div class="tier feat">
+        <span class="ribbon">Most popular</span>
+        <span class="tname">Launch</span>
+        <div class="price">$17<span class="per"> / mo</span></div>
+        <p class="tdesc">Everything to run the whole marketing surface in production.</p>
+        <a class="btn btn-grad" href="#demo">Get started <span class="arr">&rarr;</span></a>
+        <ul>
+          <li><span class="ck" aria-hidden="true"></span> Everything in Sandbox</li>
+          <li><span class="ck" aria-hidden="true"></span> Forms &amp; lead reports</li>
+          <li><span class="ck" aria-hidden="true"></span> First-party attribution</li>
+          <li><span class="ck" aria-hidden="true"></span> Image optimization (WebP/AVIF)</li>
+          <li><span class="ck" aria-hidden="true"></span> Custom domain + auto-renewing SSL</li>
+        </ul>
+      </div>
+      <div class="tier">
+        <span class="tname">Scale</span>
+        <div class="price">Let's talk<span class="per"></span></div>
+        <p class="tdesc">For teams adding seats, sites, and volume.</p>
+        <a class="btn btn-ghost" href="#demo">Talk to us</a>
+        <ul>
+          <li><span class="ck" aria-hidden="true"></span> Everything in Launch</li>
+          <li><span class="ck" aria-hidden="true"></span> Multiple sites &amp; team seats</li>
+          <li><span class="ck" aria-hidden="true"></span> Priority support</li>
+          <li><span class="ck" aria-hidden="true"></span> Advanced multi-touch attribution</li>
+        </ul>
+      </div>
+    </div>
+    <p class="pricing-note">Every plan is all-inclusive. The price you see is the price you pay — no per-feature unlocks, no surprise line items.</p>
+  </div>
+</section>
+
+<!-- ============================ ZONE 5b · TESTIMONIAL (T2 single pull-quote · dark anchor) ============================ -->
+<section class="section quote-band on-dark">
+  <div class="wrap">
+    <span class="qmark reveal" aria-hidden="true">&ldquo;</span>
+    <blockquote class="reveal">
+      We were a seventeen-person startup paying four vendors and burning an engineer just to publish a blog post.
+      On Driftwell our marketing team owns the whole surface, and a post goes live <span class="clip">in minutes, not on a Friday.</span>
+      The thing I didn't expect: I can finally see which article actually drove a demo.
+    </blockquote>
+    <div class="attr reveal">
+      <span class="av" aria-hidden="true">SB</span>
+      <span class="who"><b>Saoirse Brennan</b><span>Head of Growth, Driftwell</span></span>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ ZONE 3b · BEFORE/AFTER (4 services retired) ============================ -->
+<section class="section tint">
+  <div class="wrap">
+    <div class="section-head center reveal">
+      <span class="eyebrow">Before &amp; after</span>
+      <h2 class="h2">A stitched stack, retired</h2>
+    </div>
+    <div class="swap-grid reveal">
+      <div class="swap-col before">
+        <h4>The headless setup</h4>
+        <div class="swap-chips">
+          <span class="chip">Headless CMS</span>
+          <span class="chip">Managed SEO service</span>
+          <span class="chip">Forms SaaS</span>
+          <span class="chip">Standalone CDN</span>
+          <span class="chip">Separate hosting</span>
+          <span class="chip">Front-end repo</span>
+        </div>
+      </div>
+      <div class="swap-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+      <div class="swap-col after">
+        <h4>One platform</h4>
+        <span class="one"><span class="dot" aria-hidden="true"></span> Driftwell</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ ZONE 7b · FAQ (I9 accordion) ============================ -->
+<section class="section" id="faq">
+  <div class="wrap">
+    <div class="section-head center reveal">
+      <span class="eyebrow">Questions</span>
+      <h2 class="h2">The things teams ask before they switch</h2>
+    </div>
+    <div class="faq reveal">
+      <details open>
+        <summary>Do I need an engineer to publish?</summary>
+        <div class="ans">No. The whole point is that marketing owns the surface. A non-engineer edits a pricing line or
+          ships a landing page in the browser — no repo, no build, no deploy window. Engineering stays on the product.</div>
+      </details>
+      <details>
+        <summary>What happens to our existing SEO and traffic?</summary>
+        <div class="ans">The redirect manager maps every legacy URL with a 301, so your hard-won organic equity carries
+          through the rebuild intact. On-page SEO — meta, Open Graph, canonicals, JSON-LD, and sitemap — is edited
+          inline on each page, so metadata can't drift out of sync with content.</div>
+      </details>
+      <details>
+        <summary>Is this really one bill, or a base price plus add-ons?</summary>
+        <div class="ans">One bill. Hosting, SSL, a global CDN, a WAF, and automatic patching are part of the Foundation Pack
+          on every plan — including the free Sandbox. There's no plugin tax and no suite tax: the price you see is what you pay.</div>
+      </details>
+      <details>
+        <summary>Can I see which content actually drives demos?</summary>
+        <div class="ans">Yes — that's the attribution capability. First-party UTM with first-touch, last-touch, and multi-touch
+          tracking ties each demo request back to the post, channel, and campaign that produced it, all on one screen.</div>
+      </details>
+      <details>
+        <summary>How do I try it without committing?</summary>
+        <div class="ans">Start on the $0 Sandbox and prototype the full platform — no card, no time limit. When you're ready
+          for production, Launch is $17/mo, all-inclusive.</div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ ZONE 7c · CLOSING CTA ============================ -->
+<section class="section close-cta on-dark" id="demo">
+  <div class="wrap">
+    <h2 class="h2">Hand publishing back to your marketing team</h2>
+    <p>Move your whole marketing surface — site, blog, and SEO — onto one stack, and hand publishing
+       back to the people who write the content. See it on your own data in 20 minutes.</p>
+    <div class="cta-row">
+      <a class="btn btn-grad" href="#">Request a demo <span class="arr">&rarr;</span></a>
+      <a class="btn btn-ghost" href="#">Start free on the Sandbox</a>
+    </div>
+    <p class="fineprint">No card required &middot; Prototype free, then $17/mo all-inclusive</p>
+  </div>
+</section>
+
+</main>
+
+<!-- ============================ FOOTER ============================ -->
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a class="brand" href="#top"><span class="mark" aria-hidden="true"></span> driftwell</a>
+        <p>One stack for your marketing site, blog, and SEO. Build a page, publish it live, and measure what it earned — no engineer in the loop.</p>
+      </div>
+      <div class="foot-col">
+        <h5>Product</h5>
+        <ul>
+          <li><a href="#how">How it works</a></li>
+          <li><a href="#features">Platform</a></li>
+          <li><a href="#showcase">In action</a></li>
+          <li><a href="#pricing">Pricing</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h5>Company</h5>
+        <ul>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#demo">Contact</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h5>Resources</h5>
+        <ul>
+          <li><a href="#">Docs</a></li>
+          <li><a href="#">Changelog</a></li>
+          <li><a href="#">Status</a></li>
+          <li><a href="#">Privacy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span class="legal">&copy; 2026 Driftwell. All rights reserved.</span>
+      <span class="built">Built on <span class="sg"><span class="m" aria-hidden="true"></span> SGEN</span></span>
+    </div>
+    <p class="placeholder-note">
+      [ PLACEHOLDER SITE ] "Driftwell" and "Saoirse Brennan" are fictional. All metrics, the quote, the logo, and the
+      product screenshots are owner-directed placeholders — not a real SGEN customer. Every SGEN capability shown is real.
+      Imagery generated locally for demonstration. Replace with a real, consented story before publish.
+    </p>
+  </div>
+</footer>
+
+<!-- ============================ STICKY CTA (SCROLL §2.3) ============================ -->
+<div id="sticky-cta" aria-hidden="true">
+  <div class="wrap">
+    <span class="lbl">Ready to retire the headless tax?<small>See Driftwell on your data in 20 minutes.</small></span>
+    <a class="btn btn-grad" href="#demo">Request a demo</a>
+    <button class="close" aria-label="Dismiss">&times;</button>
+  </div>
+</div>
+
+<!-- back-to-top (SCROLL §2.5) -->
+<button id="back-to-top" type="button" aria-label="Back to top">
+  <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+</button>
+
+<script>
+(function(){
+  "use strict";
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- sticky glass header (SCROLL §2.1 — IO sentinel) ---------- */
+  var header = document.getElementById('siteHeader');
+  var sentinel = document.getElementById('header-sentinel');
+  if (sentinel && 'IntersectionObserver' in window){
+    new IntersectionObserver(function(entries){
+      header.classList.toggle('is-stuck', !entries[0].isIntersecting);
+    }, {threshold:0}).observe(sentinel);
+  }
+
+  /* ---------- mobile drawer (RESP §3) ---------- */
+  var toggle = document.querySelector('.nav-toggle');
+  var drawer = document.getElementById('drawer');
+  var scrim  = document.querySelector('.scrim');
+  var closeBtn = drawer.querySelector('.drawer__close');
+  var navFrozen = false;
+  function setNavFrozen(v){ navFrozen = v; if(v){ btt.classList.remove('is-visible'); } }
+  function openNav(){
+    drawer.classList.add('open'); drawer.setAttribute('aria-hidden','false');
+    toggle.setAttribute('aria-expanded','true');
+    scrim.hidden = false; requestAnimationFrame(function(){ scrim.classList.add('show'); });
+    document.documentElement.classList.add('nav-open'); closeBtn.focus();
+    setNavFrozen(true);
+  }
+  function closeNav(){
+    drawer.classList.remove('open'); drawer.setAttribute('aria-hidden','true');
+    toggle.setAttribute('aria-expanded','false'); scrim.classList.remove('show');
+    document.documentElement.classList.remove('nav-open');
+    setTimeout(function(){ scrim.hidden = true; }, 300); toggle.focus();
+    setNavFrozen(false);
+  }
+  toggle.addEventListener('click', function(){ drawer.classList.contains('open') ? closeNav() : openNav(); });
+  scrim.addEventListener('click', closeNav);
+  closeBtn.addEventListener('click', closeNav);
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape' && drawer.classList.contains('open')) closeNav(); });
+  drawer.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', function(){ setTimeout(closeNav,150); }); });
+  var mq = matchMedia('(min-width:1024px)');
+  mq.addEventListener('change', function(e){ if(e.matches && drawer.classList.contains('open')) closeNav(); });
+
+  /* ---------- scroll-reveal + stagger (TOP-12 #4 / SCROLL §2.7) ---------- */
+  if ('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in-view'); io.unobserve(e.target); } });
+    }, {threshold:0.12, rootMargin: reduce ? '0px' : '0px 0px -8% 0px'});
+    document.querySelectorAll('.reveal, .stagger').forEach(function(el){ io.observe(el); });
+  } else {
+    document.querySelectorAll('.reveal, .stagger').forEach(function(el){ el.classList.add('in-view'); });
+  }
+
+  /* ---------- count-up (TOP-12 #5) ---------- */
+  function countUp(el){
+    var to = parseFloat(el.getAttribute('data-to'));
+    var dec = parseInt(el.getAttribute('data-decimals')||'0',10);
+    if (reduce){ el.textContent = to.toLocaleString(undefined,{minimumFractionDigits:dec,maximumFractionDigits:dec}); return; }
+    var dur = 1400, t0 = null;
+    function frame(t){
+      if(!t0) t0 = t;
+      var p = Math.min((t - t0)/dur, 1);
+      var eased = 1 - Math.pow(1 - p, 3);
+      var val = to * eased;
+      el.textContent = val.toLocaleString(undefined,{minimumFractionDigits:dec,maximumFractionDigits:dec});
+      if(p < 1) requestAnimationFrame(frame); else el.textContent = to.toLocaleString(undefined,{minimumFractionDigits:dec,maximumFractionDigits:dec});
+    }
+    requestAnimationFrame(frame);
+  }
+  if ('IntersectionObserver' in window){
+    var cio = new IntersectionObserver(function(es){
+      es.forEach(function(e){ if(e.isIntersecting){ countUp(e.target); cio.unobserve(e.target); } });
+    }, {threshold:0.5});
+    document.querySelectorAll('.counter').forEach(function(el){ cio.observe(el); });
+  } else {
+    document.querySelectorAll('.counter').forEach(function(el){ el.textContent = el.getAttribute('data-to'); });
+  }
+
+  /* ---------- back-to-top, progress, sticky-CTA ---------- */
+  var btt = document.getElementById('back-to-top');
+  var progress = document.querySelector('#scroll-progress .bar');
+  var stickyCta = document.getElementById('sticky-cta');
+  var ctaDismissed = false;
+  var SHOW_AT = Math.max(900, window.innerHeight * 1.4);
+
+  /* sticky-CTA appears once hero scrolls past (F2 sentinel on the hero) */
+  var hero = document.querySelector('.hero');
+  var realDemo = document.getElementById('demo');
+  if ('IntersectionObserver' in window && hero){
+    new IntersectionObserver(function(e){
+      if(ctaDismissed) return;
+      stickyCta.classList.toggle('show', !e[0].isIntersecting && !navFrozen);
+      stickyCta.setAttribute('aria-hidden', String(e[0].isIntersecting));
+    }, {threshold:0}).observe(hero);
+    if(realDemo){
+      new IntersectionObserver(function(e){
+        if(e[0].isIntersecting){ stickyCta.classList.remove('show'); }
+      }, {threshold:0.2}).observe(realDemo);
+    }
+  }
+  var sc = stickyCta.querySelector('.close');
+  if(sc) sc.addEventListener('click', function(){ ctaDismissed = true; stickyCta.classList.remove('show'); });
+
+  var ticking = false;
+  function onScroll(){
+    if(ticking) return; ticking = true;
+    requestAnimationFrame(function(){
+      var y = window.pageYOffset;
+      var max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+      if(progress) progress.style.transform = 'scaleX(' + (y/max) + ')';
+      if(!navFrozen) btt.classList.toggle('is-visible', y > SHOW_AT);
+      ticking = false;
+    });
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  window.addEventListener('resize', function(){ SHOW_AT = Math.max(900, window.innerHeight * 1.4); });
+  onScroll();
+
+  btt.addEventListener('click', function(){
+    window.scrollTo({top:0, behavior: reduce ? 'auto' : 'smooth'});
+    var top = document.getElementById('top');
+    if(top){ top.setAttribute('tabindex','-1'); top.focus({preventScroll:true}); }
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SGEN — Design System · Bundle A "Clarity White"</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sg-primary:#d51522; --sg-primary-deep:#b00000; --sg-primary-darkest:#780101; --sg-primary-soft:#FCE7E8;
+  --sg-accent:#e61938; --sg-accent-soft:#fff1f1; --sg-signature:#d51522;
+  --sg-bg:#ffffff; --sg-bg-2:#f9f9f9; --sg-bg-warm:#F2F1ED;
+  --sg-ink:#000000; --sg-ink-2:#1A1A1A; --sg-ink-soft:#5b5853; --sg-ink-faint:#868279;
+  --sg-line:#ECEAE5; --sg-near-black:#1b1a18; --sg-true-black:#0c0c0c;
+  --sg-r-sm:8px; --sg-r-md:12px; --sg-r-lg:16px; --sg-r-btn:8px; --sg-r-pill:9999px;
+  --sg-shadow:0 20px 50px rgba(0,0,0,.08); --sg-shadow-2:0 28px 64px rgba(0,0,0,.14);
+  --sg-shadow-red:0 14px 34px rgba(213,21,34,.32);
+  --sg-grad-red:linear-gradient(135deg,#b00000,#e53935);
+  --sg-grad-text:linear-gradient(to right,#780101,#e80000,#a30000);
+  --sg-ease:cubic-bezier(.65,0,.35,1);
+  --sg-font:'Inter',system-ui,sans-serif; --sg-mono:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box;}
+body{margin:0; background:var(--sg-bg-2); color:var(--sg-ink); font-family:var(--sg-font); font-size:17px; line-height:1.6; -webkit-font-smoothing:antialiased;}
+.page{max-width:1180px; margin:0 auto; padding:56px 32px 120px;}
+.grad{background:var(--sg-grad-text);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;}
+.ds-head{border-bottom:1px solid var(--sg-line); padding-bottom:26px; margin-bottom:48px;}
+.eyebrow{font-family:var(--sg-mono); font-size:11px; font-weight:700; letter-spacing:.22em; text-transform:uppercase; color:var(--sg-primary); margin:0 0 12px;}
+.ds-head h1{margin:0; font-weight:900; font-size:clamp(32px,5vw,54px); letter-spacing:-.04em; line-height:1;}
+.ds-head p{color:var(--sg-ink-soft); font-size:15px; margin:14px 0 0; max-width:70ch;}
+.sec{background:#fff; border:1px solid var(--sg-line); border-radius:var(--sg-r-lg); padding:40px 44px; margin-bottom:24px;}
+.sec > h2{font-family:var(--sg-mono); font-size:12px; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--sg-ink-faint); margin:0 0 8px;}
+.sec > .sub{color:var(--sg-ink-soft); font-size:14px; margin:0 0 28px;}
+.row{display:flex; flex-wrap:wrap; gap:20px; align-items:center;}
+code{font-family:var(--sg-mono); font-size:12px; background:var(--sg-bg-2); padding:2px 7px; border-radius:5px; color:var(--sg-primary-deep);}
+.note{font-family:var(--sg-mono); font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--sg-ink-faint); margin-top:8px;}
+
+/* tokens table */
+.tok-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:12px;}
+.tok{border:1px solid var(--sg-line); border-radius:var(--sg-r-sm); overflow:hidden;}
+.tok .c{height:60px;} .tok .b{padding:10px 12px;}
+.tok .n{font-weight:700; font-size:12px;} .tok .v{font-family:var(--sg-mono); font-size:10px; color:var(--sg-ink-faint);}
+.scale-row{display:flex; align-items:baseline; gap:18px; padding:14px 0; border-bottom:1px solid var(--sg-line); flex-wrap:wrap;}
+.scale-row:last-child{border-bottom:0;}
+.scale-row .lbl{font-family:var(--sg-mono); font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--sg-ink-faint); width:160px; flex:none;}
+
+/* buttons */
+.btn{display:inline-flex; align-items:center; gap:9px; font-family:var(--sg-font); font-weight:700; font-size:17px; line-height:1; cursor:pointer; border:0; padding:16px 28px; border-radius:var(--sg-r-btn); transition:filter .16s ease, box-shadow .2s ease, transform .08s ease, background .18s ease, color .18s ease;}
+.btn .arr{transition:transform .2s var(--sg-ease);} .btn:hover .arr{transform:translateX(5px);} .btn:active{transform:scale(.97);}
+.btn-primary{background:var(--sg-grad-red); color:#fff; box-shadow:var(--sg-shadow-red);}
+.btn-primary:hover{filter:brightness(.94); box-shadow:0 18px 40px rgba(213,21,34,.42);}
+.btn-secondary{background:transparent; color:var(--sg-primary); border:1.5px solid var(--sg-primary);}
+.btn-secondary:hover{background:var(--sg-primary); color:#fff;}
+.btn:focus-visible{outline:3px solid var(--sg-accent-soft); outline-offset:2px;}
+.on-dark-stage{background:var(--sg-near-black); border-radius:var(--sg-r-md); padding:28px; display:flex; gap:16px; flex-wrap:wrap;}
+.btn-ghost-dark{background:rgba(255,255,255,.06); color:#fff; border:1.5px solid rgba(255,255,255,.22);}
+.btn-ghost-dark:hover{background:#fff; color:var(--sg-ink); border-color:#fff;}
+
+/* cards */
+.card-demo{display:grid; grid-template-columns:repeat(3,1fr); gap:18px;}
+.dcard{background:#fff; border:1px solid var(--sg-line); border-radius:var(--sg-r-lg); padding:28px; box-shadow:var(--sg-shadow); transition:transform .22s var(--sg-ease), box-shadow .22s ease;}
+.dcard:hover{transform:translateY(-4px); box-shadow:var(--sg-shadow-2);}
+.dcard .ico{width:46px; height:46px; border-radius:var(--sg-r-pill); background:var(--sg-accent-soft); color:var(--sg-primary); display:flex; align-items:center; justify-content:center; margin-bottom:18px; font-weight:800;}
+.dcard h4{margin:0 0 8px; font-weight:800; font-size:19px; letter-spacing:-.01em;}
+.dcard p{margin:0; color:var(--sg-ink-soft); font-size:14.5px;}
+.dcard .lk{display:inline-flex; gap:7px; margin-top:16px; font-weight:700; font-size:14px; color:var(--sg-primary);}
+.dcard.featured{border-color:var(--sg-primary); box-shadow:0 0 0 1.5px var(--sg-primary), var(--sg-shadow);}
+
+/* inputs */
+.field{display:flex; flex-direction:column; gap:8px; max-width:340px;}
+.field label{font-family:var(--sg-mono); font-size:10px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--sg-ink-faint);}
+.pill-input{display:flex; align-items:center; padding:6px 6px 6px 20px; background:var(--sg-bg-2); border:1px solid var(--sg-line); border-radius:var(--sg-r-pill); max-width:420px;}
+.pill-input input{flex:1; border:0; background:transparent; padding:10px 0; font-family:var(--sg-font); font-size:15px; color:var(--sg-ink); outline:none;}
+.pill-input button{padding:10px 20px; background:var(--sg-grad-red); color:#fff; border:0; border-radius:var(--sg-r-pill); font-weight:700; font-size:14px; cursor:pointer;}
+.box-input{width:100%; max-width:340px; padding:13px 16px; background:#fff; border:1px solid var(--sg-line); border-radius:var(--sg-r-sm); font-family:var(--sg-font); font-size:15px; transition:border-color .2s ease, box-shadow .2s ease;}
+.box-input:focus{outline:0; border-color:var(--sg-primary); box-shadow:0 0 0 3px var(--sg-accent-soft);}
+
+/* badges + pills */
+.badge{display:inline-flex; align-items:center; gap:8px; font-family:var(--sg-mono); font-size:11px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; padding:7px 14px; border-radius:var(--sg-r-pill);}
+.badge.soft{background:var(--sg-accent-soft); color:var(--sg-primary-deep);}
+.badge.solid{background:var(--sg-grad-red); color:#fff;}
+.badge .live{width:7px;height:7px;border-radius:50%;background:var(--sg-primary);}
+.badge.solid .live{background:#fff;}
+
+/* dividers */
+.divider-feather{height:2px; border:0; margin:0; background:linear-gradient(to right,rgba(213,21,34,0),rgba(213,21,34,.85) 50%,rgba(213,21,34,0));}
+
+/* motion table */
+.mtable{width:100%; border-collapse:collapse;}
+.mtable th,.mtable td{text-align:left; padding:13px 14px; border-bottom:1px solid var(--sg-line); font-size:14px;}
+.mtable th{font-family:var(--sg-mono); font-size:10px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--sg-primary); width:26%;}
+.mtable td .pn{font-weight:700;}
+.hover-link{color:var(--sg-ink); text-decoration:underline; text-decoration-color:var(--sg-line); text-underline-offset:4px; transition:color .16s ease, text-decoration-color .16s ease; font-weight:600;}
+.hover-link:hover{color:var(--sg-primary); text-decoration-color:var(--sg-primary);}
+
+/* rendered chrome — nav + footer mini */
+.chrome-nav{height:64px; background:rgba(255,255,255,.92); border:1px solid var(--sg-line); border-radius:var(--sg-r-md); display:flex; align-items:center; justify-content:space-between; padding:0 22px; backdrop-filter:blur(8px);}
+.chrome-nav .lg{font-weight:900; font-size:20px; letter-spacing:-.04em;} .chrome-nav .lg .d{color:var(--sg-primary);}
+.chrome-nav .lks{display:flex; gap:24px; font-weight:600; font-size:14px; color:var(--sg-ink-2);}
+.chrome-nav .cta{padding:9px 18px; font-size:14px;}
+.chrome-foot{background:var(--sg-bg-2); border:1px solid var(--sg-line); border-radius:var(--sg-r-md); padding:28px; display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:24px; margin-top:14px;}
+.chrome-foot .fl{font-family:var(--sg-mono); font-size:10px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--sg-ink-faint); margin-bottom:12px;}
+.chrome-foot a{display:block; font-size:13px; color:var(--sg-ink-2); padding:5px 0;}
+.chrome-foot .lg{font-weight:900; font-size:22px; letter-spacing:-.04em;} .chrome-foot .lg .d{color:var(--sg-primary);}
+
+/* drawer mock */
+.drawer-mock{width:300px; background:#fff; border:1px solid var(--sg-line); border-radius:var(--sg-r-md); padding:24px; box-shadow:var(--sg-shadow);}
+.drawer-mock .dl{font-weight:800; font-size:22px; letter-spacing:-.02em; padding:12px 0; border-bottom:1px solid var(--sg-line);}
+.drawer-mock .dl:last-of-type{border-bottom:0;}
+
+/* rhythm reference */
+.rhythm{display:flex; flex-direction:column; gap:6px; border:1px solid var(--sg-line); border-radius:var(--sg-r-md); overflow:hidden;}
+.rb{display:grid; grid-template-columns:42px 1fr 200px; gap:16px; align-items:center; padding:14px 20px; min-height:60px; position:relative;}
+.rb[data-bg=light]{background:#fff; color:var(--sg-ink);}
+.rb[data-bg=warm]{background:var(--sg-bg-warm); color:var(--sg-ink);}
+.rb[data-bg=accent]{background:var(--sg-accent-soft); color:var(--sg-ink);}
+.rb[data-bg=dark]{background:var(--sg-near-black); color:#fff;}
+.rb .n{font-family:var(--sg-mono); font-size:15px; font-weight:700; opacity:.5;}
+.rb .l{font-weight:700; font-size:15px;}
+.rb .meta{font-family:var(--sg-mono); font-size:9px; letter-spacing:.08em; text-transform:uppercase; opacity:.6; text-align:right;}
+@media (max-width:860px){
+  .card-demo{grid-template-columns:1fr;} .chrome-foot{grid-template-columns:1fr 1fr;}
+  .chrome-nav .lks{display:none;} .sec{padding:28px 22px;} .rb{grid-template-columns:32px 1fr;} .rb .meta{display:none;}
+}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="ds-head">
+    <p class="eyebrow">Design System · Bundle A</p>
+    <h1>SGEN <span class="grad">Clarity White</span> — implementation contract</h1>
+    <p>The tokens, chrome, components, and motion every page inherits. Identity &amp; voice live in <code>brand-card.html</code>; this file is implementation only. Type is heavy &amp; oversized per the locked override.</p>
+  </div>
+
+  <!-- TOKENS -->
+  <div class="sec">
+    <h2>Color tokens</h2>
+    <div class="tok-grid">
+      <div class="tok"><div class="c" style="background:#d51522"></div><div class="b"><div class="n">primary</div><div class="v">#d51522</div></div></div>
+      <div class="tok"><div class="c" style="background:#b00000"></div><div class="b"><div class="n">primary-deep</div><div class="v">#b00000</div></div></div>
+      <div class="tok"><div class="c" style="background:#780101"></div><div class="b"><div class="n">primary-darkest</div><div class="v">#780101</div></div></div>
+      <div class="tok"><div class="c" style="background:#FCE7E8"></div><div class="b"><div class="n">primary-soft</div><div class="v">#FCE7E8</div></div></div>
+      <div class="tok"><div class="c" style="background:#e61938"></div><div class="b"><div class="n">accent</div><div class="v">#e61938</div></div></div>
+      <div class="tok"><div class="c" style="background:#fff1f1"></div><div class="b"><div class="n">accent-soft</div><div class="v">#fff1f1</div></div></div>
+      <div class="tok"><div class="c" style="background:#ffffff;border-bottom:1px solid #ECEAE5"></div><div class="b"><div class="n">bg</div><div class="v">#ffffff</div></div></div>
+      <div class="tok"><div class="c" style="background:#f9f9f9;border-bottom:1px solid #ECEAE5"></div><div class="b"><div class="n">bg-2</div><div class="v">#f9f9f9</div></div></div>
+      <div class="tok"><div class="c" style="background:#F2F1ED;border-bottom:1px solid #ECEAE5"></div><div class="b"><div class="n">bg-warm</div><div class="v">#F2F1ED</div></div></div>
+      <div class="tok"><div class="c" style="background:#000000"></div><div class="b"><div class="n">ink</div><div class="v">#000000</div></div></div>
+      <div class="tok"><div class="c" style="background:#868279"></div><div class="b"><div class="n">ink-faint</div><div class="v">#868279</div></div></div>
+      <div class="tok"><div class="c" style="background:#1b1a18"></div><div class="b"><div class="n">near-black</div><div class="v">#1b1a18</div></div></div>
+    </div>
+  </div>
+
+  <!-- TYPE SCALE -->
+  <div class="sec">
+    <h2>Type scale — Inter heavy + oversized</h2>
+    <p class="sub">Hero <code>900</code> clamp(56,9vw,120) · H2 <code>900</code> clamp(34,5vw,72) · H3 <code>800</code> · body 18/400 · eyebrow JetBrains Mono 11/700.</p>
+    <div class="scale-row"><span class="lbl">Hero · 900</span><span style="font-weight:900;font-size:clamp(40px,6vw,72px);letter-spacing:-.04em;line-height:1;">Build without plugins</span></div>
+    <div class="scale-row"><span class="lbl">H2 · 900</span><span style="font-weight:900;font-size:clamp(30px,4vw,48px);letter-spacing:-.03em;">Host fast. Sleep easy.</span></div>
+    <div class="scale-row"><span class="lbl">H3 · 800</span><span style="font-weight:800;font-size:28px;letter-spacing:-.02em;">Three products. One system.</span></div>
+    <div class="scale-row"><span class="lbl">Body · 400</span><span style="font-size:18px;color:var(--sg-ink-soft);">One managed platform for hosting, CMS, builder, and suites.</span></div>
+    <div class="scale-row"><span class="lbl">Eyebrow · mono 700</span><span style="font-family:var(--sg-mono);font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--sg-primary);">Managed website platform</span></div>
+  </div>
+
+  <!-- BUTTONS -->
+  <div class="sec">
+    <h2>Buttons — CTA #7 cluster · icon-led-arrow · color-shift hover</h2>
+    <p class="sub">Hover, focus (Tab to a button), and active (press) states are all live.</p>
+    <div class="row">
+      <a href="#" class="btn btn-primary">Start free Sandbox <span class="arr">→</span></a>
+      <a href="#" class="btn btn-secondary">See it in action</a>
+    </div>
+    <div class="on-dark-stage" style="margin-top:18px;">
+      <a href="#" class="btn btn-primary">Start free <span class="arr">→</span></a>
+      <a href="#" class="btn btn-ghost-dark">Compare plans</a>
+    </div>
+    <p class="note">radius 8px · primary = diagonal red gradient + red glow · secondary fills red on hover · :active scale .97 · :focus-visible accent-soft ring</p>
+  </div>
+
+  <!-- CARDS -->
+  <div class="sec">
+    <h2>Cards — CARD-VARIATIONS #4 circle-icon service card</h2>
+    <p class="sub">White, 16px radius, signature soft shadow, lift on hover. Hover any card.</p>
+    <div class="card-demo">
+      <div class="dcard"><div class="ico">◎</div><h4>SG-Core</h4><p>The CMS, rebuilt — server-first, clean code.</p><a class="lk" href="#">Explore →</a></div>
+      <div class="dcard featured"><div class="ico">◇</div><h4>SG-Modules</h4><p>Suites à la carte — forms, SEO, ecommerce.</p><a class="lk" href="#">Explore →</a></div>
+      <div class="dcard"><div class="ico">▦</div><h4>SG-Dashboard</h4><p>Every site, one place. Bulk + white-label.</p><a class="lk" href="#">Explore →</a></div>
+    </div>
+    <p class="note">.dcard default · .dcard.featured (red ring) · :hover translateY(-4px) + shadow-2</p>
+  </div>
+
+  <!-- FORMS -->
+  <div class="sec">
+    <h2>Form fields — pill-input (primary) + boxed (focus ring)</h2>
+    <div class="row" style="align-items:flex-start; gap:32px;">
+      <div>
+        <div class="pill-input"><input type="email" placeholder="you@company.com"><button>Start free</button></div>
+        <p class="note">pill-input · inline red submit</p>
+      </div>
+      <div class="field">
+        <label>Work email</label>
+        <input class="box-input" type="email" placeholder="Focus me — red ring">
+        <p class="note">boxed · :focus red border + accent-soft ring</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- BADGES + DIVIDERS -->
+  <div class="sec">
+    <h2>Badges, pills &amp; the signature divider</h2>
+    <div class="row">
+      <span class="badge soft"><span class="live"></span>Managed platform</span>
+      <span class="badge solid">Most popular</span>
+      <span class="badge soft">2-week trial</span>
+    </div>
+    <hr class="divider-feather" style="margin-top:28px;">
+    <p class="note">DIVIDER-PATTERNS #1 hard edge — the feathered 2px red line is the only decorative mark</p>
+  </div>
+
+  <!-- MOTION -->
+  <div class="sec">
+    <h2>Motion — the 8 locked picks</h2>
+    <p class="sub">Live where previewable; spec for the rest. <a href="#" class="hover-link">Hover this link</a> to see the link treatment.</p>
+    <table class="mtable">
+      <tr><th>Button hover</th><td><span class="pn">MOTION #2 Color-shift</span> — brightness .94 + glow deepen</td></tr>
+      <tr><th>Card hover</th><td><span class="pn">MOTION #10 Lift</span> — translateY(-4px) on signature shadow</td></tr>
+      <tr><th>Link hover</th><td><span class="pn">MOTION #18 Color-shift</span> — ink → red + red underline, 4px offset</td></tr>
+      <tr><th>Page entrance</th><td><span class="pn">MOTION #21 Fade-up</span> — staggered eyebrow→h1→sub→CTA</td></tr>
+      <tr><th>Scroll-triggered</th><td><span class="pn">MOTION #26 Fade-in-on-view</span> — IntersectionObserver reveal</td></tr>
+      <tr><th>Cursor</th><td><span class="pn">MOTION #31 Default</span> — native cursor (SMB accessibility)</td></tr>
+      <tr><th>Micro</th><td><span class="pn">MOTION #36 Button press</span> — :active scale .97</td></tr>
+      <tr><th>Page transition</th><td><span class="pn">MOTION #43 View Transitions API</span> — native MPA cross-fade</td></tr>
+    </table>
+    <p class="note">all motion honors prefers-reduced-motion · red + grayscale only</p>
+  </div>
+
+  <!-- RENDERED CHROME -->
+  <div class="sec">
+    <h2>Site chrome — header, mobile drawer, footer</h2>
+    <div class="chrome-nav">
+      <span class="lg">SGEN<span class="d">.</span></span>
+      <span class="lks"><span>Product</span><span>Why SGEN</span><span>Pricing</span><span>Docs</span></span>
+      <a href="#" class="btn btn-primary cta">Start free <span class="arr">→</span></a>
+    </div>
+    <div class="row" style="margin-top:18px; align-items:flex-start;">
+      <div class="drawer-mock">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;"><span class="lg" style="font-weight:900;font-size:20px;letter-spacing:-.04em;">SGEN<span style="color:var(--sg-primary)">.</span></span><span style="width:34px;height:34px;border-radius:8px;background:var(--sg-bg-2);display:flex;align-items:center;justify-content:center;">✕</span></div>
+        <div class="dl">Product</div><div class="dl">Why SGEN</div><div class="dl">Pricing</div><div class="dl">Docs</div>
+        <a href="#" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:16px;">Start free Sandbox →</a>
+        <p class="note">≤900px · right-slide drawer (sgen locked drill-down pattern)</p>
+      </div>
+      <div style="flex:1; min-width:300px;">
+        <div class="chrome-foot">
+          <div><span class="lg">SGEN<span class="d">.</span></span><p style="font-size:12px;color:var(--sg-ink-soft);margin:10px 0 0;">Everything bolted on, built in.</p></div>
+          <div><div class="fl">SG-Core</div><a href="#">Pages</a><a href="#">Media</a><a href="#">Users</a></div>
+          <div><div class="fl">SG-Modules</div><a href="#">Forms</a><a href="#">SEO</a><a href="#">Analytics</a></div>
+          <div><div class="fl">SG-Dashboard</div><a href="#">Pricing</a><a href="#">Status</a><a href="#">Roadmap</a></div>
+        </div>
+        <p class="note">FOOTER-STYLES #2 · 4-col light, brand-left</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- RHYTHM REFERENCE -->
+  <div class="sec">
+    <h2>Section rhythm — the page-architecture contract (H9)</h2>
+    <p class="sub">Pages inherit this bg / imagery / chrome cadence. ≥2 dark (incl. one mid-band), ≥50% imagery, no 4-run repeats.</p>
+    <div class="rhythm">
+      <div class="rb" data-bg="light"><span class="n">01</span><span class="l">Hero</span><span class="meta">light · inset-photo · shadow-lift</span></div>
+      <div class="rb" data-bg="warm"><span class="n">02</span><span class="l">Trust strip</span><span class="meta">warm · motif · open</span></div>
+      <div class="rb" data-bg="accent"><span class="n">03</span><span class="l">Stat band</span><span class="meta">accent · none · hairline</span></div>
+      <div class="rb" data-bg="light"><span class="n">04</span><span class="l">SGEN vs WordPress</span><span class="meta">light · inset · hairline</span></div>
+      <div class="rb" data-bg="dark"><span class="n">05</span><span class="l">Product pillars</span><span class="meta">dark · inset · dark-panel</span></div>
+      <div class="rb" data-bg="dark"><span class="n">06</span><span class="l">Host fast. Sleep easy.</span><span class="meta">dark · full-bleed · overlay</span></div>
+      <div class="rb" data-bg="light"><span class="n">07</span><span class="l">Architecture bento</span><span class="meta">light · motif · hairline</span></div>
+      <div class="rb" data-bg="warm"><span class="n">08</span><span class="l">SG-Builder showcase</span><span class="meta">warm · full-bleed · shadow</span></div>
+      <div class="rb" data-bg="accent"><span class="n">09</span><span class="l">Testimonials</span><span class="meta">accent · inset · hairline</span></div>
+      <div class="rb" data-bg="light"><span class="n">10</span><span class="l">Pricing teaser</span><span class="meta">light · none · shadow</span></div>
+      <div class="rb" data-bg="warm"><span class="n">11</span><span class="l">FAQ</span><span class="meta">warm · none · open</span></div>
+      <div class="rb" data-bg="dark"><span class="n">12</span><span class="l">Closing CTA</span><span class="meta">dark · motif · overlay</span></div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
