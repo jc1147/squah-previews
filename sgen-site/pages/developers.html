@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Custom Code, Webhooks, and Integrations | SGEN</title>
+<meta name="description" content="Inject head and body code, route events with webhooks and Zapier, and connect Stripe, PayPal, Google, Airtable, and Slack without a plugin stack underneath.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../_design/sgen-tokens.css">
+<link rel="stylesheet" href="../_design/sgen-structural.css">
+<link rel="stylesheet" href="../_design/sgen-chrome.css">
+<link rel="stylesheet" href="_standard.css">
+</head>
+<body>
+
+<!-- ===== TOP UTILITY BAR ===== -->
+<div class="topbar"><div class="in">
+ <span class="msg"><span class="spark">◆</span> <b>One platform, priced by sites.</b><span class="long"> Every module included.</span></span>
+ <span class="util"><a class="hide-sm" href="#">Docs</a><a class="hide-sm" href="#">Changelog</a><span class="status"><span class="d"></span> All systems operational</span></span>
+</div></div>
+
+<!-- ===== HEADER (mega-menu) ===== -->
+<header class="site-header" id="hdr"><div class="in">
+ <a class="brand" href="../pages/home.html">SGEN<span class="dot">.</span></a>
+ <nav class="site-nav">
+ <div class="nav-item">
+ <button class="nav-trigger">Product <span class="chev"></span></button>
+ <div class="megamenu"><div class="mm-inner">
+ <span class="mm-watermark" aria-hidden="true">PRODUCT</span>
+ <div class="mm-col"><div class="mm-head">Build &amp; Design</div>
+ <a class="mm-link" href="page-builder.html"><span class="t"><span class="gl"></span>SG Builder</span><span class="s">Visual builder, server-rendered output</span></a>
+ <a class="mm-link" href="templates.html"><span class="t"><span class="gl"></span>Templates</span><span class="s">Start from a real design</span></a>
+ <a class="mm-link" href="theme-editor.html"><span class="t"><span class="gl"></span>Theme Editor</span><span class="s">Global tokens, fonts, colors</span></a>
+ <a class="mm-link" href="media-library.html"><span class="t"><span class="gl"></span>Media Library</span><span class="s">Native assets + optimization</span></a>
+ </div>
+ <div class="mm-col"><div class="mm-head">Grow &amp; Convert</div>
+ <a class="mm-link" href="forms.html"><span class="t"><span class="gl"></span>Forms</span><span class="s">Native lead capture</span></a>
+ <a class="mm-link" href="seo-optimization.html"><span class="t"><span class="gl"></span>SEO</span><span class="s">On-page optimization</span></a>
+ <a class="mm-link" href="attributions.html"><span class="t"><span class="gl"></span>Attribution</span><span class="s">Multi-touch + call tracking</span></a>
+ <a class="mm-link" href="ecommerce.html"><span class="t"><span class="gl"></span>Ecommerce</span><span class="s">Storefront, products, checkout</span></a>
+ <a class="mm-link" href="overview-modules.html"><span class="t"><span class="gl"></span>All 22 modules →</span><span class="s">The whole platform, in the box</span></a>
+ <a class="mm-link" href="overview-core.html"><span class="t"><span class="gl"></span>SG-Core</span><span class="s">The content engine, native CMS</span></a>
+ <a class="mm-link" href="overview-dashboard.html"><span class="t"><span class="gl"></span>SG-Dashboard</span><span class="s">The operating layer, one hub</span></a>
+ </div>
+ <div class="mm-feat"><span class="badge">Flagship</span><span class="k">SG Builder</span><span class="ttl">Design like Elementor. Ship like a real product.</span><span class="sub">A true visual builder on a server-rendered platform, no plugin underneath.</span><span class="go">Explore the builder →</span></div>
+ </div></div>
+ </div>
+ <div class="nav-item">
+ <button class="nav-trigger">Why SGEN <span class="chev"></span></button>
+ <div class="megamenu"><div class="mm-inner">
+ <span class="mm-watermark" aria-hidden="true">WHY</span>
+ <div class="mm-col"><div class="mm-head">The case</div>
+ <a class="mm-link" href="why-sgen-no-plugins.html"><span class="t"><span class="gl"></span>No plugins</span><span class="s">91% of WP vulns were in plugins</span></a>
+ <a class="mm-link" href="why-sgen-speed.html"><span class="t"><span class="gl"></span>Speed</span><span class="s">Server-side rendered, fast by default</span></a>
+ <a class="mm-link" href="why-sgen.html"><span class="t"><span class="gl"></span>Why SGEN, in full</span><span class="s">The whole case, one page</span></a>
+ </div>
+ <div class="mm-col"><div class="mm-head">The model</div>
+ <a class="mm-link" href="pricing.html"><span class="t"><span class="gl"></span>One stack</span><span class="s">No plugin tax, no suite tax</span></a>
+ <a class="mm-link" href="pricing.html"><span class="t"><span class="gl"></span>Priced by sites</span><span class="s">Not by features</span></a>
+ </div>
+ <div class="mm-feat"><span class="badge">The wedge</span><span class="k">Native, not plugins</span><span class="ttl">One stack. Nothing to license or patch.</span><span class="sub">The whole platform is the box, hosting, builder, SEO, attribution, security.</span><span class="go">See why SGEN →</span></div>
+ </div></div>
+ </div>
+ <div class="nav-item">
+ <button class="nav-trigger">Solutions <span class="chev"></span></button>
+ <div class="megamenu"><div class="mm-inner">
+ <span class="mm-watermark" aria-hidden="true">SOLUTIONS</span>
+ <div class="mm-col"><div class="mm-head">By team</div>
+ <a class="mm-link" href="solutions-agencies.html"><span class="t"><span class="gl"></span>Agencies</span><span class="s">Multi-site, white-label, RBAC</span></a>
+ <a class="mm-link" href="solutions-freelancers.html"><span class="t"><span class="gl"></span>Freelancers</span><span class="s">Build on Sandbox, hand off</span></a>
+ </div>
+ <div class="mm-col"><div class="mm-head">By business</div>
+ <a class="mm-link" href="solutions-small-business.html"><span class="t"><span class="gl"></span>Small business</span><span class="s">One fast site, done right</span></a>
+ <a class="mm-link" href="solutions-restaurants.html"><span class="t"><span class="gl"></span>Restaurants</span><span class="s">Menus, events, online ordering</span></a>
+ <a class="mm-link" href="solutions-multi-location.html"><span class="t"><span class="gl"></span>Multi-location</span><span class="s">One dashboard, many sites</span></a>
+ <a class="mm-link" href="solutions-healthcare.html"><span class="t"><span class="gl"></span>Healthcare</span><span class="s">Compliance-grade posture</span></a>
+ </div>
+ <div class="mm-feat"><span class="badge">For teams</span><span class="k">Agencies</span><span class="ttl">Run an unlimited portfolio from one dashboard.</span><span class="sub">Multi-site, login-as, bulk-clone, Enterprise, $497/mo.</span><span class="go">See the agency plan →</span></div>
+ </div></div>
+ </div>
+ <div class="nav-item">
+ <button class="nav-trigger">Compare <span class="chev"></span></button>
+ <div class="megamenu"><div class="mm-inner">
+ <span class="mm-watermark" aria-hidden="true">VS</span>
+ <div class="mm-col"><div class="mm-head">Deep dives</div>
+ <a class="mm-link" href="compare-vs-wordpress.html"><span class="t"><span class="gl"></span>vs WordPress</span><span class="s">The refugee path</span></a>
+ <a class="mm-link" href="compare-vs-elementor.html"><span class="t"><span class="gl"></span>vs Elementor</span><span class="s">Builder head-to-head</span></a>
+ <a class="mm-link" href="compare-vs-wp-engine.html"><span class="t"><span class="gl"></span>vs WP Engine</span><span class="s">Managed hosting</span></a>
+ </div>
+ <div class="mm-col"><div class="mm-head">Quick looks</div>
+ <a class="mm-link" href="compare-vs-wix.html"><span class="t"><span class="gl"></span>vs Wix</span><span class="s">Own a real product</span></a>
+ <a class="mm-link" href="compare-vs-squarespace.html"><span class="t"><span class="gl"></span>vs Squarespace</span><span class="s">Beyond templates</span></a>
+ <a class="mm-link" href="compare-vs-godaddy.html"><span class="t"><span class="gl"></span>vs GoDaddy</span><span class="s">Past a brochure site</span></a>
+ <a class="mm-link" href="compare.html"><span class="t"><span class="gl"></span>All comparisons →</span><span class="s">Every head-to-head in one place</span></a>
+ </div>
+ <div class="mm-feat"><span class="badge">Switching?</span><span class="k">/migrate</span><span class="ttl">Move off WordPress, the honest way.</span><span class="sub">A move is a rebuild, and that's the upgrade. White-glove or DIY.</span><span class="go">See how migration works →</span></div>
+ </div></div>
+ </div>
+ <div class="nav-item">
+ <button class="nav-trigger">Customers <span class="chev"></span></button>
+ <div class="megamenu"><div class="mm-inner">
+ <span class="mm-watermark" aria-hidden="true">PROOF</span>
+ <div class="mm-col"><div class="mm-head">Explore</div>
+ <a class="mm-link" href="customers.html"><span class="t"><span class="gl"></span>Customer stories</span><span class="s">Metric-first case grid</span></a>
+ <a class="mm-link" href="showcase.html"><span class="t"><span class="gl"></span>Showcase</span><span class="s">Gallery of sites built on SGEN</span></a>
+ <a class="mm-link" href="customers.html"><span class="t"><span class="gl"></span>Case studies</span><span class="s">The full teardown, deep</span></a>
+ </div>
+ <div class="mm-col"><div class="mm-head">Built on SGEN</div>
+ <a class="mm-link" href="why-sgen-no-plugins.html"><span class="t"><span class="gl"></span>Zero plugins</span><span class="s">Under every site in the reel</span></a>
+ <a class="mm-link" href="pricing.html"><span class="t"><span class="gl"></span>One stack</span><span class="s">Forms, store, SEO, all native</span></a>
+ </div>
+ <div class="mm-feat"><span class="badge">Case study</span><span class="k">Marrow &amp; Vine</span><span class="ttl">The menu page that loads in 0.8s.</span><span class="sub">Six tools became one. No plugins, no booking tax.</span><span class="go">Read the story →</span></div>
+ </div></div>
+ </div>
+ <a class="nav-trigger" href="pricing.html">Pricing</a>
+ </nav>
+ <div class="site-actions">
+ <a class="login" href="#">Log in</a>
+ <button class="btn btn-primary">Start Building <span class="arr">→</span></button>
+ <button class="hamburger" data-drawer-open aria-label="Menu"><span></span><span></span><span></span></button>
+ </div>
+</div></header>
+
+<main>
+<!-- 1 · HERO -->
+<section class="sec std-hero">
+ <div class="feat-copy">
+ <div class="eyebrow">Developers · Build on SGEN</div>
+ <h1>Your code, <span class="grad">where you need it.</span></h1>
+ <p class="lead">Inject head and body snippets, route form and order events to your own services, and connect the tools you already run. No plugin to license, no connector tier just to move data off the platform.</p>
+ <div class="cta flex">
+ <button class="btn btn-primary">Start Building <span class="arr">&rarr;</span></button>
+ <a class="btn btn-secondary" href="pricing.html">Compare Plans</a>
+ </div>
+ </div>
+ <div class="ui-mock reveal">
+ <div class="ui-bar"><span class="d"></span><span class="d"></span><span class="d"></span><span class="t">Custom Codes · head</span></div>
+ <div class="mk-editor">
+ <div class="ui-field active">
+ <div class="lab">Head code <span class="cc">injected before &lt;/head&gt;</span></div>
+ <div class="val mono" style="width:auto;height:auto;background:none;color:var(--sg-ink-soft);font-size:12.5px;line-height:1.5">&lt;script src="https://cdn.example.com/widget.js" async&gt;&lt;/script&gt;</div>
+ </div>
+ <div class="ui-field">
+ <div class="lab">Body code <span class="cc">injected before &lt;/body&gt;</span></div>
+ <div class="val mono" style="width:auto;height:auto;background:none;color:var(--sg-ink-faint);font-size:12.5px;line-height:1.5">&lt;!-- chat launcher, A/B snippet, analytics tag --&gt;</div>
+ </div>
+ <div class="ui-toggle">Apply site-wide <span class="sw"></span></div>
+ </div>
+ </div>
+</section>
+
+<!-- 2 · CUSTOM CODES -->
+<section class="sec sec--warm">
+ <div class="wrap">
+ <div class="feat reveal">
+ <div class="feat-copy">
+ <div class="eyebrow">Custom Codes</div>
+ <h2 class="h2">Drop in any snippet. <span class="grad">Head or body.</span></h2>
+ <p class="lead" style="margin-top:14px">The Custom Codes module injects raw HTML, CSS, and JavaScript into the head or body of your rendered pages. It is the native home for the third-party tags every real site ends up needing: analytics, a chat launcher, a verification meta tag, a heatmap script, an experiment snippet.</p>
+ <div class="checks" style="margin-top:24px">
+ <div class="ck"><span class="mk"></span><div><b>Head and body, separately.</b> Put a tag in the head when it needs to load early, in the body when it should run after content. You choose per snippet.</div></div>
+ <div class="ck"><span class="mk"></span><div><b>Site-wide or per page.</b> Inject globally across the site, or scope a snippet to the pages that need it so the rest stay lean.</div></div>
+ <div class="ck"><span class="mk"></span><div><b>Native, not a plugin.</b> On WordPress this is a separate snippets plugin with its own settings page and update cycle. Here it ships with the platform and updates with it.</div></div>
+ </div>
+ <p style="margin-top:18px"><a href="advanced-settings.html" style="color:var(--sg-red)">Advanced Settings</a> handles SMTP, SEO defaults, and social metadata natively, so Custom Codes stays focused on the one job snippet injection.</p>
+ </div>
+ <div class="feat-art" style="background:var(--sg-bg-2)">
+ <div class="ui-mock" style="width:100%">
+ <div class="ui-bar"><span class="d"></span><span class="d"></span><span class="d"></span><span class="t">Custom Codes · scope</span></div>
+ <div class="mk-toolbar"><span class="chip on">Site-wide</span><span class="chip">This page</span><span class="chip">By template</span></div>
+ <div class="mk-editor">
+ <div class="ui-field active">
+ <div class="lab">Snippet name</div>
+ <div class="val" style="width:auto;height:auto;background:none;color:var(--sg-ink-soft);font-size:13px">Analytics 4 base tag</div>
+ </div>
+ <div class="ui-field">
+ <div class="lab">Placement <span class="cc">head</span></div>
+ <div class="val mono" style="width:auto;height:auto;background:none;color:var(--sg-ink-faint);font-size:12px;line-height:1.5">&lt;script async src="https://www.googletagmanager.com/gtag/js"&gt;&lt;/script&gt;</div>
+ </div>
+ <div class="ui-toggle">Enabled <span class="sw"></span></div>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+</section>
+
+<!-- 3 · INTEGRATIONS GRID -->
+<section class="sec">
+ <div class="wrap">
+ <div class="sec-head readw reveal">
+ <div class="eyebrow">First-party integrations</div>
+ <h2 class="h2">Connections you don't have to <span class="grad">build.</span></h2>
+ <p class="lead" style="margin-top:16px">Before you write a line of integration code, check whether SGEN already ships the connection. These are configured in the admin, not coded against an API, so they work the moment you add your keys.</p>
+ </div>
+ <div class="grid g-3" style="margin-top:44px">
+ <div class="card reveal"><div class="ico"><span class="m"></span></div><h3 class="h3">Stripe</h3><p style="margin-top:10px">Card payments in the Ecommerce module. Add your keys and checkout is live.</p></div>
+ <div class="card reveal" data-d="1"><div class="ico"><span class="m"></span></div><h3 class="h3">PayPal</h3><p style="margin-top:10px">An alternative checkout payment method alongside Stripe.</p></div>
+ <div class="card reveal" data-d="2"><div class="ico"><span class="m"></span></div><h3 class="h3">Google</h3><p style="margin-top:10px">Analytics 4, Tag Manager, Search Console, and reCAPTCHA, connected from the admin.</p></div>
+ <div class="card reveal"><div class="ico"><span class="m"></span></div><h3 class="h3">Zapier</h3><p style="margin-top:10px">Route SGEN events, a form submission or a new order, to the rest of your stack.</p></div>
+ <div class="card reveal" data-d="1"><div class="ico"><span class="m"></span></div><h3 class="h3">Airtable</h3><p style="margin-top:10px">Push form submissions straight into an Airtable base and table.</p></div>
+ <div class="card reveal" data-d="2"><div class="ico"><span class="m"></span></div><h3 class="h3">Slack</h3><p style="margin-top:10px">Post a real-time alert to a Slack channel the moment a site event fires.</p></div>
+ </div>
+ <p class="label" style="text-align:center;margin-top:24px">The full reference, and what each connection routes, lives on the <a href="attributions.html" style="color:var(--sg-red)">Integrations</a> page.</p>
+ </div>
+</section>
+
+<!-- 4 · WEBHOOKS -->
+<section class="sec sec--alt">
+ <div class="wrap">
+ <div class="feat flip reveal">
+ <div class="feat-copy">
+ <div class="eyebrow">Webhooks</div>
+ <h2 class="h2">Send every event <span class="grad">where it needs to go.</span></h2>
+ <p class="lead" style="margin-top:14px">When the six first-party connections don't cover it, point a webhook at your own endpoint. Each form connects to a destination from its own integrations panel: a per-form connection, not one global firehose that lumps every form together.</p>
+ <div class="checks" style="margin-top:24px">
+ <div class="ck"><span class="mk"></span><div><b>POST to any endpoint.</b> A custom CRM, an internal service, a serverless function. You set the URL, the method, and the headers.</div></div>
+ <div class="ck"><span class="mk"></span><div><b>Test before you ship.</b> A connection test fires a sample payload so you confirm your endpoint receives it before a real lead does.</div></div>
+ <div class="ck"><span class="mk"></span><div><b>Zapier for the long tail.</b> For anything without a direct connection, route the event through Zapier to a connected app.</div></div>
+ </div>
+ <p style="margin-top:18px">Form leads can also land in your <a href="forms.html" style="color:var(--sg-red)">Forms</a> submissions inbox at the same time, so a webhook failure never loses the lead.</p>
+ </div>
+ <div class="feat-art" style="background:var(--sg-bg-2)">
+ <div class="ui-mock" style="width:100%">
+ <div class="ui-bar"><span class="d"></span><span class="d"></span><span class="d"></span><span class="t">Webhook · delivery log</span></div>
+ <div class="mk-status"><span class="ok"><span class="d"></span>Endpoint reachable</span><span class="n">200</span></div>
+ <div class="mk-rows">
+ <div class="mk-log"><span class="t">11:42</span><span class="ev">form.submission &rarr; crm.acme.internal</span><span class="tag">Sent</span></div>
+ <div class="mk-log"><span class="t">11:18</span><span class="ev">order.created &rarr; zapier hook</span><span class="tag">Sent</span></div>
+ <div class="mk-log"><span class="t">10:54</span><span class="ev">form.submission &rarr; airtable base</span><span class="tag">Sent</span></div>
+ <div class="mk-log"><span class="t">10:51</span><span class="ev">Connection test &rarr; sample payload</span><span class="tag">Sent</span></div>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+</section>
+
+<!-- 5 · DARK STAT PUNCTUATION -->
+<section class="sec surface-dark has-atmos">
+ <div class="wrap">
+ <div class="sec-head readw reveal">
+ <div class="eyebrow">What's in the box</div>
+ <h2 class="h2">Every connection point, <span class="grad">on every plan.</span></h2>
+ </div>
+ <div class="stat-band" style="margin-top:42px">
+ <div class="s reveal"><span class="stat">6</span><div class="cap">First-party integrations</div></div>
+ <div class="s reveal" data-d="1"><span class="stat">0<span class="z"> plugins</span></span><div class="cap">Custom Codes is native</div></div>
+ <div class="s reveal" data-d="2"><span class="stat">22</span><div class="cap">Native modules on every plan</div></div>
+ </div>
+ </div>
+</section>
+
+<!-- 6 · FAQ -->
+<section class="sec">
+ <div class="wrap">
+ <div class="sec-head reveal"><div class="eyebrow">Questions</div><h2 class="h2">Developer questions</h2></div>
+ <div class="faq-list" style="margin-top:30px">
+ <details class="reveal" open><summary>How do I add a third-party script or tag? <span class="pm">+</span></summary><div class="ans">Use the Custom Codes module. It injects raw HTML, CSS, and JavaScript into the head or body of your rendered pages, site-wide or scoped to specific pages. That covers analytics tags, chat launchers, verification meta tags, heatmaps, and experiment snippets, the third-party code real sites end up needing.</div></details>
+ <details class="reveal"><summary>Can I send form or order events to my own system? <span class="pm">+</span></summary><div class="ans">Yes. Each form connects to a destination from its own integrations panel, including a webhook you point at any endpoint, with a configurable URL, method, and headers, plus a connection test. For anything without a direct connection, route the event through Zapier to a connected app.</div></details>
+ <details class="reveal"><summary>Which third-party services connect natively? <span class="pm">+</span></summary><div class="ans">Six first-party integrations: Stripe and PayPal for payments, Google (Analytics 4, Tag Manager, Search Console, reCAPTCHA), Zapier for event routing, Airtable, and Slack. They are configured in the admin with your keys, not coded against an API.</div></details>
+ <details class="reveal"><summary>Is there a public REST API or SDK? <span class="pm">+</span></summary><div class="ans">We don't market a public REST API or SDK today, so we won't point you at one we can't stand behind. What is supported, and what most builds actually need, is Custom Codes for injecting your own scripts, the six first-party integrations, and webhooks plus Zapier for routing events out. If your project needs more than that, contact sales and we'll tell you straight what's possible.</div></details>
+ <details class="reveal"><summary>Which plan includes all of this? <span class="pm">+</span></summary><div class="ans">Every plan. Custom Codes and the integration panels are part of the 22 native modules, and every plan is the whole platform, plans differ only by how many live sites you run. The free Sandbox includes them too, on unlimited staging sites, so you can wire up a webhook and test it before you pay anything.</div></details>
+ </div>
+ </div>
+</section>
+
+<!-- 7 · CLOSING PRICING CTA -->
+<section class="sec sec--warm" style="text-align:center">
+ <div class="wrap">
+ <div class="eyebrow reveal" style="justify-content:center">Included in your plan</div>
+ <h2 class="h2 reveal" data-d="1" style="margin-top:12px">Custom code. Webhooks. Six integrations. <span class="grad">From $39/mo.</span></h2>
+ <p class="lead reveal" data-d="2" style="margin:16px auto 0">Every plan is the whole platform, all 22 modules. Plans are priced by how many live sites you run: Indie at $39/mo for one site (billed annually; $47 monthly), Studio at $97 for three, Scale at $297 for ten, Enterprise at $497 for unlimited. The free unlimited Sandbox lets you build and test on staging URLs before you pay anything.</p>
+ <div class="flex reveal" data-d="3" style="justify-content:center;margin-top:28px">
+ <button class="btn btn-primary">Try the Free Sandbox <span class="arr">&rarr;</span></button>
+ <a class="btn btn-secondary" href="pricing.html">See Pricing</a>
+ </div>
+ </div>
+</section>
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer class="site-footer surface-dark">
+ <div class="footer-cta">
+ <div class="eyebrow">Start free</div>
+ <h2>Build the whole thing on the Sandbox. <span class="grad">$0, no card.</span></h2>
+ <p>Every module unlocked on unlimited sandbox sites. Go live by upgrading, priced by how many sites you run, not by features.</p>
+ <div class="ctas"><button class="btn btn-primary">Try the Free Sandbox <span class="arr">→</span></button><a class="btn btn-secondary" href="compare-vs-wordpress.html">Compare to WordPress</a></div>
+ </div>
+ <div class="ft-grid">
+ <div class="ft-brand"><div class="b">SGEN<span class="dot">.</span></div><p>One all-inclusive platform. Build the whole site, no plugins underneath, priced by how many sites you run.</p><span class="ft-status"><span class="d"></span> All systems operational</span></div>
+ <div class="ft-col"><h4>Product</h4><a href="overview-modules.html">All 22 modules</a><a href="overview-core.html">SG-Core</a><a href="overview-dashboard.html">SG-Dashboard</a><a href="page-builder.html">SG Builder</a><a href="attributions.html">Attribution</a><a href="ecommerce.html">Ecommerce</a></div>
+ <div class="ft-col"><h4>Solutions</h4><a href="solutions-agencies.html">Agencies</a><a href="solutions-small-business.html">Small business</a><a href="solutions-restaurants.html">Restaurants</a><a href="solutions-freelancers.html">Freelancers</a><a href="enterprise.html">Enterprise</a></div>
+ <div class="ft-col"><h4>Resources</h4><a href="resources.html">All resources</a><a href="blog.html">Blog</a><a href="guides.html">Guides</a><a href="changelog.html">Changelog</a><a href="roadmap.html">Roadmap</a><a href="status.html">Status</a></div>
+ <div class="ft-col"><h4>Company</h4><a href="about.html">About</a><a href="customers.html">Customers</a><a href="partners.html">Partners</a><a href="contact.html">Contact</a></div>
+ <div class="ft-col"><h4>Developers</h4><a href="developers.html">Docs</a><a href="integrations.html">Integrations</a><a href="developers.html">API</a></div>
+ </div>
+ <div class="ft-watermark">SGEN</div>
+ <div class="ft-bottom"><span>© 2026 SGEN. The managed website platform.</span><div class="links"><a href="legal-privacy.html">Privacy</a><a href="legal-terms.html">Terms</a><a href="legal-dpa.html">DPA</a><a href="legal-cookie-policy.html">Cookies</a><a href="accessibility.html">Accessibility</a></div></div>
+</footer>
+
+<!-- ===== MOBILE DRAWER ===== -->
+<div class="drawer-overlay" data-drawer-close></div>
+<aside class="site-drawer" id="drawer">
+ <div class="dr-top"><div class="b" style="font-weight:900;font-size:20px;letter-spacing:-.04em;color:#f4f2ee">SGEN<span style="color:var(--sg-red)">.</span></div><button class="dr-close" data-drawer-close aria-label="Close">×</button></div>
+ <div class="dr-body">
+ <details class="dr-group"><summary>Product <span class="pm">+</span></summary><div class="dr-children">
+ <a href="page-builder.html"><span class="ct">SG Builder</span><span class="cs">Visual builder, SSR output</span></a>
+ <a href="templates.html"><span class="ct">Templates</span><span class="cs">Start from a real design</span></a>
+ <a href="forms.html"><span class="ct">Forms</span><span class="cs">Native lead capture</span></a>
+ <a href="attributions.html"><span class="ct">Attribution</span><span class="cs">Multi-touch + call tracking</span></a>
+ <a href="ecommerce.html"><span class="ct">Ecommerce</span><span class="cs">Storefront, checkout</span></a>
+ <a href="overview-modules.html"><span class="ct">All 22 modules →</span><span class="cs">The whole platform</span></a>
+ </div></details>
+ <details class="dr-group"><summary>Why SGEN <span class="pm">+</span></summary><div class="dr-children">
+ <a href="why-sgen-no-plugins.html"><span class="ct">No plugins</span><span class="cs">91% of WP vulns were plugins</span></a>
+ <a href="why-sgen-speed.html"><span class="ct">Speed</span><span class="cs">Server-side rendered</span></a>
+ </div></details>
+ <details class="dr-group"><summary>Solutions <span class="pm">+</span></summary><div class="dr-children">
+ <a href="solutions-agencies.html"><span class="ct">Agencies</span><span class="cs">Multi-site, white-label</span></a>
+ <a href="solutions-small-business.html"><span class="ct">Small business</span><span class="cs">One fast site</span></a>
+ <a href="solutions-restaurants.html"><span class="ct">Restaurants</span><span class="cs">Menus, events, ordering</span></a>
+ <a href="solutions-freelancers.html"><span class="ct">Freelancers</span><span class="cs">Build &amp; hand off</span></a>
+ </div></details>
+ <details class="dr-group"><summary>Compare <span class="pm">+</span></summary><div class="dr-children">
+ <a href="compare-vs-wordpress.html"><span class="ct">vs WordPress</span><span class="cs">The refugee path</span></a>
+ <a href="compare-vs-elementor.html"><span class="ct">vs Elementor</span><span class="cs">Builder head-to-head</span></a>
+ <a href="compare-vs-wp-engine.html"><span class="ct">All comparisons →</span><span class="cs">Wix · Squarespace · GoDaddy</span></a>
+ </div></details>
+ <details class="dr-group"><summary>Customers <span class="pm">+</span></summary><div class="dr-children">
+ <a href="customers.html"><span class="ct">Customer stories</span><span class="cs">Metric-first cases</span></a>
+ <a href="showcase.html"><span class="ct">Showcase</span><span class="cs">Gallery of built sites</span></a>
+ <a href="customers.html"><span class="ct">Case studies</span><span class="cs">The full teardown</span></a>
+ </div></details>
+ <a class="dr-flat" href="pricing.html">Pricing</a>
+ </div>
+</aside>
+
+<!-- ===== MOBILE STICKY BAR ===== -->
+<div class="mobile-bar surface-dark">
+ <button class="btn btn-primary">Start Building <span class="arr">→</span></button>
+ <a class="btn btn-secondary" href="pricing.html">Pricing</a>
+</div>
+
+<script>
+ const hdr = document.getElementById('hdr');
+ addEventListener('scroll', () => hdr.classList.toggle('is-stuck', scrollY > 10), {passive:true});
+ const drawer = document.getElementById('drawer'), overlay = document.querySelector('.drawer-overlay');
+ document.querySelectorAll('[data-drawer-open]').forEach(b => b.addEventListener('click', () => { drawer.classList.add('open'); overlay.classList.add('open'); }));
+ document.querySelectorAll('[data-drawer-close]').forEach(b => b.addEventListener('click', () => { drawer.classList.remove('open'); overlay.classList.remove('open'); }));
+ // scroll-reveal
+ const io = new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}})},{threshold:.12,rootMargin:'0px 0px -6% 0px'});
+ document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+ // mobile sticky bar, appear after hero, hide when footer CTA in view
+ const mbar = document.querySelector('.mobile-bar');
+ const heroSec = document.querySelector('main section');
+ const fcta = document.querySelector('.footer-cta');
+ function updBar(){ if(!mbar||!fcta) return; const past = scrollY > (heroSec ? heroSec.offsetTop + heroSec.offsetHeight - 140 : 480); const footerNear = fcta.getBoundingClientRect().top < innerHeight * 0.94; mbar.classList.toggle('show', past && !footerNear); }
+ addEventListener('scroll', updBar, {passive:true}); addEventListener('resize', updBar); updBar();
+ // billing toggle (pricing + any page with [data-billing])
+ document.querySelectorAll('[data-billing]').forEach(t=>t.addEventListener('click',()=>{ const mode=t.dataset.billing; document.querySelectorAll('[data-billing]').forEach(b=>b.classList.toggle('on',b===t)); document.querySelectorAll('[data-annual]').forEach(el=>{ el.textContent = mode==='annual'? el.dataset.annual : el.dataset.monthly; }); document.querySelectorAll('.billed').forEach(el=>{ if(el.dataset.annual) el.textContent = mode==='annual'? el.dataset.annual : el.dataset.monthly; }); }));
+</script>
+</body>
+</html>
