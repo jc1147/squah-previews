@@ -6,6 +6,10 @@
    Desktop top bar unchanged. Alongside sgen-tokens.css + sgen-structural.css.
    ============================================================================ */
 
+/* ===== SKIP LINK (a11y: bypass nav, visible on keyboard focus) ===== */
+.skip { position:fixed; top:-60px; left:12px; z-index:200; background:var(--sg-red); color:#fff; padding:12px 18px; border-radius:0 0 12px 12px; font-weight:700; font-size:14px; text-decoration:none; box-shadow:0 10px 30px rgba(0,0,0,.5); transition:top .2s var(--sg-ease); }
+.skip:focus { top:0; outline:2px solid #fff; outline-offset:2px; }
+
 /* ===== TOP UTILITY BAR (desktop = unchanged) ===== */
 .topbar { background:#080706; border-bottom:1px solid rgba(255,255,255,.07); }
 .topbar .in { max-width:var(--sg-maxw); margin-inline:auto; display:flex; align-items:center; justify-content:space-between; gap:18px;
@@ -74,6 +78,9 @@
 .mm-feat .ttl { position:relative; font-weight:800; font-size:22px; color:#fff; margin:8px 0 8px; letter-spacing:-.02em; line-height:1.08; }
 .mm-feat .sub { position:relative; font-size:13.5px; color:rgba(255,255,255,.66); line-height:1.5; }
 .mm-feat .go { position:relative; margin-top:18px; display:inline-flex; align-items:center; gap:7px; font-size:13.5px; font-weight:700; color:#fff; }
+a.mm-feat { text-decoration:none; transition:border-color .2s var(--sg-ease), transform .2s var(--sg-ease), box-shadow .2s var(--sg-ease); }
+a.mm-feat:hover { border-color:rgba(213,21,34,.5); transform:translateY(-3px); box-shadow:0 24px 48px -20px rgba(0,0,0,.7), 0 0 30px -10px rgba(213,21,34,.4); }
+a.mm-feat:hover .go { gap:11px; }
 
 .site-actions { display:flex; align-items:center; gap:16px; }
 .site-actions .login { color:#e9e6e0; font-size:15px; font-weight:600; text-decoration:none; transition:color .16s; }
@@ -113,14 +120,14 @@
    when the footer CTA enters view (never two CTAs at once). */
 .mobile-bar { display:none; }
 @media (max-width:980px){
-  .mobile-bar { display:flex; position:fixed; left:14px; right:14px; bottom:calc(14px + env(safe-area-inset-bottom,0px)); z-index:60; gap:10px; padding:10px; border-radius:20px;
-    background:rgba(18,16,18,.58); -webkit-backdrop-filter:blur(24px) saturate(160%); backdrop-filter:blur(24px) saturate(160%);
-    border:1px solid rgba(255,255,255,.13); box-shadow:0 26px 56px -16px rgba(0,0,0,.74), 0 0 32px -12px rgba(213,21,34,.4), inset 0 1px 0 rgba(255,255,255,.1);
+  .mobile-bar { display:flex; align-items:center; position:fixed; left:12px; right:12px; bottom:calc(12px + env(safe-area-inset-bottom,0px)); z-index:60; gap:8px; padding:7px; border-radius:16px;
+    background:rgba(18,16,18,.62); -webkit-backdrop-filter:blur(24px) saturate(160%); backdrop-filter:blur(24px) saturate(160%);
+    border:1px solid rgba(255,255,255,.13); box-shadow:0 22px 48px -18px rgba(0,0,0,.74), 0 0 26px -14px rgba(213,21,34,.38), inset 0 1px 0 rgba(255,255,255,.1);
     transform:translateY(170%); opacity:0; pointer-events:none; transition:transform .36s var(--sg-ease), opacity .28s; }
   .mobile-bar.show { transform:translateY(0); opacity:1; pointer-events:auto; }
 }
-.mobile-bar .btn { flex:1; justify-content:center; }
-.mobile-bar .btn-secondary { flex:.7; }
+.mobile-bar .btn { flex:1; justify-content:center; padding:12px 14px; font-size:14px; border-radius:10px; }
+.mobile-bar .btn-secondary { flex:.62; }
 
 /* ===== FOOTER — FLOATING GLASS PANEL (inset + rounded, all breakpoints) ===== */
 .site-footer { position:relative; margin:clamp(14px,2.4vw,32px); border-radius:clamp(22px,2.6vw,34px); overflow:clip; isolation:isolate;
