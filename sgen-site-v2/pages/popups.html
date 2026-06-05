@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Native Popup Builder, Hashcode Triggers and SG Builder Authoring | SGEN</title>
+<meta name="description" content="SGEN Popups builds on-site modals in a full WYSIWYG editor or the SG Builder visual page builder, gives every popup a copy-paste hashcode you drop on any link to fire it, and manages the whole draft-to-publish lifecycle. One of 23 native modules, on every plan.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../_design/sgen-tokens.css?v=ec73c2e3">
+<link rel="stylesheet" href="../_design/sgen-structural.css?v=a102bd3a">
+<link rel="stylesheet" href="../_design/sgen-chrome.css?v=5245d0e3">
+<link rel="stylesheet" href="popups.css?v=d362772e">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- ===== TOP UTILITY BAR ===== -->
+<div class="topbar"><div class="in">
+ <span class="msg"><span class="spark">◆</span> <b>One platform, priced by sites.</b><span class="long"> Every module included.</span></span>
+ <span class="util"><a class="hide-sm" href="developers.html">Docs</a><a class="hide-sm" href="changelog.html">Changelog</a><span class="status"><span class="d"></span> All systems operational</span></span>
+</div></div>
+
+<!-- ===== HEADER (mega-menu) ===== -->
+<header class="site-header" id="hdr"><div class="in">
+ <a class="brand" href="../pages/home.html">SGEN<span class="dot">.</span></a>
+ <nav class="site-nav">
+ <div class="nav-item">
+ <button class="nav-trigger" aria-haspopup="true" aria-expanded="false" aria-controls="mm-product">Product <span class="chev"></span></button>
+ <div class="megamenu mm-wide" id="mm-product"><div class="mm-inner">
+ <span class="mm-watermark" aria-hidden="true">PRODUCT</span>
+ <div class="mm-cols">
+ <div class="mm-col"><div class="mm-head">Build &amp; Design</div>
+ <a class="mm-link" href="page-builder.html"><span class="t"><span class="gl"></span>SG Builder</span><span class="s">Design pages visually</span></a>
+ <a class="mm-link" href="templates.html"><span class="t"><span class="gl"></span>Templates</span><span class="s">Start from a real design</span></a>
+ <a class="mm-link" href="theme-editor.html"><span class="t"><span class="gl"></span>Theme Editor</span><span class="s">Colors, fonts, and presets</span></a>
+ <a class="mm-link" href="media-library.html"><span class="t"><span class="gl"></span>Media Library</span><span class="s">Assets, optimized and fast</span></a>
+ <a class="mm-link" href="menus.html"><span class="t"><span class="gl"></span>Menus</span><span class="s">Build navigation visually</span></a>
+ <a class="mm-link" href="pages-and-posts.html"><span class="t"><span class="gl"></span>Pages &amp; Posts</span><span class="s">Every content type</span></a>
+ <a class="mm-link" href="custom-objects.html"><span class="t"><span class="gl"></span>Custom Objects</span><span class="s">Native content modeling</span></a>
+ </div>
+ <div class="mm-col"><div class="mm-head">Sell</div>
+ <a class="mm-link" href="ecommerce.html"><span class="t"><span class="gl"></span>Ecommerce</span><span class="s">Catalog, checkout, tax</span></a>
+ <a class="mm-link" href="discussions.html"><span class="t"><span class="gl"></span>Discussions &amp; Reviews</span><span class="s">Reviews and comments</span></a>
+ <a class="mm-link" href="events.html"><span class="t"><span class="gl"></span>Events</span><span class="s">Events and a calendar</span></a>
+ </div>
+ <div class="mm-col"><div class="mm-head">Grow &amp; Convert</div>
+ <a class="mm-link" href="forms.html"><span class="t"><span class="gl"></span>Forms</span><span class="s">Lead capture, native</span></a>
+ <a class="mm-link" href="popups.html"><span class="t"><span class="gl"></span>Popups</span><span class="s">On-demand and autoload</span></a>
+ <a class="mm-link" href="seo-optimization.html"><span class="t"><span class="gl"></span>SEO</span><span class="s">Titles, meta, and robots</span></a>
+ <a class="mm-link" href="attributions.html"><span class="t"><span class="gl"></span>Attribution</span><span class="s">The source of every lead</span></a>
+ <a class="mm-link" href="analytics.html"><span class="t"><span class="gl"></span>Analytics</span><span class="s">Dashboard plus raw events</span></a>
+ <a class="mm-link" href="integrations.html"><span class="t"><span class="gl"></span>Integrations</span><span class="s">Stripe, Google, and more</span></a>
+ </div>
+ <div class="mm-col"><div class="mm-head">Operate</div>
+ <a class="mm-link" href="site-manager.html"><span class="t"><span class="gl"></span>Site Manager</span><span class="s">One cockpit per site</span></a>
+ <a class="mm-link" href="backups.html"><span class="t"><span class="gl"></span>Backups</span><span class="s">Backups and save-points</span></a>
+ <a class="mm-link" href="stage-live.html"><span class="t"><span class="gl"></span>Stage &amp; Live</span><span class="s">Restore and roll back</span></a>
+ <a class="mm-link" href="advanced-settings.html"><span class="t"><span class="gl"></span>Advanced Settings</span><span class="s">Email, import, export</span></a>
+ <a class="mm-link" href="users-and-roles.html"><span class="t"><span class="gl"></span>Users &amp; Roles</span><span class="s">Directory plus audit log</span></a>
+ <a class="mm-link" href="redirects.html"><span class="t"><span class="gl"></span>Redirects</span><span class="s">Native 301 and 302 rules</span></a>
+ </div>
+ <div class="mm-col"><div class="mm-head">Secure &amp; Comply</div>
+ <a class="mm-link" href="security.html"><span class="t"><span class="gl"></span>Security</span><span class="s">Platform WAF by default</span></a>
+ <a class="mm-link" href="security.html"><span class="t"><span class="gl"></span>Age Verification</span><span class="s">Age gate for regulated</span></a>
+ <a class="mm-link" href="legal-cookie-policy.html"><span class="t"><span class="gl"></span>Consent &amp; Tracking</span><span class="s">Consent banner plus log</span></a>
+ <a class="mm-link" href="trust.html"><span class="t"><span class="gl"></span>Trust</span><span class="s">WAF, SSL, CDN, logging</span></a>
+ <a class="mm-link" href="accessibility.html"><span class="t"><span class="gl"></span>Accessibility</span><span class="s">Conformance status</span></a>
+ </div>
+ </div>
+ <a class="mm-feat" href="page-builder.html"><span class="badge">Flagship</span><span class="k">SG Builder</span><span class="ttl">Build it visually. Ship it server-rendered.</span><span class="sub">A true visual builder with 48 native components and a real product underneath.</span><span class="go">Explore the builder →</span></a>
+ <div class="mm-index"><a href="overview-modules.html"><b>All 23 modules</b> The whole platform, in the box</a><a href="overview-core.html"><b>SG-Core</b> The native content engine</a><a href="overview-dashboard.html"><b>SG-Dashboard</b> The operating layer, one hub</a></div>
+ </div></div>
+ </div>
+ <div class="nav-item">
+ <button class="nav-trigger" aria-haspopup="true" aria-expanded="false" aria-controls="mm-why">Why SGEN <span class="chev"></span></button>
+ <div class="megamenu" id="mm-why"><div class="mm-inner">
+ <span class="mm-watermark" aria-hidden="true">WHY</span>
+ <div class="mm-col"><div class="mm-head">The case</div>
+ <a class="mm-link" href="why-sgen-no-plugins.html"><span class="t"><span class="gl"></span>No plugins</span><span class="s">Native modules, nothing to license or patch</span></a>
+ <a class="mm-link" href="why-sgen-speed.html"><span class="t"><span class="gl"></span>Speed</span><span class="s">Server-side rendered, fast by default</span></a>
+ <a class="mm-link" href="why-sgen.html"><span class="t"><span class="gl"></span>Why SGEN, in full</span><span class="s">The whole case, one page</span></a>
+ </div>
+ <div class="mm-col"><div class="mm-head">The model</div>
+ <a class="mm-link" href="pricing.html"><span class="t"><span class="gl"></span>One stack</span><span class="s">No plugin tax, no suite tax</span></a>
+ <a class="mm-link" href="pricing.html"><span class="t"><span class="gl"></span>Priced by sites</span><span class="s">Not by features</span></a>
+ </div>
+ <a class="mm-feat" href="why-sgen.html"><span class="badge">The wedge</span><span class="k">Native, not plugins</span><span class="ttl">One stack. Nothing to license or patch.</span><span class="sub">The whole platform is the box, hosting, builder, SEO, attribution, security.</span><span class="go">See why SGEN →</span></a>
+ </div></div>
+ </div>
+ <div class="nav-item">
+ <button class="nav-trigger" aria-haspopup="true" aria-expanded="false" aria-controls="mm-solutions">Solutions <span class="chev"></span></button>
+ <div class="megamenu" id="mm-solutions"><div class="mm-inner">
+ <span class="mm-watermark" aria-hidden="true">SOLUTIONS</span>
+ <div class="mm-col"><div class="mm-head">By team</div>
+ <a class="mm-link" href="solutions-agencies.html"><span class="t"><span class="gl"></span>Agencies</span><span class="s">Run every client site from one dashboard</span></a>
+ <a class="mm-link" href="solutions-freelancers.html"><span class="t"><span class="gl"></span>Freelancers</span><span class="s">Build on Sandbox, hand off</span></a>
+ </div>
+ <div class="mm-col"><div class="mm-head">By business</div>
+ <a class="mm-link" href="solutions-small-business.html"><span class="t"><span class="gl"></span>Small business</span><span class="s">One fast site, done right</span></a>
+ <a class="mm-link" href="solutions-restaurants.html"><span class="t"><span class="gl"></span>Restaurants</span><span class="s">Menus, events, online ordering</span></a>
+ <a class="mm-link" href="solutions-multi-location.html"><span class="t"><span class="gl"></span>Multi-location</span><span class="s">One dashboard, many sites</span></a>
+ <a class="mm-link" href="solutions-healthcare.html"><span class="t"><span class="gl"></span>Healthcare</span><span class="s">HIPAA compliant for healthcare</span></a>
+ </div>
+ <a class="mm-feat" href="solutions-agencies.html"><span class="badge">For teams</span><span class="k">Agencies</span><span class="ttl">Run an unlimited portfolio from one dashboard.</span><span class="sub">Multi-site portfolio, fixed roles, audit log, Enterprise from $497/mo.</span><span class="go">See the agency plan →</span></a>
+ </div></div>
+ </div>
+ <div class="nav-item">
+ <button class="nav-trigger" aria-haspopup="true" aria-expanded="false" aria-controls="mm-compare">Compare <span class="chev"></span></button>
+ <div class="megamenu" id="mm-compare"><div class="mm-inner">
+ <span class="mm-watermark" aria-hidden="true">VS</span>
+ <div class="mm-col"><div class="mm-head">Deep dives</div>
+ <a class="mm-link" href="compare-vs-wordpress.html"><span class="t"><span class="gl"></span>vs WordPress</span><span class="s">The refugee path</span></a>
+ <a class="mm-link" href="compare-vs-elementor.html"><span class="t"><span class="gl"></span>vs Elementor</span><span class="s">Builder head-to-head</span></a>
+ <a class="mm-link" href="compare-vs-wp-engine.html"><span class="t"><span class="gl"></span>vs WP Engine</span><span class="s">Managed hosting</span></a>
+ </div>
+ <div class="mm-col"><div class="mm-head">Quick looks</div>
+ <a class="mm-link" href="compare-vs-wix.html"><span class="t"><span class="gl"></span>vs Wix</span><span class="s">Own a real product</span></a>
+ <a class="mm-link" href="compare-vs-squarespace.html"><span class="t"><span class="gl"></span>vs Squarespace</span><span class="s">Beyond templates</span></a>
+ <a class="mm-link" href="compare-vs-godaddy.html"><span class="t"><span class="gl"></span>vs GoDaddy</span><span class="s">Past a brochure site</span></a>
+ <a class="mm-link" href="compare.html"><span class="t"><span class="gl"></span>All comparisons →</span><span class="s">Every head-to-head in one place</span></a>
+ </div>
+ <a class="mm-feat" href="migrate.html"><span class="badge">Switching?</span><span class="k">/migrate</span><span class="ttl">Move off WordPress, the honest way.</span><span class="sub">A move is a rebuild, and that's the upgrade. White-glove or DIY.</span><span class="go">See how migration works →</span></a>
+ </div></div>
+ </div>
+ <div class="nav-item">
+ <button class="nav-trigger" aria-haspopup="true" aria-expanded="false" aria-controls="mm-customers">Customers <span class="chev"></span></button>
+ <div class="megamenu" id="mm-customers"><div class="mm-inner">
+ <span class="mm-watermark" aria-hidden="true">PROOF</span>
+ <div class="mm-col"><div class="mm-head">Explore</div>
+ <a class="mm-link" href="customers.html"><span class="t"><span class="gl"></span>Customer stories</span><span class="s">Metric-first case grid</span></a>
+ <a class="mm-link" href="showcase.html"><span class="t"><span class="gl"></span>Showcase</span><span class="s">Gallery of sites built on SGEN</span></a>
+ <a class="mm-link" href="customers.html"><span class="t"><span class="gl"></span>Case studies</span><span class="s">The full teardown, deep</span></a>
+ </div>
+ <div class="mm-col"><div class="mm-head">Built on SGEN</div>
+ <a class="mm-link" href="why-sgen-no-plugins.html"><span class="t"><span class="gl"></span>Zero plugins</span><span class="s">Under every site in the reel</span></a>
+ <a class="mm-link" href="pricing.html"><span class="t"><span class="gl"></span>One stack</span><span class="s">Forms, store, SEO, all native</span></a>
+ </div>
+ <a class="mm-feat" href="customers-fernwood.html"><span class="badge">Case study</span><span class="k">Fernwood Digital</span><span class="ttl">23 client sites, one stack, one login.</span><span class="sub">A studio that retired the plugin-maintenance tax.</span><span class="go">Read the story →</span></a>
+ </div></div>
+ </div>
+ <a class="nav-trigger" href="pricing.html">Pricing</a>
+ </nav>
+ <div class="site-actions">
+ <a class="login" href="https://app.sgen.com/login">Log in</a>
+ <a class="btn btn-primary" href="pricing.html">Start Building <span class="arr">→</span></a>
+ <button class="hamburger" data-drawer-open aria-label="Menu"><span></span><span></span><span></span></button>
+ </div>
+</div></header>
+
+<main id="main">
+<!-- 1 · HERO · the two-pane Create Popup builder -->
+<section class="sec p-hero surface-dark has-atmos">
+ <div class="wrap">
+ <div class="lede reveal">
+ <div class="eyebrow">Native module &middot; Popups</div>
+ <h1>Build the popup. Drop one hashcode. <span class="grad">Fire it from any link.</span></h1>
+ <p class="lead">SGEN Popups builds an on-site modal in a full content editor, or in the same SG Builder visual page builder you use for your pages, then hands you a copy-paste hashcode to trigger it from any link or button on the site. Included on every plan, with no per-popup license and no third-party widget.</p>
+ <p class="beat">Author the content, set the title tag, width, and close behavior in a Configuration rail, then publish. A published popup appears on the public site immediately, with no cache step. Manage every popup from one list with draft, published, and trash states, search, and bulk actions.</p>
+ <div class="cta flex">
+ <a class="btn btn-primary" href="pricing.html">Start Building <span class="arr">&rarr;</span></a>
+ <a class="btn btn-secondary" href="pricing.html">Compare Plans</a>
+ </div>
+ </div>
+
+ <div class="stage reveal" data-d="1">
+ <div class="adwin" aria-hidden="true">
+ <div class="adbar"><span class="ic"></span><span class="ti">Create Popup<small>Create and configure popup content</small></span><span class="act">Create a Popup</span></div>
+ <div class="pbld">
+ <div class="edit">
+ <span class="seclab">My Popup</span>
+ <div class="ttl">Spring Sale - 20% off this week</div>
+ <div class="wysi">
+ <div class="wtool">
+ <i class="b">B</i><i class="it">I</i><i class="u">U</i><i class="s">S</i><i class="col">A</i><span class="fmt">Default &#9662;</span><i>&#8220;</i><i>&#8226;</i><i>1.</i><i>&#8677;</i><i>&#8676;</i><i>L</i><i>C</i><i>R</i><i>&#128279;</i><i>&#9634;</i>
+ </div>
+ <div class="wtool r2">
+ <i>&lt;/&gt;</i><i>&#9636;</i><i>&#8213;</i><i>&#8634;</i><i>&#8635;</i><span class="fmt">View Code</span>
+ </div>
+ <div class="wbody"><strong>Spring is here.</strong> Take 20% off every order over $50 through Sunday. Use the code at checkout, no minimums on bundles. New arrivals included.</div>
+ <div class="wfoot"><span>148 chars</span><span class="ptag">P</span></div>
+ </div>
+ </div>
+ <div class="prail">
+ <div class="panel">
+ <div class="pt">Editor</div>
+ <div class="row"><span class="l">Editor</span><div class="ipt">Text Editor<span class="cv">&#9662;</span></div></div>
+ <div class="row"><span class="l">Status</span><div class="ipt">Publish<span class="cv">&#9662;</span></div></div>
+ </div>
+ <div class="panel">
+ <div class="pt">Configuration</div>
+ <div class="row"><span class="l">Popup Title Tag</span><div class="ipt">H4<span class="cv">&#9662;</span></div></div>
+ <div class="row"><span class="l">Popup Width (px)</span><div class="ipt">480<span class="cv">px</span></div></div>
+ <div class="chk on"><span class="bx"></span>Enable autoload popup</div>
+ <div class="chk"><span class="bx"></span>Disable Close Button</div>
+ <div class="chk"><span class="bx"></span>Disable Closing on Overlay</div>
+ </div>
+ <div class="mk">Create a Popup</div>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+</section>
+
+<!-- 2 · WHAT POPUPS DOES · the native lifecycle / PAIN reframed positive -->
+<section class="sec sec--warm">
+ <div class="wrap">
+ <div class="readw reveal">
+ <div class="eyebrow">More than a newsletter widget</div>
+ <h2 class="h2">A real content tool for on-site modals, <span class="grad">not a single email toggle.</span></h2>
+ <p class="lead" style="margin-top:16px">Most popup plugins give you one rigid template and a subscribe field. SGEN Popups is a managed content type: a full editor or the visual page builder for the body, a Configuration rail for how it shows, a hashcode to fire it from anywhere, and a draft-to-publish list with author and created metadata. No bolt-on plugin, no per-popup license.</p>
+ </div>
+ <div class="grid g-3" style="margin-top:42px">
+ <div class="card reveal"><div class="ico"><span class="m"></span></div><h3 class="h3">Two ways to author</h3><p style="margin-top:10px">Write the body in a full WYSIWYG editor with bold, lists, alignment, links, images, tables, and a source-code view, or switch the Editor source to SG Builder and design the popup with the same drag-and-drop builder as your pages.</p></div>
+ <div class="card reveal" data-d="1"><div class="ico"><span class="m"></span></div><h3 class="h3">A hashcode for every popup</h3><p style="margin-top:10px">Each popup gets a copy-paste <code>#sgp_&lt;ID&gt;</code> hashcode. Drop it as the href on any link or button anywhere on the site to open that popup on click, alongside the optional autoload.</p></div>
+ <div class="card reveal" data-d="2"><div class="ico"><span class="m"></span></div><h3 class="h3">Configuration rail</h3><p style="margin-top:10px">Set the title tag (H1 through H6 or paragraph), an explicit width in pixels, extra CSS classes, and toggles for the close button, overlay-close, stacking, popup title, and inline versus AJAX content.</p></div>
+ <div class="card reveal"><div class="ico"><span class="m"></span></div><h3 class="h3">Per-session autoload</h3><p style="margin-top:10px">Turn on autoload and set a per-session frequency: 0 shows it on every page, or cap it to the first N times a visitor sees it in a session. No add-on, configured on the popup itself.</p></div>
+ <div class="card reveal" data-d="1"><div class="ico"><span class="m"></span></div><h3 class="h3">Draft-to-publish workflow</h3><p style="margin-top:10px">Status tabs for All, Published, Draft, and Trash with live counts, search by title or date, bulk publish, draft, trash, and a Trash-only delete-permanently. Soft-delete keeps a popup recoverable.</p></div>
+ <div class="card reveal" data-d="2"><div class="ico"><span class="m"></span></div><h3 class="h3">Instant on the live site</h3><p style="margin-top:10px">Publish and the popup appears on the public site immediately, with no cache or build step. Trash it and it stops showing. The list always reflects what visitors can actually see.</p></div>
+ </div>
+ </div>
+</section>
+
+<!-- 3 · THE LIST · All Popups management surface (status tabs + 4-col table) -->
+<section class="sec">
+ <div class="wrap">
+ <div class="readw reveal">
+ <div class="eyebrow">Managed content, not a one-off</div>
+ <h2 class="h2">Every popup in one list, <span class="grad">with a real draft-to-publish lifecycle.</span></h2>
+ <p class="lead" style="margin-top:16px">The All Popups screen is a full management table: status tabs with live counts, a search box, a bulk-action toolbar, and a row per popup carrying its title, its hashcode, the author, and when it was created. Trash is a soft-delete you can restore, and delete-permanently lives on the Trash tab.</p>
+ </div>
+ <div class="adwin light reveal" data-d="1" style="margin-top:40px" aria-hidden="true">
+ <div class="adbar"><span class="ic"></span><span class="ti">Popups<small>Manage popup content and visibility</small></span><span class="act">+ Add New</span></div>
+ <div class="ppills">
+ <span class="ppill on">All Popups <b>5</b></span><span class="ppill">Published <b>3</b></span><span class="ppill">Draft <b>2</b></span><span class="ppill">Trash <b>0</b></span>
+ </div>
+ <div class="pctrl"><span class="sel">Action For Selected &#9662;</span><span class="ap">Apply</span><span class="srch">Search popups...</span></div>
+ <div class="ptab">
+ <div class="th"><span>Title</span><span>Hashcode</span><span>Author</span><span>Created At</span></div>
+ <div class="tr"><span class="nm">Spring Sale - 20% off<span class="badge pub">Published</span></span><span class="hc">#sgp_1</span><span class="au">site@yourbrand.com</span><span class="dt">May 12, 2026</span></div>
+ <div class="tr"><span class="nm">Newsletter signup<span class="badge pub">Published</span></span><span class="hc">#sgp_2</span><span class="au">site@yourbrand.com</span><span class="dt">Apr 28, 2026</span></div>
+ <div class="tr"><span class="nm">Free shipping over $50<span class="badge pub">Published</span></span><span class="hc">#sgp_3</span><span class="au">site@yourbrand.com</span><span class="dt">Apr 09, 2026</span></div>
+ <div class="tr"><span class="nm">Launch teaser<span class="badge dr">Draft</span></span><span class="hc">#sgp_4</span><span class="au">site@yourbrand.com</span><span class="dt">May 03, 2026</span></div>
+ </div>
+ </div>
+ <div class="plife reveal">
+ <span class="step"><span class="dot"></span>Draft</span><span class="arr-s">&rarr;</span>
+ <span class="step"><span class="dot"></span>Published</span><span class="arr-s">&rarr;</span>
+ <span class="step"><span class="dot"></span>Trash</span><span class="arr-s">&rarr;</span>
+ <span class="step"><span class="dot"></span>Restore</span>
+ </div>
+ </div>
+</section>
+
+<!-- 4 · CAPABILITY BREAKDOWN · the hashcode trigger model -->
+<section class="sec surface-dark has-atmos" style="background:var(--sg-bg-2)">
+ <div class="wrap">
+ <div class="readw reveal">
+ <div class="eyebrow">Trigger from anywhere</div>
+ <h2 class="h2">One hashcode you can drop <span class="grad">on any link or button site-wide.</span></h2>
+ <p class="lead" style="margin-top:16px">Every popup carries its own hashcode in the list and on its edit screen. Paste it as the href on a navigation link, a hero button, or an inline text link, and that click opens the popup. Pair it with autoload to also open on page load, capped per session.</p>
+ </div>
+ <div class="adwin reveal" data-d="1" style="margin-top:40px" aria-hidden="true">
+ <div class="adbar"><span class="ic"></span><span class="ti">Update Popup<small>Spring Sale - 20% off this week</small></span></div>
+ <div class="phash">
+ <div class="hbar">
+ <span class="lk">Copy this hashcode as your href or link</span>
+ <span class="code">href="#sgp_1"</span>
+ <span class="copy">Copy</span>
+ </div>
+ <div class="use">
+ <div class="uc">
+ <div class="ut">On a button</div>
+ <div class="snip"><span class="tag">&lt;a</span> <span class="at">class</span>=&quot;btn&quot; <span class="at">href</span>=&quot;<b>#sgp_1</b>&quot;<span class="tag">&gt;</span>Get the deal<span class="tag">&lt;/a&gt;</span></div>
+ <div class="demo"><span class="lnk">Get the deal</span></div>
+ </div>
+ <div class="uc">
+ <div class="ut">On a text link</div>
+ <div class="snip"><span class="tag">&lt;a</span> <span class="at">href</span>=&quot;<b>#sgp_1</b>&quot;<span class="tag">&gt;</span>See this week's offer<span class="tag">&lt;/a&gt;</span></div>
+ <div class="demo"><span class="lnk ghost">See this week's offer</span></div>
+ </div>
+ </div>
+ </div>
+ </div>
+ <p class="reveal" style="margin-top:22px;max-width:74ch;color:var(--sg-ink-soft)">The hashcode is the whole trigger model: a concrete anchor you control, not a hidden rule engine. Combine it with the autoload toggle and per-session frequency for popups that also open on load.</p>
+ </div>
+</section>
+
+<!-- 5 · EDITOR SOURCE · Text Editor / Template / SG Builder -->
+<section class="sec sec--alt">
+ <div class="wrap">
+ <div class="readw reveal">
+ <div class="eyebrow">Author it your way</div>
+ <h2 class="h2">A text editor, any appearance template, <span class="grad">or the full SG Builder.</span></h2>
+ <p class="lead" style="margin-top:16px">The Editor source on the right rail decides how you build the popup body. Stay in the WYSIWYG text editor, pick one of your appearance templates, or switch to SG Builder and design the popup with the same visual page builder you use for pages. The standout is SG Builder authoring: drag-and-drop a popup, not just type into a box.</p>
+ </div>
+ <div class="adwin light reveal" data-d="1" style="margin-top:40px" aria-hidden="true">
+ <div class="adbar"><span class="ic"></span><span class="ti">Editor source<small>Choose how this popup is built</small></span></div>
+ <div class="psrc">
+ <div class="stile on"><span class="pick">Selected</span><span class="si">T</span><span class="sn">Text Editor</span><span class="sd">The two-row WYSIWYG editor: formatting, lists, links, images, tables, and a source-code view.</span></div>
+ <div class="stile"><span class="si">A</span><span class="sn">Appearance Template</span><span class="sd">Render the popup from one of your saved appearance templates, so it inherits your site styling.</span></div>
+ <div class="stile"><span class="si">B</span><span class="sn">SG Builder</span><span class="sd">Design the popup visually with the same drag-and-drop builder as your pages.</span><span class="sgb">Edit with SG Builder</span></div>
+ </div>
+ </div>
+ <p class="label reveal" style="margin-top:16px">One module, three authoring paths. The popup body is as simple or as designed as the work needs.</p>
+ </div>
+</section>
+
+<!-- 6 · CONFIGURATION + PUBLIC RENDER · what shows, and what the visitor sees -->
+<section class="sec surface-dark has-atmos">
+ <div class="wrap">
+ <div class="feat reveal" data-d="1" style="border-top:0">
+ <div class="feat-copy">
+ <div class="eyebrow">Configured, then live</div>
+ <h3 class="h3" style="margin-bottom:12px">Set how it shows, publish, and it is on the public site.</h3>
+ <p>The Configuration rail controls the title tag, width in pixels, extra CSS classes, and the close, overlay-close, stacking, title, and inline-versus-AJAX toggles. Set the autoload frequency and publish. The popup renders as a centered modal over your page content for visitors immediately, with no build step. This panel shows a published popup as an anonymous visitor sees it, and the <a href="forms.html" style="color:var(--sg-red-hot)">Forms module</a> captures what they do next.</p>
+ </div>
+ <div class="prend" aria-hidden="true">
+ <div class="site">
+ <div class="nav"><span class="lg">Yourbrand</span><span>Shop</span><span>About</span><span>Contact</span></div>
+ <h4>Fresh batches, shipped weekly.</h4>
+ <p class="sub">Small-run goods made to order, delivered to your door across the country.</p>
+ </div>
+ <div class="scrim"></div>
+ <div class="modal">
+ <span class="x">&times;</span>
+ <div class="mbody">
+ <div class="kick">This week only</div>
+ <h5>Spring Sale - 20% off</h5>
+ <p>Take 20% off every order over $50 through Sunday. New arrivals included, no minimums on bundles.</p>
+ <span class="mc">Shop the sale</span>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+</section>
+
+<!-- 7 · REPLACES-PLUGINS WEDGE · one module vs the popup-plugin stack -->
+<section class="sec">
+ <div class="wrap">
+ <div class="feat reveal">
+ <div class="feat-copy">
+ <div class="eyebrow">The stack it replaces</div>
+ <h2 class="h2">One module. <span class="grad">The whole popup stack, in the box.</span></h2>
+ <p class="lead" style="margin-top:14px">SGEN Popups ships the editor, the visual builder integration, the hashcode trigger, the autoload control, and the draft-to-publish list as one native module. A typical site stitches this together from a licensed popup plugin and a separate page-builder add-on, each its own product with its own update and renewal. Two or three products there, one module here.</p>
+ <div class="replaces">
+ <span class="rep-chip">OptinMonster</span><span class="rep-chip">Popup Maker</span><span class="rep-chip">Elementor Popups</span>
+ </div>
+ </div>
+ <div class="adwin" style="align-self:start" aria-hidden="true">
+ <div class="adbar"><span class="ic"></span><span class="ti">Popups &middot; native</span></div>
+ <div class="fint">
+ <div class="dcard"><span class="pic" style="background:var(--sg-grad-red)">E</span><div class="di"><span class="dn">Popup editor</span><span class="dm">WYSIWYG, native</span></div><span class="pill on">in the box</span></div>
+ <div class="dcard"><span class="pic" style="background:var(--sg-grad-red)">B</span><div class="di"><span class="dn">Visual authoring</span><span class="dm">SG Builder source</span></div><span class="pill on">in the box</span></div>
+ <div class="dcard"><span class="pic" style="background:var(--sg-grad-red)">H</span><div class="di"><span class="dn">Hashcode triggers</span><span class="dm">fire from any link</span></div><span class="pill on">in the box</span></div>
+ <div class="dcard"><span class="pic" style="background:var(--sg-grad-red)">L</span><div class="di"><span class="dn">Lifecycle + autoload</span><span class="dm">draft to publish, per-session</span></div><span class="pill on">in the box</span></div>
+ </div>
+ </div>
+ </div>
+ </div>
+</section>
+
+<!-- 8 · CROSS-LINK · dark stat punctuation + sibling modules -->
+<section class="sec surface-dark has-atmos">
+ <div class="wrap">
+ <div class="sec-head readw reveal"><div class="eyebrow">The platform behind the module</div><h2 class="h2">In the box on every plan.</h2></div>
+ <div class="stat-band" style="margin-top:42px">
+ <div class="s reveal"><span class="stat">3</span><div class="cap">ways to author: text editor, template, SG Builder</div></div>
+ <div class="s reveal" data-d="1"><span class="stat">0<span class="z"> plugins</span></span><div class="cap">Popups is native, not bolted on</div></div>
+ <div class="s reveal" data-d="2"><span class="stat">23</span><div class="cap">native modules included on every plan</div></div>
+ </div>
+ <div class="readw reveal" style="margin-top:38px">
+ <p class="lead">Popups pairs naturally with the rest of the platform: capture the click with <a href="forms.html" style="color:var(--sg-red-hot)">Forms</a>, design the body in <a href="page-builder.html" style="color:var(--sg-red-hot)">SG Builder</a>, and see all 23 modules in the <a href="overview-modules.html" style="color:var(--sg-red-hot)">module overview</a>.</p>
+ </div>
+ </div>
+</section>
+
+<!-- 9 · FAQ -->
+<section class="sec">
+ <div class="wrap">
+ <div class="sec-head reveal"><div class="eyebrow">Questions</div><h2 class="h2">Frequently asked questions about Popups</h2></div>
+ <div class="faq-list" style="margin-top:30px">
+ <details class="reveal" open><summary>How do I trigger a popup from a link? <span class="pm">+</span></summary><div class="ans">Every popup has a hashcode shown in the list and on its edit screen, in the form <code>#sgp_&lt;ID&gt;</code>. Paste it as the <code>href</code> on any link or button anywhere on the site, and clicking that element opens the popup. You can also turn on autoload so the popup opens on page load.</div></details>
+ <details class="reveal"><summary>Can I design a popup with the page builder? <span class="pm">+</span></summary><div class="ans">Yes. The Editor source on the right rail offers a Text Editor, any of your appearance templates, or SG Builder. Choose SG Builder and an "Edit with SG Builder" button opens the same drag-and-drop visual builder you use for your pages, so the popup body is designed, not just typed.</div></details>
+ <details class="reveal"><summary>What can I configure on a popup? <span class="pm">+</span></summary><div class="ans">The Configuration rail sets the popup title tag (H1 through H6 or paragraph), an explicit width in pixels, extra CSS classes, and toggles to disable the close button, disable closing on the overlay, disable stacking multiple popups, hide the popup title, and switch between AJAX-fetched and inline content. Autoload adds a per-session frequency cap.</div></details>
+ <details class="reveal"><summary>Does autoload show the popup on every visit? <span class="pm">+</span></summary><div class="ans">You decide. Enable autoload and set a frequency: 0 shows it on every page, or set a number to show it only the first N times in a session. Without autoload, the popup opens only when a visitor clicks a link bound to its hashcode.</div></details>
+ <details class="reveal"><summary>Can I unpublish or remove a popup? <span class="pm">+</span></summary><div class="ans">Yes. Set its status to Draft to take it off the site, or move it to Trash as a soft-delete that you can restore later. Delete Permanently is available on the Trash tab. Note that restoring a trashed popup returns it as a Draft, so re-publish it when you want it live again.</div></details>
+ <details class="reveal"><summary>When does a published popup go live? <span class="pm">+</span></summary><div class="ans">Immediately. Publishing a popup makes it appear on the public site with no cache or build step, rendered as a centered modal over your page content. Moving it to Draft or Trash removes it from the live site just as quickly.</div></details>
+ </div>
+ </div>
+</section>
+
+<!-- 10 · CLOSING PRICING CTA -->
+<section class="sec surface-dark has-atmos p-close" style="background:var(--sg-bg-deep)">
+ <div class="wrap">
+ <div class="eyebrow reveal" style="justify-content:center">Included in your plan</div>
+ <h2 class="h2 reveal" data-d="1" style="margin-top:12px">A real popup editor, SG Builder authoring, hashcode triggers. <span class="grad">From $39/mo.</span></h2>
+ <p class="lead reveal" data-d="2" style="margin:16px auto 0;max-width:62ch">SGEN Popups is one of 23 native modules included in every plan. Build and test popups on the free Sandbox across unlimited staging sites before you pay anything.</p>
+ <div class="flex reveal" data-d="3" style="justify-content:center;margin-top:28px">
+ <a class="btn btn-primary" href="pricing.html">Try the Free Sandbox <span class="arr">&rarr;</span></a>
+ <a class="btn btn-secondary" href="forms.html">Pair with Forms</a>
+ </div>
+ <div class="related reveal" data-d="3">
+ <a href="page-builder.html">SG Builder, the visual page builder</a>
+ <a href="forms.html">Forms, capture the lead behind the click</a>
+ <a href="overview-modules.html">All 23 native modules</a>
+ </div>
+ <p class="fine reveal">From $39/mo, billed annually. $47 monthly. 2-week trial, cancel anytime. Every module included.</p>
+ </div>
+</section>
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer class="site-footer surface-dark">
+ <div class="footer-cta">
+ <div class="eyebrow">Start free</div>
+ <h2>Build the whole thing on the Sandbox. <span class="grad">$0, no card.</span></h2>
+ <p>Every module unlocked on unlimited sandbox sites. Go live by upgrading, priced by how many sites you run, not by features.</p>
+ <div class="ctas"><a class="btn btn-primary" href="pricing.html">Try the Free Sandbox <span class="arr">→</span></a><a class="btn btn-secondary" href="compare-vs-wordpress.html">Compare to WordPress</a></div>
+ </div>
+ <div class="ft-grid">
+ <div class="ft-brand"><div class="b">SGEN<span class="dot">.</span></div><p>One all-inclusive platform. Build the whole site, no plugins underneath, priced by how many sites you run.</p><span class="ft-status"><span class="d"></span> All systems operational</span></div>
+ <div class="ft-col"><div class="ft-head">Build &amp; Design</div><a href="page-builder.html">SG Builder</a><a href="templates.html">Templates</a><a href="theme-editor.html">Theme Editor</a><a href="media-library.html">Media Library</a><a href="pages-and-posts.html">Pages &amp; Posts</a><a href="custom-objects.html">Custom Objects</a><a href="overview-modules.html">All 23 modules</a><a href="overview-core.html">SG-Core</a></div>
+ <div class="ft-col"><div class="ft-head">Sell</div><a href="ecommerce.html">Ecommerce</a><a href="discussions.html">Discussions &amp; Reviews</a></div>
+ <div class="ft-col"><div class="ft-head">Grow &amp; Convert</div><a href="forms.html">Forms</a><a href="attributions.html">Attribution</a><a href="seo-optimization.html">SEO</a><a href="analytics.html">Analytics</a><a href="popups.html">Popups</a><a href="integrations.html">Integrations</a></div>
+ <div class="ft-col"><div class="ft-head">Operate &amp; Secure</div><a href="site-manager.html">Site Manager</a><a href="overview-dashboard.html">SG-Dashboard</a><a href="backups.html">Backups</a><a href="redirects.html">Redirects</a><a href="security.html">Security</a><a href="trust.html">Trust</a></div>
+ <div class="ft-col"><div class="ft-head">Why SGEN</div><a href="why-sgen.html">Why SGEN</a><a href="why-sgen-no-plugins.html">No plugins</a><a href="why-sgen-speed.html">Speed</a><a href="compare.html">Compare all</a><a href="migrate.html">Migrate</a></div>
+ <div class="ft-col"><div class="ft-head">Solutions</div><a href="solutions-agencies.html">Agencies</a><a href="solutions-small-business.html">Small business</a><a href="solutions-restaurants.html">Restaurants</a><a href="solutions-multi-location.html">Multi-location</a><a href="solutions-healthcare.html">Healthcare</a><a href="solutions-freelancers.html">Freelancers</a><a href="enterprise.html">Enterprise</a></div>
+ <div class="ft-col"><div class="ft-head">Customers</div><a href="customers.html">Customer stories</a><a href="showcase.html">Showcase</a><a href="customers-fernwood.html">Fernwood Digital</a><a href="customers-halloran-vint.html">Halloran &amp; Vint</a></div>
+ <div class="ft-col"><div class="ft-head">Resources</div><a href="resources.html">All resources</a><a href="blog.html">Blog</a><a href="guides.html">Guides</a><a href="changelog.html">Changelog</a><a href="roadmap.html">Roadmap</a><a href="status.html">Status</a></div>
+ <div class="ft-col"><div class="ft-head">Company</div><a href="about.html">About</a><a href="partners.html">Partners</a><a href="partners-apply.html">Become a partner</a><a href="partners-directory.html">Partner directory</a><a href="contact.html">Contact</a></div>
+ <div class="ft-col"><div class="ft-head">Developers</div><a href="developers.html">Docs</a><a href="developers.html">API</a><a href="integrations.html">Integrations</a></div>
+ </div>
+ <div class="ft-watermark">SGEN</div>
+ <div class="ft-bottom"><span>© 2026 SGEN. The managed website platform.</span><div class="links"><a href="legal-privacy.html">Privacy</a><a href="legal-terms.html">Terms</a><a href="legal-dpa.html">DPA</a><a href="legal-cookie-policy.html">Cookies</a><a href="accessibility.html">Accessibility</a></div></div>
+</footer>
+
+<!-- ===== MOBILE DRAWER ===== -->
+<div class="drawer-overlay" data-drawer-close></div>
+<aside class="site-drawer" id="drawer">
+ <div class="dr-top"><div class="b" style="font-weight:900;font-size:20px;letter-spacing:-.04em;color:#f4f2ee">SGEN<span style="color:var(--sg-red)">.</span></div><button class="dr-close" data-drawer-close aria-label="Close">×</button></div>
+ <div class="dr-body">
+ <details class="dr-group"><summary>Product <span class="pm" aria-hidden="true">+</span></summary><div class="dr-children">
+ <div class="dr-subhead">Build &amp; Design</div>
+ <a href="page-builder.html"><span class="ct">SG Builder</span><span class="cs">Visual builder, SSR output</span></a>
+ <a href="templates.html"><span class="ct">Templates</span><span class="cs">Start from a real design</span></a>
+ <a href="theme-editor.html"><span class="ct">Theme Editor</span><span class="cs">Global tokens, fonts, colors</span></a>
+ <a href="media-library.html"><span class="ct">Media Library</span><span class="cs">Native assets, optimized</span></a>
+ <a href="menus.html"><span class="ct">Menus</span><span class="cs">Build navigation visually</span></a>
+ <a href="pages-and-posts.html"><span class="ct">Pages &amp; Posts</span><span class="cs">Every content type</span></a>
+ <a href="custom-objects.html"><span class="ct">Custom Objects</span><span class="cs">Model content with native fields</span></a>
+ <div class="dr-subhead">Sell</div>
+ <a href="ecommerce.html"><span class="ct">Ecommerce</span><span class="cs">Storefront, checkout</span></a>
+ <a href="discussions.html"><span class="ct">Discussions &amp; Reviews</span><span class="cs">Reviews and comments, moderated</span></a>
+ <a href="events.html"><span class="ct">Events</span><span class="cs">Events and a public calendar</span></a>
+ <div class="dr-subhead">Grow &amp; Convert</div>
+ <a href="forms.html"><span class="ct">Forms</span><span class="cs">Native lead capture</span></a>
+ <a href="popups.html"><span class="ct">Popups</span><span class="cs">On-demand and autoload</span></a>
+ <a href="seo-optimization.html"><span class="ct">SEO</span><span class="cs">On-page, server-rendered</span></a>
+ <a href="attributions.html"><span class="ct">Attribution</span><span class="cs">Source-level lead attribution</span></a>
+ <a href="analytics.html"><span class="ct">Analytics</span><span class="cs">Dashboard plus raw events</span></a>
+ <a href="integrations.html"><span class="ct">Integrations</span><span class="cs">Stripe, Google, and more</span></a>
+ <div class="dr-subhead">Operate</div>
+ <a href="site-manager.html"><span class="ct">Site Manager</span><span class="cs">One health cockpit per site</span></a>
+ <a href="backups.html"><span class="ct">Backups</span><span class="cs">One-click save-points</span></a>
+ <a href="stage-live.html"><span class="ct">Stage &amp; Live</span><span class="cs">Restore and roll back safely</span></a>
+ <a href="advanced-settings.html"><span class="ct">Advanced Settings</span><span class="cs">Search-replace, import, export</span></a>
+ <a href="users-and-roles.html"><span class="ct">Users &amp; Roles</span><span class="cs">Directory with audit log</span></a>
+ <a href="redirects.html"><span class="ct">Redirects</span><span class="cs">Native 301 and 302 manager</span></a>
+ <div class="dr-subhead">Secure &amp; Comply</div>
+ <a href="security.html"><span class="ct">Security</span><span class="cs">Platform WAF, hardened</span></a>
+ <a href="security.html"><span class="ct">Age Verification</span><span class="cs">Age gate for regulated sites</span></a>
+ <a href="legal-cookie-policy.html"><span class="ct">Consent &amp; Tracking</span><span class="cs">Consent banner, per-session log</span></a>
+ <a href="trust.html"><span class="ct">Trust</span><span class="cs">WAF, SSL, CDN, logging</span></a>
+ <a href="accessibility.html"><span class="ct">Accessibility</span><span class="cs">Conformance status</span></a>
+ <div class="dr-subhead">The platform</div>
+ <a href="overview-modules.html"><span class="ct">All 23 modules →</span><span class="cs">The whole platform</span></a>
+ <a href="overview-core.html"><span class="ct">SG-Core</span><span class="cs">The native content engine</span></a>
+ <a href="overview-dashboard.html"><span class="ct">SG-Dashboard</span><span class="cs">The operating layer</span></a>
+ </div></details>
+ <details class="dr-group"><summary>Why SGEN <span class="pm" aria-hidden="true">+</span></summary><div class="dr-children">
+ <a href="why-sgen.html"><span class="ct">Why SGEN, in full</span><span class="cs">The whole case, one page</span></a>
+ <a href="why-sgen-no-plugins.html"><span class="ct">No plugins</span><span class="cs">Nothing to license or patch</span></a>
+ <a href="why-sgen-speed.html"><span class="ct">Speed</span><span class="cs">Server-side rendered</span></a>
+ </div></details>
+ <details class="dr-group"><summary>Solutions <span class="pm" aria-hidden="true">+</span></summary><div class="dr-children">
+ <a href="solutions-agencies.html"><span class="ct">Agencies</span><span class="cs">Multi-site, one dashboard</span></a>
+ <a href="solutions-small-business.html"><span class="ct">Small business</span><span class="cs">One fast site</span></a>
+ <a href="solutions-restaurants.html"><span class="ct">Restaurants</span><span class="cs">Menus, events, ordering</span></a>
+ <a href="solutions-multi-location.html"><span class="ct">Multi-location</span><span class="cs">One dashboard, many sites</span></a>
+ <a href="solutions-healthcare.html"><span class="ct">Healthcare</span><span class="cs">HIPAA compliant for healthcare</span></a>
+ <a href="solutions-freelancers.html"><span class="ct">Freelancers</span><span class="cs">Build &amp; hand off</span></a>
+ <a href="enterprise.html"><span class="ct">Enterprise</span><span class="cs">Unlimited sites, one bill</span></a>
+ </div></details>
+ <details class="dr-group"><summary>Compare <span class="pm" aria-hidden="true">+</span></summary><div class="dr-children">
+ <a href="compare-vs-wordpress.html"><span class="ct">vs WordPress</span><span class="cs">The refugee path</span></a>
+ <a href="compare-vs-elementor.html"><span class="ct">vs Elementor</span><span class="cs">Builder head-to-head</span></a>
+ <a href="compare-vs-wp-engine.html"><span class="ct">vs WP Engine</span><span class="cs">Managed hosting</span></a>
+ <a href="compare-vs-wix.html"><span class="ct">vs Wix</span><span class="cs">Own a real product</span></a>
+ <a href="compare-vs-squarespace.html"><span class="ct">vs Squarespace</span><span class="cs">Beyond templates</span></a>
+ <a href="compare-vs-godaddy.html"><span class="ct">vs GoDaddy</span><span class="cs">Past a brochure site</span></a>
+ <a href="compare.html"><span class="ct">All comparisons →</span><span class="cs">Every head-to-head</span></a>
+ <a href="migrate.html"><span class="ct">Migrate</span><span class="cs">Move off WordPress</span></a>
+ </div></details>
+ <details class="dr-group"><summary>Customers <span class="pm" aria-hidden="true">+</span></summary><div class="dr-children">
+ <a href="customers.html"><span class="ct">Customer stories</span><span class="cs">Metric-first cases</span></a>
+ <a href="showcase.html"><span class="ct">Showcase</span><span class="cs">Gallery of built sites</span></a>
+ <a href="customers-fernwood.html"><span class="ct">Fernwood Digital</span><span class="cs">23 sites, one stack</span></a>
+ <a href="customers-halloran-vint.html"><span class="ct">Halloran &amp; Vint</span><span class="cs">Consultancy rebuild</span></a>
+ </div></details>
+ <details class="dr-group"><summary>Resources <span class="pm" aria-hidden="true">+</span></summary><div class="dr-children">
+ <a href="resources.html"><span class="ct">All resources</span><span class="cs">Guides, blog, and more</span></a>
+ <a href="blog.html"><span class="ct">Blog</span><span class="cs">Notes from the platform</span></a>
+ <a href="guides.html"><span class="ct">Guides</span><span class="cs">How-to walkthroughs</span></a>
+ <a href="changelog.html"><span class="ct">Changelog</span><span class="cs">What shipped</span></a>
+ <a href="roadmap.html"><span class="ct">Roadmap</span><span class="cs">What is next</span></a>
+ <a href="status.html"><span class="ct">Status</span><span class="cs">System status</span></a>
+ </div></details>
+ <details class="dr-group"><summary>Company <span class="pm" aria-hidden="true">+</span></summary><div class="dr-children">
+ <a href="about.html"><span class="ct">About</span><span class="cs">Who we are</span></a>
+ <a href="partners.html"><span class="ct">Partners</span><span class="cs">The partner program</span></a>
+ <a href="partners-apply.html"><span class="ct">Become a partner</span><span class="cs">Apply to partner</span></a>
+ <a href="contact.html"><span class="ct">Contact</span><span class="cs">Talk to us</span></a>
+ </div></details>
+ <a class="dr-flat" href="pricing.html">Pricing</a>
+ <a class="dr-flat" href="enterprise.html">Enterprise</a>
+ <a class="dr-flat" href="https://app.sgen.com/login">Log in</a>
+ </div>
+</aside>
+
+<!-- ===== MOBILE STICKY BAR ===== -->
+<div class="mobile-bar surface-dark">
+ <a class="btn btn-primary" href="pricing.html">Start Building <span class="arr">→</span></a>
+ <a class="btn btn-secondary" href="pricing.html">Pricing</a>
+</div>
+
+<script>
+ const hdr = document.getElementById('hdr');
+ addEventListener('scroll', () => hdr.classList.toggle('is-stuck', scrollY > 10), {passive:true});
+ const drawer = document.getElementById('drawer'), overlay = document.querySelector('.drawer-overlay');
+ document.querySelectorAll('[data-drawer-open]').forEach(b => b.addEventListener('click', () => { drawer.classList.add('open'); overlay.classList.add('open'); }));
+ document.querySelectorAll('[data-drawer-close]').forEach(b => b.addEventListener('click', () => { drawer.classList.remove('open'); overlay.classList.remove('open'); }));
+ // scroll-reveal
+ const io = new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}})},{threshold:.12,rootMargin:'0px 0px -6% 0px'});
+ document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+ // mobile sticky bar, appear after hero, hide when footer CTA in view
+ const mbar = document.querySelector('.mobile-bar');
+ const heroSec = document.querySelector('main section');
+ const fcta = document.querySelector('.footer-cta');
+ function updBar(){ if(!mbar||!fcta) return; const past = scrollY > (heroSec ? heroSec.offsetTop + heroSec.offsetHeight - 140 : 480); const footerNear = fcta.getBoundingClientRect().top < innerHeight * 0.94; mbar.classList.toggle('show', past && !footerNear); }
+ addEventListener('scroll', updBar, {passive:true}); addEventListener('resize', updBar); updBar();
+ // billing toggle (pricing + any page with [data-billing])
+ document.querySelectorAll('[data-billing]').forEach(t=>t.addEventListener('click',()=>{ const mode=t.dataset.billing; document.querySelectorAll('[data-billing]').forEach(b=>b.classList.toggle('on',b===t)); document.querySelectorAll('[data-annual]').forEach(el=>{ el.textContent = mode==='annual'? el.dataset.annual : el.dataset.monthly; }); document.querySelectorAll('.billed').forEach(el=>{ if(el.dataset.annual) el.textContent = mode==='annual'? el.dataset.annual : el.dataset.monthly; }); }));
+ // megamenu keyboard + screen-reader access.
+ // CSS reveals each panel on .nav-item:hover and :focus-within (progressive enhancement, kept).
+ // Here we add an explicit JS-owned open state: aria-expanded on the trigger + an .is-open class
+ // on the .nav-item so keyboard/SR users get click-to-toggle and Escape-to-close-with-focus-restore.
+ // (A CSS rule keyed on .nav-item.is-open .megamenu makes the explicit-open path visually robust and
+ // lets Escape keep the trigger focused without :focus-within re-revealing the panel; see A9 NOTE.)
+ document.querySelectorAll('.nav-item').forEach(item => {
+ const trig = item.querySelector('.nav-trigger');
+ const panel = item.querySelector('.megamenu');
+ if (!trig || !panel) return;
+ let viaPointer = false; // distinguishes a click (pointer) from a Tab (keyboard) into the trigger
+ const sync = on => { item.classList.toggle('is-open', on); trig.setAttribute('aria-expanded', on ? 'true' : 'false'); };
+ const closeOthers = () => document.querySelectorAll('.nav-item.is-open').forEach(o => { if (o !== item) { o.classList.remove('is-open'); const t = o.querySelector('.nav-trigger'); if (t) t.setAttribute('aria-expanded','false'); } });
+ // Pointer path: mousedown flags the focus as pointer-driven so focusin does not auto-open;
+ // click then toggles. Keyboard path: no mousedown, so focusin opens on Tab-in.
+ trig.addEventListener('mousedown', () => { viaPointer = true; });
+ trig.addEventListener('click', e => {
+ e.preventDefault();
+ const willOpen = trig.getAttribute('aria-expanded') !== 'true';
+ closeOthers();
+ sync(willOpen);
+ if (willOpen) trig.focus(); else trig.blur();
+ viaPointer = false;
+ });
+ // Keyboard focus into the item opens it (covers Tab-through reveal); pointer focus is left to click.
+ item.addEventListener('focusin', () => { if (viaPointer) return; sync(true); });
+ item.addEventListener('focusout', () => { if (!item.contains(document.relatedTarget)) sync(false); });
+ // Escape closes the open panel and returns focus to its trigger.
+ item.addEventListener('keydown', e => {
+ if (e.key === 'Escape' && trig.getAttribute('aria-expanded') === 'true') { e.stopPropagation(); sync(false); trig.focus(); }
+ });
+ });
+ // Click outside any nav-item closes open megamenus.
+ document.addEventListener('click', e => { if (!e.target.closest('.nav-item')) document.querySelectorAll('.nav-item.is-open').forEach(o => { o.classList.remove('is-open'); const t = o.querySelector('.nav-trigger'); if (t) t.setAttribute('aria-expanded','false'); }); });
+</script>
+</body>
+</html>

@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Case for Speed: Server-Side Render, Instant-On | SGEN</title>
+<meta name="description" content="SGEN renders on the server and ships finished HTML, so content paints instantly. Smart loading and plugin-free stability keep it fast. Start building.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../_design/sgen-tokens.css?v=ec73c2e3">
+<link rel="stylesheet" href="../_design/sgen-structural.css?v=a102bd3a">
+<link rel="stylesheet" href="../_design/sgen-chrome.css?v=5245d0e3">
+<link rel="stylesheet" href="why-sgen-speed.css?v=c2ca4cc1">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- ===== TOP UTILITY BAR ===== -->
+<div class="topbar"><div class="in">
+ <span class="msg"><span class="spark">◆</span> <b>One platform, priced by sites.</b><span class="long"> Every module included.</span></span>
+ <span class="util"><a class="hide-sm" href="developers.html">Docs</a><a class="hide-sm" href="changelog.html">Changelog</a><span class="status"><span class="d"></span> All systems operational</span></span>
+</div></div>
+
+<!-- ===== HEADER (mega-menu) ===== -->
+<header class="site-header" id="hdr"><div class="in">
+ <a class="brand" href="../pages/home.html">SGEN<span class="dot">.</span></a>
+ <nav class="site-nav">
+ <div class="nav-item">
+ <button class="nav-trigger" aria-haspopup="true" aria-expanded="false" aria-controls="mm-product">Product <span class="chev"></span></button>
+ <div class="megamenu mm-wide" id="mm-product"><div class="mm-inner">
+ <span class="mm-watermark" aria-hidden="true">PRODUCT</span>
+ <div class="mm-cols">
+ <div class="mm-col"><div class="mm-head">Build &amp; Design</div>
+ <a class="mm-link" href="page-builder.html"><span class="t"><span class="gl"></span>SG Builder</span><span class="s">Design pages visually</span></a>
+ <a class="mm-link" href="templates.html"><span class="t"><span class="gl"></span>Templates</span><span class="s">Start from a real design</span></a>
+ <a class="mm-link" href="theme-editor.html"><span class="t"><span class="gl"></span>Theme Editor</span><span class="s">Colors, fonts, and presets</span></a>
+ <a class="mm-link" href="media-library.html"><span class="t"><span class="gl"></span>Media Library</span><span class="s">Assets, optimized and fast</span></a>
+ <a class="mm-link" href="menus.html"><span class="t"><span class="gl"></span>Menus</span><span class="s">Build navigation visually</span></a>
+ <a class="mm-link" href="pages-and-posts.html"><span class="t"><span class="gl"></span>Pages &amp; Posts</span><span class="s">Every content type</span></a>
+ <a class="mm-link" href="custom-objects.html"><span class="t"><span class="gl"></span>Custom Objects</span><span class="s">Native content modeling</span></a>
+ </div>
+ <div class="mm-col"><div class="mm-head">Sell</div>
+ <a class="mm-link" href="ecommerce.html"><span class="t"><span class="gl"></span>Ecommerce</span><span class="s">Catalog, checkout, tax</span></a>
+ <a class="mm-link" href="discussions.html"><span class="t"><span class="gl"></span>Discussions &amp; Reviews</span><span class="s">Reviews and comments</span></a>
+ <a class="mm-link" href="events.html"><span class="t"><span class="gl"></span>Events</span><span class="s">Events and a calendar</span></a>
+ </div>
+ <div class="mm-col"><div class="mm-head">Grow &amp; Convert</div>
+ <a class="mm-link" href="forms.html"><span class="t"><span class="gl"></span>Forms</span><span class="s">Lead capture, native</span></a>
+ <a class="mm-link" href="popups.html"><span class="t"><span class="gl"></span>Popups</span><span class="s">On-demand and autoload</span></a>
+ <a class="mm-link" href="seo-optimization.html"><span class="t"><span class="gl"></span>SEO</span><span class="s">Titles, meta, and robots</span></a>
+ <a class="mm-link" href="attributions.html"><span class="t"><span class="gl"></span>Attribution</span><span class="s">The source of every lead</span></a>
+ <a class="mm-link" href="analytics.html"><span class="t"><span class="gl"></span>Analytics</span><span class="s">Dashboard plus raw events</span></a>
+ <a class="mm-link" href="integrations.html"><span class="t"><span class="gl"></span>Integrations</span><span class="s">Stripe, Google, and more</span></a>
+ </div>
+ <div class="mm-col"><div class="mm-head">Operate</div>
+ <a class="mm-link" href="site-manager.html"><span class="t"><span class="gl"></span>Site Manager</span><span class="s">One cockpit per site</span></a>
+ <a class="mm-link" href="backups.html"><span class="t"><span class="gl"></span>Backups</span><span class="s">Backups and save-points</span></a>
+ <a class="mm-link" href="stage-live.html"><span class="t"><span class="gl"></span>Stage &amp; Live</span><span class="s">Restore and roll back</span></a>
+ <a class="mm-link" href="advanced-settings.html"><span class="t"><span class="gl"></span>Advanced Settings</span><span class="s">Email, import, export</span></a>
+ <a class="mm-link" href="users-and-roles.html"><span class="t"><span class="gl"></span>Users &amp; Roles</span><span class="s">Directory plus audit log</span></a>
+ <a class="mm-link" href="redirects.html"><span class="t"><span class="gl"></span>Redirects</span><span class="s">Native 301 and 302 rules</span></a>
+ </div>
+ <div class="mm-col"><div class="mm-head">Secure &amp; Comply</div>
+ <a class="mm-link" href="security.html"><span class="t"><span class="gl"></span>Security</span><span class="s">Platform WAF by default</span></a>
+ <a class="mm-link" href="security.html"><span class="t"><span class="gl"></span>Age Verification</span><span class="s">Age gate for regulated</span></a>
+ <a class="mm-link" href="legal-cookie-policy.html"><span class="t"><span class="gl"></span>Consent &amp; Tracking</span><span class="s">Consent banner plus log</span></a>
+ <a class="mm-link" href="trust.html"><span class="t"><span class="gl"></span>Trust</span><span class="s">WAF, SSL, CDN, logging</span></a>
+ <a class="mm-link" href="accessibility.html"><span class="t"><span class="gl"></span>Accessibility</span><span class="s">Conformance status</span></a>
+ </div>
+ </div>
+ <a class="mm-feat" href="page-builder.html"><span class="badge">Flagship</span><span class="k">SG Builder</span><span class="ttl">Build it visually. Ship it server-rendered.</span><span class="sub">A true visual builder with 48 native components and a real product underneath.</span><span class="go">Explore the builder →</span></a>
+ <div class="mm-index"><a href="overview-modules.html"><b>All 23 modules</b> The whole platform, in the box</a><a href="overview-core.html"><b>SG-Core</b> The native content engine</a><a href="overview-dashboard.html"><b>SG-Dashboard</b> The operating layer, one hub</a></div>
+ </div></div>
+ </div>
+ <div class="nav-item">
+ <button class="nav-trigger" aria-haspopup="true" aria-expanded="false" aria-controls="mm-why">Why SGEN <span class="chev"></span></button>
+ <div class="megamenu" id="mm-why"><div class="mm-inner">
+ <span class="mm-watermark" aria-hidden="true">WHY</span>
+ <div class="mm-col"><div class="mm-head">The case</div>
+ <a class="mm-link" href="why-sgen-no-plugins.html"><span class="t"><span class="gl"></span>No plugins</span><span class="s">Native modules, nothing to license or patch</span></a>
+ <a class="mm-link" href="why-sgen-speed.html"><span class="t"><span class="gl"></span>Speed</span><span class="s">Server-side rendered, fast by default</span></a>
+ <a class="mm-link" href="why-sgen.html"><span class="t"><span class="gl"></span>Why SGEN, in full</span><span class="s">The whole case, one page</span></a>
+ </div>
+ <div class="mm-col"><div class="mm-head">The model</div>
+ <a class="mm-link" href="pricing.html"><span class="t"><span class="gl"></span>One stack</span><span class="s">No plugin tax, no suite tax</span></a>
+ <a class="mm-link" href="pricing.html"><span class="t"><span class="gl"></span>Priced by sites</span><span class="s">Not by features</span></a>
+ </div>
+ <a class="mm-feat" href="why-sgen.html"><span class="badge">The wedge</span><span class="k">Native, not plugins</span><span class="ttl">One stack. Nothing to license or patch.</span><span class="sub">The whole platform is the box, hosting, builder, SEO, attribution, security.</span><span class="go">See why SGEN →</span></a>
+ </div></div>
+ </div>
+ <div class="nav-item">
+ <button class="nav-trigger" aria-haspopup="true" aria-expanded="false" aria-controls="mm-solutions">Solutions <span class="chev"></span></button>
+ <div class="megamenu" id="mm-solutions"><div class="mm-inner">
+ <span class="mm-watermark" aria-hidden="true">SOLUTIONS</span>
+ <div class="mm-col"><div class="mm-head">By team</div>
+ <a class="mm-link" href="solutions-agencies.html"><span class="t"><span class="gl"></span>Agencies</span><span class="s">Run every client site from one dashboard</span></a>
+ <a class="mm-link" href="solutions-freelancers.html"><span class="t"><span class="gl"></span>Freelancers</span><span class="s">Build on Sandbox, hand off</span></a>
+ </div>
+ <div class="mm-col"><div class="mm-head">By business</div>
+ <a class="mm-link" href="solutions-small-business.html"><span class="t"><span class="gl"></span>Small business</span><span class="s">One fast site, done right</span></a>
+ <a class="mm-link" href="solutions-restaurants.html"><span class="t"><span class="gl"></span>Restaurants</span><span class="s">Menus, events, online ordering</span></a>
+ <a class="mm-link" href="solutions-multi-location.html"><span class="t"><span class="gl"></span>Multi-location</span><span class="s">One dashboard, many sites</span></a>
+ <a class="mm-link" href="solutions-healthcare.html"><span class="t"><span class="gl"></span>Healthcare</span><span class="s">HIPAA compliant for healthcare</span></a>
+ </div>
+ <a class="mm-feat" href="solutions-agencies.html"><span class="badge">For teams</span><span class="k">Agencies</span><span class="ttl">Run an unlimited portfolio from one dashboard.</span><span class="sub">Multi-site portfolio, fixed roles, audit log, Enterprise from $497/mo.</span><span class="go">See the agency plan →</span></a>
+ </div></div>
+ </div>
+ <div class="nav-item">
+ <button class="nav-trigger" aria-haspopup="true" aria-expanded="false" aria-controls="mm-compare">Compare <span class="chev"></span></button>
+ <div class="megamenu" id="mm-compare"><div class="mm-inner">
+ <span class="mm-watermark" aria-hidden="true">VS</span>
+ <div class="mm-col"><div class="mm-head">Deep dives</div>
+ <a class="mm-link" href="compare-vs-wordpress.html"><span class="t"><span class="gl"></span>vs WordPress</span><span class="s">The refugee path</span></a>
+ <a class="mm-link" href="compare-vs-elementor.html"><span class="t"><span class="gl"></span>vs Elementor</span><span class="s">Builder head-to-head</span></a>
+ <a class="mm-link" href="compare-vs-wp-engine.html"><span class="t"><span class="gl"></span>vs WP Engine</span><span class="s">Managed hosting</span></a>
+ </div>
+ <div class="mm-col"><div class="mm-head">Quick looks</div>
+ <a class="mm-link" href="compare-vs-wix.html"><span class="t"><span class="gl"></span>vs Wix</span><span class="s">Own a real product</span></a>
+ <a class="mm-link" href="compare-vs-squarespace.html"><span class="t"><span class="gl"></span>vs Squarespace</span><span class="s">Beyond templates</span></a>
+ <a class="mm-link" href="compare-vs-godaddy.html"><span class="t"><span class="gl"></span>vs GoDaddy</span><span class="s">Past a brochure site</span></a>
+ <a class="mm-link" href="compare.html"><span class="t"><span class="gl"></span>All comparisons →</span><span class="s">Every head-to-head in one place</span></a>
+ </div>
+ <a class="mm-feat" href="migrate.html"><span class="badge">Switching?</span><span class="k">/migrate</span><span class="ttl">Move off WordPress, the honest way.</span><span class="sub">A move is a rebuild, and that's the upgrade. White-glove or DIY.</span><span class="go">See how migration works →</span></a>
+ </div></div>
+ </div>
+ <div class="nav-item">
+ <button class="nav-trigger" aria-haspopup="true" aria-expanded="false" aria-controls="mm-customers">Customers <span class="chev"></span></button>
+ <div class="megamenu" id="mm-customers"><div class="mm-inner">
+ <span class="mm-watermark" aria-hidden="true">PROOF</span>
+ <div class="mm-col"><div class="mm-head">Explore</div>
+ <a class="mm-link" href="customers.html"><span class="t"><span class="gl"></span>Customer stories</span><span class="s">Metric-first case grid</span></a>
+ <a class="mm-link" href="showcase.html"><span class="t"><span class="gl"></span>Showcase</span><span class="s">Gallery of sites built on SGEN</span></a>
+ <a class="mm-link" href="customers.html"><span class="t"><span class="gl"></span>Case studies</span><span class="s">The full teardown, deep</span></a>
+ </div>
+ <div class="mm-col"><div class="mm-head">Built on SGEN</div>
+ <a class="mm-link" href="why-sgen-no-plugins.html"><span class="t"><span class="gl"></span>Zero plugins</span><span class="s">Under every site in the reel</span></a>
+ <a class="mm-link" href="pricing.html"><span class="t"><span class="gl"></span>One stack</span><span class="s">Forms, store, SEO, all native</span></a>
+ </div>
+ <a class="mm-feat" href="customers-fernwood.html"><span class="badge">Case study</span><span class="k">Fernwood Digital</span><span class="ttl">23 client sites, one stack, one login.</span><span class="sub">A studio that retired the plugin-maintenance tax.</span><span class="go">Read the story →</span></a>
+ </div></div>
+ </div>
+ <a class="nav-trigger" href="pricing.html">Pricing</a>
+ </nav>
+ <div class="site-actions">
+ <a class="login" href="https://app.sgen.com/login">Log in</a>
+ <a class="btn btn-primary" href="pricing.html">Start Building <span class="arr">→</span></a>
+ <button class="hamburger" data-drawer-open aria-label="Menu"><span></span><span></span><span></span></button>
+ </div>
+</div></header>
+
+<main id="main">
+<!-- 1 · HERO (the argument: speed is an architecture decision, not a plugin) -->
+<section class="sec sp-hero std-hero">
+ <div class="feat-copy">
+ <div class="eyebrow">The case for speed</div>
+ <h1>Speed is an architecture decision, not a <span class="grad">plugin you bolt on later</span>.</h1>
+ <p class="lead">SGEN renders pages on the server and sends the browser finished HTML, so the main content paints the moment the page arrives. Smart, deferred loading makes it interactive on arrival, and immutable stability means no plugin bloat creeps in to slow it back down. Fast is the default state of the architecture, not a setting you fight to keep.</p>
+ <p class="label" style="margin-top:18px">The usual WordPress speed fix is to bolt a caching plugin on top of a browser-rendered page builder. Caching speeds up how fast slow output is re-served. It does not change what the page builder produces. SGEN changes the source: finished HTML from the server, not a JavaScript bundle the visitor's device has to assemble.</p>
+ <div class="cta flex">
+ <a class="btn btn-primary" href="pricing.html">Start Building <span class="arr" aria-hidden="true">&rarr;</span></a>
+ <a class="btn btn-secondary" href="contact.html">Talk to Sales</a>
+ </div>
+ </div>
+ <div class="adwin spvitals reveal" aria-hidden="true">
+ <div class="adbar"><span class="ic"></span><span class="ti">Site Vitals<small>Render pipeline, this page</small></span><span class="act ghost">Live view</span></div>
+ <div class="splane">
+ <div class="sptrack">
+ <span class="spk">Browser-rendered<small>WordPress + JS page builder</small></span>
+ <div class="spbar wp">
+ <i class="seg dl" style="width:22%"><b>HTML + JS bundle</b></i>
+ <i class="seg ex" style="width:40%"><b>Device executes script</b></i>
+ <i class="seg pa" style="width:38%"><b>Content paints</b></i>
+ </div>
+ <span class="spwait">Visitor waits on their own device to do the work</span>
+ </div>
+ <div class="sptrack ours">
+ <span class="spk">Server-side render<small>SGEN, finished HTML</small></span>
+ <div class="spbar sg">
+ <i class="seg done" style="width:30%"><b>Finished HTML</b></i>
+ <i class="seg ready" style="width:14%"><b>Interactive</b></i>
+ <i class="seg idle" style="width:56%"></i>
+ </div>
+ <span class="spwait ok"><span class="d"></span>Content first, interactive on arrival</span>
+ </div>
+ </div>
+ <div class="spfoot">
+ <span class="vit"><span class="vk">Where the work runs</span><span class="vn">Server, not the visitor's device</span></span>
+ <span class="vsep"></span>
+ <span class="vit"><span class="vk">Page output</span><span class="vn">Finished HTML <small>not a JS bundle</small></span></span>
+ </div>
+ </div>
+</section>
+
+<!-- 2 · THREE PILLARS (the three architectural levers behind "fast") -->
+<section class="sec sec--warm">
+ <div class="wrap">
+ <div class="sec-head readw reveal">
+ <div class="eyebrow">Why SGEN is fast</div>
+ <h2 class="h2">Three architecture choices, made once, so speed is <span class="grad">structural instead of bolted on</span></h2>
+ <p class="lead" style="margin-top:16px">A fast site on WordPress is usually a fast site in spite of the stack: a caching plugin papering over browser-rendered output, an optimization plugin trimming what a dozen other plugins added. SGEN gets there a different way, by deciding three things at the platform level. These are architecture, not a guaranteed score: we describe how the pipeline is built, not a benchmark number we have not measured for your site.</p>
+ </div>
+ <div class="grid g-3" style="margin-top:44px">
+ <div class="card reveal"><div class="ico"><span class="m"></span></div><h3 class="h3">Rendered on the server</h3><p style="margin-top:10px">SGEN renders the page on the server and sends the browser finished HTML. The main content is already on the screen when the page arrives, instead of being assembled afterward on the visitor's device. Browser-rendered page builders ship a JavaScript bundle and make the visitor's hardware do the work first; the server-side path skips that wait.</p><p class="label" style="margin-top:12px">What it changes: content paints fast because the work is already done before the page leaves the server.</p></div>
+ <div class="card reveal" data-d="1"><div class="ico"><span class="m"></span></div><h3 class="h3">Smart, deferred loading</h3><p style="margin-top:10px">Getting content onto the screen is only half of fast. Browser-rendered sites leave a gap between "looks loaded" and "actually responds to a tap." SGEN's smart loading prioritizes what the visitor sees and needs first, and defers the rest, so the page is interactive the moment it appears rather than frozen for a beat while scripts catch up.</p><p class="label" style="margin-top:12px">What it changes: no dead first second where the page looks ready but ignores a tap.</p></div>
+ <div class="card reveal" data-d="2"><div class="ico"><span class="m"></span></div><h3 class="h3">Immutable stability, no plugin bloat</h3><p style="margin-top:10px">A site that starts fast does not stay fast on WordPress, because every plugin you add to fill a gap adds its own scripts and styles to every page. SGEN ships those capabilities as native modules instead, so there is no growing plugin layer dragging weight onto the page, and a platform update does not reshuffle a dependency tree underneath you.</p><p class="label" style="margin-top:12px">What it changes: speed does not decay as the site grows, because there is no plugin bloat to accumulate.</p></div>
+ </div>
+ <p class="label" style="text-align:center;margin-top:28px;max-width:78ch;margin-left:auto;margin-right:auto">Server-side render gets content on the screen, smart loading makes it usable on arrival, and immutable stability keeps both from eroding as the site grows. Three decisions, made at the platform level, instead of three plugins you maintain.</p>
+ </div>
+</section>
+
+<!-- 3 · CAPABILITY DEEP-DIVE (the render pipeline, with crafted before/after speed panel) -->
+<section class="sec">
+ <div class="wrap">
+ <div class="sec-head readw reveal">
+ <div class="eyebrow">The case for speed &middot; how the pipeline runs</div>
+ <h2 class="h2">Caching speeds up <span class="grad">delivery</span>. SGEN speeds up the <span class="grad">source</span>.</h2>
+ <p class="lead" style="margin-top:16px">The honest version of this comparison matters, because good caching is real. A managed WordPress host can cache server-side and cache well. But caching stores and re-serves whatever the page builder produces, faster. If that output is JavaScript-dependent HTML the browser still has to render, caching has sped up the delivery of slow output. SGEN produces fast output from the start, so there is nothing slow left for a cache to paper over.</p>
+ </div>
+
+ <div class="grid g-2" style="margin-top:44px;align-items:start;gap:26px">
+ <div class="adwin spwf reveal" aria-hidden="true">
+ <div class="adbar"><span class="ic"></span><span class="ti">Before &middot; browser-rendered + caching<small>Slow output, served faster</small></span></div>
+ <div class="wfbody">
+ <div class="wfrow"><span class="wl">Server sends JS bundle</span><span class="wt"><i class="bar dl" style="left:0;width:16%"></i></span></div>
+ <div class="wfrow"><span class="wl">Cache hit, faster delivery</span><span class="wt"><i class="bar ca" style="left:16%;width:10%"></i></span></div>
+ <div class="wfrow"><span class="wl">Device parses &amp; executes script</span><span class="wt"><i class="bar ex" style="left:26%;width:34%"></i></span></div>
+ <div class="wfrow"><span class="wl">Plugin scripts hydrate</span><span class="wt"><i class="bar pl" style="left:60%;width:22%"></i></span></div>
+ <div class="wfrow"><span class="wl">Content paints</span><span class="wt"><i class="mark" style="left:82%"></i></span></div>
+ <div class="wfrow"><span class="wl">Interactive</span><span class="wt"><i class="mark slow" style="left:96%"></i></span></div>
+ </div>
+ <div class="wffoot"><span>Caching moved one bar. The browser still does the rendering.</span></div>
+ </div>
+ <div class="adwin spwf good reveal" data-d="1" aria-hidden="true">
+ <div class="adbar"><span class="ic"></span><span class="ti">After &middot; SGEN server-side render<small>Fast output, nothing to paper over</small></span></div>
+ <div class="wfbody">
+ <div class="wfrow"><span class="wl">Server renders finished HTML</span><span class="wt"><i class="bar done" style="left:0;width:22%"></i></span></div>
+ <div class="wfrow"><span class="wl">Content paints</span><span class="wt"><i class="mark fast" style="left:24%"></i></span></div>
+ <div class="wfrow"><span class="wl">Smart loading, priority first</span><span class="wt"><i class="bar pri" style="left:24%;width:12%"></i></span></div>
+ <div class="wfrow"><span class="wl">Interactive on arrival</span><span class="wt"><i class="mark ready" style="left:38%"></i></span></div>
+ <div class="wfrow"><span class="wl">Deferred work, off the critical path</span><span class="wt"><i class="bar def" style="left:42%;width:34%"></i></span></div>
+ <div class="wfrow muted"><span class="wl">No plugin layer to hydrate</span><span class="wt"><span class="none">None</span></span></div>
+ </div>
+ <div class="wffoot ok"><span class="d"></span><span>Content first, interactive next, the rest deferred.</span></div>
+ </div>
+ </div>
+
+ <div class="grid g-2" style="margin-top:40px;align-items:start">
+ <div class="card reveal">
+ <h3 class="h3">Finished HTML, not a bundle to assemble</h3>
+ <p style="margin-top:10px">When the server renders the page, the visitor's browser receives the content already built. There is no "ship a script, then wait while the device runs it" step on the critical path to first paint. The clocks that Core Web Vitals run, time-to-paint and time-to-interactive, start against a page that is already most of the way there.</p>
+ <p class="label" style="margin-top:12px">What it means: the wait that browser-rendering creates is removed at the source, not hidden behind a cache.</p>
+ </div>
+ <div class="card reveal" data-d="1">
+ <h3 class="h3">Smart loading closes the "looks loaded" gap</h3>
+ <p style="margin-top:10px">Server-side render gets content on screen; smart, deferred loading makes it usable. The page prioritizes what the visitor sees and can act on, and pushes the rest off the path to interactivity. That closes the gap browser-rendered sites leave between a page that looks ready and a page that actually responds to a tap.</p>
+ <p class="label" style="margin-top:12px">What it means: interactive on arrival, instead of a frozen first beat while scripts hydrate.</p>
+ </div>
+ <div class="card reveal" data-d="2">
+ <h3 class="h3">No caching plugin to license or reconcile</h3>
+ <p style="margin-top:10px">Because the output is fast from the start, there is no caching, optimization, or minification plugin to install, configure, and keep compatible with everything else on the site. Performance is part of the platform, not a stack of speed plugins each on its own update schedule and each capable of breaking the others.</p>
+ <p class="label" style="margin-top:12px">What it means: one fewer layer to maintain, and one fewer set of plugins to collide on a Tuesday.</p>
+ </div>
+ <div class="card reveal" data-d="3">
+ <h3 class="h3">Stays fast as the site grows</h3>
+ <p style="margin-top:10px">Speed that decays is the real WordPress speed problem: a site is fast at launch, then every plugin added to fill a gap drips more scripts and styles onto every page. SGEN ships those capabilities natively, so adding a form, a popup, or analytics does not mean adding another third-party bundle the browser has to load.</p>
+ <p class="label" style="margin-top:12px">What it means: the page weight does not creep up plugin by plugin, so launch-day speed holds.</p>
+ </div>
+ </div>
+ <p class="label" style="margin-top:22px;max-width:78ch">A note on honesty: we describe the architecture, server-side render, smart loading, and a plugin-free output, not a guaranteed score. We do not publish a benchmark figure here because we have no measured number for your specific site, and we will not invent one. The argument is structural: the pipeline is built to target exactly what the speed metrics measure.</p>
+ </div>
+</section>
+
+<!-- 4 · ECOSYSTEM / "what else you get" rail (the infra under the speed) -->
+<section class="sec sec--alt">
+ <div class="wrap">
+ <div class="sec-head readw reveal">
+ <div class="eyebrow">The case for speed &middot; what carries the page</div>
+ <h2 class="h2">Server-side render sits on the <span class="grad">whole platform</span></h2>
+ <p class="lead" style="margin-top:16px">Removing plugins does not downgrade you to a bare host. The render pipeline runs on the Foundation Pack baseline that ships on every plan, even the free Sandbox, and is backed by the 23 native modules so the capabilities you would otherwise add as weight-bearing plugins are already part of the page.</p>
+ </div>
+ <div class="sp-eco reveal">
+ <div class="ec"><div class="ek">Foundation Pack</div><h3 class="h3">CDN and global delivery, included</h3><p style="margin-top:8px">Hosting, SSL, a CDN, a WAF, and security patching ship in the Foundation Pack on every plan, including the $0 Sandbox. The CDN puts finished HTML close to the visitor; the render pipeline made it fast before it ever got there. Infrastructure that keeps a site fast and defended is the included baseline, not a per-site add-on.</p></div>
+ <div class="ec"><div class="ek">Native modules</div><h3 class="h3">Capabilities without the page weight</h3><p style="margin-top:8px">Forms, popups, SEO controls, analytics, and the rest run as native modules across the 23 in the platform, instead of third-party plugins each adding their own scripts to every page. You add capability without adding the bundle weight that drags WordPress speed down over time.</p></div>
+ <div class="ec"><div class="ek">Custom Codes</div><h3 class="h3">Your own snippets, on your terms</h3><p style="margin-top:8px">Where you need to drop in custom HTML, CSS, or JavaScript, the Custom Codes module handles head and body snippets natively. You control what extra code runs on the page, so the only weight on the critical path is the weight you chose to put there.</p></div>
+ </div>
+ </div>
+</section>
+
+<!-- 5 · PROOF (architectural facts, 91% Patchstack allowed on why-sgen-* ; illustrative-mock disclaimer) -->
+<section class="sec">
+ <div class="wrap">
+ <div class="sec-head readw reveal">
+ <div class="eyebrow">The case for speed &middot; what holds it</div>
+ <h2 class="h2">Fast by architecture. <span class="grad">Stable by design.</span></h2>
+ <p class="lead" style="margin-top:16px">These are not performance scores; they are the structural facts the speed argument rests on. The plugin layer is both the thing that slows WordPress sites down over time and, per Patchstack, where the security risk concentrates. Remove it, and you remove the layer that erodes speed and the one that erodes stability at the same time.</p>
+ </div>
+ <div class="metrics reveal" style="margin-top:40px">
+ <div class="metric"><span class="stat">91<span class="z">%</span></span><div class="k">of 2025 WordPress vulnerabilities were in plugins (Patchstack, State of WordPress Security 2026 report)</div></div>
+ <div class="metric"><span class="stat">0<span class="z"> plugins</span></span><div class="k">caching or optimization plugins to license and patch</div></div>
+ <div class="metric"><span class="stat">23</span><div class="k">native modules, so capability does not mean page weight</div></div>
+ </div>
+ <p class="label" style="text-align:center;margin-top:30px;max-width:74ch;margin-left:auto;margin-right:auto">The Site Vitals and render-pipeline panels on this page are illustrative product surfaces that show how the architecture is built, not screenshots of a measured benchmark or a specific customer's score.</p>
+ </div>
+</section>
+
+<!-- 6 · FAQ (6 objections about speed framed honestly) -->
+<section class="sec sec--warm">
+ <div class="wrap">
+ <div class="sec-head reveal"><div class="eyebrow">The case for speed &middot; common questions</div><h2 class="h2">Speed questions, <span class="grad">answered straight</span></h2></div>
+ <div class="faq-list" style="margin-top:30px">
+ <details class="reveal" open><summary>Will my SGEN site get a specific PageSpeed or Core Web Vitals score? <span class="pm" aria-hidden="true">+</span></summary><div class="ans">We will not promise you a number, and you should be wary of anyone who does, because your real-world score depends on your content, your images, and your traffic, none of which we control. What we can tell you is structural: SGEN renders on the server and ships finished HTML, and Core Web Vitals measure exactly the paint-and-interactive timing that server-side rendering is built to target. The architecture aims at what the metrics measure. We do not publish a benchmark figure here because we have no measured number for your site, and we will not invent one.</div></details>
+ <details class="reveal"><summary>Does SGEN replace my caching plugin? <span class="pm" aria-hidden="true">+</span></summary><div class="ans">Yes, there is no caching plugin to install or maintain. SGEN renders on the server, so the output is fast to begin with, and there is nothing slow left for a cache to paper over. Performance is native to the platform, not an add-on you bolt on and then reconcile against every other plugin on the site. A CDN ships in the Foundation Pack to put that finished HTML close to your visitors.</div></details>
+ <details class="reveal"><summary>If a managed WordPress host caches well, is that not just as fast? <span class="pm" aria-hidden="true">+</span></summary><div class="ans">Good caching is real, and we will not pretend otherwise. The honest distinction is what gets cached: caching stores and re-serves whatever the page builder produces. If that output is JavaScript-dependent HTML the browser still has to render, caching has sped up the delivery of slow output. SGEN's output is finished HTML from the server, so the speed is in the source, not in how fast a slow page is re-served.</div></details>
+ <details class="reveal"><summary>What exactly is smart, deferred loading? <span class="pm" aria-hidden="true">+</span></summary><div class="ans">It is what makes the page interactive the moment it appears, not seconds later. Server-side render gets the finished content onto the screen fast; smart loading then prioritizes what the visitor sees and can act on, and defers the rest off the critical path. That closes the gap browser-rendered sites leave between a page that looks loaded and a page that actually responds to a tap or click.</div></details>
+ <details class="reveal"><summary>My WordPress site is fast at launch but slows down over time. Why? <span class="pm" aria-hidden="true">+</span></summary><div class="ans">That is the most common WordPress speed story, and it is structural. Each plugin you add to fill a gap, a form plugin, a popup plugin, an analytics plugin, ships its own scripts and styles to every page. The site does not slow down all at once; it accumulates weight plugin by plugin. SGEN ships those capabilities as native modules, so adding capability does not add a third-party bundle to the page, and launch-day speed holds as the site grows.</div></details>
+ <details class="reveal"><summary>Will my site break or slow down when SGEN ships a platform update? <span class="pm" aria-hidden="true">+</span></summary><div class="ans">No. The reason WordPress sites break or shift on update is the plugin dependency tree, where each plugin updates on its own schedule, independent of core and of every other plugin. That same plugin layer is where the security research consistently finds the risk concentrated, which is why removing it removes the failure source. SGEN has no plugin dependency tree to reshuffle, so a platform update does not affect your content, your design, or your speed. That is what immutable stability means.</div></details>
+ </div>
+ </div>
+</section>
+
+<!-- 7 · THE FIT (argument-framed pricing fit: the speed architecture is on every plan) -->
+<section class="sec">
+ <div class="wrap">
+ <div class="sec-head readw reveal">
+ <div class="eyebrow">The case for speed &middot; what it costs</div>
+ <h2 class="h2">The speed architecture is on <span class="grad">every plan, including the free one</span></h2>
+ <p class="lead" style="margin-top:16px">Server-side render, smart loading, the CDN, and a plugin-free output are not a performance tier you upgrade into. They are how the platform is built, so every plan, and the $0 Sandbox, runs the same pipeline. You pick a plan by how many sites you run, not by how fast you want them to be.</p>
+ </div>
+ <div class="sp-plans reveal">
+ <div class="pl">
+ <span class="pn">Free Sandbox</span>
+ <span class="ps">Build and test before you pay</span>
+ <span class="pp">$0</span>
+ <span class="pm" aria-hidden="true">unlimited staging sites</span>
+ <span class="pf">The whole platform, the same server-side render pipeline, on unlimited staging sites so you can see the architecture before you commit.</span>
+ </div>
+ <div class="pl featured">
+ <span class="badge">Where most start</span>
+ <span class="pn">Indie</span>
+ <span class="ps">For a single live site</span>
+ <span class="pp">$39<small>/mo</small></span>
+ <span class="pm" aria-hidden="true">billed annually &middot; $47 monthly</span>
+ <span class="pf">One live site, the full pipeline, the Foundation Pack with CDN and WAF, and all 23 native modules.</span>
+ </div>
+ <div class="pl">
+ <span class="pn">Studio &amp; up</span>
+ <span class="ps">For a growing portfolio</span>
+ <span class="pp">$97<small>/mo</small></span>
+ <span class="pm" aria-hidden="true">billed annually &middot; $117 monthly</span>
+ <span class="pf">Three sites and up, each running the same speed architecture. You scale by site count, never by performance tier.</span>
+ </div>
+ </div>
+ <div class="cta flex reveal" data-d="1" style="margin-top:32px">
+ <a class="btn btn-primary" href="pricing.html">Start Building <span class="arr" aria-hidden="true">&rarr;</span></a>
+ <a class="btn btn-secondary" href="contact.html">Talk to Sales</a>
+ </div>
+ </div>
+</section>
+
+<!-- 8 · FINAL CTA (surface-dark + verbatim fine-print) -->
+<section class="sec surface-dark has-atmos" style="text-align:center">
+ <div class="wrap">
+ <div class="sec-head readw reveal" style="margin-left:auto;margin-right:auto">
+ <div class="eyebrow" style="justify-content:center">The case for speed</div>
+ <h2 class="h2">Build on a platform that renders on the server <span class="grad">and stays fast as it grows.</span></h2>
+ <p class="lead" style="margin-top:16px;margin-left:auto;margin-right:auto">Finished HTML from the server, smart loading that is interactive on arrival, and a plugin-free output that does not slow down over time. Speed by architecture, not by a caching plugin you maintain. Part of the platform on every plan; pick a plan by site count.</p>
+ </div>
+ <div class="flex reveal" data-d="1" style="justify-content:center;margin-top:28px">
+ <a class="btn btn-primary" href="pricing.html">Start Building <span class="arr" aria-hidden="true">&rarr;</span></a>
+ <a class="btn btn-secondary" href="contact.html">Talk to Sales</a>
+ </div>
+ <p class="sp-fine">From $39/mo, billed annually. $47 monthly. 2-week trial, cancel anytime. Every module included.</p>
+ </div>
+</section>
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer class="site-footer surface-dark">
+ <div class="footer-cta">
+ <div class="eyebrow">Start free</div>
+ <h2>Build the whole thing on the Sandbox. <span class="grad">$0, no card.</span></h2>
+ <p>Every module unlocked on unlimited sandbox sites. Go live by upgrading, priced by how many sites you run, not by features.</p>
+ <div class="ctas"><a class="btn btn-primary" href="pricing.html">Try the Free Sandbox <span class="arr">→</span></a><a class="btn btn-secondary" href="compare-vs-wordpress.html">Compare to WordPress</a></div>
+ </div>
+ <div class="ft-grid">
+ <div class="ft-brand"><div class="b">SGEN<span class="dot">.</span></div><p>One all-inclusive platform. Build the whole site, no plugins underneath, priced by how many sites you run.</p><span class="ft-status"><span class="d"></span> All systems operational</span></div>
+ <div class="ft-col"><div class="ft-head">Build &amp; Design</div><a href="page-builder.html">SG Builder</a><a href="templates.html">Templates</a><a href="theme-editor.html">Theme Editor</a><a href="media-library.html">Media Library</a><a href="pages-and-posts.html">Pages &amp; Posts</a><a href="custom-objects.html">Custom Objects</a><a href="overview-modules.html">All 23 modules</a><a href="overview-core.html">SG-Core</a></div>
+ <div class="ft-col"><div class="ft-head">Sell</div><a href="ecommerce.html">Ecommerce</a><a href="discussions.html">Discussions &amp; Reviews</a></div>
+ <div class="ft-col"><div class="ft-head">Grow &amp; Convert</div><a href="forms.html">Forms</a><a href="attributions.html">Attribution</a><a href="seo-optimization.html">SEO</a><a href="analytics.html">Analytics</a><a href="popups.html">Popups</a><a href="integrations.html">Integrations</a></div>
+ <div class="ft-col"><div class="ft-head">Operate &amp; Secure</div><a href="site-manager.html">Site Manager</a><a href="overview-dashboard.html">SG-Dashboard</a><a href="backups.html">Backups</a><a href="redirects.html">Redirects</a><a href="security.html">Security</a><a href="trust.html">Trust</a></div>
+ <div class="ft-col"><div class="ft-head">Why SGEN</div><a href="why-sgen.html">Why SGEN</a><a href="why-sgen-no-plugins.html">No plugins</a><a href="why-sgen-speed.html">Speed</a><a href="compare.html">Compare all</a><a href="migrate.html">Migrate</a></div>
+ <div class="ft-col"><div class="ft-head">Solutions</div><a href="solutions-agencies.html">Agencies</a><a href="solutions-small-business.html">Small business</a><a href="solutions-restaurants.html">Restaurants</a><a href="solutions-multi-location.html">Multi-location</a><a href="solutions-healthcare.html">Healthcare</a><a href="solutions-freelancers.html">Freelancers</a><a href="enterprise.html">Enterprise</a></div>
+ <div class="ft-col"><div class="ft-head">Customers</div><a href="customers.html">Customer stories</a><a href="showcase.html">Showcase</a><a href="customers-fernwood.html">Fernwood Digital</a><a href="customers-halloran-vint.html">Halloran &amp; Vint</a></div>
+ <div class="ft-col"><div class="ft-head">Resources</div><a href="resources.html">All resources</a><a href="blog.html">Blog</a><a href="guides.html">Guides</a><a href="changelog.html">Changelog</a><a href="roadmap.html">Roadmap</a><a href="status.html">Status</a></div>
+ <div class="ft-col"><div class="ft-head">Company</div><a href="about.html">About</a><a href="partners.html">Partners</a><a href="partners-apply.html">Become a partner</a><a href="partners-directory.html">Partner directory</a><a href="contact.html">Contact</a></div>
+ <div class="ft-col"><div class="ft-head">Developers</div><a href="developers.html">Docs</a><a href="developers.html">API</a><a href="integrations.html">Integrations</a></div>
+ </div>
+ <div class="ft-watermark">SGEN</div>
+ <div class="ft-bottom"><span>© 2026 SGEN. The managed website platform.</span><div class="links"><a href="legal-privacy.html">Privacy</a><a href="legal-terms.html">Terms</a><a href="legal-dpa.html">DPA</a><a href="legal-cookie-policy.html">Cookies</a><a href="accessibility.html">Accessibility</a></div></div>
+</footer>
+
+<!-- ===== MOBILE DRAWER ===== -->
+<div class="drawer-overlay" data-drawer-close></div>
+<aside class="site-drawer" id="drawer">
+ <div class="dr-top"><div class="b" style="font-weight:900;font-size:20px;letter-spacing:-.04em;color:#f4f2ee">SGEN<span style="color:var(--sg-red)">.</span></div><button class="dr-close" data-drawer-close aria-label="Close">×</button></div>
+ <div class="dr-body">
+ <details class="dr-group"><summary>Product <span class="pm" aria-hidden="true">+</span></summary><div class="dr-children">
+ <div class="dr-subhead">Build &amp; Design</div>
+ <a href="page-builder.html"><span class="ct">SG Builder</span><span class="cs">Visual builder, SSR output</span></a>
+ <a href="templates.html"><span class="ct">Templates</span><span class="cs">Start from a real design</span></a>
+ <a href="theme-editor.html"><span class="ct">Theme Editor</span><span class="cs">Global tokens, fonts, colors</span></a>
+ <a href="media-library.html"><span class="ct">Media Library</span><span class="cs">Native assets, optimized</span></a>
+ <a href="menus.html"><span class="ct">Menus</span><span class="cs">Build navigation visually</span></a>
+ <a href="pages-and-posts.html"><span class="ct">Pages &amp; Posts</span><span class="cs">Every content type</span></a>
+ <a href="custom-objects.html"><span class="ct">Custom Objects</span><span class="cs">Model content with native fields</span></a>
+ <div class="dr-subhead">Sell</div>
+ <a href="ecommerce.html"><span class="ct">Ecommerce</span><span class="cs">Storefront, checkout</span></a>
+ <a href="discussions.html"><span class="ct">Discussions &amp; Reviews</span><span class="cs">Reviews and comments, moderated</span></a>
+ <a href="events.html"><span class="ct">Events</span><span class="cs">Events and a public calendar</span></a>
+ <div class="dr-subhead">Grow &amp; Convert</div>
+ <a href="forms.html"><span class="ct">Forms</span><span class="cs">Native lead capture</span></a>
+ <a href="popups.html"><span class="ct">Popups</span><span class="cs">On-demand and autoload</span></a>
+ <a href="seo-optimization.html"><span class="ct">SEO</span><span class="cs">On-page, server-rendered</span></a>
+ <a href="attributions.html"><span class="ct">Attribution</span><span class="cs">Source-level lead attribution</span></a>
+ <a href="analytics.html"><span class="ct">Analytics</span><span class="cs">Dashboard plus raw events</span></a>
+ <a href="integrations.html"><span class="ct">Integrations</span><span class="cs">Stripe, Google, and more</span></a>
+ <div class="dr-subhead">Operate</div>
+ <a href="site-manager.html"><span class="ct">Site Manager</span><span class="cs">One health cockpit per site</span></a>
+ <a href="backups.html"><span class="ct">Backups</span><span class="cs">One-click save-points</span></a>
+ <a href="stage-live.html"><span class="ct">Stage &amp; Live</span><span class="cs">Restore and roll back safely</span></a>
+ <a href="advanced-settings.html"><span class="ct">Advanced Settings</span><span class="cs">Search-replace, import, export</span></a>
+ <a href="users-and-roles.html"><span class="ct">Users &amp; Roles</span><span class="cs">Directory with audit log</span></a>
+ <a href="redirects.html"><span class="ct">Redirects</span><span class="cs">Native 301 and 302 manager</span></a>
+ <div class="dr-subhead">Secure &amp; Comply</div>
+ <a href="security.html"><span class="ct">Security</span><span class="cs">Platform WAF, hardened</span></a>
+ <a href="security.html"><span class="ct">Age Verification</span><span class="cs">Age gate for regulated sites</span></a>
+ <a href="legal-cookie-policy.html"><span class="ct">Consent &amp; Tracking</span><span class="cs">Consent banner, per-session log</span></a>
+ <a href="trust.html"><span class="ct">Trust</span><span class="cs">WAF, SSL, CDN, logging</span></a>
+ <a href="accessibility.html"><span class="ct">Accessibility</span><span class="cs">Conformance status</span></a>
+ <div class="dr-subhead">The platform</div>
+ <a href="overview-modules.html"><span class="ct">All 23 modules →</span><span class="cs">The whole platform</span></a>
+ <a href="overview-core.html"><span class="ct">SG-Core</span><span class="cs">The native content engine</span></a>
+ <a href="overview-dashboard.html"><span class="ct">SG-Dashboard</span><span class="cs">The operating layer</span></a>
+ </div></details>
+ <details class="dr-group"><summary>Why SGEN <span class="pm" aria-hidden="true">+</span></summary><div class="dr-children">
+ <a href="why-sgen.html"><span class="ct">Why SGEN, in full</span><span class="cs">The whole case, one page</span></a>
+ <a href="why-sgen-no-plugins.html"><span class="ct">No plugins</span><span class="cs">Nothing to license or patch</span></a>
+ <a href="why-sgen-speed.html"><span class="ct">Speed</span><span class="cs">Server-side rendered</span></a>
+ </div></details>
+ <details class="dr-group"><summary>Solutions <span class="pm" aria-hidden="true">+</span></summary><div class="dr-children">
+ <a href="solutions-agencies.html"><span class="ct">Agencies</span><span class="cs">Multi-site, one dashboard</span></a>
+ <a href="solutions-small-business.html"><span class="ct">Small business</span><span class="cs">One fast site</span></a>
+ <a href="solutions-restaurants.html"><span class="ct">Restaurants</span><span class="cs">Menus, events, ordering</span></a>
+ <a href="solutions-multi-location.html"><span class="ct">Multi-location</span><span class="cs">One dashboard, many sites</span></a>
+ <a href="solutions-healthcare.html"><span class="ct">Healthcare</span><span class="cs">HIPAA compliant for healthcare</span></a>
+ <a href="solutions-freelancers.html"><span class="ct">Freelancers</span><span class="cs">Build &amp; hand off</span></a>
+ <a href="enterprise.html"><span class="ct">Enterprise</span><span class="cs">Unlimited sites, one bill</span></a>
+ </div></details>
+ <details class="dr-group"><summary>Compare <span class="pm" aria-hidden="true">+</span></summary><div class="dr-children">
+ <a href="compare-vs-wordpress.html"><span class="ct">vs WordPress</span><span class="cs">The refugee path</span></a>
+ <a href="compare-vs-elementor.html"><span class="ct">vs Elementor</span><span class="cs">Builder head-to-head</span></a>
+ <a href="compare-vs-wp-engine.html"><span class="ct">vs WP Engine</span><span class="cs">Managed hosting</span></a>
+ <a href="compare-vs-wix.html"><span class="ct">vs Wix</span><span class="cs">Own a real product</span></a>
+ <a href="compare-vs-squarespace.html"><span class="ct">vs Squarespace</span><span class="cs">Beyond templates</span></a>
+ <a href="compare-vs-godaddy.html"><span class="ct">vs GoDaddy</span><span class="cs">Past a brochure site</span></a>
+ <a href="compare.html"><span class="ct">All comparisons →</span><span class="cs">Every head-to-head</span></a>
+ <a href="migrate.html"><span class="ct">Migrate</span><span class="cs">Move off WordPress</span></a>
+ </div></details>
+ <details class="dr-group"><summary>Customers <span class="pm" aria-hidden="true">+</span></summary><div class="dr-children">
+ <a href="customers.html"><span class="ct">Customer stories</span><span class="cs">Metric-first cases</span></a>
+ <a href="showcase.html"><span class="ct">Showcase</span><span class="cs">Gallery of built sites</span></a>
+ <a href="customers-fernwood.html"><span class="ct">Fernwood Digital</span><span class="cs">23 sites, one stack</span></a>
+ <a href="customers-halloran-vint.html"><span class="ct">Halloran &amp; Vint</span><span class="cs">Consultancy rebuild</span></a>
+ </div></details>
+ <details class="dr-group"><summary>Resources <span class="pm" aria-hidden="true">+</span></summary><div class="dr-children">
+ <a href="resources.html"><span class="ct">All resources</span><span class="cs">Guides, blog, and more</span></a>
+ <a href="blog.html"><span class="ct">Blog</span><span class="cs">Notes from the platform</span></a>
+ <a href="guides.html"><span class="ct">Guides</span><span class="cs">How-to walkthroughs</span></a>
+ <a href="changelog.html"><span class="ct">Changelog</span><span class="cs">What shipped</span></a>
+ <a href="roadmap.html"><span class="ct">Roadmap</span><span class="cs">What is next</span></a>
+ <a href="status.html"><span class="ct">Status</span><span class="cs">System status</span></a>
+ </div></details>
+ <details class="dr-group"><summary>Company <span class="pm" aria-hidden="true">+</span></summary><div class="dr-children">
+ <a href="about.html"><span class="ct">About</span><span class="cs">Who we are</span></a>
+ <a href="partners.html"><span class="ct">Partners</span><span class="cs">The partner program</span></a>
+ <a href="partners-apply.html"><span class="ct">Become a partner</span><span class="cs">Apply to partner</span></a>
+ <a href="contact.html"><span class="ct">Contact</span><span class="cs">Talk to us</span></a>
+ </div></details>
+ <a class="dr-flat" href="pricing.html">Pricing</a>
+ <a class="dr-flat" href="enterprise.html">Enterprise</a>
+ <a class="dr-flat" href="https://app.sgen.com/login">Log in</a>
+ </div>
+</aside>
+
+<!-- ===== MOBILE STICKY BAR ===== -->
+<div class="mobile-bar surface-dark">
+ <a class="btn btn-primary" href="pricing.html">Start Building <span class="arr">→</span></a>
+ <a class="btn btn-secondary" href="pricing.html">Pricing</a>
+</div>
+
+<script>
+ const hdr = document.getElementById('hdr');
+ addEventListener('scroll', () => hdr.classList.toggle('is-stuck', scrollY > 10), {passive:true});
+ const drawer = document.getElementById('drawer'), overlay = document.querySelector('.drawer-overlay');
+ document.querySelectorAll('[data-drawer-open]').forEach(b => b.addEventListener('click', () => { drawer.classList.add('open'); overlay.classList.add('open'); }));
+ document.querySelectorAll('[data-drawer-close]').forEach(b => b.addEventListener('click', () => { drawer.classList.remove('open'); overlay.classList.remove('open'); }));
+ // scroll-reveal
+ const io = new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}})},{threshold:.12,rootMargin:'0px 0px -6% 0px'});
+ document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+ // mobile sticky bar, appear after hero, hide when footer CTA in view
+ const mbar = document.querySelector('.mobile-bar');
+ const heroSec = document.querySelector('main section');
+ const fcta = document.querySelector('.footer-cta');
+ function updBar(){ if(!mbar||!fcta) return; const past = scrollY > (heroSec ? heroSec.offsetTop + heroSec.offsetHeight - 140 : 480); const footerNear = fcta.getBoundingClientRect().top < innerHeight * 0.94; mbar.classList.toggle('show', past && !footerNear); }
+ addEventListener('scroll', updBar, {passive:true}); addEventListener('resize', updBar); updBar();
+ // billing toggle (pricing + any page with [data-billing])
+ document.querySelectorAll('[data-billing]').forEach(t=>t.addEventListener('click',()=>{ const mode=t.dataset.billing; document.querySelectorAll('[data-billing]').forEach(b=>b.classList.toggle('on',b===t)); document.querySelectorAll('[data-annual]').forEach(el=>{ el.textContent = mode==='annual'? el.dataset.annual : el.dataset.monthly; }); document.querySelectorAll('.billed').forEach(el=>{ if(el.dataset.annual) el.textContent = mode==='annual'? el.dataset.annual : el.dataset.monthly; }); }));
+ // megamenu keyboard + screen-reader access.
+ // CSS reveals each panel on .nav-item:hover and :focus-within (progressive enhancement, kept).
+ // Here we add an explicit JS-owned open state: aria-expanded on the trigger + an .is-open class
+ // on the .nav-item so keyboard/SR users get click-to-toggle and Escape-to-close-with-focus-restore.
+ // (A CSS rule keyed on .nav-item.is-open .megamenu makes the explicit-open path visually robust and
+ // lets Escape keep the trigger focused without :focus-within re-revealing the panel; see A9 NOTE.)
+ document.querySelectorAll('.nav-item').forEach(item => {
+ const trig = item.querySelector('.nav-trigger');
+ const panel = item.querySelector('.megamenu');
+ if (!trig || !panel) return;
+ let viaPointer = false; // distinguishes a click (pointer) from a Tab (keyboard) into the trigger
+ const sync = on => { item.classList.toggle('is-open', on); trig.setAttribute('aria-expanded', on ? 'true' : 'false'); };
+ const closeOthers = () => document.querySelectorAll('.nav-item.is-open').forEach(o => { if (o !== item) { o.classList.remove('is-open'); const t = o.querySelector('.nav-trigger'); if (t) t.setAttribute('aria-expanded','false'); } });
+ // Pointer path: mousedown flags the focus as pointer-driven so focusin does not auto-open;
+ // click then toggles. Keyboard path: no mousedown, so focusin opens on Tab-in.
+ trig.addEventListener('mousedown', () => { viaPointer = true; });
+ trig.addEventListener('click', e => {
+ e.preventDefault();
+ const willOpen = trig.getAttribute('aria-expanded') !== 'true';
+ closeOthers();
+ sync(willOpen);
+ if (willOpen) trig.focus(); else trig.blur();
+ viaPointer = false;
+ });
+ // Keyboard focus into the item opens it (covers Tab-through reveal); pointer focus is left to click.
+ item.addEventListener('focusin', () => { if (viaPointer) return; sync(true); });
+ item.addEventListener('focusout', () => { if (!item.contains(document.relatedTarget)) sync(false); });
+ // Escape closes the open panel and returns focus to its trigger.
+ item.addEventListener('keydown', e => {
+ if (e.key === 'Escape' && trig.getAttribute('aria-expanded') === 'true') { e.stopPropagation(); sync(false); trig.focus(); }
+ });
+ });
+ // Click outside any nav-item closes open megamenus.
+ document.addEventListener('click', e => { if (!e.target.closest('.nav-item')) document.querySelectorAll('.nav-item.is-open').forEach(o => { o.classList.remove('is-open'); const t = o.querySelector('.nav-trigger'); if (t) t.setAttribute('aria-expanded','false'); }); });
+</script>
+</body>
+</html>

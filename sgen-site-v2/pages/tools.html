@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Site Operations Toolbox, Seven Native Tools | SGEN</title>
+<meta name="description" content="Run your site from one operations toolbox: page caching and Core Web Vitals, JSON content import and export, site-wide database find and replace, maintenance mode, a staging gate, and full-site backups. Native on every plan. From $39/mo.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../_design/sgen-tokens.css?v=ec73c2e3">
+<link rel="stylesheet" href="../_design/sgen-structural.css?v=a102bd3a">
+<link rel="stylesheet" href="../_design/sgen-chrome.css?v=5245d0e3">
+<link rel="stylesheet" href="tools.css?v=264874f6">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- ===== TOP UTILITY BAR ===== -->
+<div class="topbar"><div class="in">
+ <span class="msg"><span class="spark">◆</span> <b>One platform, priced by sites.</b><span class="long"> Every module included.</span></span>
+ <span class="util"><a class="hide-sm" href="developers.html">Docs</a><a class="hide-sm" href="changelog.html">Changelog</a><span class="status"><span class="d"></span> All systems operational</span></span>
+</div></div>
+
+<!-- ===== HEADER (mega-menu) ===== -->
+<header class="site-header" id="hdr"><div class="in">
+ <a class="brand" href="../pages/home.html">SGEN<span class="dot">.</span></a>
+ <nav class="site-nav">
+ <div class="nav-item">
+ <button class="nav-trigger" aria-haspopup="true" aria-expanded="false" aria-controls="mm-product">Product <span class="chev"></span></button>
+ <div class="megamenu mm-wide" id="mm-product"><div class="mm-inner">
+ <span class="mm-watermark" aria-hidden="true">PRODUCT</span>
+ <div class="mm-cols">
+ <div class="mm-col"><div class="mm-head">Build &amp; Design</div>
+ <a class="mm-link" href="page-builder.html"><span class="t"><span class="gl"></span>SG Builder</span><span class="s">Design pages visually</span></a>
+ <a class="mm-link" href="templates.html"><span class="t"><span class="gl"></span>Templates</span><span class="s">Start from a real design</span></a>
+ <a class="mm-link" href="theme-editor.html"><span class="t"><span class="gl"></span>Theme Editor</span><span class="s">Colors, fonts, and presets</span></a>
+ <a class="mm-link" href="media-library.html"><span class="t"><span class="gl"></span>Media Library</span><span class="s">Assets, optimized and fast</span></a>
+ <a class="mm-link" href="menus.html"><span class="t"><span class="gl"></span>Menus</span><span class="s">Build navigation visually</span></a>
+ <a class="mm-link" href="pages-and-posts.html"><span class="t"><span class="gl"></span>Pages &amp; Posts</span><span class="s">Every content type</span></a>
+ <a class="mm-link" href="custom-objects.html"><span class="t"><span class="gl"></span>Custom Objects</span><span class="s">Native content modeling</span></a>
+ </div>
+ <div class="mm-col"><div class="mm-head">Sell</div>
+ <a class="mm-link" href="ecommerce.html"><span class="t"><span class="gl"></span>Ecommerce</span><span class="s">Catalog, checkout, tax</span></a>
+ <a class="mm-link" href="discussions.html"><span class="t"><span class="gl"></span>Discussions &amp; Reviews</span><span class="s">Reviews and comments</span></a>
+ <a class="mm-link" href="events.html"><span class="t"><span class="gl"></span>Events</span><span class="s">Events and a calendar</span></a>
+ </div>
+ <div class="mm-col"><div class="mm-head">Grow &amp; Convert</div>
+ <a class="mm-link" href="forms.html"><span class="t"><span class="gl"></span>Forms</span><span class="s">Lead capture, native</span></a>
+ <a class="mm-link" href="popups.html"><span class="t"><span class="gl"></span>Popups</span><span class="s">On-demand and autoload</span></a>
+ <a class="mm-link" href="seo-optimization.html"><span class="t"><span class="gl"></span>SEO</span><span class="s">Titles, meta, and robots</span></a>
+ <a class="mm-link" href="attributions.html"><span class="t"><span class="gl"></span>Attribution</span><span class="s">The source of every lead</span></a>
+ <a class="mm-link" href="analytics.html"><span class="t"><span class="gl"></span>Analytics</span><span class="s">Dashboard plus raw events</span></a>
+ <a class="mm-link" href="integrations.html"><span class="t"><span class="gl"></span>Integrations</span><span class="s">Stripe, Google, and more</span></a>
+ </div>
+ <div class="mm-col"><div class="mm-head">Operate</div>
+ <a class="mm-link" href="site-manager.html"><span class="t"><span class="gl"></span>Site Manager</span><span class="s">One cockpit per site</span></a>
+ <a class="mm-link" href="backups.html"><span class="t"><span class="gl"></span>Backups</span><span class="s">Backups and save-points</span></a>
+ <a class="mm-link" href="stage-live.html"><span class="t"><span class="gl"></span>Stage &amp; Live</span><span class="s">Restore and roll back</span></a>
+ <a class="mm-link" href="advanced-settings.html"><span class="t"><span class="gl"></span>Advanced Settings</span><span class="s">Email, import, export</span></a>
+ <a class="mm-link" href="users-and-roles.html"><span class="t"><span class="gl"></span>Users &amp; Roles</span><span class="s">Directory plus audit log</span></a>
+ <a class="mm-link" href="redirects.html"><span class="t"><span class="gl"></span>Redirects</span><span class="s">Native 301 and 302 rules</span></a>
+ </div>
+ <div class="mm-col"><div class="mm-head">Secure &amp; Comply</div>
+ <a class="mm-link" href="security.html"><span class="t"><span class="gl"></span>Security</span><span class="s">Platform WAF by default</span></a>
+ <a class="mm-link" href="security.html"><span class="t"><span class="gl"></span>Age Verification</span><span class="s">Age gate for regulated</span></a>
+ <a class="mm-link" href="legal-cookie-policy.html"><span class="t"><span class="gl"></span>Consent &amp; Tracking</span><span class="s">Consent banner plus log</span></a>
+ <a class="mm-link" href="trust.html"><span class="t"><span class="gl"></span>Trust</span><span class="s">WAF, SSL, CDN, logging</span></a>
+ <a class="mm-link" href="accessibility.html"><span class="t"><span class="gl"></span>Accessibility</span><span class="s">Conformance status</span></a>
+ </div>
+ </div>
+ <a class="mm-feat" href="page-builder.html"><span class="badge">Flagship</span><span class="k">SG Builder</span><span class="ttl">Build it visually. Ship it server-rendered.</span><span class="sub">A true visual builder with 48 native components and a real product underneath.</span><span class="go">Explore the builder →</span></a>
+ <div class="mm-index"><a href="overview-modules.html"><b>All 23 modules</b> The whole platform, in the box</a><a href="overview-core.html"><b>SG-Core</b> The native content engine</a><a href="overview-dashboard.html"><b>SG-Dashboard</b> The operating layer, one hub</a></div>
+ </div></div>
+ </div>
+ <div class="nav-item">
+ <button class="nav-trigger" aria-haspopup="true" aria-expanded="false" aria-controls="mm-why">Why SGEN <span class="chev"></span></button>
+ <div class="megamenu" id="mm-why"><div class="mm-inner">
+ <span class="mm-watermark" aria-hidden="true">WHY</span>
+ <div class="mm-col"><div class="mm-head">The case</div>
+ <a class="mm-link" href="why-sgen-no-plugins.html"><span class="t"><span class="gl"></span>No plugins</span><span class="s">Native modules, nothing to license or patch</span></a>
+ <a class="mm-link" href="why-sgen-speed.html"><span class="t"><span class="gl"></span>Speed</span><span class="s">Server-side rendered, fast by default</span></a>
+ <a class="mm-link" href="why-sgen.html"><span class="t"><span class="gl"></span>Why SGEN, in full</span><span class="s">The whole case, one page</span></a>
+ </div>
+ <div class="mm-col"><div class="mm-head">The model</div>
+ <a class="mm-link" href="pricing.html"><span class="t"><span class="gl"></span>One stack</span><span class="s">No plugin tax, no suite tax</span></a>
+ <a class="mm-link" href="pricing.html"><span class="t"><span class="gl"></span>Priced by sites</span><span class="s">Not by features</span></a>
+ </div>
+ <a class="mm-feat" href="why-sgen.html"><span class="badge">The wedge</span><span class="k">Native, not plugins</span><span class="ttl">One stack. Nothing to license or patch.</span><span class="sub">The whole platform is the box, hosting, builder, SEO, attribution, security.</span><span class="go">See why SGEN →</span></a>
+ </div></div>
+ </div>
+ <div class="nav-item">
+ <button class="nav-trigger" aria-haspopup="true" aria-expanded="false" aria-controls="mm-solutions">Solutions <span class="chev"></span></button>
+ <div class="megamenu" id="mm-solutions"><div class="mm-inner">
+ <span class="mm-watermark" aria-hidden="true">SOLUTIONS</span>
+ <div class="mm-col"><div class="mm-head">By team</div>
+ <a class="mm-link" href="solutions-agencies.html"><span class="t"><span class="gl"></span>Agencies</span><span class="s">Run every client site from one dashboard</span></a>
+ <a class="mm-link" href="solutions-freelancers.html"><span class="t"><span class="gl"></span>Freelancers</span><span class="s">Build on Sandbox, hand off</span></a>
+ </div>
+ <div class="mm-col"><div class="mm-head">By business</div>
+ <a class="mm-link" href="solutions-small-business.html"><span class="t"><span class="gl"></span>Small business</span><span class="s">One fast site, done right</span></a>
+ <a class="mm-link" href="solutions-restaurants.html"><span class="t"><span class="gl"></span>Restaurants</span><span class="s">Menus, events, online ordering</span></a>
+ <a class="mm-link" href="solutions-multi-location.html"><span class="t"><span class="gl"></span>Multi-location</span><span class="s">One dashboard, many sites</span></a>
+ <a class="mm-link" href="solutions-healthcare.html"><span class="t"><span class="gl"></span>Healthcare</span><span class="s">HIPAA compliant for healthcare</span></a>
+ </div>
+ <a class="mm-feat" href="solutions-agencies.html"><span class="badge">For teams</span><span class="k">Agencies</span><span class="ttl">Run an unlimited portfolio from one dashboard.</span><span class="sub">Multi-site portfolio, fixed roles, audit log, Enterprise from $497/mo.</span><span class="go">See the agency plan →</span></a>
+ </div></div>
+ </div>
+ <div class="nav-item">
+ <button class="nav-trigger" aria-haspopup="true" aria-expanded="false" aria-controls="mm-compare">Compare <span class="chev"></span></button>
+ <div class="megamenu" id="mm-compare"><div class="mm-inner">
+ <span class="mm-watermark" aria-hidden="true">VS</span>
+ <div class="mm-col"><div class="mm-head">Deep dives</div>
+ <a class="mm-link" href="compare-vs-wordpress.html"><span class="t"><span class="gl"></span>vs WordPress</span><span class="s">The refugee path</span></a>
+ <a class="mm-link" href="compare-vs-elementor.html"><span class="t"><span class="gl"></span>vs Elementor</span><span class="s">Builder head-to-head</span></a>
+ <a class="mm-link" href="compare-vs-wp-engine.html"><span class="t"><span class="gl"></span>vs WP Engine</span><span class="s">Managed hosting</span></a>
+ </div>
+ <div class="mm-col"><div class="mm-head">Quick looks</div>
+ <a class="mm-link" href="compare-vs-wix.html"><span class="t"><span class="gl"></span>vs Wix</span><span class="s">Own a real product</span></a>
+ <a class="mm-link" href="compare-vs-squarespace.html"><span class="t"><span class="gl"></span>vs Squarespace</span><span class="s">Beyond templates</span></a>
+ <a class="mm-link" href="compare-vs-godaddy.html"><span class="t"><span class="gl"></span>vs GoDaddy</span><span class="s">Past a brochure site</span></a>
+ <a class="mm-link" href="compare.html"><span class="t"><span class="gl"></span>All comparisons →</span><span class="s">Every head-to-head in one place</span></a>
+ </div>
+ <a class="mm-feat" href="migrate.html"><span class="badge">Switching?</span><span class="k">/migrate</span><span class="ttl">Move off WordPress, the honest way.</span><span class="sub">A move is a rebuild, and that's the upgrade. White-glove or DIY.</span><span class="go">See how migration works →</span></a>
+ </div></div>
+ </div>
+ <div class="nav-item">
+ <button class="nav-trigger" aria-haspopup="true" aria-expanded="false" aria-controls="mm-customers">Customers <span class="chev"></span></button>
+ <div class="megamenu" id="mm-customers"><div class="mm-inner">
+ <span class="mm-watermark" aria-hidden="true">PROOF</span>
+ <div class="mm-col"><div class="mm-head">Explore</div>
+ <a class="mm-link" href="customers.html"><span class="t"><span class="gl"></span>Customer stories</span><span class="s">Metric-first case grid</span></a>
+ <a class="mm-link" href="showcase.html"><span class="t"><span class="gl"></span>Showcase</span><span class="s">Gallery of sites built on SGEN</span></a>
+ <a class="mm-link" href="customers.html"><span class="t"><span class="gl"></span>Case studies</span><span class="s">The full teardown, deep</span></a>
+ </div>
+ <div class="mm-col"><div class="mm-head">Built on SGEN</div>
+ <a class="mm-link" href="why-sgen-no-plugins.html"><span class="t"><span class="gl"></span>Zero plugins</span><span class="s">Under every site in the reel</span></a>
+ <a class="mm-link" href="pricing.html"><span class="t"><span class="gl"></span>One stack</span><span class="s">Forms, store, SEO, all native</span></a>
+ </div>
+ <a class="mm-feat" href="customers-fernwood.html"><span class="badge">Case study</span><span class="k">Fernwood Digital</span><span class="ttl">23 client sites, one stack, one login.</span><span class="sub">A studio that retired the plugin-maintenance tax.</span><span class="go">Read the story →</span></a>
+ </div></div>
+ </div>
+ <a class="nav-trigger" href="pricing.html">Pricing</a>
+ </nav>
+ <div class="site-actions">
+ <a class="login" href="https://app.sgen.com/login">Log in</a>
+ <a class="btn btn-primary" href="pricing.html">Start Building <span class="arr">→</span></a>
+ <button class="hamburger" data-drawer-open aria-label="Menu"><span></span><span></span><span></span></button>
+ </div>
+</div></header>
+
+<main id="main">
+<!-- 1 · HERO · the 7-tool Tools router (3-column operations toolbox) -->
+<section class="sec t-hero surface-dark has-atmos">
+ <div class="wrap">
+ <div class="lede reveal">
+ <div class="eyebrow">Native module &middot; Tools</div>
+ <h1>Run your whole site from <span class="grad">one operations toolbox.</span></h1>
+ <p class="lead">SGEN groups seven operations tools under a single Tools node and reads them back as a three-column screen: the dark sidebar with Tools expanded and red-active, an in-content card-list that repeats all seven with one-line descriptors, and the active tool's own panel. The bare Tools route 302-redirects to the first sub-tool, so you always land on real work, not a settings index.</p>
+ <p class="beat">The seven are Google Integrations, Search and Replace, Post Migration, Maintenance Mode, Site Protection, Optimization, and Misc Tools, with a sibling Migration node beneath them for full-site backups. The work of running a site lives on a few admin screens instead of a stack of plugins, each with its own update cycle.</p>
+ <div class="cta flex">
+ <a class="btn btn-primary" href="pricing.html">Start Building <span class="arr">&rarr;</span></a>
+ <a class="btn btn-secondary" href="pricing.html">Compare Plans</a>
+ </div>
+ </div>
+
+ <div class="stage reveal" data-d="1">
+ <div class="adwin" aria-hidden="true">
+ <div class="adbar"><span class="ic"></span><span class="ti">Tools<small>One operations toolbox, seven tools</small></span><span class="act ghost">Migration</span></div>
+ <div class="trouter">
+ <div class="tnav-side">
+ <div class="grp">Configuration</div>
+ <div class="nrow parent"><span class="gl"></span>Tools</div>
+ <div class="nsub">
+ <span class="s">Google Integrations</span>
+ <span class="s on">Search &amp; Replace</span>
+ <span class="s">Post Migration</span>
+ <span class="s">Maintenance Mode</span>
+ <span class="s">Site Protection</span>
+ <span class="s">Optimization</span>
+ <span class="s">Misc Tools</span>
+ </div>
+ <div class="nrow"><span class="gl"></span>Migration</div>
+ </div>
+ <div class="tnav-card">
+ <div class="ch"><span class="ti">G</span><span class="lab"><span class="n">Google Integrations</span><span class="d">Search Console &amp; APIs</span></span><span class="cv">&rsaquo;</span></div>
+ <div class="ch on"><span class="ti">S</span><span class="lab"><span class="n">Search &amp; Replace</span><span class="d">Database find &amp; replace</span></span><span class="cv">&rsaquo;</span></div>
+ <div class="ch"><span class="ti">P</span><span class="lab"><span class="n">Post Migration</span><span class="d">Import / Export Post Types</span></span><span class="cv">&rsaquo;</span></div>
+ <div class="ch"><span class="ti">M</span><span class="lab"><span class="n">Maintenance Mode</span><span class="d">Temporary offline</span></span><span class="cv">&rsaquo;</span></div>
+ <div class="ch"><span class="ti">P</span><span class="lab"><span class="n">Site Protection</span><span class="d">Password protect</span></span><span class="cv">&rsaquo;</span></div>
+ <div class="ch"><span class="ti">O</span><span class="lab"><span class="n">Optimization</span><span class="d">Performance settings</span></span><span class="cv">&rsaquo;</span></div>
+ <div class="ch"><span class="ti">U</span><span class="lab"><span class="n">Misc Tools</span><span class="d">Utilities</span></span><span class="cv">&rsaquo;</span></div>
+ </div>
+ <div class="tnav-panel">
+ <div class="thead">
+ <span class="mi"></span>
+ <span class="ht"><span class="h">Search &amp; Replace</span><span class="bc">Dashboard / Tools / Search &amp; Replace</span></span>
+ <span class="pa">Run Search/Replace</span>
+ </div>
+ <div class="tbody">
+ <div class="pcard"><div class="pt">What to replace</div>
+ <div class="prow"><span class="k">search_for</span><span class="v">studio.old-domain.com</span></div>
+ <div class="prow"><span class="k">replace_with</span><span class="v">studio.new-domain.com</span></div>
+ </div>
+ <div class="pcard"><div class="pt">Options</div>
+ <div class="prow"><span class="k">dry_run</span><span class="sw"></span></div>
+ <div class="prow"><span class="k">case_insensitive</span><span class="sw off"></span></div>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+</section>
+
+<!-- 2 · WHAT THE TOOLBOX DOES · the operator lifecycle -->
+<section class="sec sec--warm">
+ <div class="wrap">
+ <div class="readw reveal">
+ <div class="eyebrow">Operator-grade, native</div>
+ <h2 class="h2">The work of running a site, <span class="grad">on a handful of admin screens.</span></h2>
+ <p class="lead" style="margin-top:16px">The Tools cluster owns the jobs a site needs after it launches: tune how pages are served, move content in and out, swap a domain across the database, hold the front door during a cutover, gate a staging build, and snapshot the whole site before a risky change. No performance plugin to license, no search-replace add-on, no separate backup product, each its own install with its own maintainer.</p>
+ </div>
+ <div class="grid g-3" style="margin-top:42px">
+ <div class="card reveal"><div class="ico"><span class="m"></span></div><h3 class="h3">Performance you can read</h3><p style="margin-top:10px">The Optimization tool carries 6 settings cards and around 14 controls for caching, minification, deferral, lazy-loading, and LCP media preloading. The Dashboard Site Vitals card reads the result back in four metrics.</p></div>
+ <div class="card reveal" data-d="1"><div class="ico"><span class="m"></span></div><h3 class="h3">Content in and out</h3><p style="margin-top:10px">Export your whole library to one JSON file with exact counts, or import via a Basic JSON path that keeps draft and publish status, or an Advanced path with a visual field-mapping step for CSV or JSON.</p></div>
+ <div class="card reveal" data-d="2"><div class="ico"><span class="m"></span></div><h3 class="h3">Database find and replace</h3><p style="margin-top:10px">Swap a domain or a brand name across the whole database from a per-table picker, with a dry-run preview first and a timestamped SQL backup written before any real change.</p></div>
+ <div class="card reveal"><div class="ico"><span class="m"></span></div><h3 class="h3">A go-live pair</h3><p style="margin-top:10px">Maintenance Mode swaps the public site for a holding page you edit in a real HTML editor. Site Protection gates a staging build behind a single access key while you build.</p></div>
+ <div class="card reveal" data-d="1"><div class="ico"><span class="m"></span></div><h3 class="h3">A safety net, in one click</h3><p style="margin-top:10px">The Backups tool captures the database and the uploads directory into one .sgen archive, listed on a clean table you can rename and restore from. Take a point-in-time snapshot before anything risky.</p></div>
+ <div class="card reveal" data-d="2"><div class="ico"><span class="m"></span></div><h3 class="h3">Platform health</h3><p style="margin-top:10px">Misc Tools reclaims database space by clearing post revisions, and a Database Checker verifies that every required table is present. Keep the platform tidy from one place, no maintenance contract.</p></div>
+ </div>
+ </div>
+</section>
+
+<!-- 3 · OPTIMIZATION console + Site Vitals payoff -->
+<section class="sec surface-dark has-atmos" style="background:var(--sg-bg-2)">
+ <div class="wrap">
+ <div class="readw reveal">
+ <div class="eyebrow">Optimization &middot; performance settings</div>
+ <h2 class="h2">Tune Core Web Vitals from one console, <span class="grad">then watch the numbers move.</span></h2>
+ <p class="lead" style="margin-top:16px">The Optimization tool stacks 6 settings cards, around 14 controls in all, that govern how every page is served: caching with a lifespan, HTML, CSS, and JS minification with per-URL exclude lists, CSS and JavaScript deferral, lazy-loading with an above-the-fold skip list, and LCP media preloading. The Dashboard Site Vitals card is the visible payoff, the settings on the left, the read-out on the right.</p>
+ </div>
+ <div class="adwin reveal" data-d="1" style="margin-top:40px" aria-hidden="true">
+ <div class="adbar"><span class="ic"></span><span class="ti">Optimization<small>Performance settings</small></span><span class="act">Save Changes</span></div>
+ <div class="topt">
+ <div class="ocards">
+ <div class="ocard"><div class="oh"><span class="nm">Caching</span><span class="ix"><b></b></span></div>
+ <div class="ctl"><span class="cn">enable_cache</span><span class="ms"></span></div>
+ <div class="ctl"><span class="cn">cache_lifespan</span><span class="num">1440 min</span></div>
+ </div>
+ <div class="ocard"><div class="oh"><span class="nm">Minification</span><span class="ix"><b></b></span></div>
+ <div class="ctl"><span class="cn">minify_html</span><span class="ms"></span></div>
+ <div class="ctl"><span class="cn">minify_css</span><span class="ms"></span></div>
+ <div class="ctl"><span class="cn">minify_js</span><span class="ms off"></span></div>
+ <div class="ta">exclude_minify_css:
+/assets/print.css
+exclude_minify_js:
+/vendor/maps.js</div>
+ </div>
+ <div class="ocard"><div class="oh"><span class="nm">CSS Optimization</span><span class="ix"><b></b></span></div>
+ <div class="ctl"><span class="cn">defer_css</span><span class="ms"></span></div>
+ </div>
+ <div class="ocard"><div class="oh"><span class="nm">JavaScript Optimization</span><span class="ix"><b></b></span></div>
+ <div class="ctl"><span class="cn">defer_js</span><span class="ms"></span></div>
+ <div class="ta">exclude_defer_js:
+/js/checkout.js
+Inline DOMContentLoaded helper added on defer.</div>
+ </div>
+ <div class="ocard"><div class="oh"><span class="nm">Lazy Loading</span><span class="ix"><b></b></span></div>
+ <div class="ctl"><span class="cn">lazyload</span><span class="ms"></span></div>
+ <div class="ta">lazyload_critical_media:
+/img/hero.webp (skip, above the fold)</div>
+ </div>
+ <div class="ocard"><div class="oh"><span class="nm">Media Preloading</span><span class="ix"><b></b></span></div>
+ <div class="ta">lazyload_preload_media:
+desktop|/img/hero.webp|high|anonymous
+mobile|/img/hero-m.webp|high</div>
+ </div>
+ <div class="osave"><span class="mk">Save Changes</span></div>
+ </div>
+ <div class="adwin tvit">
+ <div class="vh"><span class="ti" style="font-weight:800;font-size:13px">Site Vitals</span><span class="seg"><b class="on">Desktop</b><b>Mobile</b></span></div>
+ <div class="scan">Core performance metrics &middot; Last scan: Apr 21, 9:06 AM</div>
+ <div class="vtiles">
+ <div class="vtile"><div class="vn">0.7s</div><div class="vk">First Content Paint</div><span class="vg good"><span class="dt"></span>Good</span></div>
+ <div class="vtile"><div class="vn">0.8s</div><div class="vk">Avg. Load Speed</div><span class="vg good"><span class="dt"></span>Good</span></div>
+ <div class="vtile"><div class="vn">76%</div><div class="vk">Performance Score</div><span class="vg avg"><span class="dt"></span>Average</span></div>
+ <div class="vtile"><div class="vn">1.2s</div><div class="vk">Speed Index</div><span class="vg good"><span class="dt"></span>Good</span></div>
+ </div>
+ </div>
+ </div>
+ </div>
+ <p class="reveal" style="margin-top:22px;max-width:78ch;color:var(--sg-ink-soft)">You set how pages are delivered, then save. Site Vitals is a stored snapshot from the last scan, not a live monitor, so the 0.7s and 76% you see are the captured read-out, a Core Web Vitals story competitors usually sell as a paid plugin, native here.</p>
+ </div>
+</section>
+
+<!-- 4 · IMPORT / EXPORT PAGES (content portability) -->
+<section class="sec sec--alt">
+ <div class="wrap">
+ <div class="readw reveal">
+ <div class="eyebrow">Post Migration &middot; import &amp; export</div>
+ <h2 class="h2">Export your whole library to JSON, <span class="grad">or import with a field-mapping step.</span></h2>
+ <p class="lead" style="margin-top:16px">The Import / Export Pages tool moves content both directions on a two-tab screen, header "Import / Export Pages", subtitle "Import or export content using JSON or CSV". Pick the content types to export, read the exact record count, and download one file, or drop a file in and map its columns to the right fields on the way in. This is the work that is normally a handful of separate WordPress plugins, each with its own settings page.</p>
+ </div>
+ <div class="tie reveal" data-d="1" style="margin-top:40px">
+ <div class="adwin" aria-hidden="true">
+ <div class="adbar"><span class="ic"></span><span class="ti">Import / Export Pages<small>Import or export content using JSON or CSV</small></span></div>
+ <div class="ietabs"><b>Import</b><b class="on">Export</b></div>
+ <div class="iebody">
+ <div class="ttl">Select a content to export</div>
+ <div class="iecards">
+ <div class="ec all sel"><span class="cb"></span><span class="et"><span class="en">All Content</span><span class="ct">28 items</span></span></div>
+ <div class="ec"><span class="cb"></span><span class="et"><span class="en">Page</span><span class="ct">19 items</span></span></div>
+ <div class="ec"><span class="cb"></span><span class="et"><span class="en">Blog</span><span class="ct">9 items</span></span></div>
+ </div>
+ <div class="iefmt"><span class="l">Format</span><span class="pick">JSON</span></div>
+ <div class="ietot">Total records to export: <b>28</b>.</div>
+ <span class="ieexp"><span class="arr">&darr;</span> Export Selected Content</span>
+ </div>
+ </div>
+ <div>
+ <div class="adwin" aria-hidden="true">
+ <div class="adbar"><span class="ic"></span><span class="ti">Import<small>Upload a file</small></span></div>
+ <div class="iebody">
+ <div class="iedrop">
+ <span class="up"><b></b></span>
+ <div class="dt">Drop your file here or browse</div>
+ <div class="ds">Supports JSON and CSV files</div>
+ <span class="chip">JSON / CSV &middot; No file selected</span>
+ </div>
+ </div>
+ </div>
+ <div class="adwin iemap">
+ <div class="mt">Advanced import &middot; field mapping</div>
+ <div class="mgrp">Standard fields</div>
+ <div class="mrow"><span class="src">post_title</span><span class="ar">&rarr;</span><span class="tgt">title</span></div>
+ <div class="mrow"><span class="src">body_html</span><span class="ar">&rarr;</span><span class="tgt">content</span></div>
+ <div class="mrow"><span class="src">state</span><span class="ar">&rarr;</span><span class="tgt">custom_status</span></div>
+ <div class="mgrp">Post custom fields</div>
+ <div class="mrow"><span class="src">region</span><span class="ar">&rarr;</span><span class="tgt">page_type</span></div>
+ </div>
+ </div>
+ </div>
+ <p class="label reveal" style="margin-top:16px">Whole-site JSON portability out, CSV or JSON field-mapped import in. Migrate from a spreadsheet or another CMS export, or lift your whole site to one file.</p>
+ </div>
+</section>
+
+<!-- 5 · SEARCH & REPLACE (site-wide DB find/replace) -->
+<section class="sec surface-dark has-atmos">
+ <div class="wrap">
+ <div class="readw reveal">
+ <div class="eyebrow">Search &amp; Replace &middot; database find/replace</div>
+ <h2 class="h2">Swap a domain or rebrand across the whole database, <span class="grad">with a dry-run first.</span></h2>
+ <p class="lead" style="margin-top:16px">The Search &amp; Replace tool runs a find-and-replace across your database from three cards: what to replace, which tables to touch, and the run options. Scope the change with a per-table picker that shows each table's size, preview it with the dry-run toggle before any write, and let the tool save a timestamped SQL backup the moment you run it for real.</p>
+ </div>
+ <div class="adwin reveal" data-d="1" style="margin-top:40px" aria-hidden="true">
+ <div class="adbar"><span class="ic"></span><span class="ti">Search &amp; Replace<small>Database find &amp; replace</small></span></div>
+ <div class="tsr">
+ <div class="srcard">
+ <div class="sct">What to Replace</div>
+ <div class="fr"><span class="l">search_for</span><div class="i">studio.old-domain.com</div></div>
+ <div class="fr"><span class="l">replace_with</span><div class="i">studio.new-domain.com</div></div>
+ <div class="warn"><span class="wi"></span><span class="wt">Create a backup before you run a live replace. A timestamped SQL backup is written automatically before any non-dry-run change.</span></div>
+ </div>
+ <div class="srcard tables">
+ <div class="sct">Select Tables</div>
+ <div class="tfilter"><span class="si">Filter tables</span><span class="sa">Select All / Deselect All</span></div>
+ <div class="srlist">
+ <div class="trow on"><span class="cb"></span><span class="tn">custom_codes</span><span class="sz">2.4 MB</span></div>
+ <div class="trow on"><span class="cb"></span><span class="tn">custom_codes_meta</span><span class="sz">0.9 MB</span></div>
+ <div class="trow on"><span class="cb"></span><span class="tn">custom_fields</span><span class="sz">5.1 MB</span></div>
+ <div class="trow"><span class="cb"></span><span class="tn">custom_objects</span><span class="sz">3.7 MB</span></div>
+ </div>
+ <div class="srcount"><b>3</b> tables selected</div>
+ </div>
+ <div class="srcard">
+ <div class="sct">Options</div>
+ <div class="sropt"><span>dry_run<span class="on-note">preview, default on</span></span><span class="sw"></span></div>
+ <div class="sropt"><span>case_insensitive</span><span class="sw off"></span></div>
+ <span class="srrun">Run Search/Replace <span class="arr">&rarr;</span></span>
+ <div class="srbk">Writes <span class="f">search_replace_backup_2026-04-23-1402.sql</span></div>
+ </div>
+ </div>
+ </div>
+ <p class="reveal" style="margin-top:22px;max-width:76ch;color:var(--sg-ink-soft)">Lead with the table picker, the dry-run preview, and the automatic pre-write SQL backup. Leave case-insensitive off for anything but an exact, case-matched swap, since it changes the casing of a whole field. This is database text replacement, the trust story is the preview plus the backup, not a header claim.</p>
+ </div>
+</section>
+
+<!-- 6 · GO-LIVE PAIR: Maintenance Mode + Site Protection -->
+<section class="sec sec--warm">
+ <div class="wrap">
+ <div class="readw reveal">
+ <div class="eyebrow">Maintenance Mode + Site Protection &middot; go-live</div>
+ <h2 class="h2">Hold the front door with a custom holding page, <span class="grad">or a single staging key.</span></h2>
+ <p class="lead" style="margin-top:16px">Maintenance Mode swaps the public site for a holding page you control, a real HTML editor with line numbers, syntax highlighting, and {{site_title}} templating, so visitors land on a clean "We're working on some updates" page while you work. Site Protection gates a staging build behind one access key. Build behind Site Protection, then flip Maintenance Mode for the cutover window.</p>
+ </div>
+ <div class="tgolive reveal" data-d="1" style="margin-top:40px">
+ <div class="adwin" aria-hidden="true">
+ <div class="adbar"><span class="ic"></span><span class="ti">Maintenance Mode<small>Temporary offline</small></span><span class="act ghost">Save</span></div>
+ <div class="mm-body">
+ <div class="mm-toggle"><span class="q">Enable maintenance mode?</span><span class="sw off"></span></div>
+ <div class="cmed">
+ <div class="cmh"><span class="lbl">Content</span><span class="lang">HTML</span></div>
+ <div class="code">
+ <div class="ln">1<br>2<br>3<br>4<br>5</div>
+ <div class="src"><span class="tag">&lt;section class="holding"&gt;</span>
+ <span class="tag">&lt;h1&gt;</span><span class="var">{{site_title}}</span><span class="tag">&lt;/h1&gt;</span>
+ <span class="tag">&lt;p&gt;</span><span class="txt">We're working on some updates.</span><span class="tag">&lt;/p&gt;</span>
+ <span class="tag">&lt;p&gt;</span><span class="txt">Back shortly.</span><span class="tag">&lt;/p&gt;</span>
+<span class="tag">&lt;/section&gt;</span></div>
+ </div>
+ </div>
+ <div class="holding">
+ <div class="hp"><span class="hb"></span><h6>Studio Northcraft</h6><p>We're working on some updates.</p></div>
+ </div>
+ </div>
+ </div>
+ <div class="adwin" aria-hidden="true">
+ <div class="adbar"><span class="ic"></span><span class="ti">Site Protection<small>Password protect</small></span><span class="act ghost">Save</span></div>
+ <div class="sp-body">
+ <div class="mm-toggle"><span class="q">Enable protection mode?</span><span class="sw"></span></div>
+ <div class="sp-key">
+ <div class="kl">Access Key</div>
+ <div class="kfield"><span class="dots">&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;</span><span class="eye"></span></div>
+ </div>
+ <p class="sp-note">Site Protection is a single shared-key gate that holds a staging build behind one password while you build. It is a staging gate, not user accounts or full authentication. Share the key with whoever needs to preview the build, and change it before launch.</p>
+ </div>
+ </div>
+ </div>
+ </div>
+</section>
+
+<!-- 7 · BACKUPS: one-click full-site snapshot manager -->
+<section class="sec">
+ <div class="wrap">
+ <div class="readw reveal">
+ <div class="eyebrow">Migration &middot; Backups</div>
+ <h2 class="h2">Snapshot your entire site, content, settings, and media, <span class="grad">in one click.</span></h2>
+ <p class="lead" style="margin-top:16px">The Backups tool captures the whole site, the database plus the uploads directory, into one .sgen archive, listed on a clean table. Take a point-in-time snapshot before any risky change, rename a snapshot inline so you remember why you took it, and keep a safety net built into the platform rather than a separate backup product.</p>
+ </div>
+ <div class="adwin light reveal" data-d="1" style="margin-top:40px" aria-hidden="true">
+ <div class="tbk-head">
+ <span class="mi"></span>
+ <span class="ht"><span class="h">Backups</span><span class="bc">Dashboard &rsaquo; Migration &rsaquo; Backups</span></span>
+ <span class="create">+ Create a Backup</span>
+ </div>
+ <div class="bk-banner"><span class="sp"></span>A backup or restore job is currently in progress.</div>
+ <div class="bktab">
+ <div class="th"><span>Filename</span><span>Size</span><span>Date Created</span><span>Actions</span></div>
+ <div class="tr renaming">
+ <span class="fn"><span class="edit">post-product-launch-v2</span><span class="hint">Press Enter to save</span></span>
+ <span class="sz">142 MB</span>
+ <span class="dt">Apr 23, 2026, 2:02 pm</span>
+ <span class="act"><span class="restore">Restore</span><span>Rename</span><span class="del">Delete</span></span>
+ </div>
+ <div class="tr">
+ <span class="fn">backup-2026-04-23-1402.sgen</span>
+ <span class="sz">142 MB</span>
+ <span class="dt">Apr 23, 2026, 2:02 pm</span>
+ <span class="act"><span class="restore">Restore</span><span>Rename</span><span class="del">Delete</span></span>
+ </div>
+ <div class="tr">
+ <span class="fn">backup-2026-02-28.sgen</span>
+ <span class="sz">131 MB</span>
+ <span class="dt">Feb 28, 2026</span>
+ <span class="act"><span class="restore">Restore</span><span>Rename</span><span class="del">Delete</span></span>
+ </div>
+ <div class="tr">
+ <span class="fn">backup-2026-02-14.sgen</span>
+ <span class="sz">128 MB</span>
+ <span class="dt">Feb 14, 2026</span>
+ <span class="act"><span class="restore">Restore</span><span>Rename</span><span class="del">Delete</span></span>
+ </div>
+ </div>
+ <div class="bk-bundle"><span class="b">database.sql</span><span class="b">uploads directory</span><span class="b">site settings</span><span class="b">media</span><span class="b">one .sgen archive</span></div>
+ </div>
+ <p class="reveal" style="margin-top:18px;max-width:78ch;color:var(--sg-ink-soft)">One click writes a full-site archive you can list, rename, and restore from. Restore replaces the live site, so it is a deliberate, platform-assisted recovery step, save a fresh snapshot first. Backups are manual and kept on the same disk, with no scheduler, so create one before each risky change.</p>
+ </div>
+</section>
+
+<!-- 8 · DARK STAT BAND (platform-health punctuation, no Patchstack stat) -->
+<section class="sec surface-dark has-atmos" style="background:var(--sg-bg-deep)">
+ <div class="wrap">
+ <div class="sec-head readw reveal"><div class="eyebrow">The platform behind the toolbox</div><h2 class="h2">Operator-grade tooling, in the box on every plan.</h2></div>
+ <div class="stat-band" style="margin-top:42px">
+ <div class="s reveal"><span class="stat">7</span><div class="cap">operations tools under one Tools node</div></div>
+ <div class="s reveal" data-d="1"><span class="stat">6</span><div class="cap">Optimization settings cards feeding Site Vitals</div></div>
+ <div class="s reveal" data-d="2"><span class="stat">23</span><div class="cap">native modules included on every plan</div></div>
+ </div>
+ <div class="tmisc reveal" data-d="2">
+ <div class="adwin" aria-hidden="true"><div class="mp">
+ <div class="ph">Clear Post Revisions</div>
+ <div class="pd">Clear saved revision history for posts and pages to free up database space. The current reclaimable size is read live from your database.</div>
+ <span class="pv">108 items &middot; 5.61 MB</span>
+ </div></div>
+ <div class="adwin" aria-hidden="true"><div class="mp">
+ <div class="ph">Database Checker</div>
+ <div class="pd">Verify that all required database tables are present and properly set up, so you can diagnose a configuration issue without leaving the admin.</div>
+ <span class="pb">Check database</span>
+ </div></div>
+ </div>
+ </div>
+</section>
+
+<!-- 9 · FAQ -->
+<section class="sec">
+ <div class="wrap">
+ <div class="sec-head reveal"><div class="eyebrow">Questions</div><h2 class="h2">Frequently asked questions about Tools</h2></div>
+ <div class="faq-list" style="margin-top:30px">
+ <details class="reveal" open><summary>What are the seven tools, and where do they live? <span class="pm">+</span></summary><div class="ans">All seven sit under the Tools node: Google Integrations (Search Console &amp; APIs), Search &amp; Replace (database find &amp; replace), Post Migration (Import / Export Post Types), Maintenance Mode (temporary offline), Site Protection (password protect), Optimization (performance settings), and Misc Tools (utilities). Full-site Backups live on the sibling Migration node beside Tools. It is an operations toolbox, not a settings index, and the bare Tools route sends you to the first sub-tool.</div></details>
+ <details class="reveal"><summary>How does the Optimization tool improve performance, and how do I see the result? <span class="pm">+</span></summary><div class="ans">The 6 settings cards tune how pages are served: caching with a lifespan, HTML, CSS, and JS minification with per-URL exclude lists, CSS and JavaScript deferral, lazy-loading with an above-the-fold skip list, and LCP media preloading. The Dashboard Site Vitals card reads the result back as First Content Paint, Avg. Load Speed, Performance Score, and Speed Index. Site Vitals is a stored snapshot from the last scan, not a live monitor, so treat the numbers as a captured read-out, not a guaranteed score.</div></details>
+ <details class="reveal"><summary>Can I move my content in and out, and in what format? <span class="pm">+</span></summary><div class="ans">Export the whole library (Pages and Blog) to one JSON file with exact counts, shown as a running total before you download. Import via a Basic JSON path that keeps draft and publish status on the way in, or an Advanced path that takes CSV or JSON with a visual field-mapping step that auto-suggests source column to target field matches, grouped into Standard fields and Post custom fields. Export is JSON-only despite the CSV label on the format field, and import writes immediately with no dry-run, so back up first.</div></details>
+ <details class="reveal"><summary>Is the database find-and-replace safe to run on a live site? <span class="pm">+</span></summary><div class="ans">Yes, run it with the built-in dry-run preview and the automatic timestamped SQL backup that is written before any real change, plus the per-table picker so you scope exactly what gets touched. What it does NOT do safely: the case-insensitive option is not safe for partial matches, since it can change the casing of a whole field, so leave it off for anything but an exact, case-matched swap. This is database text replacement, not a migration importer.</div></details>
+ <details class="reveal"><summary>What do Backups do, and what do they NOT do? <span class="pm">+</span></summary><div class="ans">Backups create a one-click full-site .sgen snapshot, the database plus uploads, that you can list, rename, and restore as a deliberate action. What they do NOT do: there are no scheduled, automatic, or off-site backups, every snapshot is manual and kept on the same disk; there is no self-serve download of an archive; and restore is not a one-click reversible button, since it replaces the live site, so save a fresh snapshot first and treat recovery as a deliberate, platform-assisted operation. Delete is permanent, with no trash.</div></details>
+ <details class="reveal"><summary>Which plan includes the Tools cluster? <span class="pm">+</span></summary><div class="ans">All of it is native on every plan, part of the 23 native modules. Plans differ only by live-site count: Indie is $39 a month annual, $47 monthly (1 site); Studio $97 / $117 (3 sites); Scale $297 / $333 (10 sites); Enterprise $497 / $577 (unlimited). A free unlimited Sandbox on staging URLs runs the full toolbox before you pay anything.</div></details>
+ </div>
+ </div>
+</section>
+
+<!-- 10 · CLOSING PRICING CTA -->
+<section class="sec surface-dark has-atmos t-close" style="background:var(--sg-bg-deep)">
+ <div class="wrap">
+ <div class="eyebrow reveal" style="justify-content:center">Included in your plan</div>
+ <h2 class="h2 reveal" data-d="1" style="margin-top:12px">One toolbox to run your site. <span class="grad">From $39/mo.</span></h2>
+ <p class="lead reveal" data-d="2" style="margin:16px auto 0;max-width:64ch">The Tools cluster is native on every plan, one of 23 native modules. The free Sandbox runs the full toolbox, optimization, import and export, search and replace, the go-live pair, and backups, on unlimited staging sites before you pay anything.</p>
+ <div class="flex reveal" data-d="3" style="justify-content:center;margin-top:28px">
+ <a class="btn btn-primary" href="pricing.html">Start Building <span class="arr">&rarr;</span></a>
+ <a class="btn btn-secondary" href="pricing.html">Compare Plans</a>
+ </div>
+ <div class="related reveal" data-d="3">
+ <a href="integrations.html">Google services and site-level integrations</a>
+ <a href="migrate.html">Move an existing site onto SGEN</a>
+ <a href="overview-modules.html">All 23 native modules</a>
+ </div>
+ <p class="fine reveal">From $39/mo, billed annually. $47 monthly. 2-week trial, cancel anytime. Every module included.</p>
+ </div>
+</section>
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer class="site-footer surface-dark">
+ <div class="footer-cta">
+ <div class="eyebrow">Start free</div>
+ <h2>Build the whole thing on the Sandbox. <span class="grad">$0, no card.</span></h2>
+ <p>Every module unlocked on unlimited sandbox sites. Go live by upgrading, priced by how many sites you run, not by features.</p>
+ <div class="ctas"><a class="btn btn-primary" href="pricing.html">Try the Free Sandbox <span class="arr">→</span></a><a class="btn btn-secondary" href="compare-vs-wordpress.html">Compare to WordPress</a></div>
+ </div>
+ <div class="ft-grid">
+ <div class="ft-brand"><div class="b">SGEN<span class="dot">.</span></div><p>One all-inclusive platform. Build the whole site, no plugins underneath, priced by how many sites you run.</p><span class="ft-status"><span class="d"></span> All systems operational</span></div>
+ <div class="ft-col"><div class="ft-head">Build &amp; Design</div><a href="page-builder.html">SG Builder</a><a href="templates.html">Templates</a><a href="theme-editor.html">Theme Editor</a><a href="media-library.html">Media Library</a><a href="pages-and-posts.html">Pages &amp; Posts</a><a href="custom-objects.html">Custom Objects</a><a href="overview-modules.html">All 23 modules</a><a href="overview-core.html">SG-Core</a></div>
+ <div class="ft-col"><div class="ft-head">Sell</div><a href="ecommerce.html">Ecommerce</a><a href="discussions.html">Discussions &amp; Reviews</a></div>
+ <div class="ft-col"><div class="ft-head">Grow &amp; Convert</div><a href="forms.html">Forms</a><a href="attributions.html">Attribution</a><a href="seo-optimization.html">SEO</a><a href="analytics.html">Analytics</a><a href="popups.html">Popups</a><a href="integrations.html">Integrations</a></div>
+ <div class="ft-col"><div class="ft-head">Operate &amp; Secure</div><a href="site-manager.html">Site Manager</a><a href="overview-dashboard.html">SG-Dashboard</a><a href="backups.html">Backups</a><a href="redirects.html">Redirects</a><a href="security.html">Security</a><a href="trust.html">Trust</a></div>
+ <div class="ft-col"><div class="ft-head">Why SGEN</div><a href="why-sgen.html">Why SGEN</a><a href="why-sgen-no-plugins.html">No plugins</a><a href="why-sgen-speed.html">Speed</a><a href="compare.html">Compare all</a><a href="migrate.html">Migrate</a></div>
+ <div class="ft-col"><div class="ft-head">Solutions</div><a href="solutions-agencies.html">Agencies</a><a href="solutions-small-business.html">Small business</a><a href="solutions-restaurants.html">Restaurants</a><a href="solutions-multi-location.html">Multi-location</a><a href="solutions-healthcare.html">Healthcare</a><a href="solutions-freelancers.html">Freelancers</a><a href="enterprise.html">Enterprise</a></div>
+ <div class="ft-col"><div class="ft-head">Customers</div><a href="customers.html">Customer stories</a><a href="showcase.html">Showcase</a><a href="customers-fernwood.html">Fernwood Digital</a><a href="customers-halloran-vint.html">Halloran &amp; Vint</a></div>
+ <div class="ft-col"><div class="ft-head">Resources</div><a href="resources.html">All resources</a><a href="blog.html">Blog</a><a href="guides.html">Guides</a><a href="changelog.html">Changelog</a><a href="roadmap.html">Roadmap</a><a href="status.html">Status</a></div>
+ <div class="ft-col"><div class="ft-head">Company</div><a href="about.html">About</a><a href="partners.html">Partners</a><a href="partners-apply.html">Become a partner</a><a href="partners-directory.html">Partner directory</a><a href="contact.html">Contact</a></div>
+ <div class="ft-col"><div class="ft-head">Developers</div><a href="developers.html">Docs</a><a href="developers.html">API</a><a href="integrations.html">Integrations</a></div>
+ </div>
+ <div class="ft-watermark">SGEN</div>
+ <div class="ft-bottom"><span>© 2026 SGEN. The managed website platform.</span><div class="links"><a href="legal-privacy.html">Privacy</a><a href="legal-terms.html">Terms</a><a href="legal-dpa.html">DPA</a><a href="legal-cookie-policy.html">Cookies</a><a href="accessibility.html">Accessibility</a></div></div>
+</footer>
+
+<!-- ===== MOBILE DRAWER ===== -->
+<div class="drawer-overlay" data-drawer-close></div>
+<aside class="site-drawer" id="drawer">
+ <div class="dr-top"><div class="b" style="font-weight:900;font-size:20px;letter-spacing:-.04em;color:#f4f2ee">SGEN<span style="color:var(--sg-red)">.</span></div><button class="dr-close" data-drawer-close aria-label="Close">×</button></div>
+ <div class="dr-body">
+ <details class="dr-group"><summary>Product <span class="pm" aria-hidden="true">+</span></summary><div class="dr-children">
+ <div class="dr-subhead">Build &amp; Design</div>
+ <a href="page-builder.html"><span class="ct">SG Builder</span><span class="cs">Visual builder, SSR output</span></a>
+ <a href="templates.html"><span class="ct">Templates</span><span class="cs">Start from a real design</span></a>
+ <a href="theme-editor.html"><span class="ct">Theme Editor</span><span class="cs">Global tokens, fonts, colors</span></a>
+ <a href="media-library.html"><span class="ct">Media Library</span><span class="cs">Native assets, optimized</span></a>
+ <a href="menus.html"><span class="ct">Menus</span><span class="cs">Build navigation visually</span></a>
+ <a href="pages-and-posts.html"><span class="ct">Pages &amp; Posts</span><span class="cs">Every content type</span></a>
+ <a href="custom-objects.html"><span class="ct">Custom Objects</span><span class="cs">Model content with native fields</span></a>
+ <div class="dr-subhead">Sell</div>
+ <a href="ecommerce.html"><span class="ct">Ecommerce</span><span class="cs">Storefront, checkout</span></a>
+ <a href="discussions.html"><span class="ct">Discussions &amp; Reviews</span><span class="cs">Reviews and comments, moderated</span></a>
+ <a href="events.html"><span class="ct">Events</span><span class="cs">Events and a public calendar</span></a>
+ <div class="dr-subhead">Grow &amp; Convert</div>
+ <a href="forms.html"><span class="ct">Forms</span><span class="cs">Native lead capture</span></a>
+ <a href="popups.html"><span class="ct">Popups</span><span class="cs">On-demand and autoload</span></a>
+ <a href="seo-optimization.html"><span class="ct">SEO</span><span class="cs">On-page, server-rendered</span></a>
+ <a href="attributions.html"><span class="ct">Attribution</span><span class="cs">Source-level lead attribution</span></a>
+ <a href="analytics.html"><span class="ct">Analytics</span><span class="cs">Dashboard plus raw events</span></a>
+ <a href="integrations.html"><span class="ct">Integrations</span><span class="cs">Stripe, Google, and more</span></a>
+ <div class="dr-subhead">Operate</div>
+ <a href="site-manager.html"><span class="ct">Site Manager</span><span class="cs">One health cockpit per site</span></a>
+ <a href="backups.html"><span class="ct">Backups</span><span class="cs">One-click save-points</span></a>
+ <a href="stage-live.html"><span class="ct">Stage &amp; Live</span><span class="cs">Restore and roll back safely</span></a>
+ <a href="advanced-settings.html"><span class="ct">Advanced Settings</span><span class="cs">Search-replace, import, export</span></a>
+ <a href="users-and-roles.html"><span class="ct">Users &amp; Roles</span><span class="cs">Directory with audit log</span></a>
+ <a href="redirects.html"><span class="ct">Redirects</span><span class="cs">Native 301 and 302 manager</span></a>
+ <div class="dr-subhead">Secure &amp; Comply</div>
+ <a href="security.html"><span class="ct">Security</span><span class="cs">Platform WAF, hardened</span></a>
+ <a href="security.html"><span class="ct">Age Verification</span><span class="cs">Age gate for regulated sites</span></a>
+ <a href="legal-cookie-policy.html"><span class="ct">Consent &amp; Tracking</span><span class="cs">Consent banner, per-session log</span></a>
+ <a href="trust.html"><span class="ct">Trust</span><span class="cs">WAF, SSL, CDN, logging</span></a>
+ <a href="accessibility.html"><span class="ct">Accessibility</span><span class="cs">Conformance status</span></a>
+ <div class="dr-subhead">The platform</div>
+ <a href="overview-modules.html"><span class="ct">All 23 modules →</span><span class="cs">The whole platform</span></a>
+ <a href="overview-core.html"><span class="ct">SG-Core</span><span class="cs">The native content engine</span></a>
+ <a href="overview-dashboard.html"><span class="ct">SG-Dashboard</span><span class="cs">The operating layer</span></a>
+ </div></details>
+ <details class="dr-group"><summary>Why SGEN <span class="pm" aria-hidden="true">+</span></summary><div class="dr-children">
+ <a href="why-sgen.html"><span class="ct">Why SGEN, in full</span><span class="cs">The whole case, one page</span></a>
+ <a href="why-sgen-no-plugins.html"><span class="ct">No plugins</span><span class="cs">Nothing to license or patch</span></a>
+ <a href="why-sgen-speed.html"><span class="ct">Speed</span><span class="cs">Server-side rendered</span></a>
+ </div></details>
+ <details class="dr-group"><summary>Solutions <span class="pm" aria-hidden="true">+</span></summary><div class="dr-children">
+ <a href="solutions-agencies.html"><span class="ct">Agencies</span><span class="cs">Multi-site, one dashboard</span></a>
+ <a href="solutions-small-business.html"><span class="ct">Small business</span><span class="cs">One fast site</span></a>
+ <a href="solutions-restaurants.html"><span class="ct">Restaurants</span><span class="cs">Menus, events, ordering</span></a>
+ <a href="solutions-multi-location.html"><span class="ct">Multi-location</span><span class="cs">One dashboard, many sites</span></a>
+ <a href="solutions-healthcare.html"><span class="ct">Healthcare</span><span class="cs">HIPAA compliant for healthcare</span></a>
+ <a href="solutions-freelancers.html"><span class="ct">Freelancers</span><span class="cs">Build &amp; hand off</span></a>
+ <a href="enterprise.html"><span class="ct">Enterprise</span><span class="cs">Unlimited sites, one bill</span></a>
+ </div></details>
+ <details class="dr-group"><summary>Compare <span class="pm" aria-hidden="true">+</span></summary><div class="dr-children">
+ <a href="compare-vs-wordpress.html"><span class="ct">vs WordPress</span><span class="cs">The refugee path</span></a>
+ <a href="compare-vs-elementor.html"><span class="ct">vs Elementor</span><span class="cs">Builder head-to-head</span></a>
+ <a href="compare-vs-wp-engine.html"><span class="ct">vs WP Engine</span><span class="cs">Managed hosting</span></a>
+ <a href="compare-vs-wix.html"><span class="ct">vs Wix</span><span class="cs">Own a real product</span></a>
+ <a href="compare-vs-squarespace.html"><span class="ct">vs Squarespace</span><span class="cs">Beyond templates</span></a>
+ <a href="compare-vs-godaddy.html"><span class="ct">vs GoDaddy</span><span class="cs">Past a brochure site</span></a>
+ <a href="compare.html"><span class="ct">All comparisons →</span><span class="cs">Every head-to-head</span></a>
+ <a href="migrate.html"><span class="ct">Migrate</span><span class="cs">Move off WordPress</span></a>
+ </div></details>
+ <details class="dr-group"><summary>Customers <span class="pm" aria-hidden="true">+</span></summary><div class="dr-children">
+ <a href="customers.html"><span class="ct">Customer stories</span><span class="cs">Metric-first cases</span></a>
+ <a href="showcase.html"><span class="ct">Showcase</span><span class="cs">Gallery of built sites</span></a>
+ <a href="customers-fernwood.html"><span class="ct">Fernwood Digital</span><span class="cs">23 sites, one stack</span></a>
+ <a href="customers-halloran-vint.html"><span class="ct">Halloran &amp; Vint</span><span class="cs">Consultancy rebuild</span></a>
+ </div></details>
+ <details class="dr-group"><summary>Resources <span class="pm" aria-hidden="true">+</span></summary><div class="dr-children">
+ <a href="resources.html"><span class="ct">All resources</span><span class="cs">Guides, blog, and more</span></a>
+ <a href="blog.html"><span class="ct">Blog</span><span class="cs">Notes from the platform</span></a>
+ <a href="guides.html"><span class="ct">Guides</span><span class="cs">How-to walkthroughs</span></a>
+ <a href="changelog.html"><span class="ct">Changelog</span><span class="cs">What shipped</span></a>
+ <a href="roadmap.html"><span class="ct">Roadmap</span><span class="cs">What is next</span></a>
+ <a href="status.html"><span class="ct">Status</span><span class="cs">System status</span></a>
+ </div></details>
+ <details class="dr-group"><summary>Company <span class="pm" aria-hidden="true">+</span></summary><div class="dr-children">
+ <a href="about.html"><span class="ct">About</span><span class="cs">Who we are</span></a>
+ <a href="partners.html"><span class="ct">Partners</span><span class="cs">The partner program</span></a>
+ <a href="partners-apply.html"><span class="ct">Become a partner</span><span class="cs">Apply to partner</span></a>
+ <a href="contact.html"><span class="ct">Contact</span><span class="cs">Talk to us</span></a>
+ </div></details>
+ <a class="dr-flat" href="pricing.html">Pricing</a>
+ <a class="dr-flat" href="enterprise.html">Enterprise</a>
+ <a class="dr-flat" href="https://app.sgen.com/login">Log in</a>
+ </div>
+</aside>
+
+<!-- ===== MOBILE STICKY BAR ===== -->
+<div class="mobile-bar surface-dark">
+ <a class="btn btn-primary" href="pricing.html">Start Building <span class="arr">→</span></a>
+ <a class="btn btn-secondary" href="pricing.html">Pricing</a>
+</div>
+
+<script>
+ const hdr = document.getElementById('hdr');
+ addEventListener('scroll', () => hdr.classList.toggle('is-stuck', scrollY > 10), {passive:true});
+ const drawer = document.getElementById('drawer'), overlay = document.querySelector('.drawer-overlay');
+ document.querySelectorAll('[data-drawer-open]').forEach(b => b.addEventListener('click', () => { drawer.classList.add('open'); overlay.classList.add('open'); }));
+ document.querySelectorAll('[data-drawer-close]').forEach(b => b.addEventListener('click', () => { drawer.classList.remove('open'); overlay.classList.remove('open'); }));
+ // scroll-reveal
+ const io = new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}})},{threshold:.12,rootMargin:'0px 0px -6% 0px'});
+ document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+ // mobile sticky bar, appear after hero, hide when footer CTA in view
+ const mbar = document.querySelector('.mobile-bar');
+ const heroSec = document.querySelector('main section');
+ const fcta = document.querySelector('.footer-cta');
+ function updBar(){ if(!mbar||!fcta) return; const past = scrollY > (heroSec ? heroSec.offsetTop + heroSec.offsetHeight - 140 : 480); const footerNear = fcta.getBoundingClientRect().top < innerHeight * 0.94; mbar.classList.toggle('show', past && !footerNear); }
+ addEventListener('scroll', updBar, {passive:true}); addEventListener('resize', updBar); updBar();
+ // billing toggle (pricing + any page with [data-billing])
+ document.querySelectorAll('[data-billing]').forEach(t=>t.addEventListener('click',()=>{ const mode=t.dataset.billing; document.querySelectorAll('[data-billing]').forEach(b=>b.classList.toggle('on',b===t)); document.querySelectorAll('[data-annual]').forEach(el=>{ el.textContent = mode==='annual'? el.dataset.annual : el.dataset.monthly; }); document.querySelectorAll('.billed').forEach(el=>{ if(el.dataset.annual) el.textContent = mode==='annual'? el.dataset.annual : el.dataset.monthly; }); }));
+ // megamenu keyboard + screen-reader access.
+ // CSS reveals each panel on .nav-item:hover and :focus-within (progressive enhancement, kept).
+ // Here we add an explicit JS-owned open state: aria-expanded on the trigger + an .is-open class
+ // on the .nav-item so keyboard/SR users get click-to-toggle and Escape-to-close-with-focus-restore.
+ // (A CSS rule keyed on .nav-item.is-open .megamenu makes the explicit-open path visually robust and
+ // lets Escape keep the trigger focused without :focus-within re-revealing the panel; see A9 NOTE.)
+ document.querySelectorAll('.nav-item').forEach(item => {
+ const trig = item.querySelector('.nav-trigger');
+ const panel = item.querySelector('.megamenu');
+ if (!trig || !panel) return;
+ let viaPointer = false; // distinguishes a click (pointer) from a Tab (keyboard) into the trigger
+ const sync = on => { item.classList.toggle('is-open', on); trig.setAttribute('aria-expanded', on ? 'true' : 'false'); };
+ const closeOthers = () => document.querySelectorAll('.nav-item.is-open').forEach(o => { if (o !== item) { o.classList.remove('is-open'); const t = o.querySelector('.nav-trigger'); if (t) t.setAttribute('aria-expanded','false'); } });
+ // Pointer path: mousedown flags the focus as pointer-driven so focusin does not auto-open;
+ // click then toggles. Keyboard path: no mousedown, so focusin opens on Tab-in.
+ trig.addEventListener('mousedown', () => { viaPointer = true; });
+ trig.addEventListener('click', e => {
+ e.preventDefault();
+ const willOpen = trig.getAttribute('aria-expanded') !== 'true';
+ closeOthers();
+ sync(willOpen);
+ if (willOpen) trig.focus(); else trig.blur();
+ viaPointer = false;
+ });
+ // Keyboard focus into the item opens it (covers Tab-through reveal); pointer focus is left to click.
+ item.addEventListener('focusin', () => { if (viaPointer) return; sync(true); });
+ item.addEventListener('focusout', () => { if (!item.contains(document.relatedTarget)) sync(false); });
+ // Escape closes the open panel and returns focus to its trigger.
+ item.addEventListener('keydown', e => {
+ if (e.key === 'Escape' && trig.getAttribute('aria-expanded') === 'true') { e.stopPropagation(); sync(false); trig.focus(); }
+ });
+ });
+ // Click outside any nav-item closes open megamenus.
+ document.addEventListener('click', e => { if (!e.target.closest('.nav-item')) document.querySelectorAll('.nav-item.is-open').forEach(o => { o.classList.remove('is-open'); const t = o.querySelector('.nav-trigger'); if (t) t.setAttribute('aria-expanded','false'); }); });
+</script>
+</body>
+</html>

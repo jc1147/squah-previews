@@ -1,0 +1,114 @@
+/* ============================================================================
+ solutions-freelancers.css - TYPE-E PERSONA SIGNATURE for /solutions/freelancers.
+ Persona = freelance web designer/developer. Reframe: build client sites fast,
+ hand them off clean, no plugin-maintenance retainer; Sandbox-to-client transfer.
+ Crafted-CSS product surfaces, all modeled on the shared .adwin admin atom:
+ (1) Project handoff panel (hero): Sandbox build -> review -> live -> transfer,
+     a staged checklist + a $0 build / 0 plugins / no retainer summary bar.
+ (2) SG Builder reframed for solo speed (deep-dive): toolbar + block canvas +
+     publish-to-live toggle. The "one canvas, every client" money shot.
+ (3) Client-access role matrix (deep-dive support): You vs Client (Editor),
+     content yes / build no, the clean-handoff guarantee.
+ NO fabricated capability the persona needs but the product lacks; no "91%"
+ Patchstack stat (held for why-sgen-* only). All var(--sg-*).
+ ============================================================================ */
+@import "_standard.css";
+
+/* ---- HERO ------------------------------------------------------------------ */
+.fr-hero { padding-block: 8vh var(--sg-pad); }
+.fr-hero .feat-copy h1 { max-width: 16ch; }
+.fr-hero .feat-copy .lead { max-width: 60ch; }
+.fr-hero .cta { margin-top: 30px; }
+
+/* ===== PROJECT HANDOFF PANEL (hero surface, modeled on .adwin) ============== */
+.frhand { padding: 0; }
+/* staged checklist: build -> review -> live -> transfer */
+.frhand .frstage { padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; }
+.frhand .ph { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 12px; padding: 11px 14px; border: 1px solid var(--sg-line); border-radius: 10px; background: #fff; }
+.frhand .ph .dot { width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--sg-line); flex: none; }
+.frhand .ph .pl { font-weight: 600; font-size: 12.5px; color: var(--sg-ink-soft); }
+.frhand .ph .pt { font-family: var(--sg-mono); font-size: 9px; letter-spacing: .06em; text-transform: uppercase; color: var(--sg-ink-faint); padding: 3px 8px; border-radius: 5px; background: var(--sg-bg-2); white-space: nowrap; }
+/* done steps: filled red dot + check */
+.frhand .ph.done .dot { border-color: transparent; background: var(--sg-grad-red); box-shadow: var(--sg-shadow-red); position: relative; }
+.frhand .ph.done .dot::after { content: ""; position: absolute; left: 4px; top: 4px; width: 7px; height: 4px; border-left: 2px solid #fff; border-bottom: 2px solid #fff; transform: rotate(-45deg); }
+.frhand .ph.done .pl { color: var(--sg-ink); }
+/* current step: red ring + soft fill */
+.frhand .ph.now { border-color: var(--sg-red); background: var(--sg-red-soft); box-shadow: 0 0 0 3px var(--sg-red-soft); }
+.frhand .ph.now .dot { border-color: var(--sg-red); background: #fff; position: relative; }
+.frhand .ph.now .dot::after { content: ""; position: absolute; inset: 3px; border-radius: 50%; background: var(--sg-grad-red); }
+.frhand .ph.now .pl { color: var(--sg-red-deep); font-weight: 700; }
+.frhand .ph.now .pt { background: #fff; color: var(--sg-red-deep); }
+
+/* summary bar: $0 build / 0 plugins / no retainer */
+.frhand .frsum { display: flex; align-items: center; gap: 14px; padding: 13px 16px; border-top: 1px solid var(--sg-line); background: var(--sg-bg-2); flex-wrap: wrap; }
+.frhand .frsum .rk { display: block; font-family: var(--sg-mono); font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: var(--sg-ink-faint); }
+.frhand .frsum .rn { font-weight: 900; font-size: 19px; letter-spacing: -.03em; line-height: 1; color: var(--sg-ink); font-variant-numeric: tabular-nums; }
+.frhand .frsum .rn small { font-family: var(--sg-mono); font-weight: 600; font-size: 10px; letter-spacing: .04em; color: var(--sg-ink-faint); margin-left: 4px; }
+.frhand .frsum .sep { width: 1px; align-self: stretch; background: var(--sg-line); margin: 2px 0; }
+
+/* ===== SG BUILDER, SOLO SPEED (deep-dive surface, modeled on .adwin) ======== */
+.frbuild { padding: 0; }
+.frbuild .frbar { display: flex; gap: 6px; padding: 12px 16px 6px; flex-wrap: wrap; }
+.frbuild .frbar .chip { font-family: var(--sg-mono); font-size: 10px; padding: 6px 12px; border-radius: 999px; border: 1px solid var(--sg-line); color: var(--sg-ink-faint); }
+.frbuild .frbar .chip.on { background: var(--sg-red-soft); color: var(--sg-red-deep); border-color: transparent; }
+.frbuild .frcanvas { padding: 6px 16px 14px; display: flex; flex-direction: column; gap: 10px; }
+.frbuild .blk { border: 1px solid var(--sg-line); border-radius: 10px; padding: 12px 14px; display: flex; flex-direction: column; gap: 7px; }
+.frbuild .blk.active { border-color: var(--sg-red); box-shadow: 0 0 0 3px var(--sg-red-soft); }
+.frbuild .blk .bl { font-family: var(--sg-mono); font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: var(--sg-ink-faint); }
+.frbuild .blk .bb { height: 9px; border-radius: 4px; background: #eceae5; }
+.frbuild .blk2 { display: flex; gap: 10px; }
+.frbuild .blk2 .blk { flex: 1; }
+.frbuild .frpub { display: flex; align-items: center; justify-content: space-between; padding: 13px 16px; border-top: 1px solid var(--sg-line); background: var(--sg-bg-2); font-size: 13px; font-weight: 700; color: var(--sg-ink-soft); }
+.frbuild .frpub .sw { width: 40px; height: 23px; border-radius: 999px; background: var(--sg-grad-red); position: relative; box-shadow: var(--sg-shadow-red); flex: none; }
+.frbuild .frpub .sw::after { content: ""; position: absolute; top: 3px; right: 3px; width: 17px; height: 17px; border-radius: 50%; background: #fff; }
+
+/* ===== CLIENT-ACCESS ROLE MATRIX (deep-dive support, modeled on .adwin) ===== */
+.frroles { padding: 0; }
+.frroles .rt { display: grid; grid-template-columns: 1.5fr .85fr .85fr; gap: 0; }
+.frroles .rt .c { padding: 12px 14px; border-bottom: 1px solid var(--sg-line-2); border-right: 1px solid var(--sg-line-2); font-size: 12px; display: flex; align-items: center; gap: 8px; }
+.frroles .rt .c:nth-child(3n) { border-right: 0; }
+.frroles .rt .c.h { font-family: var(--sg-mono); font-size: 8.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--sg-ink-faint); border-bottom: 1px solid var(--sg-line); background: var(--sg-bg-2); justify-content: center; }
+.frroles .rt .c.h.cap { justify-content: flex-start; }
+.frroles .rt .c.cap { font-weight: 600; color: var(--sg-ink-soft); }
+.frroles .rt .c.v { justify-content: center; }
+.frroles .rt .c .yes { width: 16px; height: 16px; border-radius: 5px; background: var(--sg-grad-red); box-shadow: var(--sg-shadow-red); position: relative; flex: none; }
+.frroles .rt .c .yes::after { content: ""; position: absolute; left: 4px; top: 4px; width: 7px; height: 4px; border-left: 2px solid #fff; border-bottom: 2px solid #fff; transform: rotate(-45deg); }
+.frroles .rt .c .no { width: 14px; height: 2px; border-radius: 2px; background: var(--sg-line); flex: none; }
+.frroles .rnote { padding: 12px 16px; font-family: var(--sg-mono); font-size: 10.5px; line-height: 1.5; color: var(--sg-ink-faint); border-top: 1px solid var(--sg-line-2); }
+
+/* ---- ECOSYSTEM "what else" rail ------------------------------------------- */
+.fr-eco { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-top: 40px; }
+.fr-eco .ec { padding: 24px; border-radius: var(--sg-r-lg); border: 1px solid var(--sg-line); background: var(--sg-card-bg); }
+.surface-dark .fr-eco .ec { box-shadow: var(--sg-glass-inset); }
+.fr-eco .ec .ek { font-family: var(--sg-mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--sg-red-deep); }
+.surface-dark .fr-eco .ec .ek { color: var(--sg-red-hot); }
+.fr-eco .ec h3 { margin: 10px 0 8px; }
+
+/* ---- PRICING-FIT row (3 plans, freelancer-framed) ------------------------- */
+.fr-plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 36px; align-items: stretch; }
+.fr-plans .pl { display: flex; flex-direction: column; padding: 26px 24px; border-radius: var(--sg-r-lg); border: 1px solid var(--sg-line); background: var(--sg-card-bg); }
+.fr-plans .pl.featured { box-shadow: 0 0 0 1.5px var(--sg-red), var(--sg-shadow-2); }
+.surface-dark .fr-plans .pl { box-shadow: var(--sg-glass-inset); }
+.fr-plans .pl .pn { font-weight: 800; font-size: 17px; letter-spacing: -.02em; }
+.fr-plans .pl .ps { font-family: var(--sg-mono); font-size: 10.5px; color: var(--sg-ink-faint); margin-top: 4px; }
+.fr-plans .pl .pp { margin-top: 16px; font-weight: 900; font-size: 30px; letter-spacing: -.03em; line-height: 1; font-variant-numeric: tabular-nums; }
+.fr-plans .pl .pp small { font-family: var(--sg-mono); font-weight: 600; font-size: 11px; letter-spacing: 0; color: var(--sg-ink-faint); margin-left: 4px; }
+.fr-plans .pl .pm { font-family: var(--sg-mono); font-size: 10px; color: var(--sg-ink-faint); margin-top: 6px; }
+.fr-plans .pl .pf { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--sg-line); font-size: 13px; color: var(--sg-ink-soft); }
+.fr-plans .pl .badge { align-self: flex-start; font-family: var(--sg-mono); font-size: 9px; letter-spacing: .1em; text-transform: uppercase; padding: 3px 9px; border-radius: 999px; background: var(--sg-red-soft); color: var(--sg-red-deep); margin-bottom: 12px; }
+
+/* ---- close fine-print ------------------------------------------------------ */
+.fr-fine { font-family: var(--sg-mono); font-size: 12px; color: var(--sg-ink-faint); margin-top: 22px; }
+.surface-dark .fr-fine { color: rgba(255,255,255,.6); }
+
+/* ---- RESPONSIVE ----------------------------------------------------------- */
+@media (max-width: 900px) {
+ .fr-eco { grid-template-columns: 1fr; }
+ .fr-plans { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+ .frhand .ph { grid-template-columns: auto 1fr; row-gap: 4px; }
+ .frhand .ph .pt { grid-column: 2; justify-self: start; }
+ .frbuild .blk2 { flex-direction: column; }
+ .frroles .rt .c { font-size: 11px; padding: 10px 8px; }
+}

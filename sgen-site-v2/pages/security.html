@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Native Site Security and IP Blocking, No Plugins | SGEN</title>
+<meta name="description" content="SGEN runs a native WAF, security patching, and audit-ready logging on every plan, plus a built-in IP blacklist that blocks single IPs, CIDR ranges, and IPv4 wildcards with a Test-IP dry run and per-rule hit analytics. 91% of WordPress vulnerabilities were in plugins (Patchstack, State of WordPress Security 2026), so SGEN ships the protection natively with no plugin attack surface to patch.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../_design/sgen-tokens.css?v=ec73c2e3">
+<link rel="stylesheet" href="../_design/sgen-structural.css?v=a102bd3a">
+<link rel="stylesheet" href="../_design/sgen-chrome.css?v=5245d0e3">
+<link rel="stylesheet" href="security.css?v=28dc84f0">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- ===== TOP UTILITY BAR ===== -->
+<div class="topbar"><div class="in">
+ <span class="msg"><span class="spark">◆</span> <b>One platform, priced by sites.</b><span class="long"> Every module included.</span></span>
+ <span class="util"><a class="hide-sm" href="developers.html">Docs</a><a class="hide-sm" href="changelog.html">Changelog</a><span class="status"><span class="d"></span> All systems operational</span></span>
+</div></div>
+
+<!-- ===== HEADER (mega-menu) ===== -->
+<header class="site-header" id="hdr"><div class="in">
+ <a class="brand" href="../pages/home.html">SGEN<span class="dot">.</span></a>
+ <nav class="site-nav">
+ <div class="nav-item">
+ <button class="nav-trigger" aria-haspopup="true" aria-expanded="false" aria-controls="mm-product">Product <span class="chev"></span></button>
+ <div class="megamenu mm-wide" id="mm-product"><div class="mm-inner">
+ <span class="mm-watermark" aria-hidden="true">PRODUCT</span>
+ <div class="mm-cols">
+ <div class="mm-col"><div class="mm-head">Build &amp; Design</div>
+ <a class="mm-link" href="page-builder.html"><span class="t"><span class="gl"></span>SG Builder</span><span class="s">Design pages visually</span></a>
+ <a class="mm-link" href="templates.html"><span class="t"><span class="gl"></span>Templates</span><span class="s">Start from a real design</span></a>
+ <a class="mm-link" href="theme-editor.html"><span class="t"><span class="gl"></span>Theme Editor</span><span class="s">Colors, fonts, and presets</span></a>
+ <a class="mm-link" href="media-library.html"><span class="t"><span class="gl"></span>Media Library</span><span class="s">Assets, optimized and fast</span></a>
+ <a class="mm-link" href="menus.html"><span class="t"><span class="gl"></span>Menus</span><span class="s">Build navigation visually</span></a>
+ <a class="mm-link" href="pages-and-posts.html"><span class="t"><span class="gl"></span>Pages &amp; Posts</span><span class="s">Every content type</span></a>
+ <a class="mm-link" href="custom-objects.html"><span class="t"><span class="gl"></span>Custom Objects</span><span class="s">Native content modeling</span></a>
+ </div>
+ <div class="mm-col"><div class="mm-head">Sell</div>
+ <a class="mm-link" href="ecommerce.html"><span class="t"><span class="gl"></span>Ecommerce</span><span class="s">Catalog, checkout, tax</span></a>
+ <a class="mm-link" href="discussions.html"><span class="t"><span class="gl"></span>Discussions &amp; Reviews</span><span class="s">Reviews and comments</span></a>
+ <a class="mm-link" href="events.html"><span class="t"><span class="gl"></span>Events</span><span class="s">Events and a calendar</span></a>
+ </div>
+ <div class="mm-col"><div class="mm-head">Grow &amp; Convert</div>
+ <a class="mm-link" href="forms.html"><span class="t"><span class="gl"></span>Forms</span><span class="s">Lead capture, native</span></a>
+ <a class="mm-link" href="popups.html"><span class="t"><span class="gl"></span>Popups</span><span class="s">On-demand and autoload</span></a>
+ <a class="mm-link" href="seo-optimization.html"><span class="t"><span class="gl"></span>SEO</span><span class="s">Titles, meta, and robots</span></a>
+ <a class="mm-link" href="attributions.html"><span class="t"><span class="gl"></span>Attribution</span><span class="s">The source of every lead</span></a>
+ <a class="mm-link" href="analytics.html"><span class="t"><span class="gl"></span>Analytics</span><span class="s">Dashboard plus raw events</span></a>
+ <a class="mm-link" href="integrations.html"><span class="t"><span class="gl"></span>Integrations</span><span class="s">Stripe, Google, and more</span></a>
+ </div>
+ <div class="mm-col"><div class="mm-head">Operate</div>
+ <a class="mm-link" href="site-manager.html"><span class="t"><span class="gl"></span>Site Manager</span><span class="s">One cockpit per site</span></a>
+ <a class="mm-link" href="backups.html"><span class="t"><span class="gl"></span>Backups</span><span class="s">Backups and save-points</span></a>
+ <a class="mm-link" href="stage-live.html"><span class="t"><span class="gl"></span>Stage &amp; Live</span><span class="s">Restore and roll back</span></a>
+ <a class="mm-link" href="advanced-settings.html"><span class="t"><span class="gl"></span>Advanced Settings</span><span class="s">Email, import, export</span></a>
+ <a class="mm-link" href="users-and-roles.html"><span class="t"><span class="gl"></span>Users &amp; Roles</span><span class="s">Directory plus audit log</span></a>
+ <a class="mm-link" href="redirects.html"><span class="t"><span class="gl"></span>Redirects</span><span class="s">Native 301 and 302 rules</span></a>
+ </div>
+ <div class="mm-col"><div class="mm-head">Secure &amp; Comply</div>
+ <a class="mm-link" href="security.html"><span class="t"><span class="gl"></span>Security</span><span class="s">Platform WAF by default</span></a>
+ <a class="mm-link" href="security.html"><span class="t"><span class="gl"></span>Age Verification</span><span class="s">Age gate for regulated</span></a>
+ <a class="mm-link" href="legal-cookie-policy.html"><span class="t"><span class="gl"></span>Consent &amp; Tracking</span><span class="s">Consent banner plus log</span></a>
+ <a class="mm-link" href="trust.html"><span class="t"><span class="gl"></span>Trust</span><span class="s">WAF, SSL, CDN, logging</span></a>
+ <a class="mm-link" href="accessibility.html"><span class="t"><span class="gl"></span>Accessibility</span><span class="s">Conformance status</span></a>
+ </div>
+ </div>
+ <a class="mm-feat" href="page-builder.html"><span class="badge">Flagship</span><span class="k">SG Builder</span><span class="ttl">Build it visually. Ship it server-rendered.</span><span class="sub">A true visual builder with 48 native components and a real product underneath.</span><span class="go">Explore the builder →</span></a>
+ <div class="mm-index"><a href="overview-modules.html"><b>All 23 modules</b> The whole platform, in the box</a><a href="overview-core.html"><b>SG-Core</b> The native content engine</a><a href="overview-dashboard.html"><b>SG-Dashboard</b> The operating layer, one hub</a></div>
+ </div></div>
+ </div>
+ <div class="nav-item">
+ <button class="nav-trigger" aria-haspopup="true" aria-expanded="false" aria-controls="mm-why">Why SGEN <span class="chev"></span></button>
+ <div class="megamenu" id="mm-why"><div class="mm-inner">
+ <span class="mm-watermark" aria-hidden="true">WHY</span>
+ <div class="mm-col"><div class="mm-head">The case</div>
+ <a class="mm-link" href="why-sgen-no-plugins.html"><span class="t"><span class="gl"></span>No plugins</span><span class="s">Native modules, nothing to license or patch</span></a>
+ <a class="mm-link" href="why-sgen-speed.html"><span class="t"><span class="gl"></span>Speed</span><span class="s">Server-side rendered, fast by default</span></a>
+ <a class="mm-link" href="why-sgen.html"><span class="t"><span class="gl"></span>Why SGEN, in full</span><span class="s">The whole case, one page</span></a>
+ </div>
+ <div class="mm-col"><div class="mm-head">The model</div>
+ <a class="mm-link" href="pricing.html"><span class="t"><span class="gl"></span>One stack</span><span class="s">No plugin tax, no suite tax</span></a>
+ <a class="mm-link" href="pricing.html"><span class="t"><span class="gl"></span>Priced by sites</span><span class="s">Not by features</span></a>
+ </div>
+ <a class="mm-feat" href="why-sgen.html"><span class="badge">The wedge</span><span class="k">Native, not plugins</span><span class="ttl">One stack. Nothing to license or patch.</span><span class="sub">The whole platform is the box, hosting, builder, SEO, attribution, security.</span><span class="go">See why SGEN →</span></a>
+ </div></div>
+ </div>
+ <div class="nav-item">
+ <button class="nav-trigger" aria-haspopup="true" aria-expanded="false" aria-controls="mm-solutions">Solutions <span class="chev"></span></button>
+ <div class="megamenu" id="mm-solutions"><div class="mm-inner">
+ <span class="mm-watermark" aria-hidden="true">SOLUTIONS</span>
+ <div class="mm-col"><div class="mm-head">By team</div>
+ <a class="mm-link" href="solutions-agencies.html"><span class="t"><span class="gl"></span>Agencies</span><span class="s">Run every client site from one dashboard</span></a>
+ <a class="mm-link" href="solutions-freelancers.html"><span class="t"><span class="gl"></span>Freelancers</span><span class="s">Build on Sandbox, hand off</span></a>
+ </div>
+ <div class="mm-col"><div class="mm-head">By business</div>
+ <a class="mm-link" href="solutions-small-business.html"><span class="t"><span class="gl"></span>Small business</span><span class="s">One fast site, done right</span></a>
+ <a class="mm-link" href="solutions-restaurants.html"><span class="t"><span class="gl"></span>Restaurants</span><span class="s">Menus, events, online ordering</span></a>
+ <a class="mm-link" href="solutions-multi-location.html"><span class="t"><span class="gl"></span>Multi-location</span><span class="s">One dashboard, many sites</span></a>
+ <a class="mm-link" href="solutions-healthcare.html"><span class="t"><span class="gl"></span>Healthcare</span><span class="s">HIPAA compliant for healthcare</span></a>
+ </div>
+ <a class="mm-feat" href="solutions-agencies.html"><span class="badge">For teams</span><span class="k">Agencies</span><span class="ttl">Run an unlimited portfolio from one dashboard.</span><span class="sub">Multi-site portfolio, fixed roles, audit log, Enterprise from $497/mo.</span><span class="go">See the agency plan →</span></a>
+ </div></div>
+ </div>
+ <div class="nav-item">
+ <button class="nav-trigger" aria-haspopup="true" aria-expanded="false" aria-controls="mm-compare">Compare <span class="chev"></span></button>
+ <div class="megamenu" id="mm-compare"><div class="mm-inner">
+ <span class="mm-watermark" aria-hidden="true">VS</span>
+ <div class="mm-col"><div class="mm-head">Deep dives</div>
+ <a class="mm-link" href="compare-vs-wordpress.html"><span class="t"><span class="gl"></span>vs WordPress</span><span class="s">The refugee path</span></a>
+ <a class="mm-link" href="compare-vs-elementor.html"><span class="t"><span class="gl"></span>vs Elementor</span><span class="s">Builder head-to-head</span></a>
+ <a class="mm-link" href="compare-vs-wp-engine.html"><span class="t"><span class="gl"></span>vs WP Engine</span><span class="s">Managed hosting</span></a>
+ </div>
+ <div class="mm-col"><div class="mm-head">Quick looks</div>
+ <a class="mm-link" href="compare-vs-wix.html"><span class="t"><span class="gl"></span>vs Wix</span><span class="s">Own a real product</span></a>
+ <a class="mm-link" href="compare-vs-squarespace.html"><span class="t"><span class="gl"></span>vs Squarespace</span><span class="s">Beyond templates</span></a>
+ <a class="mm-link" href="compare-vs-godaddy.html"><span class="t"><span class="gl"></span>vs GoDaddy</span><span class="s">Past a brochure site</span></a>
+ <a class="mm-link" href="compare.html"><span class="t"><span class="gl"></span>All comparisons →</span><span class="s">Every head-to-head in one place</span></a>
+ </div>
+ <a class="mm-feat" href="migrate.html"><span class="badge">Switching?</span><span class="k">/migrate</span><span class="ttl">Move off WordPress, the honest way.</span><span class="sub">A move is a rebuild, and that's the upgrade. White-glove or DIY.</span><span class="go">See how migration works →</span></a>
+ </div></div>
+ </div>
+ <div class="nav-item">
+ <button class="nav-trigger" aria-haspopup="true" aria-expanded="false" aria-controls="mm-customers">Customers <span class="chev"></span></button>
+ <div class="megamenu" id="mm-customers"><div class="mm-inner">
+ <span class="mm-watermark" aria-hidden="true">PROOF</span>
+ <div class="mm-col"><div class="mm-head">Explore</div>
+ <a class="mm-link" href="customers.html"><span class="t"><span class="gl"></span>Customer stories</span><span class="s">Metric-first case grid</span></a>
+ <a class="mm-link" href="showcase.html"><span class="t"><span class="gl"></span>Showcase</span><span class="s">Gallery of sites built on SGEN</span></a>
+ <a class="mm-link" href="customers.html"><span class="t"><span class="gl"></span>Case studies</span><span class="s">The full teardown, deep</span></a>
+ </div>
+ <div class="mm-col"><div class="mm-head">Built on SGEN</div>
+ <a class="mm-link" href="why-sgen-no-plugins.html"><span class="t"><span class="gl"></span>Zero plugins</span><span class="s">Under every site in the reel</span></a>
+ <a class="mm-link" href="pricing.html"><span class="t"><span class="gl"></span>One stack</span><span class="s">Forms, store, SEO, all native</span></a>
+ </div>
+ <a class="mm-feat" href="customers-fernwood.html"><span class="badge">Case study</span><span class="k">Fernwood Digital</span><span class="ttl">23 client sites, one stack, one login.</span><span class="sub">A studio that retired the plugin-maintenance tax.</span><span class="go">Read the story →</span></a>
+ </div></div>
+ </div>
+ <a class="nav-trigger" href="pricing.html">Pricing</a>
+ </nav>
+ <div class="site-actions">
+ <a class="login" href="https://app.sgen.com/login">Log in</a>
+ <a class="btn btn-primary" href="pricing.html">Start Building <span class="arr">→</span></a>
+ <button class="hamburger" data-drawer-open aria-label="Menu"><span></span><span></span><span></span></button>
+ </div>
+</div></header>
+
+<main id="main">
+<!-- 1 · HERO · the Blacklist two-card single page -->
+<section class="sec s-hero surface-dark has-atmos">
+ <div class="wrap">
+ <div class="lede reveal">
+ <div class="eyebrow">Native module &middot; Security</div>
+ <h1>Security built <span class="grad">in</span>. Not bolted on.</h1>
+ <p class="lead">SGEN ships a web application firewall, SSL, a CDN, and platform security patching on every plan through the Foundation Pack, including the $0 Sandbox, then adds a native IP blacklist that gates every public request by source IP. Add a single IP, a CIDR range like <code>45.79.0.0/16</code>, or an IPv4 wildcard like <code>192.168.*.*</code>, give each rule a reason and an author, and a built-in Test-IP tool tells you whether any address would be blocked before a visitor ever hits it.</p>
+ <p class="beat">On WordPress the thing securing your site is itself a plugin, so SGEN hardens the platform underneath instead, with no security plugin to install, license, or keep patched.</p>
+ <div class="cta flex">
+ <a class="btn btn-primary" href="pricing.html">Start Building <span class="arr">&rarr;</span></a>
+ <a class="btn btn-secondary" href="pricing.html">Compare Plans</a>
+ </div>
+ </div>
+
+ <div class="stage reveal" data-d="1">
+ <div class="adwin dark" aria-hidden="true">
+ <div class="adbar"><span class="ic"></span><span class="ti">SGEN Admin<small>Site security</small></span><span class="act">Blacklist item</span></div>
+ <div class="scrumb"><b>Dashboard</b><span class="sep">/</span><b>Blacklist</b></div>
+ <div class="shead"><h4>Blacklist</h4><p>Block entries and manage blacklist rules.</p></div>
+ <div class="sblk">
+ <div class="addcard">
+ <div class="ct">Add to blacklist</div>
+ <div class="fld"><span class="lab">Entry</span><div class="inp ph">e.g. 45.79.0.0/16</div></div>
+ <div class="hint">Enter an IP, CIDR range (e.g., <code>10.0.0.0/24</code>), or IPv4 wildcard (e.g., <code>192.168.*.*</code>).</div>
+ <div class="fld"><span class="lab">Reason</span><div class="inp area ph">Repeat checkout fraud</div></div>
+ <div class="submit">Blacklist item</div>
+ </div>
+ <div class="tblpane">
+ <div class="tbar">
+ <span class="sel">Bulk actions &#9662;</span><span class="ap">Apply</span>
+ <span class="testip"><span class="lt"></span> Test IP</span>
+ <span class="srch">Search entries...</span>
+ </div>
+ <div class="btab">
+ <div class="th"><span class="cb"></span><span>Item</span><span>Reason</span><span>Hits</span><span>Last Matched</span><span>Author</span><span>Date Created</span></div>
+ <div class="tr"><span class="cb"></span><span class="item">45.79.0.0/16</span><span class="rsn">Repeat checkout fraud</span><span class="hits">1,284</span><span class="lm">2m ago</span><span class="au">Site Owner</span><span class="dc">May 4</span></div>
+ <div class="tr"><span class="cb"></span><span class="item">203.0.113.5</span><span class="rsn">Credential stuffing</span><span class="hits">612</span><span class="lm">18m ago</span><span class="au">Site Owner</span><span class="dc">May 9</span></div>
+ <div class="tr"><span class="cb"></span><span class="item">192.168.*.*</span><span class="rsn">Internal range, staging only</span><span class="hits">0</span><span class="lm">never</span><span class="au">A. Reyes</span><span class="dc">Apr 22</span></div>
+ <div class="tr"><span class="cb"></span><span class="item">10.0.0.0/24</span><span class="rsn">Comment-spam source</span><span class="hits">347</span><span class="lm">1h ago</span><span class="au">Site Owner</span><span class="dc">Apr 30</span></div>
+ <div class="pg"><span>4 of 4 entries</span><span class="nav"><span class="on">1</span><span>Next</span></span></div>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+</section>
+
+<!-- 2 · WHAT SECURITY DOES · native control grid -->
+<section class="sec sec--warm">
+ <div class="wrap">
+ <div class="readw reveal">
+ <div class="eyebrow">The controls a plugin gives you, native</div>
+ <h2 class="h2">The protection a security plugin adds, <span class="grad">with nothing to install.</span></h2>
+ <p class="lead" style="margin-top:16px">SGEN ships a WAF and security patching on every plan, including the $0 Sandbox, through the Foundation Pack, so a site is firewalled and on patched infrastructure before you have paid anything. The deeper controls are built into the platform, not bolted on by a third party.</p>
+ </div>
+ <div class="grid g-3" style="margin-top:44px">
+ <div class="card reveal"><div class="ico"><span class="m"></span></div><h3 class="h3">Foundation Pack WAF</h3><p style="margin-top:10px">A web application firewall, SSL, CDN, and security patching on every plan, free, even on the $0 Sandbox. The protection competitors put behind an upgrade is the floor here.</p></div>
+ <div class="card reveal" data-d="1"><div class="ico"><span class="m"></span></div><h3 class="h3">IP blacklist</h3><p style="margin-top:10px">Block a single IP, a CIDR range, or an IPv4 wildcard, IPv4 and IPv6, each with a reason. The platform gates every public request, increments a per-rule hit count, and stamps the last-matched time. A built-in Test-IP tool previews a block before it happens.</p></div>
+ <div class="card reveal" data-d="2"><div class="ico"><span class="m"></span></div><h3 class="h3">Site protection</h3><p style="margin-top:10px">Password-gate the site or drop it into maintenance mode from the platform through the Tools module. Lock a staging site or hide a work-in-progress without installing third-party code.</p></div>
+ <div class="card reveal"><div class="ico"><span class="m"></span></div><h3 class="h3">Audit-ready logging</h3><p style="margin-top:10px">The platform keeps audit-ready logs, the evidence trail you need for accessibility and GDPR posture, built in rather than added by a separate plugin.</p></div>
+ <div class="card reveal" data-d="1"><div class="ico"><span class="m"></span></div><h3 class="h3">GDPR consent log</h3><p style="margin-top:10px">The native Consent and Tracking module keeps a per-session consent log you can review entry by entry, so you can show, session by session, what each visitor consented to. No separate consent plugin to add.</p></div>
+ <div class="card reveal" data-d="2"><div class="ico"><span class="m"></span></div><h3 class="h3">Patched infrastructure</h3><p style="margin-top:10px">Security patching runs at the platform level on monitored, hardened infrastructure, so the hardening is not a plugin you install on a platform that was never hardened to begin with.</p></div>
+ </div>
+ <p class="label" style="margin-top:24px">Compliance-grade posture: this is audit-ready logging and a consent trail, not a HIPAA or SOC 2 certification. SOC 2 and ISO are in progress; no badges, no "certified" claim.</p>
+ </div>
+</section>
+
+<!-- 3 · TEST-IP DRY RUN · the differentiator -->
+<section class="sec surface-dark has-atmos" style="background:var(--sg-bg-2)">
+ <div class="wrap">
+ <div class="readw reveal">
+ <div class="eyebrow">Check a block before it lands</div>
+ <h2 class="h2">Test whether any IP is blocked, <span class="grad">without making the visit yourself.</span></h2>
+ <p class="lead" style="margin-top:16px">SGEN ships a Test-IP tool inside the blacklist toolbar that runs a read-only dry run: type an address, press Test, and the platform tells you whether it is blocked and by which rule. A flat block field makes you publish a rule and wait to see if it caught the right traffic. SGEN lets you confirm the match first. The check is read-only and does not count as a hit, so you verify a CIDR or wildcard rule covers the address you meant without skewing the per-rule analytics.</p>
+ </div>
+ <div class="adwin light reveal" data-d="1" style="margin-top:40px">
+ <div class="adbar"><span class="ic"></span><span class="ti">Test IP<small>Read-only dry run</small></span></div>
+ <div class="stip" aria-hidden="true">
+ <div class="tform"><div class="inp">203.0.113.5</div><span class="go">Test</span></div>
+ <div class="res ok"><span class="dot"></span><span>Test IP <code>203.0.113.5</code> is blacklisted by <code>45.79.0.0/16</code>.</span></div>
+ <div class="res info"><span class="dot"></span><span>Test IP <code>8.8.8.8</code> is not blacklisted.</span></div>
+ <div class="res err"><span class="dot"></span><span>Please enter a valid IP address to test.</span></div>
+ <div class="note">The Test-IP check is read-only. It does not increment Hits and it does not block the address.</div>
+ </div>
+ </div>
+ </div>
+</section>
+
+<!-- 4 · PER-RULE ANALYTICS + AUDIT TRAIL · capability breakdown -->
+<section class="sec sec--alt">
+ <div class="wrap">
+ <div class="readw reveal">
+ <div class="eyebrow">A rules manager, not a text box</div>
+ <h2 class="h2">Every rule carries a reason, an author, a hit count, <span class="grad">and a last-matched time.</span></h2>
+ <p class="lead" style="margin-top:16px">SGEN renders the blacklist as a searchable, paginated, bulk-deletable rules table, not a single field. The Hits counter increments on every blocked public request and Last Matched stamps the time, so you see which rules actually fire and can prune the ones that never do. The Reason and Author columns make it a documented, attributable blocklist, every entry says why it exists and who added it, instead of an anonymous deny-list. Edits and deletes take effect on the visitor's very next public request, with no caching lag.</p>
+ </div>
+ <div class="adwin light reveal" data-d="1" style="margin-top:40px">
+ <div class="adbar"><span class="ic"></span><span class="ti">Blacklist rules<small>20 per page</small></span><span class="act ghost">Search entries...</span></div>
+ <div class="srows" aria-hidden="true">
+ <div class="head"><span class="cb"></span><span>Item</span><span>Reason</span><span>Hits</span><span>Last Matched</span><span>Author</span><span>Created</span><span></span></div>
+ <div class="row">
+ <span class="cb"></span>
+ <span class="item">45.79.0.0/16</span>
+ <span class="rsn">Repeat checkout fraud</span>
+ <span class="hits">1,284</span>
+ <span class="lm"><span class="pulse"></span> 2m ago</span>
+ <span class="au">Site Owner</span>
+ <span class="dc">May 4</span>
+ <span class="acts"><span>Edit</span><span class="del">Delete</span></span>
+ </div>
+ <div class="row">
+ <span class="cb"></span>
+ <span class="item">203.0.113.5</span>
+ <span class="rsn">Credential stuffing</span>
+ <span class="hits">612</span>
+ <span class="lm"><span class="pulse"></span> 18m ago</span>
+ <span class="au">Site Owner</span>
+ <span class="dc">May 9</span>
+ <span class="acts"><span>Edit</span><span class="del">Delete</span></span>
+ </div>
+ </div>
+ </div>
+ <p class="label reveal" style="margin-top:16px">Search is a LIKE-match on the Item column. The blacklist blocks by source IP only: single IPs, CIDR ranges, and IPv4 wildcards. It is not a domain, user-agent, country, or keyword filter, and it is not an allow-list.</p>
+ </div>
+</section>
+
+<!-- 5 · REPLACES THESE PLUGINS · the one WP wedge + Patchstack stat -->
+<section class="sec">
+ <div class="wrap">
+ <div class="feat reveal">
+ <div class="feat-copy">
+ <div class="eyebrow">The shelf it clears</div>
+ <h2 class="h2">One platform. <span class="grad">The whole security-plugin shelf, gone.</span></h2>
+ <p class="lead" style="margin-top:14px">SGEN replaces the security-plugin stack at the platform level: a free Foundation Pack WAF, platform security patching, the IP blacklist, and site protection, native. Each security plugin you remove is a separate update, a separate maintainer, and a separate entry in your vulnerability surface that you no longer run.</p>
+ <div class="replaces">
+ <span class="rep-chip">Wordfence</span><span class="rep-chip">iThemes Security</span><span class="rep-chip">Solid Security</span><span class="rep-chip">Sucuri</span>
+ </div>
+ <p style="margin-top:18px"><strong>91% of WordPress vulnerabilities were in plugins</strong>, <em>Patchstack, State of WordPress Security 2026</em>. The attack surface is the plugin layer, not the core, so the most secure security plugin is the one you do not have to run: zero security plugins means zero of that attack surface.</p>
+ </div>
+ <div class="adwin svs">
+ <div class="head">Foundation Pack, native</div>
+ <div class="rowx"><span class="ico2"></span><div class="lb"><span class="n">Web application firewall</span><span class="m">free, every plan</span></div><span class="pill">in the box</span></div>
+ <div class="rowx"><span class="ico2"></span><div class="lb"><span class="n">Security patching</span><span class="m">platform level</span></div><span class="pill">in the box</span></div>
+ <div class="rowx"><span class="ico2"></span><div class="lb"><span class="n">IP blacklist</span><span class="m">Test-IP + analytics</span></div><span class="pill">in the box</span></div>
+ <div class="rowx"><span class="ico2"></span><div class="lb"><span class="n">Site protection</span><span class="m">password gate, maintenance</span></div><span class="pill">in the box</span></div>
+ </div>
+ </div>
+ </div>
+</section>
+
+<!-- 6 · CROSS-LINK · DARK STAT PUNCTUATION -->
+<section class="sec surface-dark has-atmos">
+ <div class="wrap">
+ <div class="sec-head readw reveal"><div class="eyebrow">The platform behind the posture</div><h2 class="h2">Protected on day one. On every plan.</h2></div>
+ <div class="stat-band" style="margin-top:42px">
+ <div class="s reveal"><span class="stat">91<span class="z">%</span></span><div class="cap">of WP vulns were in plugins, Patchstack '26</div></div>
+ <div class="s reveal" data-d="1"><span class="stat">0<span class="z"> plugins</span></span><div class="cap">zero security plugins, zero of that attack surface</div></div>
+ <div class="s reveal" data-d="2"><span class="stat">23</span><div class="cap">native modules included on every plan</div></div>
+ </div>
+ <p class="reveal" style="margin-top:28px;max-width:74ch;color:var(--sg-ink-soft)">Security sits in the same platform as the rest of your stack. Pair the IP blacklist and Foundation Pack WAF with the native <a href="attributions.html" style="color:var(--sg-red-hot)">Attribution module</a> for the source behind every visitor, and the <a href="overview-modules.html" style="color:var(--sg-red-hot)">full set of 23 native modules</a> included on every plan.</p>
+ </div>
+</section>
+
+<!-- 7 · FAQ -->
+<section class="sec">
+ <div class="wrap">
+ <div class="sec-head reveal"><div class="eyebrow">Questions</div><h2 class="h2">Common questions about security</h2></div>
+ <div class="faq-list" style="margin-top:30px">
+ <details class="reveal" open><summary>Does SGEN comply with GDPR? <span class="pm">+</span></summary><div class="ans">SGEN ships the GDPR tools, a cookie-consent banner and a per-session consent log you can audit entry by entry, through the native Consent and Tracking module. Configuring your site to meet GDPR is still your responsibility; the consent trail is built in, with no consent plugin to add.</div></details>
+ <details class="reveal"><summary>What does the IP blacklist actually block, and what does it not do? <span class="pm">+</span></summary><div class="ans">The blacklist blocks by source IP only: single IPs, CIDR ranges, and IPv4 wildcards, IPv4 and IPv6. It is a response tool: it blocks addresses you have already identified and redirects those visitors away. It does not detect threats or rate-limit on its own, and it does not block by domain, user-agent, referrer, country, or keyword, and it is not an allow-list. Pair it with the Foundation Pack WAF for automated filtering and use the blacklist for the specific bad actors you have identified.</div></details>
+ <details class="reveal"><summary>What about HIPAA? <span class="pm">+</span></summary><div class="ans">Compliance (HIPAA) is coming soon, there is no price yet, and we do not claim HIPAA compliance or sign a BAA today. If you have specific regulatory requirements, talk to sales.</div></details>
+ <details class="reveal"><summary>What security plugins does SGEN replace? <span class="pm">+</span></summary><div class="ans">The big three: Wordfence, iThemes Security (Solid Security), and Sucuri. SGEN replaces them at the platform level with a free Foundation Pack WAF, platform security patching, IP blacklisting, and site protection, so there is no security plugin to install, license, or keep updated.</div></details>
+ <details class="reveal"><summary>Are SGEN's SOC 2 and ISO certifications complete? <span class="pm">+</span></summary><div class="ans">SOC 2 and ISO are in progress. We do not display certification badges or claim "certified" status until they are. The Trust Center lists the current status.</div></details>
+ <details class="reveal"><summary>Which plan includes the security controls? <span class="pm">+</span></summary><div class="ans">Every plan. The Foundation Pack WAF and security patching are free on every plan, including the $0 Sandbox. The deeper platform security controls, including the IP blacklist with its Test-IP tool and per-rule analytics, are part of the whole platform, included on every paid plan, from $39/mo (billed annually; $47 monthly). Plans differ only by how many live sites you run.</div></details>
+ </div>
+ </div>
+</section>
+
+<!-- 8 · CLOSING PRICING CTA -->
+<section class="sec sec--warm s-close">
+ <div class="wrap">
+ <div class="eyebrow reveal" style="justify-content:center">Included in your plan</div>
+ <h2 class="h2 reveal" data-d="1" style="margin-top:12px">A WAF, audit-ready logging, and a consent trail. <span class="grad">From $39/mo.</span></h2>
+ <p class="lead reveal" data-d="2" style="margin:16px auto 0;max-width:62ch">SGEN ships security natively across the whole platform, included on every plan, with free WAF and patching reaching even the $0 Sandbox, so you can build and protect a site before paying anything.</p>
+ <div class="flex reveal" data-d="3" style="justify-content:center;margin-top:28px">
+ <a class="btn btn-primary" href="pricing.html">Try the Free Sandbox <span class="arr">&rarr;</span></a>
+ <a class="btn btn-secondary" href="pricing.html">Compare Plans</a>
+ </div>
+ <div class="related reveal" data-d="3">
+ <a href="attributions.html">Attribution, the source behind every visitor</a>
+ <a href="integrations.html">Site-level integrations and Google services</a>
+ <a href="overview-modules.html">All 23 native modules</a>
+ </div>
+ <p class="fine reveal">From $39/mo, billed annually. $47 monthly. 2-week trial, cancel anytime. Every module included.</p>
+ </div>
+</section>
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer class="site-footer surface-dark">
+ <div class="footer-cta">
+ <div class="eyebrow">Start free</div>
+ <h2>Build the whole thing on the Sandbox. <span class="grad">$0, no card.</span></h2>
+ <p>Every module unlocked on unlimited sandbox sites. Go live by upgrading, priced by how many sites you run, not by features.</p>
+ <div class="ctas"><a class="btn btn-primary" href="pricing.html">Try the Free Sandbox <span class="arr">→</span></a><a class="btn btn-secondary" href="compare-vs-wordpress.html">Compare to WordPress</a></div>
+ </div>
+ <div class="ft-grid">
+ <div class="ft-brand"><div class="b">SGEN<span class="dot">.</span></div><p>One all-inclusive platform. Build the whole site, no plugins underneath, priced by how many sites you run.</p><span class="ft-status"><span class="d"></span> All systems operational</span></div>
+ <div class="ft-col"><div class="ft-head">Build &amp; Design</div><a href="page-builder.html">SG Builder</a><a href="templates.html">Templates</a><a href="theme-editor.html">Theme Editor</a><a href="media-library.html">Media Library</a><a href="pages-and-posts.html">Pages &amp; Posts</a><a href="custom-objects.html">Custom Objects</a><a href="overview-modules.html">All 23 modules</a><a href="overview-core.html">SG-Core</a></div>
+ <div class="ft-col"><div class="ft-head">Sell</div><a href="ecommerce.html">Ecommerce</a><a href="discussions.html">Discussions &amp; Reviews</a></div>
+ <div class="ft-col"><div class="ft-head">Grow &amp; Convert</div><a href="forms.html">Forms</a><a href="attributions.html">Attribution</a><a href="seo-optimization.html">SEO</a><a href="analytics.html">Analytics</a><a href="popups.html">Popups</a><a href="integrations.html">Integrations</a></div>
+ <div class="ft-col"><div class="ft-head">Operate &amp; Secure</div><a href="site-manager.html">Site Manager</a><a href="overview-dashboard.html">SG-Dashboard</a><a href="backups.html">Backups</a><a href="redirects.html">Redirects</a><a href="security.html">Security</a><a href="trust.html">Trust</a></div>
+ <div class="ft-col"><div class="ft-head">Why SGEN</div><a href="why-sgen.html">Why SGEN</a><a href="why-sgen-no-plugins.html">No plugins</a><a href="why-sgen-speed.html">Speed</a><a href="compare.html">Compare all</a><a href="migrate.html">Migrate</a></div>
+ <div class="ft-col"><div class="ft-head">Solutions</div><a href="solutions-agencies.html">Agencies</a><a href="solutions-small-business.html">Small business</a><a href="solutions-restaurants.html">Restaurants</a><a href="solutions-multi-location.html">Multi-location</a><a href="solutions-healthcare.html">Healthcare</a><a href="solutions-freelancers.html">Freelancers</a><a href="enterprise.html">Enterprise</a></div>
+ <div class="ft-col"><div class="ft-head">Customers</div><a href="customers.html">Customer stories</a><a href="showcase.html">Showcase</a><a href="customers-fernwood.html">Fernwood Digital</a><a href="customers-halloran-vint.html">Halloran &amp; Vint</a></div>
+ <div class="ft-col"><div class="ft-head">Resources</div><a href="resources.html">All resources</a><a href="blog.html">Blog</a><a href="guides.html">Guides</a><a href="changelog.html">Changelog</a><a href="roadmap.html">Roadmap</a><a href="status.html">Status</a></div>
+ <div class="ft-col"><div class="ft-head">Company</div><a href="about.html">About</a><a href="partners.html">Partners</a><a href="partners-apply.html">Become a partner</a><a href="partners-directory.html">Partner directory</a><a href="contact.html">Contact</a></div>
+ <div class="ft-col"><div class="ft-head">Developers</div><a href="developers.html">Docs</a><a href="developers.html">API</a><a href="integrations.html">Integrations</a></div>
+ </div>
+ <div class="ft-watermark">SGEN</div>
+ <div class="ft-bottom"><span>© 2026 SGEN. The managed website platform.</span><div class="links"><a href="legal-privacy.html">Privacy</a><a href="legal-terms.html">Terms</a><a href="legal-dpa.html">DPA</a><a href="legal-cookie-policy.html">Cookies</a><a href="accessibility.html">Accessibility</a></div></div>
+</footer>
+
+<!-- ===== MOBILE DRAWER ===== -->
+<div class="drawer-overlay" data-drawer-close></div>
+<aside class="site-drawer" id="drawer">
+ <div class="dr-top"><div class="b" style="font-weight:900;font-size:20px;letter-spacing:-.04em;color:#f4f2ee">SGEN<span style="color:var(--sg-red)">.</span></div><button class="dr-close" data-drawer-close aria-label="Close">×</button></div>
+ <div class="dr-body">
+ <details class="dr-group"><summary>Product <span class="pm" aria-hidden="true">+</span></summary><div class="dr-children">
+ <div class="dr-subhead">Build &amp; Design</div>
+ <a href="page-builder.html"><span class="ct">SG Builder</span><span class="cs">Visual builder, SSR output</span></a>
+ <a href="templates.html"><span class="ct">Templates</span><span class="cs">Start from a real design</span></a>
+ <a href="theme-editor.html"><span class="ct">Theme Editor</span><span class="cs">Global tokens, fonts, colors</span></a>
+ <a href="media-library.html"><span class="ct">Media Library</span><span class="cs">Native assets, optimized</span></a>
+ <a href="menus.html"><span class="ct">Menus</span><span class="cs">Build navigation visually</span></a>
+ <a href="pages-and-posts.html"><span class="ct">Pages &amp; Posts</span><span class="cs">Every content type</span></a>
+ <a href="custom-objects.html"><span class="ct">Custom Objects</span><span class="cs">Model content with native fields</span></a>
+ <div class="dr-subhead">Sell</div>
+ <a href="ecommerce.html"><span class="ct">Ecommerce</span><span class="cs">Storefront, checkout</span></a>
+ <a href="discussions.html"><span class="ct">Discussions &amp; Reviews</span><span class="cs">Reviews and comments, moderated</span></a>
+ <a href="events.html"><span class="ct">Events</span><span class="cs">Events and a public calendar</span></a>
+ <div class="dr-subhead">Grow &amp; Convert</div>
+ <a href="forms.html"><span class="ct">Forms</span><span class="cs">Native lead capture</span></a>
+ <a href="popups.html"><span class="ct">Popups</span><span class="cs">On-demand and autoload</span></a>
+ <a href="seo-optimization.html"><span class="ct">SEO</span><span class="cs">On-page, server-rendered</span></a>
+ <a href="attributions.html"><span class="ct">Attribution</span><span class="cs">Source-level lead attribution</span></a>
+ <a href="analytics.html"><span class="ct">Analytics</span><span class="cs">Dashboard plus raw events</span></a>
+ <a href="integrations.html"><span class="ct">Integrations</span><span class="cs">Stripe, Google, and more</span></a>
+ <div class="dr-subhead">Operate</div>
+ <a href="site-manager.html"><span class="ct">Site Manager</span><span class="cs">One health cockpit per site</span></a>
+ <a href="backups.html"><span class="ct">Backups</span><span class="cs">One-click save-points</span></a>
+ <a href="stage-live.html"><span class="ct">Stage &amp; Live</span><span class="cs">Restore and roll back safely</span></a>
+ <a href="advanced-settings.html"><span class="ct">Advanced Settings</span><span class="cs">Search-replace, import, export</span></a>
+ <a href="users-and-roles.html"><span class="ct">Users &amp; Roles</span><span class="cs">Directory with audit log</span></a>
+ <a href="redirects.html"><span class="ct">Redirects</span><span class="cs">Native 301 and 302 manager</span></a>
+ <div class="dr-subhead">Secure &amp; Comply</div>
+ <a href="security.html"><span class="ct">Security</span><span class="cs">Platform WAF, hardened</span></a>
+ <a href="security.html"><span class="ct">Age Verification</span><span class="cs">Age gate for regulated sites</span></a>
+ <a href="legal-cookie-policy.html"><span class="ct">Consent &amp; Tracking</span><span class="cs">Consent banner, per-session log</span></a>
+ <a href="trust.html"><span class="ct">Trust</span><span class="cs">WAF, SSL, CDN, logging</span></a>
+ <a href="accessibility.html"><span class="ct">Accessibility</span><span class="cs">Conformance status</span></a>
+ <div class="dr-subhead">The platform</div>
+ <a href="overview-modules.html"><span class="ct">All 23 modules →</span><span class="cs">The whole platform</span></a>
+ <a href="overview-core.html"><span class="ct">SG-Core</span><span class="cs">The native content engine</span></a>
+ <a href="overview-dashboard.html"><span class="ct">SG-Dashboard</span><span class="cs">The operating layer</span></a>
+ </div></details>
+ <details class="dr-group"><summary>Why SGEN <span class="pm" aria-hidden="true">+</span></summary><div class="dr-children">
+ <a href="why-sgen.html"><span class="ct">Why SGEN, in full</span><span class="cs">The whole case, one page</span></a>
+ <a href="why-sgen-no-plugins.html"><span class="ct">No plugins</span><span class="cs">Nothing to license or patch</span></a>
+ <a href="why-sgen-speed.html"><span class="ct">Speed</span><span class="cs">Server-side rendered</span></a>
+ </div></details>
+ <details class="dr-group"><summary>Solutions <span class="pm" aria-hidden="true">+</span></summary><div class="dr-children">
+ <a href="solutions-agencies.html"><span class="ct">Agencies</span><span class="cs">Multi-site, one dashboard</span></a>
+ <a href="solutions-small-business.html"><span class="ct">Small business</span><span class="cs">One fast site</span></a>
+ <a href="solutions-restaurants.html"><span class="ct">Restaurants</span><span class="cs">Menus, events, ordering</span></a>
+ <a href="solutions-multi-location.html"><span class="ct">Multi-location</span><span class="cs">One dashboard, many sites</span></a>
+ <a href="solutions-healthcare.html"><span class="ct">Healthcare</span><span class="cs">HIPAA compliant for healthcare</span></a>
+ <a href="solutions-freelancers.html"><span class="ct">Freelancers</span><span class="cs">Build &amp; hand off</span></a>
+ <a href="enterprise.html"><span class="ct">Enterprise</span><span class="cs">Unlimited sites, one bill</span></a>
+ </div></details>
+ <details class="dr-group"><summary>Compare <span class="pm" aria-hidden="true">+</span></summary><div class="dr-children">
+ <a href="compare-vs-wordpress.html"><span class="ct">vs WordPress</span><span class="cs">The refugee path</span></a>
+ <a href="compare-vs-elementor.html"><span class="ct">vs Elementor</span><span class="cs">Builder head-to-head</span></a>
+ <a href="compare-vs-wp-engine.html"><span class="ct">vs WP Engine</span><span class="cs">Managed hosting</span></a>
+ <a href="compare-vs-wix.html"><span class="ct">vs Wix</span><span class="cs">Own a real product</span></a>
+ <a href="compare-vs-squarespace.html"><span class="ct">vs Squarespace</span><span class="cs">Beyond templates</span></a>
+ <a href="compare-vs-godaddy.html"><span class="ct">vs GoDaddy</span><span class="cs">Past a brochure site</span></a>
+ <a href="compare.html"><span class="ct">All comparisons →</span><span class="cs">Every head-to-head</span></a>
+ <a href="migrate.html"><span class="ct">Migrate</span><span class="cs">Move off WordPress</span></a>
+ </div></details>
+ <details class="dr-group"><summary>Customers <span class="pm" aria-hidden="true">+</span></summary><div class="dr-children">
+ <a href="customers.html"><span class="ct">Customer stories</span><span class="cs">Metric-first cases</span></a>
+ <a href="showcase.html"><span class="ct">Showcase</span><span class="cs">Gallery of built sites</span></a>
+ <a href="customers-fernwood.html"><span class="ct">Fernwood Digital</span><span class="cs">23 sites, one stack</span></a>
+ <a href="customers-halloran-vint.html"><span class="ct">Halloran &amp; Vint</span><span class="cs">Consultancy rebuild</span></a>
+ </div></details>
+ <details class="dr-group"><summary>Resources <span class="pm" aria-hidden="true">+</span></summary><div class="dr-children">
+ <a href="resources.html"><span class="ct">All resources</span><span class="cs">Guides, blog, and more</span></a>
+ <a href="blog.html"><span class="ct">Blog</span><span class="cs">Notes from the platform</span></a>
+ <a href="guides.html"><span class="ct">Guides</span><span class="cs">How-to walkthroughs</span></a>
+ <a href="changelog.html"><span class="ct">Changelog</span><span class="cs">What shipped</span></a>
+ <a href="roadmap.html"><span class="ct">Roadmap</span><span class="cs">What is next</span></a>
+ <a href="status.html"><span class="ct">Status</span><span class="cs">System status</span></a>
+ </div></details>
+ <details class="dr-group"><summary>Company <span class="pm" aria-hidden="true">+</span></summary><div class="dr-children">
+ <a href="about.html"><span class="ct">About</span><span class="cs">Who we are</span></a>
+ <a href="partners.html"><span class="ct">Partners</span><span class="cs">The partner program</span></a>
+ <a href="partners-apply.html"><span class="ct">Become a partner</span><span class="cs">Apply to partner</span></a>
+ <a href="contact.html"><span class="ct">Contact</span><span class="cs">Talk to us</span></a>
+ </div></details>
+ <a class="dr-flat" href="pricing.html">Pricing</a>
+ <a class="dr-flat" href="enterprise.html">Enterprise</a>
+ <a class="dr-flat" href="https://app.sgen.com/login">Log in</a>
+ </div>
+</aside>
+
+<!-- ===== MOBILE STICKY BAR ===== -->
+<div class="mobile-bar surface-dark">
+ <a class="btn btn-primary" href="pricing.html">Start Building <span class="arr">→</span></a>
+ <a class="btn btn-secondary" href="pricing.html">Pricing</a>
+</div>
+
+<script>
+ const hdr = document.getElementById('hdr');
+ addEventListener('scroll', () => hdr.classList.toggle('is-stuck', scrollY > 10), {passive:true});
+ const drawer = document.getElementById('drawer'), overlay = document.querySelector('.drawer-overlay');
+ document.querySelectorAll('[data-drawer-open]').forEach(b => b.addEventListener('click', () => { drawer.classList.add('open'); overlay.classList.add('open'); }));
+ document.querySelectorAll('[data-drawer-close]').forEach(b => b.addEventListener('click', () => { drawer.classList.remove('open'); overlay.classList.remove('open'); }));
+ // scroll-reveal
+ const io = new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}})},{threshold:.12,rootMargin:'0px 0px -6% 0px'});
+ document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+ // mobile sticky bar, appear after hero, hide when footer CTA in view
+ const mbar = document.querySelector('.mobile-bar');
+ const heroSec = document.querySelector('main section');
+ const fcta = document.querySelector('.footer-cta');
+ function updBar(){ if(!mbar||!fcta) return; const past = scrollY > (heroSec ? heroSec.offsetTop + heroSec.offsetHeight - 140 : 480); const footerNear = fcta.getBoundingClientRect().top < innerHeight * 0.94; mbar.classList.toggle('show', past && !footerNear); }
+ addEventListener('scroll', updBar, {passive:true}); addEventListener('resize', updBar); updBar();
+ // billing toggle (pricing + any page with [data-billing])
+ document.querySelectorAll('[data-billing]').forEach(t=>t.addEventListener('click',()=>{ const mode=t.dataset.billing; document.querySelectorAll('[data-billing]').forEach(b=>b.classList.toggle('on',b===t)); document.querySelectorAll('[data-annual]').forEach(el=>{ el.textContent = mode==='annual'? el.dataset.annual : el.dataset.monthly; }); document.querySelectorAll('.billed').forEach(el=>{ if(el.dataset.annual) el.textContent = mode==='annual'? el.dataset.annual : el.dataset.monthly; }); }));
+ // megamenu keyboard + screen-reader access.
+ // CSS reveals each panel on .nav-item:hover and :focus-within (progressive enhancement, kept).
+ // Here we add an explicit JS-owned open state: aria-expanded on the trigger + an .is-open class
+ // on the .nav-item so keyboard/SR users get click-to-toggle and Escape-to-close-with-focus-restore.
+ // (A CSS rule keyed on .nav-item.is-open .megamenu makes the explicit-open path visually robust and
+ // lets Escape keep the trigger focused without :focus-within re-revealing the panel; see A9 NOTE.)
+ document.querySelectorAll('.nav-item').forEach(item => {
+ const trig = item.querySelector('.nav-trigger');
+ const panel = item.querySelector('.megamenu');
+ if (!trig || !panel) return;
+ let viaPointer = false; // distinguishes a click (pointer) from a Tab (keyboard) into the trigger
+ const sync = on => { item.classList.toggle('is-open', on); trig.setAttribute('aria-expanded', on ? 'true' : 'false'); };
+ const closeOthers = () => document.querySelectorAll('.nav-item.is-open').forEach(o => { if (o !== item) { o.classList.remove('is-open'); const t = o.querySelector('.nav-trigger'); if (t) t.setAttribute('aria-expanded','false'); } });
+ // Pointer path: mousedown flags the focus as pointer-driven so focusin does not auto-open;
+ // click then toggles. Keyboard path: no mousedown, so focusin opens on Tab-in.
+ trig.addEventListener('mousedown', () => { viaPointer = true; });
+ trig.addEventListener('click', e => {
+ e.preventDefault();
+ const willOpen = trig.getAttribute('aria-expanded') !== 'true';
+ closeOthers();
+ sync(willOpen);
+ if (willOpen) trig.focus(); else trig.blur();
+ viaPointer = false;
+ });
+ // Keyboard focus into the item opens it (covers Tab-through reveal); pointer focus is left to click.
+ item.addEventListener('focusin', () => { if (viaPointer) return; sync(true); });
+ item.addEventListener('focusout', () => { if (!item.contains(document.relatedTarget)) sync(false); });
+ // Escape closes the open panel and returns focus to its trigger.
+ item.addEventListener('keydown', e => {
+ if (e.key === 'Escape' && trig.getAttribute('aria-expanded') === 'true') { e.stopPropagation(); sync(false); trig.focus(); }
+ });
+ });
+ // Click outside any nav-item closes open megamenus.
+ document.addEventListener('click', e => { if (!e.target.closest('.nav-item')) document.querySelectorAll('.nav-item.is-open').forEach(o => { o.classList.remove('is-open'); const t = o.querySelector('.nav-trigger'); if (t) t.setAttribute('aria-expanded','false'); }); });
+</script>
+</body>
+</html>

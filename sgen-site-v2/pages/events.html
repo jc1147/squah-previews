@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Events Module for WordPress Sites | Native Event Publishing | SGEN</title>
+<meta name="description" content="SGEN's Events module publishes dated events with start and end times, recurrence, categories, and a one-click Add to Calendar export across 6 providers. A native content type with a full rich-text editor, built-in discussions and reviews, and a filterable public archive. No events plugin to license.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../_design/sgen-tokens.css?v=ec73c2e3">
+<link rel="stylesheet" href="../_design/sgen-structural.css?v=a102bd3a">
+<link rel="stylesheet" href="../_design/sgen-chrome.css?v=5245d0e3">
+<link rel="stylesheet" href="events.css?v=8c05bafb">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- ===== TOP UTILITY BAR ===== -->
+<div class="topbar"><div class="in">
+ <span class="msg"><span class="spark">◆</span> <b>One platform, priced by sites.</b><span class="long"> Every module included.</span></span>
+ <span class="util"><a class="hide-sm" href="developers.html">Docs</a><a class="hide-sm" href="changelog.html">Changelog</a><span class="status"><span class="d"></span> All systems operational</span></span>
+</div></div>
+
+<!-- ===== HEADER (mega-menu) ===== -->
+<header class="site-header" id="hdr"><div class="in">
+ <a class="brand" href="../pages/home.html">SGEN<span class="dot">.</span></a>
+ <nav class="site-nav">
+ <div class="nav-item">
+ <button class="nav-trigger" aria-haspopup="true" aria-expanded="false" aria-controls="mm-product">Product <span class="chev"></span></button>
+ <div class="megamenu mm-wide" id="mm-product"><div class="mm-inner">
+ <span class="mm-watermark" aria-hidden="true">PRODUCT</span>
+ <div class="mm-cols">
+ <div class="mm-col"><div class="mm-head">Build &amp; Design</div>
+ <a class="mm-link" href="page-builder.html"><span class="t"><span class="gl"></span>SG Builder</span><span class="s">Design pages visually</span></a>
+ <a class="mm-link" href="templates.html"><span class="t"><span class="gl"></span>Templates</span><span class="s">Start from a real design</span></a>
+ <a class="mm-link" href="theme-editor.html"><span class="t"><span class="gl"></span>Theme Editor</span><span class="s">Colors, fonts, and presets</span></a>
+ <a class="mm-link" href="media-library.html"><span class="t"><span class="gl"></span>Media Library</span><span class="s">Assets, optimized and fast</span></a>
+ <a class="mm-link" href="menus.html"><span class="t"><span class="gl"></span>Menus</span><span class="s">Build navigation visually</span></a>
+ <a class="mm-link" href="pages-and-posts.html"><span class="t"><span class="gl"></span>Pages &amp; Posts</span><span class="s">Every content type</span></a>
+ <a class="mm-link" href="custom-objects.html"><span class="t"><span class="gl"></span>Custom Objects</span><span class="s">Native content modeling</span></a>
+ </div>
+ <div class="mm-col"><div class="mm-head">Sell</div>
+ <a class="mm-link" href="ecommerce.html"><span class="t"><span class="gl"></span>Ecommerce</span><span class="s">Catalog, checkout, tax</span></a>
+ <a class="mm-link" href="discussions.html"><span class="t"><span class="gl"></span>Discussions &amp; Reviews</span><span class="s">Reviews and comments</span></a>
+ <a class="mm-link" href="events.html"><span class="t"><span class="gl"></span>Events</span><span class="s">Events and a calendar</span></a>
+ </div>
+ <div class="mm-col"><div class="mm-head">Grow &amp; Convert</div>
+ <a class="mm-link" href="forms.html"><span class="t"><span class="gl"></span>Forms</span><span class="s">Lead capture, native</span></a>
+ <a class="mm-link" href="popups.html"><span class="t"><span class="gl"></span>Popups</span><span class="s">On-demand and autoload</span></a>
+ <a class="mm-link" href="seo-optimization.html"><span class="t"><span class="gl"></span>SEO</span><span class="s">Titles, meta, and robots</span></a>
+ <a class="mm-link" href="attributions.html"><span class="t"><span class="gl"></span>Attribution</span><span class="s">The source of every lead</span></a>
+ <a class="mm-link" href="analytics.html"><span class="t"><span class="gl"></span>Analytics</span><span class="s">Dashboard plus raw events</span></a>
+ <a class="mm-link" href="integrations.html"><span class="t"><span class="gl"></span>Integrations</span><span class="s">Stripe, Google, and more</span></a>
+ </div>
+ <div class="mm-col"><div class="mm-head">Operate</div>
+ <a class="mm-link" href="site-manager.html"><span class="t"><span class="gl"></span>Site Manager</span><span class="s">One cockpit per site</span></a>
+ <a class="mm-link" href="backups.html"><span class="t"><span class="gl"></span>Backups</span><span class="s">Backups and save-points</span></a>
+ <a class="mm-link" href="stage-live.html"><span class="t"><span class="gl"></span>Stage &amp; Live</span><span class="s">Restore and roll back</span></a>
+ <a class="mm-link" href="advanced-settings.html"><span class="t"><span class="gl"></span>Advanced Settings</span><span class="s">Email, import, export</span></a>
+ <a class="mm-link" href="users-and-roles.html"><span class="t"><span class="gl"></span>Users &amp; Roles</span><span class="s">Directory plus audit log</span></a>
+ <a class="mm-link" href="redirects.html"><span class="t"><span class="gl"></span>Redirects</span><span class="s">Native 301 and 302 rules</span></a>
+ </div>
+ <div class="mm-col"><div class="mm-head">Secure &amp; Comply</div>
+ <a class="mm-link" href="security.html"><span class="t"><span class="gl"></span>Security</span><span class="s">Platform WAF by default</span></a>
+ <a class="mm-link" href="security.html"><span class="t"><span class="gl"></span>Age Verification</span><span class="s">Age gate for regulated</span></a>
+ <a class="mm-link" href="legal-cookie-policy.html"><span class="t"><span class="gl"></span>Consent &amp; Tracking</span><span class="s">Consent banner plus log</span></a>
+ <a class="mm-link" href="trust.html"><span class="t"><span class="gl"></span>Trust</span><span class="s">WAF, SSL, CDN, logging</span></a>
+ <a class="mm-link" href="accessibility.html"><span class="t"><span class="gl"></span>Accessibility</span><span class="s">Conformance status</span></a>
+ </div>
+ </div>
+ <a class="mm-feat" href="page-builder.html"><span class="badge">Flagship</span><span class="k">SG Builder</span><span class="ttl">Build it visually. Ship it server-rendered.</span><span class="sub">A true visual builder with 48 native components and a real product underneath.</span><span class="go">Explore the builder →</span></a>
+ <div class="mm-index"><a href="overview-modules.html"><b>All 23 modules</b> The whole platform, in the box</a><a href="overview-core.html"><b>SG-Core</b> The native content engine</a><a href="overview-dashboard.html"><b>SG-Dashboard</b> The operating layer, one hub</a></div>
+ </div></div>
+ </div>
+ <div class="nav-item">
+ <button class="nav-trigger" aria-haspopup="true" aria-expanded="false" aria-controls="mm-why">Why SGEN <span class="chev"></span></button>
+ <div class="megamenu" id="mm-why"><div class="mm-inner">
+ <span class="mm-watermark" aria-hidden="true">WHY</span>
+ <div class="mm-col"><div class="mm-head">The case</div>
+ <a class="mm-link" href="why-sgen-no-plugins.html"><span class="t"><span class="gl"></span>No plugins</span><span class="s">Native modules, nothing to license or patch</span></a>
+ <a class="mm-link" href="why-sgen-speed.html"><span class="t"><span class="gl"></span>Speed</span><span class="s">Server-side rendered, fast by default</span></a>
+ <a class="mm-link" href="why-sgen.html"><span class="t"><span class="gl"></span>Why SGEN, in full</span><span class="s">The whole case, one page</span></a>
+ </div>
+ <div class="mm-col"><div class="mm-head">The model</div>
+ <a class="mm-link" href="pricing.html"><span class="t"><span class="gl"></span>One stack</span><span class="s">No plugin tax, no suite tax</span></a>
+ <a class="mm-link" href="pricing.html"><span class="t"><span class="gl"></span>Priced by sites</span><span class="s">Not by features</span></a>
+ </div>
+ <a class="mm-feat" href="why-sgen.html"><span class="badge">The wedge</span><span class="k">Native, not plugins</span><span class="ttl">One stack. Nothing to license or patch.</span><span class="sub">The whole platform is the box, hosting, builder, SEO, attribution, security.</span><span class="go">See why SGEN →</span></a>
+ </div></div>
+ </div>
+ <div class="nav-item">
+ <button class="nav-trigger" aria-haspopup="true" aria-expanded="false" aria-controls="mm-solutions">Solutions <span class="chev"></span></button>
+ <div class="megamenu" id="mm-solutions"><div class="mm-inner">
+ <span class="mm-watermark" aria-hidden="true">SOLUTIONS</span>
+ <div class="mm-col"><div class="mm-head">By team</div>
+ <a class="mm-link" href="solutions-agencies.html"><span class="t"><span class="gl"></span>Agencies</span><span class="s">Run every client site from one dashboard</span></a>
+ <a class="mm-link" href="solutions-freelancers.html"><span class="t"><span class="gl"></span>Freelancers</span><span class="s">Build on Sandbox, hand off</span></a>
+ </div>
+ <div class="mm-col"><div class="mm-head">By business</div>
+ <a class="mm-link" href="solutions-small-business.html"><span class="t"><span class="gl"></span>Small business</span><span class="s">One fast site, done right</span></a>
+ <a class="mm-link" href="solutions-restaurants.html"><span class="t"><span class="gl"></span>Restaurants</span><span class="s">Menus, events, online ordering</span></a>
+ <a class="mm-link" href="solutions-multi-location.html"><span class="t"><span class="gl"></span>Multi-location</span><span class="s">One dashboard, many sites</span></a>
+ <a class="mm-link" href="solutions-healthcare.html"><span class="t"><span class="gl"></span>Healthcare</span><span class="s">HIPAA compliant for healthcare</span></a>
+ </div>
+ <a class="mm-feat" href="solutions-agencies.html"><span class="badge">For teams</span><span class="k">Agencies</span><span class="ttl">Run an unlimited portfolio from one dashboard.</span><span class="sub">Multi-site portfolio, fixed roles, audit log, Enterprise from $497/mo.</span><span class="go">See the agency plan →</span></a>
+ </div></div>
+ </div>
+ <div class="nav-item">
+ <button class="nav-trigger" aria-haspopup="true" aria-expanded="false" aria-controls="mm-compare">Compare <span class="chev"></span></button>
+ <div class="megamenu" id="mm-compare"><div class="mm-inner">
+ <span class="mm-watermark" aria-hidden="true">VS</span>
+ <div class="mm-col"><div class="mm-head">Deep dives</div>
+ <a class="mm-link" href="compare-vs-wordpress.html"><span class="t"><span class="gl"></span>vs WordPress</span><span class="s">The refugee path</span></a>
+ <a class="mm-link" href="compare-vs-elementor.html"><span class="t"><span class="gl"></span>vs Elementor</span><span class="s">Builder head-to-head</span></a>
+ <a class="mm-link" href="compare-vs-wp-engine.html"><span class="t"><span class="gl"></span>vs WP Engine</span><span class="s">Managed hosting</span></a>
+ </div>
+ <div class="mm-col"><div class="mm-head">Quick looks</div>
+ <a class="mm-link" href="compare-vs-wix.html"><span class="t"><span class="gl"></span>vs Wix</span><span class="s">Own a real product</span></a>
+ <a class="mm-link" href="compare-vs-squarespace.html"><span class="t"><span class="gl"></span>vs Squarespace</span><span class="s">Beyond templates</span></a>
+ <a class="mm-link" href="compare-vs-godaddy.html"><span class="t"><span class="gl"></span>vs GoDaddy</span><span class="s">Past a brochure site</span></a>
+ <a class="mm-link" href="compare.html"><span class="t"><span class="gl"></span>All comparisons →</span><span class="s">Every head-to-head in one place</span></a>
+ </div>
+ <a class="mm-feat" href="migrate.html"><span class="badge">Switching?</span><span class="k">/migrate</span><span class="ttl">Move off WordPress, the honest way.</span><span class="sub">A move is a rebuild, and that's the upgrade. White-glove or DIY.</span><span class="go">See how migration works →</span></a>
+ </div></div>
+ </div>
+ <div class="nav-item">
+ <button class="nav-trigger" aria-haspopup="true" aria-expanded="false" aria-controls="mm-customers">Customers <span class="chev"></span></button>
+ <div class="megamenu" id="mm-customers"><div class="mm-inner">
+ <span class="mm-watermark" aria-hidden="true">PROOF</span>
+ <div class="mm-col"><div class="mm-head">Explore</div>
+ <a class="mm-link" href="customers.html"><span class="t"><span class="gl"></span>Customer stories</span><span class="s">Metric-first case grid</span></a>
+ <a class="mm-link" href="showcase.html"><span class="t"><span class="gl"></span>Showcase</span><span class="s">Gallery of sites built on SGEN</span></a>
+ <a class="mm-link" href="customers.html"><span class="t"><span class="gl"></span>Case studies</span><span class="s">The full teardown, deep</span></a>
+ </div>
+ <div class="mm-col"><div class="mm-head">Built on SGEN</div>
+ <a class="mm-link" href="why-sgen-no-plugins.html"><span class="t"><span class="gl"></span>Zero plugins</span><span class="s">Under every site in the reel</span></a>
+ <a class="mm-link" href="pricing.html"><span class="t"><span class="gl"></span>One stack</span><span class="s">Forms, store, SEO, all native</span></a>
+ </div>
+ <a class="mm-feat" href="customers-fernwood.html"><span class="badge">Case study</span><span class="k">Fernwood Digital</span><span class="ttl">23 client sites, one stack, one login.</span><span class="sub">A studio that retired the plugin-maintenance tax.</span><span class="go">Read the story →</span></a>
+ </div></div>
+ </div>
+ <a class="nav-trigger" href="pricing.html">Pricing</a>
+ </nav>
+ <div class="site-actions">
+ <a class="login" href="https://app.sgen.com/login">Log in</a>
+ <a class="btn btn-primary" href="pricing.html">Start Building <span class="arr">→</span></a>
+ <button class="hamburger" data-drawer-open aria-label="Menu"><span></span><span></span><span></span></button>
+ </div>
+</div></header>
+
+<main id="main">
+<!-- 1 · HERO · the All Events admin index -->
+<section class="sec ev-hero surface-dark has-atmos">
+ <div class="wrap">
+ <div class="lede reveal">
+ <div class="eyebrow">Native module &middot; Events</div>
+ <h1>Publish events as native content. <span class="grad">Dated, recurring, on a public calendar.</span></h1>
+ <p class="lead">SGEN's Events module creates dated events with start and end times, a rich-text body, an address, categories, and a per-event banner, then publishes each one to a filterable public archive with its own single-event page. Set a series to repeat Daily, Weekly, Monthly, or Yearly from one record. Every public event page generates a one-click Add to Calendar export across Google, Apple, Outlook, iCal, Yahoo, and Microsoft 365. On WordPress this lives in a licensed events plugin you renew and patch. Here it is one of 23 native modules, in the box on every plan.</p>
+ <div class="cta flex">
+ <a class="btn btn-primary" href="pricing.html">Start Building <span class="arr">&rarr;</span></a>
+ <a class="btn btn-secondary" href="pricing.html">Compare Plans</a>
+ </div>
+ </div>
+
+ <div class="stage reveal" data-d="1">
+ <div class="adwin" aria-hidden="true">
+ <div class="adbar"><span class="ic"></span><span class="ti">Events<small>All Events</small></span><span class="act">+ Add New</span></div>
+ <div class="evcrumb">Dashboard / <b>Events</b> / All Events</div>
+ <div class="evpills">
+ <span class="evpill on">All Events <b>4</b></span><span class="evpill">Published <b>3</b></span><span class="evpill">Draft <b>1</b></span><span class="evpill">Trash <b>1</b></span>
+ </div>
+ <div class="evctrl"><span class="sel">Action For Selected &#9662;</span><span class="ap">Apply</span><span class="srch">Search events...</span></div>
+ <div class="evtab">
+ <div class="th"><span></span><span>Event Title</span><span>Date of Event</span><span>Recurrences</span><span>Category</span><span>Author</span><span>Created At</span></div>
+ <div class="tr"><span class="ck"></span><span class="nm">Summer Menu Launch <span class="dr">Draft</span></span><span class="dte">01/15/2027 09:00 AM - 11:00 AM</span><span class="rec none">-</span><span class="cat">Tastings</span><span class="au">Site Owner</span><span class="cr">Dec 02</span></div>
+ <div class="tr"><span class="ck"></span><span class="nm">Live Jazz Night</span><span class="dte">02/20/2027 02:00 PM - 04:00 PM</span><span class="rec">Weekly</span><span class="cat">Music</span><span class="au">Site Owner</span><span class="cr">Dec 04</span></div>
+ <div class="tr"><span class="ck"></span><span class="nm">Friday Tasting</span><span class="dte">03/15/2027 09:00 AM - 11:00 AM</span><span class="rec">Weekly</span><span class="cat">Tastings</span><span class="au">Site Owner</span><span class="cr">Dec 06</span></div>
+ <div class="tr"><span class="ck"></span><span class="nm">Winter Pop-Up Market</span><span class="dte">12/12/2026 10:00 AM - 05:00 PM</span><span class="rec none">-</span><span class="cat">Markets</span><span class="au">Site Owner</span><span class="cr">Nov 18</span></div>
+ </div>
+ </div>
+ </div>
+ </div>
+</section>
+
+<!-- 2 · WHAT THE EVENTS MODULE DOES · capability grid -->
+<section class="sec sec--warm">
+ <div class="wrap">
+ <div class="readw reveal">
+ <div class="eyebrow">The whole module, native</div>
+ <h2 class="h2">Create an event, set its date and recurrence, <span class="grad">publish it to a public archive.</span></h2>
+ <p class="lead" style="margin-top:16px">The Events module owns the whole job in one place: author the event, repeat it on a schedule, sort it into categories, and put it on a public calendar visitors can add to their own. No events plugin to license, no Pro tier to unlock recurrence, no separate front-end add-on for the archive.</p>
+ </div>
+ <div class="grid g-3" style="margin-top:42px">
+ <div class="card reveal"><div class="ico"><span class="m"></span></div><h3 class="h3">Create and edit events</h3><p style="margin-top:10px">The create form carries a Name of event, a Date of Event datetime range, a text-display override, an Address field, and a rich-text Content editor with a full two-row toolbar: bold, italic, underline, strikethrough, color, paragraph styles, lists, alignment, links, images, code, tables, and a View Code button.</p></div>
+ <div class="card reveal" data-d="1"><div class="ico"><span class="m"></span></div><h3 class="h3">Recurrence from one record</h3><p style="margin-top:10px">Set a series to repeat Daily, Weekly, Monthly, or Yearly. Weekly adds Monday through Sunday day checkboxes and an every-N-weeks interval. End the series never, after N occurrences, or on a set date. The whole run is one record you edit in one place, not dozens of duplicates.</p></div>
+ <div class="card reveal" data-d="2"><div class="ico"><span class="m"></span></div><h3 class="h3">Categories and list management</h3><p style="margin-top:10px">Group events into categories with a name, slug, description, and thumbnail, then run the calendar from one admin list with 4 status filters (All Events, Published, Draft, Trash), search, and bulk actions: Move to Publish, Move to Draft, Move to Trash.</p></div>
+ <div class="card reveal"><div class="ico"><span class="m"></span></div><h3 class="h3">Public archive and single pages</h3><p style="margin-top:10px">Every published event joins the public events archive and gets its own single-event page. The archive ships its own front-end toolbar: a Search events box, All Events and All Categories dropdowns, and a list or grid view toggle.</p></div>
+ <div class="card reveal" data-d="1"><div class="ico"><span class="m"></span></div><h3 class="h3">Add to Calendar export</h3><p style="margin-top:10px">Each public event page generates an Add to Calendar dropdown that exports to Google, Apple, Outlook, iCal, Yahoo, and Microsoft 365. The visitor commits because the event lands in their own calendar in one click.</p></div>
+ <div class="card reveal" data-d="2"><div class="ico"><span class="m"></span></div><h3 class="h3">Per-event and per-archive SEO</h3><p style="margin-top:10px">Override SEO title, description, and canonical on each event, and set archive-wide SEO defaults on a dedicated Events SEO screen under the SEO module, with shortcode tokens like <code>{{page_title}}</code> and <code>{{site_title}}</code>.</p></div>
+ </div>
+ </div>
+</section>
+
+<!-- 3 · EVENT MANAGE FORM · the under-claimed authoring depth (WYSIWYG + recurrence + sidebar) -->
+<section class="sec surface-dark has-atmos" style="background:var(--sg-bg-2)">
+ <div class="wrap">
+ <div class="readw reveal">
+ <div class="eyebrow">More than a date and a title</div>
+ <h2 class="h2">Turn on per-event discussions, ratings, and a promo banner <span class="grad">from the same form.</span></h2>
+ <p class="lead" style="margin-top:16px">The Event Manage form carries a Discussions &amp; Reviews card with three controls, Enable discussions, Close discussions (read-only), and Allow ratings, so any event can collect comments and star ratings without a second plugin. The same form adds a per-event Banner: an enable toggle, an HTML content block, a call-to-action button repeater, text and background colors, and a background image with a separate mobile image. Each event also takes a Thumbnail through the media picker and a checkbox list of Categories.</p>
+ </div>
+ <div class="adwin reveal" data-d="1" style="margin-top:40px" aria-hidden="true">
+ <div class="adbar"><span class="ic"></span><span class="ti">Event Manage<small>Add New Event</small></span></div>
+ <div class="evform">
+ <div class="main">
+ <div class="fld"><span class="lab">Name of event</span><div class="inp">Live Jazz Night</div></div>
+ <div class="row2">
+ <div class="fld"><span class="lab">Date of Event</span><div class="inp">02/20/2027 02:00 PM - 04:00 PM</div></div>
+ <div class="fld"><span class="lab">Address</span><div class="inp">The Cellar, 14 Mill Lane</div></div>
+ </div>
+ <div class="evwys">
+ <span class="lab2">Content</span>
+ <div class="bar">
+ <div class="row">
+ <span class="b">B</span><span class="b i">I</span><span class="b u">U</span><span class="b s">S</span><span class="b dot"></span>
+ <span class="sep"></span><span class="dd">Paragraph &#9662;</span><span class="b">&rdquo;</span><span class="b">&bull;</span><span class="b">1.</span><span class="b">&#8677;</span>
+ <span class="sep"></span><span class="b">L</span><span class="b">C</span><span class="b">R</span><span class="b">J</span>
+ </div>
+ <div class="row">
+ <span class="b">&#128279;</span><span class="b">&#9633;</span><span class="b">&lt;&gt;</span><span class="b">&#9783;</span><span class="b">HR</span>
+ <span class="sep"></span><span class="b">&#8630;</span><span class="b">&#8631;</span><span class="code">View Code</span>
+ </div>
+ </div>
+ <div class="body">
+ <p>An evening of standards and originals with the house trio. Doors at 7, first set at 8.</p>
+ <div class="ln w90"></div><div class="ln w70"></div>
+ </div>
+ </div>
+ <div class="evrec">
+ <div class="rt">Recurrence</div>
+ <div class="seg"><b>Daily</b><b class="on">Weekly</b><b>Monthly</b><b>Yearly</b></div>
+ <div class="days"><span class="day">M</span><span class="day on">T</span><span class="day">W</span><span class="day">T</span><span class="day on">F</span><span class="day">S</span><span class="day">S</span></div>
+ <div class="iv">Every <span class="stp">1</span> week(s)</div>
+ <div class="end"><span class="k">Ends</span><span class="v">After 12 occurrences</span></div>
+ </div>
+ </div>
+ <div class="side">
+ <div class="evside-card">
+ <div class="ct">Publish</div>
+ <div class="statsel"><span>Status: Draft</span><span class="cv">&#9662;</span></div>
+ <span class="create">Create Event</span>
+ </div>
+ <div class="evside-card">
+ <div class="ct">Discussions &amp; Reviews</div>
+ <div class="evchk on"><span>Enable discussions</span><span class="sw"></span></div>
+ <div class="evchk"><span>Close discussions (read-only)</span><span class="sw"></span></div>
+ <div class="evchk on"><span>Allow ratings</span><span class="sw"></span></div>
+ </div>
+ <div class="evside-card evcats">
+ <div class="ct">Categories</div>
+ <div class="crow on"><span class="box"></span>Music</div>
+ <div class="crow"><span class="box"></span>Tastings</div>
+ <div class="crow"><span class="box"></span>Markets</div>
+ </div>
+ <div class="evside-card">
+ <div class="ct">Thumbnail</div>
+ <div class="evthumb"><span class="ph"></span><span class="choose">Choose Image</span></div>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+</section>
+
+<!-- 4 · PUBLIC SINGLE-EVENT PAGE · Add to Calendar across 6 providers -->
+<section class="sec sec--alt">
+ <div class="wrap">
+ <div class="readw reveal">
+ <div class="eyebrow">The page your visitors see</div>
+ <h2 class="h2">A public event page with <span class="grad">one-click Add to Calendar across 6 providers.</span></h2>
+ <p class="lead" style="margin-top:16px">Every published event gets its own single-event page with its banner, date, address, and rich-text body. The Add to Calendar dropdown exports the event to Google, Apple, Outlook, iCal, Yahoo, and Microsoft 365, so it lands in the visitor's own calendar in one click. The public archive that lists these pages carries its own front-end toolbar with search, filters, and a list-or-grid toggle.</p>
+ </div>
+ <div class="evpub reveal" data-d="1" style="margin-top:40px" aria-hidden="true">
+ <div class="brow"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="url">yourbrand.com/my-events/live-jazz-night</span></div>
+ <div class="banner"><span class="tag">Music</span></div>
+ <div class="pbody">
+ <div class="pmain">
+ <h4>Live Jazz Night</h4>
+ <div class="pmeta"><span><b>When</b> Feb 20, 2027, 2:00 - 4:00 PM</span><span><b>Where</b> The Cellar, 14 Mill Lane</span><span><b>Repeats</b> Weekly</span></div>
+ <p>An evening of standards and originals with the house trio. Doors at 7, first set at 8. Seating is limited, so add it to your calendar and arrive early.</p>
+ <div class="ln w92"></div><div class="ln w78"></div>
+ <div class="toolbar">
+ <span class="tb">Search events <span class="cv">&#9662;</span></span>
+ <span class="tb">All Categories <span class="cv">&#9662;</span></span>
+ <span class="vtog"><b class="on">List</b><b>Grid</b></span>
+ </div>
+ </div>
+ <div class="pside">
+ <div class="atc">
+ <div class="ahead"><span>Add to Calendar</span><span class="cv">&#9662;</span></div>
+ <div class="prov"><span class="pi" style="background:#1a73e8">G</span>Google</div>
+ <div class="prov"><span class="pi" style="background:#1d1d1f">A</span>Apple</div>
+ <div class="prov"><span class="pi" style="background:#0f6cbd">O</span>Outlook</div>
+ <div class="prov"><span class="pi" style="background:#5a5a5a">i</span>iCal</div>
+ <div class="prov"><span class="pi" style="background:#6001d2">Y</span>Yahoo</div>
+ <div class="prov"><span class="pi" style="background:#d83b01">M</span>Microsoft 365</div>
+ </div>
+ </div>
+ </div>
+ </div>
+ <p class="label reveal" style="margin-top:16px">One public page per event. Six calendars the visitor can add it to, in one click.</p>
+ </div>
+</section>
+
+<!-- 5 · ONE MODULE INSTEAD OF A LICENSED PLUGIN · the single WP "replaces" wedge -->
+<section class="sec">
+ <div class="wrap">
+ <div class="feat reveal">
+ <div class="feat-copy">
+ <div class="eyebrow">Already included</div>
+ <h2 class="h2">One native module <span class="grad">instead of a licensed events plugin.</span></h2>
+ <p class="lead" style="margin-top:14px">Events ships inside SGEN and updates with it, so there is no separate Pro tier to renew and nothing extra to patch on its own schedule. The usual WordPress route is a free events plugin with a paid Pro tier for recurrence, the feature most calendars actually need, which means another license to renew and another update to keep current. One module here, in the box on every plan.</p>
+ <div class="replaces">
+ <span class="rep-chip">The Events Calendar</span><span class="rep-chip">WP Event Manager</span><span class="rep-chip">Pro license</span><span class="rep-chip">Update queue</span>
+ </div>
+ </div>
+ <div class="adwin" style="align-self:start" aria-hidden="true">
+ <div class="adbar"><span class="ic"></span><span class="ti">Events &middot; native</span></div>
+ <div class="fint" style="padding:14px 16px">
+ <div class="dcard"><span class="pic" style="background:var(--sg-grad-red)">C</span><div class="di"><span class="dn">Create and edit</span><span class="dm">rich-text, native content type</span></div><span class="pill on">in the box</span></div>
+ <div class="dcard"><span class="pic" style="background:var(--sg-grad-red)">R</span><div class="di"><span class="dn">Recurrence</span><span class="dm">Daily, Weekly, Monthly, Yearly</span></div><span class="pill on">in the box</span></div>
+ <div class="dcard"><span class="pic" style="background:var(--sg-grad-red)">A</span><div class="di"><span class="dn">Public archive + single pages</span><span class="dm">front-end toolbar</span></div><span class="pill on">in the box</span></div>
+ <div class="dcard"><span class="pic" style="background:var(--sg-grad-red)">E</span><div class="di"><span class="dn">Add to Calendar</span><span class="dm">6 providers, one click</span></div><span class="pill on">in the box</span></div>
+ </div>
+ </div>
+ </div>
+ </div>
+</section>
+
+<!-- 6 · CROSS-LINK · pair with Forms / Discussions -->
+<section class="sec sec--warm">
+ <div class="wrap">
+ <div class="feat reveal" data-d="1" style="border-top:0">
+ <div class="feat-copy">
+ <div class="eyebrow">Pairs with the rest of the platform</div>
+ <h3 class="h3" style="margin-bottom:12px">Events publishes the date. Other native modules collect the sign-up.</h3>
+ <p>Events is built to put a dated, recurring event on a public page, not to take sign-ups. To collect sign-ups for an event, place the native <a href="forms.html" style="color:var(--sg-red-hot)">Forms module</a> on the page and route each submission to Slack, Airtable, or a webhook. The per-event Discussions &amp; Reviews card draws on the same platform as the <a href="discussions.html" style="color:var(--sg-red-hot)">Discussions module</a>, and the per-event banner and rich-text body are styled by the same <a href="page-builder.html" style="color:var(--sg-red-hot)">SG Builder</a> that powers the rest of your site.</p>
+ </div>
+ <div class="adwin light" aria-hidden="true">
+ <div class="adbar"><span class="ic"></span><span class="ti">On this event page</span></div>
+ <div class="fint" style="padding:14px 16px">
+ <div class="dcard"><span class="pic" style="background:var(--sg-grad-red)">F</span><div class="di"><span class="dn">Forms: sign-up</span><span class="dm">route to Slack, Airtable, webhook</span></div><span class="pill on">add it</span></div>
+ <div class="dcard"><span class="pic" style="background:var(--sg-grad-red)">D</span><div class="di"><span class="dn">Discussions &amp; ratings</span><span class="dm">3 toggles on the same form</span></div><span class="pill on">built in</span></div>
+ <div class="dcard"><span class="pic" style="background:var(--sg-grad-red)">B</span><div class="di"><span class="dn">Banner + body</span><span class="dm">styled in SG Builder</span></div><span class="pill on">built in</span></div>
+ </div>
+ </div>
+ </div>
+ </div>
+</section>
+
+<!-- 7 · DARK STAT PUNCTUATION · platform-in-the-box -->
+<section class="sec surface-dark has-atmos">
+ <div class="wrap">
+ <div class="sec-head readw reveal"><div class="eyebrow">The platform behind the module</div><h2 class="h2">In the box on every plan.</h2></div>
+ <div class="stat-band" style="margin-top:42px">
+ <div class="s reveal"><span class="stat">6</span><div class="cap">calendar providers the public event page exports to</div></div>
+ <div class="s reveal" data-d="1"><span class="stat">4</span><div class="cap">recurrence cadences: Daily, Weekly, Monthly, Yearly</div></div>
+ <div class="s reveal" data-d="2"><span class="stat">23</span><div class="cap">native modules included on every plan</div></div>
+ </div>
+ </div>
+</section>
+
+<!-- 8 · FAQ -->
+<section class="sec">
+ <div class="wrap">
+ <div class="sec-head reveal"><div class="eyebrow">Questions</div><h2 class="h2">Frequently asked questions about Events</h2></div>
+ <div class="faq-list" style="margin-top:30px">
+ <details class="reveal" open><summary>Can visitors add an event to their own calendar? <span class="pm">+</span></summary><div class="ans">Yes. Each public event page generates an Add to Calendar dropdown that exports to Google, Apple, Outlook, iCal, Yahoo, and Microsoft 365. One click and the event lands in the visitor's own calendar. This is one-way export, not a two-way sync, so it adds the event but does not read back from their calendar.</div></details>
+ <details class="reveal"><summary>Does SGEN support recurring events? <span class="pm">+</span></summary><div class="ans">Yes. Events repeat Daily, Weekly, Monthly, or Yearly from a single record. Weekly adds Monday through Sunday day checkboxes and an every-N-weeks interval, and the series ends never, after N occurrences, or on a set date. You edit the whole run in one place rather than duplicating dozens of entries.</div></details>
+ <details class="reveal"><summary>Does each event get its own public page? <span class="pm">+</span></summary><div class="ans">Yes. A published event joins the public events archive and gets its own single-event page. The archive carries a front-end toolbar with a Search events box, All Events and All Categories filters, and a list-or-grid view toggle. There is no separate front-end plugin to install.</div></details>
+ <details class="reveal"><summary>Can events collect discussions and reviews? <span class="pm">+</span></summary><div class="ans">Yes. Each event has a Discussions &amp; Reviews card with three controls: Enable discussions, Close discussions (read-only), and Allow ratings, so events collect comments and star ratings natively. These are the three toggles on the form, not a full moderation suite.</div></details>
+ <details class="reveal"><summary>What does the Events module not do? <span class="pm">+</span></summary><div class="ans">It is a tabular list module, not a drag-on-grid month or week calendar view, and Add to Calendar is one-way export, not ICS import or two-way sync. Recurrence is managed from one record, so there is no per-occurrence editing of individual dates in the run. The Address field is plain text with no map or geocoding. To collect sign-ups for an event, pair Events with the native Forms module.</div></details>
+ <details class="reveal"><summary>Which plan includes Events? <span class="pm">+</span></summary><div class="ans">Every plan. Events is one of 23 native modules, and every plan is the whole platform, plans differ only by how many live sites you run. Paid plans start at $39/mo billed annually ($47 monthly), and the free Sandbox runs Events on unlimited staging sites.</div></details>
+ </div>
+ </div>
+</section>
+
+<!-- 9 · CLOSING PRICING CTA -->
+<section class="sec surface-dark has-atmos ev-close" style="background:var(--sg-bg-deep)">
+ <div class="wrap">
+ <div class="eyebrow reveal" style="justify-content:center">Included in your plan</div>
+ <h2 class="h2 reveal" data-d="1" style="margin-top:12px">A native events module. <span class="grad">From $39/mo.</span></h2>
+ <p class="lead reveal" data-d="2" style="margin:16px auto 0;max-width:64ch">Events is one of SGEN's 23 native modules, included in every plan, with create and edit, recurrence, categories, a filterable public archive, per-event discussions and reviews, and a 6-provider Add to Calendar export. The free Sandbox builds and publishes an event on unlimited staging sites before you pay anything.</p>
+ <div class="flex reveal" data-d="3" style="justify-content:center;margin-top:28px">
+ <a class="btn btn-primary" href="pricing.html">Try the Free Sandbox <span class="arr">&rarr;</span></a>
+ <a class="btn btn-secondary" href="forms.html">Collect sign-ups with Forms</a>
+ </div>
+ <div class="related reveal" data-d="3">
+ <a href="forms.html">Forms, route every sign-up anywhere</a>
+ <a href="discussions.html">Discussions and reviews, native</a>
+ <a href="overview-modules.html">All 23 native modules</a>
+ </div>
+ <p class="fine reveal">From $39/mo, billed annually. $47 monthly. 2-week trial, cancel anytime. Every module included.</p>
+ </div>
+</section>
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer class="site-footer surface-dark">
+ <div class="footer-cta">
+ <div class="eyebrow">Start free</div>
+ <h2>Build the whole thing on the Sandbox. <span class="grad">$0, no card.</span></h2>
+ <p>Every module unlocked on unlimited sandbox sites. Go live by upgrading, priced by how many sites you run, not by features.</p>
+ <div class="ctas"><a class="btn btn-primary" href="pricing.html">Try the Free Sandbox <span class="arr">→</span></a><a class="btn btn-secondary" href="compare-vs-wordpress.html">Compare to WordPress</a></div>
+ </div>
+ <div class="ft-grid">
+ <div class="ft-brand"><div class="b">SGEN<span class="dot">.</span></div><p>One all-inclusive platform. Build the whole site, no plugins underneath, priced by how many sites you run.</p><span class="ft-status"><span class="d"></span> All systems operational</span></div>
+ <div class="ft-col"><div class="ft-head">Build &amp; Design</div><a href="page-builder.html">SG Builder</a><a href="templates.html">Templates</a><a href="theme-editor.html">Theme Editor</a><a href="media-library.html">Media Library</a><a href="pages-and-posts.html">Pages &amp; Posts</a><a href="custom-objects.html">Custom Objects</a><a href="overview-modules.html">All 23 modules</a><a href="overview-core.html">SG-Core</a></div>
+ <div class="ft-col"><div class="ft-head">Sell</div><a href="ecommerce.html">Ecommerce</a><a href="discussions.html">Discussions &amp; Reviews</a></div>
+ <div class="ft-col"><div class="ft-head">Grow &amp; Convert</div><a href="forms.html">Forms</a><a href="attributions.html">Attribution</a><a href="seo-optimization.html">SEO</a><a href="analytics.html">Analytics</a><a href="popups.html">Popups</a><a href="integrations.html">Integrations</a></div>
+ <div class="ft-col"><div class="ft-head">Operate &amp; Secure</div><a href="site-manager.html">Site Manager</a><a href="overview-dashboard.html">SG-Dashboard</a><a href="backups.html">Backups</a><a href="redirects.html">Redirects</a><a href="security.html">Security</a><a href="trust.html">Trust</a></div>
+ <div class="ft-col"><div class="ft-head">Why SGEN</div><a href="why-sgen.html">Why SGEN</a><a href="why-sgen-no-plugins.html">No plugins</a><a href="why-sgen-speed.html">Speed</a><a href="compare.html">Compare all</a><a href="migrate.html">Migrate</a></div>
+ <div class="ft-col"><div class="ft-head">Solutions</div><a href="solutions-agencies.html">Agencies</a><a href="solutions-small-business.html">Small business</a><a href="solutions-restaurants.html">Restaurants</a><a href="solutions-multi-location.html">Multi-location</a><a href="solutions-healthcare.html">Healthcare</a><a href="solutions-freelancers.html">Freelancers</a><a href="enterprise.html">Enterprise</a></div>
+ <div class="ft-col"><div class="ft-head">Customers</div><a href="customers.html">Customer stories</a><a href="showcase.html">Showcase</a><a href="customers-fernwood.html">Fernwood Digital</a><a href="customers-halloran-vint.html">Halloran &amp; Vint</a></div>
+ <div class="ft-col"><div class="ft-head">Resources</div><a href="resources.html">All resources</a><a href="blog.html">Blog</a><a href="guides.html">Guides</a><a href="changelog.html">Changelog</a><a href="roadmap.html">Roadmap</a><a href="status.html">Status</a></div>
+ <div class="ft-col"><div class="ft-head">Company</div><a href="about.html">About</a><a href="partners.html">Partners</a><a href="partners-apply.html">Become a partner</a><a href="partners-directory.html">Partner directory</a><a href="contact.html">Contact</a></div>
+ <div class="ft-col"><div class="ft-head">Developers</div><a href="developers.html">Docs</a><a href="developers.html">API</a><a href="integrations.html">Integrations</a></div>
+ </div>
+ <div class="ft-watermark">SGEN</div>
+ <div class="ft-bottom"><span>© 2026 SGEN. The managed website platform.</span><div class="links"><a href="legal-privacy.html">Privacy</a><a href="legal-terms.html">Terms</a><a href="legal-dpa.html">DPA</a><a href="legal-cookie-policy.html">Cookies</a><a href="accessibility.html">Accessibility</a></div></div>
+</footer>
+
+<!-- ===== MOBILE DRAWER ===== -->
+<div class="drawer-overlay" data-drawer-close></div>
+<aside class="site-drawer" id="drawer">
+ <div class="dr-top"><div class="b" style="font-weight:900;font-size:20px;letter-spacing:-.04em;color:#f4f2ee">SGEN<span style="color:var(--sg-red)">.</span></div><button class="dr-close" data-drawer-close aria-label="Close">×</button></div>
+ <div class="dr-body">
+ <details class="dr-group"><summary>Product <span class="pm" aria-hidden="true">+</span></summary><div class="dr-children">
+ <div class="dr-subhead">Build &amp; Design</div>
+ <a href="page-builder.html"><span class="ct">SG Builder</span><span class="cs">Visual builder, SSR output</span></a>
+ <a href="templates.html"><span class="ct">Templates</span><span class="cs">Start from a real design</span></a>
+ <a href="theme-editor.html"><span class="ct">Theme Editor</span><span class="cs">Global tokens, fonts, colors</span></a>
+ <a href="media-library.html"><span class="ct">Media Library</span><span class="cs">Native assets, optimized</span></a>
+ <a href="menus.html"><span class="ct">Menus</span><span class="cs">Build navigation visually</span></a>
+ <a href="pages-and-posts.html"><span class="ct">Pages &amp; Posts</span><span class="cs">Every content type</span></a>
+ <a href="custom-objects.html"><span class="ct">Custom Objects</span><span class="cs">Model content with native fields</span></a>
+ <div class="dr-subhead">Sell</div>
+ <a href="ecommerce.html"><span class="ct">Ecommerce</span><span class="cs">Storefront, checkout</span></a>
+ <a href="discussions.html"><span class="ct">Discussions &amp; Reviews</span><span class="cs">Reviews and comments, moderated</span></a>
+ <a href="events.html"><span class="ct">Events</span><span class="cs">Events and a public calendar</span></a>
+ <div class="dr-subhead">Grow &amp; Convert</div>
+ <a href="forms.html"><span class="ct">Forms</span><span class="cs">Native lead capture</span></a>
+ <a href="popups.html"><span class="ct">Popups</span><span class="cs">On-demand and autoload</span></a>
+ <a href="seo-optimization.html"><span class="ct">SEO</span><span class="cs">On-page, server-rendered</span></a>
+ <a href="attributions.html"><span class="ct">Attribution</span><span class="cs">Source-level lead attribution</span></a>
+ <a href="analytics.html"><span class="ct">Analytics</span><span class="cs">Dashboard plus raw events</span></a>
+ <a href="integrations.html"><span class="ct">Integrations</span><span class="cs">Stripe, Google, and more</span></a>
+ <div class="dr-subhead">Operate</div>
+ <a href="site-manager.html"><span class="ct">Site Manager</span><span class="cs">One health cockpit per site</span></a>
+ <a href="backups.html"><span class="ct">Backups</span><span class="cs">One-click save-points</span></a>
+ <a href="stage-live.html"><span class="ct">Stage &amp; Live</span><span class="cs">Restore and roll back safely</span></a>
+ <a href="advanced-settings.html"><span class="ct">Advanced Settings</span><span class="cs">Search-replace, import, export</span></a>
+ <a href="users-and-roles.html"><span class="ct">Users &amp; Roles</span><span class="cs">Directory with audit log</span></a>
+ <a href="redirects.html"><span class="ct">Redirects</span><span class="cs">Native 301 and 302 manager</span></a>
+ <div class="dr-subhead">Secure &amp; Comply</div>
+ <a href="security.html"><span class="ct">Security</span><span class="cs">Platform WAF, hardened</span></a>
+ <a href="security.html"><span class="ct">Age Verification</span><span class="cs">Age gate for regulated sites</span></a>
+ <a href="legal-cookie-policy.html"><span class="ct">Consent &amp; Tracking</span><span class="cs">Consent banner, per-session log</span></a>
+ <a href="trust.html"><span class="ct">Trust</span><span class="cs">WAF, SSL, CDN, logging</span></a>
+ <a href="accessibility.html"><span class="ct">Accessibility</span><span class="cs">Conformance status</span></a>
+ <div class="dr-subhead">The platform</div>
+ <a href="overview-modules.html"><span class="ct">All 23 modules →</span><span class="cs">The whole platform</span></a>
+ <a href="overview-core.html"><span class="ct">SG-Core</span><span class="cs">The native content engine</span></a>
+ <a href="overview-dashboard.html"><span class="ct">SG-Dashboard</span><span class="cs">The operating layer</span></a>
+ </div></details>
+ <details class="dr-group"><summary>Why SGEN <span class="pm" aria-hidden="true">+</span></summary><div class="dr-children">
+ <a href="why-sgen.html"><span class="ct">Why SGEN, in full</span><span class="cs">The whole case, one page</span></a>
+ <a href="why-sgen-no-plugins.html"><span class="ct">No plugins</span><span class="cs">Nothing to license or patch</span></a>
+ <a href="why-sgen-speed.html"><span class="ct">Speed</span><span class="cs">Server-side rendered</span></a>
+ </div></details>
+ <details class="dr-group"><summary>Solutions <span class="pm" aria-hidden="true">+</span></summary><div class="dr-children">
+ <a href="solutions-agencies.html"><span class="ct">Agencies</span><span class="cs">Multi-site, one dashboard</span></a>
+ <a href="solutions-small-business.html"><span class="ct">Small business</span><span class="cs">One fast site</span></a>
+ <a href="solutions-restaurants.html"><span class="ct">Restaurants</span><span class="cs">Menus, events, ordering</span></a>
+ <a href="solutions-multi-location.html"><span class="ct">Multi-location</span><span class="cs">One dashboard, many sites</span></a>
+ <a href="solutions-healthcare.html"><span class="ct">Healthcare</span><span class="cs">HIPAA compliant for healthcare</span></a>
+ <a href="solutions-freelancers.html"><span class="ct">Freelancers</span><span class="cs">Build &amp; hand off</span></a>
+ <a href="enterprise.html"><span class="ct">Enterprise</span><span class="cs">Unlimited sites, one bill</span></a>
+ </div></details>
+ <details class="dr-group"><summary>Compare <span class="pm" aria-hidden="true">+</span></summary><div class="dr-children">
+ <a href="compare-vs-wordpress.html"><span class="ct">vs WordPress</span><span class="cs">The refugee path</span></a>
+ <a href="compare-vs-elementor.html"><span class="ct">vs Elementor</span><span class="cs">Builder head-to-head</span></a>
+ <a href="compare-vs-wp-engine.html"><span class="ct">vs WP Engine</span><span class="cs">Managed hosting</span></a>
+ <a href="compare-vs-wix.html"><span class="ct">vs Wix</span><span class="cs">Own a real product</span></a>
+ <a href="compare-vs-squarespace.html"><span class="ct">vs Squarespace</span><span class="cs">Beyond templates</span></a>
+ <a href="compare-vs-godaddy.html"><span class="ct">vs GoDaddy</span><span class="cs">Past a brochure site</span></a>
+ <a href="compare.html"><span class="ct">All comparisons →</span><span class="cs">Every head-to-head</span></a>
+ <a href="migrate.html"><span class="ct">Migrate</span><span class="cs">Move off WordPress</span></a>
+ </div></details>
+ <details class="dr-group"><summary>Customers <span class="pm" aria-hidden="true">+</span></summary><div class="dr-children">
+ <a href="customers.html"><span class="ct">Customer stories</span><span class="cs">Metric-first cases</span></a>
+ <a href="showcase.html"><span class="ct">Showcase</span><span class="cs">Gallery of built sites</span></a>
+ <a href="customers-fernwood.html"><span class="ct">Fernwood Digital</span><span class="cs">23 sites, one stack</span></a>
+ <a href="customers-halloran-vint.html"><span class="ct">Halloran &amp; Vint</span><span class="cs">Consultancy rebuild</span></a>
+ </div></details>
+ <details class="dr-group"><summary>Resources <span class="pm" aria-hidden="true">+</span></summary><div class="dr-children">
+ <a href="resources.html"><span class="ct">All resources</span><span class="cs">Guides, blog, and more</span></a>
+ <a href="blog.html"><span class="ct">Blog</span><span class="cs">Notes from the platform</span></a>
+ <a href="guides.html"><span class="ct">Guides</span><span class="cs">How-to walkthroughs</span></a>
+ <a href="changelog.html"><span class="ct">Changelog</span><span class="cs">What shipped</span></a>
+ <a href="roadmap.html"><span class="ct">Roadmap</span><span class="cs">What is next</span></a>
+ <a href="status.html"><span class="ct">Status</span><span class="cs">System status</span></a>
+ </div></details>
+ <details class="dr-group"><summary>Company <span class="pm" aria-hidden="true">+</span></summary><div class="dr-children">
+ <a href="about.html"><span class="ct">About</span><span class="cs">Who we are</span></a>
+ <a href="partners.html"><span class="ct">Partners</span><span class="cs">The partner program</span></a>
+ <a href="partners-apply.html"><span class="ct">Become a partner</span><span class="cs">Apply to partner</span></a>
+ <a href="contact.html"><span class="ct">Contact</span><span class="cs">Talk to us</span></a>
+ </div></details>
+ <a class="dr-flat" href="pricing.html">Pricing</a>
+ <a class="dr-flat" href="enterprise.html">Enterprise</a>
+ <a class="dr-flat" href="https://app.sgen.com/login">Log in</a>
+ </div>
+</aside>
+
+<!-- ===== MOBILE STICKY BAR ===== -->
+<div class="mobile-bar surface-dark">
+ <a class="btn btn-primary" href="pricing.html">Start Building <span class="arr">→</span></a>
+ <a class="btn btn-secondary" href="pricing.html">Pricing</a>
+</div>
+
+<script>
+ const hdr = document.getElementById('hdr');
+ addEventListener('scroll', () => hdr.classList.toggle('is-stuck', scrollY > 10), {passive:true});
+ const drawer = document.getElementById('drawer'), overlay = document.querySelector('.drawer-overlay');
+ document.querySelectorAll('[data-drawer-open]').forEach(b => b.addEventListener('click', () => { drawer.classList.add('open'); overlay.classList.add('open'); }));
+ document.querySelectorAll('[data-drawer-close]').forEach(b => b.addEventListener('click', () => { drawer.classList.remove('open'); overlay.classList.remove('open'); }));
+ // scroll-reveal
+ const io = new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}})},{threshold:.12,rootMargin:'0px 0px -6% 0px'});
+ document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+ // mobile sticky bar, appear after hero, hide when footer CTA in view
+ const mbar = document.querySelector('.mobile-bar');
+ const heroSec = document.querySelector('main section');
+ const fcta = document.querySelector('.footer-cta');
+ function updBar(){ if(!mbar||!fcta) return; const past = scrollY > (heroSec ? heroSec.offsetTop + heroSec.offsetHeight - 140 : 480); const footerNear = fcta.getBoundingClientRect().top < innerHeight * 0.94; mbar.classList.toggle('show', past && !footerNear); }
+ addEventListener('scroll', updBar, {passive:true}); addEventListener('resize', updBar); updBar();
+ // billing toggle (pricing + any page with [data-billing])
+ document.querySelectorAll('[data-billing]').forEach(t=>t.addEventListener('click',()=>{ const mode=t.dataset.billing; document.querySelectorAll('[data-billing]').forEach(b=>b.classList.toggle('on',b===t)); document.querySelectorAll('[data-annual]').forEach(el=>{ el.textContent = mode==='annual'? el.dataset.annual : el.dataset.monthly; }); document.querySelectorAll('.billed').forEach(el=>{ if(el.dataset.annual) el.textContent = mode==='annual'? el.dataset.annual : el.dataset.monthly; }); }));
+ // megamenu keyboard + screen-reader access.
+ // CSS reveals each panel on .nav-item:hover and :focus-within (progressive enhancement, kept).
+ // Here we add an explicit JS-owned open state: aria-expanded on the trigger + an .is-open class
+ // on the .nav-item so keyboard/SR users get click-to-toggle and Escape-to-close-with-focus-restore.
+ // (A CSS rule keyed on .nav-item.is-open .megamenu makes the explicit-open path visually robust and
+ // lets Escape keep the trigger focused without :focus-within re-revealing the panel; see A9 NOTE.)
+ document.querySelectorAll('.nav-item').forEach(item => {
+ const trig = item.querySelector('.nav-trigger');
+ const panel = item.querySelector('.megamenu');
+ if (!trig || !panel) return;
+ let viaPointer = false; // distinguishes a click (pointer) from a Tab (keyboard) into the trigger
+ const sync = on => { item.classList.toggle('is-open', on); trig.setAttribute('aria-expanded', on ? 'true' : 'false'); };
+ const closeOthers = () => document.querySelectorAll('.nav-item.is-open').forEach(o => { if (o !== item) { o.classList.remove('is-open'); const t = o.querySelector('.nav-trigger'); if (t) t.setAttribute('aria-expanded','false'); } });
+ // Pointer path: mousedown flags the focus as pointer-driven so focusin does not auto-open;
+ // click then toggles. Keyboard path: no mousedown, so focusin opens on Tab-in.
+ trig.addEventListener('mousedown', () => { viaPointer = true; });
+ trig.addEventListener('click', e => {
+ e.preventDefault();
+ const willOpen = trig.getAttribute('aria-expanded') !== 'true';
+ closeOthers();
+ sync(willOpen);
+ if (willOpen) trig.focus(); else trig.blur();
+ viaPointer = false;
+ });
+ // Keyboard focus into the item opens it (covers Tab-through reveal); pointer focus is left to click.
+ item.addEventListener('focusin', () => { if (viaPointer) return; sync(true); });
+ item.addEventListener('focusout', () => { if (!item.contains(document.relatedTarget)) sync(false); });
+ // Escape closes the open panel and returns focus to its trigger.
+ item.addEventListener('keydown', e => {
+ if (e.key === 'Escape' && trig.getAttribute('aria-expanded') === 'true') { e.stopPropagation(); sync(false); trig.focus(); }
+ });
+ });
+ // Click outside any nav-item closes open megamenus.
+ document.addEventListener('click', e => { if (!e.target.closest('.nav-item')) document.querySelectorAll('.nav-item.is-open').forEach(o => { o.classList.remove('is-open'); const t = o.querySelector('.nav-trigger'); if (t) t.setAttribute('aria-expanded','false'); }); });
+</script>
+</body>
+</html>

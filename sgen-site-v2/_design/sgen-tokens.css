@@ -1,0 +1,137 @@
+/* ============================================================================
+   SGEN DESIGN FOUNDATION — TOKENS  (dual-surface: light canvas + dark premium)
+   ----------------------------------------------------------------------------
+   Single source of truth for the SGEN site rebuild. Built 2026-06-03 from the
+   harvested modern bar (homepage + proof-build Direction B + WOW-SPEC ceiling),
+   PRESERVING the locked --sg-* brand identity (red load-bearing + Inter/JetBrains
+   + the 5 radii + the motion picks). De-staled to D6 (one all-inclusive platform,
+   no Suites). Surface model: :root = LIGHT marketing canvas; .surface-dark (or
+   [data-surface="dark"]) flips the same vars to the DARK premium punctuation used
+   on heroes / proof / product panels / stat bands / closing CTAs.
+   Discipline (WOW-SPEC): ONE accent · ONE display+body face · ONE radius language
+   · ONE easing · ONE shadow family. tint, never #000. subtle > flashy.
+   ============================================================================ */
+
+:root {
+  /* ---- BRAND: red is load-bearing (surface-agnostic) ---------------------- */
+  --sg-red:           #d51522;   /* signature — CTA / accent / active-state    */
+  --sg-red-deep:      #b00000;   /* gradient origin                            */
+  --sg-red-darkest:   #780101;   /* text-clip anchor                           */
+  --sg-red-hot:       #ff2a38;   /* hotter accent — key numbers, on-dark links */
+  --sg-red-soft:      #fff1f1;   /* palest red wash (light surfaces)           */
+  --sg-red-tint-08:   rgba(213,21,34,.08);
+  --sg-red-tint-14:   rgba(213,21,34,.14);
+  --sg-red-tint-22:   rgba(213,21,34,.22);
+
+  /* ---- TYPE (locked) ------------------------------------------------------ */
+  --sg-font: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --sg-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+
+  /* fluid display scale (oversized, James override — negative tracking scales) */
+  --sg-fs-hero:  clamp(48px, 8.5vw, 116px);
+  --sg-fs-h1:    clamp(40px, 6vw, 84px);
+  --sg-fs-h2:    clamp(32px, 5vw, 64px);
+  --sg-fs-h3:    clamp(22px, 2.4vw, 30px);
+  --sg-fs-stat:  clamp(44px, 6vw, 84px);
+  --sg-fs-lead:  clamp(18px, 1.5vw, 21px);
+  --sg-fs-body:  18px;
+  --sg-fs-eyebrow: 11px;
+
+  /* ---- RADII (locked — one radius language) ------------------------------- */
+  --sg-r-sm:   8px;
+  --sg-r-md:   12px;
+  --sg-r-lg:   16px;
+  --sg-r-btn:  8px;     /* buttons are intentionally NOT pills */
+  --sg-r-pill: 9999px;
+  --sg-r-squircle: clamp(24px, 4vw, 56px);  /* feature/hero imagery frames */
+
+  /* ---- MOTION (one easing family) ----------------------------------------- */
+  --sg-ease:       cubic-bezier(.16,.84,.36,1);  /* snappy-settle (proof/WOW)  */
+  --sg-ease-out:   cubic-bezier(.22,.61,.36,1);  /* soft (image zoom, parallax)*/
+  --sg-ease-spring:cubic-bezier(.34,1.56,.64,1); /* overshoot (pops)           */
+  --sg-t-fast:   .2s;    /* confident hover — fast + small, never flashy */
+  --sg-t-reveal: .6s;    /* scroll entrance */
+
+  /* ---- LAYOUT ------------------------------------------------------------- */
+  --sg-maxw:  1320px;
+  --sg-readw: 720px;
+  --sg-pad:   clamp(56px, 8vw, 120px);   /* section block padding (asymmetric large) */
+
+  /* ===========================  LIGHT SURFACE  ============================== */
+  /* :root defaults = the light marketing canvas (warm, never pure #fff/#000)  */
+  --sg-bg:        #ffffff;
+  --sg-bg-2:      #f9f9f9;
+  --sg-bg-warm:   #F2F1ED;   /* warm-gray neutral band */
+  --sg-ink:       #1A1A1A;   /* tinted near-black, NOT pure #000 (WOW tint rule)*/
+  --sg-ink-soft:  #5b5853;   /* warm-gray body copy */
+  --sg-ink-faint: #868279;   /* meta / labels / hex captions */
+  --sg-line:      #ECEAE5;   /* warm hairline */
+  --sg-line-2:    #f0eeea;   /* faintest divider */
+
+  --sg-card-bg:     #ffffff;
+  --sg-card-border: #ECEAE5;
+
+  /* depth — ink-TINTED, layered, negative-spread (WOW), red-glow for CTAs */
+  --sg-shadow:      0 15px 30px 0 rgba(16,24,40,.10);
+  --sg-shadow-2:    0 28px 64px -12px rgba(16,24,40,.16);
+  --sg-shadow-rest: 0 2px 5px 0 rgba(16,24,40,.06);
+  --sg-shadow-red:  0 14px 34px rgba(213,21,34,.30);
+  --sg-shadow-red-hover: 0 18px 44px rgba(213,21,34,.42);
+  --sg-glass-inset: inset 0 1px 0 rgba(255,255,255,.6);  /* light-catch lip */
+
+  /* gradients */
+  --sg-grad-red:  linear-gradient(135deg, #b00000, #e53935);
+  --sg-grad-text: linear-gradient(100deg, #780101, #e80000 55%, #a30000);
+  --sg-grad-stat: linear-gradient(120deg, #1A1A1A, #868279);  /* metallic numeral */
+  --sg-divider-feather: linear-gradient(to right, rgba(213,21,34,0), rgba(213,21,34,.85) 50%, rgba(213,21,34,0));
+
+  /* atmosphere (light = restrained; warm wash only) */
+  --sg-atmos-glow: none;
+  --sg-grain-opacity: 0;
+  --sg-watermark-fill:   rgba(16,24,40,.045);
+  --sg-watermark-stroke: rgba(16,24,40,.08);
+
+  color-scheme: light;
+}
+
+/* ============================  DARK SURFACE  =============================== */
+/* The premium punctuation: hero treatments, proof, product/dashboard panels,
+   stat bands, closing CTAs. Flips the same vars — components don't change.    */
+.surface-dark,
+[data-surface="dark"] {
+  --sg-bg:        #0d0d0f;   /* stage — warm near-black */
+  --sg-bg-2:      #16161a;   /* stage-2 — raised band   */
+  --sg-bg-warm:   #121214;
+  --sg-bg-deep:   #080706;   /* deepest floor (footer/closer) */
+  --sg-ink:       #f4f2ee;   /* cream */
+  --sg-ink-soft:  rgba(255,255,255,.62);
+  --sg-ink-faint: rgba(255,255,255,.40);
+  --sg-line:      rgba(255,255,255,.10);
+  --sg-line-2:    rgba(255,255,255,.06);
+
+  --sg-card-bg:     rgba(255,255,255,.04);   /* faux-glass fill */
+  --sg-card-border: rgba(255,255,255,.10);
+
+  /* depth on dark — deep black drop + RED directional rim + inset top-light */
+  --sg-shadow:      0 40px 90px -30px rgba(0,0,0,.80);
+  --sg-shadow-2:    0 50px 120px -24px rgba(0,0,0,.72);
+  --sg-shadow-cinematic: 0 50px 130px rgba(0,0,0,.65), -28px 0 90px rgba(213,21,34,.14), inset 0 1px 0 rgba(255,255,255,.06);
+  --sg-shadow-rest: 0 8px 24px -10px rgba(0,0,0,.6);
+  --sg-shadow-red:  0 10px 30px -8px rgba(213,21,34,.60);
+  --sg-shadow-red-hover: 0 16px 40px -8px rgba(213,21,34,.80);
+  --sg-glass-inset: inset 0 1px 0 rgba(255,255,255,.06);
+
+  --sg-grad-text: linear-gradient(100deg, #ff2a38, #d51522 60%, #ff6b75);
+  --sg-grad-stat: linear-gradient(120deg, #ffffff, rgba(255,255,255,.55));
+  --sg-divider-feather: linear-gradient(to right, rgba(213,21,34,0), rgba(213,21,34,.85) 50%, rgba(213,21,34,0));
+
+  /* atmosphere — the cinematic lift off pure black */
+  --sg-atmos-glow:
+    radial-gradient(120% 80% at 50% -10%, rgba(213,21,34,.12), transparent 55%),
+    radial-gradient(140% 120% at 50% 120%, rgba(0,0,0,.68), transparent 60%);
+  --sg-grain-opacity: .045;
+  --sg-watermark-fill:   rgba(255,255,255,.06);
+  --sg-watermark-stroke: rgba(255,255,255,.10);
+
+  color-scheme: dark;
+}

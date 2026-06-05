@@ -1,0 +1,124 @@
+/* ============================================================================
+ solutions-agencies.css - TYPE-E PERSONA SIGNATURE for /solutions/agencies (FLAGSHIP).
+ The agency persona page AND the template the other 7 solutions pages copy.
+ Crafted-CSS product surfaces that sell the REAL, VERIFIED Agency capability:
+ (1) Multi-Site Agency Dashboard (hero): client-site rows + per-site status +
+     a per-row "Log in as" action + a roster summary bar. The agency money shot.
+ (2) Three-role explainer (.agroles): Administrator / Editor / Customer, the
+     VERIFIED fixed-role taxonomy (users.FINAL.md:120). NOT a capability matrix.
+ (3) Login-as two-state (.aglogin): "Viewing as [client]" + one-click "Switch back"
+     + a single "Every switch is recorded" line. NO audit-log viewer UI (unverified);
+     login-as is NEVER described as "secure" (open CSRF, A item 5).
+ (4) Foundation Pack strip (.ag-fp): hosting / SSL / CDN / WAF / patching, posture only.
+ Modeled on the shared .adwin admin atom (white card, red accent) from _standard.css.
+ NO white-label margin number, NO reseller-margin claim, NO tier-gating (HELD/D9). var(--sg-*).
+ ============================================================================ */
+@import "_standard.css";
+
+/* ---- HERO ------------------------------------------------------------------ */
+.ag-hero { padding-block: 8vh var(--sg-pad); }
+.ag-hero .feat-copy h1 { max-width: 16ch; }
+.ag-hero .feat-copy .lead { max-width: 60ch; }
+.ag-hero .cta { margin-top: 30px; }
+
+/* ===== MULTI-SITE AGENCY DASHBOARD (hero surface, modeled on .adwin) ======== */
+.agdash { padding: 0; }
+.agdash .roster { display: flex; align-items: center; gap: 14px; padding: 13px 16px; border-bottom: 1px solid var(--sg-line); background: var(--sg-bg-2); flex-wrap: wrap; }
+.agdash .roster .rk { font-family: var(--sg-mono); font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: var(--sg-ink-faint); }
+.agdash .roster .rn { font-weight: 900; font-size: 20px; letter-spacing: -.03em; line-height: 1; color: var(--sg-ink); font-variant-numeric: tabular-nums; }
+.agdash .roster .rn small { font-family: var(--sg-mono); font-weight: 600; font-size: 10px; letter-spacing: .04em; color: var(--sg-ink-faint); margin-left: 4px; }
+.agdash .roster .sep { width: 1px; align-self: stretch; background: var(--sg-line); margin: 2px 0; }
+.agdash .roster .find { margin-left: auto; font-family: var(--sg-mono); font-size: 10.5px; color: var(--sg-ink-faint); padding: 7px 13px; border: 1px solid var(--sg-line); border-radius: 8px; background: #fff; min-width: 150px; }
+
+/* filter pills row */
+.agdash .agfil { display: flex; gap: 6px; padding: 12px 16px 6px; flex-wrap: wrap; }
+.agdash .agfil .chip { font-family: var(--sg-mono); font-size: 10px; padding: 6px 12px; border-radius: 999px; border: 1px solid var(--sg-line); color: var(--sg-ink-faint); }
+.agdash .agfil .chip.on { background: var(--sg-red-soft); color: var(--sg-red-deep); border-color: transparent; }
+
+/* client-site rows: name+url | env+patch | health | login-as */
+.agdash .ahead, .agdash .arow { display: grid; grid-template-columns: 1.7fr 1fr .8fr auto; gap: 12px; align-items: center; padding: 12px 16px; }
+.agdash .ahead { font-family: var(--sg-mono); font-size: 8.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--sg-ink-faint); border-bottom: 1px solid var(--sg-line); }
+.agdash .arow { border-bottom: 1px solid var(--sg-line-2); font-size: 12.5px; }
+.agdash .arow:last-child { border-bottom: 0; }
+.agdash .arow .who { font-weight: 700; color: var(--sg-ink); }
+.agdash .arow .who small { display: block; font-weight: 500; font-family: var(--sg-mono); font-size: 10px; color: var(--sg-ink-faint); margin-top: 2px; }
+.agdash .arow .env { font-family: var(--sg-mono); font-size: 10px; color: var(--sg-ink-soft); }
+.agdash .arow .env i { font-style: normal; color: var(--sg-ink-faint); }
+.agdash .arow .st { font-family: var(--sg-mono); font-size: 9px; padding: 3px 9px; border-radius: 5px; justify-self: start; white-space: nowrap; }
+.agdash .arow .st.live { background: #e7f7ee; color: #1c7a45; }
+.agdash .arow .st.draft { background: var(--sg-bg-2); color: var(--sg-ink-faint); }
+.agdash .arow .st.attn { background: #fdf0e3; color: #a8631c; }
+.agdash .arow .login { font-family: var(--sg-font); font-size: 10.5px; font-weight: 700; color: #fff; padding: 7px 12px; border-radius: 8px; background: var(--sg-grad-red); box-shadow: var(--sg-shadow-red); white-space: nowrap; justify-self: end; }
+.agdash .arow.cur .login { background: #fff; color: var(--sg-red-deep); border: 1px solid var(--sg-red-tint-22); box-shadow: none; }
+.agdash .arow.cur { background: var(--sg-red-soft); }
+
+/* ===== THREE-ROLE EXPLAINER (honest, replaces the old capability matrix) ===== */
+/* VERIFIED 3 fixed roles only (Administrator / Editor / Customer; users.FINAL.md:120).
+   A plain three-row explainer, NOT a per-capability / per-site matrix. */
+.agroles { padding: 0; }
+.agroles .rl { display: flex; flex-direction: column; }
+.agroles .rrow { display: grid; grid-template-columns: 0.85fr 1.7fr; gap: 14px; align-items: baseline; padding: 16px; border-bottom: 1px solid var(--sg-line-2); }
+.agroles .rrow:last-child { border-bottom: 0; }
+.agroles .rrow .rname { font-weight: 800; font-size: 14px; letter-spacing: -.01em; color: var(--sg-ink); position: relative; padding-left: 16px; }
+.agroles .rrow .rname::before { content: ""; position: absolute; left: 0; top: 6px; width: 8px; height: 8px; border-radius: 3px; background: var(--sg-grad-red); box-shadow: var(--sg-shadow-red); }
+.agroles .rrow .rdesc { font-size: 12.5px; line-height: 1.5; color: var(--sg-ink-soft); }
+
+/* ===== LOGIN-AS TWO-STATE (honest, replaces the audit-log viewer timeline) === */
+/* Shows the ACTION (viewing-as + one-click switch back) + a single recorded line.
+   NO browsable audit-log viewer (unverified, A item 6). NEVER labeled "secure". */
+.aglogin { padding: 0; }
+.aglogin .agswitch { padding: 18px 16px; }
+.aglogin .vstate { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 16px; border-radius: 10px; background: var(--sg-red-soft); }
+.aglogin .vstate .l { display: inline-flex; align-items: center; gap: 9px; font-weight: 700; font-size: 13px; color: var(--sg-red-deep); }
+.aglogin .vstate .l .d { width: 9px; height: 9px; border-radius: 50%; background: var(--sg-red); box-shadow: 0 0 8px rgba(213,21,34,.5); flex: none; }
+.aglogin .vstate .back { font-family: var(--sg-font); font-size: 11px; font-weight: 700; color: var(--sg-red-deep); padding: 7px 13px; border-radius: 8px; background: #fff; border: 1px solid var(--sg-red-tint-22); white-space: nowrap; }
+.aglogin .srec { font-family: var(--sg-mono); font-size: 10.5px; color: var(--sg-ink-faint); margin-top: 12px; padding-left: 2px; }
+
+/* ---- FOUNDATION PACK strip (burden/liability section, iconographic, posture) -- */
+.ag-fp { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 40px; }
+.ag-fp .fp { display: flex; flex-direction: column; padding: 22px; border-radius: var(--sg-r-lg); border: 1px solid var(--sg-line); background: var(--sg-card-bg); }
+.surface-dark .ag-fp .fp { box-shadow: var(--sg-glass-inset); }
+.ag-fp .fp .fk { font-family: var(--sg-mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--sg-red-deep); }
+.surface-dark .ag-fp .fp .fk { color: var(--sg-red-hot); }
+.ag-fp .fp .ft { margin-top: 10px; font-size: 13px; line-height: 1.5; color: var(--sg-ink-soft); }
+
+/* ---- ECOSYSTEM "what else" rail ------------------------------------------- */
+.ag-eco { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-top: 40px; }
+.ag-eco .ec { padding: 24px; border-radius: var(--sg-r-lg); border: 1px solid var(--sg-line); background: var(--sg-card-bg); }
+.surface-dark .ag-eco .ec { box-shadow: var(--sg-glass-inset); }
+.ag-eco .ec .ek { font-family: var(--sg-mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--sg-red-deep); }
+.surface-dark .ag-eco .ec .ek { color: var(--sg-red-hot); }
+.ag-eco .ec h3 { margin: 10px 0 8px; }
+
+/* ---- PRICING-FIT row (3 plans, agency-framed) ----------------------------- */
+.ag-plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 36px; align-items: stretch; }
+.ag-plans .pl { display: flex; flex-direction: column; padding: 26px 24px; border-radius: var(--sg-r-lg); border: 1px solid var(--sg-line); background: var(--sg-card-bg); }
+.ag-plans .pl.featured { box-shadow: 0 0 0 1.5px var(--sg-red), var(--sg-shadow-2); }
+.surface-dark .ag-plans .pl { box-shadow: var(--sg-glass-inset); }
+.ag-plans .pl .pn { font-weight: 800; font-size: 17px; letter-spacing: -.02em; }
+.ag-plans .pl .ps { font-family: var(--sg-mono); font-size: 10.5px; color: var(--sg-ink-faint); margin-top: 4px; }
+.ag-plans .pl .pp { margin-top: 16px; font-weight: 900; font-size: 30px; letter-spacing: -.03em; line-height: 1; font-variant-numeric: tabular-nums; }
+.ag-plans .pl .pp small { font-family: var(--sg-mono); font-weight: 600; font-size: 11px; letter-spacing: 0; color: var(--sg-ink-faint); margin-left: 4px; }
+.ag-plans .pl .pm { font-family: var(--sg-mono); font-size: 10px; color: var(--sg-ink-faint); margin-top: 6px; }
+.ag-plans .pl .pf { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--sg-line); font-size: 13px; color: var(--sg-ink-soft); }
+.ag-plans .pl .badge { align-self: flex-start; font-family: var(--sg-mono); font-size: 9px; letter-spacing: .1em; text-transform: uppercase; padding: 3px 9px; border-radius: 999px; background: var(--sg-red-soft); color: var(--sg-red-deep); margin-bottom: 12px; }
+
+/* ---- close fine-print ------------------------------------------------------ */
+.ag-fine { font-family: var(--sg-mono); font-size: 12px; color: var(--sg-ink-faint); margin-top: 22px; }
+.surface-dark .ag-fine { color: rgba(255,255,255,.6); }
+
+/* ---- RESPONSIVE ----------------------------------------------------------- */
+@media (max-width: 900px) {
+ .ag-eco { grid-template-columns: 1fr; }
+ .ag-plans { grid-template-columns: 1fr; }
+ .ag-fp { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 640px) {
+ .agdash .ahead { display: none; }
+ .agdash .arow { grid-template-columns: 1fr auto; row-gap: 4px; }
+ .agdash .arow .env { display: none; }
+ .agdash .arow .st { grid-column: 1; }
+ .agdash .arow .login { grid-row: 1 / span 2; }
+ .ag-fp { grid-template-columns: 1fr; }
+ .agroles .rrow { grid-template-columns: 1fr; gap: 6px; }
+}

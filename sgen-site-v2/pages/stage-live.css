@@ -1,0 +1,114 @@
+/* ============================================================================
+ stage-live.css - signature surfaces for /stage-live (Backups & Migration).
+ REFRAME: the page is the one-click full-site backup + point-in-time restore
+ story (admin area "Migration · Backups"), NOT a staging/preview workflow.
+ Crafted-CSS replicas of the real Backups panel (light canvas, red accent),
+ grounded in _depth-library/_buildspec/stage-live.md. No stock, no screenshots.
+ Surfaces: Backups list panel . inline-rename + bulk-delete state .
+ Create-a-Backup in-progress banner. All var(--sg-*). Reuses .adwin atoms.
+ ============================================================================ */
+@import "_standard.css";
+
+/* ---- HERO ----------------------------------------------------------------- */
+.bk-hero { padding-block: 9vh var(--sg-pad); }
+.bk-hero .lede { max-width: 980px; }
+.bk-hero h1 { margin-top: 16px; }
+.bk-hero .lead { margin-top: 22px; max-width: 70ch; }
+.bk-hero .cta { margin-top: 30px; }
+.bk-hero .stage { margin-top: 52px; }
+
+/* ===== BACKUPS PANEL header (h1 + breadcrumb + Create CTA) ================== */
+.bkpanel { padding: 0; }
+.bkhead { display: flex; align-items: flex-end; gap: 14px; padding: 16px 18px 14px; border-bottom: 1px solid var(--sg-line); }
+.bkhead .ht { display: flex; flex-direction: column; gap: 4px; }
+.bkhead .ht h4 { font-size: 19px; font-weight: 900; letter-spacing: -.02em; color: var(--sg-ink); line-height: 1; }
+.bkhead .ht .crumb { font-family: var(--sg-mono); font-size: 10px; color: var(--sg-ink-faint); letter-spacing: .02em; }
+.bkhead .new { margin-left: auto; font-family: var(--sg-font); font-size: 12.5px; font-weight: 700; color: #fff; padding: 9px 15px; border-radius: 9px; background: var(--sg-grad-red); box-shadow: var(--sg-shadow-red); white-space: nowrap; }
+
+/* toolbar: bulk action dropdown + apply + search */
+.bktool { display: flex; align-items: center; gap: 9px; padding: 12px 18px; border-bottom: 1px solid var(--sg-line); flex-wrap: wrap; }
+.bktool .sel { font-family: var(--sg-mono); font-size: 11px; color: var(--sg-ink-soft); padding: 8px 12px; border: 1px solid var(--sg-line); border-radius: 8px; background: var(--sg-bg-2); display: inline-flex; gap: 9px; align-items: center; }
+.bktool .sel .cv { color: var(--sg-ink-faint); }
+.bktool .ap { font-family: var(--sg-font); font-size: 11px; font-weight: 700; color: #fff; padding: 8px 13px; border-radius: 8px; background: var(--sg-grad-red); }
+.bktool .srch { margin-left: auto; font-family: var(--sg-mono); font-size: 11px; color: var(--sg-ink-faint); padding: 8px 13px; border: 1px solid var(--sg-line); border-radius: 8px; min-width: 170px; }
+
+/* ===== BACKUPS TABLE (checkbox . Filename . Size . Date Created . Actions) == */
+.bktab .th.bktab .tr { display: grid; grid-template-columns: 26px 2.1fr .8fr 1.3fr 1.4fr; gap: 12px; align-items: center; padding: 13px 18px; }
+.bktab .th { font-family: var(--sg-mono); font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: var(--sg-ink-faint); border-bottom: 1px solid var(--sg-line); }
+.bktab .tr { border-bottom: 1px solid var(--sg-line-2); font-size: 13px; }
+.bktab .tr:last-child { border-bottom: 0; }
+.bktab .ck { width: 16px; height: 16px; border-radius: 4px; border: 1.5px solid var(--sg-line); background: #fff; position: relative; }
+.bktab .ck.on { background: var(--sg-grad-red); border-color: transparent; }
+.bktab .ck.on::after { content: ""; position: absolute; left: 5px; top: 2px; width: 4px; height: 8px; border: solid #fff; border-width: 0 2px 2px 0; transform: rotate(42deg); }
+.bktab .fn { font-family: var(--sg-mono); font-size: 12px; font-weight: 600; color: var(--sg-ink); word-break: break-all; }
+.bktab .sz { font-variant-numeric: tabular-nums; color: var(--sg-ink-soft); font-weight: 600; }
+.bktab .dt { font-family: var(--sg-mono); font-size: 11px; color: var(--sg-ink-faint); }
+.bktab .acts { display: flex; gap: 7px; flex-wrap: wrap; }
+.bktab .chip { font-family: var(--sg-mono); font-size: 10px; padding: 4px 9px; border-radius: 6px; border: 1px solid var(--sg-line); color: var(--sg-ink-soft); }
+.bktab .chip.restore { color: var(--sg-red-deep); border-color: var(--sg-red-tint-22); background: var(--sg-red-soft); }
+/* numbered pager footer */
+.bkpager { display: flex; align-items: center; gap: 6px; padding: 12px 18px; }
+.bkpager .pg { font-family: var(--sg-mono); font-size: 11px; color: var(--sg-ink-faint); width: 26px; height: 26px; display: grid; place-items: center; border: 1px solid var(--sg-line); border-radius: 7px; }
+.bkpager .pg.on { background: var(--sg-grad-red); color: #fff; border-color: transparent; }
+.bkpager .note { margin-left: auto; font-family: var(--sg-mono); font-size: 10px; color: var(--sg-ink-faint); }
+
+/* ===== INLINE-RENAME + BULK-DELETE state =================================== */
+.bkmgr { padding: 0; }
+.bkmgr .lead-row { padding: 14px 18px; border-bottom: 1px solid var(--sg-line); }
+.bkmgr .rn { display: grid; grid-template-columns: 26px 2.1fr .8fr 1.3fr; gap: 12px; align-items: center; }
+.bkmgr .rn .ck { width: 16px; height: 16px; border-radius: 4px; border: 1.5px solid var(--sg-line); }
+.bkmgr .rn-field { position: relative; }
+.bkmgr .rn-field input, .bkmgr .rn-field .editbox { width: 100%; font-family: var(--sg-mono); font-size: 12px; font-weight: 600; color: var(--sg-ink); border: 1.5px solid var(--sg-red); border-radius: 8px; padding: 9px 11px; background: #fff; box-shadow: 0 0 0 3px var(--sg-red-soft); }
+.bkmgr .rn-hint { display: flex; gap: 10px; align-items: center; margin-top: 7px; }
+.bkmgr .rn-hint .h { font-family: var(--sg-mono); font-size: 10px; color: var(--sg-ink-faint); }
+.bkmgr .rn-hint .cancel { font-family: var(--sg-mono); font-size: 10px; color: var(--sg-ink-soft); border: 1px solid var(--sg-line); padding: 3px 9px; border-radius: 6px; }
+.bkmgr .rn .sz { font-variant-numeric: tabular-nums; color: var(--sg-ink-soft); font-weight: 600; font-size: 13px; }
+.bkmgr .rn .dt { font-family: var(--sg-mono); font-size: 11px; color: var(--sg-ink-faint); }
+/* bulk-delete: rows checked + dropdown set to Delete + Apply */
+.bkbulk .btool { display: flex; align-items: center; gap: 9px; padding: 13px 18px; border-bottom: 1px solid var(--sg-line); background: var(--sg-red-soft); }
+.bkbulk .btool .sel { font-family: var(--sg-mono); font-size: 11px; color: var(--sg-red-deep); padding: 8px 12px; border: 1px solid var(--sg-red-tint-22); border-radius: 8px; background: #fff; display: inline-flex; gap: 9px; align-items: center; }
+.bkbulk .btool .ap { font-family: var(--sg-font); font-size: 11px; font-weight: 700; color: #fff; padding: 8px 14px; border-radius: 8px; background: var(--sg-grad-red); box-shadow: var(--sg-shadow-red); }
+.bkbulk .btool .cnt { margin-left: auto; font-family: var(--sg-mono); font-size: 10px; color: var(--sg-ink-faint); }
+.bkbulk .brow { display: grid; grid-template-columns: 26px 2.1fr .8fr 1.3fr; gap: 12px; align-items: center; padding: 11px 18px; border-bottom: 1px solid var(--sg-line-2); font-size: 12.5px; }
+.bkbulk .brow .ck { width: 16px; height: 16px; border-radius: 4px; background: var(--sg-grad-red); position: relative; flex: none; }
+.bkbulk .brow .ck::after { content: ""; position: absolute; left: 5px; top: 2px; width: 4px; height: 8px; border: solid #fff; border-width: 0 2px 2px 0; transform: rotate(42deg); }
+.bkbulk .brow .fn { font-family: var(--sg-mono); font-size: 12px; color: var(--sg-ink); }
+.bkbulk .brow .sz { font-variant-numeric: tabular-nums; color: var(--sg-ink-soft); }
+.bkbulk .brow .dt { font-family: var(--sg-mono); font-size: 11px; color: var(--sg-ink-faint); }
+.bkbulk .confirm { display: flex; align-items: center; gap: 10px; padding: 13px 18px; }
+.bkbulk .confirm .ok { width: 18px; height: 18px; border-radius: 50%; background: #1c7a45; position: relative; flex: none; }
+.bkbulk .confirm .ok::after { content: ""; position: absolute; left: 6px; top: 4px; width: 4px; height: 8px; border: solid #fff; border-width: 0 2px 2px 0; transform: rotate(42deg); }
+.bkbulk .confirm .msg { font-size: 13px; font-weight: 700; color: #1c7a45; }
+
+/* ===== CREATE-A-BACKUP IN-PROGRESS banner ================================== */
+.bkjob { padding: 0; }
+.bkjob .banner { display: flex; align-items: center; gap: 13px; padding: 14px 18px; background: var(--sg-red-soft); border-bottom: 1px solid var(--sg-red-tint-22); }
+.bkjob .banner .spin { width: 18px; height: 18px; border-radius: 50%; border: 2.5px solid var(--sg-red-tint-22); border-top-color: var(--sg-red); flex: none; }
+.bkjob .banner .bt { font-size: 13px; font-weight: 700; color: var(--sg-red-deep); }
+.bkjob .banner .bt small { display: block; font-family: var(--sg-mono); font-size: 10px; font-weight: 500; color: var(--sg-ink-faint); margin-top: 2px; letter-spacing: 0; }
+.bkjob .banner .running { margin-left: auto; font-family: var(--sg-mono); font-size: 9px; letter-spacing: .08em; text-transform: uppercase; color: var(--sg-red-deep); border: 1px solid var(--sg-red-tint-22); padding: 4px 9px; border-radius: 999px; }
+.bkjob .grow { display: grid; grid-template-columns: 26px 2.1fr .8fr 1.3fr; gap: 12px; align-items: center; padding: 12px 18px; border-bottom: 1px solid var(--sg-line-2); font-size: 12.5px; }
+.bkjob .grow.fresh { background: linear-gradient(90deg, var(--sg-red-soft), transparent); }
+.bkjob .grow .ck { width: 16px; height: 16px; border-radius: 4px; border: 1.5px solid var(--sg-line); }
+.bkjob .grow .fn { font-family: var(--sg-mono); font-size: 12px; color: var(--sg-ink); }
+.bkjob .grow .fn .badge { font-family: var(--sg-mono); font-size: 8.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--sg-red-deep); background: #fff; border: 1px solid var(--sg-red-tint-22); padding: 2px 7px; border-radius: 999px; margin-left: 8px; }
+.bkjob .grow .sz { font-variant-numeric: tabular-nums; color: var(--sg-ink-faint); }
+.bkjob .grow .dt { font-family: var(--sg-mono); font-size: 11px; color: var(--sg-ink-faint); }
+.bkjob .auto { display: flex; gap: 8px; align-items: baseline; padding: 12px 18px; font-family: var(--sg-mono); font-size: 10px; color: var(--sg-ink-faint); }
+.bkjob .auto code { color: var(--sg-red-deep); background: var(--sg-red-soft); padding: 2px 7px; border-radius: 5px; }
+
+/* ---- CLOSE --------------------------------------------------------------- */
+.bk-close { text-align: center; }
+.bk-close .related { display: flex; flex-wrap: wrap; gap: 14px 26px; justify-content: center; margin-top: 28px; }
+.bk-close .related a { font-family: var(--sg-mono); font-size: 12px; color: var(--sg-ink); border-bottom: 1px solid var(--sg-red-tint-22); padding-bottom: 2px; }
+.bk-close .related a:hover { color: var(--sg-red-hot); }
+.bk-close .fine { font-family: var(--sg-mono); font-size: 12px; color: var(--sg-ink-faint); margin-top: 22px; }
+
+/* ---- RESPONSIVE ---------------------------------------------------------- */
+@media (max-width: 760px) {
+ .bktab .th { display: none; }
+ .bktab .tr { grid-template-columns: 1fr; row-gap: 5px; }
+ .bktab .acts { margin-top: 2px; }
+ .bkmgr .rn.bkbulk .brow.bkjob .grow { grid-template-columns: 1fr; row-gap: 5px; }
+ .bktool .srch.bkbulk .btool .ap { margin-left: 0; }
+}
