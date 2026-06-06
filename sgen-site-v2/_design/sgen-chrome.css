@@ -95,10 +95,12 @@ a.mm-feat:hover .go { gap:11px; }
 /* ===== MOBILE: header floats as a glass bar, CTA-button corner radius (TB-B) ===== */
 @media (max-width:980px){
   .topbar { display:none; }
-  .site-header { position:sticky; top:10px; margin:10px 12px 0; border-radius:var(--sg-r-btn);
+  .site-header { position:fixed; top:10px; left:12px; right:12px; border-radius:var(--sg-r-btn);
     background:linear-gradient(180deg,rgba(22,19,21,.96),rgba(11,10,12,.95)); -webkit-backdrop-filter:blur(16px) saturate(140%); backdrop-filter:blur(16px) saturate(140%);
     border:1px solid rgba(255,255,255,.1); box-shadow:0 12px 28px -16px rgba(0,0,0,.66), inset 0 1px 0 rgba(255,255,255,.07); }
   .site-header .in { padding:8px 8px 8px 18px; }
+  /* header floats over the hero now (no white band above it); push the first section's content clear of the bar */
+  .site-header + section, .site-header + header { padding-top:clamp(76px,18vw,104px); }
   .site-header.is-stuck { box-shadow:0 16px 36px -16px rgba(0,0,0,.74), inset 0 1px 0 rgba(255,255,255,.07); border-color:rgba(213,21,34,.28); }
   .hamburger { border-radius:var(--sg-r-btn); width:38px; height:38px; gap:4px; }
   .hamburger span { width:17px; }
