@@ -191,7 +191,7 @@
  <div class="readw reveal">
  <div class="eyebrow">Inside the module</div>
  <h2 class="h2">Add, order, test, and import, <span class="grad">all from the admin.</span></h2>
- <p class="lead" style="margin-top:16px">The Redirects module is a rules engine, not a flat list. Each rule carries a type, a priority, a stop-processing switch, and its own usage counters, and the whole thing reads and writes from one admin screen with no separate plugin to license.</p>
+ <p class="lead" style="margin-top:16px">The Redirects module is a rules engine, not a flat list. Each rule carries a type, a priority, a stop-processing switch, and its own usage counters, and the whole thing reads and writes from one admin screen, the same screen where you manage the rest of your site.</p>
  </div>
  <div class="grid g-3" style="margin-top:42px">
  <div class="card reveal"><div class="ico"><span class="m"></span></div><h3 class="h3">301 or 302 per rule</h3><p style="margin-top:10px">Choose the type on each rule from a Type select. A 301 passes ranking signals to the new URL, a 302 keeps the old URL in the index for a short detour. You decide per rule, not per site.</p></div>
@@ -210,7 +210,7 @@
  <div class="readw reveal">
  <div class="eyebrow">Dry-run before you publish</div>
  <h2 class="h2">Test any URL against your rules <span class="grad">before one redirect goes live.</span></h2>
- <p class="lead" style="margin-top:16px">The Test URL field runs your URL through the same matching logic the rules engine uses, then tells you exactly which rule catches it and where it sends the visitor, without performing the redirect. It is the dry-run a paid redirect tool charges for, included on every plan.</p>
+ <p class="lead" style="margin-top:16px">The Test URL field runs your URL through the same matching logic the rules engine uses, then tells you exactly which rule catches it and where it sends the visitor, without performing the redirect. The dry-run is part of the Redirects module, included on every plan.</p>
  </div>
  <div class="adwin reveal" data-d="1" style="margin-top:40px;max-width:760px" aria-hidden="true">
  <div class="adbar"><span class="ic"></span><span class="ti">Test URL<small>Dry-run a URL against your live rules</small></span></div>
@@ -349,11 +349,11 @@
  <div class="wrap">
  <div class="feat reveal">
  <div class="feat-copy">
- <div class="eyebrow">The plugin it kills</div>
- <h2 class="h2">One module. <span class="grad">The whole redirect stack, gone.</span></h2>
- <p class="lead" style="margin-top:14px">SGEN ships redirect management in the platform itself. On WordPress the same job means installing the Redirection plugin, or paying for a premium SEO plugin tier, then keeping each one updated. SGEN Redirects ships with the platform, updates with the platform, and adds nothing to install or maintain.</p>
+ <div class="eyebrow">One module, the whole job</div>
+ <h2 class="h2">One module. <span class="grad">The whole redirect stack, built in.</span></h2>
+ <p class="lead" style="margin-top:14px">SGEN ships redirect management in the platform itself. Add a rule, set 301 or 302, give it a priority, test it, then flip it live, all from the Add New form. The module ships with the platform, updates with the platform, and adds nothing to install or maintain.</p>
  <div class="replaces">
- <span class="rep-chip">Redirection</span><span class="rep-chip">Yoast Premium</span><span class="rep-chip">Rank Math Pro</span><span class="rep-chip">Simple 301 Redirects</span>
+ <span class="rep-chip">301 / 302 per rule</span><span class="rep-chip">Priority ordering</span><span class="rep-chip">Test URL dry-run</span><span class="rep-chip">CSV / JSON import</span>
  </div>
  </div>
  <div class="adwin" style="align-self:start" aria-hidden="true">
@@ -399,7 +399,7 @@
  <div class="faq-list" style="margin-top:30px">
  <details class="reveal" open><summary>Does SGEN support wildcard redirects? <span class="pm">+</span></summary><div class="ans">SGEN matches a class of URLs with regex pattern rules via the Is Regex? toggle, rather than a separate star-wildcard syntax. For a single old-URL-to-new-URL move, use a plain 301. Test any pattern rule in the Test URL simulator before you rely on it, so you confirm the rule catches what you expect.</div></details>
  <details class="reveal"><summary>Do redirects carry my link equity? <span class="pm">+</span></summary><div class="ans">Use a 301 for a permanent move: it is the redirect type that passes the source URL's ranking signals to the destination, which is why search engines treat the new page as canonical. Use a 302 for a short-term detour, since it keeps the original URL in the index. This is standard HTTP-code behavior, you pick the code per rule.</div></details>
- <details class="reveal"><summary>Can I bulk-import my existing redirects? <span class="pm">+</span></summary><div class="ans">Yes. Upload a CSV or JSON file in the Import / Export panel through the drag-and-drop dropzone. Import adds new rules and skips duplicate targets, so it is import once then edit in the UI. Two honest notes: import writes immediately, there is no preview-then-confirm step, and imported rows arrive active, unlike rules added in the form, which start inactive. SGEN imports the redirect rules, not your WordPress site itself.</div></details>
+ <details class="reveal"><summary>Can I bulk-import my existing redirects? <span class="pm">+</span></summary><div class="ans">Yes. Upload a CSV or JSON file in the Import / Export panel through the drag-and-drop dropzone. Import adds new rules and skips duplicate targets, so it is import once then edit in the UI. Two honest notes: import writes immediately, there is no preview-then-confirm step, and imported rows arrive active, unlike rules added in the form, which start inactive. The import reads the redirect rules from your file, the rules only, not the pages they point to.</div></details>
  <details class="reveal"><summary>If I rename a page's slug, does the redirect happen automatically? <span class="pm">+</span></summary><div class="ans">No. The redirect manager is a separate tool from the page editor, so renaming a slug does not auto-create a rule. The best practice is to add a 301 from the old slug to the new one in the Redirects panel right after you make the change, so the old URL keeps working.</div></details>
  <details class="reveal"><summary>How do I know a rule will catch the right URL? <span class="pm">+</span></summary><div class="ans">Use the Test URL field. It dry-runs your URL against the live match logic and returns "Matched rule: TARGET to DESTINATION", or "No rule matched", without performing the redirect. You confirm the matched rule and its destination before you publish. It is a config-time check that reports the would-be match.</div></details>
  <details class="reveal"><summary>Can I stage a redirect before it goes live? <span class="pm">+</span></summary><div class="ans">Yes. New rules added in the form default to Status off, an inactive draft, so you can build and test the rule, then flip Status on to activate it. Bulk Move to Active and Move to Inactive let you flip several at once. The one asymmetry to know: imported rules default to active, unlike rules you add in the form.</div></details>
@@ -410,8 +410,8 @@
 <!-- 9 · CLOSING PRICING CTA -->
 <section class="sec surface-dark has-atmos r-close" style="background:var(--sg-bg-deep)">
  <div class="wrap">
- <div class="eyebrow reveal" style="justify-content:center">One fewer plugin</div>
- <h2 class="h2 reveal" data-d="1" style="margin-top:12px">The Redirection plugin, retired. <span class="grad">From $39/mo.</span></h2>
+ <div class="eyebrow reveal" style="justify-content:center">Redirects, included</div>
+ <h2 class="h2 reveal" data-d="1" style="margin-top:12px">Your redirect map, managed in the admin. <span class="grad">From $39/mo.</span></h2>
  <p class="lead reveal" data-d="2" style="margin:16px auto 0;max-width:64ch">Redirects is one of 23 native modules included in every plan, nothing to add on. Plans are priced by how many live sites you run, not by feature. Build and test your rules on the free Sandbox before you pay anything.</p>
  <div class="flex reveal" data-d="3" style="justify-content:center;margin-top:28px">
  <a class="btn btn-primary" href="pricing.html">Start Building <span class="arr">&rarr;</span></a>
