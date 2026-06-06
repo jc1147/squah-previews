@@ -232,5 +232,18 @@
  .ttab .th { display: none; }
  .ttab .tr { grid-template-columns: 1fr auto; row-gap: 4px; }
  .ttab .cb, .ttab .au, .ttab .dt { display: none; }
- .tpills.tctrl { padding-left: 13px; padding-right: 13px; }
+ .tpills, .tctrl { padding-left: 13px; padding-right: 13px; }
+ /* control strip: let the row wrap instead of clipping the search field off the card edge */
+ .tctrl { flex-wrap: wrap; }
+ .tctrl .srch, .tbulk .srch { margin-left: 0; min-width: 0; flex: 1 1 100%; }
+ /* re-assert the mobile hide of the library category rail (base .tlib .lcat rule
+    is declared later in the file and was overriding the @media display:none) */
+ .tlib .lcat { display: none; }
+}
+@media (max-width: 480px) {
+ /* applied-footer render: the brand block was crammed against its links in the
+    2-up grid at phone width; stack to one column so each block gets full width */
+ .tfoot .render .cols { grid-template-columns: 1fr; gap: 26px; }
+ .tfoot .render .brand .sub { max-width: none; }
+ .tfoot .render { padding: 30px 22px 22px; }
 }
