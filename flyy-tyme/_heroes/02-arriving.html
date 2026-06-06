@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Flyy Tyme × Saddberries — Hero Concept 02 · Arriving</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   CONCEPT 02 · ARRIVING  (HERO #1/#5 split text-left + cinematic photo-right
+   on a luxury field · NAV #2 classic full-bar over hero, transparent)
+   FLYY TYME — The Daylight District, rendered moody gold-on-warm-black.
+   SGEN design-system tokens (--ds-*) · the 444 thread.
+   ============================================================ */
+:root{
+  /* Daylight District — Flyy Tyme (gold / warm black) */
+  --ds-gold:#C9A227; --ds-gold-lite:#EAC766; --ds-gold-deep:#8F6E14;
+  --ds-cream:#F4ECDB; --ds-cream-2:#E8DABA; --ds-ink-warm:#1C1606;
+  /* Night District — Saddberries (violet / magenta / near-black) */
+  --ds-violet:#7C3AED; --ds-violet-lite:#A982FF; --ds-magenta:#E152D8; --ds-magenta-lite:#F77BE8;
+  --ds-night:#08040E; --ds-night-2:#180A33; --ds-ink-cool:#EFE9FF;
+  /* warm-black field for the Daylight premium register */
+  --ds-field:#0C0A07; --ds-field-2:#141009; --ds-muted-warm:#B7A77E;
+  /* shape */
+  --ds-r-sm:4px; --ds-r-pill:999px;
+  --ds-font-display:'Anton',system-ui,sans-serif;
+  --ds-font-serif:'Cormorant Garamond',Georgia,serif;
+  --ds-font-body:'Inter',system-ui,sans-serif;
+  --ds-font-mono:'Space Mono',ui-monospace,monospace;
+  --ds-ease:cubic-bezier(.5,0,.2,1); --ds-dur:.35s;
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{font-family:var(--ds-font-body);background:var(--ds-field);color:var(--ds-cream);
+  -webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{display:block;max-width:100%}
+a{text-decoration:none;color:inherit}
+
+/* ---- film grain (premium, reused technique) ---- */
+.grain{position:fixed;inset:0;z-index:60;pointer-events:none;opacity:.05;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* ===================== STAGE (above-the-fold) ===================== */
+.stage{position:relative;min-height:100vh;min-height:760px;display:flex;flex-direction:column}
+
+/* warm-black background field: gold radial glow + ghosted 444 motif + vignette */
+.field{position:relative;flex:1;display:flex;flex-direction:column;min-height:0;overflow:hidden;
+  background:
+    radial-gradient(120% 90% at 22% 30%, #1A1409 0%, var(--ds-field-2) 42%, var(--ds-field) 100%);}
+.field::before{ /* faint large gold radial glow behind the headline */
+  content:"";position:absolute;left:-6%;top:8%;width:62%;height:80%;pointer-events:none;z-index:0;
+  background:radial-gradient(circle at 34% 42%, rgba(201,162,39,.20), rgba(201,162,39,.06) 38%, transparent 64%);
+  filter:blur(2px)}
+.field::after{ /* corner vignette to seat the luxury field */
+  content:"";position:absolute;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(130% 120% at 50% 46%, transparent 52%, rgba(0,0,0,.55) 100%)}
+/* ghosted 444 motif in the gutter between text + photo */
+.motif{position:absolute;top:0;bottom:0;left:54%;width:300px;z-index:0;pointer-events:none;
+  background:url("assets/motif-444.jpg") center/cover no-repeat;opacity:.10;
+  filter:saturate(1.05) contrast(1.05);
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 40%,#000 60%,transparent);
+          mask-image:linear-gradient(90deg,transparent,#000 40%,#000 60%,transparent)}
+
+/* ===================== HERO GRID ===================== */
+.hero{position:relative;z-index:2;flex:1;display:grid;grid-template-columns:1.15fr 1fr;
+  align-items:center;gap:clamp(28px,3vw,64px);min-height:0;
+  padding:128px clamp(40px,5vw,84px) 84px clamp(40px,5.4vw,90px)}
+
+/* ---- LEFT: the copy ---- */
+.col{position:relative;max-width:38rem}
+.kick{font-family:var(--ds-font-mono);font-size:12px;letter-spacing:.32em;text-transform:uppercase;
+  color:var(--ds-gold);display:flex;align-items:center;gap:11px;margin:0 0 24px}
+.kick::before{content:"";width:30px;height:1px;background:var(--ds-gold);display:inline-block}
+
+.h-serif{font-family:var(--ds-font-serif);font-weight:600;line-height:.97;letter-spacing:-.01em;
+  font-size:clamp(48px,5.6vw,92px);margin:0;color:var(--ds-cream)}
+.h-serif em{font-style:italic;font-weight:500;color:var(--ds-gold-lite);
+  text-shadow:0 0 40px rgba(234,199,102,.34)}
+
+.sub{font-size:17px;line-height:1.62;margin:26px 0 32px;max-width:40ch;color:var(--ds-muted-warm)}
+
+.cta-row{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.cta{display:inline-flex;align-items:center;gap:10px;font-family:var(--ds-font-body);font-weight:600;
+  font-size:15px;padding:15px 28px;border-radius:var(--ds-r-sm);
+  transition:transform var(--ds-dur) var(--ds-ease),box-shadow var(--ds-dur) var(--ds-ease),
+    background var(--ds-dur),color var(--ds-dur)}
+.cta:hover{transform:translateY(-2px)}
+.cta-primary{background:linear-gradient(180deg,var(--ds-gold-lite),var(--ds-gold));color:var(--ds-ink-warm);
+  box-shadow:0 14px 36px rgba(201,162,39,.34)}
+.cta-primary:hover{box-shadow:0 18px 48px rgba(201,162,39,.5)}
+.cta-ghost{background:transparent;color:var(--ds-gold-lite);border:1px solid rgba(201,162,39,.5)}
+.cta-ghost:hover{background:rgba(201,162,39,.12);border-color:var(--ds-gold-lite)}
+.cta-ghost .play{font-size:11px;line-height:1;color:var(--ds-gold)}
+
+.rule{height:1px;width:min(420px,100%);margin:38px 0 16px;
+  background:linear-gradient(90deg,var(--ds-gold),rgba(201,162,39,.16) 78%,transparent)}
+.whisper{display:block;font-family:var(--ds-font-mono);font-size:11.5px;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--ds-gold-deep)}
+.whisper b{color:var(--ds-gold);font-weight:400}
+
+/* ---- RIGHT: cinematic gold-duotone portrait frame ---- */
+.frame{position:relative;align-self:stretch;margin:96px 0 28px;border-radius:6px;overflow:hidden;
+  border:1px solid rgba(201,162,39,.42);
+  box-shadow:0 0 0 1px rgba(0,0,0,.6),0 34px 80px rgba(0,0,0,.6),0 0 90px rgba(201,162,39,.18);}
+.frame .shot{position:absolute;inset:0;background:url("assets/flyy-couple.png") center center/cover no-repeat;
+  filter:grayscale(.32) contrast(1.08) brightness(.96) sepia(.18)}
+/* gold duotone harmony: gold multiply layer keeps figures+car visible, reads gold-on-black */
+.frame .duo{position:absolute;inset:0;mix-blend-mode:multiply;
+  background:linear-gradient(160deg, rgba(201,162,39,.42) 0%, rgba(143,110,20,.30) 46%, rgba(12,10,7,.82) 100%)}
+.frame .lift{position:absolute;inset:0;mix-blend-mode:soft-light;
+  background:linear-gradient(160deg, rgba(234,199,102,.30), transparent 52%)}
+/* bottom legibility scrim + inner hairline */
+.frame .scrim{position:absolute;inset:0;
+  background:linear-gradient(180deg, transparent 42%, rgba(12,10,7,.30) 70%, rgba(12,10,7,.78) 100%)}
+.frame::after{content:"";position:absolute;inset:0;border-radius:6px;pointer-events:none;
+  box-shadow:inset 0 0 0 1px rgba(234,199,102,.28),inset 0 0 60px rgba(0,0,0,.45)}
+/* the FLYY script lockup, scrimmed at the base of the frame */
+.frame .cap{position:absolute;left:24px;bottom:22px;z-index:3}
+.frame .cap .nm{font-family:var(--ds-font-display);font-size:26px;letter-spacing:.05em;color:var(--ds-gold-lite);
+  text-shadow:0 2px 18px rgba(0,0,0,.7);line-height:1}
+.frame .cap .tg{font-family:var(--ds-font-mono);font-size:9.5px;letter-spacing:.30em;text-transform:uppercase;
+  color:var(--ds-cream-2);margin-top:7px}
+
+/* wax-seal badge over the top-left corner of the frame */
+.seal{position:absolute;top:-26px;left:-26px;z-index:4;width:96px;height:96px;border-radius:var(--ds-r-pill);
+  display:grid;place-items:center;text-align:center;
+  background:radial-gradient(circle at 50% 34%, #20180A, var(--ds-field) 74%);
+  border:1.5px solid var(--ds-gold-lite);
+  box-shadow:0 0 0 6px rgba(12,10,7,.92),0 0 48px rgba(234,199,102,.45),inset 0 0 22px rgba(201,162,39,.30)}
+.seal::after{content:"";position:absolute;inset:-11px;border-radius:var(--ds-r-pill);
+  border:1px solid rgba(201,162,39,.30)}
+.seal .num{font-family:var(--ds-font-serif);font-weight:600;font-size:26px;color:var(--ds-gold-lite);
+  line-height:1;letter-spacing:.02em;text-shadow:0 0 14px rgba(234,199,102,.5)}
+.seal .lab{font-family:var(--ds-font-mono);font-size:7px;letter-spacing:.30em;color:#D8B23F;
+  margin-top:5px;text-transform:uppercase}
+
+/* ===================== NAV (#2 classic full-bar, transparent over hero) ===================== */
+.nav{position:absolute;top:0;left:0;right:0;z-index:20;display:grid;
+  grid-template-columns:1fr auto 1fr;align-items:center;gap:24px;
+  padding:26px clamp(36px,4vw,72px) 0}
+.brand{display:flex;flex-direction:column;line-height:1;gap:5px;justify-self:start}
+.brand .lo-1{font-family:var(--ds-font-display);font-size:24px;letter-spacing:.05em;color:var(--ds-gold)}
+.brand .lo-tag{font-family:var(--ds-font-mono);font-size:8.5px;letter-spacing:.28em;
+  color:var(--ds-muted-warm);text-transform:uppercase}
+.brand .lo-tag b{color:var(--ds-gold-deep);font-weight:400}
+
+.nav-links{display:flex;align-items:center;justify-content:center;gap:34px;
+  font-size:13px;font-weight:500;letter-spacing:.02em;color:var(--ds-cream-2)}
+.nav-links a{position:relative;padding-bottom:4px;transition:color var(--ds-dur)}
+.nav-links a::after{content:"";position:absolute;left:0;bottom:0;height:1px;width:0;
+  background:var(--ds-gold);transition:width var(--ds-dur) var(--ds-ease)}
+.nav-links a:hover{color:var(--ds-gold-lite)}
+.nav-links a:hover::after{width:100%}
+
+.nav-cta{justify-self:end}
+.join{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;
+  padding:11px 22px;border-radius:var(--ds-r-pill);color:var(--ds-gold-lite);
+  border:1px solid rgba(201,162,39,.55);transition:background var(--ds-dur),color var(--ds-dur),
+    box-shadow var(--ds-dur)}
+.join:hover{background:rgba(201,162,39,.14);color:var(--ds-gold-lite);
+  box-shadow:0 8px 28px rgba(201,162,39,.28)}
+
+/* ===================== PEEK BAND (thin "AS SEEN" credibility row) ===================== */
+.peek{position:relative;z-index:10;flex:0 0 auto;height:48px;
+  background:#080603;border-top:1px solid rgba(201,162,39,.24);
+  display:flex;align-items:center;justify-content:center;overflow:hidden}
+.peek .row{font-family:var(--ds-font-mono);font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;
+  color:var(--ds-muted-warm);white-space:nowrap;display:inline-flex;align-items:center;gap:18px}
+.peek .row b{color:var(--ds-gold-lite);font-weight:400}
+.peek .dot{color:var(--ds-gold-deep)}
+
+/* ===================== MOBILE NAV (CSS-only drawer) ===================== */
+.mnav{display:none}
+@media (max-width:900px){
+  .mnav{display:flex;align-items:center;justify-content:space-between;gap:12px;
+    position:fixed;top:0;left:0;right:0;z-index:50;padding:13px 20px;
+    background:rgba(12,10,7,.93);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+    border-bottom:1px solid rgba(201,162,39,.24)}
+  .mnav .mlogo{display:inline-flex;flex-direction:column;gap:4px;line-height:1}
+  .mnav .mlogo b{font-family:var(--ds-font-display);font-size:18px;font-weight:400;letter-spacing:.05em;color:var(--ds-gold)}
+  .mnav .mlogo i{font-family:var(--ds-font-mono);font-size:8px;letter-spacing:.24em;text-transform:uppercase;
+    color:var(--ds-muted-warm);font-style:normal}
+  .mtog{position:absolute;opacity:0;width:0;height:0;pointer-events:none}
+  .mburger{display:grid;gap:5px;cursor:pointer;padding:7px;margin:-7px}
+  .mburger span{width:25px;height:2px;background:var(--ds-gold-lite);transition:transform .3s var(--ds-ease),opacity .2s}
+  .mtog:checked ~ .mburger span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+  .mtog:checked ~ .mburger span:nth-child(2){opacity:0}
+  .mtog:checked ~ .mburger span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+  .mdrawer{position:absolute;top:100%;left:0;right:0;
+    background:rgba(12,10,7,.98);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+    border-bottom:1px solid rgba(201,162,39,.24);
+    display:flex;flex-direction:column;padding:0 22px;max-height:0;overflow:hidden;opacity:0;
+    transition:max-height .42s var(--ds-ease),opacity .3s,padding .42s var(--ds-ease)}
+  .mtog:checked ~ .mdrawer{max-height:74vh;opacity:1;padding:8px 22px 22px}
+  .mdrawer a{color:var(--ds-cream);font-size:16px;font-weight:600;padding:13px 0;
+    border-bottom:1px solid rgba(201,162,39,.12)}
+  .mdrawer .mdrawer-cta{margin-top:16px;text-align:center;color:#1C1606;border:0;
+    background:linear-gradient(180deg,var(--ds-gold-lite),var(--ds-gold));padding:14px;
+    border-radius:var(--ds-r-sm);box-shadow:0 12px 30px rgba(201,162,39,.34)}
+}
+@media (prefers-reduced-motion:reduce){.mburger span,.mdrawer{transition:none}}
+
+@media (max-width:900px){
+  .stage{min-height:0}
+  .nav{display:none}                          /* desktop bar hidden; .mnav takes over */
+  /* condense the copy so the photo lands ABOVE the fold */
+  .hero{grid-template-columns:1fr;padding:78px 22px 22px;gap:12px;align-content:start}
+  .motif,.field::before{display:none}
+  .kick{margin-bottom:14px;font-size:11px}
+  .h-serif{font-size:clamp(44px,12vw,60px)}   /* title size kept */
+  .sub{font-size:14px;line-height:1.45;margin:13px 0 17px;max-width:44ch}
+  .cta-row{flex-wrap:nowrap;gap:10px}         /* both CTAs on one row */
+  .cta{padding:12px 16px;font-size:13.5px;white-space:nowrap}
+  .rule{margin:16px 0 9px;width:100%}
+  .whisper{font-size:10px;letter-spacing:.12em}
+  .frame{margin:13px 0 4px;min-height:350px}  /* photo prominent, in the fold */
+  .frame .shot{filter:grayscale(.16) contrast(1.05) brightness(1.08) sepia(.10)}  /* lift the photo on mobile */
+  .frame .duo{opacity:.8}
+  .frame .cap .nm{font-size:22px}
+  .seal{top:-18px;left:-10px;width:72px;height:72px}
+  .seal .num{font-size:22px}
+  .peek{height:auto;padding:11px 14px;text-align:center}
+  .peek .row{white-space:normal;flex-wrap:wrap;justify-content:center;font-size:9.5px;letter-spacing:.14em}
+}
+</style>
+</head>
+<body>
+<div class="grain"></div>
+
+<!-- MOBILE NAV (shown ≤900px) -->
+<nav class="mnav">
+  <input type="checkbox" id="mtog02" class="mtog" aria-label="Toggle menu">
+  <a class="mlogo" href="#"><b>FLYY TYME</b><i>&times; Saddberries &middot; Night City</i></a>
+  <label for="mtog02" class="mburger" aria-label="Open menu"><span></span><span></span><span></span></label>
+  <div class="mdrawer">
+    <a href="#">The Universe</a><a href="#">Store</a><a href="#">Culture</a><a href="#">Events</a>
+    <a class="mdrawer-cta" href="#">Join the List &rarr;</a>
+  </div>
+</nav>
+
+<div class="stage">
+  <div class="field">
+    <div class="motif"></div>
+
+    <!-- NAV #2 — classic full-bar, transparent over the hero -->
+    <nav class="nav">
+      <a class="brand" href="#">
+        <span class="lo-1">FLYY TYME</span>
+        <span class="lo-tag">&times; SADDBERRIES &middot; <b>NIGHT CITY</b></span>
+      </a>
+      <div class="nav-links">
+        <a href="#">The Universe</a>
+        <a href="#">Store</a>
+        <a href="#">Culture</a>
+        <a href="#">Events</a>
+      </div>
+      <div class="nav-cta">
+        <a class="join" href="#">Join the List</a>
+      </div>
+    </nav>
+
+    <!-- HERO #1/#5 — copy left, cinematic photo right -->
+    <div class="hero">
+
+      <!-- LEFT -->
+      <div class="col">
+        <p class="kick">Flyy Tyme &middot; The Daylight District &middot; LV / OK</p>
+        <h1 class="h-serif">It is about<br><em>arriving.</em></h1>
+        <p class="sub">For those who never rush the ritual. The luxury side of a culture &mdash;
+          members-only nights, elevated taste, the slow ceremony of arriving.</p>
+        <div class="cta-row">
+          <a class="cta cta-primary" href="#">Join the List <span>&rarr;</span></a>
+          <a class="cta cta-ghost" href="#"><span class="play">&#9654;</span> Watch the film</a>
+        </div>
+        <div class="rule"></div>
+        <span class="whisper"><b>4:44</b> &mdash; The FLYY Hour &middot; Stay elevated, my friends.</span>
+      </div>
+
+      <!-- RIGHT — gold-duotone cinematic portrait frame -->
+      <div class="frame">
+        <div class="shot"></div>
+        <div class="duo"></div>
+        <div class="lift"></div>
+        <div class="scrim"></div>
+        <div class="seal"><div><div class="num">4:44</div><div class="lab">Est</div></div></div>
+        <div class="cap">
+          <div class="nm">FLYY TYME</div>
+          <div class="tg">Members Only &middot; The Luxury Side</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- PEEK BAND — "AS SEEN" credibility (text only, no metrics, no logo images) -->
+    <div class="peek">
+      <span class="row">
+        Featured in <b>High&nbsp;Times</b> <i class="dot">&middot;</i>
+        <b>The&nbsp;Drop&nbsp;LV</b> <i class="dot">&middot;</i>
+        <b>Cookies</b> <i class="dot">&middot;</i>
+        <b>Exotic&nbsp;Pop</b> <i class="dot">&middot;</i>
+        Las&nbsp;Vegas&nbsp;/&nbsp;Oklahoma
+      </span>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>

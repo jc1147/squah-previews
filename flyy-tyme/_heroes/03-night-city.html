@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Flyy Tyme × Saddberries — Hero Concept 03 · Night City</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   CONCEPT 03 · NIGHT CITY  (HERO #5 full-bleed cinematic + NAV #12 ornate emblem + center links)
+   SGEN design-system tokens (--ds-*) · Saddberries — The Night District. Violet + magenta on near-black.
+   ============================================================ */
+:root{
+  /* Daylight District — Flyy Tyme (gold / warm black) */
+  --ds-gold:#C9A227; --ds-gold-lite:#EAC766; --ds-gold-deep:#8F6E14;
+  --ds-cream:#F4ECDB; --ds-cream-2:#E8DABA; --ds-ink-warm:#1C1606;
+  /* Night District — Saddberries (violet / magenta / near-black) */
+  --ds-violet:#7C3AED; --ds-violet-lite:#A982FF; --ds-magenta:#E152D8; --ds-magenta-lite:#F77BE8;
+  --ds-night:#08040E; --ds-night-2:#180A33; --ds-ink-cool:#EFE9FF;
+  /* shape */
+  --ds-r-sm:4px; --ds-r-pill:999px;
+  --ds-font-display:'Anton',system-ui,sans-serif;
+  --ds-font-serif:'Cormorant Garamond',Georgia,serif;
+  --ds-font-body:'Inter',system-ui,sans-serif;
+  --ds-font-mono:'Space Mono',ui-monospace,monospace;
+  --ds-ease:cubic-bezier(.5,0,.2,1); --ds-dur:.35s;
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{font-family:var(--ds-font-body);background:var(--ds-night);color:var(--ds-ink-cool);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{display:block;max-width:100%}
+a{text-decoration:none;color:inherit}
+
+/* ---- film grain (premium · reused verbatim from golden file) ---- */
+.grain{position:fixed;inset:0;z-index:60;pointer-events:none;opacity:.05;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* ===================== STAGE (above-the-fold) ===================== */
+.stage{position:relative;min-height:100vh;display:flex;flex-direction:column;background:var(--ds-night)}
+.scene{position:relative;flex:1;display:flex;align-items:center;min-height:0;overflow:hidden}
+
+/* ---- full-bleed cinematic background (universe.png) ---- */
+.bg{position:absolute;inset:0;background:url("assets/universe.png") center/cover no-repeat;
+  filter:saturate(1.12) contrast(1.04);transform:scale(1.04)}
+/* legibility scrim: violet glow (left) + magenta glow (bottom-right) + left-weighted dark gradient */
+.scrim{position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(58% 78% at 8% 46%, rgba(124,58,237,.46), transparent 60%),
+    radial-gradient(70% 90% at 92% 116%, rgba(225,82,216,.34), transparent 58%),
+    linear-gradient(90deg, rgba(8,4,14,.92) 0%, rgba(8,4,14,.74) 34%, rgba(8,4,14,.40) 62%, rgba(8,4,14,.66) 100%);}
+/* vignette — frame the cinema */
+.vignette{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(120% 92% at 50% 42%, transparent 52%, rgba(4,2,8,.72) 100%);
+  box-shadow:inset 0 0 160px 40px rgba(4,2,8,.7)}
+/* top + bottom rake so nav and peek band read crisply */
+.rake-top{position:absolute;left:0;right:0;top:0;height:200px;pointer-events:none;
+  background:linear-gradient(180deg, rgba(8,4,14,.86), transparent)}
+
+/* ===================== NAV (#12 ornate emblem + centered links) ===================== */
+.nav{position:absolute;top:0;left:0;right:0;z-index:20;display:grid;
+  grid-template-columns:1fr auto 1fr;align-items:center;gap:24px;
+  padding:24px clamp(28px,3.4vw,56px) 0}
+.brand{display:flex;align-items:center;gap:13px;justify-self:start}
+/* crest art ships on a WHITE field → screen-blend drops the white, keeping the purple emblem */
+.brand .crest{height:46px;width:auto;mix-blend-mode:screen;
+  filter:drop-shadow(0 0 14px rgba(124,58,237,.6)) drop-shadow(0 2px 4px rgba(0,0,0,.6))}
+.brand .word{display:flex;flex-direction:column;line-height:1;gap:4px}
+.brand .word .nm{font-family:var(--ds-font-display);font-size:22px;letter-spacing:.07em;
+  color:var(--ds-ink-cool);text-shadow:0 0 16px rgba(169,130,255,.45)}
+.brand .word .tg{font-family:var(--ds-font-mono);font-size:8px;letter-spacing:.34em;
+  text-transform:uppercase;color:var(--ds-violet-lite)}
+
+.nav-links{display:flex;align-items:center;justify-content:center;gap:30px;
+  font-size:13px;font-weight:600;letter-spacing:.02em}
+.nav-links a{position:relative;padding-bottom:4px;color:#D9CFF4;transition:color var(--ds-dur)}
+.nav-links a::after{content:"";position:absolute;left:0;bottom:0;height:1px;width:0;
+  background:var(--ds-magenta-lite);transition:width var(--ds-dur) var(--ds-ease)}
+.nav-links a:hover{color:#fff}
+.nav-links a:hover::after{width:100%}
+
+.nav-cta{justify-self:end}
+.enter{display:inline-flex;align-items:center;gap:8px;font-family:var(--ds-font-body);font-weight:700;
+  font-size:13.5px;letter-spacing:.04em;color:#fff;padding:11px 24px;border-radius:var(--ds-r-pill);
+  background:linear-gradient(110deg,var(--ds-violet),var(--ds-magenta));
+  border:1px solid rgba(247,123,232,.55);box-shadow:0 10px 30px rgba(124,58,237,.5);
+  transition:transform var(--ds-dur) var(--ds-ease),box-shadow var(--ds-dur) var(--ds-ease)}
+.enter:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(225,82,216,.6)}
+
+/* ===================== HERO CONTENT (left / center-left) ===================== */
+.wrap{position:relative;z-index:10;width:100%;
+  padding:0 clamp(36px,6vw,96px);display:flex;align-items:center}
+.col{max-width:36rem}
+
+.kick{font-family:var(--ds-font-mono);font-size:12px;letter-spacing:.30em;text-transform:uppercase;
+  display:flex;align-items:center;gap:10px;margin:0 0 30px;color:var(--ds-magenta-lite)}
+.kick::before{content:"";width:28px;height:1px;background:var(--ds-magenta-lite);display:inline-block}
+
+.headline{font-family:var(--ds-font-display);text-transform:uppercase;line-height:.9;margin:0;
+  font-size:clamp(56px,6.4vw,108px);letter-spacing:.004em;color:var(--ds-ink-cool);
+  text-shadow:0 4px 40px rgba(8,4,14,.7)}
+.headline .city{color:var(--ds-magenta-lite);
+  text-shadow:0 0 42px rgba(124,58,237,.7),0 0 18px rgba(225,82,216,.55)}
+
+.sub{font-size:17px;line-height:1.64;margin:30px 0 38px;max-width:38ch;color:#CFC3F0}
+.sub b{color:var(--ds-ink-cool);font-weight:600}
+
+.cta-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.cta{display:inline-flex;align-items:center;gap:10px;font-family:var(--ds-font-body);font-weight:600;
+  font-size:15px;padding:15px 28px;border-radius:var(--ds-r-sm);
+  transition:transform var(--ds-dur) var(--ds-ease),box-shadow var(--ds-dur) var(--ds-ease),background var(--ds-dur)}
+.cta:hover{transform:translateY(-2px)}
+.cta-primary{color:#fff;background:linear-gradient(120deg,var(--ds-violet),var(--ds-magenta));
+  border:1px solid rgba(247,123,232,.5);box-shadow:0 14px 36px rgba(124,58,237,.52)}
+.cta-primary:hover{box-shadow:0 18px 46px rgba(225,82,216,.6)}
+.cta-ghost{color:var(--ds-ink-cool);background:rgba(124,58,237,.08);
+  border:1px solid rgba(169,130,255,.5)}
+.cta-ghost:hover{background:rgba(124,58,237,.2)}
+
+.whisper{display:block;font-family:var(--ds-font-mono);font-size:11.5px;letter-spacing:.13em;
+  margin-top:30px;text-transform:uppercase;color:#9C84D8}
+.whisper .sep{color:var(--ds-magenta);margin:0 6px}
+
+/* ===================== ROSTER RAIL (cinematic universe teaser, lower-right) ===================== */
+.roster{position:absolute;z-index:8;right:clamp(36px,4.5vw,88px);bottom:70px;
+  display:flex;align-items:flex-end;pointer-events:none}
+.card{position:relative;border:1px solid rgba(169,130,255,.55);border-radius:6px;overflow:hidden;
+  background:#0c0618;box-shadow:0 18px 44px rgba(4,2,8,.7),0 0 26px rgba(124,58,237,.4);}
+.card img{width:100%;height:100%;object-fit:cover;filter:saturate(1.05) contrast(1.03)}
+.card::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,transparent 52%,rgba(8,4,14,.55));pointer-events:none}
+.card .tag{position:absolute;left:8px;bottom:7px;z-index:2;font-family:var(--ds-font-mono);
+  font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:#E7DCFF;text-shadow:0 1px 3px #000}
+.card-1{width:128px;height:172px;transform:rotate(-6deg);margin-right:-26px;z-index:1;opacity:.94}
+.card-2{width:150px;height:200px;transform:rotate(2.5deg);z-index:3;
+  border-color:rgba(247,123,232,.6);box-shadow:0 22px 52px rgba(4,2,8,.75),0 0 30px rgba(225,82,216,.45)}
+.card-3{width:132px;height:176px;transform:rotate(7deg);margin-left:-24px;z-index:2;opacity:.92}
+
+/* ===================== PEEK BAND (roster ticker — next band peeking) ===================== */
+.peek{position:relative;z-index:12;flex:0 0 auto;height:48px;display:flex;align-items:center;
+  background:#070310;border-top:1px solid rgba(225,82,216,.4);overflow:hidden}
+.marq{display:flex;gap:54px;white-space:nowrap;animation:slide 36s linear infinite;padding-left:54px}
+.marq span{font-family:var(--ds-font-mono);font-size:12px;letter-spacing:.22em;text-transform:uppercase;
+  color:#9C8FC0;display:inline-flex;gap:54px;align-items:center}
+.marq span b{color:var(--ds-violet-lite);font-weight:400}
+.marq span i.cs{color:var(--ds-magenta-lite);font-style:normal}
+.marq .dot{color:var(--ds-magenta)}
+@keyframes slide{to{transform:translateX(-50%)}}
+
+@media (prefers-reduced-motion:reduce){.marq{animation:none}}
+
+/* ===================== RESPONSIVE STACK (desktop is priority) ===================== */
+@media (max-width:900px){
+  .nav{grid-template-columns:auto 1fr;gap:14px;padding:16px 18px 0;
+    background:linear-gradient(180deg,rgba(8,4,14,.92),transparent)}
+  .nav-links{display:none}
+  .nav-cta{justify-self:end}
+  .bg{transform:scale(1.1)}
+  .scrim{background:
+    radial-gradient(70% 50% at 30% 30%, rgba(124,58,237,.4), transparent 60%),
+    linear-gradient(180deg, rgba(8,4,14,.72) 0%, rgba(8,4,14,.5) 50%, rgba(8,4,14,.82) 100%);}
+  .wrap{padding:0 22px}
+  .col{max-width:none}
+  .headline{font-size:clamp(46px,12vw,72px)}
+  .sub{font-size:15.5px}
+  .roster{display:none}
+}
+</style>
+</head>
+<body>
+<div class="grain"></div>
+
+<div class="stage">
+
+  <section class="scene">
+    <div class="bg"></div>
+    <div class="scrim"></div>
+    <div class="vignette"></div>
+    <div class="rake-top"></div>
+
+    <!-- HERO CONTENT -->
+    <div class="wrap">
+      <div class="col">
+        <p class="kick">Saddberries · The Night District · Welcome to Night City</p>
+        <h1 class="headline">Enter<br><span class="city">Night City.</span></h1>
+        <p class="sub">A world with a dark side and a light side — the characters, the after-hours, the emotional truth. <b>Feel everything. Fear nothing.</b></p>
+        <div class="cta-row">
+          <a class="cta cta-primary" href="#">Enter the Universe <span>→</span></a>
+          <a class="cta cta-ghost" href="#">Meet the characters</a>
+        </div>
+        <span class="whisper">Trust no one. Especially yourself.<span class="sep">·</span>3:33 AM</span>
+      </div>
+    </div>
+
+    <!-- ROSTER RAIL (cinematic universe teaser) -->
+    <div class="roster">
+      <figure class="card card-1"><img src="assets/joker.png" alt="Pimp Juice — horror crew"><figcaption class="tag">Pimp Juice</figcaption></figure>
+      <figure class="card card-2"><img src="assets/tattoo-man.png" alt="Tattoo Man character card"><figcaption class="tag">Tattoo Man</figcaption></figure>
+      <figure class="card card-3"><img src="assets/dc-poster.png" alt="Saddberries DC poster"><figcaption class="tag">No Regulation</figcaption></figure>
+    </div>
+
+    <!-- NAV over the cinema -->
+    <nav class="nav">
+      <a class="brand" href="#">
+        <img class="crest" src="assets/crest.png" alt="Saddberries crowned crest">
+        <span class="word"><span class="nm">SADDBERRIES</span><span class="tg">The Night District</span></span>
+      </a>
+      <div class="nav-links">
+        <a href="#">The Universe</a>
+        <a href="#">Characters</a>
+        <a href="#">Culture</a>
+        <a href="#">Events</a>
+        <a href="#">Store</a>
+      </div>
+      <div class="nav-cta"><a class="enter" href="#">Enter <span>→</span></a></div>
+    </nav>
+  </section>
+
+  <!-- PEEK BAND (roster ticker — coming soon, never a date) -->
+  <div class="peek">
+    <div class="marq">
+      <span>The&nbsp;Terrible&nbsp;Trio <i class="dot">●</i> Silky&nbsp;Jay <i class="dot">●</i> Doughboy <i class="dot">●</i> Sadboy <i class="dot">●</i> <b>Dr.&nbsp;Deno</b> <i class="dot">●</i> Tattoo&nbsp;Man <i class="dot">●</i> Chuck&nbsp;the&nbsp;Gentleman&nbsp;Ghost <i class="dot">●</i> Pimp&nbsp;Juice <i class="dot">●</i> The&nbsp;Saddberries&nbsp;Universe — <i class="cs">coming&nbsp;soon</i> <i class="dot">●</i></span>
+      <span>The&nbsp;Terrible&nbsp;Trio <i class="dot">●</i> Silky&nbsp;Jay <i class="dot">●</i> Doughboy <i class="dot">●</i> Sadboy <i class="dot">●</i> <b>Dr.&nbsp;Deno</b> <i class="dot">●</i> Tattoo&nbsp;Man <i class="dot">●</i> Chuck&nbsp;the&nbsp;Gentleman&nbsp;Ghost <i class="dot">●</i> Pimp&nbsp;Juice <i class="dot">●</i> The&nbsp;Saddberries&nbsp;Universe — <i class="cs">coming&nbsp;soon</i> <i class="dot">●</i></span>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

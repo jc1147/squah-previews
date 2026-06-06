@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Flyy Tyme × Saddberries — Hero Concept 04 · The Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   CONCEPT 04 · THE HUB / VOLTRON  (HERO #19 bento door-router + #11 centered
+   statement above the grid · NAV #1 floating pill, centered, dark-translucent)
+   One near-black field carrying BOTH gold AND violet — the unified hub.
+   Grid reads day → night, left → right. SGEN design-system tokens (--ds-*).
+   ============================================================ */
+:root{
+  /* Daylight District — Flyy Tyme (gold / warm black) */
+  --ds-gold:#C9A227; --ds-gold-lite:#EAC766; --ds-gold-deep:#8F6E14;
+  --ds-cream:#F4ECDB; --ds-cream-2:#E8DABA; --ds-ink-warm:#1C1606;
+  /* Night District — Saddberries (violet / magenta / near-black) */
+  --ds-violet:#7C3AED; --ds-violet-lite:#A982FF; --ds-magenta:#E152D8; --ds-magenta-lite:#F77BE8;
+  --ds-night:#08040E; --ds-night-2:#180A33; --ds-ink-cool:#EFE9FF;
+  /* shape */
+  --ds-r-sm:4px; --ds-r-md:14px; --ds-r-pill:999px;
+  --ds-font-display:'Anton',system-ui,sans-serif;
+  --ds-font-serif:'Cormorant Garamond',Georgia,serif;
+  --ds-font-body:'Inter',system-ui,sans-serif;
+  --ds-font-mono:'Space Mono',ui-monospace,monospace;
+  --ds-ease:cubic-bezier(.5,0,.2,1); --ds-dur:.4s;
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{font-family:var(--ds-font-body);background:var(--ds-night);color:var(--ds-ink-cool);
+  -webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{display:block;max-width:100%}
+a{text-decoration:none;color:inherit}
+
+/* ---- film grain (premium, from golden file) ---- */
+.grain{position:fixed;inset:0;z-index:80;pointer-events:none;opacity:.05;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* ===================== STAGE (above-the-fold) ===================== */
+.stage{position:relative;min-height:100vh;min-height:760px;display:flex;flex-direction:column;overflow:hidden}
+/* unified hub field: gold wash upper-left, violet/magenta lower-right, on near-black */
+.stage::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(70% 60% at 14% 6%, rgba(201,162,39,.20), transparent 58%),
+    radial-gradient(80% 70% at 92% 104%, rgba(124,58,237,.34), transparent 60%),
+    radial-gradient(60% 60% at 100% 0%, rgba(225,82,216,.16), transparent 60%),
+    linear-gradient(165deg, #0C0716 0%, var(--ds-night) 46%, #0B0620 100%);}
+/* faint motif-444 starfield, ghosted top-center as hub texture */
+.stage::after{content:"";position:absolute;top:-4%;left:50%;transform:translateX(-50%);
+  width:340px;height:54%;z-index:0;pointer-events:none;opacity:.10;
+  background:url("assets/motif-444.jpg") center top/contain no-repeat;
+  -webkit-mask-image:radial-gradient(60% 70% at 50% 30%,#000 0%,transparent 76%);
+          mask-image:radial-gradient(60% 70% at 50% 30%,#000 0%,transparent 76%);}
+
+.inner{position:relative;z-index:2;flex:1;display:flex;flex-direction:column;
+  padding:0 clamp(24px,4vw,72px);min-height:0}
+
+/* ===================== NAV — floating pill ===================== */
+.nav-wrap{position:relative;z-index:30;display:flex;justify-content:center;padding-top:24px}
+.pill{width:min(1100px,100%);display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:24px;
+  padding:11px 14px 11px 22px;border-radius:var(--ds-r-pill);
+  background:rgba(14,10,24,.72);backdrop-filter:blur(16px) saturate(1.2);-webkit-backdrop-filter:blur(16px) saturate(1.2);
+  position:relative;box-shadow:0 18px 50px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.04)}
+/* gold→violet hairline border */
+.pill::before{content:"";position:absolute;inset:0;border-radius:var(--ds-r-pill);padding:1px;pointer-events:none;
+  background:linear-gradient(90deg,var(--ds-gold-lite),var(--ds-gold) 28%,#6B4FC8 62%,var(--ds-violet-lite));
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+          mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;opacity:.9}
+.brand{display:inline-flex;align-items:baseline;gap:7px;line-height:1}
+.brand .bn{font-family:var(--ds-font-display);font-size:17px;letter-spacing:.05em;color:var(--ds-gold)}
+.brand .bx{color:var(--ds-violet-lite);font-size:13px;transform:translateY(-1px)}
+.nav-links{display:flex;justify-content:center;align-items:center;gap:30px;
+  font-size:13px;font-weight:500;letter-spacing:.01em;color:var(--ds-ink-cool)}
+.nav-links a{position:relative;padding-bottom:3px;opacity:.86;transition:opacity var(--ds-dur)}
+.nav-links a:hover{opacity:1}
+.nav-links a::after{content:"";position:absolute;left:0;bottom:0;height:1px;width:0;
+  background:linear-gradient(90deg,var(--ds-gold),var(--ds-violet-lite));transition:width var(--ds-dur) var(--ds-ease)}
+.nav-links a:hover::after{width:100%}
+.nav-cta{justify-self:end;display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--ds-font-body);font-weight:600;font-size:13px;color:#1C1606;
+  padding:10px 20px;border-radius:var(--ds-r-pill);
+  background:linear-gradient(180deg,var(--ds-gold-lite),var(--ds-gold));
+  box-shadow:0 10px 26px rgba(201,162,39,.34);transition:transform var(--ds-dur) var(--ds-ease),box-shadow var(--ds-dur)}
+.nav-cta:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(201,162,39,.5)}
+
+/* ===================== HERO STATEMENT (centered, above the grid) ===================== */
+.statement{position:relative;z-index:2;text-align:center;
+  padding:clamp(26px,3.6vh,46px) 0 clamp(18px,2.6vh,30px)}
+.kick{font-family:var(--ds-font-mono);font-size:12px;letter-spacing:.32em;text-transform:uppercase;
+  color:#B9A4E6;display:inline-flex;align-items:center;gap:12px;margin:0 0 18px}
+.kick::before,.kick::after{content:"";width:26px;height:1px;
+  background:linear-gradient(90deg,transparent,var(--ds-gold-lite),var(--ds-violet-lite),transparent)}
+.headline{font-family:var(--ds-font-serif);font-weight:600;line-height:.98;letter-spacing:-.012em;
+  font-size:clamp(44px,5.2vw,84px);margin:0 auto;max-width:18ch;color:var(--ds-ink-cool)}
+.headline .gild{color:var(--ds-gold-lite);font-style:italic;font-weight:600;
+  text-shadow:0 0 34px rgba(234,199,102,.4)}
+.headline .tint{color:var(--ds-violet-lite);
+  text-shadow:0 0 34px rgba(169,130,255,.5)}
+.sub{font-size:17px;line-height:1.58;color:#C8BDE6;max-width:62ch;margin:18px auto 0}
+.sub b{color:var(--ds-gold-lite);font-weight:600}
+.sub i{color:var(--ds-violet-lite);font-style:normal;font-weight:600}
+
+/* ===================== DOOR ROUTER (bento, 4 tall tiles) ===================== */
+.router{position:relative;z-index:2;flex:1;min-height:0;display:grid;
+  grid-template-columns:repeat(4,1fr);gap:clamp(12px,1.3vw,20px);
+  padding-bottom:clamp(20px,3vh,34px)}
+.mcarousel{display:none}   /* mobile-only auto-scroll door rail (see ≤540) */
+.door{position:relative;border-radius:var(--ds-r-md);overflow:hidden;display:flex;
+  min-height:0;align-items:flex-end;isolation:isolate;
+  background:#0B0714;border:1px solid rgba(255,255,255,.06);
+  box-shadow:0 16px 40px rgba(0,0,0,.5);
+  transition:transform var(--ds-dur) var(--ds-ease),box-shadow var(--ds-dur) var(--ds-ease),border-color var(--ds-dur)}
+.door .img{position:absolute;inset:0;z-index:0;background-position:center;background-size:cover;
+  transition:transform .6s var(--ds-ease),filter var(--ds-dur)}
+.door .scrim{position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(to top,rgba(6,3,12,.94) 4%,rgba(6,3,12,.62) 34%,rgba(6,3,12,.10) 64%,rgba(6,3,12,0) 100%)}
+.door:hover{transform:translateY(-7px);box-shadow:0 28px 56px rgba(0,0,0,.6)}
+.door:hover .img{transform:scale(1.05)}
+/* hairline glow accent at the foot of each door (district-graded) */
+.door .glow{position:absolute;left:0;right:0;bottom:0;height:3px;z-index:2}
+.door .body{position:relative;z-index:3;padding:clamp(16px,1.6vw,22px);width:100%}
+.door .eyebrow{font-family:var(--ds-font-mono);font-size:10px;letter-spacing:.28em;text-transform:uppercase;
+  margin:0 0 8px;display:flex;align-items:center;gap:8px}
+.door .title{font-family:var(--ds-font-display);font-size:clamp(19px,1.55vw,26px);line-height:1.02;
+  text-transform:uppercase;letter-spacing:.01em;color:#fff;margin:0;
+  display:flex;align-items:center;justify-content:space-between;gap:10px}
+.door .arrow{display:inline-grid;place-items:center;width:30px;height:30px;flex:0 0 auto;
+  border-radius:var(--ds-r-pill);font-size:14px;font-family:var(--ds-font-body);
+  border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.06);
+  transition:transform var(--ds-dur) var(--ds-ease),background var(--ds-dur),border-color var(--ds-dur)}
+.door:hover .arrow{transform:translateX(3px)}
+
+/* --- district grading: day (gold) left → night (violet/magenta) right --- */
+.door.d-day{border-color:rgba(201,162,39,.26)}
+.door.d-day .eyebrow{color:var(--ds-gold-lite)}
+.door.d-day .eyebrow::before{content:"";width:16px;height:1px;background:var(--ds-gold)}
+.door.d-day .glow{background:linear-gradient(90deg,transparent,var(--ds-gold),transparent);
+  box-shadow:0 0 18px 1px rgba(201,162,39,.6)}
+.door.d-day:hover{border-color:rgba(234,199,102,.6)}
+.door.d-day:hover .arrow{background:rgba(201,162,39,.22);border-color:var(--ds-gold-lite)}
+
+.door.d-store{border-color:rgba(201,162,39,.18)}
+.door.d-store .eyebrow{color:var(--ds-cream-2)}
+.door.d-store .eyebrow::before{content:"";width:16px;height:1px;background:var(--ds-cream-2)}
+.door.d-store .glow{background:linear-gradient(90deg,transparent,var(--ds-cream-2),var(--ds-violet-lite),transparent);
+  box-shadow:0 0 18px 1px rgba(232,218,186,.4)}
+.door.d-store:hover{border-color:rgba(232,218,186,.5)}
+.door.d-store:hover .arrow{background:rgba(232,218,186,.18);border-color:var(--ds-cream-2)}
+
+.door.d-night{border-color:rgba(124,58,237,.32)}
+.door.d-night .eyebrow{color:var(--ds-violet-lite)}
+.door.d-night .eyebrow::before{content:"";width:16px;height:1px;background:var(--ds-violet)}
+.door.d-night .glow{background:linear-gradient(90deg,transparent,var(--ds-violet-lite),transparent);
+  box-shadow:0 0 18px 1px rgba(124,58,237,.65)}
+.door.d-night:hover{border-color:rgba(169,130,255,.7)}
+.door.d-night:hover .arrow{background:rgba(124,58,237,.28);border-color:var(--ds-violet-lite)}
+
+.door.d-events{border-color:rgba(225,82,216,.3)}
+.door.d-events .eyebrow{color:var(--ds-magenta-lite)}
+.door.d-events .eyebrow::before{content:"";width:16px;height:1px;background:var(--ds-magenta)}
+.door.d-events .glow{background:linear-gradient(90deg,transparent,var(--ds-magenta),transparent);
+  box-shadow:0 0 18px 1px rgba(225,82,216,.6)}
+.door.d-events:hover{border-color:rgba(247,123,232,.7)}
+.door.d-events:hover .arrow{background:rgba(225,82,216,.26);border-color:var(--ds-magenta-lite)}
+
+/* per-door imagery */
+.door.d-day   .img{background-image:url("assets/flyy-couple.png");background-position:center 18%}
+.door.d-night .img{background-image:url("assets/universe.png")}
+.door.d-store .img{background-image:url("assets/hoodie.png")}
+.door.d-events .img{background-image:url("assets/dc-poster.png");background-position:center top}
+
+/* ===================== PEEK MARQUEE (thin next band) ===================== */
+.peek{position:relative;z-index:10;flex:0 0 auto;height:46px;display:flex;align-items:center;overflow:hidden;
+  background:#060309;border-top:1px solid rgba(201,162,39,.20)}
+.peek::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(90deg,#060309 0%,transparent 6%,transparent 94%,#060309 100%)}
+.marq{display:flex;white-space:nowrap;animation:slide 32s linear infinite;will-change:transform}
+.marq span{font-family:var(--ds-font-mono);font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;
+  color:#9C8FC0;display:inline-flex;align-items:center;gap:26px;padding-right:26px}
+.marq b{color:var(--ds-gold-lite);font-weight:400}
+.marq i{color:var(--ds-violet-lite);font-style:normal}
+.marq .dot{color:var(--ds-magenta)}
+@keyframes slide{to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){.marq{animation:none}}
+
+/* ===================== RESPONSIVE (desktop-first; graceful stack) ===================== */
+@media (max-width:900px){
+  .stage{min-height:0}
+  .pill{grid-template-columns:auto auto;gap:14px}
+  .nav-links{display:none}
+  .statement{padding:24px 0 16px}
+  .headline{font-size:clamp(34px,8vw,54px);max-width:none}
+  .sub{font-size:15px}
+  .router{grid-template-columns:repeat(2,1fr);grid-auto-rows:minmax(240px,40vw)}
+  .stage::after{display:none}
+}
+/* phones: BIG spaced title up top + a single-card auto-scrolling door carousel pinned to the bottom */
+@media (max-width:540px){
+  .stage{min-height:100vh}              /* fill the viewport so the carousel pins to the bottom of the fold */
+  .inner{padding:0 16px}
+  .pill{padding:9px 10px 9px 16px}
+  .brand .bn{font-size:15px}
+  .nav-cta{padding:9px 15px;font-size:12px}
+  /* big, spaced-out statement */
+  .statement{padding:30px 0 24px}
+  .kick{font-size:10px;letter-spacing:.24em;gap:8px;margin-bottom:20px}
+  .kick::before,.kick::after{width:16px}
+  .headline{font-size:clamp(44px,13.5vw,64px);line-height:1.08;letter-spacing:.004em;max-width:12ch}
+  .sub{font-size:13.5px;line-height:1.5;margin-top:18px;max-width:34ch}
+  /* swap the desktop grid for the auto-scrolling carousel, pinned to the bottom of the fold */
+  .router{display:none}
+  .mcarousel{display:block;margin-top:auto;overflow:hidden;padding-bottom:14px;
+    -webkit-mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent);
+            mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent)}
+  .mtrack{display:flex;width:max-content;animation:carousel 36s linear infinite}
+  .mtrack .door{flex:0 0 auto;width:80vw;aspect-ratio:16/11;margin-right:14px}
+  .door .body{padding:16px}
+  .door .eyebrow{font-size:9.5px;letter-spacing:.2em;margin-bottom:7px}
+  .door .title{font-size:20px}
+  .door .arrow{width:28px;height:28px;font-size:13px}
+  .peek{height:42px}
+  .marq span{font-size:10.5px;letter-spacing:.18em}
+}
+@keyframes carousel{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){.mtrack{animation:none}}
+</style>
+</head>
+<body>
+<div class="grain"></div>
+
+<div class="stage">
+  <div class="inner">
+
+    <!-- FLOATING PILL NAV -->
+    <div class="nav-wrap">
+      <nav class="pill">
+        <a class="brand" href="#"><span class="bn">FLYY TYME</span><span class="bx">&#10022;</span></a>
+        <div class="nav-links">
+          <a href="#">The Universe</a>
+          <a href="#">Store</a>
+          <a href="#">Culture</a>
+          <a href="#">Events</a>
+        </div>
+        <a class="nav-cta" href="#">Join the List <span>&#8594;</span></a>
+      </nav>
+    </div>
+
+    <!-- HERO STATEMENT -->
+    <div class="statement">
+      <p class="kick">One Hub &middot; Las&nbsp;Vegas / Oklahoma &middot; Featured in High&nbsp;Times</p>
+      <h1 class="headline">One <span class="gild">world.</span> Every <span class="tint">door.</span></h1>
+      <p class="sub">Flyy Tyme by <b>day</b>, Saddberries by <i>night</i>. The store, the culture, the events, the characters &mdash; one home everything is driven to.</p>
+    </div>
+
+    <!-- DOOR ROUTER (bento) -->
+    <div class="router">
+
+      <a class="door d-day" href="#">
+        <div class="img"></div><div class="scrim"></div><div class="glow"></div>
+        <div class="body">
+          <p class="eyebrow">Flyy Tyme &middot; Arrive</p>
+          <h2 class="title">The Daylight<br>District <span class="arrow">&#8594;</span></h2>
+        </div>
+      </a>
+
+      <a class="door d-night" href="#">
+        <div class="img"></div><div class="scrim"></div><div class="glow"></div>
+        <div class="body">
+          <p class="eyebrow">Saddberries &middot; Enter</p>
+          <h2 class="title">The Night<br>District <span class="arrow">&#8594;</span></h2>
+        </div>
+      </a>
+
+      <a class="door d-store" href="#">
+        <div class="img"></div><div class="scrim"></div><div class="glow"></div>
+        <div class="body">
+          <p class="eyebrow">Merch &amp; Pre-Order</p>
+          <h2 class="title">The Store <span class="arrow">&#8594;</span></h2>
+        </div>
+      </a>
+
+      <a class="door d-events" href="#">
+        <div class="img"></div><div class="scrim"></div><div class="glow"></div>
+        <div class="body">
+          <p class="eyebrow">Every 20th &middot; June&nbsp;14</p>
+          <h2 class="title">Events <span class="arrow">&#8594;</span></h2>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- MOBILE CAROUSEL (≤540px): auto-scrolling single-card door rail, pinned to the bottom of the fold -->
+    <div class="mcarousel">
+      <div class="mtrack">
+        <a class="door d-day" href="#"><div class="img"></div><div class="scrim"></div><div class="glow"></div><div class="body"><p class="eyebrow">Flyy Tyme &middot; Arrive</p><h2 class="title">The Daylight District <span class="arrow">&#8594;</span></h2></div></a>
+        <a class="door d-night" href="#"><div class="img"></div><div class="scrim"></div><div class="glow"></div><div class="body"><p class="eyebrow">Saddberries &middot; Enter</p><h2 class="title">The Night District <span class="arrow">&#8594;</span></h2></div></a>
+        <a class="door d-store" href="#"><div class="img"></div><div class="scrim"></div><div class="glow"></div><div class="body"><p class="eyebrow">Merch &amp; Pre-Order</p><h2 class="title">The Store <span class="arrow">&#8594;</span></h2></div></a>
+        <a class="door d-events" href="#"><div class="img"></div><div class="scrim"></div><div class="glow"></div><div class="body"><p class="eyebrow">Every 20th &middot; June&nbsp;14</p><h2 class="title">Events <span class="arrow">&#8594;</span></h2></div></a>
+        <a class="door d-day" href="#" aria-hidden="true" tabindex="-1"><div class="img"></div><div class="scrim"></div><div class="glow"></div><div class="body"><p class="eyebrow">Flyy Tyme &middot; Arrive</p><h2 class="title">The Daylight District <span class="arrow">&#8594;</span></h2></div></a>
+        <a class="door d-night" href="#" aria-hidden="true" tabindex="-1"><div class="img"></div><div class="scrim"></div><div class="glow"></div><div class="body"><p class="eyebrow">Saddberries &middot; Enter</p><h2 class="title">The Night District <span class="arrow">&#8594;</span></h2></div></a>
+        <a class="door d-store" href="#" aria-hidden="true" tabindex="-1"><div class="img"></div><div class="scrim"></div><div class="glow"></div><div class="body"><p class="eyebrow">Merch &amp; Pre-Order</p><h2 class="title">The Store <span class="arrow">&#8594;</span></h2></div></a>
+        <a class="door d-events" href="#" aria-hidden="true" tabindex="-1"><div class="img"></div><div class="scrim"></div><div class="glow"></div><div class="body"><p class="eyebrow">Every 20th &middot; June&nbsp;14</p><h2 class="title">Events <span class="arrow">&#8594;</span></h2></div></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- PEEK BAND (thin marquee, next band peeking) -->
+  <div class="peek">
+    <div class="marq">
+      <span>Unite the Universe <i class="dot">&#9670;</i> One Login, Every Door <i class="dot">&#9670;</i> <b>Flyy&nbsp;Tyme</b> &times; <i>Saddberries</i> <i class="dot">&#9670;</i> Night&nbsp;City <i class="dot">&#9670;</i> 4:44 &mdash; The&nbsp;Flyy&nbsp;Hour <i class="dot">&#9670;</i>&nbsp;</span>
+      <span>Unite the Universe <i class="dot">&#9670;</i> One Login, Every Door <i class="dot">&#9670;</i> <b>Flyy&nbsp;Tyme</b> &times; <i>Saddberries</i> <i class="dot">&#9670;</i> Night&nbsp;City <i class="dot">&#9670;</i> 4:44 &mdash; The&nbsp;Flyy&nbsp;Hour <i class="dot">&#9670;</i>&nbsp;</span>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
