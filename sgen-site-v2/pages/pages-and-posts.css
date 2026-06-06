@@ -120,11 +120,13 @@
 .pmodal .opt.pick .oi { background: rgba(255,255,255,.22); }
 .pmodal .opt .on { font-weight: 800; font-size: 13px; color: var(--sg-ink); }
 .pmodal .opt .od { font-size: 11px; color: var(--sg-ink-faint); margin-top: 4px; line-height: 1.4; }
-.pmodal .opt.pick .on, .pmodal .opt.pick .od { color: #fff; }
-.pmodal .opt.pick .od { opacity: .92; }
+.pmodal .opt.pick .on { color: #fff; }
+.pmodal .opt.pick .od { color: rgba(255,255,255,.85); }
 
 /* note callout for the WYSIWYG track */
-.wcall { display: flex; align-items: center; gap: 12px; margin-top: 18px; max-width: 78ch; border: 1px solid var(--sg-red-tint-22); border-radius: 11px; padding: 13px 16px; background: var(--sg-red-soft); }
+.wcall { display: flex; align-items: center; gap: 12px; margin-top: 18px; max-width: 78ch; border: 1px solid var(--sg-red-tint-22); border-radius: 11px; padding: 13px 16px; background: var(--sg-red-soft);
+ /* pale-pink card is a LIGHT surface even inside .surface-dark, re-assert light-canvas ink so copy stays dark (was near-white-on-pink, cr 1.06) */
+ --sg-ink: #1A1A1A; --sg-ink-soft: #5b5853; }
 .wcall .lab2 { font-family: var(--sg-mono); font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: var(--sg-red-deep); padding: 4px 9px; border-radius: 6px; background: #fff; white-space: nowrap; }
 .wcall p { font-size: 13px; color: var(--sg-ink-soft); margin: 0; }
 
@@ -153,6 +155,31 @@
 .parch .perm .opt .rd { width: 13px; height: 13px; border-radius: 50%; border: 1px solid var(--sg-line); flex: none; }
 .parch .perm .opt.on .rd { border-color: var(--sg-red); background: radial-gradient(circle 3px at center, #fff 60%, transparent 62%), var(--sg-red); }
 .parch .perm .opt code { font-family: var(--sg-mono); font-size: 10px; color: var(--sg-ink-faint); }
+
+/* ===== DISCUSSIONS: composer card (.pdisc) + public comment surface (.pubd) === */
+.pdisc { padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 9px; }
+.pdisc .dchk { display: flex; align-items: flex-start; gap: 11px; border: 1px solid var(--sg-line); border-radius: 10px; padding: 11px 13px; background: #fff; }
+.pdisc .dchk .dbox { width: 16px; height: 16px; border-radius: 5px; border: 1px solid var(--sg-line); background: var(--sg-bg-2); flex: none; margin-top: 1px; }
+.pdisc .dchk.on { border-color: transparent; background: var(--sg-red-soft); }
+.pdisc .dchk.on .dbox { border: 0; background: var(--sg-grad-red); position: relative; }
+.pdisc .dchk.on .dbox::after { content: ""; position: absolute; left: 5px; top: 1px; width: 5px; height: 9px; border: solid #fff; border-width: 0 2px 2px 0; transform: rotate(42deg); }
+.pdisc .dchk .dt { font-weight: 700; font-size: 12.5px; color: var(--sg-ink); }
+.pdisc .dchk .dh { font-size: 10.5px; color: var(--sg-ink-faint); margin-top: 3px; line-height: 1.4; }
+
+.pubd { padding: 16px; }
+.pubd .dhead { font-weight: 800; font-size: 14px; color: var(--sg-ink); display: flex; align-items: center; gap: 9px; padding-bottom: 12px; border-bottom: 1px solid var(--sg-line-2); }
+.pubd .dhead .dct { font-family: var(--sg-mono); font-size: 10px; padding: 2px 8px; border-radius: 999px; background: var(--sg-red-soft); color: var(--sg-red-deep); }
+.pubd .cmt { display: flex; gap: 11px; padding: 13px 0; border-bottom: 1px solid var(--sg-line-2); }
+.pubd .cmt .cav { width: 30px; height: 30px; border-radius: 50%; background: var(--sg-grad-red); box-shadow: var(--sg-shadow-red); flex: none; }
+.pubd .cmt .cwho { font-weight: 700; font-size: 12.5px; color: var(--sg-ink); }
+.pubd .cmt .ctx { font-size: 12px; color: var(--sg-ink-soft); margin-top: 3px; line-height: 1.45; }
+.pubd .cmt .cre { font-family: var(--sg-mono); font-size: 10px; color: var(--sg-red-deep); font-weight: 700; margin-top: 6px; }
+.pubd .cform { margin-top: 14px; border: 1px solid var(--sg-line); border-radius: 11px; padding: 14px; background: var(--sg-bg-2); }
+.pubd .cform .cft { font-weight: 800; font-size: 12.5px; color: var(--sg-ink); margin-bottom: 11px; }
+.pubd .cform .cfrow { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+.pubd .cform .cfi { border: 1px solid var(--sg-line); border-radius: 9px; padding: 9px 11px; font-size: 11.5px; color: var(--sg-ink-faint); background: #fff; }
+.pubd .cform .cfi.tall { padding: 16px 11px 26px; }
+.pubd .cform .cfsub { margin-top: 11px; font-family: var(--sg-font); font-size: 12px; font-weight: 800; color: #fff; padding: 10px; border-radius: 9px; background: var(--sg-grad-red); box-shadow: var(--sg-shadow-red); text-align: center; }
 
 /* ===== PAGE HISTORY restore surface ===== */
 .phist { padding: 16px; }

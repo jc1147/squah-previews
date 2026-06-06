@@ -9,10 +9,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../_design/sgen-tokens.css?v=ec73c2e3">
-<link rel="stylesheet" href="../_design/sgen-structural.css?v=a102bd3a">
-<link rel="stylesheet" href="../_design/sgen-chrome.css?v=5245d0e3">
-<link rel="stylesheet" href="security.css?v=28dc84f0">
+<link rel="stylesheet" href="../_design/sgen-tokens.css?v=0e2cf486">
+<link rel="stylesheet" href="../_design/sgen-structural.css?v=7ce6a554">
+<link rel="stylesheet" href="../_design/sgen-chrome.css?v=a9511fae">
+<link rel="stylesheet" href="security.css?v=0e34a68e">
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -71,7 +71,7 @@
  </div>
  </div>
  <a class="mm-feat" href="page-builder.html"><span class="badge">Flagship</span><span class="k">SG Builder</span><span class="ttl">Build it visually. Ship it server-rendered.</span><span class="sub">A true visual builder with 48 native components and a real product underneath.</span><span class="go">Explore the builder →</span></a>
- <div class="mm-index"><a href="overview-modules.html"><b>All 23 modules</b> The whole platform, in the box</a><a href="overview-core.html"><b>SG-Core</b> The native content engine</a><a href="overview-dashboard.html"><b>SG-Dashboard</b> The operating layer, one hub</a></div>
+ <div class="mm-index"><a href="overview-modules.html"><b>All 23 modules</b> The whole platform, in the box</a><a href="overview-core.html"><b>Content engine</b> Pages, posts, media, and theme</a><a href="overview-dashboard.html"><b>Dashboard</b> The operating layer, one hub</a></div>
  </div></div>
  </div>
  <div class="nav-item">
@@ -215,7 +215,7 @@
  <div class="card reveal" data-d="1"><div class="ico"><span class="m"></span></div><h3 class="h3">GDPR consent log</h3><p style="margin-top:10px">The native Consent and Tracking module keeps a per-session consent log you can review entry by entry, so you can show, session by session, what each visitor consented to. No separate consent plugin to add.</p></div>
  <div class="card reveal" data-d="2"><div class="ico"><span class="m"></span></div><h3 class="h3">Patched infrastructure</h3><p style="margin-top:10px">Security patching runs at the platform level on monitored, hardened infrastructure, so the hardening is not a plugin you install on a platform that was never hardened to begin with.</p></div>
  </div>
- <p class="label" style="margin-top:24px">Compliance-grade posture: this is audit-ready logging and a consent trail, not a HIPAA or SOC 2 certification. SOC 2 and ISO are in progress; no badges, no "certified" claim.</p>
+ <p class="label" style="margin-top:24px">Compliance-grade posture: this is audit-ready logging and a consent trail. SGEN is HIPAA compliant for healthcare. SOC 2 and ISO are in progress, posture not certification; no badges, no "certified" claim.</p>
  </div>
 </section>
 
@@ -246,7 +246,7 @@
  <div class="readw reveal">
  <div class="eyebrow">A rules manager, not a text box</div>
  <h2 class="h2">Every rule carries a reason, an author, a hit count, <span class="grad">and a last-matched time.</span></h2>
- <p class="lead" style="margin-top:16px">SGEN renders the blacklist as a searchable, paginated, bulk-deletable rules table, not a single field. The Hits counter increments on every blocked public request and Last Matched stamps the time, so you see which rules actually fire and can prune the ones that never do. The Reason and Author columns make it a documented, attributable blocklist, every entry says why it exists and who added it, instead of an anonymous deny-list. Edits and deletes take effect on the visitor's very next public request, with no caching lag.</p>
+ <p class="lead" style="margin-top:16px">SGEN renders the blacklist as a searchable, paginated, bulk-deletable rules table, not a single field. The Hits counter increments on every blocked public request and Last Matched stamps the time, so you see which rules actually fire and can prune the ones that never do. The Reason and Author columns make it a documented, attributable blocklist, every entry says why it exists and who added it, instead of an anonymous deny-list. And there is <strong>no caching lag</strong>: add, edit, or delete a rule and it takes effect on the visitor's very next public request, so a block you set is live the moment you save it.</p>
  </div>
  <div class="adwin light reveal" data-d="1" style="margin-top:40px">
  <div class="adbar"><span class="ic"></span><span class="ti">Blacklist rules<small>20 per page</small></span><span class="act ghost">Search entries...</span></div>
@@ -322,7 +322,7 @@
  <div class="faq-list" style="margin-top:30px">
  <details class="reveal" open><summary>Does SGEN comply with GDPR? <span class="pm">+</span></summary><div class="ans">SGEN ships the GDPR tools, a cookie-consent banner and a per-session consent log you can audit entry by entry, through the native Consent and Tracking module. Configuring your site to meet GDPR is still your responsibility; the consent trail is built in, with no consent plugin to add.</div></details>
  <details class="reveal"><summary>What does the IP blacklist actually block, and what does it not do? <span class="pm">+</span></summary><div class="ans">The blacklist blocks by source IP only: single IPs, CIDR ranges, and IPv4 wildcards, IPv4 and IPv6. It is a response tool: it blocks addresses you have already identified and redirects those visitors away. It does not detect threats or rate-limit on its own, and it does not block by domain, user-agent, referrer, country, or keyword, and it is not an allow-list. Pair it with the Foundation Pack WAF for automated filtering and use the blacklist for the specific bad actors you have identified.</div></details>
- <details class="reveal"><summary>What about HIPAA? <span class="pm">+</span></summary><div class="ans">Compliance (HIPAA) is coming soon, there is no price yet, and we do not claim HIPAA compliance or sign a BAA today. If you have specific regulatory requirements, talk to sales.</div></details>
+ <details class="reveal"><summary>What about HIPAA? <span class="pm">+</span></summary><div class="ans">SGEN is HIPAA compliant for healthcare; it runs on a single secure database with data protection and does not host patients' records or PHI, so the protected data stays under the clinic's control while the public site runs on a firewalled, centrally-patched platform.</div></details>
  <details class="reveal"><summary>What security plugins does SGEN replace? <span class="pm">+</span></summary><div class="ans">The big three: Wordfence, iThemes Security (Solid Security), and Sucuri. SGEN replaces them at the platform level with a free Foundation Pack WAF, platform security patching, IP blacklisting, and site protection, so there is no security plugin to install, license, or keep updated.</div></details>
  <details class="reveal"><summary>Are SGEN's SOC 2 and ISO certifications complete? <span class="pm">+</span></summary><div class="ans">SOC 2 and ISO are in progress. We do not display certification badges or claim "certified" status until they are. The Trust Center lists the current status.</div></details>
  <details class="reveal"><summary>Which plan includes the security controls? <span class="pm">+</span></summary><div class="ans">Every plan. The Foundation Pack WAF and security patching are free on every plan, including the $0 Sandbox. The deeper platform security controls, including the IP blacklist with its Test-IP tool and per-rule analytics, are part of the whole platform, included on every paid plan, from $39/mo (billed annually; $47 monthly). Plans differ only by how many live sites you run.</div></details>
@@ -360,16 +360,16 @@
  </div>
  <div class="ft-grid">
  <div class="ft-brand"><div class="b">SGEN<span class="dot">.</span></div><p>One all-inclusive platform. Build the whole site, no plugins underneath, priced by how many sites you run.</p><span class="ft-status"><span class="d"></span> All systems operational</span></div>
- <div class="ft-col"><div class="ft-head">Build &amp; Design</div><a href="page-builder.html">SG Builder</a><a href="templates.html">Templates</a><a href="theme-editor.html">Theme Editor</a><a href="media-library.html">Media Library</a><a href="pages-and-posts.html">Pages &amp; Posts</a><a href="custom-objects.html">Custom Objects</a><a href="overview-modules.html">All 23 modules</a><a href="overview-core.html">SG-Core</a></div>
+ <div class="ft-col"><div class="ft-head">Build &amp; Design</div><a href="page-builder.html">SG Builder</a><a href="templates.html">Templates</a><a href="theme-editor.html">Theme Editor</a><a href="media-library.html">Media Library</a><a href="pages-and-posts.html">Pages &amp; Posts</a><a href="custom-objects.html">Custom Objects</a><a href="custom-fields.html">Custom Fields</a><a href="overview-modules.html">All 23 modules</a><a href="overview-core.html">Content engine</a></div>
  <div class="ft-col"><div class="ft-head">Sell</div><a href="ecommerce.html">Ecommerce</a><a href="discussions.html">Discussions &amp; Reviews</a></div>
  <div class="ft-col"><div class="ft-head">Grow &amp; Convert</div><a href="forms.html">Forms</a><a href="attributions.html">Attribution</a><a href="seo-optimization.html">SEO</a><a href="analytics.html">Analytics</a><a href="popups.html">Popups</a><a href="integrations.html">Integrations</a></div>
- <div class="ft-col"><div class="ft-head">Operate &amp; Secure</div><a href="site-manager.html">Site Manager</a><a href="overview-dashboard.html">SG-Dashboard</a><a href="backups.html">Backups</a><a href="redirects.html">Redirects</a><a href="security.html">Security</a><a href="trust.html">Trust</a></div>
+ <div class="ft-col"><div class="ft-head">Operate &amp; Secure</div><a href="site-manager.html">Site Manager</a><a href="overview-dashboard.html">Dashboard</a><a href="backups.html">Backups</a><a href="redirects.html">Redirects</a><a href="security.html">Security</a><a href="trust.html">Trust</a></div>
  <div class="ft-col"><div class="ft-head">Why SGEN</div><a href="why-sgen.html">Why SGEN</a><a href="why-sgen-no-plugins.html">No plugins</a><a href="why-sgen-speed.html">Speed</a><a href="compare.html">Compare all</a><a href="migrate.html">Migrate</a></div>
  <div class="ft-col"><div class="ft-head">Solutions</div><a href="solutions-agencies.html">Agencies</a><a href="solutions-small-business.html">Small business</a><a href="solutions-restaurants.html">Restaurants</a><a href="solutions-multi-location.html">Multi-location</a><a href="solutions-healthcare.html">Healthcare</a><a href="solutions-freelancers.html">Freelancers</a><a href="enterprise.html">Enterprise</a></div>
  <div class="ft-col"><div class="ft-head">Customers</div><a href="customers.html">Customer stories</a><a href="showcase.html">Showcase</a><a href="customers-fernwood.html">Fernwood Digital</a><a href="customers-halloran-vint.html">Halloran &amp; Vint</a></div>
  <div class="ft-col"><div class="ft-head">Resources</div><a href="resources.html">All resources</a><a href="blog.html">Blog</a><a href="guides.html">Guides</a><a href="changelog.html">Changelog</a><a href="roadmap.html">Roadmap</a><a href="status.html">Status</a></div>
- <div class="ft-col"><div class="ft-head">Company</div><a href="about.html">About</a><a href="partners.html">Partners</a><a href="partners-apply.html">Become a partner</a><a href="partners-directory.html">Partner directory</a><a href="contact.html">Contact</a></div>
- <div class="ft-col"><div class="ft-head">Developers</div><a href="developers.html">Docs</a><a href="developers.html">API</a><a href="integrations.html">Integrations</a></div>
+ <div class="ft-col"><div class="ft-head">Company</div><a href="about.html">About</a><a href="contact.html">Contact</a><a href="trust.html">Trust</a><a href="status.html">Status</a></div>
+ <div class="ft-col"><div class="ft-head">Developers</div><a href="developers.html">Docs &amp; API</a><a href="custom-fields.html">Custom Fields</a><a href="custom-css.html">Custom CSS</a><a href="custom-codes.html">Custom Codes</a><a href="integrations.html">Integrations</a></div>
  </div>
  <div class="ft-watermark">SGEN</div>
  <div class="ft-bottom"><span>© 2026 SGEN. The managed website platform.</span><div class="links"><a href="legal-privacy.html">Privacy</a><a href="legal-terms.html">Terms</a><a href="legal-dpa.html">DPA</a><a href="legal-cookie-policy.html">Cookies</a><a href="accessibility.html">Accessibility</a></div></div>
@@ -415,8 +415,8 @@
  <a href="accessibility.html"><span class="ct">Accessibility</span><span class="cs">Conformance status</span></a>
  <div class="dr-subhead">The platform</div>
  <a href="overview-modules.html"><span class="ct">All 23 modules →</span><span class="cs">The whole platform</span></a>
- <a href="overview-core.html"><span class="ct">SG-Core</span><span class="cs">The native content engine</span></a>
- <a href="overview-dashboard.html"><span class="ct">SG-Dashboard</span><span class="cs">The operating layer</span></a>
+ <a href="overview-core.html"><span class="ct">Content engine</span><span class="cs">Pages, posts, media, theme</span></a>
+ <a href="overview-dashboard.html"><span class="ct">Dashboard</span><span class="cs">The operating layer</span></a>
  </div></details>
  <details class="dr-group"><summary>Why SGEN <span class="pm" aria-hidden="true">+</span></summary><div class="dr-children">
  <a href="why-sgen.html"><span class="ct">Why SGEN, in full</span><span class="cs">The whole case, one page</span></a>
@@ -458,8 +458,7 @@
  </div></details>
  <details class="dr-group"><summary>Company <span class="pm" aria-hidden="true">+</span></summary><div class="dr-children">
  <a href="about.html"><span class="ct">About</span><span class="cs">Who we are</span></a>
- <a href="partners.html"><span class="ct">Partners</span><span class="cs">The partner program</span></a>
- <a href="partners-apply.html"><span class="ct">Become a partner</span><span class="cs">Apply to partner</span></a>
+ <a href="trust.html"><span class="ct">Trust</span><span class="cs">Security &amp; uptime</span></a>
  <a href="contact.html"><span class="ct">Contact</span><span class="cs">Talk to us</span></a>
  </div></details>
  <a class="dr-flat" href="pricing.html">Pricing</a>

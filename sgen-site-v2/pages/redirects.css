@@ -3,10 +3,10 @@
  Crafted-CSS replicas of the real SGEN Redirects admin (light canvas, red
  accent), grounded in _depth-library/redirects.FINAL.md + the buildspec.
  No stock, no screenshots. Surfaces:
-   . the populated 10-column All Redirects table + toolbar (HERO)
-   . the Test URL simulator with the alert-success banner
-   . the 301-vs-302 type-explainer badge cards + worked example tile
-   . the Add New rule editor diorama (Target / Destination / Type / Priority)
+ . the populated 10-column All Redirects table + toolbar (HERO)
+ . the Test URL simulator with the alert-success banner
+ . the 301-vs-302 type-explainer badge cards + worked example tile
+ . the Add New rule editor diorama (Target / Destination / Type / Priority)
  All var(--sg-*). Admin-shell atoms (.adwin family) re-declared here so the
  page is self-contained; modeled on forms' .adwin.
  ============================================================================ */
@@ -35,6 +35,17 @@
 .adbar .act.ghost { background: #fff; color: var(--sg-ink-soft); border: 1px solid var(--sg-line); box-shadow: none; }
 .adbar .act + .act { margin-left: 8px; }
 
+/* ===== import/export format cards (.dcard family, ported from forms' .adwin atoms; were unstyled, "JSON" label read dark-on-dark cr 1.12) ===== */
+.fint { padding: 16px; }
+.dcard { display: flex; align-items: center; gap: 13px; padding: 13px 15px; border: 1px solid var(--sg-line); border-radius: 11px; margin-bottom: 9px; }
+.dcard:last-child { margin-bottom: 0; }
+.dcard .pic { width: 40px; height: 40px; border-radius: 9px; display: grid; place-items: center; font-family: var(--sg-mono); font-weight: 800; font-size: 12px; color: #fff; flex: none; letter-spacing: .02em; }
+.dcard .di { flex: 1; min-width: 0; }
+.dcard .di .dn { font-weight: 700; font-size: 13px; color: var(--sg-ink); }
+.dcard .di .dm { display: block; font-family: var(--sg-mono); font-size: 10px; color: var(--sg-ink-faint); margin-top: 2px; }
+.dcard .pill { flex: none; font-family: var(--sg-mono); font-size: 9px; padding: 3px 8px; border-radius: 5px; }
+.dcard .pill.on { background: #e7f7ee; color: #1c7a45; }
+
 /* page strapline under the bar */
 .adstrap { padding: 12px 16px 0; }
 .adstrap .stitle { font-weight: 800; font-size: 15px; color: var(--sg-ink); letter-spacing: -.01em; }
@@ -55,8 +66,7 @@
 
 /* ===== ALL REDIRECTS table - 10 columns ===== */
 .rtab { width: 100%; }
-.rtab .th,
-.rtab .tr { display: grid; grid-template-columns: 28px .5fr .6fr 1.7fr 1.9fr .5fr .8fr .6fr .5fr .8fr; gap: 10px; align-items: center; padding: 11px 16px; }
+.rtab .th, .rtab .tr { display: grid; grid-template-columns: 28px .5fr .6fr 1.7fr 1.9fr .5fr .8fr .6fr .5fr .8fr; gap: 10px; align-items: center; padding: 11px 16px; }
 .rtab .th { font-family: var(--sg-mono); font-size: 8.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--sg-ink-faint); border-bottom: 1px solid var(--sg-line); }
 .rtab .tr { border-bottom: 1px solid var(--sg-line-2); font-size: 12px; }
 .rtab .tr:last-child { border-bottom: 0; }
@@ -92,6 +102,55 @@
 .simnote .nrow .tag { font-family: var(--sg-mono); font-size: 9px; padding: 3px 8px; border-radius: 5px; flex: none; }
 .simnote .nrow .tag.info { background: #e7f0fb; color: #2b5fa8; }
 .simnote .nrow .tag.danger { background: #fbeaea; color: #b3261e; }
+
+/* ===== PER-RULE AUDIT table (Hits + Last Matched doing real work) ===== */
+.raud { width: 100%; }
+.raud .th, .raud .tr { display: grid; grid-template-columns: .5fr 1.5fr 1.5fr .7fr .9fr .7fr; gap: 12px; align-items: center; padding: 12px 18px; }
+.raud .th { font-family: var(--sg-mono); font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: var(--sg-ink-faint); border-bottom: 1px solid var(--sg-line); }
+.raud .tr { border-bottom: 1px solid var(--sg-line-2); font-size: 12.5px; }
+.raud .tr:last-child { border-bottom: 0; }
+.raud .tr.dim { opacity: .62; }
+.raud .ty { font-family: var(--sg-mono); font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 5px; justify-self: start; background: #e7f7ee; color: #1c7a45; }
+.raud .tg { font-family: var(--sg-mono); font-size: 11px; color: var(--sg-red-deep); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.raud .ds { font-family: var(--sg-mono); font-size: 10.5px; color: var(--sg-ink-soft); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.raud .th .rt, .raud .th .lm { color: var(--sg-ink-faint); }
+.raud .ht { font-variant-numeric: tabular-nums; font-weight: 700; color: var(--sg-ink); text-align: right; }
+.raud .ht.hot { color: var(--sg-red-deep); }
+.raud .ht.zero { color: var(--sg-ink-faint); font-weight: 400; }
+.raud .tr .lm { font-family: var(--sg-mono); font-size: 11px; color: var(--sg-ink-soft); }
+.raud .tr .lm.zero { color: var(--sg-ink-faint); }
+.raud .stp { font-family: var(--sg-mono); font-size: 9px; padding: 3px 9px; border-radius: 999px; background: #e7f7ee; color: #1c7a45; justify-self: start; }
+.raud .stp.off { background: var(--sg-bg-2); color: var(--sg-ink-faint); }
+.raud-foot { display: flex; align-items: baseline; gap: 9px; padding: 14px 18px; border-top: 1px solid var(--sg-line); background: var(--sg-bg-2); font-size: 11.5px; color: var(--sg-ink-soft); }
+.raud-foot .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--sg-red); flex: none; transform: translateY(-1px); }
+.raud-foot b { color: var(--sg-ink); font-weight: 700; }
+@media (max-width: 760px) {
+ .raud .th, .raud .tr { grid-template-columns: 1fr auto; row-gap: 4px; }
+ .raud .ty, .raud .ds, .raud .lm { display: none; }
+}
+
+/* ===== CONFLICT DETECTION + DRAFT STATE (safety rails, 2-up) ===== */
+.rsafe { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: start; }
+@media (max-width: 860px) { .rsafe { grid-template-columns: 1fr; } }
+.rconf { padding: 18px; }
+.rconf .cfld { margin-bottom: 14px; }
+.rconf .cfld .clab { font-family: var(--sg-mono); font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: var(--sg-ink-faint); display: block; margin-bottom: 6px; }
+.rconf .cfld .cval { border: 1px solid var(--sg-red-tint-22); border-radius: 9px; padding: 11px 13px; font-family: var(--sg-mono); font-size: 12px; color: var(--sg-ink); background: #fff7f7; box-shadow: 0 0 0 3px var(--sg-red-soft); }
+.rconf .cnote { margin-top: 12px; font-size: 11.5px; color: var(--sg-ink-faint); }
+.rstate { padding: 8px 0; }
+.rstate .strow { display: grid; grid-template-columns: .8fr .9fr 1.4fr; gap: 14px; align-items: center; padding: 14px 18px; border-bottom: 1px solid var(--sg-line-2); }
+.rstate .strow:last-child { border-bottom: 0; }
+.rstate .strow.alt { background: var(--sg-bg-2); }
+.rstate .sn { font-weight: 700; font-size: 12px; color: var(--sg-ink); }
+.rstate .sb { display: inline-flex; align-items: center; gap: 8px; font-family: var(--sg-mono); font-size: 10.5px; color: var(--sg-ink-soft); }
+.rstate .sw { width: 30px; height: 18px; border-radius: 999px; background: #dcd8d1; position: relative; flex: none; }
+.rstate .sw::after { content: ""; position: absolute; top: 3px; left: 3px; width: 12px; height: 12px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.18); }
+.rstate .sw.on { background: var(--sg-grad-red); box-shadow: 0 0 9px rgba(213,21,34,.35); }
+.rstate .sw.on::after { left: auto; right: 3px; }
+.rstate .sd { font-size: 11.5px; color: var(--sg-ink-soft); }
+@media (max-width: 520px) {
+ .rstate .strow { grid-template-columns: 1fr; gap: 5px; }
+}
 
 /* ===== 301 vs 302 EXPLAINER badge cards + worked example ===== */
 .rcodes { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }

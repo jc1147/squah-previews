@@ -9,10 +9,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../_design/sgen-tokens.css?v=ec73c2e3">
-<link rel="stylesheet" href="../_design/sgen-structural.css?v=a102bd3a">
-<link rel="stylesheet" href="../_design/sgen-chrome.css?v=5245d0e3">
-<link rel="stylesheet" href="redirects.css?v=50da636d">
+<link rel="stylesheet" href="../_design/sgen-tokens.css?v=0e2cf486">
+<link rel="stylesheet" href="../_design/sgen-structural.css?v=7ce6a554">
+<link rel="stylesheet" href="../_design/sgen-chrome.css?v=a9511fae">
+<link rel="stylesheet" href="redirects.css?v=eb60a56e">
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -71,7 +71,7 @@
  </div>
  </div>
  <a class="mm-feat" href="page-builder.html"><span class="badge">Flagship</span><span class="k">SG Builder</span><span class="ttl">Build it visually. Ship it server-rendered.</span><span class="sub">A true visual builder with 48 native components and a real product underneath.</span><span class="go">Explore the builder →</span></a>
- <div class="mm-index"><a href="overview-modules.html"><b>All 23 modules</b> The whole platform, in the box</a><a href="overview-core.html"><b>SG-Core</b> The native content engine</a><a href="overview-dashboard.html"><b>SG-Dashboard</b> The operating layer, one hub</a></div>
+ <div class="mm-index"><a href="overview-modules.html"><b>All 23 modules</b> The whole platform, in the box</a><a href="overview-core.html"><b>Content engine</b> Pages, posts, media, and theme</a><a href="overview-dashboard.html"><b>Dashboard</b> The operating layer, one hub</a></div>
  </div></div>
  </div>
  <div class="nav-item">
@@ -234,6 +234,29 @@
  </div>
 </section>
 
+<!-- 3b · PER-RULE AUDIT · Hits + Last Matched -->
+<section class="sec sec--alt">
+ <div class="wrap">
+ <div class="readw reveal">
+ <div class="eyebrow">Built-in redirect analytics</div>
+ <h2 class="h2">Every rule keeps its own Hits and Last Matched, <span class="grad">so you retire the dead ones.</span></h2>
+ <p class="lead" style="margin-top:16px">The rules table is not write-only. Two of its ten columns are an audit trail: a Hits counter that increments each time the rule catches a request, and a Last Matched timestamp shown as a timeago. Sort the list and the rule that earns its keep is obvious, the one that has never fired is just as obvious. Both columns are part of the rule schema, so they travel in the JSON export too.</p>
+ </div>
+ <div class="adwin reveal" data-d="1" style="margin-top:40px" aria-hidden="true">
+ <div class="adbar"><span class="ic"></span><span class="ti">All Redirects<small>Hits and Last Matched, per rule</small></span><span class="act ghost">Sort by Hits</span></div>
+ <div class="raud">
+ <div class="th"><span>Type</span><span>Target</span><span>Destination</span><span class="rt">Hits</span><span class="lm">Last Matched</span><span>Status</span></div>
+ <div class="tr"><span class="ty">301</span><span class="tg">/blog/old-launch-post</span><span class="ds">/blog/the-launch</span><span class="ht hot">1,284</span><span class="lm">2 hours ago</span><span class="stp">Active</span></div>
+ <div class="tr"><span class="ty">301</span><span class="tg">/store/spring-sale</span><span class="ds">/store/sale</span><span class="ht">612</span><span class="lm">yesterday</span><span class="stp">Active</span></div>
+ <div class="tr"><span class="ty">302</span><span class="tg">/status</span><span class="ds">/maintenance</span><span class="ht">47</span><span class="lm">6 days ago</span><span class="stp">Active</span></div>
+ <div class="tr dim"><span class="ty">301</span><span class="tg">/legacy/team-page</span><span class="ds">/about/team</span><span class="ht zero">0</span><span class="lm zero">-</span><span class="stp off">Inactive</span></div>
+ </div>
+ <div class="raud-foot"><span class="dot"></span> A rule at <b>0 Hits</b> with a <b>-</b> Last Matched has never caught a request. Deactivate it or delete it from Action For Selected, and the list stays lean.</div>
+ </div>
+ <p class="label reveal" style="margin-top:16px;color:var(--sg-ink-faint)">Counters are usage telemetry inside the manager. Use them to keep your redirect map honest, alongside the Analytics module's traffic reporting.</p>
+ </div>
+</section>
+
 <!-- 4 · 301 vs 302 EXPLAINER + link equity -->
 <section class="sec sec--alt">
  <div class="wrap">
@@ -283,6 +306,38 @@
  <div class="dcard"><span class="pic" style="background:var(--sg-grad-red)">CSV</span><div class="di"><span class="dn">CSV header</span><span class="dm">target, destination, type, is_regex, is_active, priority, stop_processing</span></div></div>
  <div class="dcard"><span class="pic" style="background:#1f2430">JSON</span><div class="di"><span class="dn">JSON adds</span><span class="dm">ID, hits, last_matched, author, date_created, date_modified</span></div></div>
  <div class="dcard"><span class="pic" style="background:#1c7a45">&#10003;</span><div class="di"><span class="dn">Import report</span><span class="dm">total / imported / skipped / failed</span></div><span class="pill on">accepts .csv .json</span></div>
+ </div>
+ </div>
+ </div>
+ </div>
+</section>
+
+<!-- 5b · CONFLICT DETECTION + DRAFT STATE (safety rails) -->
+<section class="sec sec--warm">
+ <div class="wrap">
+ <div class="readw reveal">
+ <div class="eyebrow">Rules that do not collide</div>
+ <h2 class="h2">Two rails keep your map clean: <span class="grad">no duplicate targets, no rule live by accident.</span></h2>
+ <p class="lead" style="margin-top:16px">A redirect map goes wrong in two predictable ways: two rules fighting over the same source path, and a rule going live before you meant it to. The module guards both. Saving a rule whose Target already exists is rejected as a conflict instead of silently shadowing the first rule, and a CSV or JSON import adds new rules while skipping any target it already holds. New rules you add in the form start as an inactive draft, Status off, so you build and test before you flip it live.</p>
+ </div>
+ <div class="rsafe reveal" data-d="1" style="margin-top:40px">
+ <div class="adwin" aria-hidden="true">
+ <div class="adbar"><span class="ic"></span><span class="ti">Save redirect rule<small>Duplicate target rejected</small></span></div>
+ <div class="rconf">
+ <div class="cfld"><span class="clab">Target</span><div class="cval">/about-our-team</div></div>
+ <div class="alert warn">
+ <span class="dot"></span>
+ <span><span class="at">Conflict</span><span class="ab">A rule for <code>/about-our-team</code> already exists. Edit the existing rule instead of creating a second one for the same source.</span></span>
+ </div>
+ <div class="cnote">Save is blocked, so one source path never resolves to two destinations. The first rule stays the source of truth.</div>
+ </div>
+ </div>
+ <div class="adwin" aria-hidden="true">
+ <div class="adbar"><span class="ic"></span><span class="ti">Status on create<small>Draft first, live when you say</small></span></div>
+ <div class="rstate">
+ <div class="strow"><span class="sn">Add New form</span><span class="sb"><span class="sw"></span> Status off</span><span class="sd">Inactive draft. Build and test, then flip it on.</span></div>
+ <div class="strow"><span class="sn">Bulk action</span><span class="sb"><span class="sw on"></span> Move to Active</span><span class="sd">Activate or deactivate several rules at once.</span></div>
+ <div class="strow alt"><span class="sn">CSV / JSON import</span><span class="sb"><span class="sw on"></span> Arrives active</span><span class="sd">Honest note: imported rows go live immediately, unlike form-added rules. Review the table after an import.</span></div>
  </div>
  </div>
  </div>
@@ -382,16 +437,16 @@
  </div>
  <div class="ft-grid">
  <div class="ft-brand"><div class="b">SGEN<span class="dot">.</span></div><p>One all-inclusive platform. Build the whole site, no plugins underneath, priced by how many sites you run.</p><span class="ft-status"><span class="d"></span> All systems operational</span></div>
- <div class="ft-col"><div class="ft-head">Build &amp; Design</div><a href="page-builder.html">SG Builder</a><a href="templates.html">Templates</a><a href="theme-editor.html">Theme Editor</a><a href="media-library.html">Media Library</a><a href="pages-and-posts.html">Pages &amp; Posts</a><a href="custom-objects.html">Custom Objects</a><a href="overview-modules.html">All 23 modules</a><a href="overview-core.html">SG-Core</a></div>
+ <div class="ft-col"><div class="ft-head">Build &amp; Design</div><a href="page-builder.html">SG Builder</a><a href="templates.html">Templates</a><a href="theme-editor.html">Theme Editor</a><a href="media-library.html">Media Library</a><a href="pages-and-posts.html">Pages &amp; Posts</a><a href="custom-objects.html">Custom Objects</a><a href="custom-fields.html">Custom Fields</a><a href="overview-modules.html">All 23 modules</a><a href="overview-core.html">Content engine</a></div>
  <div class="ft-col"><div class="ft-head">Sell</div><a href="ecommerce.html">Ecommerce</a><a href="discussions.html">Discussions &amp; Reviews</a></div>
  <div class="ft-col"><div class="ft-head">Grow &amp; Convert</div><a href="forms.html">Forms</a><a href="attributions.html">Attribution</a><a href="seo-optimization.html">SEO</a><a href="analytics.html">Analytics</a><a href="popups.html">Popups</a><a href="integrations.html">Integrations</a></div>
- <div class="ft-col"><div class="ft-head">Operate &amp; Secure</div><a href="site-manager.html">Site Manager</a><a href="overview-dashboard.html">SG-Dashboard</a><a href="backups.html">Backups</a><a href="redirects.html">Redirects</a><a href="security.html">Security</a><a href="trust.html">Trust</a></div>
+ <div class="ft-col"><div class="ft-head">Operate &amp; Secure</div><a href="site-manager.html">Site Manager</a><a href="overview-dashboard.html">Dashboard</a><a href="backups.html">Backups</a><a href="redirects.html">Redirects</a><a href="security.html">Security</a><a href="trust.html">Trust</a></div>
  <div class="ft-col"><div class="ft-head">Why SGEN</div><a href="why-sgen.html">Why SGEN</a><a href="why-sgen-no-plugins.html">No plugins</a><a href="why-sgen-speed.html">Speed</a><a href="compare.html">Compare all</a><a href="migrate.html">Migrate</a></div>
  <div class="ft-col"><div class="ft-head">Solutions</div><a href="solutions-agencies.html">Agencies</a><a href="solutions-small-business.html">Small business</a><a href="solutions-restaurants.html">Restaurants</a><a href="solutions-multi-location.html">Multi-location</a><a href="solutions-healthcare.html">Healthcare</a><a href="solutions-freelancers.html">Freelancers</a><a href="enterprise.html">Enterprise</a></div>
  <div class="ft-col"><div class="ft-head">Customers</div><a href="customers.html">Customer stories</a><a href="showcase.html">Showcase</a><a href="customers-fernwood.html">Fernwood Digital</a><a href="customers-halloran-vint.html">Halloran &amp; Vint</a></div>
  <div class="ft-col"><div class="ft-head">Resources</div><a href="resources.html">All resources</a><a href="blog.html">Blog</a><a href="guides.html">Guides</a><a href="changelog.html">Changelog</a><a href="roadmap.html">Roadmap</a><a href="status.html">Status</a></div>
- <div class="ft-col"><div class="ft-head">Company</div><a href="about.html">About</a><a href="partners.html">Partners</a><a href="partners-apply.html">Become a partner</a><a href="partners-directory.html">Partner directory</a><a href="contact.html">Contact</a></div>
- <div class="ft-col"><div class="ft-head">Developers</div><a href="developers.html">Docs</a><a href="developers.html">API</a><a href="integrations.html">Integrations</a></div>
+ <div class="ft-col"><div class="ft-head">Company</div><a href="about.html">About</a><a href="contact.html">Contact</a><a href="trust.html">Trust</a><a href="status.html">Status</a></div>
+ <div class="ft-col"><div class="ft-head">Developers</div><a href="developers.html">Docs &amp; API</a><a href="custom-fields.html">Custom Fields</a><a href="custom-css.html">Custom CSS</a><a href="custom-codes.html">Custom Codes</a><a href="integrations.html">Integrations</a></div>
  </div>
  <div class="ft-watermark">SGEN</div>
  <div class="ft-bottom"><span>© 2026 SGEN. The managed website platform.</span><div class="links"><a href="legal-privacy.html">Privacy</a><a href="legal-terms.html">Terms</a><a href="legal-dpa.html">DPA</a><a href="legal-cookie-policy.html">Cookies</a><a href="accessibility.html">Accessibility</a></div></div>
@@ -437,8 +492,8 @@
  <a href="accessibility.html"><span class="ct">Accessibility</span><span class="cs">Conformance status</span></a>
  <div class="dr-subhead">The platform</div>
  <a href="overview-modules.html"><span class="ct">All 23 modules →</span><span class="cs">The whole platform</span></a>
- <a href="overview-core.html"><span class="ct">SG-Core</span><span class="cs">The native content engine</span></a>
- <a href="overview-dashboard.html"><span class="ct">SG-Dashboard</span><span class="cs">The operating layer</span></a>
+ <a href="overview-core.html"><span class="ct">Content engine</span><span class="cs">Pages, posts, media, theme</span></a>
+ <a href="overview-dashboard.html"><span class="ct">Dashboard</span><span class="cs">The operating layer</span></a>
  </div></details>
  <details class="dr-group"><summary>Why SGEN <span class="pm" aria-hidden="true">+</span></summary><div class="dr-children">
  <a href="why-sgen.html"><span class="ct">Why SGEN, in full</span><span class="cs">The whole case, one page</span></a>
@@ -480,8 +535,7 @@
  </div></details>
  <details class="dr-group"><summary>Company <span class="pm" aria-hidden="true">+</span></summary><div class="dr-children">
  <a href="about.html"><span class="ct">About</span><span class="cs">Who we are</span></a>
- <a href="partners.html"><span class="ct">Partners</span><span class="cs">The partner program</span></a>
- <a href="partners-apply.html"><span class="ct">Become a partner</span><span class="cs">Apply to partner</span></a>
+ <a href="trust.html"><span class="ct">Trust</span><span class="cs">Security &amp; uptime</span></a>
  <a href="contact.html"><span class="ct">Contact</span><span class="cs">Talk to us</span></a>
  </div></details>
  <a class="dr-flat" href="pricing.html">Pricing</a>

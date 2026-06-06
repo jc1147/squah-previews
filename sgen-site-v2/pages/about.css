@@ -1,0 +1,27 @@
+/* ============================================================================
+   about.css  ·  page signature sheet for pages/about.html
+   Loads the shared floor (_standard.css) first, then adds page-scoped fixes.
+   ============================================================================ */
+@import "_standard.css";
+
+/* ----------------------------------------------------------------------------
+   DARK-PANEL CONTRAST FIX (render-verify: span.who was cr 1.12, invisible).
+   The hero is a .surface-dark section, which flips --sg-ink to cream (#f4f2ee).
+   The .ui-mock multi-site diorama is a WHITE card (#fff) sitting inside that
+   dark section, but it never re-asserted the light-surface ink tokens, so its
+   text (.who, .who small, etc.) inherited cream ink and rendered cream-on-white.
+   Mirror the canonical .adwin fix: re-assert the LIGHT ink tokens on .ui-mock so
+   every label inside the white card reads dark, even on a dark section.
+   ---------------------------------------------------------------------------- */
+.ui-mock {
+  color: var(--sg-ink);
+  --sg-ink: #1A1A1A;
+  --sg-ink-soft: #5b5853;
+  --sg-ink-faint: #868279;
+  --sg-line: #ECEAE5;
+  --sg-line-2: #f0eeea;
+  --sg-bg-2: #f9f9f9;
+  --sg-red-soft: #fff1f1;
+  --sg-card-bg: #fff;
+  --sg-card-border: #ECEAE5;
+}

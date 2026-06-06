@@ -22,9 +22,9 @@
 @media (max-width: 980px) { .as-hero .wrap { grid-template-columns: 1fr; gap: 40px; } .as-hero .lede { max-width: none; } }
 
 /* ===== shared SGEN admin window (.swin) - white settings surface, red accent ==
-   Re-asserts the LIGHT-surface tokens so the white card always reads with dark
-   text, even inside a .surface-dark section (the invisible-text trap). Reuses
-   the .adbar atoms promoted into _standard.css. ============================== */
+ Re-asserts the LIGHT-surface tokens so the white card always reads with dark
+ text, even inside a .surface-dark section (the invisible-text trap). Reuses
+ the .adbar atoms promoted into _standard.css. ============================== */
 .swin { border-radius: 16px; overflow: hidden; background: #fff; border: 1px solid var(--sg-line); box-shadow: var(--sg-shadow); color: var(--sg-ink);
  --sg-ink: #1A1A1A; --sg-ink-soft: #5b5853; --sg-ink-faint: #868279;
  --sg-line: #ECEAE5; --sg-line-2: #f0eeea; --sg-bg-2: #f9f9f9; --sg-red-soft: #fff1f1;
@@ -155,6 +155,35 @@
 .maprow .ma { color: var(--sg-ink-faint); font-family: var(--sg-mono); font-size: 11px; }
 .maprow .mv { font-size: 12px; font-weight: 600; color: var(--sg-ink); text-align: right; }
 .maprow .mv.custom { color: var(--sg-red-deep); font-weight: 600; }
+
+/* ===== SEARCH & REPLACE surface (.mkfr) · light admin card, dry-run preview ===
+ Lives inside .swin (light tokens re-asserted) on a .sec--warm section, so every
+ atom reads dark-on-light. Reuses .tlayout/.trail/.tmain + .srow/.inp/.lab +
+ .sbtn. New atoms = the Find/Replace grid, the amber warning, the dry-run preview
+ table, and the backup confirmation chip. All var(--sg-*). ================== */
+.mkfr { max-width: 880px; margin-inline: auto; }
+.mkfr .tmain { display: flex; flex-direction: column; gap: 14px; padding: 18px; color: var(--sg-ink); }
+.frgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 640px) { .frgrid { grid-template-columns: 1fr; } }
+/* amber back-up-first warning strip */
+.frwarn { display: flex; align-items: flex-start; gap: 10px; padding: 11px 13px; border-radius: 10px; font-size: 12px; line-height: 1.45; color: #8a5a00; background: #fff7e6; border: 1px solid #f3dca0; }
+.frwarn .frwi { width: 16px; height: 16px; flex: none; margin-top: 1px; border-radius: 4px; background: #e0a200; position: relative; }
+.frwarn .frwi::after { content: "!"; position: absolute; inset: 0; display: grid; place-items: center; font-family: var(--sg-mono); font-size: 11px; font-weight: 800; color: #fff; }
+/* dry-run preview table */
+.frprev { border: 1px solid var(--sg-line); border-radius: 12px; overflow: hidden; background: var(--sg-bg-2); }
+.frph { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 14px; border-bottom: 1px solid var(--sg-line); background: #fff; }
+.frph .frpl { font-family: var(--sg-mono); font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: var(--sg-red-deep); }
+.frph .frtot { font-family: var(--sg-mono); font-size: 11px; font-weight: 700; color: var(--sg-ink); font-variant-numeric: tabular-nums; }
+.frrow { display: grid; grid-template-columns: 1fr auto auto; gap: 14px; align-items: center; padding: 10px 14px; border-top: 1px solid var(--sg-line-2); }
+.frrow:first-of-type { border-top: 0; }
+.frrow .frt { font-family: var(--sg-mono); font-size: 12px; font-weight: 600; color: var(--sg-ink); }
+.frrow .frb { font-family: var(--sg-mono); font-size: 10px; color: var(--sg-ink-faint); border: 1px solid var(--sg-line); border-radius: 999px; padding: 2px 9px; background: #fff; }
+.frrow .frm { font-family: var(--sg-mono); font-size: 11px; font-weight: 700; color: var(--sg-ink-soft); font-variant-numeric: tabular-nums; }
+/* footer: backup chip + run button */
+.frfoot { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+.frchip { display: inline-flex; align-items: center; gap: 8px; font-family: var(--sg-mono); font-size: 11px; font-weight: 600; color: var(--sg-ink-soft); }
+.frchip .frck { width: 16px; height: 16px; border-radius: 50%; background: var(--sg-grad-red); box-shadow: var(--sg-shadow-red); position: relative; flex: none; }
+.frchip .frck::after { content: ""; position: absolute; left: 5px; top: 3px; width: 4px; height: 7px; border-right: 2px solid #fff; border-bottom: 2px solid #fff; transform: rotate(40deg); }
 
 /* ---- the quiet replaces row in Section 2 -------------------------------- */
 .repline { margin-top: 36px; display: flex; align-items: center; gap: 18px; flex-wrap: wrap; padding-top: 26px; border-top: 1px solid var(--sg-line); }
