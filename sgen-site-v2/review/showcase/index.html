@@ -1,0 +1,1198 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Showcase, built on SGEN</title>
+
+<link rel="stylesheet" href="../../_design/sgen-tokens.css">
+<link rel="stylesheet" href="../../_design/sgen-structural.css">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  /* ====================================================================
+     CUSTOM CSS, scoped to what the design system does NOT already cover:
+       - the masthead counterrail layout
+       - the faceted explorer (sidebar + results) layout
+       - the gallery card device frame
+       - the spotlight shell + page-deck device frames
+     Everything else uses the real classes (.eyebrow/.h1/.h2/.h3/.grad/
+     .lead/.pill/.dot/.btn/.btn-primary/.btn-secondary/.card/.stat/.label/
+     .divider/.reveal). All values reference var(--sg-*).
+     ==================================================================== */
+
+  html, body { height: auto; }
+  body {
+    background: var(--sg-atmos-glow), var(--sg-bg);
+    background-attachment: fixed;
+    min-height: 100vh;
+  }
+  /* The linked .surface-dark.has-atmos rule sets overflow:clip (intended for section
+     bands, to contain their atmosphere pseudo-elements). On the BODY that clip blocks
+     page scroll. Restore vertical scroll here, keep horizontal contained. The spotlight
+     still locks scroll on open via an inline body style, which beats this rule. */
+  body.surface-dark.has-atmos { overflow: visible; }
+  .wrap { max-width: var(--sg-maxw); margin-inline: auto; }
+
+  /* ---- MASTHEAD ------------------------------------------------------ */
+  .sc-masthead { padding: clamp(72px, 11vw, 140px) 24px clamp(36px, 5vw, 56px); }
+  .sc-masthead .lead { margin: 18px 0 0; }
+  .sc-counterrail {
+    display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(14px, 2vw, 30px); margin-top: clamp(34px, 5vw, 56px);
+  }
+  .sc-stat { display: flex; flex-direction: column; gap: 6px; }
+  .sc-stat .stat { font-size: clamp(38px, 5vw, 64px); }
+  .sc-stat .label { margin: 0; }
+  @media (max-width: 600px) { .sc-counterrail { grid-template-columns: 1fr 1fr; } }
+
+  /* ---- EXPLORER LAYOUT ---------------------------------------------- */
+  .sc-explorer {
+    display: grid; grid-template-columns: 264px 1fr;
+    gap: clamp(24px, 3vw, 44px);
+    padding: clamp(20px, 3vw, 36px) 24px clamp(56px, 8vw, 100px);
+    align-items: start;
+  }
+  @media (max-width: 880px) { .sc-explorer { grid-template-columns: 1fr; } }
+
+  /* ---- FACET SIDEBAR ------------------------------------------------ */
+  .sc-facets {
+    position: sticky; top: 18px;
+    background: var(--sg-card-bg); border: 1px solid var(--sg-card-border);
+    border-radius: var(--sg-r-lg); padding: 22px 20px;
+    box-shadow: var(--sg-glass-inset);
+  }
+  @media (max-width: 880px) { .sc-facets { position: static; } }
+  .sc-fhead { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .sc-fhead .t { font-family: var(--sg-mono); font-size: 11px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: var(--sg-ink); }
+  .sc-reset {
+    font-family: var(--sg-mono); font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--sg-ink-faint); background: transparent; border: 0; cursor: pointer; padding: 4px 2px;
+    transition: color var(--sg-t-fast);
+  }
+  .sc-reset:hover { color: var(--sg-red-hot); }
+  .sc-showing { font-family: var(--sg-mono); font-size: 11px; letter-spacing: .04em; color: var(--sg-ink-faint); margin: 12px 0 4px; }
+  .sc-showing b { color: var(--sg-ink); }
+
+  .sc-fgroup { margin-top: 22px; }
+  .sc-gt { font-family: var(--sg-mono); font-size: 10px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--sg-red-hot); margin-bottom: 10px; }
+  .sc-facet {
+    display: flex; align-items: center; gap: 10px; width: 100%;
+    padding: 8px 8px; margin: 2px 0; border-radius: var(--sg-r-sm);
+    background: transparent; border: 1px solid transparent; cursor: pointer; text-align: left;
+    font-family: var(--sg-font); color: var(--sg-ink-soft);
+    transition: background-color var(--sg-t-fast), color var(--sg-t-fast), border-color var(--sg-t-fast);
+  }
+  .sc-facet:hover { background: rgba(255,255,255,.04); color: var(--sg-ink); }
+  .sc-facet .box {
+    width: 16px; height: 16px; flex: 0 0 auto; border-radius: 5px;
+    border: 1.5px solid var(--sg-card-border); background: rgba(255,255,255,.03);
+    display: grid; place-items: center; transition: background-color var(--sg-t-fast), border-color var(--sg-t-fast);
+  }
+  .sc-facet .box::after { content: ""; width: 8px; height: 8px; border-radius: 2px; background: #fff; opacity: 0; transform: scale(.4); transition: opacity var(--sg-t-fast), transform var(--sg-t-fast); }
+  .sc-facet .txt { flex: 1; font-size: 13.5px; font-weight: 500; letter-spacing: -.01em; }
+  .sc-facet .cnt { font-family: var(--sg-mono); font-size: 11px; font-weight: 700; color: var(--sg-ink-faint); }
+  .sc-facet.on { background: rgba(213,21,34,.10); border-color: var(--sg-red-tint-22); color: var(--sg-ink); }
+  .sc-facet.on .box { background: var(--sg-red); border-color: var(--sg-red); }
+  .sc-facet.on .box::after { opacity: 1; transform: scale(1); }
+  .sc-facet.on .cnt { color: var(--sg-red-hot); }
+  .sc-facet[data-disabled="1"] { opacity: .34; pointer-events: none; }
+
+  /* ---- RESULTS REGION ---------------------------------------------- */
+  .sc-resbar { display: flex; align-items: center; flex-wrap: wrap; gap: 14px; margin-bottom: 22px; }
+  .sc-rcount { font-family: var(--sg-mono); font-size: 13px; letter-spacing: .04em; color: var(--sg-ink-faint); }
+  .sc-rcount b { color: var(--sg-ink); font-size: 15px; }
+  .sc-chips { display: flex; flex-wrap: wrap; gap: 8px; flex: 1; min-width: 0; }
+  .sc-activechip {
+    display: inline-flex; align-items: center; gap: 7px; padding: 5px 8px 5px 12px;
+    border-radius: var(--sg-r-pill); background: rgba(255,255,255,.05); border: 1px solid var(--sg-card-border);
+    font-family: var(--sg-mono); font-size: 11px; font-weight: 600; letter-spacing: .02em; color: var(--sg-ink);
+  }
+  .sc-activechip button {
+    display: inline-grid; place-items: center; width: 16px; height: 16px; border-radius: 50%;
+    background: rgba(255,255,255,.06); border: 0; color: var(--sg-ink-soft); cursor: pointer; font-size: 13px; line-height: 1;
+    transition: background-color var(--sg-t-fast), color var(--sg-t-fast);
+  }
+  .sc-activechip button:hover { background: var(--sg-red); color: #fff; }
+  .sc-sortwrap { display: flex; align-items: center; gap: 10px; margin-left: auto; }
+  .sc-sortwrap .lbl { font-family: var(--sg-mono); font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--sg-ink-faint); }
+  .sc-sortbtns { display: inline-flex; background: rgba(255,255,255,.04); border: 1px solid var(--sg-card-border); border-radius: var(--sg-r-pill); padding: 3px; }
+  .sc-sortbtns button {
+    font-family: var(--sg-font); font-size: 12px; font-weight: 700; letter-spacing: -.01em;
+    padding: 7px 14px; border-radius: var(--sg-r-pill); border: 0; background: transparent; color: var(--sg-ink-soft); cursor: pointer;
+    transition: background-color var(--sg-t-fast), color var(--sg-t-fast);
+  }
+  .sc-sortbtns button:hover { color: var(--sg-ink); }
+  .sc-sortbtns button.on { background: var(--sg-grad-red); color: #fff; box-shadow: var(--sg-shadow-red); }
+
+  /* ---- GALLERY GRID ------------------------------------------------ */
+  .sc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  @media (max-width: 1100px) { .sc-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px)  { .sc-grid { grid-template-columns: 1fr; } }
+
+  /* card uses the real .card class; these add the device frame + meta */
+  .sc-card { padding: 0; overflow: hidden; cursor: pointer; display: flex; flex-direction: column; }
+  .sc-card:focus-visible { outline: 2px solid var(--sg-red-hot); outline-offset: 3px; }
+  .sc-frame { border-bottom: 1px solid var(--sg-line); background: #0a0a0c; }
+  .sc-chrome { display: flex; align-items: center; gap: 9px; padding: 9px 12px; background: linear-gradient(180deg, #1a1a1f, #131316); border-bottom: 1px solid var(--sg-card-border); }
+  .sc-dots { display: flex; gap: 6px; flex: 0 0 auto; }
+  .sc-dots i { width: 9px; height: 9px; border-radius: 50%; display: block; }
+  .sc-dots i:nth-child(1) { background: #ff5f57; }
+  .sc-dots i:nth-child(2) { background: #febc2e; }
+  .sc-dots i:nth-child(3) { background: #28c840; }
+  .sc-addr {
+    flex: 1; min-width: 0; padding: 5px 11px; border-radius: var(--sg-r-pill);
+    background: rgba(0,0,0,.45); border: 1px solid rgba(255,255,255,.06);
+    font-family: var(--sg-mono); font-size: 10.5px; font-weight: 600; color: rgba(255,255,255,.64);
+    overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+  }
+  .sc-shot { aspect-ratio: 16/11; width: 100%; object-fit: cover; object-position: top center; background: #0d0d0f; }
+  .sc-meta { padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+  .sc-brand { font-weight: 800; font-size: 17px; letter-spacing: -.02em; color: var(--sg-ink); line-height: 1.2; }
+  .sc-tags { display: flex; flex-wrap: wrap; gap: 7px; margin-top: auto; }
+  .sc-tag {
+    font-family: var(--sg-mono); font-size: 10px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+    padding: 4px 9px; border-radius: var(--sg-r-pill);
+    background: rgba(255,255,255,.05); border: 1px solid var(--sg-card-border); color: var(--sg-ink-soft);
+  }
+  .sc-tag.cat { color: var(--sg-red-hot); border-color: var(--sg-red-tint-22); background: rgba(213,21,34,.08); }
+  /* hover lift inherits .card behaviour; nudge the image */
+  .sc-card .sc-shot { transition: transform .45s var(--sg-ease-out); }
+  .sc-card:hover .sc-shot { transform: scale(1.035); }
+  .sc-card.active { border-color: var(--sg-red); box-shadow: var(--sg-shadow-red), var(--sg-glass-inset); }
+
+  .sc-empty {
+    grid-column: 1 / -1; text-align: center; padding: 64px 24px;
+    border: 1px dashed var(--sg-card-border); border-radius: var(--sg-r-lg); background: rgba(255,255,255,.02);
+  }
+  .sc-empty .big { font-weight: 800; font-size: 20px; letter-spacing: -.02em; color: var(--sg-ink); }
+  .sc-empty p { margin: 8px 0 18px; color: var(--sg-ink-soft); }
+
+  /* ---- STORY + CLOSER ---------------------------------------------- */
+  .sc-band { padding: clamp(56px, 8vw, 110px) 24px; }
+  .sc-band .h2 { max-width: 18ch; }
+  .sc-storygrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: clamp(34px, 5vw, 52px); }
+  @media (max-width: 880px) { .sc-storygrid { grid-template-columns: 1fr; } }
+  .sc-storycard .ix { font-family: var(--sg-mono); font-size: 12px; font-weight: 700; letter-spacing: .16em; color: var(--sg-red-hot); margin-bottom: 14px; }
+  .sc-storycard h3 { margin-bottom: 12px; }
+  .sc-storycard p { color: var(--sg-ink-soft); font-size: 15.5px; line-height: 1.6; }
+
+  .sc-closer { text-align: center; padding: clamp(64px, 9vw, 120px) 24px; }
+  .sc-closer .h2 { margin-inline: auto; max-width: 20ch; }
+  .sc-closer .sc-cta { display: inline-flex; gap: 14px; flex-wrap: wrap; justify-content: center; margin-top: 30px; }
+  .sc-foot {
+    border-top: 1px solid var(--sg-line); padding: 30px 24px; display: flex; flex-wrap: wrap; gap: 12px 24px;
+    align-items: center; justify-content: space-between;
+    font-family: var(--sg-mono); font-size: 11px; letter-spacing: .04em; color: var(--sg-ink-faint);
+  }
+  .sc-foot b { color: var(--sg-ink-soft); }
+
+  /* ====================================================================
+     SPOTLIGHT, the approved Native Page Deck, generalized per entry.
+     (CSS lifted from detail-v2-pagedeck.html and adapted to a closable
+     right-anchored panel with prev/next.)
+     ==================================================================== */
+  .pd-scrim {
+    position: fixed; inset: 0; z-index: 90; opacity: 0; pointer-events: none;
+    background: radial-gradient(120% 100% at 80% 0%, rgba(213,21,34,.10), transparent 55%), rgba(4,4,6,.74);
+    -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
+    transition: opacity .3s var(--sg-ease);
+  }
+  .pd-scrim.open { opacity: 1; pointer-events: auto; }
+
+  .pd-panel {
+    position: fixed; top: 0; right: 0; z-index: 91;
+    width: min(980px, 96vw); height: 100vh; height: 100dvh;
+    background: var(--sg-atmos-glow), var(--sg-bg);
+    border-left: 1px solid var(--sg-card-border);
+    box-shadow: -40px 0 120px -24px rgba(0,0,0,.8), -28px 0 90px rgba(213,21,34,.10);
+    overflow-y: auto; overflow-x: hidden; isolation: isolate;
+    transform: translateX(102%); transition: transform .42s var(--sg-ease);
+  }
+  .pd-panel.open { transform: none; }
+  .pd-panel::after {
+    content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+    background: repeating-linear-gradient(0deg, rgba(255,255,255,.6) 0 1px, transparent 1px 3px);
+    opacity: var(--sg-grain-opacity); mix-blend-mode: overlay;
+  }
+  .pd-inner { position: relative; z-index: 1; padding: clamp(28px, 5vw, 56px) clamp(22px, 5vw, 56px) clamp(40px, 6vw, 72px); }
+
+  .pd-toolbar { position: sticky; top: 0; z-index: 6; display: flex; align-items: center; justify-content: flex-end; gap: 10px; margin: 0 0 -8px; }
+  .pd-navbtn, .pd-close {
+    display: inline-grid; place-items: center; width: 42px; height: 42px;
+    border-radius: var(--sg-r-pill); cursor: pointer;
+    background: rgba(255,255,255,.04); color: var(--sg-ink);
+    border: 1px solid var(--sg-card-border);
+    font-family: var(--sg-font); font-size: 18px; line-height: 1;
+    transition: background-color var(--sg-t-fast), color var(--sg-t-fast), border-color var(--sg-t-fast), transform .08s var(--sg-ease);
+  }
+  .pd-navbtn:hover, .pd-close:hover { background: var(--sg-red); color: #fff; border-color: var(--sg-red); }
+  .pd-navbtn:active, .pd-close:active { transform: scale(.94); }
+
+  .pd-head { max-width: 60ch; margin-top: 6px; }
+  .pd-head .lead { margin: 14px 0 0; }
+  .pd-head .pill { margin-top: 20px; }
+
+  .pd-stage { display: grid; grid-template-columns: 1fr 250px; gap: clamp(20px, 3vw, 34px); align-items: start; margin-top: clamp(30px, 4vw, 48px); }
+
+  .pd-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+  .pd-tab {
+    display: inline-flex; align-items: center; gap: 9px;
+    padding: 8px 14px 8px 8px; border-radius: var(--sg-r-pill);
+    background: rgba(255,255,255,.03); border: 1px solid var(--sg-card-border);
+    color: var(--sg-ink-soft); cursor: pointer;
+    font-family: var(--sg-font); font-size: 13px; font-weight: 700; letter-spacing: -.01em;
+    transition: color var(--sg-t-fast), border-color var(--sg-t-fast), background-color var(--sg-t-fast), transform .08s var(--sg-ease);
+  }
+  .pd-tab:hover { color: var(--sg-ink); border-color: rgba(255,255,255,.22); }
+  .pd-tab[aria-selected="true"] {
+    color: #fff; border-color: var(--sg-red);
+    background: linear-gradient(180deg, rgba(213,21,34,.22), rgba(213,21,34,.10));
+    box-shadow: var(--sg-shadow-red);
+  }
+  .pd-tab .chip {
+    width: 30px; height: 22px; border-radius: 6px; flex: 0 0 auto;
+    background-size: cover; background-position: top center; background-color: #0d0d0f;
+    border: 1px solid var(--sg-card-border); box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+  }
+  .pd-tab .klabel { font-family: var(--sg-mono); font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+
+  .pd-browser { border-radius: var(--sg-r-lg); overflow: hidden; border: 1px solid var(--sg-card-border); background: #0a0a0c; box-shadow: var(--sg-shadow-cinematic); }
+  .pd-chrome { display: flex; align-items: center; gap: 12px; padding: 11px 14px; background: linear-gradient(180deg, #1a1a1f, #131316); border-bottom: 1px solid var(--sg-card-border); }
+  .pd-dots { display: flex; gap: 7px; flex: 0 0 auto; }
+  .pd-dots i { width: 11px; height: 11px; border-radius: 50%; display: block; }
+  .pd-dots i:nth-child(1) { background: #ff5f57; }
+  .pd-dots i:nth-child(2) { background: #febc2e; }
+  .pd-dots i:nth-child(3) { background: #28c840; }
+  .pd-addr {
+    flex: 1; min-width: 0; display: flex; align-items: center; gap: 8px;
+    padding: 7px 14px; border-radius: var(--sg-r-pill);
+    background: rgba(0,0,0,.45); border: 1px solid rgba(255,255,255,.06);
+    font-family: var(--sg-mono); font-size: 12px; font-weight: 600;
+    color: var(--sg-ink-faint); overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+  }
+  .pd-addr .lock { color: #28c840; font-size: 11px; flex: 0 0 auto; }
+  .pd-addr .url { color: rgba(255,255,255,.72); overflow: hidden; text-overflow: ellipsis; }
+
+  .pd-viewport { position: relative; aspect-ratio: 16/10; background: #0d0d0f; overflow: hidden; }
+  .pd-frame {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    object-fit: cover; object-position: top center;
+    opacity: 0; transform: scale(1.012);
+    transition: opacity .5s var(--sg-ease), transform .7s var(--sg-ease-out);
+  }
+  .pd-frame.is-active { opacity: 1; transform: scale(1); }
+
+  .pd-phone-col { display: flex; flex-direction: column; gap: 12px; }
+  .pd-phone {
+    position: relative; width: 100%; max-width: 250px; aspect-ratio: 390/844;
+    border-radius: var(--sg-r-squircle); overflow: hidden;
+    border: 1px solid var(--sg-card-border); background: #0a0a0c; box-shadow: var(--sg-shadow-cinematic);
+  }
+  .pd-phone .notch {
+    position: absolute; top: 9px; left: 50%; transform: translateX(-50%); z-index: 2;
+    width: 78px; height: 18px; border-radius: var(--sg-r-pill);
+    background: #000; border: 1px solid rgba(255,255,255,.08);
+  }
+  .pd-phone img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
+  .pd-phone-cap { font-family: var(--sg-mono); font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--sg-ink-faint); text-align: center; }
+
+  .pd-hint { margin-top: 22px; font-family: var(--sg-mono); font-size: 11px; letter-spacing: .06em; color: var(--sg-ink-faint); display: flex; align-items: center; gap: 10px; }
+  .pd-hint kbd { font-family: var(--sg-mono); font-size: 10px; padding: 2px 7px; border-radius: 5px; background: rgba(255,255,255,.05); border: 1px solid var(--sg-card-border); color: var(--sg-ink-soft); }
+
+  @media (max-width: 760px) {
+    .pd-stage { grid-template-columns: 1fr; }
+    .pd-phone-col { flex-direction: row; align-items: flex-start; gap: 16px; }
+    .pd-phone { max-width: 180px; }
+  }
+</style>
+</head>
+
+<body class="surface-dark has-atmos">
+
+<!-- ============ MASTHEAD ============ -->
+<section class="sc-masthead">
+  <div class="wrap">
+    <span class="eyebrow">Examples, built on SGEN</span>
+    <h1 class="h1">Real sites. <span class="grad">One</span> platform.</h1>
+    <p class="lead">A cross-section of the work you can design and ship on SGEN, spanning retail, health, professional services and local business. Every one of these is built and hosted on a single all-inclusive stack. Filter by category or industry, then open any site to walk its pages.</p>
+    <div class="sc-counterrail" aria-label="Showcase at a glance">
+      <div class="sc-stat"><span class="stat" id="cSites">29</span><span class="label">Sites in this showcase</span></div>
+      <div class="sc-stat"><span class="stat" id="cCats">5</span><span class="label">Categories</span></div>
+      <div class="sc-stat"><span class="stat" id="cInds">17</span><span class="label">Industries</span></div>
+      <div class="sc-stat"><span class="stat"><span class="z">1</span></span><span class="label">Platform under all of it</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ EXPLORER ============ -->
+<div class="wrap">
+  <div class="sc-explorer">
+
+    <!-- FACET SIDEBAR -->
+    <aside class="sc-facets" aria-label="Filters">
+      <div class="sc-fhead">
+        <span class="t">Filter</span>
+        <button class="sc-reset" id="resetBtn" type="button">Reset all</button>
+      </div>
+      <div class="sc-showing" id="showingLine">Showing <b>29</b> of 29 sites</div>
+
+      <div class="sc-fgroup">
+        <div class="sc-gt">Category</div>
+        <div id="grp-category"></div>
+      </div>
+      <div class="sc-fgroup">
+        <div class="sc-gt">Industry</div>
+        <div id="grp-industry"></div>
+      </div>
+    </aside>
+
+    <!-- RESULTS -->
+    <main class="sc-results">
+      <div class="sc-resbar">
+        <div class="sc-rcount"><b id="rc">29</b> results</div>
+        <div class="sc-chips" id="activeChips"></div>
+        <div class="sc-sortwrap">
+          <span class="lbl">Sort</span>
+          <div class="sc-sortbtns" id="sortBtns">
+            <button data-sort="default" class="on" type="button">Curated</button>
+            <button data-sort="az" type="button">A-Z</button>
+            <button data-sort="category" type="button">By category</button>
+          </div>
+        </div>
+      </div>
+      <div class="sc-grid" id="grid" aria-live="polite"></div>
+    </main>
+  </div>
+</div>
+
+<!-- ============ STORY ============ -->
+<section class="sc-band">
+  <div class="wrap">
+    <span class="eyebrow">Under every site</span>
+    <h2 class="h2">One platform. <span class="grad">Everything</span> native.</h2>
+    <div class="sc-storygrid">
+      <div class="card sc-storycard reveal" data-d="1">
+        <div class="ix">01</div>
+        <h3 class="h3">One builder, no code</h3>
+        <p>Every site here was designed in the same visual builder, no developer, no plugin stack, no theme licences. Drag, style, publish. The whole site, every page, in one place.</p>
+      </div>
+      <div class="card sc-storycard reveal" data-d="2">
+        <div class="ix">02</div>
+        <h3 class="h3">Every feature, native</h3>
+        <p>Forms, ecommerce, SEO, multi-site, attribution, menus, events. They are built into the platform, not bolted on. One login runs all of it, on one update schedule.</p>
+      </div>
+      <div class="card sc-storycard reveal" data-d="3">
+        <div class="ix">03</div>
+        <h3 class="h3">Hosting in the box</h3>
+        <p>Free hosting, SSL, global CDN and a managed WAF are the baseline on every plan. Nothing here is a separate bill or a server to babysit. It is all one stack.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CLOSER ============ -->
+<section class="sc-closer">
+  <div class="wrap">
+    <span class="eyebrow">Your site is next</span>
+    <h2 class="h2">Build a site that <span class="grad">holds up</span> like these.</h2>
+    <p class="lead" style="margin:18px auto 0; text-align:center;">Start free in the Sandbox, design the whole thing in one builder, and ship it on the same all-inclusive platform that runs every site above.</p>
+    <div class="sc-cta">
+      <button class="btn btn-primary" type="button">Start Building <span class="arr">-&gt;</span></button>
+      <button class="btn btn-secondary" type="button">See pricing</button>
+    </div>
+  </div>
+</section>
+
+<footer class="sc-foot wrap">
+  <span>SGEN Showcase</span>
+  <span><b id="footN">29</b> sites &middot; <b id="footC">5</b> categories &middot; one platform</span>
+  <span>Examples of work built on SGEN.</span>
+</footer>
+
+<!-- ============ SPOTLIGHT (Native Page Deck) ============ -->
+<div class="pd-scrim" id="pdScrim"></div>
+<aside class="pd-panel surface-dark" id="pdPanel" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Site spotlight">
+  <div class="pd-inner">
+
+    <div class="pd-toolbar">
+      <button class="pd-navbtn" id="pdPrev" type="button" aria-label="Previous site">&#8249;</button>
+      <button class="pd-navbtn" id="pdNext" type="button" aria-label="Next site">&#8250;</button>
+      <button class="pd-close" id="pdClose" type="button" aria-label="Close">&times;</button>
+    </div>
+
+    <header class="pd-head reveal">
+      <span class="eyebrow" id="pdEyebrow"></span>
+      <h1 class="h1" id="pdBrand"></h1>
+      <p class="lead" id="pdLead"></p>
+      <span class="pill"><span class="dot"></span>Built on SGEN</span>
+    </header>
+
+    <div class="pd-stage">
+      <div class="pd-deck reveal" data-d="1">
+        <div class="pd-tabs" id="pdTabs" role="tablist" aria-label="Pages"></div>
+        <div class="pd-browser">
+          <div class="pd-chrome">
+            <span class="pd-dots"><i></i><i></i><i></i></span>
+            <span class="pd-addr"><span class="lock">&#x1F512;</span><span class="url" id="pdUrl"></span></span>
+          </div>
+          <div class="pd-viewport" id="pdViewport"></div>
+        </div>
+        <p class="pd-hint" id="pdHint">
+          <span>Switch pages</span><kbd>&larr;</kbd><kbd>&rarr;</kbd><span>arrow keys</span>
+        </p>
+      </div>
+
+      <div class="pd-phone-col reveal" data-d="2">
+        <div class="pd-phone">
+          <span class="notch"></span>
+          <img id="pdPhone" src="" alt="">
+        </div>
+        <span class="pd-phone-cap">Mobile</span>
+      </div>
+    </div>
+
+  </div>
+</aside>
+
+<script>
+/* ============================================================
+   DATA, SGEN showcase. 29 examples built on SGEN.
+   Inlined verbatim from _shots/entries.json. Paths are already
+   relative to this index.html (no extra "../").
+   ============================================================ */
+var ENTRIES = [
+  {
+    "id": "biomeds",
+    "brand": "BioMeds of Colorado",
+    "category": "Cannabis Retail",
+    "industry": "Dispensary",
+    "tagline": "Mountain-rooted, forest green and tan.",
+    "blurb": "A strong sense of place: a red-rock Colorado hero at sunset, textured cream and green bands, and an It-Was-All-A-Dream story block. Earthy and credible.",
+    "palette": "Forest green and tan, earthy",
+    "thumb": "_thumbs/dispenza-biomeds-desktop.jpg",
+    "mobile": "_shots/mob-biomeds.jpg",
+    "pages": [
+      { "label": "Home", "src": "_shots/d-biomeds-0.jpg" },
+      { "label": "Menu", "src": "_shots/d-biomeds-1.jpg" }
+    ]
+  },
+  {
+    "id": "cannable",
+    "brand": "Cannable Cannabis",
+    "category": "Cannabis Retail",
+    "industry": "Dispensary",
+    "tagline": "Streetwear identity: electric cobalt on charcoal.",
+    "blurb": "The most distinctive voice in the book. A faded graffiti collage on dark charcoal with electric cobalt deal blocks and a scripted display headline. Confident, urban, cohesive.",
+    "palette": "Charcoal ground, electric cobalt accent",
+    "thumb": "_thumbs/dispenza-cannable-desktop.jpg",
+    "mobile": "_shots/mob-cannable.jpg",
+    "pages": [
+      { "label": "Home", "src": "_shots/d-cannable-0.jpg" },
+      { "label": "Deals", "src": "_shots/d-cannable-1.jpg" },
+      { "label": "Locations", "src": "_shots/d-cannable-2.jpg" }
+    ]
+  },
+  {
+    "id": "cookies-missoula",
+    "brand": "Cookies Missoula",
+    "category": "Cannabis Retail",
+    "industry": "Dispensary",
+    "tagline": "The Cookies franchise look, executed cleanly.",
+    "blurb": "A bright cyan franchise identity carried with discipline: the cursive Cookies wordmark flanked by product photography, a colorful deals carousel and an embedded map.",
+    "palette": "Cookies cyan, franchise-clean",
+    "thumb": "_thumbs/dispenza-cookies-missoula-desktop.jpg",
+    "mobile": "_shots/mob-cookies-missoula.jpg",
+    "pages": [
+      { "label": "Home", "src": "_shots/d-cookies-missoula-0.jpg" },
+      { "label": "Menu", "src": "_shots/d-cookies-missoula-1.jpg" }
+    ]
+  },
+  {
+    "id": "ddcanna",
+    "brand": "DD Canna",
+    "category": "Cannabis Retail",
+    "industry": "Dispensary",
+    "tagline": "Rustic Montana, craft cannabis.",
+    "blurb": "Down-to-earth and regional: a snowy-pine winter hero with a circular badge mark, a Montana Grown Craft Cannabis photo trio and a Cookies co-brand block.",
+    "palette": "Rustic green, winter photography",
+    "thumb": "_thumbs/dispenza-ddcanna-desktop.jpg",
+    "mobile": "_shots/mob-ddcanna.jpg",
+    "pages": [
+      { "label": "Home", "src": "_shots/d-ddcanna-0.jpg" },
+      { "label": "About", "src": "_shots/d-ddcanna-1.jpg" },
+      { "label": "Menu", "src": "_shots/d-ddcanna-2.jpg" }
+    ]
+  },
+  {
+    "id": "flora-terra",
+    "brand": "Flora Terra",
+    "category": "Cannabis Retail",
+    "industry": "Dispensary",
+    "tagline": "Botanical premium, airy and refined.",
+    "blurb": "A light, premium-clean direction: a green leaf hero with a serif wordmark, blush and soft-green accents, an Our Cultivation story with greenhouse photography and a street-price comparison.",
+    "palette": "White and cream, blush and green",
+    "thumb": "_thumbs/dispenza-flora-terra-desktop.jpg",
+    "mobile": "_shots/mob-flora-terra.jpg",
+    "pages": [
+      { "label": "Home", "src": "_shots/d-flora-terra-0.jpg" }
+    ]
+  },
+  {
+    "id": "gst-ny",
+    "brand": "GST NY Dispensary",
+    "category": "Cannabis Retail",
+    "industry": "Dispensary",
+    "tagline": "Modern editorial in olive and cream.",
+    "blurb": "Tasteful and restrained: a Cannabis for Modern Times hero with an embossed display headline, colorful flat category tiles and a clean olive loyalty block.",
+    "palette": "Olive and sage on cream",
+    "thumb": "_thumbs/dispenza-gst-ny-desktop.jpg",
+    "mobile": "_shots/mob-gst-ny.jpg",
+    "pages": [
+      { "label": "Home", "src": "_shots/d-gst-ny-0.jpg" },
+      { "label": "Menu", "src": "_shots/d-gst-ny-1.jpg" }
+    ]
+  },
+  {
+    "id": "halfpipe",
+    "brand": "HalfPipe Cannabis",
+    "category": "Cannabis Retail",
+    "industry": "Dispensary",
+    "tagline": "Surf and skate, fully committed custom illustration.",
+    "blurb": "The most thoroughly themed site in the set: a custom flat illustration of a coastal skate scene, sunset gradients, torn-paper dividers and beach motifs carried consistently top to bottom.",
+    "palette": "Sunset orange to teal, illustrated",
+    "thumb": "_thumbs/dispenza-halfpipe-desktop.jpg",
+    "mobile": "_shots/mob-halfpipe.jpg",
+    "pages": [
+      { "label": "Home", "src": "_shots/d-halfpipe-0.jpg" },
+      { "label": "Deals", "src": "_shots/d-halfpipe-1.jpg" },
+      { "label": "Location", "src": "_shots/d-halfpipe-2.jpg" },
+      { "label": "Shop", "src": "_shots/d-halfpipe-3.jpg" }
+    ]
+  },
+  {
+    "id": "joyleaf",
+    "brand": "JoyLeaf",
+    "category": "Cannabis Retail",
+    "industry": "Dispensary",
+    "tagline": "Boutique dispensary brand built on real store photography.",
+    "blurb": "A refined, retail-boutique identity shot in an actual upscale store: warm wood cases, mirrored shelving, a disciplined purple-magenta accent over generous white space. Reads like a deliberate brand, not a template.",
+    "palette": "Light and airy, purple-magenta accent",
+    "thumb": "_thumbs/dispenza-joyleaf-desktop.jpg",
+    "mobile": "_shots/mob-joyleaf.jpg",
+    "pages": [
+      { "label": "Home", "src": "_shots/d-joyleaf-0.jpg" }
+    ]
+  },
+  {
+    "id": "lava-leaf",
+    "brand": "Lava Leaf Organics",
+    "category": "Cannabis Retail",
+    "industry": "Dispensary",
+    "tagline": "Warm tropical amber over a leaf hero.",
+    "blurb": "Friendly and warm: an amber-toned product story over a tropical leaf hero, a social photo strip of the store and a happy-customers testimonial row.",
+    "palette": "Warm amber and orange",
+    "thumb": "_thumbs/dispenza-lava-leaf-desktop.jpg",
+    "mobile": "_shots/mob-lava-leaf.jpg",
+    "pages": [
+      { "label": "Home", "src": "_shots/d-lava-leaf-0.jpg" },
+      { "label": "Shop", "src": "_shots/d-lava-leaf-1.jpg" },
+      { "label": "About", "src": "_shots/d-lava-leaf-2.jpg" }
+    ]
+  },
+  {
+    "id": "mindlift",
+    "brand": "MindLift Dispensary",
+    "category": "Cannabis Retail",
+    "industry": "Dispensary",
+    "tagline": "Dark, deal-forward, multi-color wordmark.",
+    "blurb": "Energetic and promotional: a near-black ground with a multi-color MindLift wordmark, bright percentage-off deal cards and a vivid About block.",
+    "palette": "Midnight navy, multi-color accents",
+    "thumb": "_thumbs/dispenza-mindlift-desktop.jpg",
+    "mobile": "_shots/mob-mindlift.jpg",
+    "pages": [
+      { "label": "Home", "src": "_shots/d-mindlift-0.jpg" },
+      { "label": "Specials", "src": "_shots/d-mindlift-1.jpg" },
+      { "label": "Product", "src": "_shots/d-mindlift-2.jpg" }
+    ]
+  },
+  {
+    "id": "rr-legacy",
+    "brand": "RR Legacy Dispensary",
+    "category": "Cannabis Retail",
+    "industry": "Dispensary",
+    "tagline": "Dark premium in red, black and gold.",
+    "blurb": "Premium-leaning and moody: a smoky bud hero under Discover Tranquility, a Shop by Product grid and a red Favorite Brands band with smoke texture.",
+    "palette": "Dark red, black and gold",
+    "thumb": "_thumbs/dispenza-rr-legacy-desktop.jpg",
+    "mobile": "_shots/mob-rr-legacy.jpg",
+    "pages": [
+      { "label": "Home", "src": "_shots/d-rr-legacy-0.jpg" }
+    ]
+  },
+  {
+    "id": "sweetest-grass",
+    "brand": "Sweetest Grass",
+    "category": "Cannabis Retail",
+    "industry": "Dispensary",
+    "tagline": "Northwoods heritage for a tribal cannabis brand.",
+    "blurb": "Calm, community-rooted design: a lake-at-sunset hero with a golden script wordmark, a deep green and gold palette, and a Rooted in Tradition story. Trustworthy and heritage-leaning.",
+    "palette": "Forest green and gold, photographic",
+    "thumb": "_thumbs/dispenza-sweetest-grass-desktop.jpg",
+    "mobile": "_shots/mob-sweetest-grass.jpg",
+    "pages": [
+      { "label": "Home", "src": "_shots/d-sweetest-grass-0.jpg" },
+      { "label": "About", "src": "_shots/d-sweetest-grass-1.jpg" },
+      { "label": "Menu", "src": "_shots/d-sweetest-grass-2.jpg" }
+    ]
+  },
+  {
+    "id": "eye-society",
+    "brand": "Eye Society",
+    "category": "Retail & Ecommerce",
+    "industry": "Eyewear Retail",
+    "tagline": "Matte-black high-fashion optical.",
+    "blurb": "A Parisian boutique optician concept: matte-black minimal, accent-led section headers and a Japanese-vermillion signature, with a curate-not-stock voice.",
+    "palette": "Matte black, vermillion signature",
+    "thumb": "_thumbs/eye-society-desktop.jpg",
+    "mobile": "_thumbs/eye-society-mobile.jpg",
+    "pages": [
+      { "label": "Home", "src": "_shots/m-eye-society-d.jpg" }
+    ]
+  },
+  {
+    "id": "halden-studio",
+    "brand": "Halden Studio",
+    "category": "Retail & Ecommerce",
+    "industry": "Apparel",
+    "tagline": "Quiet slow-fashion essentials.",
+    "blurb": "A capsule-wardrobe concept with quiet warm minimalism and italic serif emphasis in a camel and olive system on a warm ground.",
+    "palette": "Warm ground, camel and olive",
+    "thumb": "_thumbs/halden-studio-desktop.jpg",
+    "mobile": "_thumbs/halden-studio-mobile.jpg",
+    "pages": [
+      { "label": "Home", "src": "_shots/m-halden-studio-d.jpg" }
+    ]
+  },
+  {
+    "id": "ponsonbys",
+    "brand": "Ponsonbys",
+    "category": "Retail & Ecommerce",
+    "industry": "Luxury Retail",
+    "tagline": "Editorial magazine luxury in espresso and cognac.",
+    "blurb": "A single-destination luxury wardrobe concept with magazine pacing: Cormorant Garamond display, slow settle motion, very sharp radii on a warm cream paper.",
+    "palette": "Warm cream, espresso and cognac",
+    "thumb": "_thumbs/ponsonbys-desktop.jpg",
+    "mobile": "_thumbs/ponsonbys-mobile.jpg",
+    "pages": [
+      { "label": "Home", "src": "_shots/m-ponsonbys-d.jpg" }
+    ]
+  },
+  {
+    "id": "ship-happens",
+    "brand": "Ship Happens",
+    "category": "Retail & Ecommerce",
+    "industry": "Ecommerce",
+    "tagline": "Bright friendly marketplace.",
+    "blurb": "A modern marketplace concept with a rotating three-headline hero, category grid and product rails in teal and a sunny yellow CTA.",
+    "palette": "Pale teal, sunny yellow, coral",
+    "thumb": "_thumbs/ship-happens-desktop.jpg",
+    "mobile": "_thumbs/ship-happens-mobile.jpg",
+    "pages": [
+      { "label": "Home", "src": "_shots/m-ship-happens-d.jpg" }
+    ]
+  },
+  {
+    "id": "solera-skin",
+    "brand": "Solera Skin",
+    "category": "Retail & Ecommerce",
+    "industry": "Skincare",
+    "tagline": "Warm sunlit clean-skincare DTC.",
+    "blurb": "A clean-formula skincare concept with warm sunlit minimalism, italic emphasis and a santal-wood palette, the most fleshed-out build in the demo set.",
+    "palette": "Warm ground, santal-wood, sage",
+    "thumb": "_thumbs/solera-skin-desktop.jpg",
+    "mobile": "_thumbs/solera-skin-mobile.jpg",
+    "pages": [
+      { "label": "Home", "src": "_shots/m-solera-skin-d.jpg" }
+    ]
+  },
+  {
+    "id": "yo-momma",
+    "brand": "Yo Momma",
+    "category": "Retail & Ecommerce",
+    "industry": "Ecommerce",
+    "tagline": "Playful baby-care storefront.",
+    "blurb": "A modern baby-care store concept with a full-bleed cinematic hero, a Babylist-derived palette and a playful eggplant and berry accent system.",
+    "palette": "Sand ground, eggplant, berry, teal",
+    "thumb": "_thumbs/yo-momma-desktop.jpg",
+    "mobile": "_thumbs/yo-momma-mobile.jpg",
+    "pages": [
+      { "label": "Home", "src": "_shots/m-yo-momma-d.jpg" }
+    ]
+  },
+  {
+    "id": "beauty-and-the-beach",
+    "brand": "Beauty and the Beach",
+    "category": "Health & Medical",
+    "industry": "Med Spa",
+    "tagline": "Soft coastal med spa with a before/after slider.",
+    "blurb": "A coastal aesthetics concept: Fraunces display, rounded radii, warm soft shadows and a before/after comparison slider in coral and seafoam.",
+    "palette": "Warm white and sand, coral and seafoam",
+    "thumb": "_thumbs/beauty-and-the-beach-desktop.jpg",
+    "mobile": "_thumbs/beauty-and-the-beach-mobile.jpg",
+    "pages": [
+      { "label": "Home", "src": "_shots/m-beauty-and-the-beach-d.jpg" }
+    ]
+  },
+  {
+    "id": "eye-carumba",
+    "brand": "Eye Carumba",
+    "category": "Health & Medical",
+    "industry": "Optometry",
+    "tagline": "Clean modern eye clinic.",
+    "blurb": "A precision-and-care optometry concept on a near-white ground: soft-shadow lift cards, solid pill CTAs and a clear blue and teal accent system.",
+    "palette": "Near-white, navy, blue and teal",
+    "thumb": "_thumbs/eye-carumba-desktop.jpg",
+    "mobile": "_thumbs/eye-carumba-mobile.jpg",
+    "pages": [
+      { "label": "Home", "src": "_shots/m-eye-carumba-d.jpg" }
+    ]
+  },
+  {
+    "id": "ketchum-and-pullem",
+    "brand": "Ketchum & Pullem",
+    "category": "Health & Medical",
+    "industry": "Dentistry",
+    "tagline": "Refined premium dental.",
+    "blurb": "A premium NYC dental concept: Fraunces serif headings, Archivo labels, pill CTAs with lift, on an ivory ground with teal and navy.",
+    "palette": "Ivory, teal and navy",
+    "thumb": "_thumbs/ketchum-and-pullem-desktop.jpg",
+    "mobile": "_thumbs/ketchum-and-pullem-mobile.jpg",
+    "pages": [
+      { "label": "Home", "src": "_shots/m-ketchum-and-pullem-d.jpg" }
+    ]
+  },
+  {
+    "id": "northside-family-health",
+    "brand": "Northside Family Health",
+    "category": "Health & Medical",
+    "industry": "Primary Care",
+    "tagline": "Trustworthy navy-and-gold family practice.",
+    "blurb": "A neighborhood family-practice concept with an institutional navy and gold system, italic emphasis headers and a we-are-still-here trust narrative.",
+    "palette": "Cool near-white, navy and gold",
+    "thumb": "_thumbs/northside-family-health-desktop.jpg",
+    "mobile": "_thumbs/northside-family-health-mobile.jpg",
+    "pages": [
+      { "label": "Home", "src": "_shots/m-northside-family-health-d.jpg" }
+    ]
+  },
+  {
+    "id": "coast-crown-realty",
+    "brand": "Coast & Crown Realty",
+    "category": "Professional & Finance",
+    "industry": "Real Estate",
+    "tagline": "Restrained luxury real estate.",
+    "blurb": "A coastal off-market brokerage concept with italic emphasis, a measured section-title rhythm and a deep accent on a warm off-white ground.",
+    "palette": "Warm off-white, deep accent",
+    "thumb": "_thumbs/coast-crown-realty-desktop.jpg",
+    "mobile": "_thumbs/coast-crown-realty-mobile.jpg",
+    "pages": [
+      { "label": "Home", "src": "_shots/m-coast-crown-realty-d.jpg" }
+    ]
+  },
+  {
+    "id": "quill-saas",
+    "brand": "Quill",
+    "category": "Professional & Finance",
+    "industry": "B2B SaaS",
+    "tagline": "Dark-mode modern SaaS.",
+    "blurb": "A lifecycle-marketing SaaS concept, the one dark-ground demo in the set, with indigo and violet gradient accents and CFO-grade metric framing.",
+    "palette": "Dark navy, indigo and violet",
+    "thumb": "_thumbs/quill-saas-desktop.jpg",
+    "mobile": "_thumbs/quill-saas-mobile.jpg",
+    "pages": [
+      { "label": "Home", "src": "_shots/m-quill-saas-d.jpg" }
+    ]
+  },
+  {
+    "id": "reid-capital-partners",
+    "brand": "Reid Capital Partners",
+    "category": "Professional & Finance",
+    "industry": "Wealth Management",
+    "tagline": "Polished fee-only advisory.",
+    "blurb": "An independent fee-only RIA concept with a polished, trustworthy fintech feel in indigo and cyan, accent-emphasis headers and an answerable-only-to-you voice.",
+    "palette": "Near-white, indigo and cyan",
+    "thumb": "_thumbs/reid-capital-partners-desktop.jpg",
+    "mobile": "_thumbs/reid-capital-partners-mobile.jpg",
+    "pages": [
+      { "label": "Home", "src": "_shots/m-reid-capital-partners-d.jpg" }
+    ]
+  },
+  {
+    "id": "casa-de-maria",
+    "brand": "Casa de Maria",
+    "category": "Lifestyle & Local",
+    "industry": "Restaurant",
+    "tagline": "Warm artisanal Oaxacan dining.",
+    "blurb": "An eighth-generation Oaxacan restaurant concept with a fractal-noise paper texture, rotating menu framing and a terracotta, sage and gold palette.",
+    "palette": "Warm cream, terracotta, sage, gold",
+    "thumb": "_thumbs/casa-de-maria-desktop.jpg",
+    "mobile": "_thumbs/casa-de-maria-mobile.jpg",
+    "pages": [
+      { "label": "Home", "src": "_shots/m-casa-de-maria-d.jpg" }
+    ]
+  },
+  {
+    "id": "full-throttle",
+    "brand": "Full Throttle",
+    "category": "Lifestyle & Local",
+    "industry": "Automotive",
+    "tagline": "Carbon-dark performance house, one committed red.",
+    "blurb": "A dark-mode reskin of the SGEN modern design system for a high-performance auto shop: full-bleed hero, engineered sharp radii, red gradient and glow on a carbon ground.",
+    "palette": "Carbon #0d0e10, automotive red",
+    "thumb": "_thumbs/full-throttle-desktop.jpg",
+    "mobile": "_thumbs/full-throttle-mobile.jpg",
+    "pages": [
+      { "label": "Home", "src": "_shots/m-full-throttle-d.jpg" }
+    ]
+  },
+  {
+    "id": "pet-society",
+    "brand": "Pet Society",
+    "category": "Lifestyle & Local",
+    "industry": "Pet Services",
+    "tagline": "Quirky multi-location pet grooming.",
+    "blurb": "A friendly lead-gen concept with springy staggered scroll reveals, paw hover animations and a scroll-progress bar in heavy Nunito weights.",
+    "palette": "Warm cream, sunny yellow, orange",
+    "thumb": "_thumbs/pet-society-desktop.jpg",
+    "mobile": "_thumbs/pet-society-mobile.jpg",
+    "pages": [
+      { "label": "Home", "src": "_shots/m-pet-society-d.jpg" }
+    ]
+  },
+  {
+    "id": "polestar-fitness",
+    "brand": "Polestar Fitness",
+    "category": "Lifestyle & Local",
+    "industry": "Fitness",
+    "tagline": "Stark monochrome athletic studio.",
+    "blurb": "A boutique signature-method studio concept in stark monochrome minimalism with accent-led section titles and an athlete-grade voice.",
+    "palette": "Light grey, near-black, grey signature",
+    "thumb": "_thumbs/polestar-fitness-desktop.jpg",
+    "mobile": "_thumbs/polestar-fitness-mobile.jpg",
+    "pages": [
+      { "label": "Home", "src": "_shots/m-polestar-fitness-d.jpg" }
+    ]
+  }
+];
+
+/* ============================================================
+   FACET ENGINE (adapted from _newbody.html).
+   Two groups only: category + industry. Live counts, reset,
+   active chips, sort. No agency / kind / real-vs-demo.
+   ============================================================ */
+var GROUPKEY = { category: "category", industry: "industry" };
+var CAT_ORDER = [];   // first-seen order from ENTRIES (= curated category order)
+var state = { category: new Set(), industry: new Set(), sort: "default" };
+var curList = [];
+var spIndex = -1;
+
+function uniq(key) {
+  var s = [];
+  ENTRIES.forEach(function (e) { if (s.indexOf(e[key]) < 0) s.push(e[key]); });
+  return s;
+}
+function escapeHtml(str) {
+  return String(str).replace(/[&<>"']/g, function (c) {
+    return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+  });
+}
+
+function matchesExcept(e, skip) {
+  if (skip !== "category" && state.category.size && !state.category.has(e.category)) return false;
+  if (skip !== "industry" && state.industry.size && !state.industry.has(e.industry)) return false;
+  return true;
+}
+function matches(e) {
+  if (state.category.size && !state.category.has(e.category)) return false;
+  if (state.industry.size && !state.industry.has(e.industry)) return false;
+  return true;
+}
+function countFor(group, val) {
+  return ENTRIES.filter(function (e) { return matchesExcept(e, group) && e[GROUPKEY[group]] === val; }).length;
+}
+
+/* ---- build facet UI ---- */
+function buildFacet(group, container, values) {
+  values.forEach(function (val) {
+    var b = document.createElement("button");
+    b.className = "sc-facet"; b.type = "button";
+    b.setAttribute("data-group", group); b.setAttribute("data-val", val);
+    b.innerHTML = '<span class="box" aria-hidden="true"></span><span class="txt">' + escapeHtml(val) + '</span><span class="cnt"></span>';
+    b.addEventListener("click", function () { toggleFacet(group, val); });
+    container.appendChild(b);
+  });
+}
+function toggleFacet(group, val) {
+  var set = state[group];
+  if (set.has(val)) set.delete(val); else set.add(val);
+  render();
+}
+
+/* ---- render ---- */
+function catIndex(c) { var i = CAT_ORDER.indexOf(c); return i < 0 ? 999 : i; }
+function render() {
+  curList = ENTRIES.filter(matches);
+  if (state.sort === "az") {
+    curList.sort(function (a, b) { return a.brand.localeCompare(b.brand); });
+  } else if (state.sort === "category") {
+    curList.sort(function (a, b) { return (catIndex(a.category) - catIndex(b.category)) || a.brand.localeCompare(b.brand); });
+  }
+
+  document.querySelectorAll(".sc-facet").forEach(function (b) {
+    var g = b.getAttribute("data-group"), v = b.getAttribute("data-val");
+    var on = state[g].has(v); b.classList.toggle("on", on);
+    var c = countFor(g, v);
+    b.querySelector(".cnt").textContent = c;
+    b.setAttribute("data-disabled", (c === 0 && !on) ? "1" : "0");
+  });
+
+  document.getElementById("showingLine").innerHTML = "Showing <b>" + curList.length + "</b> of " + ENTRIES.length + " sites";
+  document.getElementById("rc").textContent = curList.length;
+
+  var chips = document.getElementById("activeChips"); chips.innerHTML = "";
+  ["category", "industry"].forEach(function (g) {
+    state[g].forEach(function (v) {
+      var el = document.createElement("span"); el.className = "sc-activechip";
+      el.innerHTML = escapeHtml(v) + '<button type="button" aria-label="remove">&times;</button>';
+      el.querySelector("button").addEventListener("click", function (ev) { ev.stopPropagation(); toggleFacet(g, v); });
+      chips.appendChild(el);
+    });
+  });
+
+  var grid = document.getElementById("grid");
+  if (curList.length === 0) {
+    grid.innerHTML = '<div class="sc-empty"><div class="big">No sites match those filters</div><p>That combination is empty in this showcase. Loosen a filter to keep exploring.</p><button class="btn btn-secondary" type="button" id="emptyReset">Reset filters</button></div>';
+    document.getElementById("emptyReset").addEventListener("click", resetAll);
+    return;
+  }
+  grid.innerHTML = "";
+  curList.forEach(function (e, i) { grid.appendChild(buildCard(e, i)); });
+}
+
+/* ---- build a gallery card ---- */
+function buildCard(e, i) {
+  var d = document.createElement("article");
+  d.className = "card sc-card";
+  d.setAttribute("data-id", e.id);
+  d.setAttribute("tabindex", "0");
+  d.setAttribute("role", "button");
+  d.setAttribute("aria-label", "Open " + e.brand + " spotlight");
+  d.innerHTML =
+    '<div class="sc-frame">' +
+      '<div class="sc-chrome">' +
+        '<span class="sc-dots"><i></i><i></i><i></i></span>' +
+        '<span class="sc-addr">' + escapeHtml(e.id) + '.com</span>' +
+      '</div>' +
+      '<img class="sc-shot" src="' + e.thumb + '" alt="' + escapeHtml(e.brand) + ' homepage" loading="lazy">' +
+    '</div>' +
+    '<div class="sc-meta">' +
+      '<div class="sc-brand">' + escapeHtml(e.brand) + '</div>' +
+      '<div class="sc-tags">' +
+        '<span class="sc-tag cat">' + escapeHtml(e.category) + '</span>' +
+        '<span class="sc-tag">' + escapeHtml(e.industry) + '</span>' +
+      '</div>' +
+    '</div>';
+  d.addEventListener("click", function () { openSpotlight(e.id); });
+  d.addEventListener("keydown", function (ev) {
+    if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); openSpotlight(e.id); }
+  });
+  return d;
+}
+
+/* ============================================================
+   SPOTLIGHT (Native Page Deck), painted from an ENTRIES object.
+   ============================================================ */
+var pdTabs = [];          // current entry's tab buttons
+var pdFrames = [];        // current entry's frame imgs
+var pdPages = [];         // current entry's pages array
+
+function lastWordGrad(brand) {
+  var parts = String(brand).split(" ");
+  if (parts.length === 1) return '<span class="grad">' + escapeHtml(brand) + '</span>';
+  var last = parts.pop();
+  return escapeHtml(parts.join(" ")) + ' <span class="grad">' + escapeHtml(last) + '</span>';
+}
+
+function paintSpotlight() {
+  var list = curList.length ? curList : ENTRIES;
+  var e = list[spIndex]; if (!e) return;
+  pdPages = e.pages || [];
+
+  document.getElementById("pdEyebrow").textContent = e.category + " / " + e.industry;
+  document.getElementById("pdBrand").innerHTML = lastWordGrad(e.brand);
+  document.getElementById("pdLead").textContent = e.tagline || e.blurb || "";
+  document.getElementById("pdPhone").src = e.mobile || "";
+  document.getElementById("pdPhone").alt = e.brand + " on mobile";
+
+  // tabs
+  var tabsWrap = document.getElementById("pdTabs");
+  var single = pdPages.length <= 1;
+  tabsWrap.innerHTML = "";
+  tabsWrap.style.display = single ? "none" : "flex";
+  document.getElementById("pdHint").style.display = single ? "none" : "flex";
+
+  pdPages.forEach(function (p, idx) {
+    var b = document.createElement("button");
+    b.className = "pd-tab"; b.type = "button";
+    b.setAttribute("role", "tab");
+    b.setAttribute("aria-selected", idx === 0 ? "true" : "false");
+    b.setAttribute("data-page", idx);
+    b.innerHTML = '<span class="chip" style="background-image:url(\'' + p.src + '\')"></span>' +
+                  '<span class="klabel">' + escapeHtml(p.label) + '</span>';
+    b.addEventListener("click", function () { showPage(idx); b.focus(); });
+    tabsWrap.appendChild(b);
+  });
+
+  // frames
+  var vp = document.getElementById("pdViewport");
+  vp.innerHTML = "";
+  pdPages.forEach(function (p, idx) {
+    var img = document.createElement("img");
+    img.className = "pd-frame" + (idx === 0 ? " is-active" : "");
+    img.setAttribute("data-page", idx);
+    img.src = p.src;
+    img.alt = e.brand + " " + p.label + " page";
+    vp.appendChild(img);
+  });
+
+  pdTabs = Array.prototype.slice.call(tabsWrap.querySelectorAll(".pd-tab"));
+  pdFrames = Array.prototype.slice.call(vp.querySelectorAll(".pd-frame"));
+
+  // address bar: id.com (home), id.com/path for subsequent pages
+  document.getElementById("pdUrl").textContent = e.id + ".com";
+  showPage(0);
+
+  // panel content is above the fold; nudge the reveals in
+  document.querySelectorAll("#pdPanel .reveal").forEach(function (el) { el.classList.add("in"); });
+}
+
+function showPage(idx) {
+  if (!pdTabs.length) return;
+  if (idx < 0) idx = pdTabs.length - 1;
+  if (idx >= pdTabs.length) idx = 0;
+  pdTabs.forEach(function (t, i) { t.setAttribute("aria-selected", i === idx ? "true" : "false"); });
+  pdFrames.forEach(function (f) { f.classList.toggle("is-active", +f.getAttribute("data-page") === idx); });
+  var list = curList.length ? curList : ENTRIES;
+  var e = list[spIndex];
+  var p = pdPages[idx];
+  if (e && p) {
+    document.getElementById("pdUrl").textContent = e.id + ".com" + (idx === 0 ? "" : "/" + slug(p.label));
+  }
+}
+function slug(label) { return String(label).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""); }
+function currentPage() {
+  for (var i = 0; i < pdTabs.length; i++) { if (pdTabs[i].getAttribute("aria-selected") === "true") return i; }
+  return 0;
+}
+
+/* ---- open / close / step ---- */
+function openSpotlight(id) {
+  var list = curList.length ? curList : ENTRIES;
+  spIndex = list.findIndex(function (e) { return e.id === id; });
+  if (spIndex < 0) { curList = ENTRIES.slice(); spIndex = ENTRIES.findIndex(function (e) { return e.id === id; }); }
+  paintSpotlight();
+  document.getElementById("pdScrim").classList.add("open");
+  document.getElementById("pdPanel").classList.add("open");
+  document.getElementById("pdPanel").setAttribute("aria-hidden", "false");
+  document.body.style.overflow = "hidden";
+  markActive(id);
+  document.getElementById("pdClose").focus();
+}
+function closeSpotlight() {
+  document.getElementById("pdScrim").classList.remove("open");
+  document.getElementById("pdPanel").classList.remove("open");
+  document.getElementById("pdPanel").setAttribute("aria-hidden", "true");
+  document.body.style.overflow = "";
+  markActive(null);
+}
+function isOpen() { return document.getElementById("pdPanel").classList.contains("open"); }
+function markActive(id) {
+  document.querySelectorAll(".sc-card").forEach(function (r) {
+    r.classList.toggle("active", !!id && r.getAttribute("data-id") === id);
+  });
+}
+function stepSpotlight(dir) {
+  var list = curList.length ? curList : ENTRIES;
+  if (!list.length) return;
+  spIndex = (spIndex + dir + list.length) % list.length;
+  paintSpotlight();
+  markActive(list[spIndex].id);
+  document.getElementById("pdPanel").scrollTop = 0;
+}
+
+/* ============================================================
+   WIRING
+   ============================================================ */
+function resetAll() {
+  state.category.clear(); state.industry.clear();
+  render();
+}
+document.getElementById("resetBtn").addEventListener("click", resetAll);
+document.getElementById("sortBtns").addEventListener("click", function (ev) {
+  var b = ev.target.closest("button"); if (!b) return;
+  state.sort = b.getAttribute("data-sort");
+  document.querySelectorAll("#sortBtns button").forEach(function (x) { x.classList.toggle("on", x === b); });
+  render();
+});
+document.getElementById("pdClose").addEventListener("click", closeSpotlight);
+document.getElementById("pdScrim").addEventListener("click", closeSpotlight);
+document.getElementById("pdPrev").addEventListener("click", function () { stepSpotlight(-1); });
+document.getElementById("pdNext").addEventListener("click", function () { stepSpotlight(1); });
+
+document.addEventListener("keydown", function (ev) {
+  if (!isOpen()) return;
+  if (ev.key === "Escape") { closeSpotlight(); return; }
+  if (ev.key === "ArrowRight") {
+    // arrow steps PAGES when multi-page, else steps to the next site
+    if (pdTabs.length > 1) { showPage(currentPage() + 1); } else { stepSpotlight(1); }
+    ev.preventDefault();
+  } else if (ev.key === "ArrowLeft") {
+    if (pdTabs.length > 1) { showPage(currentPage() - 1); } else { stepSpotlight(-1); }
+    ev.preventDefault();
+  }
+});
+
+/* ---- reveal-on-scroll (real .reveal/.in, reduced-motion gated) ---- */
+(function () {
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var reveals = Array.prototype.slice.call(document.querySelectorAll(".sc-storycard.reveal"));
+  if (reduce || !("IntersectionObserver" in window)) {
+    reveals.forEach(function (el) { el.classList.add("in"); });
+  } else {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); } });
+    }, { threshold: 0.14 });
+    reveals.forEach(function (el) { io.observe(el); });
+  }
+})();
+
+/* ============================================================
+   INIT
+   ============================================================ */
+CAT_ORDER = uniq("category");
+buildFacet("category", document.getElementById("grp-category"), CAT_ORDER);
+buildFacet("industry", document.getElementById("grp-industry"), uniq("industry"));
+document.getElementById("cSites").textContent = ENTRIES.length;
+document.getElementById("cCats").textContent = CAT_ORDER.length;
+document.getElementById("cInds").textContent = uniq("industry").length;
+document.getElementById("footN").textContent = ENTRIES.length;
+document.getElementById("footC").textContent = CAT_ORDER.length;
+render();
+</script>
+
+</body>
+</html>

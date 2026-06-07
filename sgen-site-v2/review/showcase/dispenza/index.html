@@ -1,0 +1,797 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dispenza, the #1 agency in cannabis -- built on SGEN</title>
+
+<link rel="stylesheet" href="../../../_design/sgen-tokens.css">
+<link rel="stylesheet" href="../../../_design/sgen-structural.css">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  /* ====================================================================
+     CUSTOM CSS, scoped to what the design system does NOT already cover:
+       - page surface (dark premium WITHOUT the has-atmos-on-body scroll trap)
+       - the floating-phones hero collage
+       - the cinematic alternating proof panels (device pairing per site)
+       - the desktop browser "monitor" frame + page tabs + squircle phone
+       - the breadth/scope visual
+     Everything else uses the real classes (.eyebrow / .h-hero / .h1 / .h2 /
+     .h3 / .grad / .lead / .stat / .stat .z / .pill / .dot / .btn /
+     .btn-primary / .btn-secondary / .card / .divider / .reveal). All custom
+     values reference var(--sg-*).
+     ==================================================================== */
+
+  /* PAGE SURFACE -- dark premium applied to the BODY background directly.
+     NOT via class="...has-atmos" on <body>: the linked rule
+     .surface-dark.has-atmos { overflow: clip } is meant for section BANDS and
+     would clip page scroll on the body. We paint the atmosphere glow as a fixed
+     backdrop and let <html> remain the scroller. has-atmos is used ONLY on
+     individual full-bleed <section> bands below. */
+  html { height: auto; }
+  body {
+    background: var(--sg-bg);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  /* fixed cinematic atmosphere behind everything (does not affect scrolling) */
+  body::before {
+    content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+    background: var(--sg-atmos-glow);
+    mix-blend-mode: screen;
+  }
+  body::after {
+    content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+    opacity: var(--sg-grain-opacity); mix-blend-mode: overlay;
+    background: repeating-linear-gradient(0deg, rgba(255,255,255,.6) 0 1px, transparent 1px 3px);
+  }
+
+  .wrap { max-width: var(--sg-maxw); margin-inline: auto; }
+  .narrow { max-width: 900px; margin-inline: auto; }
+  .sec { padding: var(--sg-pad) 24px; position: relative; }
+
+  /* ---- TOP MARK (tiny native chrome line; keeps page feeling native) ---- */
+  .dz-topbar {
+    display: flex; align-items: center; justify-content: space-between; gap: 20px;
+    padding: 16px clamp(20px, 4vw, 40px);
+    border-bottom: 1px solid var(--sg-line-2);
+    font-family: var(--sg-mono); font-size: 11px; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--sg-ink-faint);
+  }
+  .dz-topbar .lhs { display: inline-flex; align-items: center; gap: 10px; color: var(--sg-ink); font-weight: 700; }
+  .dz-topbar .lhs .sg-logo { font-size: 18px; }
+  .dz-topbar .sg-logo .dot { color: var(--sg-red); }
+  .dz-topbar .rhs { display: inline-flex; align-items: center; gap: 8px; }
+  @media (max-width: 600px) { .dz-topbar .rhs { display: none; } }
+
+  /* ================= HERO ================= */
+  .dz-hero { padding: clamp(64px, 10vw, 130px) 24px clamp(48px, 7vw, 90px); overflow: hidden; }
+  .dz-hero-in {
+    max-width: var(--sg-maxw); margin-inline: auto;
+    display: grid; grid-template-columns: 1.06fr .94fr; gap: clamp(28px, 4vw, 60px);
+    align-items: center;
+  }
+  @media (max-width: 980px) {
+    .dz-hero-in { grid-template-columns: 1fr; gap: clamp(36px, 8vw, 56px); }
+  }
+  .dz-hero .h-hero { max-width: 14ch; }
+  .dz-hero .lead { margin: 22px 0 0; max-width: 50ch; }
+  .dz-hero-cta { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 30px; }
+  .dz-hero-meta {
+    margin-top: 30px; display: flex; flex-wrap: wrap; gap: 10px 22px; align-items: center;
+    font-family: var(--sg-mono); font-size: 12px; letter-spacing: .04em; color: var(--sg-ink-faint);
+  }
+  .dz-hero-meta b { color: var(--sg-ink-soft); }
+
+  /* floating live-mobile collage */
+  .dz-phones {
+    position: relative; height: clamp(420px, 50vw, 560px); min-width: 0;
+  }
+  @media (max-width: 980px) { .dz-phones { height: clamp(380px, 86vw, 480px); margin-inline: auto; max-width: 560px; } }
+  .dz-float {
+    position: absolute; width: clamp(150px, 19vw, 224px); aspect-ratio: 390/844;
+    border-radius: var(--sg-r-squircle); overflow: hidden;
+    border: 1px solid var(--sg-card-border); background: #0a0a0c;
+    box-shadow: var(--sg-shadow-cinematic);
+  }
+  .dz-float .notch {
+    position: absolute; top: 8px; left: 50%; transform: translateX(-50%); z-index: 2;
+    width: 64px; height: 15px; border-radius: var(--sg-r-pill);
+    background: #000; border: 1px solid rgba(255,255,255,.08);
+  }
+  .dz-float img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
+  .dz-float.f1 { left: 2%;  top: 6%;   z-index: 3; transform: rotate(-5deg);  animation: dz-drift-a 9s var(--sg-ease) infinite; }
+  .dz-float.f2 { left: 33%; top: 0;    z-index: 4; transform: rotate(2deg);   animation: dz-drift-b 11s var(--sg-ease) infinite; }
+  .dz-float.f3 { right: 2%; top: 14%;  z-index: 3; transform: rotate(6deg);   animation: dz-drift-a 10s var(--sg-ease) infinite .6s; }
+  .dz-float.f4 { left: 17%; bottom: 0; z-index: 5; transform: rotate(-2deg);  animation: dz-drift-b 8.5s var(--sg-ease) infinite .3s; }
+  /* a soft red puck glow under the cluster */
+  .dz-phones::before {
+    content: ""; position: absolute; inset: 12% 6% 6%; z-index: 0; pointer-events: none;
+    background: radial-gradient(60% 60% at 50% 45%, rgba(213,21,34,.20), transparent 70%);
+    filter: blur(8px);
+  }
+  @keyframes dz-drift-a { 0%,100% { transform: translateY(0) rotate(-5deg); } 50% { transform: translateY(-14px) rotate(-4deg); } }
+  @keyframes dz-drift-b { 0%,100% { transform: translateY(0) rotate(2deg);  } 50% { transform: translateY(12px) rotate(3deg);  } }
+  @media (max-width: 540px) {
+    .dz-float { width: clamp(124px, 40vw, 168px); }
+    .dz-float.f3 { display: none; }
+  }
+
+  /* ================= SCALE BAND ================= */
+  .dz-scalegrid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(18px, 3vw, 40px);
+    margin-top: clamp(34px, 5vw, 56px);
+  }
+  @media (max-width: 740px) { .dz-scalegrid { grid-template-columns: 1fr; gap: 30px; } }
+  .dz-scaleitem { display: flex; flex-direction: column; gap: 8px; }
+  .dz-scaleitem .stat { font-size: clamp(46px, 7vw, 92px); }
+  .dz-scaleitem .label { margin: 0; }
+  .dz-attrib {
+    margin-top: clamp(34px, 5vw, 52px); padding: 22px 26px;
+    border: 1px solid var(--sg-card-border); border-radius: var(--sg-r-lg);
+    background: var(--sg-card-bg); box-shadow: var(--sg-glass-inset);
+    display: flex; gap: 16px; align-items: flex-start;
+  }
+  .dz-attrib .qmark {
+    font-family: var(--sg-mono); font-size: 11px; font-weight: 700; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--sg-red-hot); flex: 0 0 auto; padding-top: 3px;
+  }
+  .dz-attrib p { margin: 0; color: var(--sg-ink-soft); font-size: 16px; line-height: 1.6; }
+  .dz-attrib b { color: var(--sg-ink); font-weight: 800; }
+
+  /* ================= ORIGIN ================= */
+  .dz-origin .narrow > .lead { margin-top: 22px; }
+  .dz-origin p.body { color: var(--sg-ink-soft); font-size: var(--sg-fs-lead); line-height: 1.7; margin: 18px 0 0; }
+  .dz-origin .h2 { max-width: 20ch; }
+
+  /* ================= PROOF GALLERY (the alternating panels) ============= */
+  .dz-gallery-head { padding: var(--sg-pad) 24px clamp(8px, 2vw, 24px); }
+  .dz-gallery-head .h2 { max-width: 16ch; }
+  .dz-gallery-head .lead { margin-top: 20px; }
+
+  .dz-panels { display: flex; flex-direction: column; }
+  .dz-panel { padding: clamp(34px, 5vw, 70px) 24px; border-top: 1px solid var(--sg-line-2); }
+  .dz-panel:first-child { border-top: 0; }
+  .dz-panel-in {
+    max-width: var(--sg-maxw); margin-inline: auto;
+    display: grid; grid-template-columns: 1.18fr .82fr; gap: clamp(26px, 4vw, 64px);
+    align-items: center;
+  }
+  /* alternate: even panels flip the device stage to the right */
+  .dz-panel.flip .dz-panel-in { grid-template-columns: .82fr 1.18fr; }
+  .dz-panel.flip .dz-stage { order: 2; }
+  .dz-panel.flip .dz-caption { order: 1; }
+  @media (max-width: 940px) {
+    .dz-panel-in,
+    .dz-panel.flip .dz-panel-in { grid-template-columns: 1fr; gap: clamp(26px, 6vw, 40px); }
+    .dz-panel.flip .dz-stage { order: 1; }
+    .dz-panel.flip .dz-caption { order: 2; }
+  }
+
+  /* caption column */
+  .dz-caption .ix {
+    font-family: var(--sg-mono); font-size: 12px; font-weight: 700; letter-spacing: .16em;
+    color: var(--sg-red-hot); margin-bottom: 14px;
+  }
+  .dz-caption .brand { font-weight: 900; font-size: clamp(28px, 3.4vw, 44px); letter-spacing: -.03em; line-height: 1.02; color: var(--sg-ink); }
+  .dz-caption .place { margin-top: 10px; font-family: var(--sg-mono); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--sg-ink-faint); }
+  .dz-caption .type {
+    margin-top: 18px; display: inline-flex; align-items: center; gap: .5em;
+    padding: 7px 14px; border-radius: var(--sg-r-pill);
+    background: rgba(255,255,255,.05); border: 1px solid var(--sg-card-border);
+    font-family: var(--sg-mono); font-size: 11px; font-weight: 700; letter-spacing: .06em;
+    text-transform: uppercase; color: var(--sg-ink-soft);
+  }
+  .dz-caption .builton { margin-top: 18px; }
+
+  /* device stage: desktop browser monitor (+ page tabs) beside the phone */
+  .dz-stage { display: grid; grid-template-columns: 1fr clamp(120px, 16vw, 176px); gap: clamp(16px, 2.4vw, 28px); align-items: start; min-width: 0; }
+  @media (max-width: 560px) { .dz-stage { grid-template-columns: 1fr; } }
+
+  /* page tabs (hidden when a site has a single page) */
+  .dz-tabs { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 14px; }
+  .dz-tab {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 12px 6px 7px; border-radius: var(--sg-r-pill);
+    background: rgba(255,255,255,.03); border: 1px solid var(--sg-card-border);
+    color: var(--sg-ink-soft); cursor: pointer;
+    font-family: var(--sg-font); font-size: 12.5px; font-weight: 700; letter-spacing: -.01em;
+    transition: color var(--sg-t-fast), border-color var(--sg-t-fast), background-color var(--sg-t-fast), transform .08s var(--sg-ease);
+  }
+  .dz-tab:hover { color: var(--sg-ink); border-color: rgba(255,255,255,.22); }
+  .dz-tab[aria-selected="true"] {
+    color: #fff; border-color: var(--sg-red);
+    background: linear-gradient(180deg, rgba(213,21,34,.22), rgba(213,21,34,.10));
+    box-shadow: var(--sg-shadow-red);
+  }
+  .dz-tab .chip {
+    width: 28px; height: 20px; border-radius: 5px; flex: 0 0 auto;
+    background-size: cover; background-position: top center; background-color: #0d0d0f;
+    border: 1px solid var(--sg-card-border); box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+  }
+  .dz-tab .klabel { font-family: var(--sg-mono); font-size: 10.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+
+  /* desktop browser frame (the "monitor") */
+  .dz-browser { border-radius: var(--sg-r-lg); overflow: hidden; border: 1px solid var(--sg-card-border); background: #0a0a0c; box-shadow: var(--sg-shadow-cinematic); }
+  .dz-chrome { display: flex; align-items: center; gap: 12px; padding: 10px 13px; background: linear-gradient(180deg, #1a1a1f, #131316); border-bottom: 1px solid var(--sg-card-border); }
+  .dz-dots { display: flex; gap: 7px; flex: 0 0 auto; }
+  .dz-dots i { width: 10px; height: 10px; border-radius: 50%; display: block; }
+  .dz-dots i:nth-child(1) { background: #ff5f57; }
+  .dz-dots i:nth-child(2) { background: #febc2e; }
+  .dz-dots i:nth-child(3) { background: #28c840; }
+  .dz-addr {
+    flex: 1; min-width: 0; display: flex; align-items: center; gap: 8px;
+    padding: 6px 13px; border-radius: var(--sg-r-pill);
+    background: rgba(0,0,0,.45); border: 1px solid rgba(255,255,255,.06);
+    font-family: var(--sg-mono); font-size: 11.5px; font-weight: 600;
+    color: var(--sg-ink-faint); overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+  }
+  .dz-addr .lock { color: #28c840; font-size: 11px; flex: 0 0 auto; }
+  .dz-addr .url { color: rgba(255,255,255,.72); overflow: hidden; text-overflow: ellipsis; }
+
+  .dz-viewport { position: relative; aspect-ratio: 16/10; background: #0d0d0f; overflow: hidden; }
+  .dz-frame {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    object-fit: cover; object-position: top center;
+    opacity: 0; transform: scale(1.012);
+    transition: opacity .5s var(--sg-ease), transform .7s var(--sg-ease-out);
+  }
+  .dz-frame.is-active { opacity: 1; transform: scale(1); }
+
+  /* phone beside the monitor */
+  .dz-phone-col { display: flex; flex-direction: column; gap: 11px; align-items: center; }
+  @media (max-width: 560px) { .dz-phone-col { flex-direction: row; align-items: flex-start; gap: 16px; } }
+  .dz-phone {
+    position: relative; width: 100%; max-width: 176px; aspect-ratio: 390/844;
+    border-radius: var(--sg-r-squircle); overflow: hidden;
+    border: 1px solid var(--sg-card-border); background: #0a0a0c; box-shadow: var(--sg-shadow-cinematic);
+  }
+  @media (max-width: 560px) { .dz-phone { max-width: 150px; } }
+  .dz-phone .notch {
+    position: absolute; top: 8px; left: 50%; transform: translateX(-50%); z-index: 2;
+    width: 62px; height: 15px; border-radius: var(--sg-r-pill);
+    background: #000; border: 1px solid rgba(255,255,255,.08);
+  }
+  .dz-phone img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
+  .dz-phone-cap { font-family: var(--sg-mono); font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--sg-ink-faint); text-align: center; }
+
+  /* ================= RANGE ================= */
+  .dz-rangegrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: clamp(34px, 5vw, 52px); }
+  @media (max-width: 920px) { .dz-rangegrid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 560px) { .dz-rangegrid { grid-template-columns: 1fr; } }
+  .dz-rangecard .rk { font-family: var(--sg-mono); font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--sg-red-hot); margin-bottom: 12px; }
+  .dz-rangecard h3 { margin-bottom: 10px; }
+  .dz-rangecard p { color: var(--sg-ink-soft); font-size: 15px; line-height: 1.6; margin: 0; }
+
+  /* ================= PLATFORM ================= */
+  .dz-platgrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(14px, 2vw, 26px); margin-top: clamp(30px, 4vw, 48px); }
+  @media (max-width: 920px) { .dz-platgrid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 480px) { .dz-platgrid { grid-template-columns: 1fr; } }
+  .dz-platstat { display: flex; flex-direction: column; gap: 6px; }
+  .dz-platstat .stat { font-size: clamp(40px, 5vw, 70px); }
+  .dz-platstat .label { margin: 0; }
+  .dz-modules { display: flex; flex-wrap: wrap; gap: 9px; margin-top: clamp(30px, 4vw, 44px); }
+  .dz-mod {
+    font-family: var(--sg-mono); font-size: 11px; font-weight: 600; letter-spacing: .06em;
+    text-transform: uppercase; padding: 8px 14px; border-radius: var(--sg-r-pill);
+    background: rgba(255,255,255,.05); border: 1px solid var(--sg-card-border); color: var(--sg-ink-soft);
+  }
+  .dz-mod .dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--sg-red); margin-right: 7px; vertical-align: middle; }
+
+  /* ================= OWN WORDS ================= */
+  .dz-words .narrow { text-align: center; }
+  .dz-claim {
+    font-weight: 900; font-size: clamp(26px, 4vw, 52px); letter-spacing: -.03em; line-height: 1.06;
+    color: var(--sg-ink); max-width: 22ch; margin: 22px auto 0;
+  }
+  .dz-claim .grad { font-weight: 900; }
+  .dz-wordmeta { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 30px; }
+  .dz-fact {
+    display: inline-flex; align-items: center; gap: 9px; padding: 10px 16px;
+    border-radius: var(--sg-r-pill); background: var(--sg-card-bg); border: 1px solid var(--sg-card-border);
+    box-shadow: var(--sg-glass-inset);
+    font-family: var(--sg-mono); font-size: 12px; font-weight: 600; letter-spacing: .04em; color: var(--sg-ink-soft);
+  }
+  .dz-fact b { color: var(--sg-ink); font-weight: 800; }
+  .dz-fact .stars { color: var(--sg-red-hot); letter-spacing: .1em; }
+  .dz-disclaim { margin-top: 24px; font-family: var(--sg-mono); font-size: 11px; letter-spacing: .04em; color: var(--sg-ink-faint); }
+
+  /* ================= CLOSER ================= */
+  .dz-closer { text-align: center; padding: clamp(64px, 9vw, 130px) 24px; }
+  .dz-closer .h2 { margin-inline: auto; max-width: 20ch; }
+  .dz-closer .lead { margin: 20px auto 0; text-align: center; }
+  .dz-closer-cta { display: inline-flex; flex-wrap: wrap; gap: 14px; justify-content: center; margin-top: 32px; }
+  .dz-price { margin-top: 22px; font-family: var(--sg-mono); font-size: 12px; letter-spacing: .06em; color: var(--sg-ink-faint); }
+  .dz-price b { color: var(--sg-ink-soft); }
+
+  .dz-foot {
+    border-top: 1px solid var(--sg-line); padding: 30px 24px;
+    display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: center; justify-content: space-between;
+    max-width: var(--sg-maxw); margin-inline: auto;
+    font-family: var(--sg-mono); font-size: 11px; letter-spacing: .04em; color: var(--sg-ink-faint);
+  }
+  .dz-foot b { color: var(--sg-ink-soft); }
+</style>
+</head>
+
+<body class="surface-dark">
+
+<!-- ============ TOP MARK ============ -->
+<div class="dz-topbar">
+  <span class="lhs"><span class="sg-logo">SGEN<span class="dot">.</span></span> Featured showcase</span>
+  <span class="rhs"><span class="dot" style="display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--sg-red);"></span> Built on SGEN</span>
+</div>
+
+<!-- ============ 1. HERO ============ -->
+<section class="dz-hero">
+  <div class="dz-hero-in">
+    <div class="dz-hero-copy reveal" data-d="1">
+      <span class="eyebrow">Featured / Built on SGEN</span>
+      <h1 class="h-hero">500+ dispensary sites. <span class="grad">One</span> platform.</h1>
+      <p class="lead">Dispenza is the cannabis industry's flagship marketing agency, and for roughly five years it has built every site it ships on SGEN. The work below is a curated sample of that machine: real dispensaries, real storefronts, real menus, all designed and hosted on one native stack.</p>
+      <div class="dz-hero-cta">
+        <a class="btn btn-primary" href="../../../pricing/">Start free in the Sandbox <span class="arr">-&gt;</span></a>
+        <a class="btn btn-secondary" href="#proof">See the work</a>
+      </div>
+      <div class="dz-hero-meta">
+        <span><b>500+</b> sites built</span>
+        <span><b>Coast to coast</b></span>
+        <span><b>~5 years</b> on SGEN</span>
+      </div>
+    </div>
+
+    <!-- floating live-mobile collage: real built work, first thing seen -->
+    <div class="dz-phones reveal" data-d="2" aria-label="Live dispensary sites built by Dispenza on SGEN">
+      <div class="dz-float f1"><span class="notch"></span><img src="../_shots/mob-sweetest-grass.jpg" alt="Sweetest Grass dispensary site on mobile" loading="lazy"></div>
+      <div class="dz-float f2"><span class="notch"></span><img src="../_shots/mob-cookies-missoula.jpg" alt="Cookies Missoula dispensary site on mobile" loading="lazy"></div>
+      <div class="dz-float f3"><span class="notch"></span><img src="../_shots/mob-flora-terra.jpg" alt="Flora Terra dispensary site on mobile" loading="lazy"></div>
+      <div class="dz-float f4"><span class="notch"></span><img src="../_shots/mob-mindlift.jpg" alt="MindLift dispensary site on mobile" loading="lazy"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 2. SCALE BAND ============ -->
+<section class="sec has-atmos surface-dark dz-scale">
+  <div class="wrap">
+    <span class="eyebrow">The scope</span>
+    <h2 class="h2">A practice built at <span class="grad">national</span> scale.</h2>
+    <div class="dz-scalegrid">
+      <div class="dz-scaleitem reveal" data-d="1">
+        <span class="stat">500<span class="z">+</span></span>
+        <span class="label">Dispensary sites built, all on SGEN</span>
+      </div>
+      <div class="dz-scaleitem reveal" data-d="2">
+        <span class="stat">Coast<br>to coast</span>
+        <span class="label">Dispensaries served across the country</span>
+      </div>
+      <div class="dz-scaleitem reveal" data-d="3">
+        <span class="stat">~5 yrs</span>
+        <span class="label">Shipping production sites on one platform</span>
+      </div>
+    </div>
+
+    <div class="dz-attrib reveal" data-d="3">
+      <span class="qmark">Dispenza reports</span>
+      <p><b>1.2 billion</b> in sales influenced, <b>2.1 billion</b> site visits, and <b>3.8 billion</b> Google impressions across the dispensary sites it runs.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3. WHY SGEN EXISTS ============ -->
+<section class="sec dz-origin">
+  <div class="narrow">
+    <span class="eyebrow">Why SGEN exists</span>
+    <h2 class="h2">Born from a real agency's <span class="grad">demand</span>.</h2>
+    <p class="lead">By Dispenza's account, running a marketing agency at this scale exposed the same problem on every build: a tower of separate plugins, hosts, and logins, each one a thing to license, patch, and pray held together.</p>
+    <p class="body">So the stack was built to replace all of it: one native platform where the builder, the hosting, the SEO, the menu and ecommerce, the forms and the analytics are one system on one login. It was proven across hundreds of live dispensary sites before it was ever offered to anyone else. The same platform that now ships every site in this showcase is the platform you can start on today.</p>
+  </div>
+</section>
+
+<!-- ============ 4. PROOF GALLERY HEAD ============ -->
+<section class="dz-gallery-head" id="proof">
+  <div class="wrap">
+    <span class="eyebrow">The proof</span>
+    <h2 class="h2">Twelve of the <span class="grad">five hundred</span>.</h2>
+    <p class="lead">A curated walk through twelve live dispensary sites, each built and hosted on SGEN. Open the desktop pages, see the same site live on a phone. No two look alike, and they all run on one stack.</p>
+  </div>
+</section>
+
+<!-- ============ 4. PROOF PANELS (rendered from SITES) ============ -->
+<div class="dz-panels" id="panels"></div>
+
+<!-- ============ 5. THE RANGE ============ -->
+<section class="sec has-atmos surface-dark dz-range">
+  <div class="wrap">
+    <span class="eyebrow">The range</span>
+    <h2 class="h2">The range one stack <span class="grad">handles</span>.</h2>
+    <p class="lead">And that is only the sample. The same platform carries the full spread of cannabis retail, from a single storefront to a national-brand franchise.</p>
+    <div class="dz-rangegrid">
+      <div class="card dz-rangecard reveal" data-d="1">
+        <div class="rk">Single + multi-location</div>
+        <h3 class="h3">Storefronts to chains</h3>
+        <p>From one neighborhood shop to multi-location chains running several storefronts and menus from a single build.</p>
+      </div>
+      <div class="card dz-rangecard reveal" data-d="2">
+        <div class="rk">National brand</div>
+        <h3 class="h3">Franchise identity, executed</h3>
+        <p>A national-brand franchise like Cookies, carried cleanly with its own look and discipline on the same platform.</p>
+      </div>
+      <div class="card dz-rangecard reveal" data-d="3">
+        <div class="rk">Sovereign nation</div>
+        <h3 class="h3">Tribal operators</h3>
+        <p>A tribal sovereign-nation operator like Sweetest Grass, with heritage-leaning design and its own community voice.</p>
+      </div>
+      <div class="card dz-rangecard reveal" data-d="1">
+        <div class="rk">Owner-led</div>
+        <h3 class="h3">Woman-owned, 24-hour delivery</h3>
+        <p>Deal-forward, delivery-first storefronts running specials and product menus around the clock.</p>
+      </div>
+      <div class="card dz-rangecard reveal" data-d="2">
+        <div class="rk">Seed to shelf</div>
+        <h3 class="h3">Own-cultivation craft</h3>
+        <p>Operators that grow their own, telling a cultivation story alongside living-soil and craft-flower lines.</p>
+      </div>
+      <div class="card dz-rangecard reveal" data-d="3">
+        <div class="rk">Coast to coast</div>
+        <h3 class="h3">Every market, one platform</h3>
+        <p>California to New York, Montana to New Mexico. Different states, different rules, the same native stack underneath.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6. THE PLATFORM UNDERNEATH ============ -->
+<section class="sec dz-platform">
+  <div class="wrap">
+    <span class="eyebrow">The platform underneath</span>
+    <h2 class="h2">Every site above runs on <span class="grad">one</span> native stack.</h2>
+    <p class="lead">No plugin tower, no separate hosting bill, no theme licenses. The builder, the hosting, and every feature are one system that updates on one schedule.</p>
+    <div class="dz-platgrid">
+      <div class="dz-platstat reveal" data-d="1"><span class="stat"><span class="z">1</span></span><span class="label">Native stack under every site</span></div>
+      <div class="dz-platstat reveal" data-d="2"><span class="stat">23</span><span class="label">Modules, all built in</span></div>
+      <div class="dz-platstat reveal" data-d="3"><span class="stat">0</span><span class="label">Plugin licenses to manage</span></div>
+      <div class="dz-platstat reveal" data-d="4"><span class="stat"><span class="z">1</span></span><span class="label">Login for the whole thing</span></div>
+    </div>
+    <div class="dz-modules reveal" data-d="2">
+      <span class="dz-mod"><span class="dot"></span>Visual builder</span>
+      <span class="dz-mod"><span class="dot"></span>Managed hosting</span>
+      <span class="dz-mod"><span class="dot"></span>SEO</span>
+      <span class="dz-mod"><span class="dot"></span>Ecommerce + menu</span>
+      <span class="dz-mod"><span class="dot"></span>Forms</span>
+      <span class="dz-mod"><span class="dot"></span>Analytics</span>
+      <span class="dz-mod"><span class="dot"></span>Security + WAF</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 7. DISPENZA IN ITS OWN WORDS ============ -->
+<section class="sec has-atmos surface-dark dz-words">
+  <div class="narrow">
+    <span class="eyebrow" style="justify-content:center;">In Dispenza's own words</span>
+    <p class="dz-claim">"The <span class="grad">#1 marketing agency</span> in cannabis, and the only one that guarantees results."</p>
+    <div class="dz-wordmeta">
+      <span class="dz-fact"><b>Las Vegas, NV</b> headquarters</span>
+      <span class="dz-fact"><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span> <b>5.0</b> from 11 Google reviews</span>
+    </div>
+    <p class="dz-disclaim">Positioning above is Dispenza's own claim. Headquarters and review rating are independently listed.</p>
+  </div>
+</section>
+
+<!-- ============ 8. CLOSER ============ -->
+<section class="sec has-atmos surface-dark dz-closer">
+  <div class="wrap">
+    <span class="eyebrow" style="justify-content:center;">Your site is next</span>
+    <h2 class="h2">Build on the stack a <span class="grad">#1 agency</span> built its business on.</h2>
+    <p class="lead">The same all-inclusive platform that ships every dispensary site above is open to you. Design the whole thing in one builder, host it on the same stack, and go live when you are ready.</p>
+    <div class="dz-closer-cta">
+      <a class="btn btn-primary" href="../../../pricing/">Start free in the Sandbox <span class="arr">-&gt;</span></a>
+      <a class="btn btn-secondary" href="../">Browse the showcase</a>
+    </div>
+    <p class="dz-price">Free <b>Sandbox</b> at $0. Go live from <b>$39/mo</b>, all-inclusive.</p>
+  </div>
+</section>
+
+<footer class="dz-foot">
+  <span><b>SGEN</b> Featured Showcase</span>
+  <span>Dispenza &middot; <b>500+</b> sites &middot; ~5 years &middot; one platform</span>
+  <span>A curated sample of work built on SGEN.</span>
+</footer>
+
+<script>
+/* ============================================================
+   DATA, Dispenza showcase. 12 REAL dispensary sites built on
+   SGEN. Inlined verbatim from data.json. Paths are already
+   relative to THIS file (../_shots/..., ../_thumbs/...).
+   ============================================================ */
+var SITES = [
+  {
+    "id": "flora-terra",
+    "brand": "Flora Terra",
+    "type": "Multi-location + own cultivation",
+    "place": "Santa Rosa, California",
+    "order": 1,
+    "thumb": "../_thumbs/dispenza-flora-terra-desktop.jpg",
+    "mobile": "../_shots/mob-flora-terra.jpg",
+    "pages": [
+      { "label": "Home", "src": "../_shots/d-flora-terra-0.jpg" }
+    ]
+  },
+  {
+    "id": "ddcanna",
+    "brand": "Double Dogs Cannabis",
+    "type": "Multi-location chain",
+    "place": "Montana",
+    "order": 2,
+    "thumb": "../_thumbs/dispenza-ddcanna-desktop.jpg",
+    "mobile": "../_shots/mob-ddcanna.jpg",
+    "pages": [
+      { "label": "Home", "src": "../_shots/d-ddcanna-0.jpg" },
+      { "label": "About", "src": "../_shots/d-ddcanna-1.jpg" },
+      { "label": "Menu", "src": "../_shots/d-ddcanna-2.jpg" }
+    ]
+  },
+  {
+    "id": "sweetest-grass",
+    "brand": "Sweetest Grass",
+    "type": "Tribal sovereign-nation operator",
+    "place": "Walker, Minnesota",
+    "order": 3,
+    "thumb": "../_thumbs/dispenza-sweetest-grass-desktop.jpg",
+    "mobile": "../_shots/mob-sweetest-grass.jpg",
+    "pages": [
+      { "label": "Home", "src": "../_shots/d-sweetest-grass-0.jpg" },
+      { "label": "About", "src": "../_shots/d-sweetest-grass-1.jpg" },
+      { "label": "Menu", "src": "../_shots/d-sweetest-grass-2.jpg" }
+    ]
+  },
+  {
+    "id": "cookies-missoula",
+    "brand": "Cookies Missoula",
+    "type": "National-brand franchise",
+    "place": "Missoula, Montana",
+    "order": 4,
+    "thumb": "../_thumbs/dispenza-cookies-missoula-desktop.jpg",
+    "mobile": "../_shots/mob-cookies-missoula.jpg",
+    "pages": [
+      { "label": "Home", "src": "../_shots/d-cookies-missoula-0.jpg" },
+      { "label": "Menu", "src": "../_shots/d-cookies-missoula-1.jpg" }
+    ]
+  },
+  {
+    "id": "mindlift",
+    "brand": "MindLift Dispensary",
+    "type": "Woman-owned, 24-hour delivery",
+    "place": "Plainfield, New Jersey",
+    "order": 5,
+    "thumb": "../_thumbs/dispenza-mindlift-desktop.jpg",
+    "mobile": "../_shots/mob-mindlift.jpg",
+    "pages": [
+      { "label": "Home", "src": "../_shots/d-mindlift-0.jpg" },
+      { "label": "Specials", "src": "../_shots/d-mindlift-1.jpg" },
+      { "label": "Product", "src": "../_shots/d-mindlift-2.jpg" }
+    ]
+  },
+  {
+    "id": "gst-ny",
+    "brand": "Greene Street",
+    "type": "Pickup + delivery storefront",
+    "place": "Brooklyn, New York",
+    "order": 6,
+    "thumb": "../_thumbs/dispenza-gst-ny-desktop.jpg",
+    "mobile": "../_shots/mob-gst-ny.jpg",
+    "pages": [
+      { "label": "Home", "src": "../_shots/d-gst-ny-0.jpg" },
+      { "label": "Menu", "src": "../_shots/d-gst-ny-1.jpg" }
+    ]
+  },
+  {
+    "id": "biomeds",
+    "brand": "BioMeds of Colorado",
+    "type": "Medical + recreational storefront",
+    "place": "Colorado Springs, Colorado",
+    "order": 7,
+    "thumb": "../_thumbs/dispenza-biomeds-desktop.jpg",
+    "mobile": "../_shots/mob-biomeds.jpg",
+    "pages": [
+      { "label": "Home", "src": "../_shots/d-biomeds-0.jpg" },
+      { "label": "Menu", "src": "../_shots/d-biomeds-1.jpg" }
+    ]
+  },
+  {
+    "id": "cannable",
+    "brand": "Cannable Cannabis",
+    "type": "Multi-location + delivery",
+    "place": "Parlier, California",
+    "order": 8,
+    "thumb": "../_thumbs/dispenza-cannable-desktop.jpg",
+    "mobile": "../_shots/mob-cannable.jpg",
+    "pages": [
+      { "label": "Home", "src": "../_shots/d-cannable-0.jpg" },
+      { "label": "Deals", "src": "../_shots/d-cannable-1.jpg" },
+      { "label": "Locations", "src": "../_shots/d-cannable-2.jpg" }
+    ]
+  },
+  {
+    "id": "halfpipe",
+    "brand": "HalfPipe Cannabis",
+    "type": "Coastal storefront",
+    "place": "Seaside, California",
+    "order": 9,
+    "thumb": "../_thumbs/dispenza-halfpipe-desktop.jpg",
+    "mobile": "../_shots/mob-halfpipe.jpg",
+    "pages": [
+      { "label": "Home", "src": "../_shots/d-halfpipe-0.jpg" },
+      { "label": "Deals", "src": "../_shots/d-halfpipe-1.jpg" },
+      { "label": "Location", "src": "../_shots/d-halfpipe-2.jpg" },
+      { "label": "Shop", "src": "../_shots/d-halfpipe-3.jpg" }
+    ]
+  },
+  {
+    "id": "joyleaf",
+    "brand": "JoyLeaf",
+    "type": "Content-rich recreational",
+    "place": "Roselle, New Jersey",
+    "order": 10,
+    "thumb": "../_thumbs/dispenza-joyleaf-desktop.jpg",
+    "mobile": "../_shots/mob-joyleaf.jpg",
+    "pages": [
+      { "label": "Home", "src": "../_shots/d-joyleaf-0.jpg" }
+    ]
+  },
+  {
+    "id": "lava-leaf",
+    "brand": "Lava Leaf Organics",
+    "type": "Living-soil craft",
+    "place": "Farmington, New Mexico",
+    "order": 11,
+    "thumb": "../_thumbs/dispenza-lava-leaf-desktop.jpg",
+    "mobile": "../_shots/mob-lava-leaf.jpg",
+    "pages": [
+      { "label": "Home", "src": "../_shots/d-lava-leaf-0.jpg" },
+      { "label": "Shop", "src": "../_shots/d-lava-leaf-1.jpg" },
+      { "label": "About", "src": "../_shots/d-lava-leaf-2.jpg" }
+    ]
+  },
+  {
+    "id": "rr-legacy",
+    "brand": "RR Legacy Dispensary",
+    "type": "First cannabis shop in the city",
+    "place": "Glens Falls, New York",
+    "order": 12,
+    "thumb": "../_thumbs/dispenza-rr-legacy-desktop.jpg",
+    "mobile": "../_shots/mob-rr-legacy.jpg",
+    "pages": [
+      { "label": "Home", "src": "../_shots/d-rr-legacy-0.jpg" }
+    ]
+  }
+];
+
+/* ============================================================
+   BUILD THE PROOF PANELS, one per site, alternating sides.
+   Each panel = a Page-Deck device pairing (browser monitor with
+   page tabs + squircle phone) beside a caption. Tabs are hidden
+   when a site has a single page. Tab switching is per-panel and
+   crossfades the monitor image + updates the faux URL.
+   ============================================================ */
+(function () {
+  var panelsEl = document.getElementById('panels');
+  if (!panelsEl) return;
+
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  function pad2(n) { return n < 10 ? '0' + n : '' + n; }
+  function slugUrl(id, label, i) {
+    var host = id + '.com';
+    if (i === 0) return host;
+    return host + '/' + String(label).toLowerCase().replace(/[^a-z0-9]+/g, '-');
+  }
+
+  SITES.forEach(function (site, idx) {
+    var multi = site.pages.length > 1;
+    var flip = (idx % 2 === 1);
+
+    var panel = document.createElement('section');
+    panel.className = 'dz-panel reveal' + (flip ? ' flip' : '');
+    panel.setAttribute('data-d', '1');
+
+    // --- tabs (only when multi-page) ---
+    var tabsHtml = '';
+    if (multi) {
+      tabsHtml += '<div class="dz-tabs" role="tablist" aria-label="' + esc(site.brand) + ' pages">';
+      site.pages.forEach(function (p, i) {
+        tabsHtml +=
+          '<button class="dz-tab" role="tab" type="button" aria-selected="' + (i === 0 ? 'true' : 'false') + '" data-page="' + i + '" data-url="' + esc(slugUrl(site.id, p.label, i)) + '">' +
+            '<span class="chip" style="background-image:url(\'' + esc(p.src) + '\')"></span>' +
+            '<span class="klabel">' + esc(p.label) + '</span>' +
+          '</button>';
+      });
+      tabsHtml += '</div>';
+    }
+
+    // --- monitor frames ---
+    var framesHtml = '';
+    site.pages.forEach(function (p, i) {
+      framesHtml +=
+        '<img class="dz-frame' + (i === 0 ? ' is-active' : '') + '" data-page="' + i + '" src="' + esc(p.src) + '" alt="' + esc(site.brand) + ' ' + esc(p.label) + ' page" loading="lazy">';
+    });
+
+    var firstUrl = slugUrl(site.id, site.pages[0].label, 0);
+
+    var stageHtml =
+      '<div class="dz-stage">' +
+        '<div class="dz-deck">' +
+          tabsHtml +
+          '<div class="dz-browser">' +
+            '<div class="dz-chrome">' +
+              '<span class="dz-dots"><i></i><i></i><i></i></span>' +
+              '<span class="dz-addr"><span class="lock">&#x1F512;</span><span class="url">' + esc(firstUrl) + '</span></span>' +
+            '</div>' +
+            '<div class="dz-viewport">' + framesHtml + '</div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="dz-phone-col">' +
+          '<div class="dz-phone"><span class="notch"></span><img src="' + esc(site.mobile) + '" alt="' + esc(site.brand) + ' on mobile" loading="lazy"></div>' +
+          '<span class="dz-phone-cap">Mobile</span>' +
+        '</div>' +
+      '</div>';
+
+    var captionHtml =
+      '<div class="dz-caption">' +
+        '<div class="ix">' + pad2(site.order) + ' / 12</div>' +
+        '<div class="brand">' + esc(site.brand) + '</div>' +
+        '<div class="place">' + esc(site.place) + '</div>' +
+        '<span class="type">' + esc(site.type) + '</span>' +
+        '<div class="builton"><span class="pill"><span class="dot"></span>Built on SGEN</span></div>' +
+      '</div>';
+
+    panel.innerHTML = '<div class="dz-panel-in">' + stageHtml + captionHtml + '</div>';
+    panelsEl.appendChild(panel);
+
+    // --- per-panel tab switching (crossfade + url) ---
+    if (multi) {
+      var tabs = Array.prototype.slice.call(panel.querySelectorAll('.dz-tab'));
+      var frames = Array.prototype.slice.call(panel.querySelectorAll('.dz-frame'));
+      var urlEl = panel.querySelector('.dz-addr .url');
+      function show(n) {
+        tabs.forEach(function (t, i) { t.setAttribute('aria-selected', i === n ? 'true' : 'false'); });
+        frames.forEach(function (f) { f.classList.toggle('is-active', +f.getAttribute('data-page') === n); });
+        if (urlEl && tabs[n]) urlEl.textContent = tabs[n].getAttribute('data-url');
+      }
+      tabs.forEach(function (t, i) {
+        t.addEventListener('click', function () { show(i); });
+      });
+    }
+  });
+
+  /* ---- scroll-reveal (real .reveal/.in convention, reduced-motion gated) ---- */
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var reveals = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
+  if (reduce || !('IntersectionObserver' in window)) {
+    reveals.forEach(function (el) { el.classList.add('in'); });
+  } else {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+    reveals.forEach(function (el) { io.observe(el); });
+    // nudge anything already above the fold in
+    requestAnimationFrame(function () {
+      reveals.forEach(function (el) {
+        var r = el.getBoundingClientRect();
+        if (r.top < window.innerHeight * 0.92) el.classList.add('in');
+      });
+    });
+  }
+})();
+</script>
+
+</body>
+</html>
