@@ -122,6 +122,40 @@
     .dz-float.f3 { display: none; }
   }
 
+  /* ---- MOBILE-ONLY infinite carousel of all 12 mobile renders ----
+     Hidden on desktop (the floating cluster stays). On phones it replaces
+     the cluster with a slow, edge-faded, seamlessly looping strip that the
+     user can also drag. Track is duplicated (24 phones) so translateX(-50%)
+     loops with no visible seam. */
+  .dz-carousel {
+    display: none;
+    width: 100%; overflow: hidden; -webkit-overflow-scrolling: touch;
+    padding: 4px 0;
+    mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  }
+  .dz-carousel-track {
+    display: flex; gap: 14px; width: max-content;
+    animation: dz-marquee 48s linear infinite;
+  }
+  @keyframes dz-marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  .dz-carousel:hover .dz-carousel-track,
+  .dz-carousel:active .dz-carousel-track { animation-play-state: paused; }
+  .dz-cphone {
+    flex: 0 0 auto; width: clamp(140px, 42vw, 168px); aspect-ratio: 390/844;
+    border-radius: var(--sg-r-squircle); overflow: hidden;
+    border: 1px solid var(--sg-card-border); box-shadow: var(--sg-shadow-cinematic);
+    background: #000;
+  }
+  .dz-cphone img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+  @media (prefers-reduced-motion: reduce) {
+    .dz-carousel-track { animation: none; }
+    .dz-carousel { overflow-x: auto; }
+  }
+
   /* ================= SCALE BAND ================= */
   .dz-scalegrid {
     display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(18px, 3vw, 40px);
@@ -321,8 +355,13 @@
      Placed last so it overrides the earlier scattered 540/560px rules.
      Desktop is untouched (everything below is inside the query). */
   @media (max-width: 560px) {
-    /* HERO CLUSTER -- kill the dark voids + disjointed tilt, lay the phones in a clean row */
-    .dz-phones { height: auto; max-width: none; margin: 0; display: flex; gap: 14px; justify-content: center; }
+    /* HERO -- on phones the bespoke infinite carousel replaces the floating
+       cluster. Show the carousel, hide the floaters entirely (display:none wins
+       over the old flex-row rules kept below for any wider legacy fallback). */
+    .dz-carousel { display: block; }
+    .dz-phones { display: none; }
+    /* (legacy hero-row rules retained but superseded by display:none above) */
+    .dz-phones { height: auto; max-width: none; margin: 0; gap: 14px; justify-content: center; }
     .dz-phones::before { display: none; }
     .dz-float { position: static; width: auto; flex: 1 1 0; max-width: 160px; transform: none !important; animation: none !important; aspect-ratio: 390/844; }
     .dz-float.f1, .dz-float.f2, .dz-float.f4 { left: auto; top: auto; bottom: auto; right: auto; }
@@ -330,16 +369,18 @@
     .dz-hero { padding: 56px 20px 40px; }
     .dz-hero-in { gap: 28px; }
 
-    /* PANEL CAPTION-STRANDING -- stack the phone + label, center, kill empty right gutter */
-    .dz-phone-col { flex-direction: column; align-items: center; gap: 10px; }
-    .dz-phone { max-width: 220px; }
+    /* PROOF PANELS -- drop the desktop browser frame + page tabs, show ONE bigger
+       phone centered. No tabs on mobile (single-device, bespoke). */
+    .dz-browser { display: none; }
+    .dz-tabs { display: none; }
+    .dz-stage { display: block; gap: 20px; }
+    .dz-phone-col { flex-direction: column; align-items: center; gap: 12px; }
+    .dz-phone { max-width: 300px; width: 100%; }
     .dz-phone-cap { text-align: center; }
-    .dz-stage { gap: 20px; justify-items: center; }
-    .dz-browser { width: 100%; }
 
     /* SECTION PADDING TRIM -- kill dead dark bands between the 12 panels + sections */
-    .dz-panel { padding: 32px 20px; }
-    .dz-panel-in { gap: 22px; }
+    .dz-panel { padding: 30px 20px; }
+    .dz-panel-in { gap: 18px; }
     .dz-caption .brand { font-size: 26px; }
     .dz-gallery-head { padding: 48px 20px 8px; }
     .dz-closer { padding: 56px 20px; }
@@ -516,6 +557,9 @@
       <div class="dz-float f3"><span class="notch"></span><img src="../_shots/mob-flora-terra.jpg" alt="Flora Terra dispensary site on mobile" loading="lazy"></div>
       <div class="dz-float f4"><span class="notch"></span><img src="../_shots/mob-mindlift.jpg" alt="MindLift dispensary site on mobile" loading="lazy"></div>
     </div>
+
+    <!-- mobile-only bespoke infinite carousel of ALL 12 mobile renders (populated by JS from SITES) -->
+    <div class="dz-carousel" aria-hidden="true"><div class="dz-carousel-track"></div></div>
   </div>
 </section>
 
@@ -934,6 +978,20 @@ var SITES = [
       });
     }
   });
+
+  /* ---- HERO CAROUSEL (mobile-only marquee): append all 12 mobile renders,
+     then the same 12 again, so translateX(-50%) loops seamlessly (24 total). ---- */
+  (function () {
+    var track = document.querySelector('.dz-carousel-track');
+    if (!track) return;
+    function phoneHtml(site) {
+      return '<div class="dz-cphone"><img src="' + esc(site.mobile) + '" alt="" loading="lazy"></div>';
+    }
+    var html = '';
+    SITES.forEach(function (site) { html += phoneHtml(site); }); // 1-12
+    SITES.forEach(function (site) { html += phoneHtml(site); }); // 13-24 = exact copies
+    track.innerHTML = html;
+  })();
 
   /* ---- scroll-reveal (real .reveal/.in convention, reduced-motion gated) ---- */
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
