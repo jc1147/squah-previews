@@ -88,23 +88,32 @@
   }
   .dz-hero-meta b { color: var(--sg-ink-soft); }
 
-  /* floating live-mobile collage */
+  /* ====================================================================
+     APPROVED REALISTIC IPHONE COMPONENT (owner-approved). Sized by --w.
+     This is the ONLY phone frame on the page now (carousel, floaters, and
+     proof-panel phones all use it; old per-context frames removed). */
+  .iphone{ position:relative; width:var(--w); aspect-ratio:393/852; border-radius:calc(var(--w)*.156); padding:calc(var(--w)*.031); background:linear-gradient(145deg,#2b2c30,#0a0a0b 38%,#000 62%,#26272b); box-shadow:0 1px 0 rgba(255,255,255,.18) inset,0 0 0 1.5px #000,0 2px 3px rgba(255,255,255,.10) inset,0 50px 90px -30px rgba(0,0,0,.85),0 14px 34px -16px rgba(0,0,0,.7); }
+  .iphone::before{ content:""; position:absolute; inset:calc(var(--w)*.020); border-radius:calc(var(--w)*.138); box-shadow:0 0 0 1px rgba(0,0,0,.9),0 0 0 2px rgba(255,255,255,.06); pointer-events:none; z-index:3; }
+  .iphone-screen{ position:relative; width:100%; height:100%; overflow:hidden; border-radius:calc(var(--w)*.125); background:#000; }
+  .iphone-screen img{ width:100%; height:100%; object-fit:cover; object-position:top center; display:block; }
+  .iphone .island{ position:absolute; top:calc(var(--w)*.038); left:50%; transform:translateX(-50%); width:calc(var(--w)*.30); height:calc(var(--w)*.085); background:#000; border-radius:99px; z-index:4; box-shadow:0 0 0 1px rgba(255,255,255,.05); }
+  .iphone .island::after{ content:""; position:absolute; right:14%; top:50%; transform:translateY(-50%); width:calc(var(--w)*.026); height:calc(var(--w)*.026); border-radius:50%; background:radial-gradient(circle at 40% 35%,#1b2a3a,#000 70%); box-shadow:0 0 0 1px rgba(40,80,120,.4); }
+  .iphone .home{ position:absolute; bottom:calc(var(--w)*.020); left:50%; transform:translateX(-50%); width:calc(var(--w)*.32); height:calc(var(--w)*.013); border-radius:99px; background:rgba(255,255,255,.5); z-index:4; }
+  .iphone .btn{ position:absolute; background:linear-gradient(180deg,#3a3b3f,#141416); border-radius:2px; z-index:0; }
+  .iphone .btn.pwr{ right:calc(var(--w)*-.008); top:30%; width:calc(var(--w)*.012); height:calc(var(--w)*.12); }
+  .iphone .btn.vu{ left:calc(var(--w)*-.008); top:26%; width:calc(var(--w)*.012); height:calc(var(--w)*.075); }
+  .iphone .btn.vd{ left:calc(var(--w)*-.008); top:37%; width:calc(var(--w)*.012); height:calc(var(--w)*.075); }
+
+  /* floating live-mobile collage (each .dz-float is now a pure positioning +
+     rotation/animation wrapper; the .iphone inside is the frame) */
   .dz-phones {
     position: relative; height: clamp(420px, 50vw, 560px); min-width: 0;
   }
   @media (max-width: 980px) { .dz-phones { height: clamp(380px, 86vw, 480px); margin-inline: auto; max-width: 560px; } }
   .dz-float {
-    position: absolute; width: clamp(150px, 19vw, 224px); aspect-ratio: 390/844;
-    border-radius: var(--sg-r-squircle); overflow: hidden;
-    border: 1px solid var(--sg-card-border); background: #0a0a0c;
-    box-shadow: var(--sg-shadow-cinematic);
+    position: absolute; width: clamp(150px, 19vw, 224px);
   }
-  .dz-float .notch {
-    position: absolute; top: 8px; left: 50%; transform: translateX(-50%); z-index: 2;
-    width: 64px; height: 15px; border-radius: var(--sg-r-pill);
-    background: #000; border: 1px solid rgba(255,255,255,.08);
-  }
-  .dz-float img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
+  .dz-float .iphone { --w: clamp(150px, 19vw, 224px); }
   .dz-float.f1 { left: 2%;  top: 6%;   z-index: 3; transform: rotate(-5deg);  animation: dz-drift-a 9s var(--sg-ease) infinite; }
   .dz-float.f2 { left: 33%; top: 0;    z-index: 4; transform: rotate(2deg);   animation: dz-drift-b 11s var(--sg-ease) infinite; }
   .dz-float.f3 { right: 2%; top: 14%;  z-index: 3; transform: rotate(6deg);   animation: dz-drift-a 10s var(--sg-ease) infinite .6s; }
@@ -137,13 +146,9 @@
   .dz-carousel-track {
     display: flex; gap: 14px; width: max-content;
   }
-  .dz-cphone {
-    flex: 0 0 auto; width: clamp(190px, 56vw, 240px); aspect-ratio: 390/844;
-    border-radius: var(--sg-r-squircle); overflow: hidden;
-    border: 1px solid var(--sg-card-border); box-shadow: var(--sg-shadow-cinematic);
-    background: #000;
-  }
-  .dz-cphone img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+  /* carousel slide = a flex sizing wrapper; the .iphone inside is the frame */
+  .dz-cphone { flex: 0 0 auto; }
+  .dz-cphone .iphone { --w: clamp(190px, 56vw, 240px); }
 
   /* ================= SCALE BAND (modern 6-stat accomplishment grid) ===== */
   .dz-statgrid {
@@ -270,18 +275,10 @@
   /* phone beside the monitor */
   .dz-phone-col { display: flex; flex-direction: column; gap: 11px; align-items: center; }
   @media (max-width: 560px) { .dz-phone-col { flex-direction: row; align-items: flex-start; gap: 16px; } }
-  .dz-phone {
-    position: relative; width: 100%; max-width: 176px; aspect-ratio: 390/844;
-    border-radius: var(--sg-r-squircle); overflow: hidden;
-    border: 1px solid var(--sg-card-border); background: #0a0a0c; box-shadow: var(--sg-shadow-cinematic);
-  }
-  @media (max-width: 560px) { .dz-phone { max-width: 150px; } }
-  .dz-phone .notch {
-    position: absolute; top: 8px; left: 50%; transform: translateX(-50%); z-index: 2;
-    width: 62px; height: 15px; border-radius: var(--sg-r-pill);
-    background: #000; border: 1px solid rgba(255,255,255,.08);
-  }
-  .dz-phone img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
+  /* proof-panel phone = sizing wrapper holding the .iphone (the only frame).
+     --w is set in CSS (not inline) so the mobile rule can grow it to 300px. */
+  .dz-phone { display: flex; justify-content: center; width: 100%; }
+  .dz-phone .iphone { --w: clamp(120px, 16vw, 176px); }
   .dz-phone-cap { font-family: var(--sg-mono); font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--sg-ink-faint); text-align: center; }
 
   /* ================= RANGE ================= */
@@ -365,7 +362,8 @@
     .dz-tabs { display: none; }
     .dz-stage { display: block; gap: 20px; }
     .dz-phone-col { flex-direction: column; align-items: center; gap: 12px; }
-    .dz-phone { max-width: 300px; width: 100%; }
+    .dz-phone { width: 100%; }
+    .dz-phone .iphone { --w: 300px; max-width: 100%; }
     .dz-phone-cap { text-align: center; }
 
     /* TITLE/DATA ABOVE THE PHONE -- caption first on every panel (flip + non-flip) */
@@ -550,10 +548,10 @@
 
     <!-- floating live-mobile collage: real built work, first thing seen -->
     <div class="dz-phones reveal" data-d="2" aria-label="Live dispensary sites built by Dispenza on SGEN">
-      <div class="dz-float f1"><span class="notch"></span><img src="../_shots/mob-sweetest-grass.jpg" alt="Sweetest Grass dispensary site on mobile" loading="lazy"></div>
-      <div class="dz-float f2"><span class="notch"></span><img src="../_shots/mob-cookies-missoula.jpg" alt="Cookies Missoula dispensary site on mobile" loading="lazy"></div>
-      <div class="dz-float f3"><span class="notch"></span><img src="../_shots/mob-flora-terra.jpg" alt="Flora Terra dispensary site on mobile" loading="lazy"></div>
-      <div class="dz-float f4"><span class="notch"></span><img src="../_shots/mob-mindlift.jpg" alt="MindLift dispensary site on mobile" loading="lazy"></div>
+      <div class="dz-float f1"><div class="iphone"><span class="btn vu"></span><span class="btn vd"></span><span class="btn pwr"></span><div class="iphone-screen"><img src="../_shots/mob-sweetest-grass.jpg" alt="Sweetest Grass dispensary site on mobile" loading="lazy"></div><span class="island"></span><span class="home"></span></div></div>
+      <div class="dz-float f2"><div class="iphone"><span class="btn vu"></span><span class="btn vd"></span><span class="btn pwr"></span><div class="iphone-screen"><img src="../_shots/mob-cookies-missoula.jpg" alt="Cookies Missoula dispensary site on mobile" loading="lazy"></div><span class="island"></span><span class="home"></span></div></div>
+      <div class="dz-float f3"><div class="iphone"><span class="btn vu"></span><span class="btn vd"></span><span class="btn pwr"></span><div class="iphone-screen"><img src="../_shots/mob-flora-terra.jpg" alt="Flora Terra dispensary site on mobile" loading="lazy"></div><span class="island"></span><span class="home"></span></div></div>
+      <div class="dz-float f4"><div class="iphone"><span class="btn vu"></span><span class="btn vd"></span><span class="btn pwr"></span><div class="iphone-screen"><img src="../_shots/mob-mindlift.jpg" alt="MindLift dispensary site on mobile" loading="lazy"></div><span class="island"></span><span class="home"></span></div></div>
     </div>
 
     <!-- mobile-only bespoke infinite carousel of ALL 12 mobile renders (populated by JS from SITES) -->
@@ -933,7 +931,7 @@ var SITES = [
           '</div>' +
         '</div>' +
         '<div class="dz-phone-col">' +
-          '<div class="dz-phone"><span class="notch"></span><img src="' + esc(site.mobile) + '" alt="' + esc(site.brand) + ' on mobile" loading="lazy"></div>' +
+          '<div class="dz-phone"><div class="iphone"><span class="btn vu"></span><span class="btn vd"></span><span class="btn pwr"></span><div class="iphone-screen"><img src="' + esc(site.mobile) + '" alt="' + esc(site.brand) + ' on mobile" loading="lazy"></div><span class="island"></span><span class="home"></span></div></div>' +
           '<span class="dz-phone-cap">Mobile</span>' +
         '</div>' +
       '</div>';
@@ -974,7 +972,7 @@ var SITES = [
     var track = document.querySelector('.dz-carousel-track');
     if (!track) return;
     function phoneHtml(site) {
-      return '<div class="dz-cphone"><img src="' + esc(site.mobile) + '" alt="" loading="lazy"></div>';
+      return '<div class="dz-cphone"><div class="iphone"><span class="btn vu"></span><span class="btn vd"></span><span class="btn pwr"></span><div class="iphone-screen"><img src="' + esc(site.mobile) + '" alt="" loading="lazy"></div><span class="island"></span><span class="home"></span></div></div>';
     }
     var html = '';
     SITES.forEach(function (site) { html += phoneHtml(site); }); // 1-12
