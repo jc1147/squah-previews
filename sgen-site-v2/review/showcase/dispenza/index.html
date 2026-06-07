@@ -129,32 +129,21 @@
      loops with no visible seam. */
   .dz-carousel {
     display: none;
-    width: 100%; overflow: hidden; -webkit-overflow-scrolling: touch;
+    width: 100%; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
     padding: 4px 0;
-    mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
-    -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
   }
+  .dz-carousel::-webkit-scrollbar { display: none; }
   .dz-carousel-track {
     display: flex; gap: 14px; width: max-content;
-    animation: dz-marquee 48s linear infinite;
   }
-  @keyframes dz-marquee {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
-  }
-  .dz-carousel:hover .dz-carousel-track,
-  .dz-carousel:active .dz-carousel-track { animation-play-state: paused; }
   .dz-cphone {
-    flex: 0 0 auto; width: clamp(140px, 42vw, 168px); aspect-ratio: 390/844;
+    flex: 0 0 auto; width: clamp(190px, 56vw, 240px); aspect-ratio: 390/844;
     border-radius: var(--sg-r-squircle); overflow: hidden;
     border: 1px solid var(--sg-card-border); box-shadow: var(--sg-shadow-cinematic);
     background: #000;
   }
   .dz-cphone img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
-  @media (prefers-reduced-motion: reduce) {
-    .dz-carousel-track { animation: none; }
-    .dz-carousel { overflow-x: auto; }
-  }
 
   /* ================= SCALE BAND ================= */
   .dz-scalegrid {
@@ -377,6 +366,14 @@
     .dz-phone-col { flex-direction: column; align-items: center; gap: 12px; }
     .dz-phone { max-width: 300px; width: 100%; }
     .dz-phone-cap { text-align: center; }
+
+    /* TITLE/DATA ABOVE THE PHONE -- caption first on every panel (flip + non-flip) */
+    .dz-panel-in,
+    .dz-panel.flip .dz-panel-in { display: flex; flex-direction: column; }
+    .dz-caption { order: 1; }
+    .dz-stage   { order: 2; }
+    .dz-panel.flip .dz-caption { order: 1; }
+    .dz-panel.flip .dz-stage   { order: 2; }
 
     /* SECTION PADDING TRIM -- kill dead dark bands between the 12 panels + sections */
     .dz-panel { padding: 30px 20px; }
@@ -979,8 +976,10 @@ var SITES = [
     }
   });
 
-  /* ---- HERO CAROUSEL (mobile-only marquee): append all 12 mobile renders,
-     then the same 12 again, so translateX(-50%) loops seamlessly (24 total). ---- */
+  /* ---- HERO CAROUSEL (mobile-only): append all 12 mobile renders, then the
+     same 12 again (24 total) so the duplicated track loops seamlessly. Native
+     thumb-drag (overflow-x:auto) + a slow JS auto-scroll when idle + seamless
+     wrap in both directions. ---- */
   (function () {
     var track = document.querySelector('.dz-carousel-track');
     if (!track) return;
@@ -991,6 +990,29 @@ var SITES = [
     SITES.forEach(function (site) { html += phoneHtml(site); }); // 1-12
     SITES.forEach(function (site) { html += phoneHtml(site); }); // 13-24 = exact copies
     track.innerHTML = html;
+  })();
+
+  /* ---- scroll engine for the hero carousel: drag + slow auto-scroll + infinite loop ---- */
+  (function(){
+    var car = document.querySelector('.dz-carousel');
+    var track = document.querySelector('.dz-carousel-track');
+    if(!car || !track) return;
+    var paused = false, resumeTimer = null;
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function pause(){ paused = true; if(resumeTimer){ clearTimeout(resumeTimer); resumeTimer = null; } }
+    function scheduleResume(){ if(resumeTimer) clearTimeout(resumeTimer); resumeTimer = setTimeout(function(){ paused = false; }, 1400); }
+    ['pointerdown','touchstart','wheel','mousedown'].forEach(function(ev){ car.addEventListener(ev, pause, {passive:true}); });
+    ['pointerup','touchend','pointercancel','touchcancel','mouseup'].forEach(function(ev){ car.addEventListener(ev, scheduleResume, {passive:true}); });
+    function tick(){
+      var half = track.scrollWidth / 2; // first 12 phones = half the duplicated track
+      if(half > 0){
+        if(car.scrollLeft >= half){ car.scrollLeft -= half; }       // seamless wrap forward
+        else if(car.scrollLeft < 0){ car.scrollLeft += half; }       // wrap backward when dragged left past start
+      }
+      if(car.offsetParent !== null && !paused && !reduce){ car.scrollLeft += 0.5; } // slow auto-scroll only when visible + idle
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
   })();
 
   /* ---- scroll-reveal (real .reveal/.in convention, reduced-motion gated) ---- */
