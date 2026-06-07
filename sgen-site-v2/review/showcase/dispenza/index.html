@@ -145,27 +145,28 @@
   }
   .dz-cphone img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
 
-  /* ================= SCALE BAND ================= */
-  .dz-scalegrid {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(18px, 3vw, 40px);
+  /* ================= SCALE BAND (modern 6-stat accomplishment grid) ===== */
+  .dz-statgrid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(14px, 1.6vw, 20px);
     margin-top: clamp(34px, 5vw, 56px);
   }
-  @media (max-width: 740px) { .dz-scalegrid { grid-template-columns: 1fr; gap: 30px; } }
-  .dz-scaleitem { display: flex; flex-direction: column; gap: 8px; }
-  .dz-scaleitem .stat { font-size: clamp(46px, 7vw, 92px); }
-  .dz-scaleitem .label { margin: 0; }
-  .dz-attrib {
-    margin-top: clamp(34px, 5vw, 52px); padding: 22px 26px;
-    border: 1px solid var(--sg-card-border); border-radius: var(--sg-r-lg);
-    background: var(--sg-card-bg); box-shadow: var(--sg-glass-inset);
-    display: flex; gap: 16px; align-items: flex-start;
+  @media (max-width: 820px) { .dz-statgrid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 520px) { .dz-statgrid { grid-template-columns: 1fr; } }
+  .dz-statcell {
+    display: flex; flex-direction: column; gap: 10px;
+    background: var(--sg-card-bg); border: 1px solid var(--sg-card-border);
+    border-radius: var(--sg-r-lg); padding: clamp(22px, 3vw, 34px);
+    box-shadow: var(--sg-glass-inset);
+    transition: transform .25s var(--sg-ease), border-color .25s;
   }
-  .dz-attrib .qmark {
-    font-family: var(--sg-mono); font-size: 11px; font-weight: 700; letter-spacing: .14em;
-    text-transform: uppercase; color: var(--sg-red-hot); flex: 0 0 auto; padding-top: 3px;
+  .dz-statcell:hover { transform: translateY(-4px); border-color: var(--sg-red-tint-22); }
+  .dz-statcell .stat { font-size: clamp(46px, 6vw, 80px); }
+  .dz-statcell .stat.is-text { font-size: clamp(30px, 4vw, 52px); line-height: 1.04; }
+  .dz-statcell .label { margin: 0; }
+  .dz-statnote {
+    font-family: var(--sg-mono); font-size: 11px; letter-spacing: .04em;
+    color: var(--sg-ink-faint); margin-top: clamp(20px, 2.4vw, 30px); max-width: 60ch;
   }
-  .dz-attrib p { margin: 0; color: var(--sg-ink-soft); font-size: 16px; line-height: 1.6; }
-  .dz-attrib b { color: var(--sg-ink); font-weight: 800; }
 
   /* ================= ORIGIN ================= */
   .dz-origin .narrow > .lead { margin-top: 22px; }
@@ -565,25 +566,34 @@
   <div class="wrap">
     <span class="eyebrow">The scope</span>
     <h2 class="h2">A practice built at <span class="grad">national</span> scale.</h2>
-    <div class="dz-scalegrid">
-      <div class="dz-scaleitem reveal" data-d="1">
+    <div class="dz-statgrid">
+      <div class="dz-statcell reveal" data-d="1">
         <span class="stat">500<span class="z">+</span></span>
-        <span class="label">Dispensary sites built, all on SGEN</span>
+        <span class="label">Dispensary sites built</span>
       </div>
-      <div class="dz-scaleitem reveal" data-d="2">
-        <span class="stat">Coast<br>to coast</span>
-        <span class="label">Dispensaries served across the country</span>
+      <div class="dz-statcell reveal" data-d="2">
+        <span class="stat">1.2<span class="z">B</span></span>
+        <span class="label">In dispensary sales influenced</span>
       </div>
-      <div class="dz-scaleitem reveal" data-d="3">
-        <span class="stat">~5 yrs</span>
-        <span class="label">Shipping production sites on one platform</span>
+      <div class="dz-statcell reveal" data-d="3">
+        <span class="stat">3.8<span class="z">B</span></span>
+        <span class="label">Google impressions earned</span>
+      </div>
+      <div class="dz-statcell reveal" data-d="1">
+        <span class="stat">2.1<span class="z">B</span></span>
+        <span class="label">Website visits driven</span>
+      </div>
+      <div class="dz-statcell reveal" data-d="2">
+        <span class="stat is-text">Coast to coast</span>
+        <span class="label">Markets served across the US</span>
+      </div>
+      <div class="dz-statcell reveal" data-d="3">
+        <span class="stat is-text">~5 yrs</span>
+        <span class="label">Building on one native platform</span>
       </div>
     </div>
 
-    <div class="dz-attrib reveal" data-d="3">
-      <span class="qmark">Dispenza reports</span>
-      <p><b>1.2 billion</b> in sales influenced, <b>2.1 billion</b> site visits, and <b>3.8 billion</b> Google impressions across the dispensary sites it runs.</p>
-    </div>
+    <p class="dz-statnote">Aggregate performance figures as reported by Dispenza. 500+ sites and platform tenure are first-party.</p>
   </div>
 </section>
 
@@ -686,26 +696,6 @@
     <p class="dz-disclaim">Positioning above is Dispenza's own claim. Headquarters and review rating are independently listed.</p>
   </div>
 </section>
-
-<!-- ============ 8. CLOSER ============ -->
-<section class="sec has-atmos surface-dark dz-closer">
-  <div class="wrap">
-    <span class="eyebrow" style="justify-content:center;">Your site is next</span>
-    <h2 class="h2">Build on the stack a <span class="grad">#1 agency</span> built its business on.</h2>
-    <p class="lead">The same all-inclusive platform that ships every dispensary site above is open to you. Design the whole thing in one builder, host it on the same stack, and go live when you are ready.</p>
-    <div class="dz-closer-cta">
-      <a class="btn btn-primary" href="../../../pricing/">Start free in the Sandbox <span class="arr">-&gt;</span></a>
-      <a class="btn btn-secondary" href="../">Browse the showcase</a>
-    </div>
-    <p class="dz-price">Free <b>Sandbox</b> at $0. Go live from <b>$39/mo</b>, all-inclusive.</p>
-  </div>
-</section>
-
-<footer class="dz-foot">
-  <span><b>SGEN</b> Featured Showcase</span>
-  <span>Dispenza &middot; <b>500+</b> sites &middot; ~5 years &middot; one platform</span>
-  <span>A curated sample of work built on SGEN.</span>
-</footer>
 
 <script>
 /* ============================================================
