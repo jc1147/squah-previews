@@ -141,7 +141,7 @@
   /* Responsive auto-fill: as many 300px-min columns as fit (5-6 on a wide
      screen), collapsing to fewer / one as the viewport narrows. No fixed
      column counts, so the grid always fills the full-bleed explorer. */
-  .sc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: clamp(14px, 1.3vw, 20px); }
+  .sc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: clamp(16px, 1.3vw, 22px); }
 
   /* card uses the real .card class; these add the device frame + meta */
   .sc-card { padding: 0; overflow: hidden; cursor: pointer; display: flex; flex-direction: column; }
@@ -245,16 +245,29 @@
   }
   .pd-inner { position: relative; z-index: 1; padding: clamp(28px, 5vw, 56px) clamp(22px, 5vw, 56px) clamp(40px, 6vw, 72px); }
 
-  .pd-toolbar { position: sticky; top: 0; z-index: 6; display: flex; align-items: center; justify-content: flex-end; gap: 10px; margin: 0 0 -8px; }
+  .pd-toolbar {
+    position: sticky; top: 0; z-index: 6;
+    display: flex; align-items: center; justify-content: flex-end; gap: 12px;
+    margin: 0 0 -8px; padding: 6px 0 14px;
+    background: linear-gradient(180deg, var(--sg-bg) 60%, transparent);
+  }
   .pd-navbtn, .pd-close {
-    display: inline-grid; place-items: center; width: 42px; height: 42px;
+    display: inline-grid; place-items: center; width: 48px; height: 48px;
     border-radius: var(--sg-r-pill); cursor: pointer;
-    background: rgba(255,255,255,.04); color: var(--sg-ink);
-    border: 1px solid var(--sg-card-border);
-    font-family: var(--sg-font); font-size: 18px; line-height: 1;
+    background: rgba(255,255,255,.12); color: #fff;
+    border: 1px solid rgba(255,255,255,.34);
+    box-shadow: 0 4px 14px -4px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,.18);
+    font-family: var(--sg-font); font-size: 22px; font-weight: 700; line-height: 1;
+    -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
     transition: background-color var(--sg-t-fast), color var(--sg-t-fast), border-color var(--sg-t-fast), transform .08s var(--sg-ease);
   }
-  .pd-navbtn:hover, .pd-close:hover { background: var(--sg-red); color: #fff; border-color: var(--sg-red); }
+  .pd-navbtn:hover { background: rgba(255,255,255,.22); border-color: rgba(255,255,255,.5); }
+  /* Close = unmissable red */
+  .pd-close {
+    background: var(--sg-red); border-color: var(--sg-red); color: #fff; font-size: 24px;
+    box-shadow: 0 6px 20px -4px rgba(213,21,34,.6), inset 0 1px 0 rgba(255,255,255,.28);
+  }
+  .pd-close:hover { background: #ec1f2d; border-color: #ec1f2d; }
   .pd-navbtn:active, .pd-close:active { transform: scale(.94); }
 
   .pd-head { max-width: 60ch; margin-top: 6px; }
@@ -500,6 +513,52 @@
  </div>
 </div></header>
 
+<!-- ============ SPOTLIGHT (Native Page Deck) — body-level, BEFORE <main> so (a) z-index:91 competes with site chrome instead of being trapped by main{z-index:1}, and (b) it is parsed before the wiring <script> inside <main> ============ -->
+<div class="pd-scrim" id="pdScrim"></div>
+<aside class="pd-panel surface-dark" id="pdPanel" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Site spotlight">
+  <div class="pd-inner">
+
+    <div class="pd-toolbar">
+      <button class="pd-navbtn" id="pdPrev" type="button" aria-label="Previous site">&#8249;</button>
+      <button class="pd-navbtn" id="pdNext" type="button" aria-label="Next site">&#8250;</button>
+      <button class="pd-close" id="pdClose" type="button" aria-label="Close">&times;</button>
+    </div>
+
+    <header class="pd-head reveal">
+      <span class="eyebrow" id="pdEyebrow"></span>
+      <h1 class="h1" id="pdBrand"></h1>
+      <p class="lead" id="pdLead"></p>
+      <span class="pill"><span class="dot"></span>Built on SGEN</span>
+    </header>
+
+    <div class="pd-stage">
+      <div class="pd-deck reveal" data-d="1">
+        <div class="pd-tabs" id="pdTabs" role="tablist" aria-label="Pages"></div>
+        <div class="pd-browser">
+          <div class="pd-chrome">
+            <span class="pd-dots"><i></i><i></i><i></i></span>
+            <span class="pd-addr"><span class="lock">&#x1F512;</span><span class="url" id="pdUrl"></span></span>
+          </div>
+          <div class="pd-viewport" id="pdViewport"></div>
+        </div>
+        <p class="pd-hint" id="pdHint">
+          <span>Switch pages</span><kbd>&larr;</kbd><kbd>&rarr;</kbd><span>arrow keys</span>
+        </p>
+      </div>
+
+      <div class="pd-phone-col reveal" data-d="2">
+        <div class="iphone" style="--w:250px">
+          <span class="btn vu"></span><span class="btn vd"></span><span class="btn pwr"></span>
+          <div class="iphone-screen"><img id="pdPhone" src="" alt=""></div>
+          <span class="island"></span><span class="home"></span>
+        </div>
+        <span class="pd-phone-cap">Mobile</span>
+      </div>
+    </div>
+
+  </div>
+</aside>
+
 <main id="main">
 
 <!-- ============ MASTHEAD ============ -->
@@ -601,52 +660,6 @@
   <span><b id="footN">29</b> sites &middot; <b id="footC">5</b> categories &middot; one platform</span>
   <span>Examples of work built on SGEN.</span>
 </footer>
-
-<!-- ============ SPOTLIGHT (Native Page Deck) ============ -->
-<div class="pd-scrim" id="pdScrim"></div>
-<aside class="pd-panel surface-dark" id="pdPanel" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Site spotlight">
-  <div class="pd-inner">
-
-    <div class="pd-toolbar">
-      <button class="pd-navbtn" id="pdPrev" type="button" aria-label="Previous site">&#8249;</button>
-      <button class="pd-navbtn" id="pdNext" type="button" aria-label="Next site">&#8250;</button>
-      <button class="pd-close" id="pdClose" type="button" aria-label="Close">&times;</button>
-    </div>
-
-    <header class="pd-head reveal">
-      <span class="eyebrow" id="pdEyebrow"></span>
-      <h1 class="h1" id="pdBrand"></h1>
-      <p class="lead" id="pdLead"></p>
-      <span class="pill"><span class="dot"></span>Built on SGEN</span>
-    </header>
-
-    <div class="pd-stage">
-      <div class="pd-deck reveal" data-d="1">
-        <div class="pd-tabs" id="pdTabs" role="tablist" aria-label="Pages"></div>
-        <div class="pd-browser">
-          <div class="pd-chrome">
-            <span class="pd-dots"><i></i><i></i><i></i></span>
-            <span class="pd-addr"><span class="lock">&#x1F512;</span><span class="url" id="pdUrl"></span></span>
-          </div>
-          <div class="pd-viewport" id="pdViewport"></div>
-        </div>
-        <p class="pd-hint" id="pdHint">
-          <span>Switch pages</span><kbd>&larr;</kbd><kbd>&rarr;</kbd><span>arrow keys</span>
-        </p>
-      </div>
-
-      <div class="pd-phone-col reveal" data-d="2">
-        <div class="iphone" style="--w:250px">
-          <span class="btn vu"></span><span class="btn vd"></span><span class="btn pwr"></span>
-          <div class="iphone-screen"><img id="pdPhone" src="" alt=""></div>
-          <span class="island"></span><span class="home"></span>
-        </div>
-        <span class="pd-phone-cap">Mobile</span>
-      </div>
-    </div>
-
-  </div>
-</aside>
 
 <script>
 /* ============================================================
