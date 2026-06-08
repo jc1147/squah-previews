@@ -4625,3 +4625,50 @@ a.cox2-mod-chip:hover { color: #fff; border-color: rgba(213,21,34,.55); }
   }
 
 }
+
+
+/* ===== PRODUCT TAB-SYNC (mobile, media-query only) ===== */
+/* ============================================================================
+   HOME / MOBILE PRODUCT SYNC - chip-strip affordances.
+   ----------------------------------------------------------------------------
+   Pairs with _home/_mobile5/product-sync.js. Mobile only. Two jobs:
+     1. Make the ACTIVE chip unmistakable in the compact pill strip. The base
+        .px3-cat.is-on tint reads weakly once chips become small pills and the
+        red spine ::before is hidden on mobile, so the active chip gets a solid
+        brand fill (selected = red), matching the carousel position.
+     2. Add scroll-margin so the JS centring (chipIntoView / centredOffset)
+        leaves a clean inset at the strip and carousel edges.
+   Scoped under #product .px3-index (id + 2 classes) so it out-specifies the
+   appended mobile carousel rule (.px3-index .px3-cat). Desktop is untouched:
+   every rule lives inside @media (max-width: 760px).
+   ============================================================================ */
+
+@media (max-width: 760px) {
+
+  /* centring inset so a chip scrolled into view is not flush to the strip edge */
+  #product .px3-index .px3-cat {
+    scroll-margin-inline: 14px;
+    transition: background-color var(--sg-t-fast), border-color var(--sg-t-fast), box-shadow var(--sg-t-fast);
+  }
+
+  /* ACTIVE chip = solid brand fill, clearly the selected one in the strip */
+  #product .px3-index .px3-cat.is-on {
+    background: var(--sg-grad-red);
+    border-color: transparent;
+    box-shadow: var(--sg-shadow-red);
+  }
+  #product .px3-index .px3-cat.is-on .px3-cat-nm { color: #fff; }
+  #product .px3-index .px3-cat.is-on .px3-cat-ic {
+    background: rgba(255,255,255,.18);
+    border-color: rgba(255,255,255,.35);
+    color: #fff;
+    box-shadow: none;
+  }
+  #product .px3-index .px3-cat.is-on .px3-cat-n {
+    color: rgba(255,255,255,.85);
+    border-left-color: rgba(255,255,255,.30);
+  }
+
+  /* leave a snap inset at the carousel edges so the centred panel sits clean */
+  #product .px3-stage .px3-panel { scroll-margin-inline: 14px; }
+}

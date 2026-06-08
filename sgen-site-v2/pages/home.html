@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="../_design/sgen-tokens.css?v=0e2cf486">
 <link rel="stylesheet" href="../_design/sgen-structural.css?v=7ce6a554">
 <link rel="stylesheet" href="../_design/sgen-chrome.css?v=cfd841c0">
-<link rel="stylesheet" href="home.css?v=c3e649b7">
+<link rel="stylesheet" href="home.css?v=1272ac98">
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -2987,45 +2987,82 @@ render();
 </style>
 
 <!-- ============================================================================
-     HOME / MOBILE AUTO-ADVANCE for horizontal carousels with more than 4 items.
+     HOME / MOBILE PRODUCT SYNC + GALLERY AUTO-SCROLL.
      ----------------------------------------------------------------------------
-     One IIFE, idempotent, defensive. MOBILE ONLY: the whole thing is gated behind
-     matchMedia('(max-width: 760px)') AND NOT prefers-reduced-motion. On desktop or
-     reduced-motion it never runs, so desktop behaviour is untouched.
+     REPLACES the old mobile auto-advance snippet. One IIFE, idempotent,
+     defensive. Two parts:
+       (A) GALLERY  (#showcase .sc-grid) smooth auto-scroll to the next card.
+           Ported verbatim in behaviour from the old snippet. Mobile + motion only.
+       (B) PRODUCT  (#product) two-way sync between the category chip strip
+           (.px3-index .px3-cat, 7) and the panel carousel (.px3-stage .px3-panel,
+           7). Source of truth is the carousel scroll position. A swipe updates the
+           active chip and scrolls it into view; a chip click scrolls the carousel.
+           Optional auto-advance (motion only) walks the carousel forward; it pauses
+           on interaction and when the section is off-screen. Boots on tab 0.
 
-     Three carousels are driven (all have more than 4 items):
-       1. GALLERY  (#showcase .sc-grid, the JS-rendered .sc-card track) PRIORITY.
-          Smoothly scrolls to the next card every ~2.5s; loops at the end; pauses
-          on any user interaction and resumes after ~4s idle.
-       2. PRODUCT  (#product .px3-cat category chips, 7) advance the SELECTION by
-          clicking the next chip every ~2.8s so the panel content swaps; loops.
-       3. COMPARE  (#cx3-compare .cx3-chip competitor chips, 5) same selection
-          advance every ~3.0s; loops.
-     SOLUTIONS (2) and the pricing slider (4) are NOT driven (4 or fewer).
+     The desktop selector script (guarded by data-px3-wired) stays intact; it sets
+     the native hidden attribute on inactive panels, which mobile CSS overrides to
+     keep every panel visible. This controller cooperates: it never touches hidden.
 
-     Build-safe (build.mjs injects content via String.replace, which interprets
-     dollar patterns; and a literal less-than-slash would close the script early):
-     NO template literals, NO dollar sign anywhere, NO less-than-slash inside any
-     string. Selection uses attribute / class selectors only.
+     BUILD-SAFE (build.mjs injects via String.replace, which interprets dollar
+     patterns; and a literal less-than-slash would close the script early):
+     NO template literals, NO backticks, NO dollar sign before a digit or a brace,
+     NO less-than-slash inside any string. Selection uses attribute / class
+     selectors only; all strings are plain.
+
+     Reviewer fixes applied:
+       - HIGH: loop-prevention guard now outlasts the smooth scroll. The stage
+         scroll handler re-arms a ~140ms quiet timer while programmatic is true,
+         clearing it only after the scroll settles (with a 900ms fallback for the
+         no-scroll-event case). Replaces the too-short fixed 500ms timer.
+       - MEDIUM: teardown on viewport cross. A matchMedia change listener (with the
+         older-Safari addListener fallback) pauses every timer when leaving mobile,
+         and the hot callbacks early-return on desktop, so desktop state is never
+         contaminated after a rotation or resize.
+       - LOW: dropped the redundant standalone setActiveTab(0) at boot.
      ============================================================================ -->
 <script>
 (function () {
   "use strict";
 
-  if (window.__sgMobileAutoScroll) { return; }
-  window.__sgMobileAutoScroll = true;
+  if (window.__sgPx3Sync) { return; }
+  window.__sgPx3Sync = true;
 
-  /* HARD GATE: mobile width AND motion allowed. If either fails, no-op forever. */
+  /* matchMedia is required; without it we cannot tell mobile from desktop. */
   var mq = window.matchMedia;
   if (!mq) { return; }
-  var isMobile = mq("(max-width: 760px)").matches;
-  var reduceMotion = mq("(prefers-reduced-motion: reduce)").matches;
-  if (!isMobile || reduceMotion) { return; }
 
-  /* ------------------------------------------------------------------ */
-  /* GALLERY: smooth scroll-to-next-card on the #showcase carousel.     */
-  /* ------------------------------------------------------------------ */
+  /* HARD GATE: this whole controller is MOBILE ONLY. We keep the MediaQueryList
+     live so the hot callbacks can re-check it after a rotation or resize, and so
+     we can tear everything down when the viewport crosses to desktop. */
+  var mql = mq("(max-width: 760px)");
+  if (!mql.matches) { return; }
+
+  /* Timed auto-advance / gallery auto-scroll additionally respect reduced motion.
+     The click<->swipe SYNC itself runs regardless (it is user-driven). */
+  var reduceMotion = mq("(prefers-reduced-motion: reduce)").matches;
+
+  /* teardown hooks registered by each part; fired when we leave mobile */
+  var teardowns = [];
+  function onLeaveMobile() {
+    if (mql.matches) { return; }   /* still mobile: nothing to do */
+    for (var i = 0; i < teardowns.length; i++) {
+      try { teardowns[i](); } catch (err) {}
+    }
+  }
+  if (mql.addEventListener) {
+    mql.addEventListener("change", onLeaveMobile);
+  } else if (mql.addListener) {
+    mql.addListener(onLeaveMobile);   /* older Safari */
+  }
+
+  /* ================================================================== */
+  /* (A) GALLERY: smooth scroll-to-next-card on the #showcase carousel. */
+  /*     Ported verbatim in behaviour from the old snippet.             */
+  /* ================================================================== */
   function startGallery() {
+    if (reduceMotion) { return; }   /* auto-scroll respects reduced motion */
+
     var section = document.getElementById("showcase");
     if (!section) { return; }
     var grid = section.querySelector(".sc-grid");
@@ -3065,6 +3102,7 @@ render();
     }
 
     function advance() {
+      if (!mql.matches) { return; }   /* no work once we leave mobile */
       var list = cards();
       if (list.length < 5) { return; }   /* only auto-advance when more than 4 */
       var cur = indexNearest();
@@ -3087,6 +3125,7 @@ render();
     }
 
     function play() {
+      if (!mql.matches) { return; }   /* never start on desktop */
       if (timer) { return; }
       timer = window.setInterval(advance, STEP_MS);
     }
@@ -3119,86 +3158,265 @@ render();
       io.observe(grid);
     }
 
+    /* tear down all timers if the viewport crosses to desktop */
+    teardowns.push(function () {
+      pause();
+      if (idleTimer) { window.clearTimeout(idleTimer); idleTimer = null; }
+      if (selfClearTimer) { window.clearTimeout(selfClearTimer); selfClearTimer = null; }
+    });
+
     /* cards are rendered asynchronously by the explorer script: wait for them */
     var tries = 0;
     (function waitForCards() {
+      if (!mql.matches) { return; }   /* bailed out to desktop while waiting */
       if (cards().length >= 5) { play(); return; }
       if (tries++ > 40) { return; }   /* give up after ~10s; nothing to drive */
       window.setTimeout(waitForCards, 250);
     })();
   }
 
-  /* ------------------------------------------------------------------ */
-  /* Generic chip cycler: advance the SELECTION by clicking the next    */
-  /* chip so the panel content swaps. Used for PRODUCT and COMPARE.     */
-  /* ------------------------------------------------------------------ */
-  function startChipCycler(sectionId, chipSelector, isSelected, stepMs, idleMs) {
-    var section = document.getElementById(sectionId);
+  /* ================================================================== */
+  /* (B) PRODUCT: two-way sync, chip strip <-> panel carousel.          */
+  /* ================================================================== */
+  function startProductSync() {
+    var section = document.getElementById("product");
     if (!section) { return; }
-    var chips = Array.prototype.slice.call(section.querySelectorAll(chipSelector));
-    if (chips.length < 5) { return; }   /* only when more than 4 items */
 
-    var timer = null;
-    var idleTimer = null;
+    var stage = section.querySelector(".px3-stage");
+    var strip = section.querySelector(".px3-index");
+    if (!stage || !strip) { return; }
 
-    function currentIndex() {
-      for (var i = 0; i < chips.length; i++) {
-        if (isSelected(chips[i])) { return i; }
+    var panels = Array.prototype.slice.call(stage.querySelectorAll(".px3-panel"));
+    var tabs = Array.prototype.slice.call(strip.querySelectorAll(".px3-cat"));
+    var n = panels.length;
+    if (n < 2 || !tabs.length) { return; }   /* nothing to sync */
+
+    /* map a panel to its chip index. The chip whose data-panel matches the
+       panel id suffix (px3-p-KEY), or whose aria-controls equals the panel id. */
+    function tabIndexFor(panel) {
+      var id = panel.id || "";
+      var key = id.indexOf("px3-p-") === 0 ? id.slice(6) : "";
+      for (var i = 0; i < tabs.length; i++) {
+        var dp = tabs[i].getAttribute("data-panel");
+        var ac = tabs[i].getAttribute("aria-controls");
+        if ((key && dp === key) || (id && ac === id)) { return i; }
       }
-      return 0;
+      return -1;
     }
 
-    function advance() {
-      var next = (currentIndex() + 1) % chips.length;
-      var el = chips[next];
-      if (el && typeof el.click === "function") { el.click(); }
+    /* precompute the panel-index -> tab-index map (DOM order should align, but
+       resolve it by attribute so a markup reorder cannot desync the strip) */
+    var tabForPanel = [];
+    for (var pi = 0; pi < n; pi++) {
+      var ti = tabIndexFor(panels[pi]);
+      tabForPanel[pi] = ti < 0 ? pi : ti;
     }
 
-    function play() {
-      if (timer) { return; }
-      timer = window.setInterval(advance, stepMs);
-    }
-    function pause() {
-      if (timer) { window.clearInterval(timer); timer = null; }
-    }
-    function bumpIdle() {
-      pause();
-      if (idleTimer) { window.clearTimeout(idleTimer); }
-      idleTimer = window.setTimeout(play, idleMs);
+    /* centred offset for panel i within the stage, clamped to the scroll range.
+       Same math as the gallery offsetFor. */
+    function centredOffset(i) {
+      var p = panels[i];
+      var target = p.offsetLeft - (stage.clientWidth - p.offsetWidth) / 2;
+      var max = stage.scrollWidth - stage.clientWidth;
+      if (target < 0) { target = 0; }
+      if (target > max) { target = max; }
+      return target;
     }
 
-    /* any interaction inside the section pauses, then resumes after idle */
-    section.addEventListener("pointerdown", bumpIdle, { passive: true });
-    section.addEventListener("touchstart", bumpIdle, { passive: true });
+    /* index of the panel whose centred offset is nearest the current scroll */
+    function activeIndex() {
+      var here = stage.scrollLeft;
+      var best = 0;
+      var bestDist = Infinity;
+      for (var i = 0; i < n; i++) {
+        var d = Math.abs(centredOffset(i) - here);
+        if (d < bestDist) { bestDist = d; best = i; }
+      }
+      return best;
+    }
 
-    /* pause when off-screen, resume when it returns */
+    /* scroll a chip into view INSIDE the strip only (never the window/vertical).
+       Centre the chip in the strip viewport, clamped to the strip scroll range. */
+    function chipIntoView(tab) {
+      var max = strip.scrollWidth - strip.clientWidth;
+      if (max <= 0) { return; }   /* strip does not scroll: nothing to do */
+      var target = tab.offsetLeft - (strip.clientWidth - tab.offsetWidth) / 2;
+      if (target < 0) { target = 0; }
+      if (target > max) { target = max; }
+      if (Math.abs(target - strip.scrollLeft) < 2) { return; }
+      try {
+        strip.scrollTo({ left: target, behavior: reduceMotion ? "auto" : "smooth" });
+      } catch (err) {
+        strip.scrollLeft = target;
+      }
+    }
+
+    /* reflect carousel position into the chip strip. Active panel index i maps
+       through tabForPanel to the chip to light up. Does NOT move the carousel. */
+    function setActiveTab(i) {
+      var wantTab = tabForPanel[i];
+      var onTab = null;
+      for (var t = 0; t < tabs.length; t++) {
+        var on = (t === wantTab);
+        tabs[t].classList.toggle("is-on", on);
+        tabs[t].setAttribute("aria-selected", on ? "true" : "false");
+        tabs[t].tabIndex = on ? 0 : -1;
+        if (on) { onTab = tabs[t]; }
+      }
+      if (onTab) { chipIntoView(onTab); }
+    }
+
+    /* loop-prevention guard. programmatic is true while WE drive stage scroll.
+       The stage scroll handler re-arms progClearTimer (a short quiet timer) on
+       every scroll tick, so the guard outlasts the whole smooth scroll and only
+       clears once scrolling settles. progFallbackTimer covers the case where no
+       scroll events fire at all (already at target, or a behavior:auto jump). */
+    var programmatic = false;
+    var progClearTimer = null;
+    var progFallbackTimer = null;
+    var PROG_QUIET_MS = 140;
+    var PROG_FALLBACK_MS = 900;
+
+    function clearProgTimers() {
+      if (progClearTimer) { window.clearTimeout(progClearTimer); progClearTimer = null; }
+      if (progFallbackTimer) { window.clearTimeout(progFallbackTimer); progFallbackTimer = null; }
+    }
+
+    /* move the carousel to centre panel i, then light its chip */
+    function goTo(i, smooth) {
+      if (i < 0) { i = 0; }
+      if (i > n - 1) { i = n - 1; }
+      var to = centredOffset(i);
+
+      programmatic = true;
+      clearProgTimers();
+      /* fallback: if the scroll lands without firing scroll events, release the
+         guard anyway so a later manual swipe is not swallowed forever. */
+      progFallbackTimer = window.setTimeout(function () {
+        programmatic = false;
+      }, PROG_FALLBACK_MS);
+
+      try {
+        stage.scrollTo({ left: to, behavior: smooth ? "smooth" : "auto" });
+      } catch (err) {
+        stage.scrollLeft = to;
+        programmatic = false;
+        clearProgTimers();
+      }
+      setActiveTab(i);
+    }
+
+    /* a manual swipe updates the chip strip (debounced; ignore self-driven).
+       While programmatic, every tick re-arms the quiet timer so the guard does
+       not drop mid-flight and light the wrong chip on an intermediate position. */
+    var scrollDebounce = null;
+    stage.addEventListener("scroll", function () {
+      if (!mql.matches) { return; }   /* no work once we leave mobile */
+      if (programmatic) {
+        if (progClearTimer) { window.clearTimeout(progClearTimer); }
+        progClearTimer = window.setTimeout(function () {
+          programmatic = false;
+          if (progFallbackTimer) { window.clearTimeout(progFallbackTimer); progFallbackTimer = null; }
+        }, PROG_QUIET_MS);
+        return;   /* ignore the scroll WE caused */
+      }
+      if (scrollDebounce) { window.clearTimeout(scrollDebounce); }
+      scrollDebounce = window.setTimeout(function () {
+        setActiveTab(activeIndex());
+      }, 120);
+    }, { passive: true });
+
+    /* chip click drives the carousel. The desktop select() also fires and is
+       harmless (CSS keeps every panel visible on mobile). Guard so the click
+       listener is added once per tab. */
+    for (var c = 0; c < tabs.length; c++) {
+      (function (tab) {
+        if (tab.__sgSyncBound) { return; }
+        tab.__sgSyncBound = true;
+        tab.addEventListener("click", function () {
+          if (!mql.matches) { return; }   /* let the desktop IIFE own the click */
+          /* find the panel index this chip controls, then go there */
+          var want = -1;
+          for (var k = 0; k < n; k++) {
+            if (tabForPanel[k] === Array.prototype.indexOf.call(tabs, tab)) { want = k; break; }
+          }
+          if (want < 0) { want = 0; }
+          pauseAuto();
+          goTo(want, true);
+          resumeAutoLater();
+        });
+      })(tabs[c]);
+    }
+
+    /* ---- AUTO-ADVANCE (motion only) -------------------------------------- */
+    var AUTO_MS = 3200;
+    var AUTO_IDLE_MS = 5000;
+    var autoTimer = null;
+    var autoIdleTimer = null;
+    var onScreen = true;
+    var autoAllowed = !reduceMotion;
+
+    function autoStep() {
+      if (!mql.matches) { pauseAuto(); return; }   /* stop once we leave mobile */
+      var next = (activeIndex() + 1) % n;
+      goTo(next, true);
+    }
+    function playAuto() {
+      if (!autoAllowed || !onScreen) { return; }
+      if (!mql.matches) { return; }   /* never start on desktop */
+      if (autoTimer) { return; }
+      autoTimer = window.setInterval(autoStep, AUTO_MS);
+    }
+    function pauseAuto() {
+      if (autoTimer) { window.clearInterval(autoTimer); autoTimer = null; }
+    }
+    function resumeAutoLater() {
+      pauseAuto();
+      if (autoIdleTimer) { window.clearTimeout(autoIdleTimer); }
+      autoIdleTimer = window.setTimeout(playAuto, AUTO_IDLE_MS);
+    }
+
+    /* interaction with the carousel or the chip strip pauses, then resumes */
+    function onUser() { resumeAutoLater(); }
+    stage.addEventListener("pointerdown", onUser, { passive: true });
+    stage.addEventListener("touchstart", onUser, { passive: true });
+    stage.addEventListener("wheel", onUser, { passive: true });
+    strip.addEventListener("pointerdown", onUser, { passive: true });
+    strip.addEventListener("touchstart", onUser, { passive: true });
+    strip.addEventListener("wheel", onUser, { passive: true });
+
+    /* pause auto-advance when #product is off-screen, resume when it returns */
     if ("IntersectionObserver" in window) {
       var io = new IntersectionObserver(function (entries) {
         for (var i = 0; i < entries.length; i++) {
-          if (entries[i].isIntersecting) { play(); } else { pause(); }
+          if (entries[i].isIntersecting) { onScreen = true; playAuto(); }
+          else { onScreen = false; pauseAuto(); }
         }
       }, { threshold: 0.2 });
       io.observe(section);
-    } else {
-      play();
     }
+
+    /* tear everything down if the viewport crosses to desktop, so we stop
+       mutating is-on / aria-selected / tabIndex on the chips. */
+    teardowns.push(function () {
+      pauseAuto();
+      if (autoIdleTimer) { window.clearTimeout(autoIdleTimer); autoIdleTimer = null; }
+      if (scrollDebounce) { window.clearTimeout(scrollDebounce); scrollDebounce = null; }
+      clearProgTimers();
+      programmatic = false;
+    });
+
+    /* ---- BOOT: default to tab 0 (Build), Build panel centred ------------- */
+    goTo(0, false);   /* this also lights tab 0 via setActiveTab(0) */
+
+    /* start auto-advance (no-op if reduced motion or off-screen) */
+    if (!("IntersectionObserver" in window)) { playAuto(); }
   }
 
-  function isProductSelected(chip) {
-    return chip.classList.contains("is-on") ||
-           chip.getAttribute("aria-selected") === "true";
-  }
-  function isCompareSelected(chip) {
-    return chip.getAttribute("aria-selected") === "true";
-  }
-
+  /* ------------------------------------------------------------------ */
   function boot() {
-    /* GALLERY is the headline one */
     startGallery();
-    /* PRODUCT category chips (7) */
-    startChipCycler("product", ".px3-cat", isProductSelected, 2800, 4500);
-    /* COMPARE competitor chips (5) */
-    startChipCycler("cx3-compare", ".cx3-chip", isCompareSelected, 3000, 4500);
+    startProductSync();
   }
 
   if (document.readyState === "loading") {
