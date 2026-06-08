@@ -4672,3 +4672,26 @@ a.cox2-mod-chip:hover { color: #fff; border-color: rgba(213,21,34,.55); }
   /* leave a snap inset at the carousel edges so the centred panel sits clean */
   #product .px3-stage .px3-panel { scroll-margin-inline: 14px; }
 }
+
+/* ===== SECTION WATERMARKS -> TOP (first pixel of each section) ===== */
+/* Home-scoped only. The shared structural .bigtype is BOTTOM-anchored
+   (inset: auto 0 -.12em 0) and used site-wide; do NOT edit it. These
+   id-scoped overrides (specificity 1,1,0) out-specify both the structural
+   rule and the home overrides (.px3-sec .bigtype top:8% at L1511, and
+   .pr2 .bigtype bottom:-.04em at L2457), pulling the watermark caps to the
+   first pixel of each section. Universal (mobile + desktop), not media-scoped.
+   The small negative top nudges the cap (line-height:.8) up to the edge. */
+#product .bigtype,
+#pricing .bigtype,
+#showcase .bigtype,
+#cx3-compare .bigtype { top: -.06em; bottom: auto; opacity: .9; }
+
+/* SOLUTIONS uses its own .sx3-wm watermark; flip it to the top too. */
+#solutions .sx3-wm { inset: 0 0 auto 0; }
+
+/* SHOWCASE: keep its two content wrappers (header + gallery) above the
+   new .bigtype watermark (.bigtype is z-index:0; content stays z-index:1).
+   The structural ".surface-dark > *" already lifts direct children to
+   z-index:1; these are belt-and-suspenders so the gallery never drops behind. */
+#showcase > .wrap,
+#showcase > .sc-explorer-full { position: relative; z-index: 1; }
