@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en" data-surface="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SGEN — From Website Platform to the Digital Agency Operating System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   SGEN brand tokens (harvested from Code/sgen-site/_design/sgen-tokens.css)
+   Dark-premium surface. Red load-bearing. Inter + JetBrains Mono.
+   ============================================================ */
+:root{
+  --red:#d51522; --red-deep:#b00000; --red-hot:#ff2a38; --red-soft:#ff6b75;
+  --red-08:rgba(213,21,34,.08); --red-14:rgba(213,21,34,.14); --red-22:rgba(213,21,34,.22);
+  --bg:#0d0d0f; --bg2:#16161a; --bg3:#1c1c21; --bg-deep:#080706;
+  --ink:#f4f2ee; --ink-soft:rgba(255,255,255,.64); --ink-faint:rgba(255,255,255,.42);
+  --line:rgba(255,255,255,.10); --line2:rgba(255,255,255,.06);
+  --card:rgba(255,255,255,.035); --card-border:rgba(255,255,255,.10);
+  --font:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace;
+  --maxw:1240px;
+  --ease:cubic-bezier(.16,.84,.36,1);
+  --shadow:0 40px 90px -30px rgba(0,0,0,.80);
+  --shadow-rest:0 8px 24px -10px rgba(0,0,0,.6);
+  --shadow-red:0 10px 30px -8px rgba(213,21,34,.55);
+  /* tag colors */
+  --t-live:#3ecf8e; --t-live-bg:rgba(62,207,142,.12); --t-live-bd:rgba(62,207,142,.34);
+  --t-extend:#f5a623; --t-extend-bg:rgba(245,166,35,.12); --t-extend-bd:rgba(245,166,35,.34);
+  --t-new:#ff5a66; --t-new-bg:rgba(213,21,34,.14); --t-new-bd:rgba(213,21,34,.40);
+  --t-int:#5aa9ff; --t-int-bg:rgba(90,169,255,.12); --t-int-bd:rgba(90,169,255,.34);
+  --t-held:#b08cff; --t-held-bg:rgba(176,140,255,.12); --t-held-bd:rgba(176,140,255,.34);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:84px}
+body{
+  font-family:var(--font);background:var(--bg);color:var(--ink);
+  font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;
+  background-image:
+    radial-gradient(120% 80% at 50% -8%, rgba(213,21,34,.14), transparent 52%),
+    radial-gradient(100% 90% at 100% 0%, rgba(90,60,180,.07), transparent 50%);
+  background-attachment:fixed;
+  overflow-x:hidden;
+}
+/* subtle grain */
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.04;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px;position:relative;z-index:2}
+
+/* ---------- progress + nav ---------- */
+#prog{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--red),var(--red-hot));z-index:60;transition:width .1s linear}
+nav.top{
+  position:fixed;top:0;left:0;right:0;z-index:50;
+  background:rgba(13,13,15,.72);backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
+}
+nav.top .row{display:flex;align-items:center;gap:18px;height:62px;max-width:var(--maxw);margin:0 auto;padding:0 28px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:-.02em;font-size:17px}
+.brand .dot{width:11px;height:11px;border-radius:3px;background:var(--red);box-shadow:0 0 14px var(--red)}
+.brand b{color:var(--red-soft)}
+nav.top .links{display:flex;gap:4px;margin-left:auto;flex-wrap:wrap}
+nav.top .links a{
+  font:600 12.5px/1 var(--font);color:var(--ink-faint);padding:8px 11px;border-radius:7px;
+  transition:.2s var(--ease);white-space:nowrap;
+}
+nav.top .links a:hover{color:var(--ink);background:rgba(255,255,255,.05)}
+nav.top .links a.active{color:var(--ink);background:var(--red-14);box-shadow:inset 0 0 0 1px var(--red-22)}
+@media(max-width:1080px){nav.top .links{display:none}}
+
+/* ---------- type ---------- */
+.eyebrow{font:600 11px/1 var(--mono);letter-spacing:.22em;text-transform:uppercase;color:var(--red-soft);margin-bottom:18px;display:inline-flex;align-items:center;gap:9px}
+.eyebrow::before{content:"";width:26px;height:1px;background:var(--red)}
+h1{font-weight:900;letter-spacing:-.035em;line-height:1.02;font-size:clamp(40px,6.4vw,84px)}
+h2{font-weight:800;letter-spacing:-.03em;line-height:1.06;font-size:clamp(30px,4.4vw,52px)}
+h3{font-weight:700;letter-spacing:-.02em;font-size:clamp(20px,2.2vw,27px)}
+.lead{font-size:clamp(18px,1.6vw,21px);color:var(--ink-soft);max-width:760px}
+.grad{background:linear-gradient(100deg,#ff2a38,#d51522 55%,#ff6b75);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.mono{font-family:var(--mono)}
+.muted{color:var(--ink-faint)}
+.soft{color:var(--ink-soft)}
+
+/* ---------- sections ---------- */
+section{padding:clamp(64px,9vw,118px) 0;border-top:1px solid var(--line2);position:relative}
+section.hero{border-top:none;padding-top:140px;padding-bottom:80px}
+.sec-head{max-width:860px;margin-bottom:46px}
+.sec-head .lead{margin-top:18px}
+
+/* ---------- hero ---------- */
+.hero h1{max-width:16ch}
+.hero .lead{margin-top:26px;font-size:clamp(18px,1.8vw,23px)}
+.hero .kicker{display:flex;gap:10px;flex-wrap:wrap;margin-top:34px}
+.pill{font:600 12px/1 var(--mono);letter-spacing:.04em;padding:9px 14px;border-radius:999px;border:1px solid var(--card-border);background:var(--card);color:var(--ink-soft)}
+.pill b{color:var(--ink)}
+
+/* two engines hero diagram */
+.engines{display:grid;grid-template-columns:1fr auto 1fr;gap:0;align-items:stretch;margin-top:56px;border:1px solid var(--card-border);border-radius:20px;overflow:hidden;background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.015))}
+.engine{padding:30px 30px 32px}
+.engine .tag{font:600 11px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--red-soft)}
+.engine h3{margin:14px 0 8px}
+.engine p{color:var(--ink-soft);font-size:15.5px}
+.engine ul{list-style:none;margin-top:14px;display:flex;flex-direction:column;gap:7px}
+.engine li{font-size:14px;color:var(--ink-soft);padding-left:18px;position:relative}
+.engine li::before{content:"";position:absolute;left:0;top:9px;width:6px;height:6px;border-radius:2px;background:var(--red)}
+.engine.b{background:rgba(90,169,255,.05)}
+.engine.b .tag{color:var(--t-int)}
+.engine.b li::before{background:var(--t-int)}
+.flywheel-mid{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 26px;border-left:1px solid var(--line);border-right:1px solid var(--line);background:rgba(0,0,0,.25);min-width:130px;text-align:center}
+.flywheel-mid .fw{font-size:34px}
+.flywheel-mid span{font:600 10.5px/1.4 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint);margin-top:10px}
+@media(max-width:860px){.engines{grid-template-columns:1fr}.flywheel-mid{flex-direction:row;gap:14px;padding:16px;border-left:none;border-right:none;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}}
+
+/* ---------- legend ---------- */
+.legend{display:flex;gap:10px;flex-wrap:wrap;margin-top:30px}
+.tag{font:600 11px/1 var(--mono);letter-spacing:.04em;padding:6px 10px;border-radius:6px;display:inline-flex;align-items:center;gap:7px;white-space:nowrap}
+.tag::before{content:"";width:7px;height:7px;border-radius:50%}
+.tag.live{color:var(--t-live);background:var(--t-live-bg);box-shadow:inset 0 0 0 1px var(--t-live-bd)}.tag.live::before{background:var(--t-live)}
+.tag.extend{color:var(--t-extend);background:var(--t-extend-bg);box-shadow:inset 0 0 0 1px var(--t-extend-bd)}.tag.extend::before{background:var(--t-extend)}
+.tag.new{color:var(--t-new);background:var(--t-new-bg);box-shadow:inset 0 0 0 1px var(--t-new-bd)}.tag.new::before{background:var(--t-new)}
+.tag.int{color:var(--t-int);background:var(--t-int-bg);box-shadow:inset 0 0 0 1px var(--t-int-bd)}.tag.int::before{background:var(--t-int)}
+.tag.held{color:var(--t-held);background:var(--t-held-bg);box-shadow:inset 0 0 0 1px var(--t-held-bd)}.tag.held::before{background:var(--t-held)}
+
+/* ---------- cards / grids ---------- */
+.card{background:var(--card);border:1px solid var(--card-border);border-radius:16px;padding:26px;transition:.25s var(--ease)}
+.card:hover{transform:translateY(-3px);border-color:var(--red-22);box-shadow:var(--shadow-rest)}
+.grid{display:grid;gap:18px}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:980px){.g3,.g4{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:680px){.g2,.g3,.g4{grid-template-columns:1fr}}
+
+/* feature rows inside suite cards */
+.feat{display:flex;align-items:flex-start;gap:12px;padding:11px 0;border-top:1px solid var(--line2)}
+.feat:first-of-type{border-top:none}
+.feat .meta{flex:1}
+.feat .name{font-weight:600;font-size:15px}
+.feat .desc{font-size:13px;color:var(--ink-faint);margin-top:2px}
+.feat .tag{flex-shrink:0;margin-top:1px}
+
+/* suite header */
+.suite-h{display:flex;align-items:center;gap:14px;margin-bottom:6px}
+.suite-h .num{font:800 14px/1 var(--mono);color:var(--red-soft);background:var(--red-14);border:1px solid var(--red-22);width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.suite-sub{color:var(--ink-faint);font-size:13.5px;margin-bottom:18px;font-family:var(--mono)}
+
+/* ---------- ladder ---------- */
+.ladder{display:flex;flex-direction:column;gap:14px;margin-top:10px}
+.rung{display:grid;grid-template-columns:64px 1fr auto;gap:22px;align-items:center;background:var(--card);border:1px solid var(--card-border);border-radius:14px;padding:20px 24px;position:relative;transition:.25s var(--ease)}
+.rung:hover{border-color:var(--red-22);transform:translateX(3px)}
+.rung .step{font:800 26px/1 var(--mono);color:var(--ink-faint)}
+.rung .ac{font:800 22px/1 var(--font);letter-spacing:-.01em}
+.rung .ac .grad{font-size:22px}
+.rung .exp{font-size:13px;color:var(--ink-faint);font-family:var(--mono);margin-top:5px}
+.rung .mean{color:var(--ink-soft);font-size:15px;margin-top:9px;max-width:62ch}
+.rung.here{border-color:var(--t-live-bd);background:linear-gradient(180deg,var(--t-live-bg),rgba(255,255,255,.02))}
+.rung .right{display:flex;flex-direction:column;align-items:flex-end;gap:8px;text-align:right}
+.herebadge{font:700 10px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--t-live);border:1px solid var(--t-live-bd);background:var(--t-live-bg);padding:5px 9px;border-radius:6px}
+@media(max-width:760px){.rung{grid-template-columns:1fr;gap:10px}.rung .right{align-items:flex-start;text-align:left}}
+
+/* ---------- flag / callout ---------- */
+.flag{border-radius:14px;padding:22px 24px;display:flex;gap:16px;align-items:flex-start}
+.flag .ico{font-size:20px;line-height:1.2;flex-shrink:0}
+.flag.warn{background:rgba(245,166,35,.07);border:1px solid rgba(245,166,35,.28)}
+.flag.note{background:var(--red-08);border:1px solid var(--red-22)}
+.flag.int{background:rgba(90,169,255,.06);border:1px solid rgba(90,169,255,.26)}
+.flag h4{font-size:15px;font-weight:700;margin-bottom:5px}
+.flag p{font-size:14px;color:var(--ink-soft)}
+.flag p+p{margin-top:7px}
+
+/* ---------- pipeline (build workflow) ---------- */
+.pipe{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px;counter-reset:s}
+.pstep{flex:1 1 150px;min-width:150px;background:var(--card);border:1px solid var(--card-border);border-radius:12px;padding:16px;position:relative}
+.pstep::before{counter-increment:s;content:counter(s,decimal-leading-zero);font:700 11px/1 var(--mono);color:var(--red-soft)}
+.pstep .pn{font-weight:700;font-size:14.5px;margin:8px 0 4px}
+.pstep .pd{font-size:12.5px;color:var(--ink-faint)}
+.pstep .tag{margin-top:10px}
+
+/* ---------- agency engine steps ---------- */
+.steps{display:flex;flex-direction:column;gap:16px}
+.estep{display:grid;grid-template-columns:auto 1fr;gap:20px}
+.estep .bub{width:46px;height:46px;border-radius:12px;background:var(--red-14);border:1px solid var(--red-22);display:flex;align-items:center;justify-content:center;font:800 16px/1 var(--mono);color:var(--red-soft)}
+.estep .body{flex:1}
+.estep h3{font-size:20px}
+.estep .estats{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+@media(max-width:680px){.estep .estats{grid-template-columns:1fr}}
+.minicard{background:rgba(255,255,255,.025);border:1px solid var(--line2);border-radius:11px;padding:14px 16px}
+.minicard .ml{font:600 10.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;margin-bottom:9px}
+.minicard.have .ml{color:var(--t-live)}
+.minicard.need .ml{color:var(--t-new)}
+.minicard ul{list-style:none;display:flex;flex-direction:column;gap:6px}
+.minicard li{font-size:13px;color:var(--ink-soft);padding-left:16px;position:relative}
+.minicard li::before{content:"";position:absolute;left:0;top:8px;width:5px;height:5px;border-radius:50%}
+.minicard.have li::before{background:var(--t-live)}
+.minicard.need li::before{background:var(--t-new)}
+
+/* ---------- table ---------- */
+.tbl{width:100%;border-collapse:collapse;font-size:14px;margin-top:8px;border:1px solid var(--card-border);border-radius:12px;overflow:hidden}
+.tbl th{text-align:left;font:600 11px/1.3 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-faint);padding:14px 16px;background:rgba(255,255,255,.03);border-bottom:1px solid var(--line)}
+.tbl td{padding:14px 16px;border-bottom:1px solid var(--line2);color:var(--ink-soft);vertical-align:top}
+.tbl tr:last-child td{border-bottom:none}
+.tbl td b{color:var(--ink);font-weight:600}
+.tbl .arrow{color:var(--red-soft);font-weight:700}
+
+/* ---------- roadmap waves ---------- */
+.waves{display:flex;flex-direction:column;gap:14px}
+.wave{display:grid;grid-template-columns:120px 1fr;gap:0;border:1px solid var(--card-border);border-radius:14px;overflow:hidden;background:var(--card)}
+.wave .wl{background:linear-gradient(160deg,var(--red-14),rgba(255,255,255,.02));padding:22px 18px;display:flex;flex-direction:column;justify-content:center;border-right:1px solid var(--line)}
+.wave .wl .wn{font:800 13px/1 var(--mono);color:var(--red-soft);letter-spacing:.06em}
+.wave .wl .wt{font-weight:700;font-size:16px;margin-top:7px;line-height:1.2}
+.wave .wb{padding:20px 22px}
+.wave .wb p{font-size:14px;color:var(--ink-soft)}
+.wave .wb .dep{font:600 11.5px/1.4 var(--mono);color:var(--ink-faint);margin-top:12px;padding-top:12px;border-top:1px dashed var(--line)}
+.wave .wb .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.chip{font:600 11.5px/1 var(--font);padding:6px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid var(--line);color:var(--ink-soft)}
+@media(max-width:680px){.wave{grid-template-columns:1fr}.wave .wl{border-right:none;border-bottom:1px solid var(--line)}}
+
+/* squads */
+.squad{border-left:2px solid var(--red);padding:4px 0 4px 18px}
+.squad h4{font-size:16px;font-weight:700}
+.squad .role{font:600 11px/1 var(--mono);color:var(--red-soft);letter-spacing:.06em;text-transform:uppercase}
+.squad p{font-size:13.5px;color:var(--ink-faint);margin-top:6px}
+
+/* decisions */
+.dec{display:flex;gap:16px;padding:18px 0;border-top:1px solid var(--line2)}
+.dec:first-child{border-top:none}
+.dec .qn{font:800 13px/1 var(--mono);color:var(--red-soft);flex-shrink:0;width:34px}
+.dec .dq{font-weight:600;font-size:15.5px}
+.dec .da{font-size:13.5px;color:var(--ink-faint);margin-top:5px}
+
+/* stat band */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+@media(max-width:780px){.stats{grid-template-columns:repeat(2,1fr)}}
+.stat .n{font:800 clamp(34px,5vw,54px)/1 var(--font);letter-spacing:-.03em;background:linear-gradient(120deg,#fff,rgba(255,255,255,.55));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.stat .n .u{font-size:.5em;color:var(--red-soft);-webkit-text-fill-color:var(--red-soft)}
+.stat .l{font-size:13px;color:var(--ink-faint);margin-top:8px;max-width:24ch}
+
+/* footer */
+footer{border-top:1px solid var(--line);padding:50px 0 70px;background:var(--bg-deep)}
+footer .prov{font-size:12.5px;color:var(--ink-faint);max-width:860px;line-height:1.7}
+footer .prov b{color:var(--ink-soft)}
+footer code{font-family:var(--mono);font-size:11.5px;color:var(--red-soft);background:var(--red-08);padding:1px 6px;border-radius:4px}
+
+.divider-feather{height:1px;background:linear-gradient(to right,transparent,var(--red),transparent);opacity:.5;margin:0 auto;max-width:var(--maxw)}
+
+/* ---------- ladder per-rung detail ---------- */
+.rdetail{margin-top:14px;display:flex;flex-direction:column;gap:12px}
+.rd .rdl{font:600 10px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;display:block;margin-bottom:7px}
+.rd.live .rdl{color:var(--t-live)}
+.rd.build .rdl{color:var(--red-soft)}
+.rd.finish .rdl{color:var(--t-extend)}
+.rd ul{list-style:none;display:flex;flex-wrap:wrap;gap:6px;margin:0}
+.rd li{font-size:11.5px;color:var(--ink-soft);background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:6px;padding:5px 9px;line-height:1.3}
+.rd.live li{border-color:var(--t-live-bd);background:var(--t-live-bg)}
+.rd.finish li{border-color:var(--t-extend-bd);background:var(--t-extend-bg)}
+.herebadge.next{color:var(--t-extend);border-color:var(--t-extend-bd);background:var(--t-extend-bg)}
+
+/* ---------- build checklist ---------- */
+.ck-fast{background:rgba(245,166,35,.07);border:1px solid rgba(245,166,35,.32);border-radius:16px;padding:26px 28px;margin-bottom:34px}
+.ck-fast .lt{font:700 12px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--t-extend);display:inline-flex;align-items:center;gap:9px}
+.ck-fast h3{font-size:21px;font-weight:800;letter-spacing:-.02em;margin:10px 0 6px}
+.ck-fast .fsub{font-size:14px;color:var(--ink-soft);margin-bottom:18px;max-width:74ch}
+.ckgrid{display:grid;grid-template-columns:1fr 1fr;gap:2px 30px}
+@media(max-width:820px){.ckgrid{grid-template-columns:1fr}}
+.ck{display:flex;align-items:flex-start;gap:11px;padding:10px 0;border-top:1px solid var(--line2);cursor:pointer}
+.ck input{appearance:none;-webkit-appearance:none;width:18px;height:18px;border:1.5px solid var(--ink-faint);border-radius:5px;flex-shrink:0;margin-top:1px;cursor:pointer;transition:.15s var(--ease);position:relative}
+.ck input:checked{background:var(--red);border-color:var(--red)}
+.ck input:checked::after{content:"✓";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;font-weight:800}
+.ck .ci{flex:1;font-size:13.5px;color:var(--ink);line-height:1.4}
+.ck .ci .cg{display:block;font:600 9.5px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:3px}
+.ck .ci .ft{color:var(--t-extend);font-weight:700}
+.ck .st{font:600 9px/1 var(--mono);letter-spacing:.04em;padding:4px 6px;border-radius:5px;flex-shrink:0;margin-top:1px}
+.ck .st.finish{color:var(--t-extend);background:var(--t-extend-bg)}
+.ck .st.build{color:var(--t-new);background:var(--t-new-bg)}
+.ck .st.integrate{color:var(--t-int);background:var(--t-int-bg)}
+.ck input:checked ~ .ci{color:var(--ink-faint);text-decoration:line-through}
+.ckstage{margin-bottom:8px}
+.ckstage .csh{display:flex;align-items:baseline;gap:12px;margin:26px 0 2px;padding-bottom:10px;border-bottom:1px solid var(--line)}
+.ckstage .csh .cn{font:800 17px/1 var(--font);letter-spacing:-.01em}
+.ckstage .csh .cn .a{color:var(--red-soft)}
+.ckstage .csh .cc{font:600 11px/1 var(--mono);color:var(--ink-faint);margin-left:auto}
+
+/* print */
+@media print{
+  body{background:#fff;color:#111}
+  nav.top,#prog{display:none}
+  section{padding:24px 0;page-break-inside:avoid}
+  .card,.rung,.wave,.engines{box-shadow:none}
+}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+
+<nav class="top">
+  <div class="row">
+    <div class="brand"><span class="dot"></span>SGEN <b>·</b> <span class="muted" style="font-weight:600">Agency OS Strategy</span></div>
+    <div class="links">
+      <a href="#thesis">Thesis</a>
+      <a href="#ladder">The Ladder</a>
+      <a href="#platform">Platform</a>
+      <a href="#flywheel">Flywheel</a>
+      <a href="#roadmap">Roadmap</a>
+      <a href="#checklist">Build List</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ================= HERO / THESIS ================= -->
+<section class="hero" id="thesis">
+  <div class="wrap">
+    <div class="eyebrow">Internal Strategy Brief · For Leadership &amp; Engineering · Draft v1</div>
+    <h1>From a website platform to the <span class="grad">operating system digital agencies run on.</span></h1>
+  </div>
+</section>
+
+
+<!-- ================= THE LADDER ================= -->
+<section id="ladder">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">The Evolution Ladder · CMS → ACMS → ACMMS → AERP</div>
+      <h2>Each rung absorbs more of the agency's business.</h2>
+      <p class="lead">Your shorthand for where SGEN is going. Read as a staircase: we start as an agency-aware CMS and climb until SGEN is the system of record for the entire digital-agency business.</p>
+    </div>
+
+    <div class="ladder">
+      <div class="rung here">
+        <div class="step">01</div>
+        <div>
+          <div class="ac"><span class="grad">CMS</span> · Content Management System</div>
+          <div class="mean">The live SGEN CMS plus the multi-site hub we run client sites on today — real, but not yet strung together or seamless, and missing the vital MVP features to launch the agency product.</div>
+          <div class="rdetail">
+            <div class="rd live"><span class="rdl">Live today</span><ul>
+              <li>SG-Builder + 22 native modules + content engine + ecommerce</li>
+              <li>Templates + media library (GCP sync + AI alt-text)</li>
+              <li>Forms / popups / events / SEO / Search Console / redirects</li>
+              <li>Attribution / consent / Locations / backups / analytics</li>
+              <li>3 fixed roles + staff-gated impersonation</li>
+              <li>Multi-site hub: dashboard · clone-to-site · staging · restore · health cockpit</li>
+            </ul></div>
+            <div class="rd finish"><span class="rdl">Finish to move on</span><ul>
+              <li>Document the cross-site hub</li>
+              <li>String-together / make the hub seamless</li>
+              <li>Close restore-from-URL SSRF + CSRF gaps</li>
+              <li>Stand up the MVP agency foundations: client/account model · cross-site RBAC · agency-owner login-as</li>
+            </ul></div>
+          </div>
+        </div>
+        <div class="right">
+          <span class="tag live">LIVE</span>
+          <span class="herebadge">◀ We are here</span>
+        </div>
+      </div>
+
+      <div class="rung">
+        <div class="step">02</div>
+        <div>
+          <div class="ac"><span class="grad">ACMS</span> · Agency Content Management System</div>
+          <div class="mean">The 2nd product — the Agency Features layer: control every client site seamlessly, build agency content with AI, and run the agency's day-to-day — support, project management, billing, and the client portal.</div>
+          <div class="rdetail">
+            <div class="rd build"><span class="rdl">Build to become</span><ul>
+              <li>Seamless cross-site agency control surface</li>
+              <li>Agency-owner login-as-client (beyond staff-only)</li>
+              <li>Granular per-client RBAC (replaces 3 fixed roles)</li>
+              <li>Client management (client entity spanning sites)</li>
+              <li>Formalized multi-site / provisioning APIs</li>
+              <li>AI Build Layer — text engine · image generator · chatbot</li>
+              <li>Guided Build Workflow (brand-lock → goals → audit → sitemap → page-text → chrome → page-build, home last)</li>
+              <li>Support: widget + ticket help desk + AI agent + analytics</li>
+              <li>Project mgmt: tickets→tasks per client · team boards · stat-triggered auto-tasks</li>
+              <li>Client billing / invoicing</li>
+              <li>Reseller program / true resale economics (owner-gated)</li>
+              <li>E-sign module — contracts &amp; signatures (integrate)</li>
+              <li>Branded client portal — profile / uploads / contracts / billing</li>
+              <li>Portal notifications from the task queue</li>
+              <li>Portal reports / live dashboard (client-facing)</li>
+            </ul></div>
+            <div class="rd finish"><span class="rdl">Finish to move on</span><ul>
+              <li>AI Build Layer working end-to-end</li>
+              <li>Guided Build Workflow producing finished sites</li>
+              <li>Client/account model proven across the roster</li>
+              <li>Per-client RBAC + agency-owner login-as in production</li>
+            </ul></div>
+          </div>
+        </div>
+        <div class="right">
+          <span class="tag new">TO BUILD</span>
+          <span class="herebadge next">◀ Next · 2nd product</span>
+        </div>
+      </div>
+
+      <div class="rung">
+        <div class="step">03</div>
+        <div>
+          <div class="ac"><span class="grad">ACMMS</span> · Agency Content Management + Marketing System</div>
+          <div class="mean">The recurring-revenue marketing engine — GBP + local SEO + AI content managed across the roster, with automated service workflows and a lead engine. (Support + project management moved up to ACMS.)</div>
+          <div class="rdetail">
+            <div class="rd build"><span class="rdl">Build to become</span><ul>
+              <li>Automated service workflows (11 types)</li>
+              <li>Lead engine + CRM</li>
+              <li>GBP Suite: listing + NAP + AI reviews + content poster + citations + API + dashboard</li>
+              <li>Local Falcon geo-grid (integrate)</li>
+              <li>SEO Suite: AI-managed optimization + posting + gap analysis + reporting</li>
+            </ul></div>
+            <div class="rd finish"><span class="rdl">Finish to move on</span><ul>
+              <li>Service workflows firing from site events</li>
+              <li>GBP + SEO managed across the roster from one console</li>
+            </ul></div>
+          </div>
+        </div>
+        <div class="right"><span class="tag new">TO BUILD</span></div>
+      </div>
+
+      <div class="rung">
+        <div class="step">04</div>
+        <div>
+          <div class="ac"><span class="grad">AERP</span> · Agency ERP</div>
+          <div class="mean">The financial backbone — the internal payment rail the rest of the platform bills through. (Billing, reseller, e-sign, and the client portal moved up to ACMS; revisit whether AERP stays its own rung.)</div>
+          <div class="rdetail">
+            <div class="rd build"><span class="rdl">Build to become</span><ul>
+              <li>Custom internal payment gateway (on the Stripe base)</li>
+            </ul></div>
+            <div class="rd finish"><span class="rdl">The summit</span><ul>
+              <li>The payment backbone every other suite bills through.</li>
+            </ul></div>
+          </div>
+        </div>
+        <div class="right"><span class="tag new">TO BUILD</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider-feather"></div>
+
+<!-- ================= TRACK A — PLATFORM ================= -->
+<section id="platform">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Track A · The Platform Roadmap</div>
+      <h2>Four suites on top of the CMS we already ship.</h2>
+      <p class="lead">This is the product engineering builds and we license to agencies. Each suite below carries your original notes, re-tagged against what actually exists today.</p>
+    </div>
+
+    <!-- Suite 1: Build / UX -->
+    <div class="card" style="margin-bottom:20px">
+      <div class="suite-h"><span class="num">1</span><div><h3>Build &amp; User Experience</h3></div></div>
+      <div class="suite-sub">effortless building · AI authoring · the guided workflow → climbs toward ACMS</div>
+      <div class="grid g2">
+        <div>
+          <div class="feat"><div class="meta"><div class="name">Effortless page building + templates galore</div><div class="desc">SG-Builder + full-site / full-page / row templates already ship</div></div><span class="tag extend">EXTEND</span></div>
+          <div class="feat"><div class="meta"><div class="name">Image generator + media repo</div><div class="desc">media library + GCP repo exists; generation (Flux/Recraft-style) is new</div></div><span class="tag new">NET-NEW</span></div>
+          <div class="feat"><div class="meta"><div class="name">AI text engine</div><div class="desc">headlines, body, blog drafts — nothing today beyond alt-text</div></div><span class="tag new">NET-NEW</span></div>
+          <div class="feat"><div class="meta"><div class="name">AI chatbot</div><div class="desc">visitor chat and/or admin build copilot</div></div><span class="tag new">NET-NEW</span></div>
+        </div>
+        <div>
+          <div class="flag note" style="height:100%;align-items:flex-start">
+            <div class="ico">▦</div>
+            <div>
+              <h4>The Guided Build Workflow — your highest-leverage feature</h4>
+              <p style="margin-bottom:14px">It productizes the exact way our agency builds a site (Track B, Strat 1). This pipeline <b style="color:var(--ink)">is</b> the moat — it turns a blank account into a finished, conversion-shaped site.</p>
+              <div class="pipe">
+                <div class="pstep"><div class="pn">Brand guide lock</div><div class="pd">create + lock brand/brief</div><span class="tag new">NEW</span></div>
+                <div class="pstep"><div class="pn">Goals / conversion strat</div><div class="pd">whole-site targets</div><span class="tag new">NEW</span></div>
+                <div class="pstep"><div class="pn">Audit</div><div class="pd">competitive + local + industry</div><span class="tag new">NEW</span></div>
+                <div class="pstep"><div class="pn">Sitemap / flowchart</div><div class="pd">generator</div><span class="tag new">NEW</span></div>
+                <div class="pstep"><div class="pn">Page text</div><div class="pd">generator</div><span class="tag new">NEW</span></div>
+                <div class="pstep"><div class="pn">Web card + chrome</div><div class="pd">build + lock</div><span class="tag extend">EXT</span></div>
+                <div class="pstep"><div class="pn">Page build</div><div class="pd">contact→about→location→service→products→LPs→<b style="color:var(--ink)">home last</b></div><span class="tag extend">EXT</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Suite 2: Marketing -->
+    <div class="grid g2" style="margin-bottom:20px">
+      <div class="card">
+        <div class="suite-h"><span class="num">2</span><div><h3>Marketing Suite</h3></div></div>
+        <div class="suite-sub">GBP + SEO, AI-run → the ACMMS engine · recurring revenue</div>
+        <div style="font:600 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--red-soft);margin:6px 0 4px">GBP Suite</div>
+        <div class="feat"><div class="meta"><div class="name">Full listing management + NAP locking</div><div class="desc">Locations CMS exists; GBP push/management is new</div></div><span class="tag new">NET-NEW</span></div>
+        <div class="feat"><div class="meta"><div class="name">AI review auto-responders</div><div class="desc">respond to reviews automatically</div></div><span class="tag new">NET-NEW</span></div>
+        <div class="feat"><div class="meta"><div class="name">AI content poster</div><div class="desc">images / posts / products</div></div><span class="tag new">NET-NEW</span></div>
+        <div class="feat"><div class="meta"><div class="name">Citation management</div><div class="desc">push NAP to directories</div></div><span class="tag new">NET-NEW</span></div>
+        <div class="feat"><div class="meta"><div class="name">Local Falcon reports</div><div class="desc">geo-grid rank tracking — buy via API</div></div><span class="tag int">INTEGRATE</span></div>
+        <div class="feat"><div class="meta"><div class="name">API reports</div><div class="desc">programmatic report exports / data API</div></div><span class="tag new">NET-NEW</span></div>
+        <div class="feat"><div class="meta"><div class="name">Management dashboard</div><div class="desc">GBP performance rollup across the roster</div></div><span class="tag new">NET-NEW</span></div>
+        <div style="font:600 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--red-soft);margin:14px 0 4px">SEO Suite</div>
+        <div class="feat"><div class="meta"><div class="name">Fully AI-managed optimization</div><div class="desc">On-Page SEO + Search Console exist; AI management is new</div></div><span class="tag extend">EXTEND</span></div>
+        <div class="feat"><div class="meta"><div class="name">Whole-site goal/structure optimization + content posting</div><div class="desc">optimize existing &amp; additional pages</div></div><span class="tag new">NET-NEW</span></div>
+        <div class="feat"><div class="meta"><div class="name">Missing-page gap analysis vs competitors</div><div class="desc">suggest pages we don't have</div></div><span class="tag new">NET-NEW</span></div>
+        <div class="feat"><div class="meta"><div class="name">Reporting / management dashboard</div><div class="desc">built-in analytics exists; rollup is new</div></div><span class="tag extend">EXTEND</span></div>
+      </div>
+
+      <!-- Suite 3: Operations -->
+      <div class="card">
+        <div class="suite-h"><span class="num">3</span><div><h3>Operations Suite</h3></div></div>
+        <div class="suite-sub">support + project management → the ACMMS layer · service at scale</div>
+        <div style="font:600 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--red-soft);margin:6px 0 4px">Support Suite</div>
+        <div class="feat"><div class="meta"><div class="name">Support widget + ticket help desk</div><div class="desc">no help desk today</div></div><span class="tag new">NET-NEW</span></div>
+        <div class="feat"><div class="meta"><div class="name">AI responding support agent</div><div class="desc">first-line resolution</div></div><span class="tag new">NET-NEW</span></div>
+        <div class="feat"><div class="meta"><div class="name">Analytics / dashboard</div><div class="desc">ticket + resolution metrics</div></div><span class="tag new">NET-NEW</span></div>
+        <div style="font:600 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--red-soft);margin:14px 0 4px">Project Management Suite</div>
+        <div class="feat"><div class="meta"><div class="name">Tickets → tasks per client</div><div class="desc">support folds into the client's task board</div></div><span class="tag new">NET-NEW</span></div>
+        <div class="feat"><div class="meta"><div class="name">Team management features</div><div class="desc">assignment, boards, statuses</div></div><span class="tag new">NET-NEW</span></div>
+        <div class="feat"><div class="meta"><div class="name">Stat-triggered auto-tasks</div><div class="desc">site events → inspection/warning tasks (Phone Taps + Analytics + Site Vitals feed this)</div></div><span class="tag extend">EXTEND</span></div>
+        <div class="feat"><div class="meta"><div class="name">Automated service workflows — 11 types</div><div class="desc">brand (scratch + overhaul/upgrade) · web (scratch + ongoing) · SEO on-page (scratch + ongoing) · SEO local (scratch + ongoing) · content (one-time + ongoing) · emergencies/problems</div></div><span class="tag new">NET-NEW</span></div>
+      </div>
+    </div>
+
+    <!-- Suite 4: Finance & Client -->
+    <div class="card">
+      <div class="suite-h"><span class="num">4</span><div><h3>Finance &amp; Client Suite</h3></div></div>
+      <div class="suite-sub">billing · e-sign · reseller · the client portal → the AERP top rung</div>
+      <div class="grid g2">
+        <div>
+          <div style="font:600 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--red-soft);margin:6px 0 4px">Finance Suite</div>
+          <div class="feat"><div class="meta"><div class="name">Reseller program</div><div class="desc">referral program exists; true resale economics are owner-gated — clear Q5 before building</div></div><span class="tag held">HELD</span></div>
+          <div class="feat"><div class="meta"><div class="name">Custom internal payment gateway</div><div class="desc">Stripe checkout exists for ecommerce; agency↔client billing is new (PCI weight — see decisions)</div></div><span class="tag new">NET-NEW</span></div>
+          <div class="feat"><div class="meta"><div class="name">E-sign dashboard module</div><div class="desc">contracts &amp; signatures — buy via API likely</div></div><span class="tag int">INTEGRATE</span></div>
+        </div>
+        <div>
+          <div style="font:600 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--red-soft);margin:6px 0 4px">Client Dashboard / Portal</div>
+          <div class="feat"><div class="meta"><div class="name">Profile / uploads / contracts / billing</div><div class="desc">customer account portal exists for ecommerce; branded client portal is HELD</div></div><span class="tag held">HELD</span></div>
+          <div class="feat"><div class="meta"><div class="name">Notifications from the task queue</div><div class="desc">client sees status from PM suite</div></div><span class="tag new">NET-NEW</span></div>
+          <div class="feat"><div class="meta"><div class="name">Reports / live dashboard</div><div class="desc">marketing + site performance, client-facing</div></div><span class="tag new">NET-NEW</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider-feather"></div>
+
+<!-- ================= FLYWHEEL ================= -->
+<section id="flywheel">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">The strategic insight</div>
+      <h2>The productization flywheel.</h2>
+      <p class="lead">This is why running our own agency matters. Track B is not a side business — it is how we discover, spec, and prove every feature in Track A before another agency ever pays for it.</p>
+    </div>
+
+    <div class="grid g4" style="margin-bottom:34px">
+      <div class="card" style="text-align:center"><div style="font-size:26px">①</div><h4 style="margin:12px 0 6px;font-size:16px">We do it by hand</h4><p class="muted" style="font-size:13px">Staff deliver a service for a client through SGEN.</p></div>
+      <div class="card" style="text-align:center"><div style="font-size:26px">②</div><h4 style="margin:12px 0 6px;font-size:16px">We feel the pain</h4><p class="muted" style="font-size:13px">The manual steps reveal the exact spec for a feature.</p></div>
+      <div class="card" style="text-align:center"><div style="font-size:26px">③</div><h4 style="margin:12px 0 6px;font-size:16px">We productize it</h4><p class="muted" style="font-size:13px">Engineering ships it as a Track A module, proven on real work.</p></div>
+      <div class="card" style="text-align:center"><div style="font-size:26px">④</div><h4 style="margin:12px 0 6px;font-size:16px">We resell it</h4><p class="muted" style="font-size:13px">Other agencies buy the feature — and run it on their roster.</p></div>
+    </div>
+
+    <h3 style="margin-bottom:12px">Playbook → Product mapping</h3>
+    <table class="tbl">
+      <thead><tr><th>Agency Engine step (Track B)</th><th></th><th>Becomes the platform feature (Track A)</th><th>Status today</th></tr></thead>
+      <tbody>
+        <tr><td><b>Build a site demo</b></td><td class="arrow">→</td><td>The Guided Build Workflow + AI authoring</td><td><span class="tag extend">EXTEND</span></td></tr>
+        <tr><td><b>Deep audit (GBP, SEO, speed)</b></td><td class="arrow">→</td><td>Marketing Suite audit engine + dashboard</td><td><span class="tag new">NET-NEW</span></td></tr>
+        <tr><td><b>Ongoing GBP / SEO / content</b></td><td class="arrow">→</td><td>Marketing Suite (ACMMS)</td><td><span class="tag new">NET-NEW</span></td></tr>
+        <tr><td><b>Service delivery &amp; client comms</b></td><td class="arrow">→</td><td>Operations Suite — support + PM (ACMMS)</td><td><span class="tag new">NET-NEW</span></td></tr>
+        <tr><td><b>Billing the client</b></td><td class="arrow">→</td><td>Finance &amp; Client Suite (AERP)</td><td><span class="tag new">NET-NEW</span></td></tr>
+        <tr><td><b>List building &amp; outreach</b></td><td class="arrow">→</td><td>Lead engine + CRM (internal first, productize later)</td><td><span class="tag new">NET-NEW</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<div class="divider-feather"></div>
+
+<!-- ================= ROADMAP ================= -->
+<section id="roadmap">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Build sequence · For the engineering team</div>
+      <h2>A wave plan that respects dependencies.</h2>
+      <p class="lead">A proposed order of build that climbs the ladder while front-loading the shared foundations every later suite depends on. Sequencing is a recommendation — yours to set.</p>
+    </div>
+
+    <div class="flag warn" style="margin-bottom:26px">
+      <div class="ico">◇</div>
+      <div>
+        <h4>The dependency that gates everything: a unified client/account data model</h4>
+        <p>Every agency-facing capability — operations, billing, marketing, the client portal — assumes one thing the per-site CMS doesn't have yet: a <b style="color:var(--ink)">client/account entity that spans sites</b> (the agency → client → sites → tasks → invoices graph). Build it first and the rest of ACMS clicks together. Skip it and every feature reinvents it.</p>
+      </div>
+    </div>
+
+    <div class="waves">
+      <div class="wave">
+        <div class="wl"><div class="wn">WAVE 0</div><div class="wt">Harden the base + agency spine</div></div>
+        <div class="wb">
+          <p>Finish the CMS hub — document it, make multi-site seamless, close the restore-from-URL SSRF + CSRF gaps — and formalize the multi-site / provisioning APIs. Then stand up the spine the whole ACMS product hangs on: the unified client/account data model, cross-site RBAC, and agency-owner login-as.</p>
+          <div class="chips"><span class="chip">Client/account model</span><span class="chip">Cross-site RBAC + login-as</span><span class="chip">Hub seamless + docs</span><span class="chip">Hub API</span><span class="chip">Security hardening</span></div>
+        </div>
+      </div>
+      <div class="wave">
+        <div class="wl"><div class="wn">WAVE 1</div><div class="wt">ACMS · Agency Operations <span style="font-weight:600;font-size:11px;color:var(--t-extend)">(fast-track)</span></div></div>
+        <div class="wb">
+          <p>The operate-my-agency MVP: client management + support desk + project management (tickets become per-client tasks, team boards) + client billing/invoicing on the internal payment rail. This is what lets staff run the whole client roster end-to-end on SGEN.</p>
+          <div class="dep">DEPENDS ON · Wave-0 client/account model + RBAC · payments/PCI decision (gateway)</div>
+        </div>
+      </div>
+      <div class="wave">
+        <div class="wl"><div class="wn">WAVE 2</div><div class="wt">ACMS · AI Build layer</div></div>
+        <div class="wb">
+          <p>The authoring engine — AI text + image generation + chatbot, and the Guided Build Workflow — built on the SG-Builder + templates + media repo we already have. Also Track B's demo-led sales engine; dogfood it from day one.</p>
+          <div class="dep">DEPENDS ON · SG-Builder (live) · templates (live) · media repo (live) · AI services horizontal</div>
+        </div>
+      </div>
+      <div class="wave">
+        <div class="wl"><div class="wn">WAVE 3</div><div class="wt">ACMMS · Marketing engine</div></div>
+        <div class="wb">
+          <p>The recurring-revenue engine — the strongest reason an agency renews. GBP management + AI review/content posting + citations (integrate Local Falcon); SEO AI-management + gap analysis; plus the automated service workflows and lead engine, fired from site events.</p>
+          <div class="dep">DEPENDS ON · Locations CMS (live) · SEO module (live) · Analytics + Site Vitals (live) · AI services · Wave-0 client model · Local Falcon API</div>
+        </div>
+      </div>
+      <div class="wave">
+        <div class="wl"><div class="wn">WAVE 4</div><div class="wt">Finish ACMS + AERP</div></div>
+        <div class="wb">
+          <p>The monetization + retention polish: e-sign (integrate), reseller economics, and the branded client portal pulling reports + task status from every suite above — all running on the internal payment gateway (AERP), the financial backbone the platform bills through.</p>
+          <div class="dep">DEPENDS ON · everything above · e-sign API · white-label/reseller clearance · payments/PCI</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<div class="divider-feather"></div>
+
+<!-- ================= BUILD CHECKLIST ================= -->
+<section id="checklist">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Your build list · check it off</div>
+      <h2>Everything left to build.</h2>
+      <p class="lead">Every feature on this page that still needs work, grouped by stage. Live foundations (SG-Builder, the 22 modules, the multi-site hub as-is) are already done and excluded. <span class="mono" style="font-size:12.5px"><span class="st build" style="vertical-align:middle">BUILD</span> net-new · <span class="st finish" style="vertical-align:middle">FINISH</span> base exists · <span class="st integrate" style="vertical-align:middle">INTEGRATE</span> buy via API</span></p>
+    </div>
+
+    <div class="ck-fast">
+      <div class="lt">⚡ Fast-Track · Agency Operations</div>
+      <h3>What to attack right away.</h3>
+      <p class="fsub">The smallest set that lets your staff run a client roster end-to-end on SGEN: finish the hub, stand up the agency spine (client model · roles · login-as · client management), basic project management + support to deliver work, and basic billing to get paid. Everything else (AI authoring, GBP/SEO, service workflows, reseller, e-sign, branded portal) is scale/resale — deferred.</p>
+      <div class="ckgrid">
+        <label class="ck"><input type="checkbox"><span class="ci"><span class="cg">CMS · Hub</span>Document the cross-site hub</span><span class="st finish">FINISH</span></label>
+        <label class="ck"><input type="checkbox"><span class="ci"><span class="cg">ACMS · Agency control</span>Unified client/account data model</span><span class="st build">BUILD</span></label>
+        <label class="ck"><input type="checkbox"><span class="ci"><span class="cg">CMS · Hub</span>String-together / make the multi-site hub seamless</span><span class="st finish">FINISH</span></label>
+        <label class="ck"><input type="checkbox"><span class="ci"><span class="cg">ACMS · Agency control</span>Granular per-client RBAC (replaces 3 fixed roles)</span><span class="st build">BUILD</span></label>
+        <label class="ck"><input type="checkbox"><span class="ci"><span class="cg">CMS · Hub</span>Close restore-from-URL SSRF + CSRF gaps</span><span class="st finish">FINISH</span></label>
+        <label class="ck"><input type="checkbox"><span class="ci"><span class="cg">ACMS · Agency control</span>Agency-owner login-as-client</span><span class="st build">BUILD</span></label>
+        <label class="ck"><input type="checkbox"><span class="ci"><span class="cg">ACMS · Agency control</span>Client management (client entity spanning sites)</span><span class="st build">BUILD</span></label>
+        <label class="ck"><input type="checkbox"><span class="ci"><span class="cg">ACMS · Project mgmt</span>Tickets → tasks per client</span><span class="st build">BUILD</span></label>
+        <label class="ck"><input type="checkbox"><span class="ci"><span class="cg">ACMS · Agency control</span>Formalize multi-site / provisioning APIs (Hub API + docs)</span><span class="st build">BUILD</span></label>
+        <label class="ck"><input type="checkbox"><span class="ci"><span class="cg">ACMS · Project mgmt</span>Team management (boards · assignment · statuses)</span><span class="st build">BUILD</span></label>
+        <label class="ck"><input type="checkbox"><span class="ci"><span class="cg">ACMS · Support</span>Support widget + ticket help desk</span><span class="st build">BUILD</span></label>
+        <label class="ck"><input type="checkbox"><span class="ci"><span class="cg">ACMS · Finance</span>Client billing / invoicing</span><span class="st build">BUILD</span></label>
+        <label class="ck"><input type="checkbox"><span class="ci"><span class="cg">AERP · Finance</span>Custom internal payment gateway (on the Stripe base)</span><span class="st build">BUILD</span></label>
+      </div>
+    </div>
+
+    <!-- Stage 01 CMS -->
+    <div class="ckstage">
+      <div class="csh"><div class="cn"><span class="a">01 · CMS</span> — finish to launch the agency product</div><div class="cc">3 items</div></div>
+      <div class="ckgrid">
+        <label class="ck"><input type="checkbox"><span class="ci"><span class="cg">Agency hub <span class="ft">· ⚡ fast-track</span></span>Document the cross-site hub</span><span class="st finish">FINISH</span></label>
+        <label class="ck"><input type="checkbox"><span class="ci"><span class="cg">Agency hub <span class="ft">· ⚡ fast-track</span></span>String-together / make the multi-site hub seamless</span><span class="st finish">FINISH</span></label>
+        <label class="ck"><input type="checkbox"><span class="ci"><span class="cg">Agency hub <span class="ft">· ⚡ fast-track</span></span>Close restore-from-URL SSRF + CSRF gaps</span><span class="st finish">FINISH</span></label>
+      </div>
+    </div>
+
+    <!-- Stage 02 ACMS -->
+    <div class="ckstage">
+      <div class="csh"><div class="cn"><span class="a">02 · ACMS</span> — Agency Features (the 2nd product)</div><div class="cc">21 items</div></div>
+      <div class="ckgrid">
+        <label class="ck"><input type="checkbox"><span class="ci"><span class="cg">Agency control <span class="ft">· ⚡ fast-track</span></span>Unified client/account data model (agency→client→sites→tasks→invoices)</span><span class="st build">BUILD</span></label>
+        <label class="ck"><input type="checkbox"><span class="ci"><span class="cg">Agency control <span class="ft">· ⚡ fast-track</span></span>Granular per-client RBAC (replaces 3 fixed roles)</span><span class="st build">BUILD</span></label>
+        <label class="ck"><input type="checkbox"><span class="ci"><span class="cg">Agency control <span class="ft">· ⚡ fast-track</span></span>Agency-owner login-as-client</span><span class="st build">BUILD</span></label>
+        <label class="ck"><input type="checkbox"><span class="ci"><span class="cg">Agency control <span class="ft">· ⚡ fast-track</span></span>Client management (client entity + records spanning sites)</span><span class="st build">BUILD</span></label>
+        <label class="ck"><input type="checkbox"><span class="ci"><span class="cg">Agency control <span class="ft">· ⚡ fast-track</span></span>Formalize multi-site / provisioning APIs (Hub API + docs)</span><span class="st build">BUILD</span></label>
+        <label class="ck"><input type="checkbox"><span class="ci"><span class="cg">AI build layer</span>AI text engine (headlines · body · blog drafts)</span><span class="st build">BUILD</span></label>
+        <label class="ck"><input type="checkbox"><span class="ci"><span class="cg">AI build layer</span>AI image generator (Flux/Recraft-style)</span><span class="st build">BUILD</span></label>
+        <label class="ck"><input type="checkbox"><span class="ci"><span class="cg">AI build layer</span>AI chatbot (visitor chat / admin build copilot)</span><span class="st build">BUILD</span></label>
+        <label class="ck"><input type="checkbox"><span class="ci"><span class="cg">AI build layer</span>Guided Build Workflow — 7-step pipeline (brand-lock → goals → audit → sitemap → page-text → web-card+chrome → page-build, home last)</span><span class="st build">BUILD</span></label>
+        <label class="ck"><input type="checkbox"><span class="ci"><span class="cg">Support <span class="ft">· ⚡ fast-track</span></span>Support widget + ticket help desk</span><span class="st build">BUILD</span></label>
+        <label class="ck"><input type="checkbox"><span class="ci"><span class="cg">Support</span>AI responding support agent</span><span class="st build">BUILD</span></label>
+        <label class="ck"><input type="checkbox"><span class="ci"><span class="cg">Support</span>Support analytics / dashboard</span><span class="st build">BUILD</span></label>
+        <label class="ck"><input type="checkbox"><span class="ci"><span class="cg">Project mgmt <span class="ft">· ⚡ fast-track</span></span>Tickets → tasks per client</span><span class="st build">BUILD</span></label>
+        <label class="ck"><input type="checkbox"><span class="ci"><span class="cg">Project mgmt <span class="ft">· ⚡ fast-track</span></span>Team management (assignment · boards · statuses)</span><span class="st build">BUILD</span></label>
+        <label class="ck"><input type="checkbox"><span class="ci"><span class="cg">Project mgmt</span>Stat-triggered auto-tasks (Phone Taps + Analytics + Site Vitals)</span><span class="st finish">FINISH</span></label>
+        <label class="ck"><input type="checkbox"><span class="ci"><span class="cg">Finance <span class="ft">· ⚡ fast-track</span></span>Client billing / invoicing</span><span class="st build">BUILD</span></label>
+        <label class="ck"><input type="checkbox"><span class="ci"><span class="cg">Finance</span>Reseller program / true resale economics <span class="muted">(owner-gated)</span></span><span class="st build">BUILD</span></label>
+        <label class="ck"><input type="checkbox"><span class="ci"><span class="cg">Finance</span>E-sign module — contracts &amp; signatures</span><span class="st integrate">INTEGRATE</span></label>
+        <label class="ck"><input type="checkbox"><span class="ci"><span class="cg">Client portal</span>Branded client portal — profile / uploads / contracts / billing <span class="muted">(owner-gated)</span></span><span class="st build">BUILD</span></label>
+        <label class="ck"><input type="checkbox"><span class="ci"><span class="cg">Client portal</span>Portal notifications from the task queue</span><span class="st build">BUILD</span></label>
+        <label class="ck"><input type="checkbox"><span class="ci"><span class="cg">Client portal</span>Portal reports / live dashboard (client-facing)</span><span class="st build">BUILD</span></label>
+      </div>
+    </div>
+
+    <!-- Stage 03 ACMMS -->
+    <div class="ckstage">
+      <div class="csh"><div class="cn"><span class="a">03 · ACMMS</span> — Marketing engine</div><div class="cc">13 items</div></div>
+      <div class="ckgrid">
+        <label class="ck"><input type="checkbox"><span class="ci"><span class="cg">GBP suite</span>Full listing management + NAP locking</span><span class="st build">BUILD</span></label>
+        <label class="ck"><input type="checkbox"><span class="ci"><span class="cg">GBP suite</span>AI review auto-responders</span><span class="st build">BUILD</span></label>
+        <label class="ck"><input type="checkbox"><span class="ci"><span class="cg">GBP suite</span>AI content poster (images / posts / products)</span><span class="st build">BUILD</span></label>
+        <label class="ck"><input type="checkbox"><span class="ci"><span class="cg">GBP suite</span>Citation management (push NAP to directories)</span><span class="st build">BUILD</span></label>
+        <label class="ck"><input type="checkbox"><span class="ci"><span class="cg">GBP suite</span>Local Falcon geo-grid rank tracking</span><span class="st integrate">INTEGRATE</span></label>
+        <label class="ck"><input type="checkbox"><span class="ci"><span class="cg">GBP suite</span>API reports (programmatic exports / data API)</span><span class="st build">BUILD</span></label>
+        <label class="ck"><input type="checkbox"><span class="ci"><span class="cg">GBP suite</span>GBP management dashboard (rollup across roster)</span><span class="st build">BUILD</span></label>
+        <label class="ck"><input type="checkbox"><span class="ci"><span class="cg">SEO suite</span>Fully AI-managed optimization</span><span class="st finish">FINISH</span></label>
+        <label class="ck"><input type="checkbox"><span class="ci"><span class="cg">SEO suite</span>Whole-site goal/structure optimization + content posting</span><span class="st build">BUILD</span></label>
+        <label class="ck"><input type="checkbox"><span class="ci"><span class="cg">SEO suite</span>Missing-page gap analysis vs competitors</span><span class="st build">BUILD</span></label>
+        <label class="ck"><input type="checkbox"><span class="ci"><span class="cg">SEO suite</span>SEO reporting / management dashboard</span><span class="st finish">FINISH</span></label>
+        <label class="ck"><input type="checkbox"><span class="ci"><span class="cg">Operations</span>Automated service workflows — 11 types (brand · web · on-page SEO · local SEO · content · emergencies)</span><span class="st build">BUILD</span></label>
+        <label class="ck"><input type="checkbox"><span class="ci"><span class="cg">Operations</span>Lead engine + CRM (internal first, productize later)</span><span class="st build">BUILD</span></label>
+      </div>
+    </div>
+
+    <!-- Stage 04 AERP -->
+    <div class="ckstage">
+      <div class="csh"><div class="cn"><span class="a">04 · AERP</span> — Agency ERP (payment backbone)</div><div class="cc">1 item</div></div>
+      <div class="ckgrid">
+        <label class="ck"><input type="checkbox"><span class="ci"><span class="cg">Finance <span class="ft">· ⚡ fast-track</span></span>Custom internal payment gateway (on the Stripe base)</span><span class="st build">BUILD</span></label>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+// progress bar
+const prog=document.getElementById('prog');
+const onScroll=()=>{const h=document.documentElement;const sc=h.scrollTop;const max=h.scrollHeight-h.clientHeight;prog.style.width=(max>0?(sc/max*100):0)+'%';};
+document.addEventListener('scroll',onScroll,{passive:true});onScroll();
+// scroll-spy
+const links=[...document.querySelectorAll('nav.top .links a')];
+const secs=links.map(a=>document.querySelector(a.getAttribute('href'))).filter(Boolean);
+const spy=()=>{
+  let cur=secs[0];const y=window.scrollY+120;
+  for(const s of secs){if(s.offsetTop<=y)cur=s;}
+  links.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+cur.id));
+};
+document.addEventListener('scroll',spy,{passive:true});spy();
+</script>
+</body>
+</html>
