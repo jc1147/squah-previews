@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="../_design/sgen-tokens.css?v=0e2cf486">
 <link rel="stylesheet" href="../_design/sgen-structural.css?v=7ce6a554">
 <link rel="stylesheet" href="../_design/sgen-chrome.css?v=cfd841c0">
-<link rel="stylesheet" href="home.css?v=347dbe89">
+<link rel="stylesheet" href="home.css?v=e2188438">
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -2985,6 +2985,229 @@ render();
   .pr2-cta .btn { justify-content: center; }
 }
 </style>
+
+<!-- ============================================================================
+     HOME / MOBILE AUTO-ADVANCE for horizontal carousels with more than 4 items.
+     ----------------------------------------------------------------------------
+     One IIFE, idempotent, defensive. MOBILE ONLY: the whole thing is gated behind
+     matchMedia('(max-width: 760px)') AND NOT prefers-reduced-motion. On desktop or
+     reduced-motion it never runs, so desktop behaviour is untouched.
+
+     Three carousels are driven (all have more than 4 items):
+       1. GALLERY  (#showcase .sc-grid, the JS-rendered .sc-card track) PRIORITY.
+          Smoothly scrolls to the next card every ~2.5s; loops at the end; pauses
+          on any user interaction and resumes after ~4s idle.
+       2. PRODUCT  (#product .px3-cat category chips, 7) advance the SELECTION by
+          clicking the next chip every ~2.8s so the panel content swaps; loops.
+       3. COMPARE  (#cx3-compare .cx3-chip competitor chips, 5) same selection
+          advance every ~3.0s; loops.
+     SOLUTIONS (2) and the pricing slider (4) are NOT driven (4 or fewer).
+
+     Build-safe (build.mjs injects content via String.replace, which interprets
+     dollar patterns; and a literal less-than-slash would close the script early):
+     NO template literals, NO dollar sign anywhere, NO less-than-slash inside any
+     string. Selection uses attribute / class selectors only.
+     ============================================================================ -->
+<script>
+(function () {
+  "use strict";
+
+  if (window.__sgMobileAutoScroll) { return; }
+  window.__sgMobileAutoScroll = true;
+
+  /* HARD GATE: mobile width AND motion allowed. If either fails, no-op forever. */
+  var mq = window.matchMedia;
+  if (!mq) { return; }
+  var isMobile = mq("(max-width: 760px)").matches;
+  var reduceMotion = mq("(prefers-reduced-motion: reduce)").matches;
+  if (!isMobile || reduceMotion) { return; }
+
+  /* ------------------------------------------------------------------ */
+  /* GALLERY: smooth scroll-to-next-card on the #showcase carousel.     */
+  /* ------------------------------------------------------------------ */
+  function startGallery() {
+    var section = document.getElementById("showcase");
+    if (!section) { return; }
+    var grid = section.querySelector(".sc-grid");
+    if (!grid) { return; }
+
+    var STEP_MS = 2500;     /* advance cadence */
+    var IDLE_MS = 4000;     /* resume delay after user interaction */
+    var timer = null;
+    var idleTimer = null;
+    var selfScrolling = false;   /* true while WE drive the scroll */
+    var selfClearTimer = null;
+
+    function cards() {
+      return Array.prototype.slice.call(grid.querySelectorAll(".sc-card"));
+    }
+
+    /* centred snap offset for a given card, clamped to the scroll range */
+    function offsetFor(card) {
+      var target = card.offsetLeft - (grid.clientWidth - card.offsetWidth) / 2;
+      var max = grid.scrollWidth - grid.clientWidth;
+      if (target < 0) { target = 0; }
+      if (target > max) { target = max; }
+      return target;
+    }
+
+    function indexNearest() {
+      var list = cards();
+      if (!list.length) { return -1; }
+      var here = grid.scrollLeft;
+      var best = 0;
+      var bestDist = Infinity;
+      for (var i = 0; i < list.length; i++) {
+        var d = Math.abs(offsetFor(list[i]) - here);
+        if (d < bestDist) { bestDist = d; best = i; }
+      }
+      return best;
+    }
+
+    function advance() {
+      var list = cards();
+      if (list.length < 5) { return; }   /* only auto-advance when more than 4 */
+      var cur = indexNearest();
+      var next = cur + 1;
+      var atEnd = (grid.scrollLeft >= (grid.scrollWidth - grid.clientWidth - 2));
+      if (next >= list.length || atEnd) { next = 0; }
+      var to = offsetFor(list[next]);
+
+      selfScrolling = true;
+      if (selfClearTimer) { window.clearTimeout(selfClearTimer); }
+      /* let the smooth scroll settle, then stop treating events as self-driven */
+      selfClearTimer = window.setTimeout(function () { selfScrolling = false; }, 900);
+
+      try {
+        grid.scrollTo({ left: to, behavior: "smooth" });
+      } catch (err) {
+        grid.scrollLeft = to;   /* older engines: jump */
+        selfScrolling = false;
+      }
+    }
+
+    function play() {
+      if (timer) { return; }
+      timer = window.setInterval(advance, STEP_MS);
+    }
+    function pause() {
+      if (timer) { window.clearInterval(timer); timer = null; }
+    }
+    function bumpIdle() {
+      pause();
+      if (idleTimer) { window.clearTimeout(idleTimer); }
+      idleTimer = window.setTimeout(play, IDLE_MS);
+    }
+
+    /* user interaction pauses; programmatic scroll does not */
+    function onUser() { bumpIdle(); }
+    grid.addEventListener("pointerdown", onUser, { passive: true });
+    grid.addEventListener("touchstart", onUser, { passive: true });
+    grid.addEventListener("wheel", onUser, { passive: true });
+    grid.addEventListener("scroll", function () {
+      if (selfScrolling) { return; }   /* ignore the scroll WE caused */
+      bumpIdle();
+    }, { passive: true });
+
+    /* pause when the carousel is off-screen, resume when it returns */
+    if ("IntersectionObserver" in window) {
+      var io = new IntersectionObserver(function (entries) {
+        for (var i = 0; i < entries.length; i++) {
+          if (entries[i].isIntersecting) { play(); } else { pause(); }
+        }
+      }, { threshold: 0.15 });
+      io.observe(grid);
+    }
+
+    /* cards are rendered asynchronously by the explorer script: wait for them */
+    var tries = 0;
+    (function waitForCards() {
+      if (cards().length >= 5) { play(); return; }
+      if (tries++ > 40) { return; }   /* give up after ~10s; nothing to drive */
+      window.setTimeout(waitForCards, 250);
+    })();
+  }
+
+  /* ------------------------------------------------------------------ */
+  /* Generic chip cycler: advance the SELECTION by clicking the next    */
+  /* chip so the panel content swaps. Used for PRODUCT and COMPARE.     */
+  /* ------------------------------------------------------------------ */
+  function startChipCycler(sectionId, chipSelector, isSelected, stepMs, idleMs) {
+    var section = document.getElementById(sectionId);
+    if (!section) { return; }
+    var chips = Array.prototype.slice.call(section.querySelectorAll(chipSelector));
+    if (chips.length < 5) { return; }   /* only when more than 4 items */
+
+    var timer = null;
+    var idleTimer = null;
+
+    function currentIndex() {
+      for (var i = 0; i < chips.length; i++) {
+        if (isSelected(chips[i])) { return i; }
+      }
+      return 0;
+    }
+
+    function advance() {
+      var next = (currentIndex() + 1) % chips.length;
+      var el = chips[next];
+      if (el && typeof el.click === "function") { el.click(); }
+    }
+
+    function play() {
+      if (timer) { return; }
+      timer = window.setInterval(advance, stepMs);
+    }
+    function pause() {
+      if (timer) { window.clearInterval(timer); timer = null; }
+    }
+    function bumpIdle() {
+      pause();
+      if (idleTimer) { window.clearTimeout(idleTimer); }
+      idleTimer = window.setTimeout(play, idleMs);
+    }
+
+    /* any interaction inside the section pauses, then resumes after idle */
+    section.addEventListener("pointerdown", bumpIdle, { passive: true });
+    section.addEventListener("touchstart", bumpIdle, { passive: true });
+
+    /* pause when off-screen, resume when it returns */
+    if ("IntersectionObserver" in window) {
+      var io = new IntersectionObserver(function (entries) {
+        for (var i = 0; i < entries.length; i++) {
+          if (entries[i].isIntersecting) { play(); } else { pause(); }
+        }
+      }, { threshold: 0.2 });
+      io.observe(section);
+    } else {
+      play();
+    }
+  }
+
+  function isProductSelected(chip) {
+    return chip.classList.contains("is-on") ||
+           chip.getAttribute("aria-selected") === "true";
+  }
+  function isCompareSelected(chip) {
+    return chip.getAttribute("aria-selected") === "true";
+  }
+
+  function boot() {
+    /* GALLERY is the headline one */
+    startGallery();
+    /* PRODUCT category chips (7) */
+    startChipCycler("product", ".px3-cat", isProductSelected, 2800, 4500);
+    /* COMPARE competitor chips (5) */
+    startChipCycler("cx3-compare", ".cx3-chip", isCompareSelected, 3000, 4500);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", boot);
+  } else {
+    boot();
+  }
+})();
+</script>
 </main>
 
 <!-- ===== FOOTER ===== -->

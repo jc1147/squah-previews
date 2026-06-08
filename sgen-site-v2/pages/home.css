@@ -3995,3 +3995,304 @@ a.cox2-mod-chip:hover { color: #fff; border-color: rgba(213,21,34,.55); }
   /* swipe hint sits a hair tighter under the head */
   .sx3-head::after { margin-top: 14px; font-size: 10.5px; }
 }
+
+
+/* ===== MOBILE SHAPE FIX (media-query only) ===== */
+
+/* ---- pricing-shape.css ---- */
+/* pricing mobile shape fix (media-query only) */
+
+/* ---------------------------------------------------------------------------
+   The site-count selector (1/3/10/inf). On mobile its three big elements all
+   inherit --sg-r-pill (9999px) from their base rules, so the track, the moving
+   red SELECTED-state highlight (the "Studio" red round pill in IMG_0400) and
+   each 52-56px tall step read as super-round pills / circles. De-pill them to
+   slim rounded RECTANGLES per the SGEN shape language.
+   The base rules (desktop) are NOT touched here - these are mobile-only
+   overrides. The same three selectors are round on desktop too (see
+   also_round_on_desktop); the owner decides desktop separately.
+
+   LEFT ALONE on purpose: the monthly/annual .pr2-toggle (tiny segmented
+   control) and the 6px .pr2-sep dot (border-radius:50%) - both correct.
+--------------------------------------------------------------------------- */
+
+@media (max-width: 760px) {
+  /* the slider track container (full-width, ~56px tall) */
+  #pricing .pr2-selector .pr2-track {
+    border-radius: var(--sg-r-lg);
+  }
+
+  /* the moving RED selected-state highlight - the big round pill in IMG_0400 */
+  #pricing .pr2-selector .pr2-track .pr2-marker {
+    border-radius: var(--sg-r-md);
+  }
+
+  /* each of the 4 tappable site-count steps (Indie / Studio / Scale / Enterprise) */
+  #pricing .pr2-selector .pr2-track .pr2-step {
+    border-radius: var(--sg-r-md);
+  }
+}
+
+/* ---- product-shape.css ---- */
+/* product mobile shape fix (media-query only) */
+
+/* ============================================================================
+   HOME · §3 PRODUCT (px3-) · MOBILE SHAPE FIX
+   ----------------------------------------------------------------------------
+   GROUND TRUTH (verified in pages/home.css + home.content.html, 2026-06):
+   On phones the desktop category SELECTOR (left .px3-index) is reflowed by the
+   "MOBILE CAROUSELS" block (home.css ~line 3460+, appended last) into a
+   horizontal chip strip. There, `.px3-index .px3-cat` is set to
+   `border-radius: var(--sg-r-pill, 999px)` (home.css line ~3496). Because the
+   chip becomes a `display:inline-flex` capsule ~40–44px tall (26/24px icon +
+   label + count), a 9999px radius renders it as a near-CIRCLE / super-round
+   pill (IMG_0397: the big circular "SEO & Performance" / "Analytics &
+   Attribution" shapes). At that size it is FAR above the ~14px tiny-status-dot
+   threshold, so per the SGEN shape language (slim rounded RECTANGLE on large
+   elements, never pills/circles) it is OFF-BRAND.
+
+   FIX: demote the large carousel category chip to var(--sg-r-lg) = 16px
+   (a slim rounded rectangle) for mobile only.
+
+   The base `.px3-cat` rule (outside any @media, home.css line ~1536) is ALREADY
+   `border-radius: var(--sg-r-md)` (12px) on DESKTOP — it is NOT a pill — so the
+   circle is a purely-mobile artifact of the carousel override. Per the hard
+   constraint the desktop base is left untouched; the desktop chip is already a
+   rounded rectangle, so there is nothing to report in also_round_on_desktop.
+
+   SPECIFICITY: scoped `#product .px3-index .px3-cat` (id + 2 classes) so it
+   out-specifies the carousel rule `.px3-index .px3-cat` and the
+   mobile-reconstruction rule `.px3-cat`, winning the cascade even though those
+   are appended last — no !important needed. var(--sg-*) tokens only.
+
+   LEFT ALONE (correct, tiny status / decorative elements <= ~14px or slim bars):
+     • .px3-cat-ic (26/24px square)   -> border-radius: 8px (--sg-r-sm)  ✓ rect
+     • .px3-env (Live/Staging badge, 9.5px mono)  -> var(--sg-r-pill)  tiny pill
+     • .px3-atr-win ("Multi-touch", 10px mono)    -> var(--sg-r-pill)  tiny pill
+     • .px3-ed-comp .tag ("Dragging", 7.5px mono) -> var(--sg-r-pill)  tiny tag
+     • .px3-atr-track (9px-tall progress bar)     -> var(--sg-r-pill)  slim bar
+     • all 7–9px status DOTS (border-radius:50%): .px3-lights i, .px3-h,
+       .px3-vit i, .px3-chip .d, .px3-atr-lab .dot
+   Every rule below lives inside an @media block — 0 top-level rules.
+   ============================================================================ */
+
+
+/* ===== 760px: phones — de-pill the large carousel category chip =========== */
+@media (max-width: 760px) {
+
+  /* the carousel category chips: pill (9999px) -> slim rounded rect (16px).
+     id-scoped so it beats the appended `.px3-index .px3-cat` carousel rule. */
+  #product .px3-index .px3-cat {
+    border-radius: var(--sg-r-lg);
+  }
+}
+
+
+/* ===== 480px: smallest phones (390px target) ============================== */
+@media (max-width: 480px) {
+
+  /* re-assert at the smallest width so any narrower-breakpoint rule cannot
+     reintroduce the pill on the large category chip at the 390px target. */
+  #product .px3-index .px3-cat {
+    border-radius: var(--sg-r-lg);
+  }
+}
+
+/* ---- compare-shape.css ---- */
+/* compare mobile shape fix (media-query only) */
+
+/* ============================================================================
+   HOME · §6 COMPARE (cx3-) · MOBILE SHAPE FIX
+   ----------------------------------------------------------------------------
+   GROUND TRUTH (verified in pages/home.css + home.content.html, 2026-06):
+   The ONLY large cx3- element that reads as a circle / super-round pill is the
+   VS seam coin (.cx3-coin) -- a 48x48px square whose base rule sets
+   border-radius: var(--sg-r-pill) (9999px), so it renders as a full CIRCLE.
+   At 48px it is far above the ~14px tiny-status-dot threshold, so per the
+   SGEN shape language it is OFF-BRAND and must become a slim rounded RECTANGLE.
+
+   Everything else in the section is already on-brand and is LEFT ALONE:
+     - .cx3-chip  (competitor chip)      -> --sg-r-md (12px)   ✓ rectangle
+     - .cx3-stage (head-to-head card)    -> --sg-r-lg (16px)   ✓ rectangle
+     - .cx3-chip-ic (36px) / .cx3-row-ic (40px) -> --sg-r-sm (8px) ✓ rectangle
+   No tiny status dots (border-radius:50% on <=14px boxes) are touched.
+
+   MOBILE ONLY: every rule below lives inside @media (max-width:760px). The
+   .cx3-coin base rule (outside any @media) is desktop and is NOT edited here;
+   it is overridden only for mobile and is reported in also_round_on_desktop so
+   the owner can decide on the desktop coin separately. Selector is id-scoped
+   (#cx3-compare .cx3-coin) so it carries higher specificity than the base
+   single-class rule and reliably wins the cascade even appended last.
+   var(--sg-*) tokens only.
+   ============================================================================ */
+
+@media (max-width: 760px) {
+
+  /* the VS seam coin: de-circle the 48px square to a slim rounded rectangle */
+  #cx3-compare .cx3-coin {
+    border-radius: var(--sg-r-md);
+  }
+}
+
+/* ---- solutions-shape.css ---- */
+/* solutions mobile shape fix (media-query only) */
+
+/* ============================================================================
+   HOME · §5 SOLUTIONS · sx3-  ·  MOBILE-ONLY shape correction
+   ----------------------------------------------------------------------------
+   SGEN shape language: slim rounded-RECTANGLE, never super-round pills on LARGE
+   elements. The one off-brand large element in this section is the operator
+   diorama's one-click ACTION-RAIL chip — `.sx3-chip` ("Clone to site",
+   "Restore from site", "Live → Staging", "Staging → Live"). Its base rule sets
+   `border-radius: var(--sg-r-pill)` (9999px); on a phone these are real,
+   sizeable tappable buttons (≈40px min-height in the mobile reconstruction at
+   home.css line ~2888) and read as super-round pills, which is OFF-BRAND.
+
+   Here they are demoted to var(--sg-r-md) = 12px (a slim rounded rectangle).
+   This is appended LAST and uses the `.sx3-stage .sx3-rail .sx3-chip` /
+   `.sx3-rail .sx3-chip` descendant chain so it out-specifies the carousel +
+   mobile-reconstruction rules without !important.
+
+   The base rule is pill on DESKTOP too, so per the hard constraint the base is
+   left untouched and the fix lives ONLY inside @media here; `.sx3-chip` is
+   listed in also_round_on_desktop for a separate owner decision on desktop.
+
+   LEFT ALONE (correct, tiny status / toggle elements ≤ ~22px):
+     • .sx3-env  (Live/Staging status pill — 10px mono, 4px/9px pad)
+     • .sx3-rtag (Dinner/Brunch/Seasonal tag — 10px mono, 4px/9px pad)
+     • .sx3-path-mark (22px selected-state check toggle)
+     • all 6–10px status DOTS: .sx3-lights i, .sx3-chip i, .sx3-env::before,
+       .sx3-rec-status::before, .sx3-vitals i
+
+   var(--sg-*) tokens only. EVERY rule below is inside an @media block —
+   0 top-level rules.
+   ========================================================================== */
+
+
+/* ===== 760px: phones — de-pill the large action-rail chips ================= */
+@media (max-width: 760px) {
+
+  /* the roster's one-click action chips: pill (9999px) → slim rounded rect.
+     Both the carousel-scoped (.sx3-stage ...) and the standalone mobile rail
+     are covered, and the descendant chain beats the appended mobile rules. */
+  .sx3-stage .sx3-rail .sx3-chip,
+  .sx3-rail .sx3-chip,
+  .sx3-stage .sx3-chip,
+  .sx3-chip {
+    border-radius: var(--sg-r-md);
+  }
+}
+
+
+/* ===== 480px: smallest phones (390px target) ============================== */
+@media (max-width: 480px) {
+
+  /* re-assert at the smallest width so any narrower-breakpoint rule that might
+     follow cannot reintroduce the pill on these large chips. */
+  .sx3-stage .sx3-rail .sx3-chip,
+  .sx3-rail .sx3-chip,
+  .sx3-stage .sx3-chip,
+  .sx3-chip {
+    border-radius: var(--sg-r-md);
+  }
+}
+
+/* ---- showcase-shape.css ---- */
+/* showcase mobile shape fix (media-query only) */
+
+/* ============================================================================
+   HOME · §7 SHOWCASE · sc-  ·  MOBILE-ONLY shape correction
+   ----------------------------------------------------------------------------
+   SGEN shape language: slim rounded-RECTANGLE, never super-round pills/circles
+   on LARGE elements. Brand radii: --sg-r-md 12px, --sg-r-lg 16px; --sg-r-pill
+   (9999px) / 50% are reserved for tiny status dots/toggles (<= ~14px).
+
+   CONFIRMED OK (no change): the carousel CARD itself.
+     • .sc-card  — base = .card (var(--sg-r-lg) 16px) AND the mobile-carousel
+       block (home.css ~3375) re-asserts border-radius: var(--sg-r-lg). Probed
+       at 390px: 335x493, radius 16, ratio 0.05 -> already a slim rounded
+       rectangle. The browser-chrome frame (.sc-frame/.sc-chrome) is clipped by
+       the card's overflow:hidden (effective radius 0). Reads correctly.
+
+   OFF-BRAND on mobile (FIXED below) — every one of these has a base (desktop)
+   rule of border-radius:var(--sg-r-pill) (9999px). Probed at 390px on a 335px
+   card, all resolved to a full stadium/super-round pill:
+     • .sc-addr      261x29  — the browser-chrome ADDRESS BAR. Large (full card
+                               width), reads as a super-round capsule. -> r-md.
+     • .sc-tag.cat   142x26  — the category tag chip (large chip).      -> r-md.
+     • .sc-tag       88x26   — the industry tag chip (same chip family). -> r-md.
+     • .sc-chip      153x25  — the highlight chip pinned to card bottom.  -> r-md.
+   --sg-r-md (12px) keeps a slim curved edge while clearly reading as a rounded
+   rectangle, not a pill.
+
+   LEFT ALONE (correct, tiny status dots <= 14px, border-radius:50%):
+     • .sc-dots i  (9x9 traffic-light dots)
+     • .sc-chip::before  (5x5 red lead dot)
+
+   HARD CONSTRAINT compliance:
+     - MOBILE ONLY: every rule below is inside an @media (max-width:...) block;
+       there are ZERO top-level rules in this file.
+     - The base rules of .sc-addr / .sc-tag / .sc-chip are pill on DESKTOP too,
+       so the base is NOT touched here; these are overridden ONLY inside @media
+       and are listed in also_round_on_desktop for a separate owner call.
+     - Selectors are #showcase-scoped + card-descendant chained so they
+       out-specify (and, being appended last, also win by source order over)
+       the prior MOBILE CAROUSELS / mobile-reconstruction rules without
+       !important. var(--sg-*) tokens only.
+   ========================================================================== */
+
+
+/* ===== 760px: phones — de-pill the large chrome bar + chips ================ */
+@media (max-width: 760px) {
+
+  /* browser-chrome ADDRESS BAR: pill (9999px) -> slim rounded rectangle */
+  #showcase .sc-card .sc-frame .sc-chrome .sc-addr,
+  #showcase .sc-card .sc-addr {
+    border-radius: var(--sg-r-md);
+  }
+
+  /* category + industry TAG chips: pill -> slim rounded rectangle.
+     These chips are only ~25-26px tall, so r-md (12px) still reads as a
+     capsule (radius ~= half height); r-sm (8px) makes them unambiguous
+     slim rounded rectangles per the SGEN shape language. */
+  #showcase .sc-card .sc-meta .sc-tags .sc-tag,
+  #showcase .sc-card .sc-tag {
+    border-radius: var(--sg-r-sm);
+  }
+
+  /* bottom HIGHLIGHT chips: pill -> slim rounded rectangle (same 25px-tall
+     capsule problem -> r-sm 8px). */
+  #showcase .sc-card .sc-meta .sc-chips-row .sc-chip,
+  #showcase .sc-card .sc-chip {
+    border-radius: var(--sg-r-sm);
+  }
+
+  /* defensive: re-assert the CARD as a slim rounded rectangle (already r-lg in
+     the carousel block, restated so no later/narrower rule can round it off) */
+  #showcase .sc-grid > .sc-card {
+    border-radius: var(--sg-r-lg);
+  }
+}
+
+
+/* ===== 480px: smallest phones (390px self-check target) =================== */
+@media (max-width: 480px) {
+
+  /* re-assert at the narrowest width so no narrower-breakpoint rule that may be
+     appended after can reintroduce the pill on these large elements. */
+  #showcase .sc-card .sc-frame .sc-chrome .sc-addr,
+  #showcase .sc-card .sc-addr {
+    border-radius: var(--sg-r-md);
+  }
+  #showcase .sc-card .sc-meta .sc-tags .sc-tag,
+  #showcase .sc-card .sc-tag {
+    border-radius: var(--sg-r-sm);
+  }
+  #showcase .sc-card .sc-meta .sc-chips-row .sc-chip,
+  #showcase .sc-card .sc-chip {
+    border-radius: var(--sg-r-sm);
+  }
+  #showcase .sc-grid > .sc-card {
+    border-radius: var(--sg-r-lg);
+  }
+}
