@@ -3290,3 +3290,708 @@ a.cox2-mod-chip:hover { color: #fff; border-color: rgba(213,21,34,.55); }
   /* manifest rows: keep the check icon aligned to the first text line */
   .pr2-lb { font-size: 13px; }
 }
+
+
+/* ===== MOBILE CAROUSELS (media-query only) ===== */
+
+/* ---- showcase (showcase-carousel.css) ---- */
+/* showcase mobile carousel (media-query only, desktop untouched) */
+
+/* ════════════════════════════════════════════════════════════════════════
+   §SHOWCASE — mobile horizontal swipe carousel.
+
+   Scope: home #showcase explorer (.sc-explorer-full > .sc-explorer >
+   .sc-facets + .sc-results[.sc-resbar + .sc-grid#grid > .sc-card]).
+   The section is `.sec.surface-dark` so --sg-ink resolves to cream — ink is
+   re-asserted defensively below so no reflow exposes dark-on-dark.
+
+   MOBILE ONLY. Every rule is inside @media (max-width: 760px | 600px | 480px).
+   Desktop renders >760px so none of these rules reach it. This file is
+   appended AFTER the prior mobile blocks (@media 880px / 560px from home.css),
+   so equal-or-higher specificity wins the cascade.
+
+   Behaviour: hide the filter sidebar + sort/result clutter; collapse the
+   2-col explorer to one column; turn .sc-grid into a CSS-only scroll-snap
+   carousel (flex row, overflow-x:auto, snap x mandatory, momentum, hidden
+   scrollbar, ~82vw cards with a peek of the next). Cards keep their JS click
+   handler (openSpotlight) so the Page-Deck pop-out still opens. The carousel
+   scrolls inside its own container — the section/body never overflow.
+   ════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 760px) {
+
+  /* ---- KILL the filter clutter (owner: no category needed on mobile) ---- */
+  /* sidebar + sort/result bar removed entirely; high specificity + !important
+     to override the prior @media(880px){.sc-explorer{1fr}} / @media(560px)
+     padding rules that left these visible. */
+  #showcase .sc-explorer .sc-facets,
+  #showcase .sc-results .sc-resbar { display: none !important; }
+
+  /* ---- EXPLORER → single column, edge-to-edge, no sidebar gap ---- */
+  #showcase .sc-explorer-full { padding-inline: 0; }
+  #showcase .sc-explorer {
+    display: block;                 /* drop the 264px grid track entirely */
+    grid-template-columns: none;
+    gap: 0;
+    padding: clamp(14px, 4vw, 22px) 0 clamp(28px, 7vw, 44px);
+    align-items: stretch;
+  }
+  #showcase .sc-results { min-width: 0; }
+
+  /* ---- THE CAROUSEL: .sc-grid becomes a horizontal scroll-snap track ---- */
+  /* override the desktop auto-fill grid; flex row that scrolls inside itself.
+     scroll-padding-inline gives the first/last card a gutter at snap rest, so
+     the row reads inset from the edge without the section ever overflowing. */
+  #showcase .sc-grid {
+    display: flex;
+    grid-template-columns: none;            /* nuke the grid definition */
+    flex-flow: row nowrap;
+    gap: clamp(14px, 4vw, 20px);
+    margin: 0;
+    padding: 4px clamp(16px, 5vw, 24px) 8px;
+    overflow-x: auto;
+    overflow-y: visible;
+    -webkit-overflow-scrolling: touch;       /* iOS momentum */
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: clamp(16px, 5vw, 24px);
+    scroll-behavior: smooth;
+    overscroll-behavior-x: contain;          /* don't chain to page scroll */
+    max-width: 100%;
+    -ms-overflow-style: none;                /* hide scrollbar (IE/Edge) */
+    scrollbar-width: none;                   /* hide scrollbar (Firefox) */
+  }
+  #showcase .sc-grid::-webkit-scrollbar { display: none; }  /* hide (WebKit) */
+
+  /* ---- CARD: fixed-share slide, snap-centred, peek of the next ---- */
+  #showcase .sc-grid > .sc-card {
+    flex: 0 0 82vw;                  /* ~82vw leaves a peek of the next card */
+    max-width: 360px;                /* don't get silly-wide on big phones */
+    width: 82vw;
+    min-width: 0;
+    scroll-snap-align: center;
+    scroll-snap-stop: always;        /* one card per swipe */
+    margin: 0;
+    /* premium lift so each slide reads as a hero card on dark */
+    border-radius: var(--sg-r-lg);
+    box-shadow: 0 18px 40px -16px rgba(0,0,0,.55), var(--sg-glass-inset);
+  }
+
+  /* the empty-state (when JS renders no matches) shouldn't try to be a slide */
+  #showcase .sc-grid > .sc-empty {
+    flex: 0 0 82vw; width: 82vw; scroll-snap-align: center;
+  }
+
+  /* ---- re-assert ink on the dark surface (defensive, post-reflow) ---- */
+  #showcase .sc-meta { padding: 14px 16px 16px; }
+  #showcase .sc-meta .sc-brand { color: var(--sg-ink); }
+  #showcase .sc-meta .sc-desc { color: var(--sg-ink-soft); }
+
+  /* slightly taller shot reads better as a portrait-ish hero slide */
+  #showcase .sc-card .sc-shot { aspect-ratio: 16/10; }
+
+  /* ---- CTA stays: "Browse the full showcase" wrapper untouched in flow ---- */
+  #showcase .shx-foot { margin-top: clamp(20px, 6vw, 32px); }
+}
+
+/* ── tighten the slide share + gaps on small phones ── */
+@media (max-width: 600px) {
+  #showcase .sc-grid {
+    gap: 14px;
+    padding: 4px 16px 8px;
+    scroll-padding-inline: 16px;
+  }
+  #showcase .sc-grid > .sc-card,
+  #showcase .sc-grid > .sc-empty {
+    flex-basis: 84vw;
+    width: 84vw;
+  }
+}
+
+/* ── narrowest phones: bigger card share, smaller chrome ── */
+@media (max-width: 480px) {
+  #showcase .sc-grid {
+    gap: 12px;
+    padding: 4px 14px 8px;
+    scroll-padding-inline: 14px;
+  }
+  #showcase .sc-grid > .sc-card,
+  #showcase .sc-grid > .sc-empty {
+    flex-basis: 86vw;
+    width: 86vw;
+    max-width: none;
+  }
+  #showcase .sc-meta { padding: 13px 14px 15px; }
+  #showcase .sc-card .sc-shot { aspect-ratio: 16/11; }
+}
+
+/* ---- product (product-carousel.css) ---- */
+/* product mobile carousel (media-query only, desktop untouched) */
+
+/* ============================================================================
+   HOME / PRODUCT (.px3-) — MOBILE SWIPE CAROUSEL
+   ----------------------------------------------------------------------------
+   Owner-locked: MOBILE ONLY. Every rule below lives inside @media (max-width).
+   Desktop (>760px) never sees a single declaration here.
+
+   Problem on phones: the desktop UX is a category SELECTOR (left .px3-index) +
+   a single swapping .px3-panel (right). On a phone the panel sits BELOW the
+   tab the owner just tapped, so the content change is off-screen — the owner
+   can't see that choosing a category did anything.
+
+   Mobile fix (pure CSS, no JS):
+     - Turn .px3-stage into a horizontal scroll-snap CAROUSEL of all 7 panels.
+     - FORCE every .px3-panel visible (override the desktop JS `hidden` attribute
+       AND the `display:none` base rule) so all 7 contents live in the swipe row.
+     - Each panel = a snap card at ~85vw with a peek of the next + center snap.
+     - Keep .px3-index as a compact horizontal chip strip ABOVE the carousel:
+       it already names all 7 categories, the active chip still red-highlights
+       via the existing JS, and tapping it remains a quick-jump label. The SWIPE
+       is the primary nav.
+     - Hide the JS-synced .px3-stage-bar: it describes only ONE category and is
+       misleading once all 7 panels are simultaneously visible.
+     - The SG Builder editor diorama (.px3-editor) scrolls horizontally inside
+       its own card so it stays legible without breaking the page.
+
+   The carousel scrolls inside .px3-stage (overflow-x:auto). The section/body
+   never gain horizontal overflow — panel widths are vw-based and the snap row
+   is clipped to the stage.
+   ============================================================================ */
+
+@media (max-width: 760px) {
+
+  /* -- rig: stack, give the carousel room -------------------------------- */
+  .px3-sec { overflow: clip; }
+  .px3-rig {
+    grid-template-columns: 1fr;
+    gap: clamp(16px, 4vw, 24px);
+    margin-top: clamp(24px, 6vw, 38px);
+  }
+
+  /* -- INDEX → compact horizontal chip strip (the labels above the swipe) - */
+  .px3-index {
+    position: static; top: auto;
+    flex-direction: row; flex-wrap: nowrap;
+    gap: 8px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x proximity;
+    /* full-bleed so chips can scroll edge-to-edge without document overflow */
+    margin-inline: calc(var(--sg-gutter, 20px) * -1);
+    padding-inline: var(--sg-gutter, 20px);
+    padding-bottom: 2px;
+    scrollbar-width: none;
+  }
+  .px3-index::-webkit-scrollbar { display: none; }
+
+  /* the "Categories / 7" label is noise in a chip strip on phones */
+  .px3-index-lab { display: none; }
+
+  /* each category → a tidy snap chip; kill the desktop grid layout */
+  .px3-index .px3-cat {
+    flex: 0 0 auto;
+    display: inline-flex; align-items: center; gap: 9px;
+    width: auto; min-height: 0;
+    padding: 9px 13px;
+    border-radius: var(--sg-r-pill, 999px);
+    scroll-snap-align: start;
+  }
+  .px3-index .px3-cat::before { display: none; } /* drop the vertical red spine */
+  .px3-index .px3-cat-ic { width: 26px; height: 26px; border-radius: 8px; }
+  .px3-index .px3-cat-ic svg { width: 15px; height: 15px; }
+  .px3-index .px3-cat-tx { display: flex; align-items: baseline; gap: 7px; min-width: 0; }
+  .px3-index .px3-cat-nm { font-size: 13px; white-space: nowrap; }
+  .px3-index .px3-cat-sub { display: none; } /* sub-copy lives in the panel itself */
+  .px3-index .px3-cat-n {
+    min-width: 0; font-size: 11px;
+    padding-left: 8px; margin-left: 2px;
+    border-left: 1px solid rgba(255,255,255,.14);
+  }
+
+  /* tally → full-width footnote under the chip strip */
+  .px3-tally { flex-basis: auto; margin-top: 4px; }
+
+  /* -- STAGE → the horizontal swipe carousel ----------------------------- */
+  .px3-stage {
+    min-height: 0;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    scroll-padding: 0 14px;
+    gap: 14px;
+    padding: 14px;
+    /* the cinematic frame is busy at this size; let cards carry their own edge */
+    background: linear-gradient(180deg, #16161b, #111114);
+    border-radius: var(--sg-r-lg, 18px);
+    scrollbar-width: none;
+    /* re-assert dark ink defensively (reflow must not lose contrast) */
+    --sg-ink: #f4f2ee; --sg-ink-soft: rgba(255,255,255,.62); --sg-ink-faint: rgba(255,255,255,.40);
+    color: var(--sg-ink);
+  }
+  .px3-stage::-webkit-scrollbar { display: none; }
+
+  /* the JS-synced single-category header lies once all panels show — hide it */
+  .px3-stage-bar { display: none; }
+
+  /* FORCE every panel visible: beats `.px3-panel{display:none}`, beats the
+     `.px3-panel.is-on{display:grid}` desktop rule, AND beats the native
+     `hidden` attribute the desktop JS sets on inactive panels. Each panel is
+     now a snap card. !important is scoped to this breakpoint only. */
+  .px3-stage .px3-panel,
+  .px3-stage .px3-panel.is-on,
+  .px3-stage .px3-panel[hidden] {
+    display: flex !important;
+    flex-direction: column;
+    flex: 0 0 85vw;
+    max-width: 420px;
+    min-height: 0;
+    scroll-snap-align: center;
+    border-radius: var(--sg-r-md, 12px);
+    border: 1px solid rgba(255,255,255,.10);
+    background: rgba(255,255,255,.02);
+    overflow: hidden;
+  }
+  /* kill the entrance animation — carousel items must not pop while swiping */
+  .px3-stage .px3-panel.is-anim { animation: none !important; }
+
+  /* a card = module list on top, diorama below */
+  .px3-mods {
+    border-right: 0;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+    padding: 16px 15px;
+    background: rgba(255,255,255,.015);
+  }
+  .px3-mods-lead { font-size: 13px; }
+
+  .px3-render {
+    padding: 15px;
+    min-width: 0;
+    flex: 1;
+  }
+
+  /* -- editor diorama: scroll horizontally INSIDE its own card ----------- */
+  .px3-editor {
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .px3-editor::-webkit-scrollbar { display: none; }
+  /* keep the 3-pane editor at a legible width and let it pan inside the card */
+  .px3-ed-body { grid-template-columns: 116px minmax(280px, 1fr) 132px; min-width: 520px; }
+  .px3-ed-top { flex-wrap: nowrap; }
+  .px3-ed-cv { padding: 16px 14px; }
+  .px3-ed-doc { max-width: 320px; }
+
+  /* dioramas: keep the ledger / roster / attribution single-column + legible */
+  .px3-ledger-grid { grid-template-columns: 1fr 1fr; gap: 9px; }
+  .px3-atr-stat { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+
+  /* -- foot: stack the closing CTA row ----------------------------------- */
+  .px3-foot { flex-direction: column; align-items: stretch; gap: 14px; }
+  .px3-foot-tx { max-width: 100%; }
+  .px3-foot .flex { flex-direction: column; gap: 10px; }
+  .px3-foot .flex .btn { width: 100%; justify-content: center; min-height: 48px; }
+}
+
+@media (max-width: 600px) {
+  /* slightly bigger peek so the "more →" affordance is unmistakable */
+  .px3-stage .px3-panel,
+  .px3-stage .px3-panel.is-on,
+  .px3-stage .px3-panel[hidden] {
+    flex: 0 0 86vw;
+  }
+  /* attribution rows stay legible at this width */
+  .px3-atr-row { grid-template-columns: 80px 1fr 34px; gap: 9px; }
+  .px3-ledger-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 480px) {
+  .px3-rig { gap: 14px; }
+
+  /* tighten the chip strip on the smallest phones */
+  .px3-index { gap: 7px; }
+  .px3-index .px3-cat { padding: 8px 12px; gap: 8px; }
+  .px3-index .px3-cat-ic { width: 24px; height: 24px; }
+  .px3-index .px3-cat-nm { font-size: 12.5px; }
+
+  /* a touch more of the next card peeks through; tighter inner padding */
+  .px3-stage { gap: 12px; padding: 12px; scroll-padding: 0 12px; }
+  .px3-stage .px3-panel,
+  .px3-stage .px3-panel.is-on,
+  .px3-stage .px3-panel[hidden] {
+    flex: 0 0 88vw;
+  }
+  .px3-mods { padding: 15px 14px; }
+  .px3-render { padding: 14px; }
+
+  /* attribution stat trio → one per line so numbers stay readable */
+  .px3-atr-stat { grid-template-columns: 1fr; }
+  .px3-atr-st { display: flex; align-items: baseline; gap: 10px; padding: 10px 12px; }
+  .px3-atr-st .n { font-size: 22px; }
+  .px3-atr-st .k { margin-top: 0; }
+  .px3-atr-row { grid-template-columns: 68px 1fr 30px; gap: 8px; }
+
+  /* roster diorama: drop the dense columns that overflow at 480 */
+  .px3-rhead, .px3-site { grid-template-columns: 1.4fr 1fr; }
+  .px3-rhead span:nth-child(3), .px3-rhead span:nth-child(4),
+  .px3-site .px3-vit, .px3-site .px3-leads { display: none; }
+
+  .px3-ledger-h { font-size: 16px; }
+  .px3-ledger-cell { padding: 12px; }
+}
+
+/* ---- compare (compare-carousel.css) ---- */
+/* compare mobile carousel (media-query only, desktop untouched) */
+
+/* ============================================================================
+   HOME · §6 COMPARE (cx3-) · MOBILE swipe carousel
+   ----------------------------------------------------------------------------
+   GROUND TRUTH (verified in home.content.html, 2026-06): the section contains
+   exactly ONE head-to-head panel (#cx3-panel / .cx3-faceoff). The 5 competitors
+   are NOT 5 DOM panels -- four of them exist only as JS data (DATA/ICONS) that
+   the desktop selector script renders into the single panel when a chip is
+   tapped. CSS cannot surface DOM nodes that do not exist, and the HTML/desktop
+   JS are owner-locked, so a 5-PANEL faceoff carousel is impossible CSS-only.
+
+   The real, swipeable, beautiful win on phones is the SELECTOR (.cx3-rail): on
+   desktop it is a 5-col grid; the prior mobile CSS crammed it into a tight
+   2-col block. Here it becomes an iPad-like horizontal scroll-snap carousel of
+   competitor chips -- swipe WordPress -> Elementor -> Wix -> Squarespace ->
+   GoDaddy, each chip snapping center with a peek of the next, momentum scroll,
+   hidden scrollbar, and NO document horizontal overflow (the rail scrolls
+   inside its own container; the section/body do not). Tapping a chip still
+   drives the existing JS that swaps the single faceoff panel beneath it.
+
+   Every rule below lives ENTIRELY inside an @media (max-width: N) block, so it
+   cannot reach the desktop render (>760px). Tokens are var(--sg-*) only. These
+   rules are appended AFTER the prior compare-mobile CSS, so selectors carry
+   equal-or-higher specificity to override the prior 2-col grid rail.
+   ============================================================================ */
+
+/* ============================================================================
+   <= 760px  rail -> horizontal swipe carousel
+   ============================================================================ */
+@media (max-width: 760px) {
+
+  /* containment insurance: the rail scrolls inside itself; the band never does */
+  #cx3-compare { overflow-x: hidden; }
+  .cx3-wrap { overflow: visible; }
+
+  /* the rail stops being a grid and becomes a single snapping scroll-row.
+     Higher specificity than the prior `.cx3-rail { grid-template-columns }`
+     via the id-scoped ancestor, so the carousel wins the cascade. */
+  #cx3-compare .cx3-rail {
+    display: flex;
+    grid-template-columns: none;              /* neutralize the prior grid */
+    flex-flow: row nowrap;
+    gap: 14px;
+    margin-top: 28px;
+    padding: 2px 4px 14px;                    /* room for chip lift + snap edge */
+    overflow-x: auto;
+    overflow-y: visible;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;        /* iOS momentum */
+    overscroll-behavior-x: contain;           /* don't chain to the page */
+    scroll-padding-left: 4px;
+    scrollbar-width: none;                     /* Firefox: hide scrollbar */
+    -ms-overflow-style: none;                  /* old Edge: hide scrollbar */
+  }
+  #cx3-compare .cx3-rail::-webkit-scrollbar { display: none; }   /* WebKit */
+
+  /* each competitor chip = a snapping card, ~80% rail width with next-peek.
+     flex:0 0 78% keeps a slice of the following chip visible as the swipe cue. */
+  #cx3-compare .cx3-chip {
+    flex: 0 0 78%;
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+    min-height: 96px;
+    padding: 18px 18px 20px;
+    justify-content: center;
+  }
+
+  /* the active chip already reads via [aria-selected] tokens; give the carousel
+     card a touch more presence so the snapped one feels deliberately centered */
+  #cx3-compare .cx3-chip[aria-selected="true"] {
+    box-shadow: var(--sg-shadow-red), var(--sg-glass-inset);
+  }
+
+  /* the chip labels stay on-brand and legible at carousel size */
+  #cx3-compare .cx3-chip-name { font-size: 16px; color: var(--sg-ink); }
+  #cx3-compare .cx3-chip-vs { color: var(--sg-ink-faint); }
+  #cx3-compare .cx3-chip[aria-selected="true"] .cx3-chip-vs { color: var(--sg-red-hot); }
+}
+
+/* ============================================================================
+   <= 600px  tighter peek + chrome on mid phones
+   ============================================================================ */
+@media (max-width: 600px) {
+
+  /* keep the carousel a flex scroll-row (re-assert over the prior 600px rule
+     that reset `.cx3-rail` back to a 2-col grid at this breakpoint) */
+  #cx3-compare .cx3-rail {
+    display: flex;
+    grid-template-columns: none;
+    gap: 12px;
+    margin-top: 24px;
+  }
+
+  /* a slightly wider card share so the chip name never crowds at 390-430px */
+  #cx3-compare .cx3-chip {
+    flex: 0 0 74%;
+    padding: 16px 16px 18px;
+  }
+  #cx3-compare .cx3-chip-name { font-size: 15px; }
+}
+
+/* ============================================================================
+   <= 480px  smallest phones (~360-390px): full-bleed snap card + clear peek
+   ============================================================================ */
+@media (max-width: 480px) {
+
+  #cx3-compare .cx3-rail {
+    display: flex;
+    grid-template-columns: none;
+    gap: 10px;
+  }
+
+  /* ~82% so a generous peek of the next competitor invites the swipe */
+  #cx3-compare .cx3-chip {
+    flex: 0 0 82%;
+    min-height: 92px;
+  }
+}
+
+/* ---- solutions (solutions-carousel.css) ---- */
+/* solutions mobile carousel (media-query only, desktop untouched) */
+
+/* ============================================================================
+   HOME · §5 SOLUTIONS · sx3-  ·  MOBILE-ONLY horizontal swipe carousel
+   ----------------------------------------------------------------------------
+   PROBLEM (mobile): the desktop "fork" is a tab control — only ONE .sx3-panel
+   is shown at a time (the other is hidden by `.sx3-panel{display:none}` PLUS
+   the JS-added `[hidden]` attribute). On a phone the path-switch is an invisible
+   change: you tap a tab and a card swaps in place, with no signal both paths
+   even exist.
+
+   FIX (CSS-only, no JS, no HTML/desktop-JS change): turn the .sx3-stage into a
+   true iPad-style horizontal swipe carousel and FORCE BOTH .sx3-panel cards
+   visible as snap items, overriding BOTH the desktop `display:none` and the
+   JS `[hidden]` attribute with breakpoint-scoped !important. Each panel becomes
+   a full-bleed ~86vw snap-center card with a peek of the next, momentum scroll,
+   hidden scrollbar. The scroll lives INSIDE .sx3-stage — the section and the
+   document never scroll sideways. The fork tabs are retired to a non-clickable
+   legend (tapping a tab can no longer collapse the carousel because our
+   visibility override beats the JS [hidden]).
+
+   var(--sg-*) tokens only. The diorama re-asserts its own dark ink locally, so
+   no contrast trap is introduced by the reflow. EVERY rule below is inside an
+   @media block — 0 top-level rules.
+   ========================================================================== */
+
+
+/* ===== 760px: phones — build the swipe carousel ========================== */
+@media (max-width: 760px) {
+
+  /* --- retire the fork tabs to a legend; the carousel + each panel's own
+         eyebrow now carry the "operators vs businesses" framing. Hiding the
+         tabs is explicitly the mobile treatment; our visibility override below
+         also guarantees a stray tap can never re-collapse the carousel. ----- */
+  .sx3-fork { display: none; }
+
+  /* --- THE STAGE becomes the horizontal scroll-snap carousel viewport.
+         It bleeds to the screen edges (the .sec gutter is 24px here) so the
+         first card sits flush-left and the next card peeks at the right.
+         scroll-padding restores the inset snap position; the scroll is
+         contained — the document never overflows sideways. ----------------- */
+  .sx3-stage {
+    margin-top: 22px;
+    /* full-bleed within the 24px section gutter, both sides */
+    margin-left: -24px;
+    margin-right: -24px;
+    padding-left: 24px;
+    padding-right: 24px;
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 16px;
+    overflow-x: auto;
+    overflow-y: visible;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    scroll-padding-left: 24px;
+    /* room so card shadows are not clipped top/bottom while scrolling */
+    padding-top: 6px;
+    padding-bottom: 10px;
+    /* keep the carousel's own overflow from leaking to the page */
+    max-width: 100vw;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;            /* Firefox */
+    -ms-overflow-style: none;         /* old Edge */
+  }
+  /* hide the scrollbar (WebKit/Blink) so the swipe feels native */
+  .sx3-stage::-webkit-scrollbar { display: none; width: 0; height: 0; }
+
+  /* --- FORCE BOTH PATHS VISIBLE as carousel cards. This overrides:
+         (1) `.sx3-panel{display:none}` for the non-active panel, and
+         (2) the JS-applied `[hidden]` attribute on the inactive panel.
+         Both beaten with breakpoint-scoped !important so JS can never collapse
+         the carousel on mobile. ------------------------------------------- */
+  .sx3-stage .sx3-panel,
+  .sx3-stage .sx3-panel.is-on,
+  .sx3-stage .sx3-panel[hidden] {
+    display: block !important;
+    flex: 0 0 86vw;
+    max-width: 86vw;
+    min-width: 0;
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+    /* the entrance keyframe must not run here (both are permanently shown) */
+    animation: none !important;
+    opacity: 1;
+    transform: none;
+  }
+  /* the last card gets a trailing spacer-feel via scroll-padding on the right */
+  .sx3-stage .sx3-panel:last-child { margin-right: 0; }
+
+  /* --- each panel's inner layout already stacks to one column at ≤760px
+         (lead block over diorama). Keep it stacked and let it fill the card. - */
+  .sx3-stage .sx3-layout {
+    grid-template-columns: 1fr;
+    gap: 22px;
+    align-items: stretch;
+    height: 100%;
+  }
+  .sx3-stage .sx3-layout > * { min-width: 0; }
+
+  /* lead copy sits comfortably inside the narrower card */
+  .sx3-stage .sx3-lead-h { font-size: clamp(23px, 6.4vw, 30px); }
+  .sx3-stage .sx3-lead-p { max-width: none; }
+  .sx3-stage .sx3-routes { margin-top: 20px; }
+
+  /* --- the diorama must never exceed its card; it fills the card width ---- */
+  .sx3-stage .sx3-dio { max-width: 100%; min-width: 0; width: 100%; }
+
+  /* a soft swipe affordance under the carousel: two pills, the framing legend,
+     built purely from the panels' own context — no JS, no DOM change. The hint
+     lives on the .sx3-stage container's sibling space via the section, so it
+     cannot affect desktop. We render it on the section using a pseudo-element
+     attached to the head so it reads as guidance, not chrome. */
+  .sx3-head::after {
+    content: "Swipe to compare both paths \2192";
+    display: inline-flex;
+    align-items: center;
+    margin-top: 16px;
+    font-family: var(--sg-mono);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--sg-red-hot);
+    padding: 7px 13px;
+    border-radius: var(--sg-r-pill);
+    background: var(--sg-red-tint-14);
+    border: 1px solid var(--sg-red-tint-22);
+  }
+
+  /* --- inside each card, the OPERATOR roster keeps its self-describing
+         stacked-card rows (legible, and it avoids a nested horizontal scroll
+         fighting the carousel's own horizontal swipe). Re-assert the stacked
+         layout so the wide 5-col grid never forces card width. -------------- */
+  .sx3-stage .sx3-roster { padding: 14px; overflow-x: visible; }
+  .sx3-stage .sx3-rhead { display: none; }
+  .sx3-stage .sx3-rrow {
+    min-width: 0;
+    grid-template-columns: 1fr auto;
+    grid-auto-rows: auto;
+    align-items: center;
+    row-gap: 9px;
+    column-gap: 10px;
+    padding: 12px 13px;
+  }
+  .sx3-stage .sx3-site { grid-column: 1; min-width: 0; }
+  .sx3-stage .sx3-open { grid-column: 2; grid-row: 1; justify-self: end; }
+  .sx3-stage .sx3-env { grid-column: 1 / -1; justify-self: start; }
+  .sx3-stage .sx3-vitals,
+  .sx3-stage .sx3-leads { grid-column: 1 / -1; justify-self: start; }
+  .sx3-stage .sx3-rail { gap: 8px; }
+
+  /* --- the BUSINESS record diorama: rail + record stack inside the card ---- */
+  .sx3-stage .sx3-cms { grid-template-columns: 1fr; padding: 14px; gap: 12px; }
+  .sx3-stage .sx3-cms-rail { flex-direction: row; flex-wrap: wrap; gap: 6px; }
+  .sx3-stage .sx3-cms-fam { width: 100%; }
+  .sx3-stage .sx3-rec { min-width: 0; }
+  .sx3-stage .sx3-field-grid { grid-template-columns: 1fr 1fr; }
+  .sx3-stage .sx3-field-v { overflow-wrap: anywhere; }
+
+  /* re-assert the diorama's dark ink locally in case any reflow shadowed it,
+     so nothing inside the card ever resolves dark-on-dark (the SGEN trap). */
+  .sx3-stage .sx3-dio {
+    --sg-ink: #f4f2ee;
+    --sg-ink-soft: rgba(255,255,255,.62);
+    --sg-ink-faint: rgba(255,255,255,.40);
+    color: var(--sg-ink);
+  }
+}
+
+
+/* ===== 600px: tighten card width + paired fields stack ==================== */
+@media (max-width: 600px) {
+
+  /* the .sec gutter drops to 20px at this breakpoint — re-bleed to match so
+     the carousel still runs flush to the true viewport edges and the next
+     card peek stays consistent. */
+  .sx3-stage {
+    margin-left: -20px;
+    margin-right: -20px;
+    padding-left: 20px;
+    padding-right: 20px;
+    scroll-padding-left: 20px;
+  }
+
+  /* slightly wider card on smaller phones so copy breathes, smaller peek */
+  .sx3-stage .sx3-panel,
+  .sx3-stage .sx3-panel.is-on,
+  .sx3-stage .sx3-panel[hidden] {
+    flex-basis: 88vw;
+    max-width: 88vw;
+  }
+
+  /* paired record fields stack so values never clip in the narrower card */
+  .sx3-stage .sx3-field-grid { grid-template-columns: 1fr; }
+
+  /* the operator meta cluster wraps under the name, left-aligned */
+  .sx3-stage .sx3-env { grid-column: 1 / -1; }
+  .sx3-stage .sx3-vitals,
+  .sx3-stage .sx3-leads { grid-column: 1 / -1; }
+}
+
+
+/* ===== 480px: smallest phones (390px target) ============================== */
+@media (max-width: 480px) {
+
+  /* maximise the card and shrink the peek a touch so each path reads big */
+  .sx3-stage {
+    gap: 14px;
+    margin-top: 18px;
+  }
+  .sx3-stage .sx3-panel,
+  .sx3-stage .sx3-panel.is-on,
+  .sx3-stage .sx3-panel[hidden] {
+    flex-basis: 90vw;
+    max-width: 90vw;
+  }
+
+  /* keep the diorama chrome from crowding the card edge on tiny screens */
+  .sx3-stage .sx3-dbar { padding: 11px 13px; }
+  .sx3-stage .sx3-dtitle small { display: none; }
+  .sx3-stage .sx3-roster { padding: 12px; }
+  .sx3-stage .sx3-cms { padding: 12px; }
+
+  /* swipe hint sits a hair tighter under the head */
+  .sx3-head::after { margin-top: 14px; font-size: 10.5px; }
+}
