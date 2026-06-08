@@ -4296,3 +4296,332 @@ a.cox2-mod-chip:hover { color: #fff; border-color: rgba(213,21,34,.55); }
     border-radius: var(--sg-r-lg);
   }
 }
+
+
+/* ===== MOBILE FIX v2 (chips condense + editor condense + solutions 2-row) - media-query only ===== */
+
+/* ---- appended from _home/_mobile4/product-chips.css ---- */
+/* product mobile chip-strip condense (media-query only) */
+
+/* ============================================================================
+   HOME / SECTION 3 PRODUCT (px3-) / MOBILE CHIP-STRIP CONDENSE
+   ----------------------------------------------------------------------------
+   GROUND TRUTH (verified in pages/home.css + home.content.html, 2026-06):
+
+   On phones the "MOBILE CAROUSELS" block (home.css ~line 3460+) reflows the
+   left category SELECTOR (.px3-index) into a horizontal flex strip:
+     .px3-index { flex-direction: row; flex-wrap: nowrap; ... }   (line ~3471)
+   That block sets flex-direction but NEVER sets align-items, so .px3-index
+   keeps its desktop base alignment (stretch). In a row flex container, stretch
+   sizes EVERY child to the tallest line.
+
+   The tallest child is .px3-tally, the last child of .px3-index in the markup
+   (home.content.html line ~106-109). Its base rule (home.css line ~1574) is a
+   padded card holding .px3-tally-n (a 30px number) plus .px3-tally-tx (a
+   multi-line mono sentence). Squeezed into flex-basis:auto inside the nowrap
+   row it wraps to roughly 233px tall, which drags the whole flex line to about
+   237px and STRETCHES every .px3-cat chip to that height. The chip's real
+   content is only about 44px (icon 26/24px + name 13px + count).
+   Owner photo IMG_0403: huge cards holding small text, large blank space.
+
+   THE FIX (mobile only, appended last):
+     1. #product .px3-index { align-items: center; }
+        Chips stop stretching to the tall line; each sizes to its own content.
+     2. #product .px3-index .px3-tally { display: none; }
+        The tally is the element forcing the tall line. It is redundant on
+        phones: the hero already states the 23 native modules / 7 categories /
+        1 flat price, and each chip carries its own per-category count. Removing
+        it lets the strip collapse to chip height.
+     3. #product .px3-index { min-height: 0; }
+        Deterministic floor so no residual min-height keeps the strip tall once
+        the only tall child is gone. Result: a compact horizontal row of about
+        44-52px chips (icon + name + count).
+
+   NOT TOUCHED (left to the prior cascade so the brand shape stays correct):
+     - border-radius: the chip keeps var(--sg-r-lg) (16px, slim rounded
+       rectangle) from the MOBILE SHAPE FIX block. This file sets NO radius, so
+       no pill or circle is reintroduced.
+     - chip sizing (icon 26/24px, name 13px), gap, scroll-snap: all from the
+       existing 760px and 480px blocks, left intact.
+
+   SPECIFICITY: every selector is id-scoped (#product, 1 id) plus 1-2 classes,
+   so it out-specifies the appended plain-class rules (.px3-index,
+   .px3-index .px3-tally) and wins the cascade without !important. Nothing on
+   .px3-tally uses !important or the [hidden] attribute, so plain specificity is
+   enough to hide it. var(--sg-*) tokens only. 0 top-level rules; every rule
+   below lives inside an @media (max-width) block, so desktop (>760px) is
+   unreachable and untouched.
+   ============================================================================ */
+
+
+/* ===== 760px: phones / condense the category chip strip =================== */
+@media (max-width: 760px) {
+
+  /* stop the chips stretching to the tall flex line, and drop any residual
+     min-height now that the tall child is removed. */
+  #product .px3-index {
+    align-items: center;
+    min-height: 0;
+  }
+
+  /* the tally is the ~233px child that forced the tall line; it is redundant
+     on phones (counts live in each chip + the hero). Hide it so the strip
+     collapses to chip height. */
+  #product .px3-index .px3-tally {
+    display: none;
+  }
+}
+
+
+/* ===== 480px: smallest phones (390px target) ============================== */
+@media (max-width: 480px) {
+
+  /* re-assert at the smallest width so no narrower-breakpoint rule can
+     reintroduce stretch or resurrect the tally on the 390px target. */
+  #product .px3-index {
+    align-items: center;
+    min-height: 0;
+  }
+  #product .px3-index .px3-tally {
+    display: none;
+  }
+}
+
+/* ---- appended from _home/_mobile4/product-editor.css ---- */
+/* ==========================================================================
+   FIX #2  MOBILE-ONLY  the PRODUCT "SG Builder" editor diorama
+   File: _home/_mobile4/product-editor.css
+   Appended to the END of pages/home.css (after every existing mobile block).
+
+   PROBLEM (owner photo IMG_0404, "totally broken on mobile"): a cramped canvas
+   on the left with a large black void on the right.
+
+   ROOT CAUSE (verified in pages/home.css):
+     The latest mobile block at @media (max-width: 760px) sets
+       .px3-editor { overflow-x: auto; ... }                       (~line 3578)
+       .px3-ed-body { grid-template-columns: 116px minmax(280px,1fr) 132px;
+                      min-width: 520px; }                          (~line 3586)
+     Inside the carousel each .px3-panel card is only ~85vw (~313px on a phone),
+     so the 520px 3-pane grid forces horizontal scroll and the dark empty
+     build-area (.px3-ed-cv) reads as a black void to the right of the canvas.
+     Earlier blocks (~1821, ~2736) already collapsed it, but this later 520px
+     rule re-introduced the 3-pane grid and won the cascade.
+
+   THE FIX (mobile only):
+     Collapse .px3-ed-body to ONE column fitted to the card (min-width:0),
+     hide the left rail (.px3-ed-rail) and right inspector (.px3-ed-insp) that
+     cause the overflow/void, kill the horizontal scroll on .px3-editor, and
+     trim the canvas padding so the SECTION-HERO + COLUMNS-3-SELECTED blocks and
+     the crumb / Publish top bar read cleanly with no dead canvas area.
+
+   SCOPE: every rule is inside @media (max-width). Zero top-level rules.
+   Selectors are id-scoped with #product to outrank the bare .px3-* mobile
+   rules above; !important is used only where it must beat an existing
+   !important from the same breakpoint or the native [hidden] attribute.
+   var(--sg-*) tokens only. Dark / red / premium, brand rounded-rectangle radii.
+   ========================================================================== */
+
+@media (max-width: 760px) {
+
+  /* -- kill the horizontal scroll: the editor now FITS its card ------------ */
+  #product .px3-editor {
+    overflow-x: hidden;
+    overflow-y: hidden;
+    width: 100%;
+    max-width: 100%;
+    /* re-assert dark ink on the panel so the reflow cannot lose contrast */
+    --sg-ink: #f4f2ee;
+    --sg-ink-soft: rgba(255,255,255,.62);
+    --sg-ink-faint: rgba(255,255,255,.40);
+    color: var(--sg-ink);
+  }
+
+  /* -- collapse the 3-pane grid to a SINGLE canvas column, no min-width ----
+     beats `.px3-ed-body { ... min-width:520px }` at ~line 3586 via #product   */
+  #product .px3-editor .px3-ed-body {
+    display: block;
+    grid-template-columns: 1fr;
+    min-width: 0;
+    width: 100%;
+    flex: 1;
+    min-height: 0;
+  }
+
+  /* -- HIDE the side panes that caused the overflow + the black void -------
+     the left rail and the right inspector are decorative chrome; the canvas
+     alone carries the drag / snap / publish story. !important defeats the
+     `.px3-ed-body { grid-template-columns: ...132px }` track that would
+     otherwise reserve their space.                                           */
+  #product .px3-editor .px3-ed-rail,
+  #product .px3-editor .px3-ed-insp {
+    display: none !important;
+  }
+
+  /* -- the canvas: full card width, trimmed padding so no dead area -------- */
+  #product .px3-editor .px3-ed-cv {
+    width: 100%;
+    min-width: 0;
+    padding: 16px 14px 18px;
+    overflow: hidden;
+  }
+  #product .px3-editor .px3-ed-doc {
+    max-width: 100%;
+    width: 100%;
+    margin-inline: 0;
+    gap: 14px;
+  }
+
+  /* -- top bar: crumb + breakpoints + red Publish chip stay on one row ------
+     it is short once the body is single-column; keep it legible, no overflow */
+  #product .px3-editor .px3-ed-top {
+    flex-wrap: nowrap;
+    gap: 10px;
+    padding: 10px 12px;
+    min-width: 0;
+  }
+  /* the path crumb can truncate rather than push the Publish chip off-card */
+  #product .px3-editor .px3-ed-crumb {
+    min-width: 0;
+    flex: 1 1 auto;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  #product .px3-editor .px3-ed-bps { flex: none; }
+  #product .px3-editor .px3-ed-pub { flex: none; }
+
+  /* -- the COLUMNS-3-SELECTED block keeps its 3 mini-columns, just tighter -- */
+  #product .px3-editor .px3-ed-cols { gap: 8px; }
+  #product .px3-editor .px3-ed-col { padding: 9px; }
+}
+
+@media (max-width: 480px) {
+
+  /* on the smallest phones, shave canvas padding + block padding a touch more
+     so the hero + columns blocks breathe inside the narrower card            */
+  #product .px3-editor .px3-ed-cv { padding: 13px 11px 15px; }
+  #product .px3-editor .px3-ed-doc { gap: 12px; }
+  #product .px3-editor .px3-ed-blk { padding: 15px 13px; }
+  #product .px3-editor .px3-ed-cols { gap: 7px; }
+  #product .px3-editor .px3-ed-col { padding: 8px; }
+
+  /* keep the top bar compact; the Publish chip stays the red focal point */
+  #product .px3-editor .px3-ed-top { gap: 8px; padding: 9px 11px; }
+}
+
+/* ---- appended from _home/_mobile4/solutions-rows.css ---- */
+/* ============================================================================
+   FIX #3, SOLUTIONS (sx3) path picker, MOBILE ONLY.
+   Owner directive: on mobile drop the tab selector and show BOTH paths as two
+   stacked rows the user scrolls through, with each row labelled For operators /
+   For businesses, so the content is easy to see and read without a tap toggle.
+
+   This file is appended to the END of home.css, after every existing mobile
+   block. It is scoped to #solutions and uses !important only where it must beat
+   the base .sx3-panel{display:none} rule and the native [hidden] attribute.
+
+   MOBILE ONLY: every rule below lives entirely inside @media (max-width). There
+   are zero top level rules. Desktop renders above 760px and is untouched.
+   var(--sg-*) tokens only. On brand: dark, red, slim rounded rectangles.
+   ============================================================================ */
+
+@media (max-width: 760px) {
+
+  /* ---- 1. Hide the tab selector. The two rows carry their own labels. ---- */
+  #solutions .sx3-fork { display: none !important; }
+
+  /* ---- 2. Show BOTH panels stacked, killing is-on / [hidden] dependence. -- */
+  #solutions .sx3-stage .sx3-panel,
+  #solutions .sx3-stage .sx3-panel.is-on,
+  #solutions .sx3-stage .sx3-panel[hidden] {
+    display: block !important;
+    animation: none !important;          /* no entrance jump on the static row */
+  }
+
+  /* Comfortable vertical rhythm between the stage header and the rows. */
+  #solutions .sx3-stage {
+    margin-top: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  /* Re-assert section ink on each panel in case the reflow lands text on the
+     dark band without an inherited colour. The dioramas re-assert their own
+     local ink, so this only governs the intro column. */
+  #solutions .sx3-stage .sx3-panel {
+    color: var(--sg-ink);
+  }
+
+  /* ---- 3. A subtle divider so the two rows read as two distinct rows. ----- */
+  /* The second row (business panel) carries the rule, drawn on the dark band. */
+  #solutions .sx3-stage .sx3-panel + .sx3-panel {
+    border-top: 1px solid var(--sg-line);
+    padding-top: 28px;
+  }
+
+  /* ---- 4. Label each row, no HTML edit, via a small mono eyebrow chip. ----
+     Gives the explicit operator / business framing the owner asked for. The
+     panel's own .sx3-lead-eye still appears below it. */
+  #solutions .sx3-stage .sx3-panel::before {
+    display: inline-block;
+    margin-bottom: 16px;
+    padding: 6px 11px;
+    border: 1px solid var(--sg-line);
+    border-radius: var(--sg-r-sm);
+    background: rgba(255,255,255,.035);
+    font-family: var(--sg-mono);
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--sg-ink-faint);
+    line-height: 1;
+  }
+  #solutions #sx3-panel-operator::before { content: "For operators"; }
+  #solutions #sx3-panel-business::before { content: "For businesses"; }
+
+  /* ---- 5. Collapse the layout to ONE column: intro above its diorama. ----- */
+  #solutions .sx3-panel .sx3-layout {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  /* ---- 6. The roster table is wide: let the diorama scroll horizontally
+     INSIDE its own card. The table keeps a min-width so columns stay legible,
+     and the scroll is contained so it never overflows the document. -------- */
+  #solutions .sx3-panel .sx3-dio { overflow: hidden; }       /* clip the card */
+
+  #solutions .sx3-panel .sx3-dio .sx3-roster {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  #solutions .sx3-panel .sx3-dio .sx3-rhead,
+  #solutions .sx3-panel .sx3-dio .sx3-rrow {
+    min-width: 460px;                    /* keep all five columns readable */
+  }
+  /* The action rail wraps freely, no min-width, so it never forces scroll. */
+  #solutions .sx3-panel .sx3-dio .sx3-rail { min-width: 0; }
+
+}
+
+/* Tighten the labels and spacing on the smallest screens. */
+@media (max-width: 480px) {
+
+  #solutions .sx3-stage { gap: 24px; }
+
+  #solutions .sx3-stage .sx3-panel + .sx3-panel { padding-top: 24px; }
+
+  #solutions .sx3-stage .sx3-panel::before {
+    font-size: 10px;
+    letter-spacing: .14em;
+    margin-bottom: 14px;
+  }
+
+  /* The roster can shrink its readable floor a touch on very narrow phones. */
+  #solutions .sx3-panel .sx3-dio .sx3-rhead,
+  #solutions .sx3-panel .sx3-dio .sx3-rrow {
+    min-width: 420px;
+  }
+
+}
