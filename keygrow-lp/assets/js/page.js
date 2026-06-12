@@ -113,17 +113,19 @@
 
     // Sensible per-industry presets (jobs / avg ticket). Picking an industry
     // seeds the sliders; the documented Plumbing / HVAC default = 40 / $450.
+    // All presets fit the capped slider ranges (jobs 1–80, ticket $50–$1500);
+    // clampRange below floors/ceils them so outputs always stay believable.
     var PRESETS = {
       'plumbing / hvac':       { jobs: 40,  ticket: 450 },
-      'roofing':               { jobs: 12,  ticket: 9500 },
+      'roofing':               { jobs: 12,  ticket: 1500 },
       'electrical':            { jobs: 45,  ticket: 380 },
       'landscaping':           { jobs: 35,  ticket: 600 },
       'junk removal':          { jobs: 60,  ticket: 320 },
       'cleaning services':     { jobs: 80,  ticket: 180 },
       'dental / med spa':      { jobs: 55,  ticket: 850 },
-      'law firm':              { jobs: 18,  ticket: 3500 },
-      'home buyers / re':      { jobs: 8,   ticket: 12000 },
-      'auto services':         { jobs: 90,  ticket: 280 }
+      'law firm':              { jobs: 18,  ticket: 1500 },
+      'real estate':           { jobs: 8,   ticket: 1500 },
+      'auto services':         { jobs: 80,  ticket: 280 }
     };
 
     var valJobs = $('[data-roi-val="jobs"]');
@@ -135,6 +137,20 @@
 
     function money(n) {
       return '$' + Math.round(n).toLocaleString('en-US');
+    }
+    // Compact $ for the monthly-revenue tiles so high dial values never spill
+    // out of the tile ($120,000 -> $120K, $2,600,000 -> $2.6M). Under $100K keeps
+    // full commas so the documented defaults read "$18,000" / "$39,600".
+    function moneyCompact(n) {
+      n = Math.round(n);
+      if (n >= 1000000) {
+        return '$' + (n / 1000000).toFixed(n % 1000000 === 0 ? 0 : 1) + 'M';
+      }
+      if (n >= 100000) {
+        var k = n / 1000;
+        return '$' + (k % 1 === 0 ? k : k.toFixed(1)) + 'K';
+      }
+      return money(n);
     }
     // Annual lift abbreviated to $K (or $M past 7 figures) per the contract default ($259K).
     function moneyK(n) {
@@ -163,8 +179,8 @@
       if (valJobs) valJobs.textContent = String(jobs);
       if (valTix)  valTix.textContent  = money(ticket);
 
-      if (outToday)  outToday.textContent  = money(today) + '/mo';
-      if (outSgen)   outSgen.textContent   = money(sgen) + '/mo';
+      if (outToday)  outToday.textContent  = moneyCompact(today) + '/mo';
+      if (outSgen)   outSgen.textContent   = moneyCompact(sgen) + '/mo';
       if (outAnnual) outAnnual.textContent = moneyK(annualLift);
       if (outRoi)    outRoi.textContent    = roiPct.toLocaleString('en-US') + '%';
     }

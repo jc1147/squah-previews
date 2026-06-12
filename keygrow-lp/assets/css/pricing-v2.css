@@ -1,0 +1,120 @@
+/* ============================================================================
+   SGEN LP — PRICING v2  (loads AFTER evidence.css + polish-*.css)
+   ----------------------------------------------------------------------------
+   Reframes the 3 price cards as DISTINCT service packages — Local SEO Only /
+   Local AEO Only / SEO + AEO (the winner). Adds a service-type pill (search-pin /
+   sparkle / both) + a colored top-accent per card so the distinction is obvious
+   at a glance. The combined card stays the visual hero (already .featured).
+   Tokens only (var(--sg-*)); literals limited to those already in evidence.css
+   (#5b9dff via --ev-imp for the analytics/search hue, white rgba glass, #51d06a,
+   #f4f2ee). No !important. Mobile-first. Motion gated.
+   ============================================================================ */
+
+/* ---- per-package accent (drives the top rule, the pill, the check glyphs) ---- */
+.pkg            { --pkg-accent: var(--sg-red-hot); }
+.pkg--seo       { --pkg-accent: var(--ev-imp); }                 /* analytics blue — traditional search */
+.pkg--aeo       { --pkg-accent: var(--sg-red-hot); }             /* hot red — AI answer engines */
+.pkg--combo     { --pkg-accent: var(--sg-red); }                 /* signature red — the winner */
+
+/* ---- top-accent rule: a thin colored bar reading the package's service type ---- */
+.price-card.pkg { overflow: hidden; padding-top: 34px; }
+.price-card.pkg::before {
+  content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: var(--pkg-accent);
+}
+/* the combined winner gets the full red gradient bar (richer than a flat hue) */
+.price-card.pkg--combo::before { height: 4px; background: var(--sg-grad-red); }
+
+/* ============================================================================
+   SERVICE-TYPE PILL  (gradient-glass + inset highlight — echoes .gsc2-tile /
+   .impact-card chrome; accent-tinted per package)
+   ============================================================================ */
+.pc-svc {
+  display: inline-flex; align-items: center; gap: 8px; align-self: flex-start;
+  margin-bottom: 14px;
+  padding: 7px 13px 7px 10px; border-radius: var(--sg-r-pill);
+  font-family: var(--sg-mono); font-size: 11.5px; font-weight: 700;
+  letter-spacing: .08em; text-transform: uppercase; line-height: 1;
+  color: var(--pkg-accent);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.025));
+  border: 1px solid color-mix(in srgb, var(--pkg-accent) 36%, transparent);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
+}
+.pc-svc-i { width: 15px; height: 15px; flex: none; color: var(--pkg-accent); }
+
+/* light-relief safety: if this section ever renders on a light surface, keep the
+   glass legible (the live #pricing is .surface-dark, but stay surface-aware). */
+.sec--light .pc-svc {
+  background: linear-gradient(180deg, rgba(0,0,0,.02), transparent);
+  border-color: color-mix(in srgb, var(--pkg-accent) 30%, transparent);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.5);
+}
+
+/* the combined pill reads as the strongest — a touch larger + a red-glow ring */
+.pc-svc--combo {
+  font-size: 12px; padding: 8px 15px 8px 11px;
+  background: linear-gradient(180deg, rgba(213,21,34,.18), rgba(213,21,34,.07));
+  border-color: var(--sg-red-tint-22);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.10), 0 0 22px -10px var(--sg-red-tint-22);
+}
+.pc-svc--combo .pc-svc-i { width: 16px; height: 16px; }
+
+/* ============================================================================
+   PER-PACKAGE EMPHASIS — the check glyphs adopt the package accent so each
+   deliverable list reads in its service color (SEO blue · AEO/combo red)
+   ============================================================================ */
+.surface-dark .price-card.pkg .pc-feat li:not(.pc-everything)::before {
+  color: var(--pkg-accent);
+}
+.price-card.pkg--combo .pc-feat .pc-everything {
+  color: var(--sg-ink);
+}
+
+/* ============================================================================
+   THE WINNER — make the combined card unmistakably the recommended one.
+   (.featured ring/scale/badge already styled in page.css + v2.css; this layers
+   a warmer wash + a slightly brighter "Everything in SEO + AEO:" lead so the
+   eye lands on it first.)
+   ============================================================================ */
+.surface-dark .price-card.pkg--combo {
+  background:
+    linear-gradient(180deg, rgba(213,21,34,.08), rgba(255,255,255,.02));
+}
+.price-card.pkg--combo .pc-feat .pc-everything {
+  position: relative; padding-left: 0;
+  font-size: 14.5px; letter-spacing: -.005em;
+  color: var(--sg-ink);
+}
+
+/* hover lift on the two non-featured packages (parity with .win2-card life on
+   dark) — gated so reduced-motion users get no transform */
+@media (prefers-reduced-motion: no-preference) {
+  .surface-dark .price-card.pkg--seo,
+  .surface-dark .price-card.pkg--aeo {
+    transition: transform .25s var(--sg-ease), border-color .25s var(--sg-ease),
+                box-shadow .25s var(--sg-ease);
+  }
+  .surface-dark .price-card.pkg--seo:hover,
+  .surface-dark .price-card.pkg--aeo:hover {
+    transform: translateY(-4px);
+    border-color: color-mix(in srgb, var(--pkg-accent) 40%, transparent);
+    box-shadow: 0 30px 70px -28px rgba(0,0,0,.8),
+                0 0 30px -10px color-mix(in srgb, var(--pkg-accent) 40%, transparent),
+                inset 0 1px 0 rgba(255,255,255,.06);
+  }
+}
+
+/* the ribbon on the AEO card uses its accent (not the default red) so the
+   service color stays consistent across the card's chrome */
+.price-card.pkg--aeo .pc-ribbon {
+  color: var(--pkg-accent);
+  border-color: color-mix(in srgb, var(--pkg-accent) 30%, transparent);
+  background: color-mix(in srgb, var(--pkg-accent) 12%, transparent);
+}
+
+/* ---- desktop: featured is already scaled in v2; keep the pill from clipping the
+   moved-up badge on the winner (badge sits at top:-13px) ---- */
+@media (min-width: 992px) {
+  .price-card.pkg--combo { padding-top: 38px; }
+}

@@ -1,0 +1,226 @@
+/* ============================================================================
+   POLISH-1  —  loads AFTER evidence.css. Additive overrides ONLY.
+   Agent 1 scope: S3 "THE SHIFT" stat cards + S4 "TWO ENGINES" cards/formula.
+   Raises both to the evidence bar (.impact-card / .gsc2-tile / .win2-card vocab):
+   gradient glass · 1px light border · inset top-highlight · red-glow + lift on
+   hover · mono red-hot eyebrows · tabular-nums numerals. Tokens only; the only
+   literals are the glass rgba(255,255,255,.0x) + #f4f2ee cream + #ff5564 numeral
+   stop already used in evidence.css for the same purposes. No !important.
+   Mobile-first; motion wrapped in @media (prefers-reduced-motion: no-preference).
+   ============================================================================ */
+
+/* ============================================================================
+   S3 · THE SHIFT — stat cards to the .impact-card bar
+   ============================================================================ */
+.surface-dark .stat-card {
+  position: relative;
+  overflow: hidden;
+  padding: 28px 26px 24px;
+  border-radius: 18px;
+  /* evidence glass: directional gradient + inset top-highlight */
+  background: linear-gradient(165deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+  border: 1px solid rgba(255,255,255,.10);
+  box-shadow: var(--sg-shadow-rest), inset 0 1px 0 rgba(255,255,255,.05);
+  /* colored top-rule signalling "the shift is happening" */
+  border-top: 2px solid var(--sg-red-hot);
+}
+
+/* red-glow corner (echoes .impact-card::after) */
+.surface-dark .stat-card::after {
+  content: "";
+  position: absolute;
+  right: -44px;
+  top: -44px;
+  width: 168px;
+  height: 168px;
+  background: radial-gradient(circle, rgba(213,21,34,.20), transparent 70%);
+  pointer-events: none;
+}
+
+/* eyebrow row: tiny red up-trend glyph + "the shift" mono tag */
+.sc-eyebrow {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-family: var(--sg-mono);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--sg-red-hot);
+}
+.sc-eyebrow .sc-trend {
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 9px;
+  /* red-tinted rounded chip, like .gsc2-tile accents */
+  background: rgba(213,21,34,.12);
+  border: 1px solid var(--sg-red-tint-22);
+  color: var(--sg-red-hot);
+}
+.sc-eyebrow .sc-trend svg { width: 14px; height: 14px; display: block; }
+
+/* number hits harder: bigger, tighter, white→red metallic clip (like .impact-card .ic-num) */
+.surface-dark .stat-card .sc-num {
+  position: relative;
+  z-index: 1;
+  margin-top: 16px;
+  font-size: clamp(48px, 6vw, 72px);
+  font-weight: 900;
+  line-height: .9;
+  letter-spacing: -.05em;
+  font-variant-numeric: tabular-nums;
+  background: linear-gradient(180deg, #ffffff, #ff5564);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* label + source crisp / readable on the new surface */
+.surface-dark .stat-card .sc-label {
+  position: relative;
+  z-index: 1;
+  margin-top: 14px;
+  font-size: 15px;
+  line-height: 1.5;
+  color: rgba(255,255,255,.7);
+}
+.surface-dark .stat-card .sc-src {
+  position: relative;
+  z-index: 1;
+  display: block;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255,255,255,.08);
+  font-family: var(--sg-mono);
+  font-size: 10.5px;
+  letter-spacing: .04em;
+  color: rgba(255,255,255,.42);
+  font-style: normal;
+}
+
+/* hover: red-glow + lift (matches the evidence bar) */
+.surface-dark .stat-card {
+  transition: transform .25s var(--sg-ease), box-shadow .25s var(--sg-ease), border-color .25s;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .surface-dark .stat-card:hover {
+    transform: translateY(-4px);
+    border-top-color: var(--sg-red-hot);
+    border-color: var(--sg-red-tint-22);
+    box-shadow: 0 30px 70px -28px rgba(0,0,0,.8),
+                0 0 30px -10px var(--sg-red-tint-22),
+                inset 0 1px 0 rgba(255,255,255,.07);
+  }
+  /* re-assert the top-rule on hover (the all-side border-color above would dim it) */
+  .surface-dark .stat-card:hover { border-top-color: var(--sg-red-hot); }
+}
+
+/* ============================================================================
+   S4 · TWO ENGINES — engine cards get an icon chip + depth + lift
+   ============================================================================ */
+.surface-dark .engine-card {
+  position: relative;
+  overflow: hidden;
+  padding: 30px 30px 28px;
+  border-radius: 18px;
+  background: linear-gradient(165deg, rgba(255,255,255,.055), rgba(255,255,255,.018));
+  border: 1px solid rgba(255,255,255,.10);
+  box-shadow: var(--sg-shadow-rest), inset 0 1px 0 rgba(255,255,255,.05);
+  transition: transform .25s var(--sg-ease), box-shadow .25s var(--sg-ease), border-color .25s;
+}
+/* red-glow corner */
+.surface-dark .engine-card::after {
+  content: "";
+  position: absolute;
+  right: -48px;
+  top: -48px;
+  width: 188px;
+  height: 188px;
+  background: radial-gradient(circle, rgba(213,21,34,.16), transparent 70%);
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .surface-dark .engine-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--sg-red-tint-22);
+    box-shadow: 0 30px 70px -28px rgba(0,0,0,.8),
+                0 0 30px -10px var(--sg-red-tint-22),
+                inset 0 1px 0 rgba(255,255,255,.07);
+  }
+}
+
+/* the icon chip — red-tinted rounded square like .gsc2-tile accents */
+.engine-card .ec-icon {
+  position: relative;
+  z-index: 1;
+  display: inline-grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  margin-bottom: 18px;
+  border-radius: 13px;
+  background: rgba(213,21,34,.12);
+  border: 1px solid var(--sg-red-tint-22);
+  color: var(--sg-red-hot);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+}
+.engine-card .ec-icon svg { width: 26px; height: 26px; display: block; }
+
+/* keep the tag/title/list above the glow corner */
+.engine-card .ec-tag,
+.engine-card .ec-title,
+.engine-card .ec-list { position: relative; z-index: 1; }
+
+/* ---- the formula band: punchier, stronger red emphasis on the payoff ---- */
+.surface-dark .es-formula {
+  position: relative;
+  overflow: hidden;
+  margin-top: 28px;
+  padding: 30px 26px;
+  border-radius: var(--sg-r-lg);
+  /* warm red-tinted glass + directional glow, not a flat slab */
+  background: linear-gradient(165deg, rgba(213,21,34,.14), rgba(213,21,34,.05));
+  border: 1px solid var(--sg-red-tint-22);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.06),
+              0 24px 60px -34px rgba(213,21,34,.55);
+  color: #f4f2ee;
+  font-size: clamp(21px, 2.7vw, 31px);
+}
+/* soft alive pulse behind the band (motion-gated) */
+.surface-dark .es-formula::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -60px;
+  width: 60%;
+  height: 160px;
+  transform: translateX(-50%);
+  background: radial-gradient(ellipse at center, rgba(255,42,56,.30), transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+.surface-dark .es-formula > * { position: relative; z-index: 1; }
+/* the payoff phrase: hot-red gradient text + glow */
+.surface-dark .es-formula .grad {
+  font-weight: 900;
+  /* --sg-grad-text on dark = hot-red gradient (red-hot to red to soft-red) */
+  background: var(--sg-grad-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .surface-dark .es-formula::before { animation: p1-alive 3.6s ease-in-out infinite; }
+}
+@keyframes p1-alive {
+  0%, 100% { opacity: .55; }
+  50%      { opacity: 1; }
+}

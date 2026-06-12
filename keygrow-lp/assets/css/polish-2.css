@@ -1,0 +1,134 @@
+/* ============================================================================
+   SGEN LP — POLISH 2  ·  "EVERYTHING IN THE BOX" deliverables  (S6, LIGHT relief)
+   ----------------------------------------------------------------------------
+   Additive overrides for the #deliverables section ONLY. Loads after page.css /
+   v2.css / evidence.css (wired via a body <link> inside _frag/05-09.html so it
+   never depends on the shared assembler). Raises the 4 plain checklist columns to
+   the evidence-section bar — but stays LIGHT (this is the relief row between two
+   dark bands). Vocabulary borrowed from .impact-card / .win2-card: layered glass
+   gradient, hairline border, inset top-highlight, hover lift + soft red glow,
+   mono red eyebrow, tabular-nums anchor number. Tokens only (var(--sg-*)); the
+   sole literal is #ffffff (card surface, same role evidence.css uses it for).
+   Mobile-first; all motion gated on prefers-reduced-motion: no-preference.
+   ============================================================================ */
+
+/* ---- the "22" count anchor + restyled head ------------------------------- */
+.dl-anchor {
+  display: flex; align-items: center; gap: clamp(16px, 3vw, 26px);
+  justify-content: center; flex-wrap: wrap;
+  margin: 26px auto 0; max-width: 560px;
+}
+.dl-anchor .dl-num {
+  flex: none; position: relative;
+  font-size: clamp(72px, 13vw, 120px); font-weight: 900; line-height: .82;
+  letter-spacing: -.06em; font-variant-numeric: tabular-nums;
+  background: var(--sg-grad-text);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent; color: var(--sg-red);
+}
+.dl-anchor .dl-num::after {  /* soft red halo behind the numeral (evidence glow) */
+  content: ""; position: absolute; inset: -18% -22%;
+  background: radial-gradient(circle, var(--sg-red-tint-14), transparent 68%);
+  z-index: -1; pointer-events: none;
+}
+.dl-anchor .dl-anchor-txt { text-align: left; min-width: 0; }
+.dl-anchor .dl-anchor-lab {
+  font-family: var(--sg-mono); font-size: 11px; font-weight: 700;
+  letter-spacing: .16em; text-transform: uppercase; color: var(--sg-red);
+}
+.dl-anchor .dl-anchor-sub {
+  margin-top: 6px; font-size: clamp(15px, 1.6vw, 17px); line-height: 1.45;
+  color: var(--sg-ink-soft); max-width: 30ch;
+}
+.dl-anchor .dl-anchor-sub b { color: var(--sg-ink); font-weight: 700; }
+
+/* ---- grid: 1 → 2 → 4 (override page.css spacing for the new card system) -- */
+.deliverables-grid { gap: clamp(16px, 2vw, 20px); margin-top: clamp(34px, 4.5vw, 52px); }
+
+/* ---- the card: clean white, hairline border, inset top-light, soft shadow - */
+.sec--light .deliverables-grid .dl-col {
+  position: relative; overflow: hidden;
+  padding: clamp(22px, 2.4vw, 28px);
+  border-radius: var(--sg-r-lg);
+  background:
+    linear-gradient(180deg, #ffffff, var(--sg-bg-2));
+  border: 1px solid var(--sg-card-border);
+  box-shadow: var(--sg-shadow-rest), inset 0 1px 0 rgba(255,255,255,.9);
+}
+.sec--light .deliverables-grid .dl-col::after {  /* faint red glow corner (evidence signature) */
+  content: ""; position: absolute; right: -46px; top: -46px;
+  width: 150px; height: 150px;
+  background: radial-gradient(circle, var(--sg-red-tint-08), transparent 70%);
+  pointer-events: none; opacity: 0; transition: opacity var(--sg-t-fast) var(--sg-ease);
+}
+.sec--light .deliverables-grid .dl-col:hover::after { opacity: 1; }
+
+/* ---- card header: icon chip + category name ------------------------------ */
+.dl-head { display: flex; align-items: center; gap: 13px; padding-bottom: 16px; border-bottom: 1px solid var(--sg-line); }
+.dl-ico {
+  flex: none; width: 42px; height: 42px; border-radius: var(--sg-r-md);
+  display: grid; place-items: center;
+  background: var(--sg-red-soft);
+  border: 1px solid var(--sg-red-tint-14);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.8);
+  color: var(--sg-red);
+}
+.dl-ico svg { width: 22px; height: 22px; display: block; }
+
+/* category name — override page.css .dl-cat (no border/padding now; the head owns it) */
+.sec--light .dl-col .dl-cat {
+  margin: 0; padding: 0; border: 0;
+  font-family: var(--sg-mono); font-size: 12px; font-weight: 700;
+  letter-spacing: .14em; text-transform: uppercase; color: var(--sg-red);
+}
+.dl-head .dl-cat-wrap { min-width: 0; }
+.dl-head .dl-count {
+  margin-top: 2px; font-family: var(--sg-mono); font-size: 10.5px;
+  font-weight: 600; letter-spacing: .04em; color: var(--sg-ink-faint);
+}
+
+/* ---- checklist rows: crisp, generous, red checkmark in a soft disc ------- */
+.sec--light .dl-col .dl-list { margin-top: 16px; gap: 0; }
+.sec--light .dl-col .dl-list li {
+  position: relative; padding: 11px 0 11px 32px;
+  font-size: 14.5px; line-height: 1.45; color: var(--sg-ink);
+  border-bottom: 1px solid var(--sg-line-2);
+}
+.sec--light .dl-col .dl-list li:last-child { border-bottom: 0; padding-bottom: 2px; }
+.sec--light .dl-col .dl-list li:first-child { padding-top: 4px; }
+/* replace the bare glyph with a tinted disc + crisp check */
+.sec--light .dl-col .dl-list li::before {
+  content: ""; position: absolute; left: 0; top: 50%; transform: translateY(-50%);
+  width: 20px; height: 20px; border-radius: 50%;
+  background: var(--sg-red-tint-08); border: 1px solid var(--sg-red-tint-14);
+}
+.sec--light .dl-col .dl-list li::after {
+  content: ""; position: absolute; left: 6px; top: 50%;
+  width: 4px; height: 8px;
+  border: solid var(--sg-red); border-width: 0 2px 2px 0;
+  transform: translateY(-60%) rotate(45deg);
+}
+
+/* ============================================================================
+   MOTION — hover lift only when the visitor hasn't asked for less
+   ============================================================================ */
+@media (prefers-reduced-motion: no-preference) {
+  .sec--light .deliverables-grid .dl-col {
+    transition: transform .25s var(--sg-ease), box-shadow .25s var(--sg-ease), border-color .25s var(--sg-ease);
+  }
+  .sec--light .deliverables-grid .dl-col:hover {
+    transform: translateY(-4px);
+    border-color: var(--sg-red-tint-22);
+    box-shadow: var(--sg-shadow-2), 0 0 26px -12px var(--sg-red-tint-22), inset 0 1px 0 rgba(255,255,255,.9);
+  }
+  .dl-anchor .dl-num { transition: transform .4s var(--sg-ease-spring); }
+}
+
+/* ============================================================================
+   RESPONSIVE — mobile-first; tighten the anchor stack on the smallest screens
+   ============================================================================ */
+@media (max-width: 419px) {
+  .dl-anchor { gap: 12px; }
+  .dl-anchor .dl-anchor-txt { text-align: center; }
+  .dl-anchor .dl-anchor-sub { margin-inline: auto; }
+}

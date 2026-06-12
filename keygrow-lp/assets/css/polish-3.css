@@ -1,0 +1,223 @@
+/* ============================================================================
+   POLISH-3 — Agent 3  ·  loads LAST (after evidence.css)
+   Additive overrides only. Tokens-only (var(--sg-*)); literals limited to the
+   glass/status values already used in evidence.css for the same purpose.
+
+   Scope:
+     A. #roi  (LIGHT relief) — right side becomes a floating PAIR card matching
+        .roi-panel; output tiles get depth + can NEVER overflow; mobile input
+        card is compact so the output tiles peek into view while dialing.
+     B. #compare (DARK premium) — mobile (<=767) swaps the stacked per-column
+        cards for the REAL grid table inside a horizontal-scroll wrapper, with a
+        sticky-left feature column and the SGEN red-ring column intact.
+   ============================================================================ */
+
+/* ============================================================================
+   A · ROI  —  the floating PAIR + overflow-proof tiles
+   ============================================================================ */
+
+/* The right column is now a card that mirrors .roi-panel exactly, so inputs
+   (left) + outputs/comparison (right) read as one deliberate pair on desktop. */
+.roi-pair {
+  padding: clamp(22px, 3vw, 34px);
+  border-radius: var(--sg-r-lg);
+  background: var(--sg-card-bg);
+  border: 1px solid var(--sg-card-border);
+  box-shadow: var(--sg-shadow);
+  display: grid;
+  gap: clamp(20px, 3vw, 28px);
+  align-content: start;
+  min-width: 0;                 /* let inner grids shrink, never force overflow */
+}
+
+/* Output tiles — keep the warm raised fill, add an evidence-grade top light-lip
+   + accent hairline so they read crafted, not flat. Min-width:0 + clip guard
+   the value from ever spilling the tile when the dials go high. */
+.roi-pair .roi-outputs { gap: 12px; }
+.roi-pair .roi-tile {
+  position: relative;
+  min-width: 0;
+  overflow: hidden;
+  border-top: 2px solid var(--sg-line);
+  box-shadow: var(--sg-shadow-rest), inset 0 1px 0 rgba(255,255,255,.6);
+}
+.roi-pair .roi-tile.is-hero {
+  border-top-color: var(--sg-red-tint-22);
+}
+/* the headline value: fluid clamp that scales DOWN on narrow tiles, tabular,
+   and hard-guarded so a 7-figure dial can't push past the tile edge */
+.roi-pair .roi-tile .rt-val {
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: clip;
+  font-variant-numeric: tabular-nums;
+  font-size: clamp(22px, 7.2vw, 34px);
+}
+@media (min-width: 480px) {
+  .roi-pair .roi-tile .rt-val { font-size: clamp(24px, 4.4vw, 36px); }
+}
+
+/* comparison strip lives inside the same card now — drop its own card chrome so
+   the rows sit ON the pair surface, divided by a hairline header. */
+.roi-pair .roi-compare {
+  margin-top: 2px;
+  padding-top: clamp(16px, 2.4vw, 22px);
+  border-top: 1px solid var(--sg-line);
+}
+.roi-pair .roi-compare .rc-head { margin-bottom: 10px; }
+.roi-pair .rc-row {
+  background: var(--sg-bg-2);
+  border-color: var(--sg-line);
+  transition: border-color var(--sg-t-fast) var(--sg-ease),
+              background-color var(--sg-t-fast) var(--sg-ease);
+}
+.roi-pair .rc-row .rc-lift {
+  font-variant-numeric: tabular-nums;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: clip;
+}
+.roi-pair .rc-row.is-sgen { background: var(--sg-red-tint-08); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .roi-pair .rc-row:not(.is-sgen):hover {
+    border-color: var(--sg-red-tint-22);
+    background: var(--sg-card-bg);
+  }
+}
+
+/* MOBILE: shorten the INPUT card so the top output tiles peek into view while
+   the user drags the dials (owner: "let them SEE the numbers move"). */
+@media (max-width: 767px) {
+  #roi .roi-panel { padding: 18px 18px 20px; }
+  #roi .roi-controls { gap: 16px; }
+  #roi .roi-field label { margin-bottom: 7px; }
+  #roi .roi-field input[type="range"] { margin: 4px 0; }
+  /* outputs 2x2 with a tight gap so all four fit a phone viewport cleanly */
+  #roi .roi-outputs { grid-template-columns: 1fr 1fr; gap: 10px; }
+  #roi .roi-pair .roi-tile { padding: 16px 14px; }
+}
+
+/* ============================================================================
+   B · COMPARE  —  mobile horizontal-scroll table (dark premium)
+   ============================================================================ */
+
+/* desktop/tablet: the scroll wrapper is inert — table renders exactly as before */
+.ct-scroll { width: 100%; }
+.ct-scrollhint { display: none; }
+
+@media (max-width: 767px) {
+  /* swap the stacked cards for the real table */
+  .compare-table .ct-cards { display: none; }
+
+  /* the wrapper scrolls sideways; mask edges hint there's more */
+  .ct-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scroll-snap-type: x proximity;
+    border-radius: var(--sg-r-md);
+    /* faint right-edge fade so the cut-off column reads as scrollable */
+    -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 22px), transparent);
+            mask-image: linear-gradient(to right, #000 calc(100% - 22px), transparent);
+  }
+
+  /* force the grid visible (page.css hides .ct-grid below 768) and give it a
+     min-width so the 4 columns overflow the viewport and scroll horizontally */
+  .compare-table .ct-grid {
+    display: grid;
+    grid-template-columns: 168px repeat(3, minmax(108px, 1fr));
+    min-width: 640px;
+    align-items: stretch;
+    background: rgba(255,255,255,.02);
+    border: 1px solid rgba(255,255,255,.10);
+    border-radius: var(--sg-r-md);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.05);
+  }
+
+  /* cells — restore the desktop cell rules that live inside the >=768 query */
+  .ct-grid .ct-cell {
+    padding: 13px 14px;
+    border-bottom: 1px solid rgba(255,255,255,.07);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    scroll-snap-align: start;
+  }
+  .ct-grid .ct-data { justify-content: center; }
+  .ct-grid .ct-feature {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #f4f2ee;
+    line-height: 1.3;
+  }
+
+  /* column heads */
+  .ct-grid .ct-colhead {
+    padding: 16px 12px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255,255,255,.10);
+    background: rgba(255,255,255,.02);
+  }
+  .ct-grid .ct-colhead .cn { font-weight: 800; font-size: 14px; letter-spacing: -.01em; color: #f4f2ee; }
+  .ct-grid .ct-colhead .cp { margin-top: 4px; font-family: var(--sg-mono); font-size: 10px; letter-spacing: .03em; color: rgba(255,255,255,.5); }
+  .ct-grid .ct-colhead.is-sgen .cn { color: var(--sg-red-hot); }
+
+  /* PIN the 4 colheads to row 1, explicit columns — the row-spanning red ring
+     (grid-column:4 / grid-row:1/-1) would otherwise bump the SGEN head into the
+     next row under sparse auto-flow. Colheads are children 1–4 of .ct-grid. */
+  .ct-grid > .ct-colhead:nth-child(1) { grid-column: 1; grid-row: 1; }
+  .ct-grid > .ct-colhead:nth-child(2) { grid-column: 2; grid-row: 1; }
+  .ct-grid > .ct-colhead:nth-child(3) { grid-column: 3; grid-row: 1; }
+  .ct-grid > .ct-colhead:nth-child(4) { grid-column: 4; grid-row: 1; }
+
+  /* STICKY-LEFT feature column — first cell of every row pins while scrolling */
+  .ct-grid .ct-colhead:first-child,
+  .ct-grid .ct-feature {
+    position: sticky;
+    left: 0;
+    z-index: 2;
+    /* opaque so scrolled cells slide UNDER it (section bg is dark premium) */
+    background: #16161a;
+    box-shadow: 1px 0 0 rgba(255,255,255,.07);
+  }
+  .ct-grid .ct-colhead:first-child { background: #16161a; }
+
+  /* SGEN column red-ring — re-pin to the 4th grid column on mobile.
+     v2.css hides .ct-col-sgen below 768 (built for the old stacked-card layout);
+     this higher-specificity rule (loads after v2.css) brings the ring back. */
+  .ct-grid .ct-col-sgen {
+    display: block;
+    grid-column: 4;
+    grid-row: 1 / -1;
+    pointer-events: none;
+    border: 1.5px solid var(--sg-red);
+    border-radius: var(--sg-r-md);
+    box-shadow: 0 0 0 4px var(--sg-red-tint-08);
+    z-index: 1;
+  }
+  .ct-grid .ct-cell.is-sgen { background: rgba(213,21,34,.10); }
+
+  /* scroll affordance pill above the table */
+  .ct-scrollhint {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0 0 10px;
+    font-family: var(--sg-mono);
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--sg-red-hot);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .ct-scrollhint { animation: ct-nudge 1.8s var(--sg-ease) infinite; }
+  }
+}
+
+@keyframes ct-nudge {
+  0%, 100% { transform: translateX(0); }
+  50%      { transform: translateX(4px); }
+}
