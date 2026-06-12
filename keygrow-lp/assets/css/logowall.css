@@ -1,0 +1,212 @@
+/* ============================================================================
+   SGEN LP — LOGO WALL  (S2 social-proof band, dark surface)
+   A dense 3-row auto-scrolling wall of ~80 fictional local-business logos on
+   subtle dark-glass tiles. Rows alternate direction (L · R · L), slow ~80–110s
+   seamless loop (translateX 0 → -50%), edge-fade masks, pause on hover. Logos
+   render desaturated/muted by default; hover lifts the tile + restores color.
+   Reduced-motion → static centered wrapped grid. Tokens / loaded fonts only.
+   ============================================================================ */
+
+.logowall {
+  margin-top: clamp(22px, 3vw, 34px);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  /* the wall scrolls INTERNALLY — the section never gains horizontal overflow */
+  overflow: hidden;
+}
+
+/* ---- a row: clip + symmetric edge-fade so tiles dissolve at both ends ---- */
+.lw-row {
+  position: relative;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent);
+          mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent);
+}
+
+/* ---- the scrolling track: inline-flex of tiles, sized to content ---- */
+.lw-track {
+  display: inline-flex;
+  flex-wrap: nowrap;
+  width: max-content;
+  gap: 14px;
+  will-change: transform;
+}
+
+/* ============================================================================
+   TILE — small dark-glass card; logo muted by default, comes alive on hover
+   ============================================================================ */
+.lw-tile {
+  --lw-hue: rgba(255, 255, 255, .6);
+  flex: 0 0 auto;
+  width: auto;
+  min-width: 128px;
+  max-width: 300px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 0 14px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, .03);
+  border: 1px solid rgba(255, 255, 255, .08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .04);
+  /* default: muted + desaturated, reads as a quiet credibility wall */
+  opacity: .7;
+  filter: grayscale(.85) brightness(1.05);
+  color: rgba(255, 255, 255, .82);
+  overflow: hidden;
+  transition: transform .22s var(--sg-ease), opacity .22s var(--sg-ease),
+              filter .22s var(--sg-ease), border-color .22s var(--sg-ease),
+              background-color .22s var(--sg-ease), box-shadow .22s var(--sg-ease);
+}
+.lw-tile:hover {
+  opacity: 1;
+  filter: none;
+  transform: translateY(-3px);
+  background: rgba(255, 255, 255, .055);
+  border-color: var(--sg-red-tint-22);
+  box-shadow: 0 18px 36px -18px rgba(0, 0, 0, .75),
+              0 0 22px -12px var(--sg-red-tint-22),
+              inset 0 1px 0 rgba(255, 255, 255, .07);
+}
+
+/* ---- type inside a logo ---- */
+.lw-name {
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: -.01em;
+  line-height: 1.05;
+  white-space: nowrap;
+  color: inherit;
+}
+.lw-name--stack { white-space: normal; max-height: 2.3em; }
+.lw-name--lg { font-size: 13px; }
+.lw-name--wm { font-size: 14px; font-weight: 800; letter-spacing: -.02em; }
+.lw-dot { color: var(--lw-hue); font-weight: 900; }
+
+/* template D — stacked name + tiny tagline */
+.lw-stack { display: flex; flex-direction: column; align-items: center; gap: 3px; text-align: center; min-width: 0; }
+.lw-tag {
+  font-family: var(--sg-mono);
+  font-size: 7.5px;
+  font-weight: 600;
+  letter-spacing: .12em;
+  white-space: nowrap;
+  color: rgba(255, 255, 255, .42);
+}
+.lw-tile:hover .lw-tag { color: color-mix(in srgb, var(--lw-hue) 70%, #fff); }
+
+/* template A — industry glyph */
+.lw-mark { display: inline-flex; flex: 0 0 auto; }
+.lw-glyph { width: 22px; height: 22px; }
+
+/* template B — monogram badge */
+.lw-badge {
+  flex: 0 0 auto;
+  width: 30px; height: 30px;
+  display: grid; place-items: center;
+  background: color-mix(in srgb, var(--lw-hue) 16%, transparent);
+  border: 1px solid color-mix(in srgb, var(--lw-hue) 34%, transparent);
+  color: var(--lw-hue);
+  font-size: 12px; font-weight: 800; letter-spacing: .01em;
+}
+.lw-badge--round  { border-radius: 50%; }
+.lw-badge--square { border-radius: 8px; }
+.lw-badge span { line-height: 1; }
+
+/* wordmark accent on hover gets the hue */
+.lw-tile:hover .lw-name { color: #fff; }
+
+/* ============================================================================
+   MOTION — alternating-direction seamless scroll (track is exactly 2× content)
+   ============================================================================ */
+@keyframes lw-scroll-l { from { transform: translateX(0); }      to { transform: translateX(-50%); } }
+@keyframes lw-scroll-r { from { transform: translateX(-50%); }   to { transform: translateX(0); } }
+
+@media (prefers-reduced-motion: no-preference) {
+  .lw-row--l .lw-track { animation: lw-scroll-l 96s linear infinite; }
+  .lw-row--r .lw-track { animation: lw-scroll-r 108s linear infinite; }
+  /* pause the whole row's track on hover so a logo can be read */
+  .lw-row:hover .lw-track { animation-play-state: paused; }
+}
+
+/* ============================================================================
+   REDUCED MOTION — no scroll; render a static centered wrapped grid
+   ============================================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .lw-row { -webkit-mask-image: none; mask-image: none; overflow: visible; }
+  .lw-track {
+    display: flex; flex-wrap: wrap; width: auto;
+    justify-content: center; gap: 12px; animation: none;
+  }
+  /* the aria-hidden duplicate set would double the grid — hide it when static */
+  .lw-track .lw-tile[aria-hidden="true"] { display: none; }
+}
+
+/* ============================================================================
+   RESPONSIVE — slightly smaller tiles on mobile; rows still scroll internally,
+   the SECTION must never gain page-level horizontal overflow
+   ============================================================================ */
+@media (max-width: 640px) {
+  .logowall { gap: 11px; }
+  .lw-track { gap: 11px; }
+  .lw-tile {
+    min-width: 116px; width: auto; height: 54px; gap: 7px; padding: 0 12px;
+    border-radius: 11px;
+  }
+  .lw-name { font-size: 11.5px; }
+  .lw-name--wm { font-size: 12.5px; }
+  .lw-name--lg { font-size: 12px; }
+  .lw-glyph { width: 19px; height: 19px; }
+  .lw-badge { width: 26px; height: 26px; font-size: 11px; }
+  .lw-tag { font-size: 7px; }
+  /* on mobile, hover doesn't apply — keep logos a touch more legible */
+  .lw-tile { opacity: .78; filter: grayscale(.7) brightness(1.05); }
+}
+
+/* ============================================================================
+   OWNER POLISH (appended — overrides the above via later cascade)
+   ============================================================================ */
+/* caption → a big, bold, gradient statement (was a tiny mono label) */
+.logo-marquee .lm-cap {
+  font-family: var(--sg-font);
+  text-transform: none;
+  font-size: clamp(22px, 3.6vw, 40px);
+  font-weight: 800;
+  letter-spacing: -.025em;
+  line-height: 1.08;
+  margin: 0 0 clamp(22px, 3.2vw, 36px);
+  background: var(--sg-grad-text);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent; color: transparent;
+}
+
+/* motion ~50% slower */
+@media (prefers-reduced-motion: no-preference) {
+  .lw-row--l .lw-track { animation-duration: 192s; }
+  .lw-row--r .lw-track { animation-duration: 216s; }
+}
+
+/* hover polish — give the lift vertical room so it never clips at the row edge,
+   raise the hovered tile above its neighbors, kill the jitter */
+.logowall { gap: 2px; }
+.lw-row { padding: 7px 0; }
+.lw-tile { position: relative; backface-visibility: hidden; }
+.lw-tile:hover { z-index: 3; transform: translateY(-3px); }
+
+/* mobile: NO left/right edge fade (logos bleed to the edge, fuller feel) +
+   bigger / bolder logo text */
+@media (max-width: 640px) {
+  .lw-row { -webkit-mask-image: none; mask-image: none; }
+  .logowall { gap: 2px; }
+  .lw-tile { min-width: 126px; height: 58px; }
+  .lw-name { font-size: 13.5px; font-weight: 800; }
+  .lw-name--wm { font-size: 15px; }
+  .lw-name--lg { font-size: 14px; }
+  .lw-glyph { width: 21px; height: 21px; }
+  .lw-badge { width: 29px; height: 29px; font-size: 12px; }
+  .lw-tag { font-size: 8px; }
+  .lw-tile { opacity: .84; }
+}

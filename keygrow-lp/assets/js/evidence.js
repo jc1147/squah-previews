@@ -17,7 +17,7 @@
     };
   }
 
-  // realistic daily series: accelerating upward trend + daily noise + rare spikes
+  // ---- legacy series (kept for buildSpark): accelerating trend + noise + spikes
   function genSeries(days, startV, endV, vol, seed) {
     var rnd = mulberry32(seed), out = [];
     for (var i = 0; i < days; i++) {
@@ -30,6 +30,7 @@
     return out;
   }
 
+  // ---- single-series y-map normalized to the series max (used by buildSpark)
   function pathFor(vals, W, H, padT, padB) {
     var max = Math.max.apply(null, vals) || 1, n = vals.length, innerH = H - padT - padB;
     var pts = vals.map(function (v, i) {
@@ -40,23 +41,90 @@
     return { line: line, area: area };
   }
 
+  // ---- chart series: believable GSC line — non-zero baseline, weekly weekend
+  // dips, occasional down-weeks, real noise, and a per-card growth CURVE.
+  // shape: 0 = late-acceleration (hockey stick), 1 = steady-linear,
+  //        2 = early-jump-then-plateau. Net trend is always clearly UP.
+  function genChartSeries(days, startV, endV, vol, seed, shape) {
+    var rnd = mulberry32(seed), out = [];
+    // smooth weekly phase + amplitude so weekend dips don't line up identically
+    var wkPhase = rnd() * Math.PI * 2, wkAmp = 0.05 + rnd() * 0.04;
+    // schedule a couple of real down-weeks (dips that interrupt the climb)
+    var dipA = 0.25 + rnd() * 0.30, dipB = 0.55 + rnd() * 0.30, dipW = 9 + rnd() * 5;
+    var span = endV - startV;
+    for (var i = 0; i < days; i++) {
+      var t = days > 1 ? i / (days - 1) : 0, prog;
+      if (shape === 0)      prog = t * t * 0.78 + t * 0.22;        // late acceleration
+      else if (shape === 1) prog = t * 0.82 + t * t * 0.18;        // steady-linear
+      else                  prog = 1 - Math.pow(1 - t, 1.9);       // early jump → plateau
+      var trend = startV + span * prog;
+      // ~7-day seasonality (GSC weekend dip)
+      var weekly = trend * wkAmp * Math.sin((i / 7) * Math.PI * 2 + wkPhase);
+      // soft, smooth down-weeks (gaussian troughs along the timeline)
+      var dip = 0;
+      dip -= span * 0.16 * Math.exp(-Math.pow((t - dipA) / (dipW / days), 2));
+      dip -= span * 0.13 * Math.exp(-Math.pow((t - dipB) / (dipW / days), 2));
+      // daily noise (heavier early, where counts are small = grittier)
+      var noise = trend * vol * (rnd() * 2 - 1) * (1 - 0.4 * t);
+      out.push(Math.max(startV * 0.55, trend + weekly + dip + noise));
+    }
+    return out;
+  }
+
+  // map a series into a fixed vertical BAND of the plot [topFrac..botFrac of H],
+  // where 0 = top of plot, 1 = bottom. Each series gets its own min/max so its
+  // texture is visible inside its band (instead of one global max squashing both).
+  function bandPath(vals, W, H, topFrac, botFrac) {
+    var lo = Math.min.apply(null, vals), hi = Math.max.apply(null, vals);
+    var rng = (hi - lo) || 1, n = vals.length;
+    var yTop = H * topFrac, yBot = H * botFrac, bH = yBot - yTop;
+    var pts = vals.map(function (v, i) {
+      var u = (v - lo) / rng;            // 0..1 within the series
+      return [(i / (n - 1)) * W, yBot - u * bH];
+    });
+    var line = 'M' + pts.map(function (p) { return p[0].toFixed(1) + ',' + p[1].toFixed(1); }).join(' L');
+    var area = line + ' L' + W.toFixed(1) + ',' + H.toFixed(1) + ' L0,' + H.toFixed(1) + ' Z';
+    return { line: line, area: area };
+  }
+
   var MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
   function buildChart(plot) {
-    var W = 640, H = 200, padT = 12, padB = 6, days = 90;
+    var W = 640, H = 200, padT = 12, padB = 6;
     var seed = +plot.getAttribute('data-seed') || 7;
+    var days = +plot.getAttribute('data-days') || 90;
+    var endOff = +plot.getAttribute('data-end') || 0; // days BEFORE the Jun 8 2026 anchor
     var cs = +plot.getAttribute('data-clk-start') || 1, ce = +plot.getAttribute('data-clk-end') || 16;
     var is = +plot.getAttribute('data-imp-start') || 220, ie = +plot.getAttribute('data-imp-end') || 2400;
-    var clk = genSeries(days, cs, ce, 0.34, seed);
-    var imp = genSeries(days, is, ie, 0.30, seed + 99);
-    var pc = pathFor(clk, W, H, padT, padB), pi = pathFor(imp, W, H, padT, padB);
+    // band separation: 0 = neck-and-neck, 1 = well separated. default 0.7.
+    var sepAttr = plot.getAttribute('data-sep');
+    var sep = sepAttr === null ? 0.7 : +sepAttr;
+    if (isNaN(sep)) sep = 0.7;
+    sep = Math.max(0, Math.min(1, sep));
+    // per-card growth curve chosen from the seed (3 distinct shapes)
+    var shape = seed % 3;
+
+    var clk = genChartSeries(days, cs, ce, 0.30, seed, shape);
+    var imp = genChartSeries(days, is, ie, 0.22, seed + 99, (shape + 1) % 3);
+
+    // vertical bands (fractions of plot height; 0 = top, 1 = bottom).
+    // impressions ride the UPPER band, clicks the LOWER band. `sep` widens the
+    // gap between them: at sep=0 the bands overlap (neck-and-neck), at sep=1
+    // they pull well apart. Both stay fully on-canvas with headroom.
+    var impTop = 0.08;
+    var impBot = 0.46 + (1 - sep) * 0.20;   // sep=1 → .46, sep=0 → .66
+    var clkTop = 0.30 - (1 - sep) * 0.12;    // sep=1 → .30, sep=0 → .18
+    var clkBot = 0.94;
+    var pi = bandPath(imp, W, H, impTop, impBot);
+    var pc = bandPath(clk, W, H, clkTop, clkBot);
 
     var grid = '';
     for (var g = 1; g <= 3; g++) { var y = (H / 4) * g; grid += '<line x1="0" y1="' + y + '" x2="' + W + '" y2="' + y + '" stroke="var(--ev-grid)" stroke-width="1"/>'; }
 
     var uid = 'ch' + seed;
+    var lbl = days >= 360 ? '12-month' : (days >= 150 ? '6-month' : (days + '-day'));
     var svg =
-      '<svg class="gsc2-plot" viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none" role="img" aria-label="90-day performance, trending up">' +
+      '<svg class="gsc2-plot" viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none" role="img" aria-label="' + lbl + ' performance, trending up">' +
       '<defs>' +
       '<linearGradient id="' + uid + 'i" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--ev-imp)" stop-opacity=".28"/><stop offset="1" stop-color="var(--ev-imp)" stop-opacity="0"/></linearGradient>' +
       '<linearGradient id="' + uid + 'c" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--ev-clk)" stop-opacity=".34"/><stop offset="1" stop-color="var(--ev-clk)" stop-opacity="0"/></linearGradient>' +
@@ -69,14 +137,23 @@
       '</svg>';
     plot.innerHTML = svg;
 
-    // x-axis date ticks (90-day window ending at a fixed recent date)
+    // x-axis ticks generated from the actual window (per-card length + end date)
     var ax = plot.parentNode.querySelector('.gsc2-xaxis');
     if (ax) {
-      var end = new Date(2026, 5, 8), labels = [];
-      [0, 18, 36, 54, 72, 89].forEach(function (d) {
-        var dt = new Date(end.getTime() - (days - 1 - d) * 86400000);
-        labels.push('<span>' + MON[dt.getMonth()] + ' ' + dt.getDate() + '</span>');
-      });
+      var end = new Date(2026, 5, 8 - endOff), labels = [];
+      if (days >= 360) {
+        // ~6 month labels spanning the year
+        for (var m = 5; m >= 0; m--) {
+          var dt = new Date(end.getTime() - Math.round((days - 1) * (m / 5)) * 86400000);
+          labels.push('<span>' + MON[dt.getMonth()] + " '" + String(dt.getFullYear()).slice(2) + '</span>');
+        }
+      } else {
+        // ~6 "Mon D" ticks across the window
+        [0, 0.2, 0.4, 0.6, 0.8, 1].forEach(function (f) {
+          var dt = new Date(end.getTime() - Math.round((days - 1) * (1 - f)) * 86400000);
+          labels.push('<span>' + MON[dt.getMonth()] + ' ' + dt.getDate() + '</span>');
+        });
+      }
       ax.innerHTML = labels.join('');
     }
   }

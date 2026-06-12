@@ -221,3 +221,26 @@
   0%, 100% { transform: translateX(0); }
   50%      { transform: translateX(4px); }
 }
+
+/* ============================================================================
+   C · REVIEWS  —  real photo avatars
+   The 42px round .gc-av (sized in evidence.css) now holds a cropped photo
+   instead of a colored letter. Neutral fill shows while the image loads.
+   ============================================================================ */
+.grev-card .gc-av { overflow: hidden; background: #ececec; }
+.grev-card .gc-av img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 50%; }
+
+/* ============================================================================
+   D · ROI  —  mobile value fit (no truncation at slider max)
+   Owner: the output-tile values clip on small phones at the dial ceiling
+   (jobs 80 / ticket 1500 → "$120K/mo", "$264K/mo", "$1.7M", "17,968%").
+   The fluid clamp above still rounds up too large for a 2-col phone tile (the
+   8-char "$120K/mo" needs ~102px at 20px but the value box is ~82px on a 320px
+   screen). Below 560px we scale the value to the tile with a tighter clamp —
+   verified headless at 320px + 360px that the longest string fits with margin —
+   keep it on one line, and clip the tile as a hard backstop.
+   ============================================================================ */
+@media (max-width: 560px) {
+  #roi .roi-pair .roi-tile .rt-val { font-size: clamp(14px, 4.6vw, 20px); white-space: nowrap; }
+  #roi .roi-pair .roi-tile { overflow: hidden; }
+}

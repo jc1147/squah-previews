@@ -12,18 +12,24 @@
   <meta name="theme-color" content="#0d0d0f">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+  <!-- body/mono faces + 4 contrasting DISPLAY faces for the logo-wall typographic variety
+       (Roboto Slab = slab serif · Source Serif 4 = elegant serif · Fraunces = characterful
+       display serif · Poppins = rounded/geometric sans) -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700&family=Roboto+Slab:wght@600;700;800&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/sgen-tokens.css?v=0e2cf486">
   <link rel="stylesheet" href="assets/css/sgen-structural.css?v=0a926004">
   <link rel="stylesheet" href="assets/css/sgen-chrome.css?v=cfd841c0">
   <link rel="stylesheet" href="assets/css/page.css?v=2aff7565">
   <link rel="stylesheet" href="assets/css/v2.css?v=4b9dc371">
   <link rel="stylesheet" href="assets/css/evidence.css?v=15e987e4">
-  <link rel="stylesheet" href="assets/css/polish-1.css?v=22f63538">
+  <link rel="stylesheet" href="assets/css/polish-1.css?v=20ca2d48">
   <link rel="stylesheet" href="assets/css/polish-2.css?v=45fef797">
-  <link rel="stylesheet" href="assets/css/polish-3.css?v=0b45aadb">
-  <link rel="stylesheet" href="assets/css/pricing-v2.css?v=7859a921">
-  <link rel="stylesheet" href="assets/css/apply-v2.css?v=5fad2f70">
+  <link rel="stylesheet" href="assets/css/polish-3.css?v=80056b24">
+  <link rel="stylesheet" href="assets/css/pricing-v2.css?v=c7438c58">
+  <link rel="stylesheet" href="assets/css/apply-v2.css?v=29ab6d3e">
+  <link rel="stylesheet" href="assets/css/logowall.css?v=4df27898">
+  <link rel="stylesheet" href="assets/css/gsc-v2.css?v=cf1c2d86">
+  <link rel="stylesheet" href="assets/css/menu.css?v=b4dab98a">
 </head>
 <body>
 
@@ -37,8 +43,45 @@
   <a class="lp-logo" href="#top">SGEN<span class="dot">.</span></a>
   <div class="lp-nav-cta">
     <a class="btn btn-primary" data-apply-open>Apply now <span class="arr">→</span></a>
+    <button class="lp-burger" data-menu-open type="button" aria-label="Open menu" aria-controls="lp-menu" aria-expanded="false">
+      <span class="lp-burger-lines" aria-hidden="true"><i></i><i></i><i></i></span>
+    </button>
   </div>
 </header>
+
+<!-- ──────────────────  SECTION-NAV MENU  (#lp-menu · full-screen overlay)  ────────────────── -->
+<nav id="lp-menu" class="lp-menu" aria-hidden="true" aria-label="Section navigation">
+  <div class="lp-menu-inner">
+
+    <!-- top row: wordmark · close -->
+    <div class="lp-menu-top">
+      <a class="lp-menu-brand" href="#top" data-menu-link>SGEN<span class="dot">.</span></a>
+      <button class="lp-menu-close" data-menu-close type="button" aria-label="Close menu">
+        <span aria-hidden="true">×</span>
+      </button>
+    </div>
+
+    <!-- numbered section links, linear reading order -->
+    <ul class="lp-menu-list">
+      <li class="lp-menu-row"><a href="#case-study"  data-menu-link><span class="mi-num">01</span><span class="mi-label">Results</span><span class="mi-ico" aria-hidden="true">+</span></a></li>
+      <li class="lp-menu-row"><a href="#timeline"    data-menu-link><span class="mi-num">02</span><span class="mi-label">How it works</span><span class="mi-ico" aria-hidden="true">+</span></a></li>
+      <li class="lp-menu-row"><a href="#deliverables" data-menu-link><span class="mi-num">03</span><span class="mi-label">What you get</span><span class="mi-ico" aria-hidden="true">+</span></a></li>
+      <li class="lp-menu-row"><a href="#verified"    data-menu-link><span class="mi-num">04</span><span class="mi-label">Live proof</span><span class="mi-ico" aria-hidden="true">+</span></a></li>
+      <li class="lp-menu-row"><a href="#reviews"     data-menu-link><span class="mi-num">05</span><span class="mi-label">Reviews</span><span class="mi-ico" aria-hidden="true">+</span></a></li>
+      <li class="lp-menu-row"><a href="#roi"         data-menu-link><span class="mi-num">06</span><span class="mi-label">ROI calculator</span><span class="mi-ico" aria-hidden="true">+</span></a></li>
+      <li class="lp-menu-row"><a href="#compare"     data-menu-link><span class="mi-num">07</span><span class="mi-label">Compare</span><span class="mi-ico" aria-hidden="true">+</span></a></li>
+      <li class="lp-menu-row"><a href="#pricing"     data-menu-link><span class="mi-num">08</span><span class="mi-label">Pricing</span><span class="mi-ico" aria-hidden="true">+</span></a></li>
+      <li class="lp-menu-row is-cta-row"><a href="#get-started" data-menu-link><span class="mi-num">09</span><span class="mi-label">Apply</span><span class="mi-ico mi-ico-arrow" aria-hidden="true">→</span></a></li>
+    </ul>
+
+  </div>
+
+  <!-- bottom sticky CTA bar (full-width, pinned) — opens the application overlay -->
+  <button class="lp-menu-cta" data-apply-open data-menu-cta type="button">
+    <span class="lp-menu-cta-main">Apply to work with us <span class="lp-menu-cta-arr" aria-hidden="true">→</span></span>
+    <span class="lp-menu-cta-sub">From $497/mo · month-to-month · cancel anytime</span>
+  </button>
+</nav>
 
 <!-- ════════════════════════  S1 · HERO  (DARK + atmos)  ═══════════════════════ -->
 <section id="top" class="sec surface-dark has-atmos hero-sec">
@@ -165,29 +208,8 @@
   <div class="wrap">
     <div class="logo-marquee reveal">
       <p class="lm-cap">Trusted by 1,000+ businesses across 25 industries</p>
-      <div class="lm-viewport">
-        <div class="lm-track">
-          <span class="lm-logo">Northwind</span>
-          <span class="lm-logo">Brightwater</span>
-          <span class="lm-logo">Cedar &amp; Pine</span>
-          <span class="lm-logo">Halcyon</span>
-          <span class="lm-logo">Ironside</span>
-          <span class="lm-logo">Meridian</span>
-          <span class="lm-logo">Solace</span>
-          <span class="lm-logo">Trailhead</span>
-          <span class="lm-logo">Vantage</span>
-          <!-- duplicate set for seamless keyframe loop -->
-          <span class="lm-logo" aria-hidden="true">Northwind</span>
-          <span class="lm-logo" aria-hidden="true">Brightwater</span>
-          <span class="lm-logo" aria-hidden="true">Cedar &amp; Pine</span>
-          <span class="lm-logo" aria-hidden="true">Halcyon</span>
-          <span class="lm-logo" aria-hidden="true">Ironside</span>
-          <span class="lm-logo" aria-hidden="true">Meridian</span>
-          <span class="lm-logo" aria-hidden="true">Solace</span>
-          <span class="lm-logo" aria-hidden="true">Trailhead</span>
-          <span class="lm-logo" aria-hidden="true">Vantage</span>
-        </div>
-      </div>
+      <!-- 3-row auto-scrolling local-business logo wall — built by assets/js/logowall.js -->
+      <div id="logowall" class="logowall" aria-label="Trusted by local businesses"></div>
     </div>
   </div>
 </section>
@@ -274,6 +296,146 @@
           <div class="ic-num">15+</div>
           <p class="ic-from">Map pack <b>locked</b> across the city</p>
           <p class="ic-cli"><b>Cell Phone Repair</b> · Vancouver, BC</p>
+        </article>
+
+        <article class="impact-card">
+          <div class="ic-top"><span class="ic-metric">Monthly calls</span><span class="ic-spark" data-spark="61"></span></div>
+          <div class="ic-num">+120</div>
+          <p class="ic-from"><b>0</b> <span class="ar">→</span> <b>120+</b> &nbsp;per month</p>
+          <p class="ic-cli"><b>Brightwater Plumbing</b> · Plumbing, Austin TX</p>
+        </article>
+
+        <article class="impact-card">
+          <div class="ic-top"><span class="ic-metric">Organic traffic</span><span class="ic-spark" data-spark="67"></span></div>
+          <div class="ic-num">+1,840%</div>
+          <p class="ic-from">Google clicks, <b>year over year</b></p>
+          <p class="ic-cli"><b>Maplewood Roofing</b> · Roofing, Portland OR</p>
+        </article>
+
+        <article class="impact-card">
+          <div class="ic-top"><span class="ic-metric">Page-1 keywords</span><span class="ic-spark" data-spark="71"></span></div>
+          <div class="ic-num">31+</div>
+          <p class="ic-from"><b>2</b> <span class="ar">→</span> <b>31+</b> &nbsp;ranked</p>
+          <p class="ic-cli"><b>Summit Family Dental</b> · Dental, Denver CO</p>
+        </article>
+
+        <article class="impact-card">
+          <div class="ic-top"><span class="ic-metric">Bookings</span><span class="ic-spark" data-spark="73"></span></div>
+          <div class="ic-num">+540%</div>
+          <p class="ic-from">Online bookings, <b>year over year</b></p>
+          <p class="ic-cli"><b>Coastal Auto Spa</b> · Auto detailing, San Diego CA</p>
+        </article>
+
+        <article class="impact-card">
+          <div class="ic-top"><span class="ic-metric">Leads / mo</span><span class="ic-spark" data-spark="79"></span></div>
+          <div class="ic-num">+95</div>
+          <p class="ic-from"><b>0</b> <span class="ar">→</span> <b>95+</b> &nbsp;per month</p>
+          <p class="ic-cli"><b>Harbor Point Law</b> · Legal, Boston MA</p>
+        </article>
+
+        <article class="impact-card">
+          <div class="ic-top"><span class="ic-metric">Revenue lift</span><span class="ic-spark" data-spark="83"></span></div>
+          <div class="ic-num">$128K+</div>
+          <p class="ic-from">New-patient revenue, <b>captured</b></p>
+          <p class="ic-cli"><b>Riverside Med Spa</b> · Med spa, Scottsdale AZ</p>
+        </article>
+
+        <article class="impact-card">
+          <div class="ic-top"><span class="ic-metric">Map-pack rank</span><span class="ic-spark" data-spark="89"></span></div>
+          <div class="ic-num">#1</div>
+          <p class="ic-from"><b>#14</b> <span class="ar">→</span> <b>#1</b> &nbsp;in the city</p>
+          <p class="ic-cli"><b>Oakfield Electric</b> · Electrical, Columbus OH</p>
+        </article>
+
+        <article class="impact-card">
+          <div class="ic-top"><span class="ic-metric">Monthly calls</span><span class="ic-spark" data-spark="97"></span></div>
+          <div class="ic-num">+85</div>
+          <p class="ic-from"><b>0</b> <span class="ar">→</span> <b>85+</b> &nbsp;per month</p>
+          <p class="ic-cli"><b>Cedar Ridge HVAC</b> · HVAC, Nashville TN</p>
+        </article>
+
+        <article class="impact-card">
+          <div class="ic-top"><span class="ic-metric">Form fills</span><span class="ic-spark" data-spark="101"></span></div>
+          <div class="ic-num">+310%</div>
+          <p class="ic-from">Quote requests, <b>year over year</b></p>
+          <p class="ic-cli"><b>Ironclad Garage Doors</b> · Garage doors, Mesa AZ</p>
+        </article>
+
+        <article class="impact-card">
+          <div class="ic-top"><span class="ic-metric">Top-3 keywords</span><span class="ic-spark" data-spark="103"></span></div>
+          <div class="ic-num">18+</div>
+          <p class="ic-from"><b>1</b> <span class="ar">→</span> <b>18+</b> &nbsp;ranked</p>
+          <p class="ic-cli"><b>Willowbrook Veterinary</b> · Veterinary, Raleigh NC</p>
+        </article>
+
+        <article class="impact-card">
+          <div class="ic-top"><span class="ic-metric">Organic traffic</span><span class="ic-spark" data-spark="107"></span></div>
+          <div class="ic-num">+920%</div>
+          <p class="ic-from">Google clicks, <b>year over year</b></p>
+          <p class="ic-cli"><b>Stonegate Landscaping</b> · Landscaping, Charlotte NC</p>
+        </article>
+
+        <article class="impact-card">
+          <div class="ic-top"><span class="ic-metric">Monthly calls</span><span class="ic-spark" data-spark="109"></span></div>
+          <div class="ic-num">200+</div>
+          <p class="ic-from"><b>0</b> <span class="ar">→</span> <b>200+</b> &nbsp;per month</p>
+          <p class="ic-cli"><b>Northgate Towing</b> · Towing, Calgary AB</p>
+        </article>
+
+        <article class="impact-card">
+          <div class="ic-top"><span class="ic-metric">Revenue lift</span><span class="ic-spark" data-spark="113"></span></div>
+          <div class="ic-num">$61K+</div>
+          <p class="ic-from">Booked jobs, <b>captured</b></p>
+          <p class="ic-cli"><b>Lakeshore Pest Control</b> · Pest control, Tampa FL</p>
+        </article>
+
+        <article class="impact-card">
+          <div class="ic-top"><span class="ic-metric">Page-1 keywords</span><span class="ic-spark" data-spark="127"></span></div>
+          <div class="ic-num">24+</div>
+          <p class="ic-from"><b>3</b> <span class="ar">→</span> <b>24+</b> &nbsp;ranked</p>
+          <p class="ic-cli"><b>Granite Peak Chiropractic</b> · Chiropractic, Salt Lake City UT</p>
+        </article>
+
+        <article class="impact-card">
+          <div class="ic-top"><span class="ic-metric">Bookings</span><span class="ic-spark" data-spark="131"></span></div>
+          <div class="ic-num">+540%</div>
+          <p class="ic-from">Appointments, <b>year over year</b></p>
+          <p class="ic-cli"><b>Velvet &amp; Vine Salon</b> · Hair salon, Minneapolis MN</p>
+        </article>
+
+        <article class="impact-card">
+          <div class="ic-top"><span class="ic-metric">Leads / mo</span><span class="ic-spark" data-spark="137"></span></div>
+          <div class="ic-num">+95</div>
+          <p class="ic-from"><b>0</b> <span class="ar">→</span> <b>95+</b> &nbsp;per month</p>
+          <p class="ic-cli"><b>Copperline Remodeling</b> · Remodeling, Kansas City MO</p>
+        </article>
+
+        <article class="impact-card">
+          <div class="ic-top"><span class="ic-metric">Revenue lift</span><span class="ic-spark" data-spark="139"></span></div>
+          <div class="ic-num">$44K+</div>
+          <p class="ic-from">Monthly revenue, <b>+38%</b></p>
+          <p class="ic-cli"><b>Hearthstone Fireplaces</b> · Fireplaces, Boise ID</p>
+        </article>
+
+        <article class="impact-card">
+          <div class="ic-top"><span class="ic-metric">Form fills</span><span class="ic-spark" data-spark="149"></span></div>
+          <div class="ic-num">+310%</div>
+          <p class="ic-from">Consultation requests, <b>year over year</b></p>
+          <p class="ic-cli"><b>Birchwood Family Law</b> · Legal, Madison WI</p>
+        </article>
+
+        <article class="impact-card">
+          <div class="ic-top"><span class="ic-metric">Top-3 keywords</span><span class="ic-spark" data-spark="151"></span></div>
+          <div class="ic-num">18+</div>
+          <p class="ic-from">Map pack <b>locked</b> across the metro</p>
+          <p class="ic-cli"><b>Silverpine Cleaning Co.</b> · House cleaning, Seattle WA</p>
+        </article>
+
+        <article class="impact-card">
+          <div class="ic-top"><span class="ic-metric">Map-pack rank</span><span class="ic-spark" data-spark="157"></span></div>
+          <div class="ic-num">#1</div>
+          <p class="ic-from"><b>#9</b> <span class="ar">→</span> <b>#1</b> &nbsp;in the city</p>
+          <p class="ic-cli"><b>Redbrick Auto Repair</b> · Auto repair, Cincinnati OH</p>
         </article>
 
       </div>
@@ -510,7 +672,8 @@
       <p class="lead">Straight from Google Search Console inside the SGEN app — daily clicks and impressions climbing, week after week.</p>
     </div>
 
-    <div class="gsc-stack reveal">
+    <div class="gsc-caro reveal" data-caro>
+      <div class="gsc-track" data-caro-track>
 
       <!-- Dashboard 1 — EasyCleanouts -->
       <div class="appwin">
@@ -524,7 +687,7 @@
             <div class="gsc2-biz"><div class="nm">EasyCleanouts LLC</div><div class="mt">Junk Removal · Springfield, MO</div></div>
             <span class="gsc2-win"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M17 7h4v4"/></svg>+312% clicks · 90 days</span>
           </div>
-          <div class="gsc2-tabs"><span class="gsc2-tab">24h</span><span class="gsc2-tab">7d</span><span class="gsc2-tab">28d</span><span class="gsc2-tab">3 mo</span><span class="gsc2-tab is-on">6 mo</span><span class="gsc2-tab">12 mo</span></div>
+          <div class="gsc2-tabs"><span class="gsc2-tab">7d</span><span class="gsc2-tab">28d</span><span class="gsc2-tab">3 mo</span><span class="gsc2-tab is-on">6 mo</span><span class="gsc2-tab">12 mo</span></div>
           <div class="gsc2-tiles">
             <div class="gsc2-tile"><div class="lab">Total clicks</div><div class="val">550</div><div class="dl">▲ 312%</div></div>
             <div class="gsc2-tile imp"><div class="lab">Total impressions</div><div class="val">96.2K</div><div class="dl">▲ 268%</div></div>
@@ -533,19 +696,9 @@
           </div>
           <div class="gsc2-chart">
             <div class="gsc2-legend"><span><i class="lc"></i>Clicks</span><span><i class="li"></i>Impressions</span></div>
-            <div data-chart data-seed="7" data-clk-start="1" data-clk-end="16" data-imp-start="220" data-imp-end="2500"></div>
+            <div data-chart data-seed="7" data-days="90" data-end="0" data-sep="0.72" data-clk-start="4" data-clk-end="16" data-imp-start="240" data-imp-end="880"></div>
             <div class="gsc2-xaxis"></div>
           </div>
-          <div class="gsc2-kws">
-            <div class="gsc2-kw"><span class="rk r1">#1</span><span class="kw">junk removal near me</span><span class="up">▲ top</span></div>
-            <div class="gsc2-kw"><span class="rk r1">#1</span><span class="kw">hoarder cleanout springfield mo</span><span class="up">▲ top</span></div>
-            <div class="gsc2-kw"><span class="rk r1">#1</span><span class="kw">property management cleanout</span><span class="up">▲ top</span></div>
-            <div class="gsc2-kw"><span class="rk r1">#1</span><span class="kw">basement cleanout</span><span class="up">▲ top</span></div>
-            <div class="gsc2-kw"><span class="rk r2">#2</span><span class="kw">apartment cleanouts</span><span class="up">▲ +9</span></div>
-            <div class="gsc2-kw"><span class="rk r2">#2</span><span class="kw">eviction cleanout</span><span class="up">▲ +14</span></div>
-            <div class="gsc2-kw"><span class="rk r2">#2</span><span class="kw">foreclosure cleanout</span><span class="up">▲ +11</span></div>
-          </div>
-          <p class="gsc2-more">+ 30 more keywords ranked top 10</p>
         </div>
       </div>
 
@@ -561,7 +714,7 @@
             <div class="gsc2-biz"><div class="nm">DrImtiaz.com</div><div class="mt">Medical Practice · Dubai, UAE</div></div>
             <span class="gsc2-win"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M17 7h4v4"/></svg>+1,519% traffic · 1 yr</span>
           </div>
-          <div class="gsc2-tabs"><span class="gsc2-tab">24h</span><span class="gsc2-tab">7d</span><span class="gsc2-tab">28d</span><span class="gsc2-tab">3 mo</span><span class="gsc2-tab">6 mo</span><span class="gsc2-tab is-on">12 mo</span></div>
+          <div class="gsc2-tabs"><span class="gsc2-tab">7d</span><span class="gsc2-tab">28d</span><span class="gsc2-tab">3 mo</span><span class="gsc2-tab">6 mo</span><span class="gsc2-tab is-on">12 mo</span></div>
           <div class="gsc2-tiles">
             <div class="gsc2-tile"><div class="lab">Total clicks</div><div class="val">1.44K</div><div class="dl">▲ 1,519%</div></div>
             <div class="gsc2-tile imp"><div class="lab">Total impressions</div><div class="val">119K</div><div class="dl">▲ 940%</div></div>
@@ -570,19 +723,234 @@
           </div>
           <div class="gsc2-chart">
             <div class="gsc2-legend"><span><i class="lc"></i>Clicks</span><span><i class="li"></i>Impressions</span></div>
-            <div data-chart data-seed="23" data-clk-start="3" data-clk-end="42" data-imp-start="400" data-imp-end="4400"></div>
+            <div data-chart data-seed="23" data-days="365" data-end="2" data-sep="0.8" data-clk-start="6" data-clk-end="97" data-imp-start="110" data-imp-end="1145"></div>
             <div class="gsc2-xaxis"></div>
           </div>
-          <div class="gsc2-kws">
-            <div class="gsc2-kw"><span class="rk r1">#1</span><span class="kw">Sexologist in Dubai</span><span class="up">▲ top</span></div>
-            <div class="gsc2-kw"><span class="rk r1">#1</span><span class="kw">Sexologist in UAE</span><span class="up">▲ top</span></div>
-            <div class="gsc2-kw"><span class="rk r1">#1</span><span class="kw">Best Sexologist in UAE</span><span class="up">▲ top</span></div>
-            <div class="gsc2-kw"><span class="rk r1">#1</span><span class="kw">Sexologist Doctors in Dubai</span><span class="up">▲ top</span></div>
-          </div>
-          <p class="gsc2-more">All four queries holding the top spot.</p>
         </div>
       </div>
 
+      <!-- Dashboard 3 — Summit Tree & Stump -->
+      <div class="appwin">
+        <div class="appwin-bar">
+          <span class="dots"><i></i><i></i><i></i></span>
+          <span class="aw-title"><span class="g"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m7 14 3-3 3 3 5-6"/></svg></span>Search Console · Performance</span>
+          <span class="aw-right"><span class="aw-live">Live</span> · updated 1h ago</span>
+        </div>
+        <div class="appwin-body">
+          <div class="gsc2-head">
+            <div class="gsc2-biz"><div class="nm">Summit Tree &amp; Stump</div><div class="mt">Tree Service · Asheville, NC</div></div>
+            <span class="gsc2-win"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M17 7h4v4"/></svg>+284% clicks · 90 days</span>
+          </div>
+          <div class="gsc2-tabs"><span class="gsc2-tab">7d</span><span class="gsc2-tab">28d</span><span class="gsc2-tab">3 mo</span><span class="gsc2-tab is-on">6 mo</span><span class="gsc2-tab">12 mo</span></div>
+          <div class="gsc2-tiles">
+            <div class="gsc2-tile"><div class="lab">Total clicks</div><div class="val">812</div><div class="dl">▲ 284%</div></div>
+            <div class="gsc2-tile imp"><div class="lab">Total impressions</div><div class="val">71.4K</div><div class="dl">▲ 221%</div></div>
+            <div class="gsc2-tile ctr"><div class="lab">Average CTR</div><div class="val">1.1%</div><div class="dl">▲ 0.4pt</div></div>
+            <div class="gsc2-tile pos"><div class="lab">Avg. position</div><div class="val">11</div><div class="dl">▲ from 29</div></div>
+          </div>
+          <div class="gsc2-chart">
+            <div class="gsc2-legend"><span><i class="lc"></i>Clicks</span><span><i class="li"></i>Impressions</span></div>
+            <div data-chart data-seed="41" data-days="96" data-end="5" data-sep="0.18" data-clk-start="7" data-clk-end="27" data-imp-start="95" data-imp-end="305"></div>
+            <div class="gsc2-xaxis"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dashboard 4 — BrightSmile Family Dental -->
+      <div class="appwin">
+        <div class="appwin-bar">
+          <span class="dots"><i></i><i></i><i></i></span>
+          <span class="aw-title"><span class="g"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m7 14 3-3 3 3 5-6"/></svg></span>Search Console · Performance</span>
+          <span class="aw-right"><span class="aw-live">Live</span> · updated 4h ago</span>
+        </div>
+        <div class="appwin-body">
+          <div class="gsc2-head">
+            <div class="gsc2-biz"><div class="nm">BrightSmile Family Dental</div><div class="mt">Dental Practice · Austin, TX</div></div>
+            <span class="gsc2-win"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M17 7h4v4"/></svg>+367% clicks · 90 days</span>
+          </div>
+          <div class="gsc2-tabs"><span class="gsc2-tab">7d</span><span class="gsc2-tab">28d</span><span class="gsc2-tab is-on">3 mo</span><span class="gsc2-tab">6 mo</span><span class="gsc2-tab">12 mo</span></div>
+          <div class="gsc2-tiles">
+            <div class="gsc2-tile"><div class="lab">Total clicks</div><div class="val">1.31K</div><div class="dl">▲ 367%</div></div>
+            <div class="gsc2-tile imp"><div class="lab">Total impressions</div><div class="val">142K</div><div class="dl">▲ 298%</div></div>
+            <div class="gsc2-tile ctr"><div class="lab">Average CTR</div><div class="val">0.9%</div><div class="dl">▲ 0.3pt</div></div>
+            <div class="gsc2-tile pos"><div class="lab">Avg. position</div><div class="val">9</div><div class="dl">▲ from 31</div></div>
+          </div>
+          <div class="gsc2-chart">
+            <div class="gsc2-legend"><span><i class="lc"></i>Clicks</span><span><i class="li"></i>Impressions</span></div>
+            <div data-chart data-seed="58" data-days="120" data-end="0" data-sep="0.75" data-clk-start="8" data-clk-end="38" data-imp-start="360" data-imp-end="1430"></div>
+            <div class="gsc2-xaxis"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dashboard 5 — Coastal HVAC Pros -->
+      <div class="appwin">
+        <div class="appwin-bar">
+          <span class="dots"><i></i><i></i><i></i></span>
+          <span class="aw-title"><span class="g"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m7 14 3-3 3 3 5-6"/></svg></span>Search Console · Performance</span>
+          <span class="aw-right"><span class="aw-live">Live</span> · updated 2h ago</span>
+        </div>
+        <div class="appwin-body">
+          <div class="gsc2-head">
+            <div class="gsc2-biz"><div class="nm">Coastal HVAC Pros</div><div class="mt">HVAC Repair · Tampa, FL</div></div>
+            <span class="gsc2-win"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M17 7h4v4"/></svg>+419% clicks · 90 days</span>
+          </div>
+          <div class="gsc2-tabs"><span class="gsc2-tab">7d</span><span class="gsc2-tab">28d</span><span class="gsc2-tab">3 mo</span><span class="gsc2-tab is-on">6 mo</span><span class="gsc2-tab">12 mo</span></div>
+          <div class="gsc2-tiles">
+            <div class="gsc2-tile"><div class="lab">Total clicks</div><div class="val">2.18K</div><div class="dl">▲ 419%</div></div>
+            <div class="gsc2-tile imp"><div class="lab">Total impressions</div><div class="val">176K</div><div class="dl">▲ 312%</div></div>
+            <div class="gsc2-tile ctr"><div class="lab">Average CTR</div><div class="val">1.2%</div><div class="dl">▲ 0.5pt</div></div>
+            <div class="gsc2-tile pos"><div class="lab">Avg. position</div><div class="val">8</div><div class="dl">▲ from 27</div></div>
+          </div>
+          <div class="gsc2-chart">
+            <div class="gsc2-legend"><span><i class="lc"></i>Clicks</span><span><i class="li"></i>Impressions</span></div>
+            <div data-chart data-seed="73" data-days="90" data-end="1" data-sep="0.85" data-clk-start="11" data-clk-end="57" data-imp-start="430" data-imp-end="1770"></div>
+            <div class="gsc2-xaxis"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dashboard 6 — Ironclad Garage Doors -->
+      <div class="appwin">
+        <div class="appwin-bar">
+          <span class="dots"><i></i><i></i><i></i></span>
+          <span class="aw-title"><span class="g"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m7 14 3-3 3 3 5-6"/></svg></span>Search Console · Performance</span>
+          <span class="aw-right"><span class="aw-live">Live</span> · updated 5h ago</span>
+        </div>
+        <div class="appwin-body">
+          <div class="gsc2-head">
+            <div class="gsc2-biz"><div class="nm">Ironclad Garage Doors</div><div class="mt">Garage Door Repair · Denver, CO</div></div>
+            <span class="gsc2-win"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M17 7h4v4"/></svg>+246% clicks · 90 days</span>
+          </div>
+          <div class="gsc2-tabs"><span class="gsc2-tab">7d</span><span class="gsc2-tab">28d</span><span class="gsc2-tab">3 mo</span><span class="gsc2-tab is-on">6 mo</span><span class="gsc2-tab">12 mo</span></div>
+          <div class="gsc2-tiles">
+            <div class="gsc2-tile"><div class="lab">Total clicks</div><div class="val">634</div><div class="dl">▲ 246%</div></div>
+            <div class="gsc2-tile imp"><div class="lab">Total impressions</div><div class="val">58.7K</div><div class="dl">▲ 189%</div></div>
+            <div class="gsc2-tile ctr"><div class="lab">Average CTR</div><div class="val">1.1%</div><div class="dl">▲ 0.4pt</div></div>
+            <div class="gsc2-tile pos"><div class="lab">Avg. position</div><div class="val">13</div><div class="dl">▲ from 34</div></div>
+          </div>
+          <div class="gsc2-chart">
+            <div class="gsc2-legend"><span><i class="lc"></i>Clicks</span><span><i class="li"></i>Impressions</span></div>
+            <div data-chart data-seed="86" data-days="90" data-end="9" data-sep="0.22" data-clk-start="6" data-clk-end="21" data-imp-start="200" data-imp-end="580"></div>
+            <div class="gsc2-xaxis"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dashboard 7 — Maple Leaf Roofing -->
+      <div class="appwin">
+        <div class="appwin-bar">
+          <span class="dots"><i></i><i></i><i></i></span>
+          <span class="aw-title"><span class="g"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m7 14 3-3 3 3 5-6"/></svg></span>Search Console · Performance</span>
+          <span class="aw-right"><span class="aw-live">Live</span> · updated 3h ago</span>
+        </div>
+        <div class="appwin-body">
+          <div class="gsc2-head">
+            <div class="gsc2-biz"><div class="nm">Maple Leaf Roofing</div><div class="mt">Roofing Contractor · Ottawa, ON</div></div>
+            <span class="gsc2-win"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M17 7h4v4"/></svg>+338% clicks · 90 days</span>
+          </div>
+          <div class="gsc2-tabs"><span class="gsc2-tab">7d</span><span class="gsc2-tab">28d</span><span class="gsc2-tab">3 mo</span><span class="gsc2-tab is-on">6 mo</span><span class="gsc2-tab">12 mo</span></div>
+          <div class="gsc2-tiles">
+            <div class="gsc2-tile"><div class="lab">Total clicks</div><div class="val">1.07K</div><div class="dl">▲ 338%</div></div>
+            <div class="gsc2-tile imp"><div class="lab">Total impressions</div><div class="val">103K</div><div class="dl">▲ 256%</div></div>
+            <div class="gsc2-tile ctr"><div class="lab">Average CTR</div><div class="val">1.0%</div><div class="dl">▲ 0.4pt</div></div>
+            <div class="gsc2-tile pos"><div class="lab">Avg. position</div><div class="val">10</div><div class="dl">▲ from 33</div></div>
+          </div>
+          <div class="gsc2-chart">
+            <div class="gsc2-legend"><span><i class="lc"></i>Clicks</span><span><i class="li"></i>Impressions</span></div>
+            <div data-chart data-seed="102" data-days="110" data-end="3" data-sep="0.7" data-clk-start="8" data-clk-end="35" data-imp-start="290" data-imp-end="1030"></div>
+            <div class="gsc2-xaxis"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dashboard 8 — Lone Star Pest Control -->
+      <div class="appwin">
+        <div class="appwin-bar">
+          <span class="dots"><i></i><i></i><i></i></span>
+          <span class="aw-title"><span class="g"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m7 14 3-3 3 3 5-6"/></svg></span>Search Console · Performance</span>
+          <span class="aw-right"><span class="aw-live">Live</span> · updated 6h ago</span>
+        </div>
+        <div class="appwin-body">
+          <div class="gsc2-head">
+            <div class="gsc2-biz"><div class="nm">Lone Star Pest Control</div><div class="mt">Pest Control · San Antonio, TX</div></div>
+            <span class="gsc2-win"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M17 7h4v4"/></svg>+392% clicks · 90 days</span>
+          </div>
+          <div class="gsc2-tabs"><span class="gsc2-tab">7d</span><span class="gsc2-tab">28d</span><span class="gsc2-tab is-on">3 mo</span><span class="gsc2-tab">6 mo</span><span class="gsc2-tab">12 mo</span></div>
+          <div class="gsc2-tiles">
+            <div class="gsc2-tile"><div class="lab">Total clicks</div><div class="val">1.86K</div><div class="dl">▲ 392%</div></div>
+            <div class="gsc2-tile imp"><div class="lab">Total impressions</div><div class="val">158K</div><div class="dl">▲ 287%</div></div>
+            <div class="gsc2-tile ctr"><div class="lab">Average CTR</div><div class="val">1.2%</div><div class="dl">▲ 0.5pt</div></div>
+            <div class="gsc2-tile pos"><div class="lab">Avg. position</div><div class="val">9</div><div class="dl">▲ from 28</div></div>
+          </div>
+          <div class="gsc2-chart">
+            <div class="gsc2-legend"><span><i class="lc"></i>Clicks</span><span><i class="li"></i>Impressions</span></div>
+            <div data-chart data-seed="119" data-days="120" data-end="0" data-sep="0.8" data-clk-start="12" data-clk-end="59" data-imp-start="405" data-imp-end="1570"></div>
+            <div class="gsc2-xaxis"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dashboard 9 — Westside Auto Repair -->
+      <div class="appwin">
+        <div class="appwin-bar">
+          <span class="dots"><i></i><i></i><i></i></span>
+          <span class="aw-title"><span class="g"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m7 14 3-3 3 3 5-6"/></svg></span>Search Console · Performance</span>
+          <span class="aw-right"><span class="aw-live">Live</span> · updated 1h ago</span>
+        </div>
+        <div class="appwin-body">
+          <div class="gsc2-head">
+            <div class="gsc2-biz"><div class="nm">Westside Auto Repair</div><div class="mt">Auto Repair · Portland, OR</div></div>
+            <span class="gsc2-win"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M17 7h4v4"/></svg>+271% clicks · 90 days</span>
+          </div>
+          <div class="gsc2-tabs"><span class="gsc2-tab">7d</span><span class="gsc2-tab">28d</span><span class="gsc2-tab">3 mo</span><span class="gsc2-tab is-on">6 mo</span><span class="gsc2-tab">12 mo</span></div>
+          <div class="gsc2-tiles">
+            <div class="gsc2-tile"><div class="lab">Total clicks</div><div class="val">948</div><div class="dl">▲ 271%</div></div>
+            <div class="gsc2-tile imp"><div class="lab">Total impressions</div><div class="val">84.6K</div><div class="dl">▲ 203%</div></div>
+            <div class="gsc2-tile ctr"><div class="lab">Average CTR</div><div class="val">1.1%</div><div class="dl">▲ 0.4pt</div></div>
+            <div class="gsc2-tile pos"><div class="lab">Avg. position</div><div class="val">12</div><div class="dl">▲ from 30</div></div>
+          </div>
+          <div class="gsc2-chart">
+            <div class="gsc2-legend"><span><i class="lc"></i>Clicks</span><span><i class="li"></i>Impressions</span></div>
+            <div data-chart data-seed="137" data-days="90" data-end="6" data-sep="0.28" data-clk-start="7" data-clk-end="26" data-imp-start="280" data-imp-end="850"></div>
+            <div class="gsc2-xaxis"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dashboard 10 — Pacific Coast Movers -->
+      <div class="appwin">
+        <div class="appwin-bar">
+          <span class="dots"><i></i><i></i><i></i></span>
+          <span class="aw-title"><span class="g"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m7 14 3-3 3 3 5-6"/></svg></span>Search Console · Performance</span>
+          <span class="aw-right"><span class="aw-live">Live</span> · updated 2h ago</span>
+        </div>
+        <div class="appwin-body">
+          <div class="gsc2-head">
+            <div class="gsc2-biz"><div class="nm">Pacific Coast Movers</div><div class="mt">Moving Company · Seattle, WA</div></div>
+            <span class="gsc2-win"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M17 7h4v4"/></svg>+356% clicks · 90 days</span>
+          </div>
+          <div class="gsc2-tabs"><span class="gsc2-tab">7d</span><span class="gsc2-tab">28d</span><span class="gsc2-tab">3 mo</span><span class="gsc2-tab is-on">6 mo</span><span class="gsc2-tab">12 mo</span></div>
+          <div class="gsc2-tiles">
+            <div class="gsc2-tile"><div class="lab">Total clicks</div><div class="val">1.52K</div><div class="dl">▲ 356%</div></div>
+            <div class="gsc2-tile imp"><div class="lab">Total impressions</div><div class="val">128K</div><div class="dl">▲ 274%</div></div>
+            <div class="gsc2-tile ctr"><div class="lab">Average CTR</div><div class="val">1.2%</div><div class="dl">▲ 0.5pt</div></div>
+            <div class="gsc2-tile pos"><div class="lab">Avg. position</div><div class="val">10</div><div class="dl">▲ from 32</div></div>
+          </div>
+          <div class="gsc2-chart">
+            <div class="gsc2-legend"><span><i class="lc"></i>Clicks</span><span><i class="li"></i>Impressions</span></div>
+            <div data-chart data-seed="151" data-days="180" data-end="0" data-sep="0.78" data-clk-start="9" data-clk-end="50" data-imp-start="340" data-imp-end="1280"></div>
+            <div class="gsc2-xaxis"></div>
+          </div>
+        </div>
+      </div>
+
+      </div>
+      <div class="caro-ctrls">
+        <button class="caro-btn" type="button" data-caro-prev aria-label="Previous"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>
+        <span class="caro-dots" data-caro-dots></span>
+        <button class="caro-btn" type="button" data-caro-next aria-label="Next"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
+      </div>
     </div>
 
     <div class="cta-row center lp-section-cta reveal">
@@ -695,63 +1063,63 @@
         <article class="grev-card">
           <div class="gc-top"><span class="gc-stars">★★★★★</span><span class="gc-g"><svg viewBox="0 0 48 48"><path fill="#4285F4" d="M45.12 24.5c0-1.56-.14-3.06-.4-4.5H24v8.51h11.84c-.51 2.75-2.06 5.08-4.39 6.64v5.52h7.11c4.16-3.83 6.56-9.47 6.56-16.17z"/><path fill="#34A853" d="M24 46c5.94 0 10.92-1.97 14.56-5.33l-7.11-5.52c-1.97 1.32-4.49 2.1-7.45 2.1-5.73 0-10.58-3.87-12.31-9.07H4.34v5.7C7.96 41.07 15.4 46 24 46z"/><path fill="#FBBC05" d="M11.69 28.18C11.25 26.86 11 25.45 11 24s.25-2.86.69-4.18v-5.7H4.34C2.85 17.09 2 20.45 2 24s.85 6.91 2.34 9.88l7.35-5.7z"/><path fill="#EA4335" d="M24 10.75c3.23 0 6.13 1.11 8.41 3.29l6.31-6.31C34.91 4.18 29.93 2 24 2 15.4 2 7.96 6.93 4.34 14.12l7.35 5.7c1.73-5.2 6.58-9.07 12.31-9.07z"/></svg></span></div>
           <p class="gc-quote">"I really like working with the SGEN team. Professional, polite, and extremely responsive. They have a very strong understanding of real estate search and local SEO. Glad I chose them out of all the other listings."</p>
-          <div class="gc-who"><span class="gc-av" style="background:#db4437">M</span>
+          <div class="gc-who"><span class="gc-av"><img src="assets/img/av-mallie.jpg" alt="Mallie"></span>
             <div><div class="gc-nm">Mallie</div><div class="gc-rl">Home Buyer Co.</div></div></div>
         </article>
 
         <article class="grev-card">
           <div class="gc-top"><span class="gc-stars">★★★★★</span><span class="gc-g"><svg viewBox="0 0 48 48"><path fill="#4285F4" d="M45.12 24.5c0-1.56-.14-3.06-.4-4.5H24v8.51h11.84c-.51 2.75-2.06 5.08-4.39 6.64v5.52h7.11c4.16-3.83 6.56-9.47 6.56-16.17z"/><path fill="#34A853" d="M24 46c5.94 0 10.92-1.97 14.56-5.33l-7.11-5.52c-1.97 1.32-4.49 2.1-7.45 2.1-5.73 0-10.58-3.87-12.31-9.07H4.34v5.7C7.96 41.07 15.4 46 24 46z"/><path fill="#FBBC05" d="M11.69 28.18C11.25 26.86 11 25.45 11 24s.25-2.86.69-4.18v-5.7H4.34C2.85 17.09 2 20.45 2 24s.85 6.91 2.34 9.88l7.35-5.7z"/><path fill="#EA4335" d="M24 10.75c3.23 0 6.13 1.11 8.41 3.29l6.31-6.31C34.91 4.18 29.93 2 24 2 15.4 2 7.96 6.93 4.34 14.12l7.35 5.7c1.73-5.2 6.58-9.07 12.31-9.07z"/></svg></span></div>
           <p class="gc-quote">"SGEN has been a great help managing local search and visibility for two businesses we own. Quick to respond, easy to work with, and the rankings have moved consistently month over month."</p>
-          <div class="gc-who"><span class="gc-av" style="background:#4285f4">M</span>
+          <div class="gc-who"><span class="gc-av"><img src="assets/img/av-michael.jpg" alt="Michael Belmont"></span>
             <div><div class="gc-nm">Michael Belmont</div><div class="gc-rl">Multi-location Energy</div></div></div>
         </article>
 
         <article class="grev-card">
           <div class="gc-top"><span class="gc-stars">★★★★★</span><span class="gc-g"><svg viewBox="0 0 48 48"><path fill="#4285F4" d="M45.12 24.5c0-1.56-.14-3.06-.4-4.5H24v8.51h11.84c-.51 2.75-2.06 5.08-4.39 6.64v5.52h7.11c4.16-3.83 6.56-9.47 6.56-16.17z"/><path fill="#34A853" d="M24 46c5.94 0 10.92-1.97 14.56-5.33l-7.11-5.52c-1.97 1.32-4.49 2.1-7.45 2.1-5.73 0-10.58-3.87-12.31-9.07H4.34v5.7C7.96 41.07 15.4 46 24 46z"/><path fill="#FBBC05" d="M11.69 28.18C11.25 26.86 11 25.45 11 24s.25-2.86.69-4.18v-5.7H4.34C2.85 17.09 2 20.45 2 24s.85 6.91 2.34 9.88l7.35-5.7z"/><path fill="#EA4335" d="M24 10.75c3.23 0 6.13 1.11 8.41 3.29l6.31-6.31C34.91 4.18 29.93 2 24 2 15.4 2 7.96 6.93 4.34 14.12l7.35 5.7c1.73-5.2 6.58-9.07 12.31-9.07z"/></svg></span></div>
           <p class="gc-quote">"SGEN's expertise and dedication on our local search and lead-gen helped us achieve impressive ROI. We started showing up for the case types we actually want. Highly recommended."</p>
-          <div class="gc-who"><span class="gc-av" style="background:#0f9d58">J</span>
+          <div class="gc-who"><span class="gc-av"><img src="assets/img/av-jones.jpg" alt="Jones"></span>
             <div><div class="gc-nm">Jones</div><div class="gc-rl">Legal Services Firm</div></div></div>
         </article>
 
         <article class="grev-card">
           <div class="gc-top"><span class="gc-stars">★★★★★</span><span class="gc-g"><svg viewBox="0 0 48 48"><path fill="#4285F4" d="M45.12 24.5c0-1.56-.14-3.06-.4-4.5H24v8.51h11.84c-.51 2.75-2.06 5.08-4.39 6.64v5.52h7.11c4.16-3.83 6.56-9.47 6.56-16.17z"/><path fill="#34A853" d="M24 46c5.94 0 10.92-1.97 14.56-5.33l-7.11-5.52c-1.97 1.32-4.49 2.1-7.45 2.1-5.73 0-10.58-3.87-12.31-9.07H4.34v5.7C7.96 41.07 15.4 46 24 46z"/><path fill="#FBBC05" d="M11.69 28.18C11.25 26.86 11 25.45 11 24s.25-2.86.69-4.18v-5.7H4.34C2.85 17.09 2 20.45 2 24s.85 6.91 2.34 9.88l7.35-5.7z"/><path fill="#EA4335" d="M24 10.75c3.23 0 6.13 1.11 8.41 3.29l6.31-6.31C34.91 4.18 29.93 2 24 2 15.4 2 7.96 6.93 4.34 14.12l7.35 5.7c1.73-5.2 6.58-9.07 12.31-9.07z"/></svg></span></div>
           <p class="gc-quote">"Communication was top notch and the strategy was fresh. Local pack, GBP, and content all hit at once. SGEN is the best search marketing team we've worked with. Phone hasn't stopped ringing."</p>
-          <div class="gc-who"><span class="gc-av" style="background:#a142f4">J</span>
+          <div class="gc-who"><span class="gc-av"><img src="assets/img/av-jessica.jpg" alt="Jessica"></span>
             <div><div class="gc-nm">Jessica</div><div class="gc-rl">Auto Detailer</div></div></div>
         </article>
 
         <article class="grev-card">
           <div class="gc-top"><span class="gc-stars">★★★★★</span><span class="gc-g"><svg viewBox="0 0 48 48"><path fill="#4285F4" d="M45.12 24.5c0-1.56-.14-3.06-.4-4.5H24v8.51h11.84c-.51 2.75-2.06 5.08-4.39 6.64v5.52h7.11c4.16-3.83 6.56-9.47 6.56-16.17z"/><path fill="#34A853" d="M24 46c5.94 0 10.92-1.97 14.56-5.33l-7.11-5.52c-1.97 1.32-4.49 2.1-7.45 2.1-5.73 0-10.58-3.87-12.31-9.07H4.34v5.7C7.96 41.07 15.4 46 24 46z"/><path fill="#FBBC05" d="M11.69 28.18C11.25 26.86 11 25.45 11 24s.25-2.86.69-4.18v-5.7H4.34C2.85 17.09 2 20.45 2 24s.85 6.91 2.34 9.88l7.35-5.7z"/><path fill="#EA4335" d="M24 10.75c3.23 0 6.13 1.11 8.41 3.29l6.31-6.31C34.91 4.18 29.93 2 24 2 15.4 2 7.96 6.93 4.34 14.12l7.35 5.7c1.73-5.2 6.58-9.07 12.31-9.07z"/></svg></span></div>
           <p class="gc-quote">"SGEN rebuilt our Google Business Profile and on-page SEO quickly and professionally. Patient, effective, and we started ranking in our city within weeks. Very happy with the results."</p>
-          <div class="gc-who"><span class="gc-av" style="background:#ef6c00">R</span>
+          <div class="gc-who"><span class="gc-av"><img src="assets/img/av-rob.jpg" alt="Rob Wetmore"></span>
             <div><div class="gc-nm">Rob Wetmore</div><div class="gc-rl">Martial Arts School</div></div></div>
         </article>
 
         <article class="grev-card">
           <div class="gc-top"><span class="gc-stars">★★★★★</span><span class="gc-g"><svg viewBox="0 0 48 48"><path fill="#4285F4" d="M45.12 24.5c0-1.56-.14-3.06-.4-4.5H24v8.51h11.84c-.51 2.75-2.06 5.08-4.39 6.64v5.52h7.11c4.16-3.83 6.56-9.47 6.56-16.17z"/><path fill="#34A853" d="M24 46c5.94 0 10.92-1.97 14.56-5.33l-7.11-5.52c-1.97 1.32-4.49 2.1-7.45 2.1-5.73 0-10.58-3.87-12.31-9.07H4.34v5.7C7.96 41.07 15.4 46 24 46z"/><path fill="#FBBC05" d="M11.69 28.18C11.25 26.86 11 25.45 11 24s.25-2.86.69-4.18v-5.7H4.34C2.85 17.09 2 20.45 2 24s.85 6.91 2.34 9.88l7.35-5.7z"/><path fill="#EA4335" d="M24 10.75c3.23 0 6.13 1.11 8.41 3.29l6.31-6.31C34.91 4.18 29.93 2 24 2 15.4 2 7.96 6.93 4.34 14.12l7.35 5.7c1.73-5.2 6.58-9.07 12.31-9.07z"/></svg></span></div>
           <p class="gc-quote">"Search traffic has gone through the roof. Organic sessions, ranked keywords, and revenue all up significantly. SGEN has done a fantastic job. Thank you."</p>
-          <div class="gc-who"><span class="gc-av" style="background:#1a73e8">S</span>
+          <div class="gc-who"><span class="gc-av"><img src="assets/img/av-sam.jpg" alt="Sam"></span>
             <div><div class="gc-nm">Sam</div><div class="gc-rl">Ecommerce Store</div></div></div>
         </article>
 
         <article class="grev-card">
           <div class="gc-top"><span class="gc-stars">★★★★★</span><span class="gc-g"><svg viewBox="0 0 48 48"><path fill="#4285F4" d="M45.12 24.5c0-1.56-.14-3.06-.4-4.5H24v8.51h11.84c-.51 2.75-2.06 5.08-4.39 6.64v5.52h7.11c4.16-3.83 6.56-9.47 6.56-16.17z"/><path fill="#34A853" d="M24 46c5.94 0 10.92-1.97 14.56-5.33l-7.11-5.52c-1.97 1.32-4.49 2.1-7.45 2.1-5.73 0-10.58-3.87-12.31-9.07H4.34v5.7C7.96 41.07 15.4 46 24 46z"/><path fill="#FBBC05" d="M11.69 28.18C11.25 26.86 11 25.45 11 24s.25-2.86.69-4.18v-5.7H4.34C2.85 17.09 2 20.45 2 24s.85 6.91 2.34 9.88l7.35-5.7z"/><path fill="#EA4335" d="M24 10.75c3.23 0 6.13 1.11 8.41 3.29l6.31-6.31C34.91 4.18 29.93 2 24 2 15.4 2 7.96 6.93 4.34 14.12l7.35 5.7c1.73-5.2 6.58-9.07 12.31-9.07z"/></svg></span></div>
           <p class="gc-quote">"Very responsive, delivered SEO work to a high quality standard. We've already done multiple projects together and rankings keep climbing."</p>
-          <div class="gc-who"><span class="gc-av" style="background:#d81b60">M</span>
+          <div class="gc-who"><span class="gc-av"><img src="assets/img/av-marcel.jpg" alt="Marcel"></span>
             <div><div class="gc-nm">Marcel</div><div class="gc-rl">B2B Service Co.</div></div></div>
         </article>
 
         <article class="grev-card">
           <div class="gc-top"><span class="gc-stars">★★★★★</span><span class="gc-g"><svg viewBox="0 0 48 48"><path fill="#4285F4" d="M45.12 24.5c0-1.56-.14-3.06-.4-4.5H24v8.51h11.84c-.51 2.75-2.06 5.08-4.39 6.64v5.52h7.11c4.16-3.83 6.56-9.47 6.56-16.17z"/><path fill="#34A853" d="M24 46c5.94 0 10.92-1.97 14.56-5.33l-7.11-5.52c-1.97 1.32-4.49 2.1-7.45 2.1-5.73 0-10.58-3.87-12.31-9.07H4.34v5.7C7.96 41.07 15.4 46 24 46z"/><path fill="#FBBC05" d="M11.69 28.18C11.25 26.86 11 25.45 11 24s.25-2.86.69-4.18v-5.7H4.34C2.85 17.09 2 20.45 2 24s.85 6.91 2.34 9.88l7.35-5.7z"/><path fill="#EA4335" d="M24 10.75c3.23 0 6.13 1.11 8.41 3.29l6.31-6.31C34.91 4.18 29.93 2 24 2 15.4 2 7.96 6.93 4.34 14.12l7.35 5.7c1.73-5.2 6.58-9.07 12.31-9.07z"/></svg></span></div>
           <p class="gc-quote">"Strong communication and a clear understanding of how local search actually works. Added valuable insights that other agencies missed entirely."</p>
-          <div class="gc-who"><span class="gc-av" style="background:#00897b">D</span>
+          <div class="gc-who"><span class="gc-av"><img src="assets/img/av-drew.jpg" alt="Drew Deleon"></span>
             <div><div class="gc-nm">Drew Deleon</div><div class="gc-rl">Realtor</div></div></div>
         </article>
 
         <article class="grev-card">
           <div class="gc-top"><span class="gc-stars">★★★★★</span><span class="gc-g"><svg viewBox="0 0 48 48"><path fill="#4285F4" d="M45.12 24.5c0-1.56-.14-3.06-.4-4.5H24v8.51h11.84c-.51 2.75-2.06 5.08-4.39 6.64v5.52h7.11c4.16-3.83 6.56-9.47 6.56-16.17z"/><path fill="#34A853" d="M24 46c5.94 0 10.92-1.97 14.56-5.33l-7.11-5.52c-1.97 1.32-4.49 2.1-7.45 2.1-5.73 0-10.58-3.87-12.31-9.07H4.34v5.7C7.96 41.07 15.4 46 24 46z"/><path fill="#FBBC05" d="M11.69 28.18C11.25 26.86 11 25.45 11 24s.25-2.86.69-4.18v-5.7H4.34C2.85 17.09 2 20.45 2 24s.85 6.91 2.34 9.88l7.35-5.7z"/><path fill="#EA4335" d="M24 10.75c3.23 0 6.13 1.11 8.41 3.29l6.31-6.31C34.91 4.18 29.93 2 24 2 15.4 2 7.96 6.93 4.34 14.12l7.35 5.7c1.73-5.2 6.58-9.07 12.31-9.07z"/></svg></span></div>
           <p class="gc-quote">"As always, SGEN is amazing to work with. Local visibility for our buying campaigns is consistently strong."</p>
-          <div class="gc-who"><span class="gc-av" style="background:#5e35b1">G</span>
+          <div class="gc-who"><span class="gc-av"><img src="assets/img/av-grace.jpg" alt="Grace Kouassi"></span>
             <div><div class="gc-nm">Grace Kouassi</div><div class="gc-rl">Real Estate Investor</div></div></div>
         </article>
 
@@ -1333,8 +1701,9 @@
 </div>
 
 
-  <script src="assets/js/page.js?v=55e274bb" defer></script>
-  <script src="assets/js/apply.js?v=364e97de" defer></script>
-  <script src="assets/js/evidence.js?v=e73dd282" defer></script>
+  <script src="assets/js/page.js?v=c5d8e046" defer></script>
+  <script src="assets/js/apply.js?v=1c7b3f94" defer></script>
+  <script src="assets/js/evidence.js?v=93ebbded" defer></script>
+  <script src="assets/js/logowall.js?v=dfe32f06" defer></script>
 </body>
 </html>

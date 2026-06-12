@@ -329,6 +329,157 @@
   }
 
   /* =========================================================================
+     7 · SECTION-NAV MENU  — hamburger -> full-screen #lp-menu overlay
+        Additive + self-guarding: no-ops if the button or overlay is absent.
+        Open/close via [data-menu-open]/[data-menu-close]; Esc closes; any
+        [data-menu-link] anchor smooth-scrolls (nav-offset aware, reduced-motion
+        honored) then closes. The bottom CTA carries data-apply-open (handled by
+        applyFlow) + data-menu-cta -> we only collapse the menu's visual state on
+        that path and let applyFlow own the scroll lock, so Apply opens cleanly.
+        Active-section highlight is synced only while the menu is open.
+     ========================================================================= */
+  function menu() {
+    var overlay = $('#lp-menu');
+    var openers = $$('[data-menu-open]');
+    if (!overlay || !openers.length) return;          // nothing to wire -> no-op
+
+    var navEl     = $('#lp-nav');
+    var closeBtn  = $('[data-menu-close]', overlay);
+    var links     = $$('[data-menu-link]', overlay);  // brand + section rows
+    var cta       = $('[data-menu-cta]', overlay);
+    var lastFocus = null;
+
+    function isOpen() { return overlay.classList.contains('is-open'); }
+
+    function lockScroll() {
+      document.documentElement.style.overflow = 'hidden';
+      document.body.style.overflow = 'hidden';
+    }
+    function unlockScroll() {
+      document.documentElement.style.overflow = '';
+      document.body.style.overflow = '';
+    }
+
+    function open() {
+      if (isOpen()) return;
+      lastFocus = document.activeElement;
+      overlay.classList.add('is-open');
+      overlay.setAttribute('aria-hidden', 'false');
+      openers.forEach(function (b) { b.setAttribute('aria-expanded', 'true'); });
+      lockScroll();
+      syncActive();
+      // focus the close control for keyboard users
+      window.setTimeout(function () {
+        try { (closeBtn || overlay).focus({ preventScroll: true }); } catch (e) {}
+      }, REDUCED ? 0 : 60);
+    }
+
+    // keepScroll=true -> leave the scroll lock in place (handing off to the
+    // apply overlay, which manages its own lock). Default restores scroll.
+    function close(keepScroll, restoreFocus) {
+      if (!isOpen()) return;
+      overlay.classList.remove('is-open');
+      overlay.setAttribute('aria-hidden', 'true');
+      openers.forEach(function (b) { b.setAttribute('aria-expanded', 'false'); });
+      if (!keepScroll) unlockScroll();
+      if (restoreFocus !== false && lastFocus && lastFocus.focus) {
+        try { lastFocus.focus(); } catch (e) {}
+      }
+    }
+
+    function navHeight() {
+      if (navEl && navEl.getBoundingClientRect) {
+        var h = navEl.offsetHeight || navEl.getBoundingClientRect().height;
+        if (h > 0) return h;
+      }
+      return 72; // sensible fallback matching the nav's padded height
+    }
+
+    function scrollToId(id) {
+      var el = id && id.charAt(0) === '#' ? document.getElementById(id.slice(1)) : null;
+      if (!el) return;
+      var top = el.getBoundingClientRect().top + (window.pageYOffset ||
+        document.documentElement.scrollTop || 0) - navHeight() - 8;
+      if (top < 0) top = 0;
+      if (REDUCED || !('scrollTo' in window)) {
+        window.scrollTo(0, top);
+      } else {
+        window.scrollTo({ top: top, behavior: 'smooth' });
+      }
+    }
+
+    // ---- wiring -----------------------------------------------------------
+    openers.forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.preventDefault();
+        open();
+      });
+    });
+    if (closeBtn) closeBtn.addEventListener('click', function () { close(false); });
+
+    links.forEach(function (a) {
+      a.addEventListener('click', function (e) {
+        var href = a.getAttribute('href') || '';
+        if (href.charAt(0) === '#') {
+          e.preventDefault();
+          // close first (restores scroll lock) so the JS scroll runs on the page
+          close(false, false);
+          scrollToId(href);
+        } else {
+          close(false);
+        }
+      });
+    });
+
+    // bottom CTA: applyFlow opens #apply-overlay (z200) on this same click; we
+    // just collapse the menu and HAND OFF the scroll lock (keepScroll=true) so
+    // there's no unlock/relock flicker and Apply sits cleanly on top.
+    if (cta) {
+      cta.addEventListener('click', function () { close(true, false); });
+    }
+
+    // backdrop click (outside the inner column) closes
+    overlay.addEventListener('mousedown', function (e) {
+      if (e.target === overlay) close(false);
+    });
+
+    // Esc closes (only while open)
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && isOpen()) { e.preventDefault(); close(false); }
+    });
+
+    // ---- active-section highlight (only while open) -----------------------
+    var sections = links
+      .map(function (a) {
+        var href = a.getAttribute('href') || '';
+        if (href.charAt(0) !== '#' || href === '#top') return null;
+        var el = document.getElementById(href.slice(1));
+        return el ? { row: a.closest('.lp-menu-row'), el: el } : null;
+      })
+      .filter(Boolean);
+
+    function syncActive() {
+      if (!sections.length) return;
+      var probe = (window.pageYOffset || document.documentElement.scrollTop || 0) +
+        navHeight() + 12;
+      var current = null;
+      sections.forEach(function (s) {
+        if (s.el.offsetTop <= probe) current = s;
+      });
+      sections.forEach(function (s) {
+        if (s.row) s.row.classList.toggle('is-active', s === current);
+      });
+    }
+
+    var aT;
+    window.addEventListener('scroll', function () {
+      if (!isOpen()) return;
+      clearTimeout(aT);
+      aT = setTimeout(syncActive, 80);
+    }, { passive: true });
+  }
+
+  /* =========================================================================
      6 · APPLY FLOW  — the #apply-overlay typeform state machine
         Opens from any [data-apply-open]; deep-links the plan via data-plan.
         SEO branch = 9 steps total. Other service branches fall back to a
@@ -877,6 +1028,7 @@
     faq();
     reviewCarousel();
     applyFlow();
+    menu();
   }
 
   if (document.readyState === 'loading') {

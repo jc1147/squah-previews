@@ -17,10 +17,14 @@
 .pkg--combo     { --pkg-accent: var(--sg-red); }                 /* signature red — the winner */
 
 /* ---- top-accent rule: a thin colored bar reading the package's service type ---- */
-.price-card.pkg { overflow: hidden; padding-top: 34px; }
+/* NB: NO overflow:hidden here — it would clip the .pc-badge that overhangs at
+   top:-13px (the "glitched top"). Instead the top bar gets matching rounded
+   corners so it never sticks out past the card's radius. */
+.price-card.pkg { padding-top: 34px; }
 .price-card.pkg::before {
   content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px;
   background: var(--pkg-accent);
+  border-radius: var(--sg-r-lg) var(--sg-r-lg) 0 0;
 }
 /* the combined winner gets the full red gradient bar (richer than a flat hue) */
 .price-card.pkg--combo::before { height: 4px; background: var(--sg-grad-red); }
@@ -117,4 +121,22 @@
    moved-up badge on the winner (badge sits at top:-13px) ---- */
 @media (min-width: 992px) {
   .price-card.pkg--combo { padding-top: 38px; }
+}
+
+/* ---- featured (combo) hover: SAME lift as the other two cards, but preserve its
+   scale on desktop so it doesn't "jump" out of the scaled state (the weird mouseover) ---- */
+@media (prefers-reduced-motion: no-preference) {
+  .surface-dark .price-card.pkg--combo {
+    transition: transform .25s var(--sg-ease), border-color .25s var(--sg-ease),
+                box-shadow .25s var(--sg-ease);
+  }
+  .surface-dark .price-card.pkg--combo:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 34px 80px -30px rgba(0,0,0,.82),
+                0 0 34px -10px var(--sg-red-tint-22),
+                inset 0 1px 0 rgba(255,255,255,.07);
+  }
+  @media (min-width: 992px) {
+    .surface-dark .price-card.pkg--combo:hover { transform: scale(1.03) translateY(-6px); }
+  }
 }

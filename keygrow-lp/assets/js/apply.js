@@ -397,6 +397,7 @@
 
   function multi(cfg, currentArr) {
     var el = stepShell(cfg.kick, cfg.q, cfg.sub);
+    el.classList.add('ao-multi-step');   // marker for mobile compaction (Issue 2)
     var wrap = document.createElement('div');
     wrap.className = 'ao-options ao-multi';
     wrap.setAttribute('role', 'group');
@@ -742,6 +743,7 @@
   function showIntro() {
     success.setAttribute('hidden', '');
     success.classList.remove('open');
+    overlay.classList.remove('is-success');   // restore the stage (Issue 3)
     backBtn.setAttribute('hidden', '');
     counter.textContent = '';
     progress.style.width = '0%';
@@ -856,6 +858,10 @@
 
     buildSuccess();
 
+    // flag the overlay so CSS collapses the emptied stage + lets #apply-success
+    // own the scroll (Issue 3 — success was trapped below the fold on mobile)
+    overlay.classList.add('is-success');
+
     success.removeAttribute('hidden');
     void success.offsetWidth;          // force reflow so .open animations fire
     success.classList.add('open');
@@ -874,6 +880,11 @@
       '<p class="ao-sbody">Your application for <span data-success-company>' + esc(comp) + '</span> is with a senior strategist. ' +
         'We personally review every business before any call — expect your 30-day plan and baseline audit within 24 hours. ' +
         '<b class="ao-soon">We\'ll be in contact soon.</b></p>' +
+
+      // ---- Book CTA sits RIGHT under the green "in contact soon" line (Issue 3) ----
+      '<div class="cta-row center ao-scta">' +
+        '<a class="btn btn-primary" href="#">Book your 15-min call <span class="arr">→</span></a>' +
+      '</div>' +
 
       // ---- ranking climb widget ----
       '<div class="ao-celebrate" data-celebrate>' +
@@ -895,9 +906,6 @@
         '</div>' +
       '</div>' +
 
-      '<div class="cta-row center ao-scta">' +
-        '<a class="btn btn-primary" href="#">Book your 15-min call <span class="arr">→</span></a>' +
-      '</div>' +
       '<div class="ao-trustchips">' +
         '<span class="tc">100% Free</span><span class="tc">No Obligation</span><span class="tc">15 Min Call</span>' +
       '</div>';

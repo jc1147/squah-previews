@@ -1,0 +1,277 @@
+/* ============================================================================
+   SECTION-NAV MENU  —  hamburger button (#lp-nav) + full-screen overlay (#lp-menu)
+   ----------------------------------------------------------------------------
+   Loads AFTER page.css. Tokens-only (var(--sg-*)); no priority overrides. Dark premium
+   surface (mirrors .surface-dark token values directly — the menu is not nested
+   in a .surface-dark ancestor, so the dark vars are set on the overlay itself).
+   z-index 150: ABOVE the fixed nav (80) + sticky bar (70), BELOW the application
+   overlay (#apply-overlay = 200) so Apply always opens on top of the menu.
+   Mobile-first; works at 390px and on desktop (content capped + centered).
+   All motion gated in @media (prefers-reduced-motion: no-preference).
+   ============================================================================ */
+
+/* ===========================================================================
+   1 · HAMBURGER BUTTON  (lives inside .lp-nav-cta)
+   =========================================================================== */
+.lp-burger {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 44px; height: 44px; flex: none;
+  padding: 0; margin: 0;
+  border: 1px solid transparent;
+  border-radius: var(--sg-r-btn);
+  background: transparent;
+  color: inherit;               /* inherits nav cream (transparent) / ink (solid) */
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.lp-burger:hover { border-color: color-mix(in srgb, currentColor 24%, transparent); }
+.lp-burger:focus-visible {
+  outline: 2px solid var(--sg-red);
+  outline-offset: 2px;
+}
+.lp-burger-lines {
+  display: inline-flex; flex-direction: column; justify-content: center;
+  gap: 5px; width: 22px; height: 16px;
+}
+.lp-burger-lines i {
+  display: block; height: 2px; width: 100%;
+  background: currentColor; border-radius: 2px;
+}
+/* the middle bar sits a touch shorter for a crafted hamburger read */
+.lp-burger-lines i:nth-child(2) { width: 78%; align-self: flex-end; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .lp-burger { transition: border-color var(--sg-t-fast) var(--sg-ease), background-color var(--sg-t-fast) var(--sg-ease); }
+  .lp-burger-lines i { transition: width var(--sg-t-fast) var(--sg-ease), background-color var(--sg-t-fast) var(--sg-ease); }
+  .lp-burger:hover .lp-burger-lines i:nth-child(2) { width: 100%; }
+}
+
+/* ===========================================================================
+   2 · OVERLAY SHELL  (#lp-menu) — full viewport, dark premium, hidden by default
+   =========================================================================== */
+#lp-menu.lp-menu {
+  /* re-declare dark tokens locally (overlay is not under a .surface-dark) */
+  --sg-bg:        #0d0d0f;
+  --sg-bg-2:      #16161a;
+  --sg-bg-deep:   #080706;
+  --sg-ink:       #f4f2ee;
+  --sg-ink-soft:  rgba(255,255,255,.62);
+  --sg-ink-faint: rgba(255,255,255,.40);
+  --sg-line:      rgba(255,255,255,.10);
+  --sg-line-2:    rgba(255,255,255,.06);
+
+  position: fixed; inset: 0; z-index: 150;
+  display: flex; flex-direction: column;
+  color: var(--sg-ink);
+  /* warm near-black with a top red bloom + deep floor — consistent with surface-dark atmos */
+  background:
+    radial-gradient(120% 80% at 50% -10%, rgba(213,21,34,.14), transparent 55%),
+    radial-gradient(140% 120% at 50% 120%, rgba(0,0,0,.70), transparent 60%),
+    linear-gradient(180deg, #0d0d0f 0%, #080706 100%);
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+
+  /* hidden state */
+  opacity: 0; visibility: hidden; pointer-events: none;
+  overflow: hidden;
+}
+#lp-menu.lp-menu.is-open {
+  opacity: 1; visibility: visible; pointer-events: auto;
+}
+
+/* inner column: scrolls if content is taller than the viewport (small phones / landscape) */
+.lp-menu-inner {
+  flex: 1 1 auto; min-height: 0;
+  display: flex; flex-direction: column;
+  width: 100%; max-width: 920px;
+  margin-inline: auto;
+  /* room above the pinned CTA so the last row never crowds it */
+  padding: 18px clamp(20px, 6vw, 56px) clamp(18px, 3vh, 28px);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* motion: fade + slight rise + scale-in; reduced-motion = instant (no transform) */
+@media (prefers-reduced-motion: no-preference) {
+  #lp-menu.lp-menu {
+    transform: translateY(-10px) scale(.985);
+    transform-origin: 50% 0;
+    transition: opacity .42s var(--sg-ease), transform .42s var(--sg-ease),
+                visibility 0s linear .42s;
+  }
+  #lp-menu.lp-menu.is-open {
+    transform: translateY(0) scale(1);
+    transition: opacity .42s var(--sg-ease), transform .42s var(--sg-ease),
+                visibility 0s linear 0s;
+  }
+}
+
+/* ===========================================================================
+   3 · TOP ROW  (wordmark · close)
+   =========================================================================== */
+.lp-menu-top {
+  flex: none;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px;
+  padding-block: 6px 14px;
+  margin-bottom: clamp(14px, 3vh, 30px);
+  border-bottom: 1px solid var(--sg-line);
+}
+.lp-menu-brand {
+  font-weight: 900; font-size: 21px; letter-spacing: -.04em;
+  color: var(--sg-ink); text-decoration: none;
+  display: inline-flex; align-items: center;
+}
+.lp-menu-brand .dot { color: var(--sg-red); }
+.lp-menu-close {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 44px; height: 44px; flex: none;
+  font-size: 30px; line-height: 1;
+  color: var(--sg-ink-soft);
+  background: transparent;
+  border: 1px solid var(--sg-line);
+  border-radius: var(--sg-r-btn);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.lp-menu-close:hover { color: var(--sg-ink); border-color: color-mix(in srgb, var(--sg-red) 60%, transparent); }
+.lp-menu-close:focus-visible { outline: 2px solid var(--sg-red); outline-offset: 2px; }
+@media (prefers-reduced-motion: no-preference) {
+  .lp-menu-close { transition: color var(--sg-t-fast) var(--sg-ease), border-color var(--sg-t-fast) var(--sg-ease); }
+}
+
+/* ===========================================================================
+   4 · NUMBERED LINK LIST
+   =========================================================================== */
+.lp-menu-list {
+  flex: 1 1 auto;
+  list-style: none; margin: 0; padding: 0;
+  display: flex; flex-direction: column;
+}
+.lp-menu-row { margin: 0; }
+.lp-menu-row + .lp-menu-row { border-top: 1px solid var(--sg-line-2, rgba(255,255,255,.06)); }
+
+.lp-menu-row > a {
+  position: relative;
+  display: flex; align-items: center; gap: clamp(14px, 3vw, 24px);
+  padding: clamp(13px, 1.9vh, 20px) clamp(8px, 2vw, 18px);
+  text-decoration: none; color: var(--sg-ink);
+  -webkit-tap-highlight-color: transparent;
+  isolation: isolate;
+}
+/* hover/active red-tint wash behind the row (under the text) */
+.lp-menu-row > a::before {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  border-radius: var(--sg-r-md);
+  background: linear-gradient(90deg, var(--sg-red-tint-14), transparent 70%);
+  opacity: 0;
+}
+.lp-menu-row > a:hover,
+.lp-menu-row > a:focus-visible { outline: none; }
+.lp-menu-row > a:hover::before,
+.lp-menu-row > a:focus-visible::before { opacity: 1; }
+.lp-menu-row > a:focus-visible { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--sg-red) 55%, transparent); border-radius: var(--sg-r-md); }
+
+/* active section highlight (set by JS while menu is open) */
+.lp-menu-row.is-active > a::before { opacity: 1; }
+.lp-menu-row.is-active .mi-label { color: var(--sg-ink); }
+.lp-menu-row.is-active .mi-num { color: var(--sg-red-hot); }
+
+.mi-num {
+  flex: none; min-width: 2.2em;
+  font-family: var(--sg-mono); font-weight: 600;
+  font-size: clamp(12px, 1.4vw, 14px); letter-spacing: .04em;
+  color: var(--sg-ink-faint);
+}
+.mi-label {
+  flex: 1 1 auto;
+  font-weight: 800; letter-spacing: -.02em; line-height: 1.05;
+  font-size: clamp(28px, 7vw, 40px);
+  color: var(--sg-ink);
+}
+.mi-ico {
+  flex: none;
+  font-family: var(--sg-mono); font-weight: 600;
+  font-size: clamp(20px, 3.4vw, 26px); line-height: 1;
+  color: var(--sg-ink-faint);
+}
+.lp-menu-row.is-cta-row .mi-label { color: var(--sg-red-hot); }
+.lp-menu-row.is-cta-row .mi-ico-arrow { color: var(--sg-red-hot); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .lp-menu-row > a       { transition: transform var(--sg-t-fast) var(--sg-ease); }
+  .lp-menu-row > a::before { transition: opacity var(--sg-t-fast) var(--sg-ease); }
+  .mi-label, .mi-ico, .mi-num { transition: color var(--sg-t-fast) var(--sg-ease); }
+  .mi-ico { transition: color var(--sg-t-fast) var(--sg-ease), transform var(--sg-t-fast) var(--sg-ease); }
+
+  .lp-menu-row > a:hover,
+  .lp-menu-row > a:focus-visible { transform: translateX(6px); }
+  .lp-menu-row > a:hover .mi-label,
+  .lp-menu-row > a:focus-visible .mi-label { color: var(--sg-ink); }
+  .lp-menu-row > a:hover .mi-num,
+  .lp-menu-row > a:focus-visible .mi-num { color: var(--sg-red-hot); }
+  .lp-menu-row > a:hover .mi-ico,
+  .lp-menu-row > a:focus-visible .mi-ico { color: var(--sg-ink); transform: translateX(3px); }
+
+  /* staggered entrance of the rows when the menu opens */
+  .lp-menu-row {
+    opacity: 0; transform: translateY(14px);
+  }
+  #lp-menu.lp-menu.is-open .lp-menu-row {
+    opacity: 1; transform: translateY(0);
+    transition: opacity .5s var(--sg-ease), transform .5s var(--sg-ease);
+  }
+  #lp-menu.lp-menu.is-open .lp-menu-row:nth-child(1) { transition-delay: .08s; }
+  #lp-menu.lp-menu.is-open .lp-menu-row:nth-child(2) { transition-delay: .12s; }
+  #lp-menu.lp-menu.is-open .lp-menu-row:nth-child(3) { transition-delay: .16s; }
+  #lp-menu.lp-menu.is-open .lp-menu-row:nth-child(4) { transition-delay: .20s; }
+  #lp-menu.lp-menu.is-open .lp-menu-row:nth-child(5) { transition-delay: .24s; }
+  #lp-menu.lp-menu.is-open .lp-menu-row:nth-child(6) { transition-delay: .28s; }
+  #lp-menu.lp-menu.is-open .lp-menu-row:nth-child(7) { transition-delay: .32s; }
+  #lp-menu.lp-menu.is-open .lp-menu-row:nth-child(8) { transition-delay: .36s; }
+  #lp-menu.lp-menu.is-open .lp-menu-row:nth-child(9) { transition-delay: .40s; }
+}
+
+/* ===========================================================================
+   5 · BOTTOM STICKY CTA BAR  (red gradient, pinned to overlay bottom)
+   =========================================================================== */
+.lp-menu-cta {
+  flex: none;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 3px;
+  width: 100%;
+  min-height: 64px;
+  padding: 12px 20px;
+  padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+  border: none;
+  color: #ffffff;
+  text-align: center;
+  cursor: pointer;
+  background: var(--sg-grad-red, linear-gradient(135deg, #b00000, #e53935));
+  box-shadow: 0 -10px 40px -16px rgba(213,21,34,.55), inset 0 1px 0 rgba(255,255,255,.18);
+  -webkit-tap-highlight-color: transparent;
+}
+.lp-menu-cta-main {
+  font-weight: 800; font-size: clamp(17px, 2.2vw, 19px); letter-spacing: -.01em;
+  display: inline-flex; align-items: center; gap: 9px;
+}
+.lp-menu-cta-arr { display: inline-block; }
+.lp-menu-cta-sub {
+  font-size: 12.5px; font-weight: 500; letter-spacing: .01em;
+  color: rgba(255,255,255,.86);
+}
+.lp-menu-cta:focus-visible { outline: 2px solid #ffffff; outline-offset: -4px; }
+@media (prefers-reduced-motion: no-preference) {
+  .lp-menu-cta { transition: filter var(--sg-t-fast) var(--sg-ease); }
+  .lp-menu-cta-arr { transition: transform var(--sg-t-fast) var(--sg-ease); }
+  .lp-menu-cta:hover { filter: brightness(1.06); }
+  .lp-menu-cta:hover .lp-menu-cta-arr { transform: translateX(4px); }
+}
+
+/* ===========================================================================
+   6 · DESKTOP REFINEMENT  (cap content, comfortable rhythm; left-aligned list)
+   =========================================================================== */
+@media (min-width: 768px) {
+  .lp-menu-inner { padding-top: 26px; }
+  .lp-menu-cta { min-height: 72px; }
+}
