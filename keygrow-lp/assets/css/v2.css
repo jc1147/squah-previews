@@ -1,0 +1,176 @@
+/* ============================================================================
+   SGEN LP — V2 DESIGN LAYER  (loads AFTER page.css; overrides to the v2 brief)
+   ----------------------------------------------------------------------------
+   Owner brief (2026-06-11): bespoke, MOSTLY-DARK canvas with a few light relief
+   rows · TIGHTER hero (~1 viewport, not 3–5 scrolls) · fix the mobile diorama ·
+   fix + tighten the compare table · bump small fonts · consistent spacing · more
+   depth/life, less flat. Tokens only. The results-showcase rebuild is separate.
+   ============================================================================ */
+
+/* ---- page canvas: deep dark gutter so seams/overscroll never flash white ---- */
+html { background: #0a090b; }
+body { background: #0a090b; }
+
+/* ============================================================================
+   1 · CONSISTENT SECTION RHYTHM + DARK SEAMS + LIGHT RELIEF ROWS
+   ============================================================================ */
+/* one standardized vertical rhythm everywhere (kills the disjointed padding) */
+.sec { padding-top: clamp(64px, 8vw, 104px); padding-bottom: clamp(64px, 8vw, 104px); }
+/* hairline seam between consecutive dark bands so they read as distinct */
+.surface-dark + .surface-dark { border-top: 1px solid rgba(255,255,255,.06); }
+/* subtle alternating depth on dark bands (every other = slightly raised) */
+.surface-dark { background: #0d0d0f; }
+.surface-dark.sec--raise { background: #121214; }
+
+/* LIGHT RELIEF ROW — warm off-white breath between dark bands (bespoke, intentional) */
+.sec--light {
+  background: #f7f6f3; color: var(--sg-ink);
+  border-top: 1px solid rgba(0,0,0,.06); border-bottom: 1px solid rgba(0,0,0,.06);
+}
+.sec--light .eyebrow { color: var(--sg-red); }
+
+/* tighten the centered section heads + standardize their rhythm */
+.sec-head { max-width: 800px; }
+.sec-head .h2 { margin-top: 12px; }
+.sec-head .lead { margin-top: 16px; font-size: clamp(16px, 1.4vw, 19px); }
+.sec-head.center .lead { max-width: 60ch; }
+.lp-section-cta { margin-top: clamp(36px, 4vw, 52px); }
+
+/* ============================================================================
+   2 · TYPE — pull the oversized down, push the too-small up
+   ============================================================================ */
+/* global display sizes: a touch smaller + tighter so nothing screams */
+h2, .h2 { font-size: clamp(28px, 3.6vw, 46px); line-height: 1.05; letter-spacing: -.028em; }
+h3, .h3 { font-size: clamp(20px, 2vw, 26px); }
+.eyebrow { font-size: 12px; letter-spacing: .18em; margin-bottom: 16px; }
+.lead { font-size: clamp(16px, 1.4vw, 19px); line-height: 1.6; }
+/* readable floors for the small text the owner flagged */
+.kicker { font-size: 12px; }
+.label, .mono { font-size: 12px; }
+
+/* ============================================================================
+   3 · HERO v2 — tighter type, ~1 viewport, bulletproof mobile diorama
+   ============================================================================ */
+.hero-sec {
+  padding-top: clamp(104px, 13vh, 148px);
+  padding-bottom: clamp(56px, 7vw, 92px);
+  background: #0a090b;
+}
+.hero-grid { gap: clamp(36px, 5vw, 56px); }
+@media (min-width: 992px) { .hero-grid { grid-template-columns: 1.05fr .95fr; align-items: center; } }
+
+/* headline down from 116 → 64 max, tighter leading */
+.hero-sec .h-hero { font-size: clamp(34px, 4.6vw, 62px); line-height: 1.04; letter-spacing: -.035em; }
+.hero-copy > .lead { margin-top: 18px; max-width: 40ch; font-size: clamp(16px, 1.35vw, 18px); }
+.hero-cta { margin-top: 26px; }
+.hero-stats { margin-top: 22px; font-size: 12.5px; }
+.hero-price { margin-top: 20px; }
+.hero-chips { margin-top: 18px; }
+
+/* dashboard depth + constrain the panel icon (was rendering oversized on mobile) */
+.hd-pico { width: 24px; height: 24px; flex: 0 0 24px; }
+.hd-pico svg { width: 14px; height: 14px; }
+/* FIX (root cause of the broken diorama): '.hd-rank' is overloaded — it is BOTH the
+   Google panel modifier (.hd-panel.hd-rank) AND the rank badge (.hd-row .hd-rank).
+   The badge rule (width:22px, red gradient bg) leaked onto the panel → it collapsed
+   to a 34px red square and its rows overflowed onto the AI panel. Re-assert the panel
+   (2-class specificity beats the 1-class badge rule). */
+.hd-panel.hd-rank {
+  width: auto; height: auto; display: block; place-items: initial;
+  border-radius: var(--sg-r-md); background: rgba(255,255,255,.03);
+  color: inherit; font: inherit; box-shadow: none;
+}
+.hero-dash { box-shadow: 0 40px 90px -30px rgba(0,0,0,.85), -24px 0 80px -40px rgba(213,21,34,.25), inset 0 1px 0 rgba(255,255,255,.06); }
+
+/* MOBILE diorama: no tilt, stack the two panels, DROP the popped cards (they overlapped) */
+@media (max-width: 991px) {
+  .hero-stage { transform: none; }
+  .hero-dash-body { grid-template-columns: 1fr; gap: 10px; }
+  .hero-chip, .hero-toast { display: none; }
+}
+
+/* ============================================================================
+   4 · DEPTH / LIFE — kill the flatness on dark cards + interactive elements
+   ============================================================================ */
+.surface-dark .card,
+.surface-dark .dl-col,
+.surface-dark .gsc-card,
+.surface-dark .metric-jump,
+.surface-dark .rc-row,
+.surface-dark .roi-tile {
+  background: linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.018));
+  border-color: rgba(255,255,255,.10);
+  box-shadow: var(--sg-shadow-rest), inset 0 1px 0 rgba(255,255,255,.05);
+}
+.surface-dark .card:hover,
+.surface-dark .win-card:hover,
+.surface-dark .gsc-card:hover {
+  border-color: var(--sg-red-tint-22);
+  box-shadow: 0 30px 70px -28px rgba(0,0,0,.8), 0 0 30px -10px var(--sg-red-tint-22), inset 0 1px 0 rgba(255,255,255,.07);
+  transform: translateY(-4px);
+}
+/* eyebrows pop hotter on the dark canvas */
+.surface-dark .eyebrow { color: var(--sg-red-hot); }
+/* engine-split + deliverables formula/notes get a subtle glow on dark */
+.surface-dark .es-formula,
+.surface-dark .tl-note { background: rgba(213,21,34,.10); border-color: var(--sg-red-tint-22); box-shadow: inset 0 1px 0 rgba(255,255,255,.04); }
+
+/* logo marquee on dark */
+.surface-dark .lm-viewport::before { background: linear-gradient(90deg, #0d0d0f, transparent); }
+.surface-dark .lm-viewport::after { background: linear-gradient(270deg, #0d0d0f, transparent); }
+.surface-dark .lm-logo { color: rgba(255,255,255,.46); }
+.surface-dark .lm-logo:hover { color: rgba(255,255,255,.85); }
+
+/* ============================================================================
+   5 · NAV — page is mostly dark now, so the scrolled nav is DARK glass (not light)
+   ============================================================================ */
+.lp-nav.is-solid {
+  color: #f4f2ee;
+  background: color-mix(in srgb, #0d0d0f 80%, transparent);
+  border-bottom-color: rgba(255,255,255,.08);
+  box-shadow: 0 10px 30px -16px rgba(0,0,0,.7);
+}
+.lp-nav.is-solid .lp-logo { color: #f4f2ee; }
+.lp-nav.is-solid .btn-secondary { color: #f4f2ee; border-color: rgba(255,255,255,.22); }
+.lp-nav.is-solid .btn-secondary:hover { background: #fff; color: var(--sg-ink); border-color: #fff; }
+
+/* ============================================================================
+   6 · COMPARE TABLE — fix alignment-assist, tighten rows, make it ALIVE
+   (markup also gets a leading blank header cell so the 3 heads align to data)
+   ============================================================================ */
+/* The ring was a grid item with grid-row:1/-1 → it OCCUPIED col4 for auto-flow,
+   shifting every cell left and wrapping the SGEN column. Make it an absolute
+   overlay over col4 instead (cols 1.4/1/1/1, gap 0 → col4 starts at 77.27%). */
+.ct-grid { position: relative; }
+@media (min-width: 768px) {
+  .ct-cell { padding: 13px 18px; border-bottom-color: rgba(255,255,255,.07); }
+  .ct-colhead { padding: 18px 16px 16px; }
+  .ct-colhead .cn { font-size: 15px; }
+  .ct-colhead.is-sgen .cn { font-size: 17px; }     /* SGEN head bigger */
+  .surface-dark .ct-cell.is-sgen { background: rgba(213,21,34,.12); }
+  .ct-col-sgen {
+    position: absolute; grid-area: 1 / 1 / -1 / -1;   /* containing block = whole grid */
+    top: -2px; bottom: -2px; left: 77.27%; right: -2px;
+    border: 1.5px solid var(--sg-red); border-radius: var(--sg-r-md);
+    box-shadow: 0 0 0 4px rgba(213,21,34,.10), 0 30px 70px -34px rgba(213,21,34,.5);
+    background: none; pointer-events: none; z-index: 3;
+  }
+}
+@media (max-width: 767px) { .ct-col-sgen { display: none; } }
+/* glyphs get a touch more presence */
+.ct-glyph { width: 24px; height: 24px; font-size: 13px; }
+.ct-glyph.yes { box-shadow: 0 0 0 1px var(--sg-red-tint-22) inset; }
+.surface-dark .ct-glyph.partial { background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.14); color: rgba(255,255,255,.6); }
+.surface-dark .ct-glyph.no { color: rgba(255,255,255,.32); }
+
+/* ============================================================================
+   7 · MISC POLISH
+   ============================================================================ */
+/* price card on dark: glassy, the featured one glows red */
+.surface-dark .price-card { background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02)); }
+.surface-dark .price-card.featured { box-shadow: 0 0 0 1.5px var(--sg-red), 0 40px 90px -30px rgba(213,21,34,.5), inset 0 1px 0 rgba(255,255,255,.07); }
+.surface-dark .price-card .pc-amt { color: #f4f2ee; }
+/* faq on light relief reads clean; on dark it glows */
+.surface-dark .faq-item.is-open { border-color: var(--sg-red-tint-22); box-shadow: 0 0 24px -12px var(--sg-red-tint-22); }
+/* stat numbers: ensure the metallic clip reads on dark */
+.surface-dark .stat-card .sc-num { background: var(--sg-grad-stat); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }

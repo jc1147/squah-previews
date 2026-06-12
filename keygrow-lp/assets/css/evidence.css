@@ -1,0 +1,207 @@
+/* ============================================================================
+   SGEN LP — EVIDENCE SYSTEM  (loads after v2.css)
+   "As if you're seeing it inside the SGEN app." Rebuilds the 4 proof sections:
+   S7 impact carousel · S8 GSC-style app dashboards w/ 90-day graphs · S9 modern
+   win cards · S10 Google-like reviews. Tokens only; the chart's 2nd data hue
+   (cool blue) is an intentional data-viz exception alongside the red primary.
+   ============================================================================ */
+
+/* ---- chart data-viz palette (local) ---- */
+:root {
+  --ev-clk:  #ff3344;   /* clicks  — SGEN red primary */
+  --ev-imp:  #5b9dff;   /* impressions — cool analytics blue (data-viz 2nd hue) */
+  --ev-grid: rgba(255,255,255,.08);
+  --ev-gold: #fcc419;   /* google review stars */
+}
+
+/* ============================================================================
+   SGEN APP WINDOW  (shared chrome — echoes the hero diorama)
+   ============================================================================ */
+.appwin {
+  position: relative; border-radius: 16px; overflow: hidden;
+  background: linear-gradient(180deg, #17171b, #101013);
+  border: 1px solid rgba(255,255,255,.10);
+  box-shadow: 0 50px 120px -40px rgba(0,0,0,.85), 0 0 60px -30px rgba(213,21,34,.25),
+              inset 0 1px 0 rgba(255,255,255,.06);
+}
+.appwin-bar {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,.07);
+  background: rgba(255,255,255,.02);
+}
+.appwin-bar .dots { display: inline-flex; gap: 7px; flex: none; }
+.appwin-bar .dots i { width: 11px; height: 11px; border-radius: 50%; }
+.appwin-bar .dots i:nth-child(1){ background:#ff5f57; } .appwin-bar .dots i:nth-child(2){ background:#febc2e; } .appwin-bar .dots i:nth-child(3){ background:#28c840; }
+.appwin-bar .aw-title { font-family: var(--sg-mono); font-size: 12.5px; letter-spacing: .02em; color: rgba(255,255,255,.7); display: inline-flex; align-items: center; gap: 8px; }
+.appwin-bar .aw-title .g { width: 15px; height: 15px; display: inline-grid; }
+.appwin-bar .aw-right { margin-left: auto; display: inline-flex; align-items: center; gap: 8px; font-family: var(--sg-mono); font-size: 11px; color: rgba(255,255,255,.42); }
+.appwin-bar .aw-live { display: inline-flex; align-items: center; gap: 6px; color: var(--sg-red-hot); }
+.appwin-bar .aw-live::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--sg-red-hot); box-shadow: 0 0 0 3px rgba(255,42,56,.18); }
+.appwin-body { padding: 20px; }
+
+/* ============================================================================
+   S8 · GSC DASHBOARD  (date tabs · readable metric tiles · 90-day chart · rows)
+   ============================================================================ */
+.gsc-stack { display: grid; gap: 28px; }
+
+.gsc2-head { display: flex; align-items: flex-start; gap: 14px; flex-wrap: wrap; margin-bottom: 18px; }
+.gsc2-biz { flex: 1; min-width: 0; }
+.gsc2-biz .nm { font-weight: 800; font-size: clamp(18px, 2vw, 22px); letter-spacing: -.01em; color: #f4f2ee; }
+.gsc2-biz .mt { margin-top: 4px; font-family: var(--sg-mono); font-size: 11.5px; letter-spacing: .04em; color: rgba(255,255,255,.45); }
+.gsc2-win { /* the "X% growth" headline pill */
+  flex: none; align-self: center; display: inline-flex; align-items: center; gap: 8px;
+  padding: 9px 15px; border-radius: var(--sg-r-pill);
+  background: rgba(40,200,64,.12); border: 1px solid rgba(40,200,64,.30); color: #51d06a;
+  font-weight: 800; font-size: 14px; letter-spacing: -.01em;
+}
+.gsc2-win svg { width: 15px; height: 15px; }
+
+/* date-range tabs */
+.gsc2-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
+.gsc2-tab {
+  font-family: var(--sg-mono); font-size: 11px; font-weight: 600; letter-spacing: .02em;
+  padding: 7px 12px; border-radius: 8px; color: rgba(255,255,255,.55);
+  background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08);
+}
+.gsc2-tab.is-on { color: #fff; background: rgba(213,21,34,.18); border-color: var(--sg-red-tint-22); }
+
+/* metric tiles — READABLE labels (owner: "what 550 what?") */
+.gsc2-tiles { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 8px; }
+@media (min-width: 560px) { .gsc2-tiles { grid-template-columns: repeat(4, 1fr); } }
+.gsc2-tile {
+  padding: 14px 16px; border-radius: 12px;
+  background: rgba(255,255,255,.035); border: 1px solid rgba(255,255,255,.09);
+  border-top: 2px solid var(--tile-accent, var(--ev-clk));
+}
+.gsc2-tile .lab { display: flex; align-items: center; gap: 7px; font-size: 12.5px; font-weight: 600; color: rgba(255,255,255,.62); }
+.gsc2-tile .lab::before { content: ""; width: 9px; height: 9px; border-radius: 3px; background: var(--tile-accent, var(--ev-clk)); flex: none; }
+.gsc2-tile .val { margin-top: 8px; font-size: clamp(24px, 2.8vw, 32px); font-weight: 800; letter-spacing: -.02em; line-height: 1; color: #f4f2ee; font-variant-numeric: tabular-nums; }
+.gsc2-tile .dl { margin-top: 5px; font-family: var(--sg-mono); font-size: 10.5px; color: #51d06a; }
+.gsc2-tile.imp { --tile-accent: var(--ev-imp); }
+.gsc2-tile.ctr { --tile-accent: #febc2e; }
+.gsc2-tile.pos { --tile-accent: #b06cf0; }
+
+/* the chart */
+.gsc2-chart { position: relative; margin-top: 16px; }
+.gsc2-legend { display: flex; gap: 18px; margin-bottom: 10px; }
+.gsc2-legend span { display: inline-flex; align-items: center; gap: 7px; font-family: var(--sg-mono); font-size: 11px; color: rgba(255,255,255,.6); }
+.gsc2-legend i { width: 12px; height: 3px; border-radius: 2px; }
+.gsc2-legend .lc { background: var(--ev-clk); } .gsc2-legend .li { background: var(--ev-imp); }
+.gsc2-plot { width: 100%; height: auto; display: block; overflow: visible; }
+.gsc2-xaxis { display: flex; justify-content: space-between; margin-top: 8px; font-family: var(--sg-mono); font-size: 10px; color: rgba(255,255,255,.32); }
+
+/* ranked keyword rows — crisp */
+.gsc2-kws { margin-top: 20px; padding-top: 18px; border-top: 1px solid rgba(255,255,255,.07); display: grid; gap: 4px; }
+.gsc2-kw { display: flex; align-items: center; gap: 12px; padding: 9px 12px; border-radius: 9px; }
+.gsc2-kw:hover { background: rgba(255,255,255,.03); }
+.gsc2-kw .rk { flex: none; min-width: 30px; height: 24px; padding: 0 9px; border-radius: 7px; display: inline-grid; place-items: center; font-family: var(--sg-mono); font-size: 11px; font-weight: 700; color: #fff; }
+.gsc2-kw .rk.r1 { background: var(--sg-grad-red); box-shadow: 0 4px 12px -4px rgba(213,21,34,.6); }
+.gsc2-kw .rk.r2 { background: rgba(255,255,255,.16); }
+.gsc2-kw .kw { flex: 1; min-width: 0; font-size: 14px; color: rgba(255,255,255,.9); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.gsc2-kw .up { flex: none; display: inline-flex; align-items: center; gap: 4px; font-family: var(--sg-mono); font-size: 11px; color: #51d06a; }
+.gsc2-more { margin-top: 12px; font-family: var(--sg-mono); font-size: 11px; color: rgba(255,255,255,.4); }
+
+/* ============================================================================
+   S7 · IMPACT CAROUSEL  (2-up · ~8 cards · HUGE number · "DAMN")
+   ============================================================================ */
+.impact-wrap { position: relative; }
+.impact-track {
+  display: grid; grid-auto-flow: column; grid-auto-columns: 88%;
+  gap: 18px; overflow-x: auto; scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch; padding-bottom: 6px; scrollbar-width: none;
+}
+.impact-track::-webkit-scrollbar { display: none; }
+@media (min-width: 760px)  { .impact-track { grid-auto-columns: calc(50% - 9px); } }   /* 2-up */
+.impact-card {
+  scroll-snap-align: start; position: relative; overflow: hidden;
+  padding: 30px 30px 26px; border-radius: 18px;
+  background: linear-gradient(165deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+  border: 1px solid rgba(255,255,255,.10);
+  box-shadow: var(--sg-shadow-rest), inset 0 1px 0 rgba(255,255,255,.05);
+}
+.impact-card::after { /* red glow corner */
+  content: ""; position: absolute; right: -40px; top: -40px; width: 180px; height: 180px;
+  background: radial-gradient(circle, rgba(213,21,34,.22), transparent 70%); pointer-events: none;
+}
+.impact-card .ic-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.impact-card .ic-metric { font-family: var(--sg-mono); font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--sg-red-hot); }
+.impact-card .ic-spark { width: 76px; height: 28px; opacity: .9; }
+.impact-card .ic-num {
+  margin-top: 14px; font-size: clamp(56px, 8vw, 92px); font-weight: 900; line-height: .9; letter-spacing: -.05em;
+  font-variant-numeric: tabular-nums; color: #fff;
+  background: linear-gradient(180deg, #ffffff, #ff5564); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+}
+.impact-card .ic-from { margin-top: 14px; display: inline-flex; align-items: center; gap: 9px; font-family: var(--sg-mono); font-size: 13px; color: rgba(255,255,255,.55); }
+.impact-card .ic-from b { color: rgba(255,255,255,.9); font-weight: 700; }
+.impact-card .ic-from .ar { color: var(--sg-red-hot); }
+.impact-card .ic-cli { margin-top: 18px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,.08); font-size: 13px; color: rgba(255,255,255,.6); }
+.impact-card .ic-cli b { color: #f4f2ee; font-weight: 700; }
+
+/* shared carousel controls (impact + reviews) */
+.caro-ctrls { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 26px; }
+.caro-btn {
+  width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; cursor: pointer;
+  background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.14); color: #f4f2ee;
+  transition: background-color .16s, border-color .16s, transform .12s var(--sg-ease);
+}
+.caro-btn:hover { background: var(--sg-red); border-color: var(--sg-red); }
+.caro-btn:active { transform: scale(.92); }
+.caro-btn svg { width: 18px; height: 18px; }
+.caro-dots { display: inline-flex; gap: 8px; }
+.caro-dots button { width: 8px; height: 8px; padding: 0; border: 0; border-radius: 50%; background: rgba(255,255,255,.28); cursor: pointer; transition: width .2s, background-color .2s; }
+.caro-dots button.is-on { width: 22px; border-radius: 99px; background: var(--sg-red); }
+
+/* ============================================================================
+   S9 · MODERN WIN CARDS  (Image-3 style: stat pills + #1 chips)
+   ============================================================================ */
+.win2-grid { display: grid; gap: 20px; }
+@media (min-width: 720px) { .win2-grid { grid-template-columns: 1fr 1fr; } }
+.win2-card {
+  padding: 28px; border-radius: 18px;
+  background: linear-gradient(165deg, rgba(255,255,255,.055), rgba(255,255,255,.018));
+  border: 1px solid rgba(255,255,255,.10);
+  box-shadow: var(--sg-shadow-rest), inset 0 1px 0 rgba(255,255,255,.05);
+  transition: transform .25s var(--sg-ease), box-shadow .25s var(--sg-ease), border-color .25s;
+}
+.win2-card:hover { transform: translateY(-4px); border-color: var(--sg-red-tint-22); box-shadow: 0 30px 70px -28px rgba(0,0,0,.8), 0 0 30px -10px var(--sg-red-tint-22); }
+.win2-card .w2-cat { font-family: var(--sg-mono); font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #51d06a; }
+.win2-card .w2-loc { margin-top: 3px; font-size: 13.5px; color: rgba(255,255,255,.5); }
+.win2-card .w2-title { margin-top: 14px; font-weight: 800; font-size: 20px; letter-spacing: -.015em; color: #f4f2ee; }
+.win2-card .w2-pills { margin-top: 20px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.w2-pill {
+  text-align: center; padding: 14px 8px; border-radius: 14px;
+  background: rgba(213,21,34,.10); border: 1px solid var(--sg-red-tint-22);
+}
+.w2-pill .pv { font-size: clamp(20px, 2.4vw, 26px); font-weight: 900; letter-spacing: -.03em; line-height: 1; color: #fff; }
+.w2-pill .pl { margin-top: 6px; font-family: var(--sg-mono); font-size: 9.5px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: rgba(255,255,255,.55); }
+.win2-card .w2-kws { margin-top: 18px; display: flex; flex-wrap: wrap; gap: 8px; }
+.w2-chip { display: inline-flex; align-items: center; gap: 7px; padding: 7px 12px 7px 7px; border-radius: 99px; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.10); font-size: 12.5px; color: rgba(255,255,255,.82); }
+.w2-chip .rk { display: inline-grid; place-items: center; min-width: 26px; height: 20px; padding: 0 6px; border-radius: 99px; background: rgba(40,200,64,.16); border: 1px solid rgba(40,200,64,.34); color: #51d06a; font-family: var(--sg-mono); font-size: 10px; font-weight: 700; }
+
+/* ============================================================================
+   S10 · GOOGLE-LIKE REVIEWS  (crisp white cards · gold stars · avatars)
+   ============================================================================ */
+.grev-rating { display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap; margin-bottom: 34px; }
+.grev-rating .g { width: 26px; height: 26px; }
+.grev-rating .score { font-size: 22px; font-weight: 800; color: #f4f2ee; }
+.grev-rating .stars { color: var(--ev-gold); font-size: 19px; letter-spacing: 2px; }
+.grev-rating .ct { font-family: var(--sg-mono); font-size: 12px; color: rgba(255,255,255,.5); }
+
+.grev-track { display: grid; grid-auto-flow: column; grid-auto-columns: 84%; gap: 18px; overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; padding-bottom: 6px; scrollbar-width: none; }
+.grev-track::-webkit-scrollbar { display: none; }
+@media (min-width: 680px)  { .grev-track { grid-auto-columns: calc(50% - 9px); } }
+@media (min-width: 1040px) { .grev-track { grid-auto-columns: calc(33.333% - 12px); } }
+.grev-card {
+  scroll-snap-align: start; display: flex; flex-direction: column;
+  background: #ffffff; color: #1a1a1a; border-radius: 16px; padding: 24px;
+  box-shadow: 0 24px 50px -24px rgba(0,0,0,.6);
+}
+.grev-card .gc-top { display: flex; align-items: center; justify-content: space-between; }
+.grev-card .gc-stars { color: var(--ev-gold); font-size: 16px; letter-spacing: 1.5px; }
+.grev-card .gc-g { width: 20px; height: 20px; }
+.grev-card .gc-quote { margin: 16px 0 0; font-size: 15px; line-height: 1.6; color: #2b2b2b; flex: 1; }
+.grev-card .gc-who { margin-top: 20px; padding-top: 18px; border-top: 1px solid #ececec; display: flex; align-items: center; gap: 12px; }
+.grev-card .gc-av { width: 42px; height: 42px; border-radius: 50%; flex: none; display: grid; place-items: center; font-weight: 700; font-size: 16px; color: #fff; }
+.grev-card .gc-nm { font-weight: 700; font-size: 14.5px; color: #1a1a1a; }
+.grev-card .gc-rl { font-size: 12.5px; color: #707070; margin-top: 1px; }
+.grev-card .gc-src { margin-top: 2px; font-size: 11px; color: #9aa0a6; display: inline-flex; align-items: center; gap: 5px; }
