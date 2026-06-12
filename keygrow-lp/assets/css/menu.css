@@ -62,15 +62,32 @@
    (menu.css loads after page.css, so these win.)
    =========================================================================== */
 #lp-nav.lp-nav { padding-top: 11px; padding-bottom: 11px; }
-#lp-nav.lp-nav.is-solid { padding-top: 9px; padding-bottom: 9px; }
 
 /* TRANSPARENT-STATE LEGIBILITY (the "can't see the menu button" fix):
    the page root theme is LIGHT (--sg-ink is dark #1A1A1A), and page.css's
    #lp-nav ID rule paints the nav with that dark ink. Over the DARK hero (the
    transparent, not-yet-scrolled state) that makes the logo + burger dark-on-dark
-   = invisible. Force cream while transparent; the solid (white-glass) state keeps
-   page.css's dark ink. ID+class+pseudo specificity (1,2,0) beats #lp-nav (1,0,0). */
+   = invisible. Force cream while transparent. ID+class+pseudo specificity (1,2,0)
+   beats #lp-nav (1,0,0). */
 #lp-nav.lp-nav:not(.is-solid) { color: #f4f2ee; }
+
+/* SOLID (scrolled) STATE — THE "fading out on scroll" FIX.
+   page.css's grouped `#lp-nav` rule (ID specificity 1,0,0) hard-sets
+   `background:transparent` + dark `color:var(--sg-ink)`, which BEATS the
+   `.lp-nav.is-solid` class rule (0,2,0) that was meant to paint the scrolled bar.
+   Result: on scroll the nav had NO background and DARK text over the dark page,
+   and the `transition` animated it → it literally faded out. Re-assert the solid
+   state at ID+class+class (1,2,0) so it wins. Dark glass + CREAM text (matches the
+   transparent state + the mostly-dark page; a white bar would clash). */
+#lp-nav.lp-nav.is-solid {
+  padding-top: 9px; padding-bottom: 9px;
+  color: #f4f2ee;
+  background: color-mix(in srgb, #0d0d0f 84%, transparent);
+  -webkit-backdrop-filter: saturate(140%) blur(16px);
+          backdrop-filter: saturate(140%) blur(16px);
+  border-bottom: 1px solid rgba(255, 255, 255, .08);
+  box-shadow: 0 10px 34px -18px rgba(0, 0, 0, .8);
+}
 @media (max-width: 640px) {
   #lp-nav.lp-nav { padding-top: 8px; padding-bottom: 8px; }
   #lp-nav.lp-nav.is-solid { padding-top: 7px; padding-bottom: 7px; }
