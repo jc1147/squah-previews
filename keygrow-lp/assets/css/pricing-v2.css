@@ -16,18 +16,18 @@
 .pkg--aeo       { --pkg-accent: var(--sg-red-hot); }             /* hot red — AI answer engines */
 .pkg--combo     { --pkg-accent: var(--sg-red); }                 /* signature red — the winner */
 
-/* ---- top-accent rule: a thin colored bar reading the package's service type ---- */
-/* NB: NO overflow:hidden here — it would clip the .pc-badge that overhangs at
-   top:-13px (the "glitched top"). Instead the top bar gets matching rounded
-   corners so it never sticks out past the card's radius. */
+/* ---- top-accent: a colored TOP BORDER that FOLLOWS the card's rounded corners ----
+   Earlier this was an absolutely-positioned ::before bar (top:0;left:0;right:0;
+   height:3px; radius:16px 16px 0 0). On a 3–4px-tall element a 16px corner radius
+   can't render, so its near-square corners poked past the card's actual 16px
+   rounded corners — the "broken / not wrapped to the edge" look the owner flagged.
+   A real border-top inherits the card's border-radius, so the accent now curves
+   with the corner and hugs the card outline. overflow stays visible (the .pc-badge
+   overhangs at top:-13px). */
 .price-card.pkg { padding-top: 34px; }
-.price-card.pkg::before {
-  content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px;
-  background: var(--pkg-accent);
-  border-radius: var(--sg-r-lg) var(--sg-r-lg) 0 0;
-}
-/* the combined winner gets the full red gradient bar (richer than a flat hue) */
-.price-card.pkg--combo::before { height: 4px; background: var(--sg-grad-red); }
+.surface-dark .price-card.pkg { border-top: 3px solid var(--pkg-accent); }
+/* the combined winner: a touch thicker, in the signature red (matches its ring) */
+.surface-dark .price-card.pkg--combo { border-top-width: 4px; border-top-color: var(--sg-red); }
 
 /* ============================================================================
    SERVICE-TYPE PILL  (gradient-glass + inset highlight — echoes .gsc2-tile /

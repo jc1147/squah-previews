@@ -13,37 +13,68 @@
 /* ===========================================================================
    1 · HAMBURGER BUTTON  (lives inside .lp-nav-cta)
    =========================================================================== */
+/* the burger is now the SOLE nav affordance (the Apply button was removed), so it
+   reads as a clear bordered pill with a "Menu" label — visible on both the
+   transparent-dark and the scrolled-solid nav states (currentColor adapts). */
 .lp-burger {
   display: inline-flex; align-items: center; justify-content: center;
-  width: 44px; height: 44px; flex: none;
-  padding: 0; margin: 0;
-  border: 1px solid transparent;
-  border-radius: var(--sg-r-btn);
-  background: transparent;
+  gap: 9px; flex: none;
+  height: 40px; padding: 0 15px 0 14px; margin: 0;
+  border: 1px solid color-mix(in srgb, currentColor 30%, transparent);
+  border-radius: var(--sg-r-pill);
+  background: color-mix(in srgb, currentColor 9%, transparent);
   color: inherit;               /* inherits nav cream (transparent) / ink (solid) */
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 }
-.lp-burger:hover { border-color: color-mix(in srgb, currentColor 24%, transparent); }
+.lp-burger:hover {
+  border-color: color-mix(in srgb, currentColor 50%, transparent);
+  background: color-mix(in srgb, currentColor 15%, transparent);
+}
 .lp-burger:focus-visible {
   outline: 2px solid var(--sg-red);
   outline-offset: 2px;
 }
 .lp-burger-lines {
   display: inline-flex; flex-direction: column; justify-content: center;
-  gap: 5px; width: 22px; height: 16px;
+  gap: 4px; width: 18px; height: 14px;
 }
 .lp-burger-lines i {
   display: block; height: 2px; width: 100%;
   background: currentColor; border-radius: 2px;
 }
 /* the middle bar sits a touch shorter for a crafted hamburger read */
-.lp-burger-lines i:nth-child(2) { width: 78%; align-self: flex-end; }
+.lp-burger-lines i:nth-child(2) { width: 72%; align-self: flex-end; }
+.lp-burger-txt {
+  font-weight: 700; font-size: 13.5px; letter-spacing: -.01em; line-height: 1;
+  color: currentColor;
+}
 
 @media (prefers-reduced-motion: no-preference) {
   .lp-burger { transition: border-color var(--sg-t-fast) var(--sg-ease), background-color var(--sg-t-fast) var(--sg-ease); }
   .lp-burger-lines i { transition: width var(--sg-t-fast) var(--sg-ease), background-color var(--sg-t-fast) var(--sg-ease); }
   .lp-burger:hover .lp-burger-lines i:nth-child(2) { width: 100%; }
+}
+
+/* ===========================================================================
+   1b · SHORTER NAV (esp. mobile) — the nav was eating needless vertical space.
+   Trim the fixed-nav padding; tighter still on the scrolled-solid state.
+   (menu.css loads after page.css, so these win.)
+   =========================================================================== */
+#lp-nav.lp-nav { padding-top: 11px; padding-bottom: 11px; }
+#lp-nav.lp-nav.is-solid { padding-top: 9px; padding-bottom: 9px; }
+
+/* TRANSPARENT-STATE LEGIBILITY (the "can't see the menu button" fix):
+   the page root theme is LIGHT (--sg-ink is dark #1A1A1A), and page.css's
+   #lp-nav ID rule paints the nav with that dark ink. Over the DARK hero (the
+   transparent, not-yet-scrolled state) that makes the logo + burger dark-on-dark
+   = invisible. Force cream while transparent; the solid (white-glass) state keeps
+   page.css's dark ink. ID+class+pseudo specificity (1,2,0) beats #lp-nav (1,0,0). */
+#lp-nav.lp-nav:not(.is-solid) { color: #f4f2ee; }
+@media (max-width: 640px) {
+  #lp-nav.lp-nav { padding-top: 8px; padding-bottom: 8px; }
+  #lp-nav.lp-nav.is-solid { padding-top: 7px; padding-bottom: 7px; }
+  .lp-burger { height: 36px; padding: 0 13px 0 12px; }
 }
 
 /* ===========================================================================
