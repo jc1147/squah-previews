@@ -1,0 +1,1003 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SEO Optimization Plan — nuleafnv.com — crawl 99</title>
+<style>
+:root{
+  --bg:#0d0f14; --bg2:#11141b; --panel:#161a23; --panel2:#1b2030; --ink:#e9edf5; --ink2:#aab2c5;
+  --dim:#79829a; --line:#252b39; --line2:#2f3850; --accent:#5b8cff; --accent2:#7aa2ff;
+  --ok:#2ec27e; --warn:#f0a93b; --bad:#ef5350;
+  --t-transactional:#ff7a59; --t-commercial:#c792ea; --t-informational:#5cc8ff; --t-navigational:#9aa3b5;
+  --f-tofu:#5cc8ff; --f-mofu:#c792ea; --f-bofu:#2ec27e;
+  --radius:12px; --radius-s:8px;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font:14px/1.55 var(--sans);-webkit-font-smoothing:antialiased}
+a{color:var(--accent2);text-decoration:none} a:hover{text-decoration:underline}
+.loading{padding:60px;text-align:center;color:var(--dim)}
+.wrap{max-width:1220px;margin:0 auto;padding:0 22px 96px}
+
+/* HEADER */
+/* header is NORMAL flow (it scrolls AWAY); only the tab bar pins — so it never eats the screen */
+header.hd{background:var(--bg);padding:16px 22px 0;margin:0}
+.hd-inner{max-width:1220px;margin:0 auto}
+.hd h1{font-size:20px;margin:0 0 2px;font-weight:700;letter-spacing:-.01em}
+.hd .dom{color:var(--accent2);font-weight:600}
+.hd .sub{color:var(--dim);font-size:12.5px;margin:0 0 12px}
+.stats{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 14px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-s);padding:8px 13px;min-width:96px}
+.stat .n{font-size:20px;font-weight:700;line-height:1.1;font-variant-numeric:tabular-nums}
+.stat .l{font-size:10.5px;color:var(--dim);text-transform:uppercase;letter-spacing:.05em;margin-top:2px}
+/* TABS */
+/* the ONLY sticky element: a thin full-width tab BAR (sibling of the content) that pins to the top as you
+   scroll, so the title+stats above it scroll away and never eat the screen. */
+.tabbar{position:sticky;top:0;z-index:50;background:var(--bg);border-bottom:1px solid var(--line);box-shadow:0 6px 14px -10px rgba(0,0,0,.75)}
+.tabs{max-width:1220px;margin:0 auto;padding:3px 22px 0;display:flex;gap:2px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{appearance:none;background:none;border:0;border-bottom:2px solid transparent;color:var(--ink2);font:600 13px/1 var(--sans);padding:11px 16px;cursor:pointer;letter-spacing:.01em;flex:0 0 auto;white-space:nowrap}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.tab .c{color:var(--dim);font-weight:600;margin-left:5px;font-variant-numeric:tabular-nums}
+
+section.view{display:none;padding-top:22px}
+section.view.active{display:block}
+
+/* CONTROLS */
+.controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:0 0 16px}
+.search{flex:1;min-width:220px;position:relative}
+.search input{width:100%;background:var(--panel);border:1px solid var(--line2);border-radius:var(--radius-s);color:var(--ink);font:14px var(--sans);padding:9px 12px 9px 34px;outline:none}
+.search input:focus{border-color:var(--accent)}
+.search svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);width:15px;height:15px;opacity:.5}
+.filters{display:flex;flex-wrap:wrap;gap:6px}
+.fchip{appearance:none;background:var(--panel);border:1px solid var(--line2);border-radius:999px;color:var(--ink2);font:600 11.5px var(--sans);padding:5px 11px;cursor:pointer;text-transform:capitalize}
+.fchip:hover{border-color:var(--line2);color:var(--ink)}
+.fchip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.sorts{display:flex;gap:6px;align-items:center}
+.sorts label{color:var(--dim);font-size:11.5px;text-transform:uppercase;letter-spacing:.04em}
+.sortbtn{appearance:none;background:var(--panel);border:1px solid var(--line2);border-radius:var(--radius-s);color:var(--ink2);font:600 12px var(--sans);padding:6px 11px;cursor:pointer}
+.sortbtn[aria-pressed="true"]{color:var(--ink);border-color:var(--accent)}
+.sortbtn .arrow{opacity:.7;margin-left:3px}
+
+.muted{color:var(--dim)} .empty{color:var(--dim);padding:26px;text-align:center;border:1px dashed var(--line2);border-radius:var(--radius)}
+.count-line{color:var(--dim);font-size:12px;margin:0 0 10px}
+
+/* PAGE ROWS */
+.plist{display:flex;flex-direction:column;gap:8px}
+.prow{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+.prow.open{border-color:var(--line2)}
+.phead{display:grid;grid-template-columns:90px 1fr auto;gap:14px;align-items:center;padding:13px 16px;cursor:pointer;width:100%;text-align:left;background:none;border:0;color:inherit;font:inherit}
+.phead:hover{background:var(--panel2)}
+.phead:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.ptype{font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink2);background:var(--panel2);border:1px solid var(--line2);border-radius:6px;padding:3px 7px;text-align:center;font-weight:700}
+.pmain{min-width:0}
+.purl{display:block;font-size:12px;color:var(--dim);font-family:var(--mono);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pphrase{display:block;font-size:14.5px;font-weight:600;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pphrase .none{color:var(--dim);font-weight:400;font-style:italic}
+.pmeta{display:flex;gap:7px;align-items:center}
+.caret{transition:transform .15s;opacity:.6;width:16px;height:16px}
+.prow.open .caret{transform:rotate(90deg)}
+
+/* DETAIL */
+.pdetail{display:none;border-top:1px solid var(--line);padding:0}
+.prow.open .pdetail{display:block}
+.cols3{display:grid;grid-template-columns:1fr 1.15fr 1fr;gap:0}
+.col{padding:16px 18px;border-right:1px solid var(--line);min-width:0}
+.col:last-child{border-right:0}
+.col h4{margin:0 0 11px;font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:.06em;font-weight:700}
+.kv{margin:0 0 9px} .kv .k{font-size:10.5px;color:var(--dim);text-transform:uppercase;letter-spacing:.04em} .kv .v{font-size:13.5px;word-break:break-word}
+.kv .v a{font-family:var(--mono);font-size:12px;word-break:break-all}
+.rationale{margin-top:12px;padding:10px 12px;background:var(--bg2);border:1px solid var(--line);border-radius:var(--radius-s);font-size:12.5px;color:var(--ink2);line-height:1.5}
+.rationale .lbl{color:var(--dim);text-transform:uppercase;font-size:10px;letter-spacing:.05em;display:block;margin-bottom:4px}
+
+/* PRIMARY CHIP (big) */
+.primarychip{background:var(--panel2);border:1px solid var(--line2);border-left:3px solid var(--accent);border-radius:var(--radius-s);padding:11px 13px;margin:0 0 13px}
+.primarychip .lbl{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.06em;font-weight:700}
+.primarychip .ph{font-size:16px;font-weight:700;margin:3px 0 8px;line-height:1.3}
+.chiprow{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.list-tight{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
+.list-tight li{padding:8px 10px;background:var(--bg2);border:1px solid var(--line);border-radius:var(--radius-s)}
+.li-ph{font-size:13px;font-weight:500;margin-bottom:5px;word-break:break-word}
+.sub-h{font-size:10.5px;color:var(--dim);text-transform:uppercase;letter-spacing:.05em;font-weight:700;margin:14px 0 8px}
+
+/* CHIPS (intent/funnel/metric) */
+.chip{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:999px;line-height:1.5;text-transform:uppercase;letter-spacing:.03em;white-space:nowrap}
+.chip.vol{background:#1d2740;color:#aecbff;border:1px solid #2b3a5e}
+.chip.kd{color:#0b0d12}
+.chip.intent{border:1px solid currentColor;background:transparent}
+.chip.intent.transactional{color:var(--t-transactional)} .chip.intent.commercial{color:var(--t-commercial)}
+.chip.intent.informational{color:var(--t-informational)} .chip.intent.navigational{color:var(--t-navigational)}
+.chip.funnel{color:#0b0d12}
+.chip.funnel.tofu{background:var(--f-tofu)} .chip.funnel.mofu{background:var(--f-mofu)} .chip.funnel.bofu{background:var(--f-bofu)}
+.chip.fam{background:var(--panel);border:1px solid var(--line2);color:var(--ink2)}
+.chip.src{background:transparent;border:1px solid var(--line2);color:var(--dim);text-transform:lowercase;letter-spacing:0}
+.chip.dim{background:var(--panel);border:1px solid var(--line);color:var(--dim)}
+
+/* COMPETITORS + SERP */
+.comp{display:flex;flex-direction:column;gap:7px}
+.compitem{display:flex;align-items:flex-start;gap:9px;padding:8px 10px;background:var(--bg2);border:1px solid var(--line);border-radius:var(--radius-s)}
+.compitem .rank{font-family:var(--mono);font-size:11px;color:var(--dim);min-width:20px;padding-top:1px}
+.compitem .cbody{min-width:0;flex:1}
+.compitem .dom{font-weight:600;font-size:13px;word-break:break-all;display:block}
+.compitem .cangle{display:block;color:var(--ink2);font-size:11.5px;line-height:1.4;margin-top:2px}
+.compitem .tags{margin-left:auto;display:flex;gap:5px;flex-shrink:0}
+.confbadge{font-size:10px;text-transform:uppercase;letter-spacing:.05em;padding:2px 7px;border-radius:5px;font-weight:700}
+.confbadge.high{background:rgba(46,194,126,.16);color:var(--ok)} .confbadge.low{background:rgba(240,169,59,.16);color:var(--warn)}
+.serp{margin-top:14px}
+.serprow{display:grid;grid-template-columns:22px 1fr;gap:8px;padding:5px 0;border-bottom:1px solid var(--line);font-size:12px}
+.serprow:last-child{border-bottom:0}
+.serprow .r{font-family:var(--mono);color:var(--dim)}
+.serprow .t{min-width:0}
+.serprow .t .dm{color:var(--accent2);font-size:11px;font-family:var(--mono)}
+.serprow .t .tt{color:var(--ink2);font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* TABLES (pillar + orphans) */
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:4px 0;margin:0 0 18px;overflow:hidden}
+.panel .ph{padding:14px 18px 10px;border-bottom:1px solid var(--line)}
+.panel .ph h3{margin:0;font-size:15px} .panel .ph p{margin:4px 0 0;color:var(--dim);font-size:12.5px}
+.tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse}
+th,td{text-align:left;padding:9px 18px;border-bottom:1px solid var(--line);font-size:13px;vertical-align:middle}
+tr:last-child td{border-bottom:0}
+th{color:var(--dim);font-weight:700;font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;position:sticky;top:0;background:var(--panel)}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+tbody tr:hover{background:var(--panel2)}
+.phrasecell{font-weight:500;word-break:break-word}
+.ownedtag{font-size:9.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--ok);border:1px solid rgba(46,194,126,.4);border-radius:4px;padding:1px 5px;margin-left:7px}
+.whitetag{font-size:9.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--warn);border:1px solid rgba(240,169,59,.4);border-radius:4px;padding:1px 5px;margin-left:7px}
+
+/* VOLUME / KD bars */
+.bar{height:6px;border-radius:3px;background:var(--line);overflow:hidden;min-width:54px;display:inline-block;vertical-align:middle}
+.bar > span{display:block;height:100%;border-radius:3px}
+.barwrap{display:inline-flex;align-items:center;gap:7px}
+.barwrap .bn{font-variant-numeric:tabular-nums;font-size:12px;color:var(--ink2);min-width:42px;text-align:right}
+
+.recpill{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;padding:3px 9px;border-radius:6px}
+.recpill.new_page{background:rgba(91,140,255,.16);color:var(--accent2)} .recpill.cluster_post{background:rgba(199,146,234,.16);color:var(--t-commercial)}
+.brief{color:var(--ink2);font-size:12.5px;line-height:1.5;max-width:640px}
+
+/* TARGET VALIDATION (Stage 2) */
+.vstat{appearance:none;cursor:pointer;background:var(--bg2);border:1px solid var(--line2);border-left:3px solid var(--vc);border-radius:9px;padding:8px 13px;display:inline-flex;flex-direction:column;gap:1px;min-width:78px}
+.vstat:hover{border-color:var(--vc)} .vstat.on{background:color-mix(in srgb,var(--vc) 14%,transparent);border-color:var(--vc)}
+.vstat .vn{font-size:19px;font-weight:700;color:var(--vc);font-variant-numeric:tabular-nums} .vstat .vl{font-size:10.5px;color:var(--ink2);text-transform:uppercase;letter-spacing:.04em}
+#vlist{display:flex;flex-direction:column;gap:8px}
+.vrow{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--vc);border-radius:var(--radius-s);padding:12px 15px}
+.vhd{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.vbadge{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#0b0d12;padding:3px 9px;border-radius:6px;white-space:nowrap}
+.vslug{font-family:var(--mono);font-size:13px;font-weight:600}
+.vrole{font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--dim);border:1px solid var(--line2);border-radius:5px;padding:2px 7px;margin-left:auto}
+.vfocus{font-size:13.5px;margin:7px 0 8px}
+.vgates{display:flex;flex-wrap:wrap;gap:6px}
+.vaction{margin-top:9px;padding-top:9px;border-top:1px dashed var(--line2)}
+.vact{font-size:12.5px;color:var(--ink2)} .vact b{color:var(--ink)}
+.rdx{font-size:12.5px;color:var(--ink2);margin:8px 0 0;line-height:1.5}
+.racts{margin-top:9px;padding-top:9px;border-top:1px dashed var(--line2);display:flex;flex-direction:column;gap:7px}
+.ract{font-size:12.5px;color:var(--ink2);line-height:1.5}
+.rrisk{font-size:9.5px;font-weight:700;letter-spacing:.04em}
+.rtype{font-size:10px;text-transform:uppercase;letter-spacing:.04em;color:var(--dim);border:1px solid var(--line2);border-radius:4px;padding:1px 6px}
+/* META REWRITE */
+.mrow{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-s);padding:13px 15px;margin:0 0 8px}
+.mhd{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:9px}
+.mchg{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--accent2);background:rgba(91,140,255,.14);border-radius:5px;padding:2px 8px}
+.mkept{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--ok);background:var(--okbg,rgba(46,194,126,.12));border-radius:5px;padding:2px 8px}
+.mfield{margin:0 0 9px}
+.mlabel{font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--dim);font-weight:700;margin-bottom:4px;display:flex;gap:8px;align-items:center}
+.mlen{font-family:var(--mono);font-size:11px;font-weight:600}
+.mold{font-size:12.5px;color:var(--dim);text-decoration:line-through;text-decoration-color:var(--line2);margin-bottom:2px}
+.mnew{font-size:13.5px;color:var(--ink)}
+.mgrnd{font-size:11.5px;color:var(--dim);border-top:1px dashed var(--line2);padding-top:8px;margin-top:3px;line-height:1.5}
+.mgrnd .gl{text-transform:uppercase;font-size:9.5px;letter-spacing:.05em;color:var(--accent2);font-weight:700}
+
+@media(max-width:900px){
+  .cols3{grid-template-columns:1fr} .col{border-right:0;border-bottom:1px solid var(--line)} .col:last-child{border-bottom:0}
+  .phead{grid-template-columns:74px 1fr auto}
+}
+@media(max-width:560px){
+  .wrap{padding:0 12px 72px}
+  header.hd{padding:12px 12px 10px}
+  .hd-inner{max-width:none}
+  .hd h1{font-size:16px;line-height:1.25}
+  .hd .sub{font-size:11.5px;margin-bottom:10px}
+  /* stats: ONE swipeable row (was 3 rows) so the header stays small */
+  .stats{gap:6px;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin:0}
+  .stats::-webkit-scrollbar{display:none}
+  .stat{flex:0 0 auto;min-width:0;padding:5px 10px} .stat .n{font-size:16px} .stat .l{font-size:9px}
+  .tabs{padding:3px 12px 0}
+  .pmeta .chip.kd,.pmeta .chip.vol{display:none}
+  .phead{grid-template-columns:66px 1fr auto;gap:8px;padding:12px 12px}
+  .ptype{font-size:9px;padding:3px 4px;letter-spacing:.02em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .col{padding:14px 13px}
+  .controls{gap:8px} .search{min-width:0;flex:1 1 100%}
+  th,td{padding:8px 12px;font-size:12px}
+  .brief{max-width:none}
+  .primarychip .ph{font-size:15px}
+}
+</style>
+</head>
+<body>
+<div id="app" class="loading">Loading…</div>
+<script id="preso-data" type="application/json">{"crawlId":"99","domain":"nuleafnv.com","category":"cannabis dispensaries","started_at":"2026-06-12T18:42:42.141Z","counts":{"pagesPlanned":3,"targetKeyphrases":7,"competitors":6,"orphans":13,"sitePages":28,"contentTopics":2,"contentHubs":0,"validated":3,"onpageFixes":0},"pages":[{"url":"https://nuleafnv.com/dispensaries/las-vegas/","type":"location","have":{"title":"NuLeaf Las Vegas Dispensary — Adult-Use Cannabis Store","h1":"Las Vegas Dispensary (Twain)","words":1410,"h2":["Services & Payment","Store Details"],"depth":2,"present":true},"primary":{"phrase":"las vegas dispensary","volume":33100,"kd":45,"intent":"informational","funnel":"TOFU"},"secondaries":[],"spoke_substack":[{"phrase":"las vegas dispensary","volume":33100,"kd":45,"intent":"informational","funnel":"TOFU","family":"","source":"spoke"},{"phrase":"dispensary las vegas","volume":33100,"kd":45,"intent":"informational","funnel":"TOFU","family":"","source":"spoke"},{"phrase":"dispensary in las vegas","volume":33100,"kd":48,"intent":"informational","funnel":"TOFU","family":"","source":"spoke"},{"phrase":"best las vegas dispensary","volume":3600,"kd":44,"intent":"commercial","funnel":"MOFU","family":"","source":"spoke"}],"rationale":"Assigned as location-page primary from the page's OWN spoke sub-stack (no pillar global genuinely fit this page; the page's own sub-theme has validated demand). Top sub-theme term (vol 33100, kd 45, family location_city). Governed by the pillar constitution (same global CORE relevance gate).","we_already_rank_pos":null,"competitors":[{"rank":null,"domain":"thedispensarynv.com","title":"","strength":""},{"rank":null,"domain":"planet13.com","title":"","strength":""},{"rank":null,"domain":"thegrovenv.com","title":"","strength":""}],"competitor_confidence":"high","competitor_wins":null,"competitor_gaps":null,"serp_top10":[{"rank":1,"domain":"planet13.com","url":"","title":"Planet 13 Las Vegas | Shop Cannabis Online"},{"rank":2,"domain":"thegrovenv.com","url":"","title":"The Grove Las Vegas: Best Cannabis Dispensary in NV"},{"rank":3,"domain":"thedispensarynv.com","url":"","title":"The Dispensary NV – Nevada's Premier Cannabis Dispensary"},{"rank":4,"domain":"yelp.com","url":"","title":"TOP 10 BEST Cannabis Dispensaries in Las Vegas, NV"},{"rank":5,"domain":"cannastarz.com","url":"","title":"Las Vegas Cannabis Dispensary"},{"rank":6,"domain":"greenlightdispensary.com","url":"","title":"Greenlight Dispensary Las Vegas - Paradise (Formerly ..."},{"rank":7,"domain":"vegastreehouse.com","url":"","title":"Vegas Treehouse | Cannabis Dispensary in the heart of Las ..."},{"rank":8,"domain":"thecannabisconv.com","url":"","title":"The Cannabis Co.: Premium Cannabis Dispensary in Las Vegas"}]},{"url":"https://nuleafnv.com/","type":"home","have":{"title":"NuLeaf — Premium Cannabis Dispensaries in Nevada","h1":"NuLeaf Cannabis Dispensaries","words":65,"h2":["NuLeaf"],"depth":0,"present":true},"primary":{"phrase":"cannabis dispensary in nevada","volume":18100,"kd":36,"intent":"","funnel":""},"secondaries":[],"spoke_substack":[],"rationale":"Assigned as home-page primary by the coverage map (GENUINE FIT: token overlap [cannabis, nevada] + type-affinity (identity -> home), score 5). Highest-volume pillar global owned by this page (vol 18100, kd 36). Governed by the pillar constitution (same global CORE relevance gate).","we_already_rank_pos":null,"competitors":[],"competitor_confidence":"low","competitor_wins":null,"competitor_gaps":null,"serp_top10":[{"rank":1,"domain":"nevadamademarijuana.com","url":"","title":"Nevada Made Marijuana: Best Dispensary in Las Vegas"},{"rank":2,"domain":"thedispensarynv.com","url":"","title":"The Dispensary NV – Nevada's Premier Cannabis Dispensary"},{"rank":3,"domain":"greenreleafdispensary.com","url":"","title":"Best Cannabis Dispensary in Nevada, MO"},{"rank":4,"domain":"deeprootsharvest.com","url":"","title":"Deep Roots Harvest: Weed Near Me, Dispensary Near Me ..."},{"rank":5,"domain":"thegrovenv.com","url":"","title":"The Grove Las Vegas: Best Cannabis Dispensary in NV"},{"rank":6,"domain":"weedmaps.com","url":"","title":"Nevada Weed Dispensaries Near Me"},{"rank":7,"domain":"thesourcenv.com","url":"","title":"The Source: Cannabis Dispensary, Dispensary Near Me ..."},{"rank":8,"domain":"greenleafwellness.com","url":"","title":"Greenleaf Wellness: Reno Cannabis Dispensary, Best Weed ..."},{"rank":9,"domain":"newecannabis.com","url":"","title":"Newe Cannabis | The BEST cannabis dispensary for miles ..."}]},{"url":"https://nuleafnv.com/dispensaries/lake-tahoe/","type":"location","have":{"title":"NuLeaf Incline Village (Lake Tahoe) Dispensary","h1":"Lake Tahoe Dispensary (Incline Village)","words":1183,"h2":["Services & Payment","Store Details"],"depth":2,"present":true},"primary":{"phrase":"dispensary lake tahoe","volume":880,"kd":0,"intent":"informational","funnel":"TOFU"},"secondaries":[],"spoke_substack":[{"phrase":"dispensary lake tahoe","volume":880,"kd":0,"intent":"informational","funnel":"TOFU","family":"","source":"spoke"},{"phrase":"lake tahoe dispensary","volume":880,"kd":16,"intent":"informational","funnel":"TOFU","family":"","source":"spoke"}],"rationale":"Assigned as location-page primary from the page's OWN spoke sub-stack (no pillar global genuinely fit this page; the page's own sub-theme has validated demand). Top sub-theme term (vol 880, kd 0, family location_city). Governed by the pillar constitution (same global CORE relevance gate).","we_already_rank_pos":null,"competitors":[{"rank":null,"domain":"tahoegreen.com","title":"","strength":""},{"rank":null,"domain":"tahoewellness.com","title":"","strength":""},{"rank":null,"domain":"cannablue.com","title":"","strength":""}],"competitor_confidence":"high","competitor_wins":null,"competitor_gaps":null,"serp_top10":[{"rank":1,"domain":"tahoegreen.com","url":"","title":"Tahoe Green Dispensary: South Lake Tahoe's Best Choice"},{"rank":2,"domain":"tahoewellness.com","url":"","title":"Tahoe Wellness Center: Cannabis Dispensary Delivery + Pickup"},{"rank":3,"domain":"yelp.com","url":"","title":"TOP 10 BEST Cannabis Dispensaries in North Lake Tahoe ..."},{"rank":4,"domain":"visitlaketahoe.com","url":"","title":"Dispensaries in South Lake Tahoe"},{"rank":5,"domain":"cannablue.com","url":"","title":"Best Cannabis Dispensary In Town - Cannablue"},{"rank":6,"domain":"weedmaps.com","url":"","title":"South Lake Tahoe, CA Weed Dispensaries Near Me"},{"rank":7,"domain":"nuleafnv.com","url":"","title":"Lake Tahoe Dispensary (Incline Village)"},{"rank":8,"domain":"tahoehoneycompany.com","url":"","title":"Home - Tahoe Honey Co."},{"rank":9,"domain":"tahoeharvestcollection.com","url":"","title":"Dispensary Delivery in Truckee & Lake Tahoe: THC"}]}],"pillarTargets":[{"phrase":"dispensary in las vegas","volume":33100,"kd":48,"intent_class":"informational","funnel_stage":"TOFU","owned":false,"sources":["competitor","equity","spoke"]},{"phrase":"dispensary las vegas","volume":33100,"kd":45,"intent_class":"informational","funnel_stage":"TOFU","owned":false,"sources":["competitor","equity","spoke"]},{"phrase":"las vegas dispensary","volume":33100,"kd":45,"intent_class":"informational","funnel_stage":"TOFU","owned":false,"sources":["equity","spoke"]},{"phrase":"cannabis dispensary in nevada","volume":18100,"kd":36,"intent_class":"","funnel_stage":"","owned":true,"sources":["anchor","pillar"]},{"phrase":"best las vegas dispensary","volume":3600,"kd":44,"intent_class":"commercial","funnel_stage":"MOFU","owned":false,"sources":["spoke"]},{"phrase":"dispensary lake tahoe","volume":880,"kd":0,"intent_class":"informational","funnel_stage":"TOFU","owned":false,"sources":["spoke"]},{"phrase":"lake tahoe dispensary","volume":880,"kd":16,"intent_class":"informational","funnel_stage":"TOFU","owned":false,"sources":["spoke"]}],"pillarDiscoveredCount":1420,"pillarQualifiedCount":7,"pillarCompetitors":[{"domain":"cannablue.com","serps":1,"best_rank":99,"strength":"","is_known_builder":false,"is_commerce_adjacent":false},{"domain":"planet13.com","serps":1,"best_rank":99,"strength":"","is_known_builder":false,"is_commerce_adjacent":false},{"domain":"tahoegreen.com","serps":1,"best_rank":99,"strength":"","is_known_builder":false,"is_commerce_adjacent":false},{"domain":"tahoewellness.com","serps":1,"best_rank":99,"strength":"","is_known_builder":false,"is_commerce_adjacent":false},{"domain":"thedispensarynv.com","serps":1,"best_rank":99,"strength":"","is_known_builder":false,"is_commerce_adjacent":false},{"domain":"thegrovenv.com","serps":1,"best_rank":99,"strength":"","is_known_builder":false,"is_commerce_adjacent":false}],"orphans":[{"phrase":"page:https://nuleafnv.com/product-satisfaction-promise/","volume":null,"kd":null,"intent_class":"","funnel_stage":"","recommended":"flag_no_demand_page","brief":"NO-DEMAND money page \"https://nuleafnv.com/product-satisfaction-promise/\" (type product) got NO plan: no pillar global genuinely fit it AND spoke FAIL-CLOSED: VALIDATE: no anchor for \"https://nuleafnv.com/product-satisfaction-promise/\" has any search demand (volume>0). Thesis fails closed -- refine anchor_terms.. Flagged as a coverage gap -- either deepen the page's sub-theme to create provable demand, de-prioritize it, or fold it into a cluster."},{"phrase":"page:https://nuleafnv.com/locations-app/","volume":null,"kd":null,"intent_class":"","funnel_stage":"","recommended":"flag_no_demand_page","brief":"NO-DEMAND money page \"https://nuleafnv.com/locations-app/\" (type product) got NO plan: no pillar global genuinely fit it AND spoke FAIL-CLOSED: VALIDATE: no anchor for \"https://nuleafnv.com/locations-app/\" has any search demand (volume>0). Thesis fails closed -- refine anchor_terms.. Flagged as a coverage gap -- either deepen the page's sub-theme to create provable demand, de-prioritize it, or fold it into a cluster."},{"phrase":"page:https://nuleafnv.com/screens/incline-vertical/","volume":null,"kd":null,"intent_class":"","funnel_stage":"","recommended":"flag_no_demand_page","brief":"NO-DEMAND money page \"https://nuleafnv.com/screens/incline-vertical/\" (type solutions) got NO plan: no pillar global genuinely fit it AND spoke FAIL-CLOSED: VALIDATE: no anchor for \"https://nuleafnv.com/screens/incline-vertical/\" has any search demand (volume>0). Thesis fails closed -- refine anchor_terms.. Flagged as a coverage gap -- either deepen the page's sub-theme to create provable demand, de-prioritize it, or fold it into a cluster."},{"phrase":"page:https://nuleafnv.com/cannabis-me/","volume":null,"kd":null,"intent_class":"","funnel_stage":"","recommended":"flag_no_demand_page","brief":"NO-DEMAND money page \"https://nuleafnv.com/cannabis-me/\" (type other) got NO plan: no pillar global genuinely fit it AND spoke FAIL-CLOSED: VALIDATE: no anchor for \"https://nuleafnv.com/cannabis-me/\" has any search demand (volume>0). Thesis fails closed -- refine anchor_terms.. Flagged as a coverage gap -- either deepen the page's sub-theme to create provable demand, de-prioritize it, or fold it into a cluster."},{"phrase":"page:https://nuleafnv.com/las-vegas-specials/","volume":null,"kd":null,"intent_class":"","funnel_stage":"","recommended":"flag_no_demand_page","brief":"NO-DEMAND money page \"https://nuleafnv.com/las-vegas-specials/\" (type other) got NO plan: no pillar global genuinely fit it AND spoke FAIL-CLOSED: VALIDATE: no anchor for \"https://nuleafnv.com/las-vegas-specials/\" has any search demand (volume>0). Thesis fails closed -- refine anchor_terms.. Flagged as a coverage gap -- either deepen the page's sub-theme to create provable demand, de-prioritize it, or fold it into a cluster."},{"phrase":"page:https://nuleafnv.com/incline-village-specials/","volume":null,"kd":null,"intent_class":"","funnel_stage":"","recommended":"flag_no_demand_page","brief":"NO-DEMAND money page \"https://nuleafnv.com/incline-village-specials/\" (type other) got NO plan: no pillar global genuinely fit it AND spoke FAIL-CLOSED: VALIDATE: no anchor for \"https://nuleafnv.com/incline-village-specials/\" has any search demand (volume>0). Thesis fails closed -- refine anchor_terms.. Flagged as a coverage gap -- either deepen the page's sub-theme to create provable demand, de-prioritize it, or fold it into a cluster."},{"phrase":"page:https://nuleafnv.com/hello-club/","volume":null,"kd":null,"intent_class":"","funnel_stage":"","recommended":"flag_no_demand_page","brief":"NO-DEMAND money page \"https://nuleafnv.com/hello-club/\" (type other) got NO plan: no pillar global genuinely fit it AND spoke FAIL-CLOSED: VALIDATE: no anchor for \"https://nuleafnv.com/hello-club/\" has any search demand (volume>0). Thesis fails closed -- refine anchor_terms.. Flagged as a coverage gap -- either deepen the page's sub-theme to create provable demand, de-prioritize it, or fold it into a cluster."},{"phrase":"page:https://nuleafnv.com/dispensaries/","volume":null,"kd":null,"intent_class":"","funnel_stage":"","recommended":"flag_no_demand_page","brief":"NO-DEMAND money page \"https://nuleafnv.com/dispensaries/\" (type location-index) got NO plan: no pillar global genuinely fit it AND spoke FAIL-CLOSED: VALIDATE: no anchor for \"https://nuleafnv.com/dispensaries/\" has any search demand (volume>0). Thesis fails closed -- refine anchor_terms.. Flagged as a coverage gap -- either deepen the page's sub-theme to create provable demand, de-prioritize it, or fold it into a cluster."},{"phrase":"page:https://nuleafnv.com/shop-online/","volume":null,"kd":null,"intent_class":"","funnel_stage":"","recommended":"flag_no_demand_page","brief":"NO-DEMAND money page \"https://nuleafnv.com/shop-online/\" (type other) got NO plan: no pillar global genuinely fit it AND spoke FAIL-CLOSED: VALIDATE: no anchor for \"https://nuleafnv.com/shop-online/\" has any search demand (volume>0). Thesis fails closed -- refine anchor_terms.. Flagged as a coverage gap -- either deepen the page's sub-theme to create provable demand, de-prioritize it, or fold it into a cluster."},{"phrase":"page:https://nuleafnv.com/category/uncategorized/","volume":null,"kd":null,"intent_class":"","funnel_stage":"","recommended":"flag_no_demand_page","brief":"NO-DEMAND money page \"https://nuleafnv.com/category/uncategorized/\" (type other) got NO plan: no pillar global genuinely fit it AND spoke FAIL-CLOSED: VALIDATE: no anchor for \"https://nuleafnv.com/category/uncategorized/\" has any search demand (volume>0). Thesis fails closed -- refine anchor_terms.. Flagged as a coverage gap -- either deepen the page's sub-theme to create provable demand, de-prioritize it, or fold it into a cluster."},{"phrase":"page:https://nuleafnv.com/screens/incline/","volume":null,"kd":null,"intent_class":"","funnel_stage":"","recommended":"flag_no_demand_page","brief":"NO-DEMAND money page \"https://nuleafnv.com/screens/incline/\" (type other) got NO plan: no pillar global genuinely fit it AND spoke FAIL-CLOSED: VALIDATE: no anchor for \"https://nuleafnv.com/screens/incline/\" has any search demand (volume>0). Thesis fails closed -- refine anchor_terms.. Flagged as a coverage gap -- either deepen the page's sub-theme to create provable demand, de-prioritize it, or fold it into a cluster."},{"phrase":"page:https://nuleafnv.com/screens/twain/","volume":null,"kd":null,"intent_class":"","funnel_stage":"","recommended":"flag_no_demand_page","brief":"NO-DEMAND money page \"https://nuleafnv.com/screens/twain/\" (type other) got NO plan: no pillar global genuinely fit it AND spoke FAIL-CLOSED: VALIDATE: no anchor for \"https://nuleafnv.com/screens/twain/\" has any search demand (volume>0). Thesis fails closed -- refine anchor_terms.. Flagged as a coverage gap -- either deepen the page's sub-theme to create provable demand, de-prioritize it, or fold it into a cluster."},{"phrase":"page:https://nuleafnv.com/2026/02/19/hello-world/","volume":null,"kd":null,"intent_class":"","funnel_stage":"","recommended":"flag_no_demand_page","brief":"NO-DEMAND money page \"https://nuleafnv.com/2026/02/19/hello-world/\" (type other) got NO plan: no pillar global genuinely fit it AND spoke FAIL-CLOSED: VALIDATE: no anchor for \"https://nuleafnv.com/2026/02/19/hello-world/\" has any search demand (volume>0). Thesis fails closed -- refine anchor_terms.. Flagged as a coverage gap -- either deepen the page's sub-theme to create provable demand, de-prioritize it, or fold it into a cluster."}],"contentMap":[{"top_keyword":"","competitor_url":"","competitor":"","is_direct":false,"volume":null,"kd":null,"best_position":null,"supports_slug":"dispensaries","is_new_hub":false,"sgen_angle":"","intent_class":"","funnel_stage":"","cluster_theme":"dispensary-locations","score":null},{"top_keyword":"","competitor_url":"","competitor":"","is_direct":false,"volume":null,"kd":null,"best_position":null,"supports_slug":"dispensaries","is_new_hub":false,"sgen_angle":"","intent_class":"","funnel_stage":"","cluster_theme":"dispensary-locations","score":null}],"contentHubs":{},"stage2":[{"slug":"","page_type":"home","page_role":"home","page_class":"product","current_phrase":"cannabis dispensary in nevada","current_volume":18100,"current_kd":36,"verdict":"KEEP_WITH_GAP","reason_code":"","new_focus_phrase":"","new_focus_volume":null,"new_focus_kd":null,"intent_result":"PASS","intent_serp_type":"product","serp_coherence":1,"winnability_result":"PASS","reality_result":"FAIL","fallback_phrase":"","new_asset":null,"content_gap":{"note":"page content does not yet reflect \"cannabis dispensary in nevada\" — align H1/intro/headings to the head term"}},{"slug":"dispensaries/las-vegas","page_type":"location","page_role":"spoke","page_class":"product","current_phrase":"las vegas dispensary","current_volume":33100,"current_kd":45,"verdict":"FAIL-CLOSED","reason_code":"OFF_THESIS","new_focus_phrase":"","new_focus_volume":null,"new_focus_kd":null,"intent_result":"PASS","intent_serp_type":"product","serp_coherence":0.88,"winnability_result":"PASS","reality_result":"FAIL","fallback_phrase":"nuleaf las vegas","new_asset":null,"content_gap":null},{"slug":"dispensaries/lake-tahoe","page_type":"location","page_role":"spoke","page_class":"product","current_phrase":"dispensary lake tahoe","current_volume":880,"current_kd":0,"verdict":"FAIL-CLOSED","reason_code":"OFF_THESIS","new_focus_phrase":"","new_focus_volume":null,"new_focus_kd":null,"intent_result":"PASS","intent_serp_type":"product","serp_coherence":0.89,"winnability_result":"PASS","reality_result":"FAIL","fallback_phrase":"nuleaf lake tahoe","new_asset":null,"content_gap":null}],"stage2Counts":{"KEEP_WITH_GAP":1,"FAIL-CLOSED":2},"relevancy":[],"relevancyCounts":{},"relevancyActions":0,"metas":[],"metasChanged":0,"linking":[{"slug":"index","page_type":"home","stage2_role":"home","derived_role":"TOPICAL-SPOKE","role_reason":"standard topical page","validated_focus":"cannabis dispensary in nevada","relevancy_verdict":"","ed_in":0,"ed_out":3,"topical_in":0,"topical_in_weighted":0,"topical_out":0,"cta_in":0,"navcard_in":0,"brand_in":0,"weak_in":0,"cta_inflation":0,"planned_hub_inbound":0,"reciprocity_diff_cluster":0,"exact_pct":0,"link_health":"well-linked"},{"slug":"shop-online","page_type":"?","stage2_role":"?","derived_role":"UTILITY","role_reason":"no validated_focus; hierarchy-excluded + leak-capped","validated_focus":"","relevancy_verdict":"","ed_in":0,"ed_out":0,"topical_in":0,"topical_in_weighted":0,"topical_out":0,"cta_in":0,"navcard_in":0,"brand_in":0,"weak_in":0,"cta_inflation":0,"planned_hub_inbound":0,"reciprocity_diff_cluster":0,"exact_pct":0,"link_health":"utility (hierarchy-excluded)"},{"slug":"product-satisfaction-promise","page_type":"?","stage2_role":"?","derived_role":"UTILITY","role_reason":"no validated_focus; hierarchy-excluded + leak-capped","validated_focus":"","relevancy_verdict":"","ed_in":0,"ed_out":1,"topical_in":0,"topical_in_weighted":0,"topical_out":0,"cta_in":0,"navcard_in":0,"brand_in":0,"weak_in":0,"cta_inflation":0,"planned_hub_inbound":0,"reciprocity_diff_cluster":0,"exact_pct":0,"link_health":"utility (hierarchy-excluded)"},{"slug":"terms-of-use","page_type":"?","stage2_role":"?","derived_role":"UTILITY","role_reason":"no validated_focus; hierarchy-excluded + leak-capped","validated_focus":"","relevancy_verdict":"","ed_in":1,"ed_out":1,"topical_in":0,"topical_in_weighted":0,"topical_out":0,"cta_in":0,"navcard_in":0,"brand_in":0,"weak_in":1,"cta_inflation":0,"planned_hub_inbound":0,"reciprocity_diff_cluster":0,"exact_pct":0,"link_health":"utility (hierarchy-excluded)"},{"slug":"hello-club-terms","page_type":"?","stage2_role":"?","derived_role":"UTILITY","role_reason":"no validated_focus; hierarchy-excluded + leak-capped","validated_focus":"","relevancy_verdict":"","ed_in":0,"ed_out":2,"topical_in":0,"topical_in_weighted":0,"topical_out":0,"cta_in":0,"navcard_in":0,"brand_in":0,"weak_in":0,"cta_inflation":0,"planned_hub_inbound":0,"reciprocity_diff_cluster":0,"exact_pct":0,"link_health":"utility (hierarchy-excluded)"},{"slug":"privacy-policy","page_type":"?","stage2_role":"?","derived_role":"UTILITY","role_reason":"no validated_focus; hierarchy-excluded + leak-capped","validated_focus":"","relevancy_verdict":"","ed_in":3,"ed_out":1,"topical_in":0,"topical_in_weighted":0,"topical_out":0,"cta_in":0,"navcard_in":0,"brand_in":0,"weak_in":3,"cta_inflation":0,"planned_hub_inbound":0,"reciprocity_diff_cluster":0,"exact_pct":0,"link_health":"utility (hierarchy-excluded)"},{"slug":"cannabis-me","page_type":"?","stage2_role":"?","derived_role":"UTILITY","role_reason":"no validated_focus; hierarchy-excluded + leak-capped","validated_focus":"","relevancy_verdict":"","ed_in":0,"ed_out":0,"topical_in":0,"topical_in_weighted":0,"topical_out":0,"cta_in":0,"navcard_in":0,"brand_in":0,"weak_in":0,"cta_inflation":0,"planned_hub_inbound":0,"reciprocity_diff_cluster":0,"exact_pct":0,"link_health":"utility (hierarchy-excluded)"},{"slug":"about-us","page_type":"?","stage2_role":"?","derived_role":"UTILITY","role_reason":"no validated_focus; hierarchy-excluded + leak-capped","validated_focus":"","relevancy_verdict":"","ed_in":0,"ed_out":1,"topical_in":0,"topical_in_weighted":0,"topical_out":0,"cta_in":0,"navcard_in":0,"brand_in":0,"weak_in":0,"cta_inflation":0,"planned_hub_inbound":0,"reciprocity_diff_cluster":0,"exact_pct":0,"link_health":"utility (hierarchy-excluded)"},{"slug":"accessibility-statement","page_type":"?","stage2_role":"?","derived_role":"UTILITY","role_reason":"no validated_focus; hierarchy-excluded + leak-capped","validated_focus":"","relevancy_verdict":"","ed_in":0,"ed_out":0,"topical_in":0,"topical_in_weighted":0,"topical_out":0,"cta_in":0,"navcard_in":0,"brand_in":0,"weak_in":0,"cta_inflation":0,"planned_hub_inbound":0,"reciprocity_diff_cluster":0,"exact_pct":0,"link_health":"utility (hierarchy-excluded)"},{"slug":"notice-of-privacy-practices","page_type":"?","stage2_role":"?","derived_role":"UTILITY","role_reason":"no validated_focus; hierarchy-excluded + leak-capped","validated_focus":"","relevancy_verdict":"","ed_in":0,"ed_out":0,"topical_in":0,"topical_in_weighted":0,"topical_out":0,"cta_in":0,"navcard_in":0,"brand_in":0,"weak_in":0,"cta_inflation":0,"planned_hub_inbound":0,"reciprocity_diff_cluster":0,"exact_pct":0,"link_health":"utility (hierarchy-excluded)"},{"slug":"locations-app","page_type":"?","stage2_role":"?","derived_role":"UTILITY","role_reason":"no validated_focus; hierarchy-excluded + leak-capped","validated_focus":"","relevancy_verdict":"","ed_in":0,"ed_out":0,"topical_in":0,"topical_in_weighted":0,"topical_out":0,"cta_in":0,"navcard_in":0,"brand_in":0,"weak_in":0,"cta_inflation":0,"planned_hub_inbound":0,"reciprocity_diff_cluster":0,"exact_pct":0,"link_health":"utility (hierarchy-excluded)"},{"slug":"hello-club","page_type":"?","stage2_role":"?","derived_role":"UTILITY","role_reason":"no validated_focus; hierarchy-excluded + leak-capped","validated_focus":"","relevancy_verdict":"","ed_in":2,"ed_out":0,"topical_in":0,"topical_in_weighted":0,"topical_out":0,"cta_in":2,"navcard_in":0,"brand_in":0,"weak_in":0,"cta_inflation":1,"planned_hub_inbound":0,"reciprocity_diff_cluster":0,"exact_pct":0,"link_health":"utility (hierarchy-excluded)"},{"slug":"incline-village-specials","page_type":"?","stage2_role":"?","derived_role":"UTILITY","role_reason":"no validated_focus; hierarchy-excluded + leak-capped","validated_focus":"","relevancy_verdict":"","ed_in":0,"ed_out":0,"topical_in":0,"topical_in_weighted":0,"topical_out":0,"cta_in":0,"navcard_in":0,"brand_in":0,"weak_in":0,"cta_inflation":0,"planned_hub_inbound":0,"reciprocity_diff_cluster":0,"exact_pct":0,"link_health":"utility (hierarchy-excluded)"},{"slug":"las-vegas-specials","page_type":"?","stage2_role":"?","derived_role":"UTILITY","role_reason":"no validated_focus; hierarchy-excluded + leak-capped","validated_focus":"","relevancy_verdict":"","ed_in":0,"ed_out":0,"topical_in":0,"topical_in_weighted":0,"topical_out":0,"cta_in":0,"navcard_in":0,"brand_in":0,"weak_in":0,"cta_inflation":0,"planned_hub_inbound":0,"reciprocity_diff_cluster":0,"exact_pct":0,"link_health":"utility (hierarchy-excluded)"},{"slug":"contact","page_type":"?","stage2_role":"?","derived_role":"UTILITY","role_reason":"no validated_focus; hierarchy-excluded + leak-capped","validated_focus":"","relevancy_verdict":"","ed_in":0,"ed_out":0,"topical_in":0,"topical_in_weighted":0,"topical_out":0,"cta_in":0,"navcard_in":0,"brand_in":0,"weak_in":0,"cta_inflation":0,"planned_hub_inbound":0,"reciprocity_diff_cluster":0,"exact_pct":0,"link_health":"utility (hierarchy-excluded)"},{"slug":"dispensaries","page_type":"?","stage2_role":"?","derived_role":"TOPICAL-HUB","role_reason":"plan-backed (topical_out 0, planned 2, tiw 0.00)","validated_focus":"","relevancy_verdict":"","ed_in":3,"ed_out":0,"topical_in":0,"topical_in_weighted":0,"topical_out":0,"cta_in":0,"navcard_in":0,"brand_in":0,"weak_in":3,"cta_inflation":0,"planned_hub_inbound":2,"reciprocity_diff_cluster":0,"exact_pct":0,"link_health":"well-linked"},{"slug":"dispensaries/lake-tahoe","page_type":"location","stage2_role":"spoke","derived_role":"TOPICAL-SPOKE","role_reason":"standard topical page","validated_focus":"nuleaf lake tahoe","relevancy_verdict":"","ed_in":0,"ed_out":0,"topical_in":0,"topical_in_weighted":0,"topical_out":0,"cta_in":0,"navcard_in":0,"brand_in":0,"weak_in":0,"cta_inflation":0,"planned_hub_inbound":0,"reciprocity_diff_cluster":0,"exact_pct":0,"link_health":"well-linked"},{"slug":"dispensaries/las-vegas","page_type":"location","stage2_role":"spoke","derived_role":"TOPICAL-SPOKE","role_reason":"standard topical page","validated_focus":"nuleaf las vegas","relevancy_verdict":"","ed_in":0,"ed_out":0,"topical_in":0,"topical_in_weighted":0,"topical_out":0,"cta_in":0,"navcard_in":0,"brand_in":0,"weak_in":0,"cta_inflation":0,"planned_hub_inbound":0,"reciprocity_diff_cluster":0,"exact_pct":0,"link_health":"well-linked"},{"slug":"screens/twain","page_type":"?","stage2_role":"?","derived_role":"UTILITY","role_reason":"no validated_focus; hierarchy-excluded + leak-capped","validated_focus":"","relevancy_verdict":"","ed_in":0,"ed_out":0,"topical_in":0,"topical_in_weighted":0,"topical_out":0,"cta_in":0,"navcard_in":0,"brand_in":0,"weak_in":0,"cta_inflation":0,"planned_hub_inbound":0,"reciprocity_diff_cluster":0,"exact_pct":0,"link_health":"utility (hierarchy-excluded)"},{"slug":"screens/incline-vertical","page_type":"?","stage2_role":"?","derived_role":"UTILITY","role_reason":"no validated_focus; hierarchy-excluded + leak-capped","validated_focus":"","relevancy_verdict":"","ed_in":0,"ed_out":0,"topical_in":0,"topical_in_weighted":0,"topical_out":0,"cta_in":0,"navcard_in":0,"brand_in":0,"weak_in":0,"cta_inflation":0,"planned_hub_inbound":0,"reciprocity_diff_cluster":0,"exact_pct":0,"link_health":"utility (hierarchy-excluded)"},{"slug":"screens/incline","page_type":"?","stage2_role":"?","derived_role":"UTILITY","role_reason":"no validated_focus; hierarchy-excluded + leak-capped","validated_focus":"","relevancy_verdict":"","ed_in":0,"ed_out":0,"topical_in":0,"topical_in_weighted":0,"topical_out":0,"cta_in":0,"navcard_in":0,"brand_in":0,"weak_in":0,"cta_inflation":0,"planned_hub_inbound":0,"reciprocity_diff_cluster":0,"exact_pct":0,"link_health":"utility (hierarchy-excluded)"},{"slug":"reviews/santa-barbara","page_type":"?","stage2_role":"?","derived_role":"UTILITY","role_reason":"no validated_focus; hierarchy-excluded + leak-capped","validated_focus":"","relevancy_verdict":"","ed_in":0,"ed_out":0,"topical_in":0,"topical_in_weighted":0,"topical_out":0,"cta_in":0,"navcard_in":0,"brand_in":0,"weak_in":0,"cta_inflation":0,"planned_hub_inbound":0,"reciprocity_diff_cluster":0,"exact_pct":0,"link_health":"utility (hierarchy-excluded)"},{"slug":"reviews/parma","page_type":"?","stage2_role":"?","derived_role":"UTILITY","role_reason":"no validated_focus; hierarchy-excluded + leak-capped","validated_focus":"","relevancy_verdict":"","ed_in":0,"ed_out":0,"topical_in":0,"topical_in_weighted":0,"topical_out":0,"cta_in":0,"navcard_in":0,"brand_in":0,"weak_in":0,"cta_inflation":0,"planned_hub_inbound":0,"reciprocity_diff_cluster":0,"exact_pct":0,"link_health":"utility (hierarchy-excluded)"},{"slug":"reviews/sahara","page_type":"?","stage2_role":"?","derived_role":"UTILITY","role_reason":"no validated_focus; hierarchy-excluded + leak-capped","validated_focus":"","relevancy_verdict":"","ed_in":0,"ed_out":0,"topical_in":0,"topical_in_weighted":0,"topical_out":0,"cta_in":0,"navcard_in":0,"brand_in":0,"weak_in":0,"cta_inflation":0,"planned_hub_inbound":0,"reciprocity_diff_cluster":0,"exact_pct":0,"link_health":"utility (hierarchy-excluded)"},{"slug":"reviews/mansfield","page_type":"?","stage2_role":"?","derived_role":"UTILITY","role_reason":"no validated_focus; hierarchy-excluded + leak-capped","validated_focus":"","relevancy_verdict":"","ed_in":0,"ed_out":0,"topical_in":0,"topical_in_weighted":0,"topical_out":0,"cta_in":0,"navcard_in":0,"brand_in":0,"weak_in":0,"cta_inflation":0,"planned_hub_inbound":0,"reciprocity_diff_cluster":0,"exact_pct":0,"link_health":"utility (hierarchy-excluded)"},{"slug":"reviews/little-ferry","page_type":"?","stage2_role":"?","derived_role":"UTILITY","role_reason":"no validated_focus; hierarchy-excluded + leak-capped","validated_focus":"","relevancy_verdict":"","ed_in":0,"ed_out":0,"topical_in":0,"topical_in_weighted":0,"topical_out":0,"cta_in":0,"navcard_in":0,"brand_in":0,"weak_in":0,"cta_inflation":0,"planned_hub_inbound":0,"reciprocity_diff_cluster":0,"exact_pct":0,"link_health":"utility (hierarchy-excluded)"},{"slug":"2026/02/19/hello-world","page_type":"?","stage2_role":"?","derived_role":"UTILITY","role_reason":"no validated_focus; hierarchy-excluded + leak-capped","validated_focus":"","relevancy_verdict":"","ed_in":1,"ed_out":0,"topical_in":0,"topical_in_weighted":0,"topical_out":0,"cta_in":0,"navcard_in":0,"brand_in":0,"weak_in":1,"cta_inflation":0,"planned_hub_inbound":0,"reciprocity_diff_cluster":0,"exact_pct":0,"link_health":"utility (hierarchy-excluded)"},{"slug":"category/uncategorized","page_type":"?","stage2_role":"?","derived_role":"UTILITY","role_reason":"no validated_focus; hierarchy-excluded + leak-capped","validated_focus":"","relevancy_verdict":"","ed_in":0,"ed_out":1,"topical_in":0,"topical_in_weighted":0,"topical_out":0,"cta_in":0,"navcard_in":0,"brand_in":0,"weak_in":0,"cta_inflation":0,"planned_hub_inbound":0,"reciprocity_diff_cluster":0,"exact_pct":0,"link_health":"utility (hierarchy-excluded)"}],"linkingRecs":[{"kind":"pending","src":"","dst":"2026/02/19/hello-world","current_anchor":"","suggested_anchor":"","rationale":"new-page: page:https://nuleafnv.com/2026/02/19/hello-world/","status":"pending","blocked_by":"page for \"page:https://nuleafnv.com/2026/02/19/hello-world/\" not built"},{"kind":"pending","src":"","dst":"cannabis-me","current_anchor":"","suggested_anchor":"","rationale":"new-page: page:https://nuleafnv.com/cannabis-me/","status":"pending","blocked_by":"page for \"page:https://nuleafnv.com/cannabis-me/\" not built"},{"kind":"pending","src":"","dst":"category/uncategorized","current_anchor":"","suggested_anchor":"","rationale":"new-page: page:https://nuleafnv.com/category/uncategorized/","status":"pending","blocked_by":"page for \"page:https://nuleafnv.com/category/uncategorized/\" not built"},{"kind":"pending","src":"","dst":"dispensaries","current_anchor":"","suggested_anchor":"","rationale":"new-page: page:https://nuleafnv.com/dispensaries/","status":"pending","blocked_by":"page for \"page:https://nuleafnv.com/dispensaries/\" not built"},{"kind":"pending","src":"","dst":"hello-club","current_anchor":"","suggested_anchor":"","rationale":"new-page: page:https://nuleafnv.com/hello-club/","status":"pending","blocked_by":"page for \"page:https://nuleafnv.com/hello-club/\" not built"},{"kind":"pending","src":"","dst":"incline-village-specials","current_anchor":"","suggested_anchor":"","rationale":"new-page: page:https://nuleafnv.com/incline-village-specials/","status":"pending","blocked_by":"page for \"page:https://nuleafnv.com/incline-village-specials/\" not built"},{"kind":"pending","src":"","dst":"las-vegas-specials","current_anchor":"","suggested_anchor":"","rationale":"new-page: page:https://nuleafnv.com/las-vegas-specials/","status":"pending","blocked_by":"page for \"page:https://nuleafnv.com/las-vegas-specials/\" not built"},{"kind":"pending","src":"","dst":"locations-app","current_anchor":"","suggested_anchor":"","rationale":"new-page: page:https://nuleafnv.com/locations-app/","status":"pending","blocked_by":"page for \"page:https://nuleafnv.com/locations-app/\" not built"},{"kind":"pending","src":"","dst":"product-satisfaction-promise","current_anchor":"","suggested_anchor":"","rationale":"new-page: page:https://nuleafnv.com/product-satisfaction-promise/","status":"pending","blocked_by":"page for \"page:https://nuleafnv.com/product-satisfaction-promise/\" not built"},{"kind":"pending","src":"","dst":"screens/incline","current_anchor":"","suggested_anchor":"","rationale":"new-page: page:https://nuleafnv.com/screens/incline/","status":"pending","blocked_by":"page for \"page:https://nuleafnv.com/screens/incline/\" not built"},{"kind":"pending","src":"","dst":"screens/incline-vertical","current_anchor":"","suggested_anchor":"","rationale":"new-page: page:https://nuleafnv.com/screens/incline-vertical/","status":"pending","blocked_by":"page for \"page:https://nuleafnv.com/screens/incline-vertical/\" not built"},{"kind":"pending","src":"","dst":"screens/twain","current_anchor":"","suggested_anchor":"","rationale":"new-page: page:https://nuleafnv.com/screens/twain/","status":"pending","blocked_by":"page for \"page:https://nuleafnv.com/screens/twain/\" not built"},{"kind":"pending","src":"","dst":"shop-online","current_anchor":"","suggested_anchor":"","rationale":"new-page: page:https://nuleafnv.com/shop-online/","status":"pending","blocked_by":"page for \"page:https://nuleafnv.com/shop-online/\" not built"}],"linkingRoleCounts":{"TOPICAL-SPOKE":3,"UTILITY":24,"TOPICAL-HUB":1},"linkingHealthCounts":{"well-linked":4,"utility (hierarchy-excluded)":24},"linkingRecCounts":{"pending":13},"schema":[{"slug":"2026/02/19/hello-world","canon_path":"/2026/02/19/hello-world/","page_type":"?","derived_role":"","existing_types":["Article","WebPage","BreadcrumbList","WebSite","Organization","Person"],"decided_type":"WebPage","drift_outlier":false,"breadcrumb_action":"KEEP","breadcrumb":{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://nuleafnv.com/"},{"@type":"ListItem","position":2,"name":"2026"},{"@type":"ListItem","position":3,"name":"02"},{"@type":"ListItem","position":4,"name":"19"},{"@type":"ListItem","position":5,"name":"Hello world! - NuLeaf","item":"https://nuleafnv.com/2026/02/19/hello-world"}]}},{"slug":"about-us","canon_path":"/about-us/","page_type":"?","derived_role":"","existing_types":["WebPage","ImageObject","BreadcrumbList","WebSite","Organization"],"decided_type":"WebPage","drift_outlier":false,"breadcrumb_action":"KEEP","breadcrumb":{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://nuleafnv.com/"},{"@type":"ListItem","position":2,"name":"About NuLeaf — Nevada Cannabis Dispensary","item":"https://nuleafnv.com/about-us"}]}},{"slug":"accessibility-statement","canon_path":"/accessibility-statement/","page_type":"?","derived_role":"","existing_types":["WebPage","BreadcrumbList","WebSite","Organization"],"decided_type":"WebPage","drift_outlier":false,"breadcrumb_action":"KEEP","breadcrumb":{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://nuleafnv.com/"},{"@type":"ListItem","position":2,"name":"Accessibility Statement | NuLeaf","item":"https://nuleafnv.com/accessibility-statement"}]}},{"slug":"cannabis-me","canon_path":"/cannabis-me/","page_type":"?","derived_role":"","existing_types":["WebPage","BreadcrumbList","WebSite","Organization"],"decided_type":"WebPage","drift_outlier":false,"breadcrumb_action":"KEEP","breadcrumb":{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://nuleafnv.com/"},{"@type":"ListItem","position":2,"name":"Cannabis &amp; Me | NuLeaf","item":"https://nuleafnv.com/cannabis-me"}]}},{"slug":"category/uncategorized","canon_path":"/category/uncategorized/","page_type":"?","derived_role":"","existing_types":["CollectionPage","BreadcrumbList","WebSite","Organization"],"decided_type":"WebPage","drift_outlier":false,"breadcrumb_action":"KEEP","breadcrumb":{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://nuleafnv.com/"},{"@type":"ListItem","position":2,"name":"Category"},{"@type":"ListItem","position":3,"name":"Uncategorized Archives - NuLeaf","item":"https://nuleafnv.com/category/uncategorized"}]}},{"slug":"contact","canon_path":"/contact/","page_type":"?","derived_role":"CONVERSION-SINK","existing_types":["WebPage","BreadcrumbList","WebSite","Organization"],"decided_type":"WebPage","drift_outlier":false,"breadcrumb_action":"KEEP","breadcrumb":{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://nuleafnv.com/"},{"@type":"ListItem","position":2,"name":"Contact NuLeaf — Nevada Cannabis Dispensary","item":"https://nuleafnv.com/contact"}]}},{"slug":"dispensaries","canon_path":"/dispensaries/","page_type":"?","derived_role":"","existing_types":["WebPage","BreadcrumbList","WebSite","Organization"],"decided_type":"LocalBusiness","drift_outlier":false,"breadcrumb_action":"KEEP","breadcrumb":{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://nuleafnv.com/"},{"@type":"ListItem","position":2,"name":"Find a NuLeaf Dispensary Near You","item":"https://nuleafnv.com/dispensaries"}]}},{"slug":"dispensaries/lake-tahoe","canon_path":"/dispensaries/lake-tahoe/","page_type":"?","derived_role":"","existing_types":["WebPage","ImageObject","BreadcrumbList","WebSite","Organization","Store","LocalBusiness"],"decided_type":"LocalBusiness","drift_outlier":false,"breadcrumb_action":"KEEP","breadcrumb":{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://nuleafnv.com/"},{"@type":"ListItem","position":2,"name":"Find a NuLeaf Dispensary Near You","item":"https://nuleafnv.com/dispensaries"},{"@type":"ListItem","position":3,"name":"NuLeaf Incline Village (Lake Tahoe) Dispensary","item":"https://nuleafnv.com/dispensaries/lake-tahoe"}]}},{"slug":"dispensaries/las-vegas","canon_path":"/dispensaries/las-vegas/","page_type":"?","derived_role":"","existing_types":["WebPage","ImageObject","BreadcrumbList","WebSite","Organization","Store","LocalBusiness"],"decided_type":"LocalBusiness","drift_outlier":false,"breadcrumb_action":"KEEP","breadcrumb":{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://nuleafnv.com/"},{"@type":"ListItem","position":2,"name":"Find a NuLeaf Dispensary Near You","item":"https://nuleafnv.com/dispensaries"},{"@type":"ListItem","position":3,"name":"NuLeaf Las Vegas Dispensary — Adult-Use Cannabis Store","item":"https://nuleafnv.com/dispensaries/las-vegas"}]}},{"slug":"hello-club","canon_path":"/hello-club/","page_type":"?","derived_role":"","existing_types":["WebPage","BreadcrumbList","WebSite","Organization"],"decided_type":"WebPage","drift_outlier":false,"breadcrumb_action":"KEEP","breadcrumb":{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://nuleafnv.com/"},{"@type":"ListItem","position":2,"name":"The Hello Club Rewards Program | NuLeaf","item":"https://nuleafnv.com/hello-club"}]}},{"slug":"hello-club-terms","canon_path":"/hello-club-terms/","page_type":"?","derived_role":"","existing_types":["WebPage","BreadcrumbList","WebSite","Organization"],"decided_type":"WebPage","drift_outlier":false,"breadcrumb_action":"KEEP","breadcrumb":{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://nuleafnv.com/"},{"@type":"ListItem","position":2,"name":"Hello Club Terms | NuLeaf","item":"https://nuleafnv.com/hello-club-terms"}]}},{"slug":"incline-village-specials","canon_path":"/incline-village-specials/","page_type":"?","derived_role":"","existing_types":["WebPage","BreadcrumbList","WebSite","Organization"],"decided_type":"WebPage","drift_outlier":false,"breadcrumb_action":"KEEP","breadcrumb":{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://nuleafnv.com/"},{"@type":"ListItem","position":2,"name":"Incline Village Specials - NuLeaf","item":"https://nuleafnv.com/incline-village-specials"}]}},{"slug":"index","canon_path":"/","page_type":"home","derived_role":"TOPICAL-SPOKE","existing_types":["WebPage","BreadcrumbList","WebSite","Organization"],"decided_type":"Store","drift_outlier":false,"breadcrumb_action":"KEEP","breadcrumb":null},{"slug":"las-vegas-specials","canon_path":"/las-vegas-specials/","page_type":"?","derived_role":"","existing_types":["WebPage","BreadcrumbList","WebSite","Organization"],"decided_type":"WebPage","drift_outlier":false,"breadcrumb_action":"KEEP","breadcrumb":{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://nuleafnv.com/"},{"@type":"ListItem","position":2,"name":"Las Vegas Specials - NuLeaf","item":"https://nuleafnv.com/las-vegas-specials"}]}},{"slug":"locations-app","canon_path":"/locations-app/","page_type":"?","derived_role":"","existing_types":["WebPage","BreadcrumbList","WebSite","Organization"],"decided_type":"WebPage","drift_outlier":false,"breadcrumb_action":"KEEP","breadcrumb":{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://nuleafnv.com/"},{"@type":"ListItem","position":2,"name":"Locations App - NuLeaf","item":"https://nuleafnv.com/locations-app"}]}},{"slug":"notice-of-privacy-practices","canon_path":"/notice-of-privacy-practices/","page_type":"?","derived_role":"","existing_types":["WebPage","BreadcrumbList","WebSite","Organization"],"decided_type":"WebPage","drift_outlier":false,"breadcrumb_action":"KEEP","breadcrumb":{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://nuleafnv.com/"},{"@type":"ListItem","position":2,"name":"Notice of Privacy Practices For Protected Health Information - NuLeaf","item":"https://nuleafnv.com/notice-of-privacy-practices"}]}},{"slug":"privacy-policy","canon_path":"/privacy-policy/","page_type":"?","derived_role":"","existing_types":["WebPage","BreadcrumbList","WebSite","Organization"],"decided_type":"WebPage","drift_outlier":false,"breadcrumb_action":"KEEP","breadcrumb":{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://nuleafnv.com/"},{"@type":"ListItem","position":2,"name":"Privacy Policy | NuLeaf","item":"https://nuleafnv.com/privacy-policy"}]}},{"slug":"product-satisfaction-promise","canon_path":"/product-satisfaction-promise/","page_type":"?","derived_role":"","existing_types":["WebPage","BreadcrumbList","WebSite","Organization"],"decided_type":"WebPage","drift_outlier":false,"breadcrumb_action":"KEEP","breadcrumb":{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://nuleafnv.com/"},{"@type":"ListItem","position":2,"name":"Product Satisfaction Promise - NuLeaf","item":"https://nuleafnv.com/product-satisfaction-promise"}]}},{"slug":"reviews/little-ferry","canon_path":"/reviews/little-ferry/","page_type":"?","derived_role":"","existing_types":["WebPage","BreadcrumbList","WebSite","Organization"],"decided_type":"WebPage","drift_outlier":false,"breadcrumb_action":"KEEP","breadcrumb":{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://nuleafnv.com/"},{"@type":"ListItem","position":2,"name":"Reviews"},{"@type":"ListItem","position":3,"name":"Little Ferry Reviews - NuLeaf","item":"https://nuleafnv.com/reviews/little-ferry"}]}},{"slug":"reviews/mansfield","canon_path":"/reviews/mansfield/","page_type":"?","derived_role":"","existing_types":["WebPage","BreadcrumbList","WebSite","Organization"],"decided_type":"WebPage","drift_outlier":false,"breadcrumb_action":"KEEP","breadcrumb":{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://nuleafnv.com/"},{"@type":"ListItem","position":2,"name":"Reviews"},{"@type":"ListItem","position":3,"name":"Mansfield Reviews - NuLeaf","item":"https://nuleafnv.com/reviews/mansfield"}]}},{"slug":"reviews/parma","canon_path":"/reviews/parma/","page_type":"?","derived_role":"","existing_types":["WebPage","BreadcrumbList","WebSite","Organization"],"decided_type":"WebPage","drift_outlier":false,"breadcrumb_action":"KEEP","breadcrumb":{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://nuleafnv.com/"},{"@type":"ListItem","position":2,"name":"Reviews"},{"@type":"ListItem","position":3,"name":"Parma Reviews - NuLeaf","item":"https://nuleafnv.com/reviews/parma"}]}},{"slug":"reviews/sahara","canon_path":"/reviews/sahara/","page_type":"?","derived_role":"","existing_types":["WebPage","BreadcrumbList","WebSite","Organization"],"decided_type":"WebPage","drift_outlier":false,"breadcrumb_action":"KEEP","breadcrumb":{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://nuleafnv.com/"},{"@type":"ListItem","position":2,"name":"Reviews"},{"@type":"ListItem","position":3,"name":"Sahara Reviews - NuLeaf","item":"https://nuleafnv.com/reviews/sahara"}]}},{"slug":"reviews/santa-barbara","canon_path":"/reviews/santa-barbara/","page_type":"?","derived_role":"","existing_types":["WebPage","BreadcrumbList","WebSite","Organization"],"decided_type":"WebPage","drift_outlier":false,"breadcrumb_action":"KEEP","breadcrumb":{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://nuleafnv.com/"},{"@type":"ListItem","position":2,"name":"Reviews"},{"@type":"ListItem","position":3,"name":"Santa Barbara Reviews - NuLeaf","item":"https://nuleafnv.com/reviews/santa-barbara"}]}},{"slug":"screens/incline","canon_path":"/screens/incline/","page_type":"?","derived_role":"","existing_types":["WebPage","BreadcrumbList","WebSite","Organization"],"decided_type":"WebPage","drift_outlier":false,"breadcrumb_action":"KEEP","breadcrumb":{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://nuleafnv.com/"},{"@type":"ListItem","position":2,"name":"Screens"},{"@type":"ListItem","position":3,"name":"Incline (horizontal) - NuLeaf","item":"https://nuleafnv.com/screens/incline"}]}},{"slug":"screens/incline-vertical","canon_path":"/screens/incline-vertical/","page_type":"?","derived_role":"","existing_types":["WebPage","BreadcrumbList","WebSite","Organization"],"decided_type":"WebPage","drift_outlier":false,"breadcrumb_action":"KEEP","breadcrumb":{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://nuleafnv.com/"},{"@type":"ListItem","position":2,"name":"Screens"},{"@type":"ListItem","position":3,"name":"Incline (vertical) - NuLeaf","item":"https://nuleafnv.com/screens/incline-vertical"}]}},{"slug":"screens/twain","canon_path":"/screens/twain/","page_type":"?","derived_role":"","existing_types":["WebPage","BreadcrumbList","WebSite","Organization"],"decided_type":"WebPage","drift_outlier":false,"breadcrumb_action":"KEEP","breadcrumb":{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://nuleafnv.com/"},{"@type":"ListItem","position":2,"name":"Screens"},{"@type":"ListItem","position":3,"name":"Las Vegas, NV (Twain) Screen - NuLeaf","item":"https://nuleafnv.com/screens/twain"}]}},{"slug":"shop-online","canon_path":"/dispensaries/","page_type":"?","derived_role":"","existing_types":["WebPage","BreadcrumbList","WebSite","Organization"],"decided_type":"WebPage","drift_outlier":false,"breadcrumb_action":"KEEP","breadcrumb":{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://nuleafnv.com/"},{"@type":"ListItem","position":2,"name":"Find a NuLeaf Dispensary Near You","item":"https://nuleafnv.com/dispensaries"}]}},{"slug":"terms-of-use","canon_path":"/terms-of-use/","page_type":"?","derived_role":"","existing_types":["WebPage","BreadcrumbList","WebSite","Organization"],"decided_type":"WebPage","drift_outlier":false,"breadcrumb_action":"KEEP","breadcrumb":{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://nuleafnv.com/"},{"@type":"ListItem","position":2,"name":"Terms of Use | NuLeaf","item":"https://nuleafnv.com/terms-of-use"}]}}],"schemaRecs":[{"slug":"2026/02/19/hello-world","type":"Organization","action":"KEEP","reason":"matches canonical identity (recommend @id)"},{"slug":"2026/02/19/hello-world","type":"BreadcrumbList","action":"KEEP","reason":"breadcrumb present + correct"},{"slug":"about-us","type":"Organization","action":"KEEP","reason":"matches canonical identity (recommend @id)"},{"slug":"about-us","type":"BreadcrumbList","action":"KEEP","reason":"breadcrumb present + correct"},{"slug":"accessibility-statement","type":"Organization","action":"KEEP","reason":"matches canonical identity (recommend @id)"},{"slug":"accessibility-statement","type":"BreadcrumbList","action":"KEEP","reason":"breadcrumb present + correct"},{"slug":"cannabis-me","type":"Organization","action":"KEEP","reason":"matches canonical identity (recommend @id)"},{"slug":"cannabis-me","type":"BreadcrumbList","action":"KEEP","reason":"breadcrumb present + correct"},{"slug":"category/uncategorized","type":"WebPage","action":"ADD","reason":"content page → WebPage"},{"slug":"category/uncategorized","type":"Organization","action":"KEEP","reason":"matches canonical identity (recommend @id)"},{"slug":"category/uncategorized","type":"BreadcrumbList","action":"KEEP","reason":"breadcrumb present + correct"},{"slug":"contact","type":"Organization","action":"KEEP","reason":"matches canonical identity (recommend @id)"},{"slug":"contact","type":"BreadcrumbList","action":"KEEP","reason":"breadcrumb present + correct"},{"slug":"dispensaries","type":"LocalBusiness","action":"ADD","reason":"local-retail page typed as LocalBusiness (derived from business_type + IA family)"},{"slug":"dispensaries","type":"Organization","action":"KEEP","reason":"matches canonical identity (recommend @id)"},{"slug":"dispensaries","type":"BreadcrumbList","action":"KEEP","reason":"breadcrumb present + correct"},{"slug":"dispensaries/lake-tahoe","type":"Organization","action":"KEEP","reason":"matches canonical identity (recommend @id)"},{"slug":"dispensaries/lake-tahoe","type":"BreadcrumbList","action":"KEEP","reason":"breadcrumb present + correct"},{"slug":"dispensaries/las-vegas","type":"Organization","action":"KEEP","reason":"matches canonical identity (recommend @id)"},{"slug":"dispensaries/las-vegas","type":"BreadcrumbList","action":"KEEP","reason":"breadcrumb present + correct"},{"slug":"hello-club","type":"Organization","action":"KEEP","reason":"matches canonical identity (recommend @id)"},{"slug":"hello-club","type":"BreadcrumbList","action":"KEEP","reason":"breadcrumb present + correct"},{"slug":"hello-club-terms","type":"Organization","action":"KEEP","reason":"matches canonical identity (recommend @id)"},{"slug":"hello-club-terms","type":"BreadcrumbList","action":"KEEP","reason":"breadcrumb present + correct"},{"slug":"incline-village-specials","type":"Organization","action":"KEEP","reason":"matches canonical identity (recommend @id)"},{"slug":"incline-village-specials","type":"BreadcrumbList","action":"KEEP","reason":"breadcrumb present + correct"},{"slug":"index","type":"Store","action":"ADD","reason":"local-retail page typed as Store (derived from business_type + IA family)"},{"slug":"index","type":"Organization","action":"KEEP","reason":"matches canonical identity (recommend @id)"},{"slug":"index","type":"BreadcrumbList","action":"KEEP","reason":"root/home → no breadcrumb (correct)"},{"slug":"las-vegas-specials","type":"Organization","action":"KEEP","reason":"matches canonical identity (recommend @id)"},{"slug":"las-vegas-specials","type":"BreadcrumbList","action":"KEEP","reason":"breadcrumb present + correct"},{"slug":"locations-app","type":"Organization","action":"KEEP","reason":"matches canonical identity (recommend @id)"},{"slug":"locations-app","type":"BreadcrumbList","action":"KEEP","reason":"breadcrumb present + correct"},{"slug":"notice-of-privacy-practices","type":"Organization","action":"KEEP","reason":"matches canonical identity (recommend @id)"},{"slug":"notice-of-privacy-practices","type":"BreadcrumbList","action":"KEEP","reason":"breadcrumb present + correct"},{"slug":"privacy-policy","type":"Organization","action":"KEEP","reason":"matches canonical identity (recommend @id)"},{"slug":"privacy-policy","type":"BreadcrumbList","action":"KEEP","reason":"breadcrumb present + correct"},{"slug":"product-satisfaction-promise","type":"Organization","action":"KEEP","reason":"matches canonical identity (recommend @id)"},{"slug":"product-satisfaction-promise","type":"BreadcrumbList","action":"KEEP","reason":"breadcrumb present + correct"},{"slug":"reviews/little-ferry","type":"Organization","action":"KEEP","reason":"matches canonical identity (recommend @id)"},{"slug":"reviews/little-ferry","type":"BreadcrumbList","action":"KEEP","reason":"breadcrumb present + correct"},{"slug":"reviews/mansfield","type":"Organization","action":"KEEP","reason":"matches canonical identity (recommend @id)"},{"slug":"reviews/mansfield","type":"BreadcrumbList","action":"KEEP","reason":"breadcrumb present + correct"},{"slug":"reviews/parma","type":"Organization","action":"KEEP","reason":"matches canonical identity (recommend @id)"},{"slug":"reviews/parma","type":"BreadcrumbList","action":"KEEP","reason":"breadcrumb present + correct"},{"slug":"reviews/sahara","type":"Organization","action":"KEEP","reason":"matches canonical identity (recommend @id)"},{"slug":"reviews/sahara","type":"BreadcrumbList","action":"KEEP","reason":"breadcrumb present + correct"},{"slug":"reviews/santa-barbara","type":"Organization","action":"KEEP","reason":"matches canonical identity (recommend @id)"},{"slug":"reviews/santa-barbara","type":"BreadcrumbList","action":"KEEP","reason":"breadcrumb present + correct"},{"slug":"screens/incline","type":"Organization","action":"KEEP","reason":"matches canonical identity (recommend @id)"},{"slug":"screens/incline","type":"BreadcrumbList","action":"KEEP","reason":"breadcrumb present + correct"},{"slug":"screens/incline-vertical","type":"Organization","action":"KEEP","reason":"matches canonical identity (recommend @id)"},{"slug":"screens/incline-vertical","type":"BreadcrumbList","action":"KEEP","reason":"breadcrumb present + correct"},{"slug":"screens/twain","type":"Organization","action":"KEEP","reason":"matches canonical identity (recommend @id)"},{"slug":"screens/twain","type":"BreadcrumbList","action":"KEEP","reason":"breadcrumb present + correct"},{"slug":"shop-online","type":"Organization","action":"KEEP","reason":"matches canonical identity (recommend @id)"},{"slug":"shop-online","type":"BreadcrumbList","action":"KEEP","reason":"breadcrumb present + correct"},{"slug":"terms-of-use","type":"Organization","action":"KEEP","reason":"matches canonical identity (recommend @id)"},{"slug":"terms-of-use","type":"BreadcrumbList","action":"KEEP","reason":"breadcrumb present + correct"}],"schemaActionCounts":{"KEEP":56,"ADD":3},"synthesis":{"crawl_id":13,"generated":"capstone-synthesis","site":{"origin":"https://sgen.com","brand_name":"SGEN","business_type":"software-saas","has_platform":true,"ctx_flags":[]},"headline":{"internal_links_to_add":9,"anchors_to_fix":62,"structural_fixes":222,"breadcrumbs_to_add":55,"duplicate_apps_removed":30,"identity_drift_fixes":1,"canonical_verdict":"CANONICAL ARCHITECTURE CLEAN — 0 duplicate canonicals, every page self-referential, head/crawl + og-consistent (1 to verify); 53 launch-parity pending","positioning_pages_flagged":14,"under_linked_pages":13},"priorities":[{"tier":"P1","theme":"Entity integrity","layer":"schema","action":"Fix the 1 identity-drift page(s) (review/showcase/dispenza/index) and normalize to ONE canonical Organization identity node. Consolidate to a single platform entity, dropping 30 duplicate app entities.","pages":["review/showcase/dispenza/index"],"impact":"Site-wide entity consolidation; collapses 30 duplicate app entities into one platform node."},{"tier":"P1","theme":"Breadcrumbs","layer":"schema","action":"Add BreadcrumbList to 55 nested page(s) (from the canonical URL path) — the supported rich result derived from each page's path.","pages":[],"impact":"Breadcrumb rich result on the 55 nested page(s) that lack it."},{"tier":"P1","theme":"Authority flow","layer":"linking","action":"Add 9 internal link(s): 1 feed the 13 topically-orphaned page(s) (today authority reaches them only through nav chrome), 8 strengthen intra-cluster relevance.","pages":["product/analytics","product/site-manager","product/discussions","guides","blog","product/stage-live","index","solutions/freelancers","product/advanced-settings","solutions/agencies","solutions/restaurants","solutions/healthcare","migrate"],"impact":"Turns nav-only pages into topically-linked pages; the biggest internal-authority win."},{"tier":"P2","theme":"Anchor quality","layer":"linking","action":"Upgrade 62 weak/raw anchor(s) to partial-match (never exact — stays under the 30% over-optimization ceiling).","pages":[],"impact":"Relevance signal without over-optimization risk."},{"tier":"P2","theme":"Card-link structure","layer":"linking","action":"Restructure 222 concatenated card-anchor(s) so only the heading/CTA is the link (the rest of the card becomes non-anchor text).","pages":[],"impact":"Removes anchor dilution from multi-link cards; clean, single-target card links."},{"tier":"P3","theme":"Canonical / launch","layer":"canonical","action":"CANONICAL ARCHITECTURE CLEAN — 0 duplicate canonicals, every page self-referential, head/crawl + og-consistent (1 to verify); 53 launch-parity pending. Verify the 1 flagged case(s) (contact); confirm production serves the 53 preview URL(s) on launch.","pages":["contact"],"impact":"No dedup work needed; launch-parity checklist."},{"tier":"IMPL","theme":"Positioning (implementation phase)","layer":"positioning","action":"Rewrite the off-message framing on 14 page(s) flagged by the positioning scan (families: ownership×71, headless×1, open-source×1; located in title×3, h1×5, body×61, heading×2, meta×2). This is live-HTML copy editing = implementation, not this plan.","pages":["compare/sgen-vs-wix","compare/sgen-vs-squarespace","compare/sgen-vs-elementor","solutions/small-business","compare/sgen-vs-godaddy","compare/sgen-vs-wordpress","compare/sgen-vs-wp-engine","index","legal/terms","product/attributions","product/site-manager","migrate","product/custom-objects","solutions/freelancers"],"impact":"On-message positioning across the flagged pages; live-HTML editing (implementation phase)."}],"cross_cutting":[{"slug":"product/site-manager","lenses":["linking","schema","positioning"],"detail":{"linking":["topically under-linked (nav-only)","inbound anchor upgrade","inbound anchor upgrade","inbound anchor upgrade"],"schema":["REMOVE SoftwareApplication, ADD WebPage, ADD BreadcrumbList"],"canonical":[],"positioning":["2 off-message hit(s)"]}},{"slug":"index","lenses":["linking","schema","positioning"],"detail":{"linking":["topically under-linked (nav-only)"],"schema":["ADD SoftwareApplication"],"canonical":[],"positioning":["2 off-message hit(s)"]}},{"slug":"solutions/freelancers","lenses":["linking","schema","positioning"],"detail":{"linking":["topically under-linked (nav-only)","new internal link (target)"],"schema":["ADD BreadcrumbList"],"canonical":[],"positioning":["1 off-message hit(s)"]}},{"slug":"migrate","lenses":["linking","schema","positioning"],"detail":{"linking":["topically under-linked (nav-only)","inbound anchor upgrade","inbound anchor upgrade","inbound anchor upgrade","inbound anchor upgrade","inbound anchor upgrade","inbound anchor upgrade","inbound anchor upgrade","inbound anchor upgrade","inbound anchor upgrade"],"schema":["ADD BreadcrumbList"],"canonical":[],"positioning":["1 off-message hit(s)"]}},{"slug":"solutions/small-business","lenses":["linking","schema","positioning"],"detail":{"linking":["new internal link (source)"],"schema":["ADD BreadcrumbList"],"canonical":[],"positioning":["6 off-message hit(s)"]}},{"slug":"product/custom-objects","lenses":["linking","schema","positioning"],"detail":{"linking":["new internal link (source)","new internal link (source)","new internal link (target)","new internal link (target)"],"schema":["REMOVE SoftwareApplication, ADD WebPage, ADD BreadcrumbList"],"canonical":[],"positioning":["1 off-message hit(s)"]}},{"slug":"compare/sgen-vs-wix","lenses":["linking","schema","positioning"],"detail":{"linking":["hub-pair to add"],"schema":["ADD BreadcrumbList"],"canonical":[],"positioning":["27 off-message hit(s)"]}},{"slug":"compare/sgen-vs-godaddy","lenses":["linking","schema","positioning"],"detail":{"linking":["hub-pair to add"],"schema":["ADD BreadcrumbList"],"canonical":[],"positioning":["3 off-message hit(s)"]}},{"slug":"compare/sgen-vs-squarespace","lenses":["linking","schema","positioning"],"detail":{"linking":["hub-pair to add"],"schema":["ADD BreadcrumbList"],"canonical":[],"positioning":["14 off-message hit(s)"]}}],"by_page":{"product/analytics":{"linking":["topically under-linked (nav-only)"],"schema":["REMOVE SoftwareApplication, ADD WebPage, ADD BreadcrumbList"],"canonical":[],"positioning":[]},"product/site-manager":{"linking":["topically under-linked (nav-only)","inbound anchor upgrade","inbound anchor upgrade","inbound anchor upgrade"],"schema":["REMOVE SoftwareApplication, ADD WebPage, ADD BreadcrumbList"],"canonical":[],"positioning":["2 off-message hit(s)"]},"product/discussions":{"linking":["topically under-linked (nav-only)","inbound anchor upgrade","inbound anchor upgrade","inbound anchor upgrade"],"schema":["REMOVE SoftwareApplication, ADD WebPage, ADD BreadcrumbList"],"canonical":[],"positioning":[]},"guides":{"linking":["topically under-linked (nav-only)","inbound anchor upgrade","inbound anchor upgrade","inbound anchor upgrade"],"schema":["ADD BreadcrumbList"],"canonical":[],"positioning":[]},"blog":{"linking":["topically under-linked (nav-only)","inbound anchor upgrade"],"schema":["ADD BreadcrumbList"],"canonical":[],"positioning":[]},"product/stage-live":{"linking":["topically under-linked (nav-only)","inbound anchor upgrade"],"schema":["REMOVE SoftwareApplication, ADD WebPage, ADD BreadcrumbList"],"canonical":[],"positioning":[]},"index":{"linking":["topically under-linked (nav-only)"],"schema":["ADD SoftwareApplication"],"canonical":[],"positioning":["2 off-message hit(s)"]},"solutions/freelancers":{"linking":["topically under-linked (nav-only)","new internal link (target)"],"schema":["ADD BreadcrumbList"],"canonical":[],"positioning":["1 off-message hit(s)"]},"product/advanced-settings":{"linking":["topically under-linked (nav-only)"],"schema":["REMOVE SoftwareApplication, ADD WebPage, ADD BreadcrumbList"],"canonical":[],"positioning":[]},"solutions/agencies":{"linking":["topically under-linked (nav-only)","inbound anchor upgrade"],"schema":["ADD BreadcrumbList"],"canonical":[],"positioning":[]},"solutions/restaurants":{"linking":["topically under-linked (nav-only)"],"schema":["ADD BreadcrumbList"],"canonical":[],"positioning":[]},"solutions/healthcare":{"linking":["topically under-linked (nav-only)"],"schema":["ADD BreadcrumbList"],"canonical":[],"positioning":[]},"migrate":{"linking":["topically under-linked (nav-only)","inbound anchor upgrade","inbound anchor upgrade","inbound anchor upgrade","inbound anchor upgrade","inbound anchor upgrade","inbound anchor upgrade","inbound anchor upgrade","inbound anchor upgrade","inbound anchor upgrade"],"schema":["ADD BreadcrumbList"],"canonical":[],"positioning":["1 off-message hit(s)"]},"solutions/small-business":{"linking":["new internal link (source)"],"schema":["ADD BreadcrumbList"],"canonical":[],"positioning":["6 off-message hit(s)"]},"product/custom-objects":{"linking":["new internal link (source)","new internal link (source)","new internal link (target)","new internal link (target)"],"schema":["REMOVE SoftwareApplication, ADD WebPage, ADD BreadcrumbList"],"canonical":[],"positioning":["1 off-message hit(s)"]},"product/custom-css":{"linking":["new internal link (target)","new internal link (target)","new internal link (source)"],"schema":["REMOVE SoftwareApplication, ADD WebPage, ADD BreadcrumbList"],"canonical":[],"positioning":[]},"product/custom-fields":{"linking":["new internal link (source)","new internal link (source)"],"schema":["REMOVE SoftwareApplication, ADD WebPage, ADD BreadcrumbList"],"canonical":[],"positioning":[]},"product/custom-codes":{"linking":["new internal link (target)","new internal link (target)","new internal link (source)"],"schema":["REMOVE SoftwareApplication, ADD WebPage, ADD BreadcrumbList"],"canonical":[],"positioning":[]},"product/theme-editor":{"linking":["new internal link (source)","new internal link (target)"],"schema":["REMOVE SoftwareApplication, ADD WebPage, ADD BreadcrumbList"],"canonical":[],"positioning":[]},"product/pages-and-posts":{"linking":["new internal link (target)","new internal link (source)"],"schema":["REMOVE SoftwareApplication, ADD WebPage, ADD BreadcrumbList"],"canonical":[],"positioning":[]},"developers":{"linking":["inbound anchor upgrade"],"schema":["ADD BreadcrumbList"],"canonical":[],"positioning":[]},"product/backups":{"linking":["inbound anchor upgrade","inbound anchor upgrade"],"schema":["REMOVE SoftwareApplication, ADD WebPage, ADD BreadcrumbList"],"canonical":[],"positioning":[]},"product/ecommerce":{"linking":["inbound anchor upgrade","inbound anchor upgrade","inbound anchor upgrade","inbound anchor upgrade","inbound anchor upgrade","inbound anchor upgrade","inbound anchor upgrade","inbound anchor upgrade"],"schema":["REMOVE SoftwareApplication, ADD WebPage, ADD BreadcrumbList"],"canonical":[],"positioning":[]},"product/forms":{"linking":["inbound anchor upgrade","inbound anchor upgrade","inbound anchor upgrade","inbound anchor upgrade","inbound anchor upgrade","inbound anchor upgrade","inbound anchor upgrade","inbound anchor upgrade","inbound anchor upgrade","inbound anchor upgrade"],"schema":["REMOVE SoftwareApplication, ADD WebPage, ADD BreadcrumbList"],"canonical":[],"positioning":[]},"product/integrations":{"linking":["inbound anchor upgrade"],"schema":["REMOVE SoftwareApplication, ADD WebPage, ADD BreadcrumbList"],"canonical":[],"positioning":[]},"product/menus":{"linking":["inbound anchor upgrade","inbound anchor upgrade"],"schema":["REMOVE SoftwareApplication, ADD WebPage, ADD BreadcrumbList"],"canonical":[],"positioning":[]},"product/page-builder":{"linking":["inbound anchor upgrade","inbound anchor upgrade","inbound anchor upgrade","inbound anchor upgrade","inbound anchor upgrade","inbound anchor upgrade","inbound anchor upgrade"],"schema":["REMOVE SoftwareApplication, ADD WebPage, ADD BreadcrumbList"],"canonical":[],"positioning":[]},"product/performance":{"linking":["inbound anchor upgrade","inbound anchor upgrade","inbound anchor upgrade"],"schema":["REMOVE SoftwareApplication, ADD WebPage, ADD BreadcrumbList"],"canonical":[],"positioning":[]},"product/popups":{"linking":["inbound anchor upgrade","inbound anchor upgrade"],"schema":["REMOVE SoftwareApplication, ADD WebPage, ADD BreadcrumbList"],"canonical":[],"positioning":[]},"product/redirects":{"linking":["inbound anchor upgrade","inbound anchor upgrade"],"schema":["REMOVE SoftwareApplication, ADD WebPage, ADD BreadcrumbList"],"canonical":[],"positioning":[]},"product/seo-optimization":{"linking":["inbound anchor upgrade"],"schema":["REMOVE SoftwareApplication, ADD WebPage, ADD BreadcrumbList"],"canonical":[],"positioning":[]},"product/templates":{"linking":["inbound anchor upgrade","inbound anchor upgrade"],"schema":["REMOVE SoftwareApplication, ADD WebPage, ADD BreadcrumbList"],"canonical":[],"positioning":[]},"compare/sgen-vs-wix":{"linking":["hub-pair to add"],"schema":["ADD BreadcrumbList"],"canonical":[],"positioning":["27 off-message hit(s)"]},"compare/sgen-vs-godaddy":{"linking":["hub-pair to add"],"schema":["ADD BreadcrumbList"],"canonical":[],"positioning":["3 off-message hit(s)"]},"compare/sgen-vs-squarespace":{"linking":["hub-pair to add"],"schema":["ADD BreadcrumbList"],"canonical":[],"positioning":["14 off-message hit(s)"]},"about":{"linking":[],"schema":["ADD BreadcrumbList"],"canonical":[],"positioning":[]},"compare/sgen-vs-elementor":{"linking":[],"schema":["ADD BreadcrumbList"],"canonical":[],"positioning":["6 off-message hit(s)"]},"compare/sgen-vs-wordpress":{"linking":[],"schema":["ADD BreadcrumbList"],"canonical":[],"positioning":["3 off-message hit(s)"]},"compare/sgen-vs-wp-engine":{"linking":[],"schema":["ADD BreadcrumbList"],"canonical":[],"positioning":["3 off-message hit(s)"]},"contact":{"linking":[],"schema":["ADD BreadcrumbList"],"canonical":["canonical → a live redirect (https://sgen.com) — verify intent"],"positioning":[]},"enterprise":{"linking":[],"schema":["ADD BreadcrumbList"],"canonical":[],"positioning":[]},"legal/accessibility":{"linking":[],"schema":["REMOVE SoftwareApplication, ADD BreadcrumbList"],"canonical":[],"positioning":[]},"legal/cookie-policy":{"linking":[],"schema":["ADD BreadcrumbList"],"canonical":[],"positioning":[]},"legal/dpa":{"linking":[],"schema":["ADD BreadcrumbList"],"canonical":[],"positioning":[]},"legal/privacy":{"linking":[],"schema":["ADD BreadcrumbList"],"canonical":[],"positioning":[]},"legal/terms":{"linking":[],"schema":["ADD BreadcrumbList"],"canonical":[],"positioning":["2 off-message hit(s)"]},"pricing":{"linking":[],"schema":["REMOVE SoftwareApplication, ADD WebPage, ADD BreadcrumbList"],"canonical":[],"positioning":[]},"product/attributions":{"linking":[],"schema":["REMOVE SoftwareApplication, ADD WebPage, ADD BreadcrumbList"],"canonical":[],"positioning":["2 off-message hit(s)"]},"product/events":{"linking":[],"schema":["REMOVE SoftwareApplication, ADD WebPage, ADD BreadcrumbList"],"canonical":[],"positioning":[]},"product/media-library":{"linking":[],"schema":["REMOVE SoftwareApplication, ADD WebPage, ADD BreadcrumbList"],"canonical":[],"positioning":[]},"product/security":{"linking":[],"schema":["REMOVE SoftwareApplication, ADD WebPage, ADD BreadcrumbList"],"canonical":[],"positioning":[]},"product/tools":{"linking":[],"schema":["REMOVE SoftwareApplication, ADD WebPage, ADD BreadcrumbList"],"canonical":[],"positioning":[]},"product/users-and-roles":{"linking":[],"schema":["REMOVE SoftwareApplication, ADD WebPage, ADD BreadcrumbList"],"canonical":[],"positioning":[]},"resources":{"linking":[],"schema":["ADD BreadcrumbList"],"canonical":[],"positioning":[]},"review/showcase/dispenza/index":{"linking":[],"schema":["REPLACE Organization"],"canonical":[],"positioning":[]},"solutions/multi-location":{"linking":[],"schema":["ADD BreadcrumbList"],"canonical":[],"positioning":[]},"status":{"linking":[],"schema":["ADD BreadcrumbList"],"canonical":[],"positioning":[]}}}}</script>
+<script>
+"use strict";
+(function(){
+  var DATA = JSON.parse(document.getElementById('preso-data').textContent);
+  var app = document.getElementById('app');
+
+  // ---- helpers ----
+  function h(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+  function n(v){ return (v==null||v==='')?null:(isFinite(+v)?+v:null); }
+  function fmtNum(v){ var x=n(v); return x==null?'—':x.toLocaleString('en-US'); }
+  function low(s){ return String(s||'').toLowerCase(); }
+
+  // KD -> color on a red(hard 100)->green(easy 0) scale. hue 0=red, 120=green.
+  function kdColor(kd){ var x=n(kd); if(x==null) return '#3a4256'; var c=Math.max(0,Math.min(100,x)); var hue=120-(c*1.2); return 'hsl('+hue+',62%,55%)'; }
+  function kdChip(kd){ var x=n(kd); if(x==null) return ''; return '<span class="chip kd" style="background:'+kdColor(x)+'">KD '+Math.round(x)+'</span>'; }
+  function volChip(v){ var x=n(v); if(x==null) return ''; return '<span class="chip vol">VOL '+fmtNum(x)+'</span>'; }
+  function intentChip(it){ var k=low(it); if(!k) return ''; var known=['transactional','commercial','informational','navigational']; var cls=known.indexOf(k)>=0?k:'navigational'; return '<span class="chip intent '+cls+'">'+h(it)+'</span>'; }
+  function funnelChip(f){ var k=low(f); if(!k) return ''; var cls=(k==='tofu'||k==='mofu'||k==='bofu')?k:''; if(!cls) return '<span class="chip dim">'+h(f)+'</span>'; return '<span class="chip funnel '+cls+'">'+h(f)+'</span>'; }
+  function famChip(fm){ return fm?('<span class="chip fam">'+h(fm)+'</span>'):''; }
+  function srcChip(s){ return s?('<span class="chip src">'+h(s)+'</span>'):''; }
+
+  // a volume bar relative to the max planned primary volume (visual scale).
+  var MAXVOL = 1; (DATA.pages||[]).forEach(function(p){ if(p.primary&&n(p.primary.volume)>MAXVOL) MAXVOL=n(p.primary.volume); });
+  (DATA.pillarTargets||[]).forEach(function(t){ if(n(t.volume)>MAXVOL) MAXVOL=n(t.volume); });
+  (DATA.contentMap||[]).forEach(function(c){ if(n(c.volume)>MAXVOL) MAXVOL=n(c.volume); });
+  function volBar(v){ var x=n(v); var pct = x==null?0:Math.max(2,Math.min(100,Math.round(x/MAXVOL*100))); return '<span class="barwrap"><span class="bar" style="width:64px"><span style="width:'+pct+'%;background:#5b8cff"></span></span><span class="bn">'+fmtNum(x)+'</span></span>'; }
+  function kdBar(kd){ var x=n(kd); var pct = x==null?0:Math.max(2,Math.min(100,Math.round(x))); return '<span class="barwrap"><span class="bar" style="width:64px"><span style="width:'+pct+'%;background:'+kdColor(x)+'"></span></span><span class="bn">'+(x==null?'—':Math.round(x))+'</span></span>'; }
+
+  // ---- state ----
+  var state = { tab:(DATA.synthesis?'synthesis':'validate'), q:'', type:'all', sort:'volume', dir:'desc', open:{}, vfilter:'all', vq:'' };
+
+  // ---- shell ----
+  function shell(){
+    var c = DATA.counts||{};
+    var asOf = DATA.started_at ? ('data as of '+h(String(DATA.started_at).slice(0,16).replace('T',' '))) : 'data as of (unknown)';
+    var types = pageTypes();
+    return ''+
+    '<header class="hd"><div class="hd-inner">'+
+      '<h1>SEO Optimization Plan — <span class="dom">'+h(DATA.domain||'(site)')+'</span></h1>'+
+      '<p class="sub">'+(DATA.category?('Offering: <strong>'+h(DATA.category)+'</strong> · '):'')+h(asOf)+' · crawl '+h(DATA.crawlId)+'</p>'+
+      '<div class="stats">'+
+        stat(c.validated,'targets validated')+
+        stat(c.pagesPlanned,'pages planned')+
+        stat(c.targetKeyphrases,'target keyphrases')+
+        stat(c.competitors,'competitors found')+
+        stat(c.contentTopics,'content topics')+
+        stat(c.orphans,'new-page opportunities')+
+      '</div>'+
+    '</div></header>'+
+    '<div class="tabbar"><div class="tabs" role="tablist">'+
+        (DATA.synthesis?tab('synthesis','Action Plan',(DATA.synthesis.priorities||[]).length):'')+
+        tab('validate','Target Validation',(DATA.stage2||[]).length)+
+        tab('onpage','On-Page Audit',(DATA.relevancy||[]).length)+
+        tab('meta','Meta Rewrite',(DATA.metas||[]).length)+
+        tab('linking','Internal Linking',(DATA.linking||[]).length)+
+        tab('schema','Structured Data',(DATA.schema||[]).length)+
+        tab('plan','Per-Page Plan',(DATA.pages||[]).length)+
+        tab('pillar','Pillar Constitution',(DATA.pillarTargets||[]).length)+
+        tab('content','Content Map',(DATA.contentMap||[]).length)+
+        tab('orphans','New-Page Opportunities',(DATA.orphans||[]).length)+
+      '</div></div>'+
+    '<div class="wrap">'+
+      '<section class="view" id="view-synthesis" role="tabpanel"></section>'+
+      '<section class="view" id="view-validate" role="tabpanel"></section>'+
+      '<section class="view" id="view-onpage" role="tabpanel"></section>'+
+      '<section class="view" id="view-meta" role="tabpanel"></section>'+
+      '<section class="view" id="view-linking" role="tabpanel"></section>'+
+      '<section class="view" id="view-schema" role="tabpanel"></section>'+
+      '<section class="view" id="view-plan" role="tabpanel"></section>'+
+      '<section class="view" id="view-pillar" role="tabpanel"></section>'+
+      '<section class="view" id="view-content" role="tabpanel"></section>'+
+      '<section class="view" id="view-orphans" role="tabpanel"></section>'+
+    '</div>';
+  }
+  function stat(v,l){ return '<div class="stat"><div class="n">'+fmtNum(v==null?0:v)+'</div><div class="l">'+h(l)+'</div></div>'; }
+  function tab(id,label,count){ return '<button class="tab" role="tab" data-tab="'+id+'" aria-selected="'+(state.tab===id)+'">'+h(label)+'<span class="c">'+fmtNum(count)+'</span></button>'; }
+
+  function pageTypes(){ var s={}; (DATA.pages||[]).forEach(function(p){ if(p.type) s[p.type]=1; }); return Object.keys(s).sort(); }
+
+  // ---- PER-PAGE PLAN ----
+  function renderPlan(){
+    var el = document.getElementById('view-plan');
+    var types = pageTypes();
+    var controls = ''+
+      '<div class="controls">'+
+        '<div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>'+
+          '<input id="q" type="search" placeholder="Search pages by URL or keyphrase…" value="'+h(state.q)+'" autocomplete="off" aria-label="Search pages"></div>'+
+        '<div class="sorts"><label>Sort</label>'+
+          sortBtn('volume','Volume')+sortBtn('kd','Primary KD')+
+        '</div>'+
+      '</div>'+
+      '<div class="filters" id="typefilters">'+
+        fchip('all','All',(DATA.pages||[]).length)+
+        types.map(function(t){ var c=(DATA.pages||[]).filter(function(p){return p.type===t;}).length; return fchip(t,t,c); }).join('')+
+      '</div>'+
+      '<p class="count-line" id="planCount"></p>'+
+      '<div class="plist" id="plist"></div>';
+    el.innerHTML = controls;
+    wirePlanControls();
+    renderPlanList();
+  }
+  function sortBtn(key,label){ var on=state.sort===key; var ar = on?(state.dir==='desc'?'▼':'▲'):''; return '<button class="sortbtn" data-sort="'+key+'" aria-pressed="'+on+'">'+h(label)+'<span class="arrow">'+ar+'</span></button>'; }
+  function fchip(val,label,count){ return '<button class="fchip" data-type="'+h(val)+'" aria-pressed="'+(state.type===val)+'">'+h(label)+(count!=null?(' ('+count+')'):'')+'</button>'; }
+
+  function filteredSortedPages(){
+    var q = low(state.q.trim());
+    var arr = (DATA.pages||[]).filter(function(p){
+      if(state.type!=='all' && p.type!==state.type) return false;
+      if(!q) return true;
+      if(low(p.url).indexOf(q)>=0) return true;
+      if(p.primary && low(p.primary.phrase).indexOf(q)>=0) return true;
+      var inSec = (p.secondaries||[]).some(function(s){return low(s.phrase).indexOf(q)>=0;});
+      var inSpk = (p.spoke_substack||[]).some(function(s){return low(s.phrase).indexOf(q)>=0;});
+      return inSec||inSpk;
+    });
+    var key = state.sort, dir = state.dir==='desc'?-1:1;
+    arr.sort(function(a,b){
+      var av,bv;
+      if(key==='kd'){ av=n(a.primary&&a.primary.kd); bv=n(b.primary&&b.primary.kd); }
+      else { av=n(a.primary&&a.primary.volume); bv=n(b.primary&&b.primary.volume); }
+      if(av==null&&bv==null) return low(a.url).localeCompare(low(b.url));
+      if(av==null) return 1; if(bv==null) return -1;
+      if(av===bv) return low(a.url).localeCompare(low(b.url));
+      return (av-bv)*dir;
+    });
+    return arr;
+  }
+
+  function renderPlanList(){
+    var list = filteredSortedPages();
+    var cnt = document.getElementById('planCount');
+    if(cnt) cnt.textContent = list.length+' of '+(DATA.pages||[]).length+' page'+((DATA.pages||[]).length===1?'':'s')+(state.type!=='all'?(' · type: '+state.type):'')+(state.q?(' · "'+state.q+'"'):'');
+    var box = document.getElementById('plist');
+    if(!list.length){ box.innerHTML = '<div class="empty">'+((DATA.pages||[]).length? 'No pages match your search/filter.':'No per-page plan rows were persisted for this crawl. (Run optimize-site first.)')+'</div>'; return; }
+    box.innerHTML = list.map(rowHtml).join('');
+    box.querySelectorAll('.phead').forEach(function(btn){
+      btn.addEventListener('click', function(){ toggleRow(btn.getAttribute('data-url')); });
+    });
+  }
+
+  function rowHtml(p){
+    var url=p.url||''; var isOpen=!!state.open[url];
+    var pm = p.primary||{};
+    var phraseLabel = pm.phrase ? h(pm.phrase) : '<span class="none">no primary assigned</span>';
+    var metaChips = (pm.phrase? (volChip(pm.volume)+kdChip(pm.kd)) : '');
+    return ''+
+    '<div class="prow'+(isOpen?' open':'')+'" data-rowurl="'+h(url)+'">'+
+      '<button class="phead" data-url="'+h(url)+'" aria-expanded="'+isOpen+'">'+
+        '<span class="ptype">'+h(p.type||'other')+'</span>'+
+        '<span class="pmain"><span class="purl">'+h(url||'(no url)')+'</span><span class="pphrase">'+phraseLabel+'</span></span>'+
+        '<span class="pmeta">'+metaChips+'<svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></span>'+
+      '</button>'+
+      '<div class="pdetail">'+(isOpen?detailHtml(p):'')+'</div>'+
+    '</div>';
+  }
+
+  function detailHtml(p){
+    return '<div class="cols3">'+colHave(p)+colTarget(p)+colComp(p)+'</div>';
+  }
+
+  function colHave(p){
+    var hv=p.have||{};
+    var rows='';
+    rows+= kv('URL', p.url ? '<a href="'+h(p.url)+'" target="_blank" rel="noopener">'+h(p.url)+'</a>' : '<span class="muted">—</span>');
+    rows+= kv('Page type', h(p.type||'other'));
+    rows+= kv('Current title', hv.title? h(hv.title):'<span class="muted">— (not in crawl)</span>');
+    rows+= kv('Current H1', hv.h1? h(hv.h1):'<span class="muted">—</span>');
+    rows+= kv('Word count', hv.words!=null? fmtNum(hv.words):'<span class="muted">—</span>');
+    if(!hv.present) rows+= '<p class="muted" style="font-size:12px">This page was not found in the current crawl map (matched by address from the plan).</p>';
+    return '<div class="col"><h4>What we have now</h4>'+rows+'</div>';
+  }
+  function kv(k,v){ return '<div class="kv"><div class="k">'+h(k)+'</div><div class="v">'+v+'</div></div>'; }
+
+  function colTarget(p){
+    var pm=p.primary||{};
+    var out='<div class="col"><h4>What we\'ll target</h4>';
+    if(pm.phrase){
+      out+='<div class="primarychip"><div class="lbl">Primary phrase</div><div class="ph">'+h(pm.phrase)+'</div>'+
+           '<div class="chiprow">'+volChip(pm.volume)+kdChip(pm.kd)+intentChip(pm.intent)+funnelChip(pm.funnel)+'</div></div>';
+    } else {
+      out+='<p class="muted">No primary phrase assigned to this page.</p>';
+    }
+    if(p.we_already_rank_pos!=null) out+='<p class="muted" style="font-size:12px;margin:-6px 0 12px">We already rank at position '+h(p.we_already_rank_pos)+' for this — equity to protect.</p>';
+
+    out+='<div class="sub-h">Secondaries</div>';
+    out+= phraseList(p.secondaries, 'No secondaries.');
+    out+='<div class="sub-h">Spoke sub-stack</div>';
+    out+= phraseList(p.spoke_substack, 'No spoke sub-stack (page has no provable sub-demand, or --dry run).');
+
+    if(p.rationale) out+='<div class="rationale"><span class="lbl">Why this phrase owns this page</span>'+h(p.rationale)+'</div>';
+    out+='</div>';
+    return out;
+  }
+  function phraseList(arr, emptyMsg){
+    if(!arr||!arr.length) return '<p class="muted" style="font-size:12px;margin:0 0 4px">'+h(emptyMsg)+'</p>';
+    return '<ul class="list-tight">'+arr.map(function(s){
+      return '<li><div class="li-ph">'+h(s.phrase||'')+'</div><div class="chiprow">'+volChip(s.volume)+kdChip(s.kd)+intentChip(s.intent)+funnelChip(s.funnel)+famChip(s.family)+srcChip(s.source)+'</div></li>';
+    }).join('')+'</ul>';
+  }
+
+  function colComp(p){
+    var out='<div class="col"><h4>Who we\'re ripping off</h4>';
+    var comps=p.competitors||[];
+    if(p.competitor_confidence){ out+='<div style="margin:-2px 0 10px"><span class="confbadge '+(low(p.competitor_confidence)==='high'?'high':'low')+'">'+h(p.competitor_confidence)+' confidence</span></div>'; }
+    if(comps.length){
+      out+='<div class="comp">'+comps.map(function(c){
+        var tag = c.strength==='core_platform'?'<span class="chip dim">platform</span>':(c.strength==='commerce_adjacent'?'<span class="chip dim">commerce</span>':'');
+        var rk = (c.rank!=null)?('#'+c.rank):'·';
+        return '<div class="compitem"><span class="rank">'+h(rk)+'</span><span class="cbody"><span class="dom">'+h(c.domain||'(unknown)')+'</span>'+(c.title?'<span class="cangle">'+h(c.title)+'</span>':'')+'</span><span class="tags">'+tag+'</span></div>';
+      }).join('')+'</div>';
+    } else {
+      out+='<p class="muted" style="font-size:12px">No relevant platform competitors in this SERP (low-confidence: an informational/listicle SERP, not a head-to-head platform race).</p>';
+    }
+    // wins to copy / gaps to fill (real data from the SERP sweep)
+    out+= winsHtml(p.competitor_wins);
+    out+= gapsHtml(p.competitor_gaps);
+    // SERP top-10 evidence
+    var serp=p.serp_top10||[];
+    if(serp.length){
+      out+='<div class="serp"><div class="sub-h">SERP top-10 (evidence)</div>'+serp.map(function(r){
+        return '<div class="serprow"><span class="r">'+h(r.rank)+'</span><span class="t">'+(r.url?'<a class="dm" href="'+h(r.url)+'" target="_blank" rel="noopener">'+h(r.domain||r.url)+'</a>':'<span class="dm">'+h(r.domain||'')+'</span>')+(r.title?'<div class="tt">'+h(r.title)+'</div>':'')+'</span></div>';
+      }).join('')+'</div>';
+    } else {
+      out+='<p class="muted" style="font-size:12px;margin-top:12px">No SERP top-10 captured for the primary phrase.</p>';
+    }
+    out+='</div>';
+    return out;
+  }
+  function detailNote(title, obj){
+    var body;
+    if(typeof obj==='string') body=h(obj);
+    else if(Array.isArray(obj)) body='<ul class="list-tight">'+obj.map(function(x){return '<li class="li-ph">'+h(typeof x==='object'?JSON.stringify(x):x)+'</li>';}).join('')+'</ul>';
+    else body='<pre style="white-space:pre-wrap;font-size:11.5px;color:var(--ink2);margin:4px 0">'+h(JSON.stringify(obj,null,2))+'</pre>';
+    return '<div class="sub-h">'+h(title)+'</div>'+body;
+  }
+  // wins/gaps renderers for the _competitors.mjs SERP-sweep shapes:
+  //   wins = { rival_titles:[their angles], shared_subtopics:[PAA they cover] }
+  //   gaps = { questions_to_answer:[PAA], related_searches:[cluster ideas] }
+  function bulletList(arr){ return '<ul class="list-tight">'+(arr||[]).map(function(x){ return '<li class="li-ph">'+h(x)+'</li>'; }).join('')+'</ul>'; }
+  function chipList(arr){ return '<div class="chiprow">'+(arr||[]).map(function(x){ return '<span class="chip fam">'+h(x)+'</span>'; }).join('')+'</div>'; }
+  function winsHtml(w){
+    if(!w||typeof w!=='object') return '';
+    var titles=w.rival_titles||[], subs=w.shared_subtopics||[];
+    if(!titles.length && !subs.length) return '';
+    var out='<div class="sub-h">Wins to copy — their angles</div>';
+    if(titles.length) out+= bulletList(titles);
+    if(subs.length) out+='<div class="sub-h" style="margin-top:12px">Subtopics they all cover</div>'+bulletList(subs);
+    return out;
+  }
+  function gapsHtml(g){
+    if(!g||typeof g!=='object') return '';
+    var qs=g.questions_to_answer||[], rel=g.related_searches||[];
+    if(!qs.length && !rel.length) return '';
+    var out='<div class="sub-h">Gaps to fill — answer on-page + blog clusters that link back</div>';
+    if(qs.length) out+= bulletList(qs);
+    if(rel.length) out+='<div class="sub-h" style="margin-top:12px">Related searches → cluster posts</div>'+chipList(rel);
+    return out;
+  }
+
+  function toggleRow(url){
+    state.open[url] = !state.open[url];
+    var row = document.querySelector('.prow[data-rowurl="'+cssEsc(url)+'"]');
+    if(!row) return;
+    var btn = row.querySelector('.phead'); var det = row.querySelector('.pdetail');
+    if(state.open[url]){ row.classList.add('open'); btn.setAttribute('aria-expanded','true'); var p=(DATA.pages||[]).filter(function(x){return (x.url||'')===url;})[0]; det.innerHTML = p?detailHtml(p):''; }
+    else { row.classList.remove('open'); btn.setAttribute('aria-expanded','false'); det.innerHTML=''; }
+  }
+  function cssEsc(s){ return String(s).replace(/["\\]/g,'\\$&'); }
+
+  function wirePlanControls(){
+    var q=document.getElementById('q');
+    if(q){ q.addEventListener('input', function(){ state.q=q.value; renderPlanList(); }); }
+    document.getElementById('typefilters').querySelectorAll('.fchip').forEach(function(b){
+      b.addEventListener('click', function(){ state.type=b.getAttribute('data-type'); document.getElementById('typefilters').querySelectorAll('.fchip').forEach(function(x){x.setAttribute('aria-pressed', x===b);}); renderPlanList(); });
+    });
+    document.querySelectorAll('.sortbtn').forEach(function(b){
+      b.addEventListener('click', function(){ var k=b.getAttribute('data-sort'); if(state.sort===k){ state.dir=state.dir==='desc'?'asc':'desc'; } else { state.sort=k; state.dir='desc'; } renderPlan(); });
+    });
+  }
+
+  // ---- PILLAR CONSTITUTION ----
+  function renderPillar(){
+    var el=document.getElementById('view-pillar');
+    var T=DATA.pillarTargets||[]; var C=DATA.pillarCompetitors||[];
+    var qualified = (DATA.pillarQualifiedCount==null? T.length : DATA.pillarQualifiedCount);
+    var discovered = (DATA.pillarDiscoveredCount==null? qualified : DATA.pillarDiscoveredCount);
+    var hiddenQualified = Math.max(0, qualified - T.length);   // meaningful targets beyond the display cap
+    var hiddenRaw = Math.max(0, discovered - qualified);       // raw discovery pool not in the constitution
+    var html='';
+    html+='<div class="panel"><div class="ph"><h3>The global goal that governs every page</h3>'+
+          '<p>Showing the top '+fmtNum(T.length)+' of '+fmtNum(qualified)+' meaningful target phrase'+(qualified===1?'':'s')+' in the constitution — the phrases that own or support a planned page, are owned by an existing page, or topped the relevance-gated SERP set. Every per-page primary + secondary is a slice of this list — no page drifts off the overall goal.'+
+          (hiddenRaw>0?(' <span class="muted">(+'+fmtNum(hiddenRaw)+' more discovered in the raw keyword pool, filtered out as noise.)</span>'):'')+
+          '</p></div>';
+    if(T.length){
+      html+='<div class="tablewrap"><table><thead><tr><th>Phrase</th><th class="num">Volume</th><th class="num">KD</th><th>Intent</th><th>Funnel</th><th>Status</th></tr></thead><tbody>'+
+        T.map(function(t){
+          return '<tr><td class="phrasecell">'+h(t.phrase)+'</td>'+
+            '<td class="num">'+volBar(t.volume)+'</td>'+
+            '<td class="num">'+kdBar(t.kd)+'</td>'+
+            '<td>'+(intentChip(t.intent_class)||'<span class="muted">—</span>')+'</td>'+
+            '<td>'+(funnelChip(t.funnel_stage)||'<span class="muted">—</span>')+'</td>'+
+            '<td>'+(t.owned?'<span class="ownedtag">owned</span>':'<span class="whitetag">whitespace</span>')+'</td></tr>';
+        }).join('')+'</tbody></table></div>';
+      if(hiddenQualified>0){ html+='<p class="count-line" style="padding:10px 18px 4px">+'+fmtNum(hiddenQualified)+' more meaningful target'+(hiddenQualified===1?'':'s')+' discovered (capped to the top '+fmtNum(T.length)+' by volume).</p>'; }
+    } else { html+='<div class="empty">No validated target phrases were persisted for this crawl.</div>'; }
+    html+='</div>';
+
+    html+='<div class="panel"><div class="ph"><h3>The pillar competitor set</h3>'+
+          '<p>'+fmtNum(C.length)+' domain'+(C.length===1?'':'s')+' that rank most often across the portfolio\'s target SERPs — the global field every page must beat. Ranked by how many of the site\'s target SERPs they appear in.</p></div>';
+    if(C.length){
+      html+='<div class="tablewrap"><table><thead><tr><th>Domain</th><th class="num">On SERPs</th><th class="num">Best rank</th><th>Kind</th></tr></thead><tbody>'+
+        C.map(function(c){
+          var kind = c.is_known_builder?'core platform':(c.is_commerce_adjacent?'commerce-adjacent':'—');
+          return '<tr><td class="phrasecell">'+h(c.domain)+'</td><td class="num">'+fmtNum(c.serps)+'</td><td class="num">'+(c.best_rank==null?'—':('#'+c.best_rank))+'</td><td>'+h(kind)+'</td></tr>';
+        }).join('')+'</tbody></table></div>';
+    } else { html+='<div class="empty">No competitor domains were persisted for this crawl.</div>'; }
+    html+='</div>';
+    el.innerHTML=html;
+  }
+
+  // ---- TARGET VALIDATION (Stage 2: per-page thesis + intent/winnability/reality verdict) ----
+  var VERDICT_META = {
+    'KEEP':            {c:'#2ec27e', t:'keep', d:'focus is right — winnable + intent-aligned + on-page'},
+    'KEEP_WITH_GAP':   {c:'#5cc8ff', t:'keep + gap', d:'keep the target; close a content/intent gap'},
+    'RE-TARGET':       {c:'#c792ea', t:'re-target', d:'better intent-aligned target found + SERP-validated'},
+    'NEEDS-NEW-ASSET': {c:'#f0a93b', t:'new asset', d:'the head wants a different page type — build a wedge'},
+    'FAIL-CLOSED':     {c:'#ef5350', t:'fail-closed', d:'no winnable+aligned head — target a branded floor'}
+  };
+  function gpill(label,res){
+    var col = res==='PASS'?'var(--ok)':res==='PARTIAL'?'var(--warn)':res==='FAIL'?'var(--bad)':'var(--dim)';
+    return '<span class="chip" style="border:1px solid '+col+';color:'+col+'">'+h(label)+' '+h(res||'—')+'</span>';
+  }
+  function renderValidate(){
+    var el=document.getElementById('view-validate');
+    var S=DATA.stage2||[]; var counts=DATA.stage2Counts||{};
+    if(!S.length){ el.innerHTML='<div class="empty">No Stage 2 verdicts persisted. (Run stage2-run.mjs.)</div>'; return; }
+    var order=['RE-TARGET','NEEDS-NEW-ASSET','FAIL-CLOSED','KEEP_WITH_GAP','KEEP'];
+    var html='<div class="panel"><div class="ph"><h3>Did each page get the right target — one it can actually win?</h3>'+
+      '<p>Every page\'s focus validated against three orthogonal gates — <b>intent fit</b> (does the SERP reward this page type?), <b>winnability</b> (KD vs the page\'s role), and <b>page reality</b> (does the content support it?). A target is only kept if it survives all three; otherwise it\'s re-targeted (SERP-validated), flagged for a new asset, or fail-closed to a winnable branded floor. Runs on any site — no platform lists.</p></div>'+
+      '<div style="padding:12px 18px 16px"><div class="chiprow">'+
+        order.filter(function(v){return counts[v];}).map(function(v){ var m=VERDICT_META[v]; return '<button class="vstat" data-v="'+v+'" style="--vc:'+m.c+'"><span class="vn">'+(counts[v]||0)+'</span><span class="vl">'+h(m.t)+'</span></button>'; }).join('')+
+        '<button class="vstat" data-v="all" style="--vc:var(--ink2)"><span class="vn">'+S.length+'</span><span class="vl">all</span></button>'+
+      '</div></div></div>'+
+      '<div class="controls"><div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>'+
+        '<input id="vq" type="search" placeholder="Search page, focus, verdict…" autocomplete="off"></div></div>'+
+      '<p class="count-line" id="vCount"></p><div id="vlist"></div>';
+    el.innerHTML=html;
+    el.querySelectorAll('.vstat').forEach(function(b){ b.addEventListener('click',function(){ state.vfilter=b.getAttribute('data-v'); el.querySelectorAll('.vstat').forEach(function(x){x.classList.toggle('on',x===b);}); drawV(); }); });
+    var vq=document.getElementById('vq'); if(vq) vq.addEventListener('input',function(){ state.vq=vq.value; drawV(); });
+    function drawV(){
+      var term=low((state.vq||'').trim());
+      var list=S.filter(function(s){
+        if(state.vfilter!=='all' && s.verdict!==state.vfilter) return false;
+        if(!term) return true;
+        return low(s.slug).indexOf(term)>=0||low(s.current_phrase).indexOf(term)>=0||low(s.verdict).indexOf(term)>=0||low(s.new_focus_phrase).indexOf(term)>=0;
+      });
+      list.sort(function(a,b){ return order.indexOf(a.verdict)-order.indexOf(b.verdict) || (a.slug||'').localeCompare(b.slug||''); });
+      var cc=document.getElementById('vCount'); if(cc) cc.textContent=list.length+' of '+S.length+' pages'+(state.vfilter!=='all'?(' · '+state.vfilter):'')+(term?(' · "'+term+'"'):'');
+      document.getElementById('vlist').innerHTML = list.length ? list.map(rowV).join('') : '<div class="empty">No pages match.</div>';
+    }
+    function rowV(s){
+      var m=VERDICT_META[s.verdict]||{c:'var(--dim)',t:s.verdict};
+      var action='';
+      if(s.verdict==='RE-TARGET'&&s.new_focus_phrase) action='<span class="vact">→ re-target to <b>'+h(s.new_focus_phrase)+'</b> <span class="muted">(KD '+(s.new_focus_kd==null?'—':s.new_focus_kd)+', SERP-validated)</span></span>';
+      else if(s.verdict==='NEEDS-NEW-ASSET'&&s.new_asset) action='<span class="vact">→ build <b>'+h(s.new_asset.type)+'</b>: "'+h(s.new_asset.target_phrase)+'" <span class="muted">· keep page on <b>'+h(s.fallback_phrase)+'</b></span></span>';
+      else if(s.verdict==='FAIL-CLOSED') action='<span class="vact">→ no winnable head ('+h((s.reason_code||'').toLowerCase().replace(/_/g,' '))+') · target <b>'+h(s.fallback_phrase)+'</b></span>';
+      else if(s.verdict==='KEEP_WITH_GAP'&&s.content_gap) action='<span class="vact muted">'+h(s.content_gap.note||'')+'</span>';
+      return '<div class="vrow" style="--vc:'+m.c+'">'+
+        '<div class="vhd"><span class="vbadge" style="background:'+m.c+'">'+h(s.verdict.replace(/-/g,' ').replace(/_/g,' '))+'</span>'+
+          '<span class="vslug">'+h(s.slug||'(home)')+'</span><span class="vrole">'+h(s.page_role)+'</span></div>'+
+        '<div class="vfocus">'+h(s.current_phrase)+' <span class="muted">· '+(s.current_volume==null?'—':fmtNum(s.current_volume))+' vol · KD '+(s.current_kd==null?'—':s.current_kd)+'</span></div>'+
+        '<div class="vgates">'+gpill('intent',s.intent_result)+(s.intent_serp_type?'<span class="chip dim">'+h(s.intent_serp_type)+'</span>':'')+gpill('win',s.winnability_result)+gpill('page',s.reality_result)+'</div>'+
+        (action?'<div class="vaction">'+action+'</div>':'')+
+      '</div>';
+    }
+    drawV();
+  }
+
+  // ---- ON-PAGE AUDIT (Phase C: does the page's real content deliver on its validated focus?) ----
+  var RV_META = { aligned:{c:'#2ec27e',t:'aligned'}, partial:{c:'#f0a93b',t:'partial'}, off:{c:'#ef5350',t:'off'} };
+  function placeChip(label,tier){
+    var col = tier==='exact'?'var(--ok)':tier==='head'?'var(--warn)':'var(--bad)';
+    var txt = tier==='exact'?'✓':tier==='head'?'~':'✗';
+    return '<span class="chip" style="border:1px solid '+col+';color:'+col+'" title="'+h(tier)+'">'+h(label)+' '+txt+'</span>';
+  }
+  function renderOnPage(){
+    var el=document.getElementById('view-onpage');
+    var R=DATA.relevancy||[]; var counts=DATA.relevancyCounts||{};
+    if(!R.length){ el.innerHTML='<div class="empty">No on-page audit persisted. (Run the Phase C workflow + _persist-phasec.mjs.)</div>'; return; }
+    var order=['off','partial','aligned'];
+    var html='<div class="panel"><div class="ph"><h3>Does each page\'s actual content deliver on its target?</h3>'+
+      '<p>Audited against the REAL main content (nav/footer chrome stripped): is the validated focus in the <b>Title / H1 / intro / headings</b>, and does the page cover the competitor subtopics? Then specific fix actions — <b>brand H1s are protected</b> (never stuffed), nothing is keyword-stuffed, and already-aligned pages get left alone. '+fmtNum(DATA.counts&&DATA.counts.onpageFixes||0)+' fixes across the site.</p></div>'+
+      '<div style="padding:12px 18px 16px"><div class="chiprow">'+
+        order.filter(function(v){return counts[v];}).map(function(v){ var m=RV_META[v]; return '<button class="vstat" data-v="'+v+'" style="--vc:'+m.c+'"><span class="vn">'+(counts[v]||0)+'</span><span class="vl">'+h(m.t)+'</span></button>'; }).join('')+
+        '<button class="vstat" data-v="all" style="--vc:var(--ink2)"><span class="vn">'+R.length+'</span><span class="vl">all</span></button>'+
+      '</div></div></div>'+
+      '<div class="controls"><div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>'+
+        '<input id="rq" type="search" placeholder="Search page, focus, action…" autocomplete="off"></div></div>'+
+      '<p class="count-line" id="rCount"></p><div id="rlist"></div>';
+    el.innerHTML=html;
+    el.querySelectorAll('.vstat').forEach(function(b){ b.addEventListener('click',function(){ state.rfilter=b.getAttribute('data-v'); el.querySelectorAll('.vstat').forEach(function(x){x.classList.toggle('on',x===b);}); drawR(); }); });
+    var rq=document.getElementById('rq'); if(rq) rq.addEventListener('input',function(){ state.rq=rq.value; drawR(); });
+    function drawR(){
+      var term=low((state.rq||'').trim()); var rf=state.rfilter||'all';
+      var list=R.filter(function(r){
+        if(rf!=='all' && r.verdict!==rf) return false;
+        if(!term) return true;
+        return low(r.slug).indexOf(term)>=0||low(r.validated_focus).indexOf(term)>=0||(r.actions||[]).some(function(a){return low(a.detail).indexOf(term)>=0;});
+      });
+      list.sort(function(a,b){ return order.indexOf(a.verdict)-order.indexOf(b.verdict) || (a.score||0)-(b.score||0); });
+      var cc=document.getElementById('rCount'); if(cc) cc.textContent=list.length+' of '+R.length+' pages'+(rf!=='all'?(' · '+rf):'')+(term?(' · "'+term+'"'):'');
+      document.getElementById('rlist').innerHTML = list.length ? list.map(rowR).join('') : '<div class="empty">No pages match.</div>';
+    }
+    function rowR(r){
+      var m=RV_META[r.verdict]||{c:'var(--dim)',t:r.verdict};
+      var fixes=(r.actions||[]).filter(function(a){return a.type!=='no_action';});
+      var acts = fixes.length ? '<div class="racts">'+fixes.map(function(a){
+        var rc = a.risk==='RISKY'?'var(--bad)':'var(--ok)';
+        return '<div class="ract"><span class="rrisk" style="color:'+rc+'">'+h(a.risk)+'</span> <span class="rtype">'+h((a.type||'').replace(/_/g,' '))+'</span> '+h(a.detail||'')+'</div>';
+      }).join('')+'</div>' : '<div class="racts"><div class="ract muted">✓ already aligned — no change needed</div></div>';
+      return '<div class="vrow" style="--vc:'+m.c+'">'+
+        '<div class="vhd"><span class="vbadge" style="background:'+m.c+'">'+h(r.verdict)+'</span>'+
+          '<span class="vslug">'+h(r.slug||'(home)')+'</span><span class="vrole">score '+(r.score==null?'—':r.score)+'</span></div>'+
+        '<div class="vfocus">target: <b>'+h(r.validated_focus)+'</b></div>'+
+        '<div class="vgates">'+placeChip('title',r.placement.title)+placeChip('h1',r.placement.h1)+placeChip('intro',r.placement.intro)+placeChip('headings',r.placement.headings)+(r.missing&&r.missing.length?'<span class="chip dim">'+r.missing.length+' subtopics missing</span>':'')+'</div>'+
+        (r.diagnosis?'<div class="rdx">'+h(r.diagnosis)+'</div>':'')+acts+
+      '</div>';
+    }
+    drawR();
+  }
+
+  // ---- META REWRITE (Phase B: focus-led title + description, grounded in real content; old vs new) ----
+  function renderMeta(){
+    var el=document.getElementById('view-meta');
+    var M=DATA.metas||[];
+    if(!M.length){ el.innerHTML='<div class="empty">No meta rewrites persisted. (Run the Phase B workflow + _persist-phaseb.mjs.)</div>'; return; }
+    var changed=DATA.metasChanged||0;
+    var html='<div class="panel"><div class="ph"><h3>Focus-led titles &amp; descriptions — grounded in the real page</h3>'+
+      '<p>Each rewrite leads with the validated focus, stays within Google\'s limits (<b>title ≤60</b>, <b>description ≤155</b>), and pulls a concrete proof from the page\'s ACTUAL content — no over-promising, brand H1s untouched. '+changed+' of '+M.length+' rewritten; the rest were already good. A reviewable payload — your live site files are not modified.</p></div>'+
+      '<div class="controls"><div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>'+
+        '<input id="mq" type="search" placeholder="Search page, focus, title…" autocomplete="off"></div>'+
+        '<div class="filters" id="mfilters">'+
+          '<button class="fchip" data-mf="all" aria-pressed="true">All ('+M.length+')</button>'+
+          '<button class="fchip" data-mf="changed" aria-pressed="false">Rewritten ('+changed+')</button>'+
+          '<button class="fchip" data-mf="kept" aria-pressed="false">Already good ('+(M.length-changed)+')</button>'+
+        '</div>'+
+      '</div><p class="count-line" id="mCount"></p><div id="mlist"></div>';
+    el.innerHTML=html;
+    var mq=document.getElementById('mq'); if(mq) mq.addEventListener('input',drawM);
+    document.getElementById('mfilters').querySelectorAll('.fchip').forEach(function(b){ b.addEventListener('click',function(){ state.mf=b.getAttribute('data-mf'); document.getElementById('mfilters').querySelectorAll('.fchip').forEach(function(x){x.setAttribute('aria-pressed',x===b);}); drawM(); }); });
+    function drawM(){
+      var term=low((mq&&mq.value||'').trim()); var mf=state.mf||'all';
+      var list=M.filter(function(m){
+        if(mf==='changed'&&!m.changed) return false; if(mf==='kept'&&m.changed) return false;
+        if(!term) return true;
+        return low(m.slug).indexOf(term)>=0||low(m.validated_focus).indexOf(term)>=0||low(m.new_title).indexOf(term)>=0||low(m.new_description).indexOf(term)>=0;
+      });
+      var cc=document.getElementById('mCount'); if(cc) cc.textContent=list.length+' of '+M.length+' pages'+(mf!=='all'?(' · '+mf):'')+(term?(' · "'+term+'"'):'');
+      document.getElementById('mlist').innerHTML = list.length ? list.map(rowM).join('') : '<div class="empty">No pages match.</div>';
+    }
+    function lenChip(n,cap){ var col=n>cap?'var(--bad)':n>cap-8?'var(--warn)':'var(--dim)'; return '<span class="mlen" style="color:'+col+'">'+n+'/'+cap+'</span>'; }
+    function rowM(m){
+      return '<div class="mrow"><div class="mhd"><span class="vslug">'+h(m.slug||'(home)')+'</span>'+
+        (m.changed?'<span class="mchg">rewritten</span>':'<span class="mkept">already good</span>')+
+        '<span class="vrole">'+h(m.validated_focus)+'</span></div>'+
+        '<div class="mfield"><div class="mlabel">Title '+lenChip(m.new_title_len||0,60)+'</div>'+
+          (m.changed&&m.current_title?'<div class="mold">'+h(m.current_title)+'</div>':'')+
+          '<div class="mnew">'+h(m.new_title)+'</div></div>'+
+        '<div class="mfield"><div class="mlabel">Description '+lenChip(m.new_desc_len||0,155)+'</div>'+
+          (m.changed&&m.current_description?'<div class="mold">'+h(m.current_description)+'</div>':'')+
+          '<div class="mnew">'+h(m.new_description)+'</div></div>'+
+        (m.grounded_in?'<div class="mgrnd"><span class="gl">grounded in</span> '+h(m.grounded_in)+'</div>':'')+
+      '</div>';
+    }
+    drawM();
+  }
+
+  // ---- INTERNAL LINKING (Layer 1: whole-site link graph, typed; derived roles + bounded recommendations) ----
+  var LK_ROLE={'TOPICAL-HUB':{c:'#5b8cff',t:'Hub'},'TOPICAL-SPOKE':{c:'#3fb6a8',t:'Spoke'},'DECISION-LEAF':{c:'#b98cff',t:'Compare leaf'},'CONVERSION-SINK':{c:'#f0883e',t:'Conversion sink'},'PRICING-TIER':{c:'#d6a44c',t:'Pricing tier'},'UTILITY':{c:'#7a8699',t:'Utility'},'MIS-TYPED→spoke':{c:'#3fb6a8',t:'Spoke (reclassed)'}};
+  function lkHealthColor(hh){ if(/UNDER/.test(hh)) return 'var(--bad)'; if(/sink|tier|utility|cta-inflated/.test(hh)) return 'var(--dim)'; if(/needs-hub/.test(hh)) return 'var(--warn)'; return 'var(--ok)'; }
+  function renderLinking(){
+    var el=document.getElementById('view-linking');
+    var L=DATA.linking||[]; var RC=DATA.linkingRecs||[];
+    if(!L.length){ el.innerHTML='<div class="empty">No internal-linking audit persisted. (Run linking-run.mjs.)</div>'; return; }
+    var roles=DATA.linkingRoleCounts||{}; var recc=DATA.linkingRecCounts||{};
+    var topicalEdges=L.reduce(function(s,r){return s+(n(r.topical_out)||0);},0);
+    var under=L.filter(function(r){return /UNDER/.test(r.link_health);}).length;
+    var hubs=L.filter(function(r){return r.derived_role==='TOPICAL-HUB';}).length;
+    var html='<div class="panel"><div class="ph"><h3>Whole-site internal linking — the graph, not the page</h3>'+
+      '<p>Every in-content link is typed (topical vs CTA / nav-card / brand / weak); only <b>topical</b> links count toward authority, so the raw in-degree’s CTA inflation is stripped. Roles are <b>derived from the graph</b> (not the old KD-ceiling label) and cross-validated against the content plan’s designated hubs. Recommendations are a reviewable plan — your live HTML is never modified.</p></div>'+
+      '<div style="display:flex;gap:14px;flex-wrap:wrap;padding:4px 18px 14px">'+
+        lkStat(topicalEdges,'topical links')+lkStat(hubs,'topical hubs')+lkStat(under,'under-linked pages')+
+        lkStat((RC.filter(function(x){return x.kind==='add';}).length),'links to add')+
+        lkStat((RC.filter(function(x){return x.kind==='fix';}).length),'anchors to fix')+
+        lkStat((RC.filter(function(x){return x.kind==='structural';}).length),'card-link structural')+
+        lkStat((RC.filter(function(x){return x.kind==='pending';}).length),'pending new-page')+
+      '</div>'+
+      '<div class="chiprow" style="padding:0 18px 14px">'+Object.keys(LK_ROLE).filter(function(k){return roles[k];}).map(function(k){return '<span class="chip" style="border-color:'+LK_ROLE[k].c+';color:'+LK_ROLE[k].c+'">'+h(LK_ROLE[k].t)+' <strong>'+roles[k]+'</strong></span>';}).join('')+'</div>'+
+    '</div>';
+    // controls: health filter + search
+    html+='<div class="controls"><div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>'+
+      '<input id="lq" type="search" placeholder="Search page or focus…" autocomplete="off"></div>'+
+      '<div class="filters" id="lfilters">'+
+        '<button class="fchip" data-lf="all" aria-pressed="true">All ('+L.length+')</button>'+
+        '<button class="fchip" data-lf="under" aria-pressed="false">Under-linked ('+under+')</button>'+
+        '<button class="fchip" data-lf="hub" aria-pressed="false">Hubs ('+hubs+')</button>'+
+        '<button class="fchip" data-lf="sink" aria-pressed="false">Sinks/Utility ('+L.filter(function(r){return /SINK|UTILITY|TIER/.test(r.derived_role);}).length+')</button>'+
+      '</div></div><p class="count-line" id="lCount"></p><div id="llist"></div>';
+    // recommendations block
+    html+='<div class="panel" style="margin-top:18px"><div class="ph"><h3>Recommendations <span class="muted" style="font-weight:400">— reviewable, no live edits</span></h3></div>'+
+      '<div id="lrecs"></div></div>';
+    el.innerHTML=html;
+    var lq=document.getElementById('lq'); if(lq) lq.addEventListener('input',drawL);
+    document.getElementById('lfilters').querySelectorAll('.fchip').forEach(function(b){ b.addEventListener('click',function(){ state.lf=b.getAttribute('data-lf'); document.getElementById('lfilters').querySelectorAll('.fchip').forEach(function(x){x.setAttribute('aria-pressed',x===b);}); drawL(); }); });
+    function drawL(){
+      var term=low((lq&&lq.value||'').trim()); var lf=state.lf||'all';
+      var list=L.filter(function(r){
+        if(lf==='under'&&!/UNDER/.test(r.link_health)) return false;
+        if(lf==='hub'&&r.derived_role!=='TOPICAL-HUB') return false;
+        if(lf==='sink'&&!/SINK|UTILITY|TIER/.test(r.derived_role)) return false;
+        if(!term) return true; return low(r.slug).indexOf(term)>=0||low(r.validated_focus).indexOf(term)>=0;
+      });
+      var cc=document.getElementById('lCount'); if(cc) cc.textContent=list.length+' of '+L.length+' pages'+(lf!=='all'?(' · '+lf):'')+(term?(' · "'+term+'"'):'');
+      document.getElementById('llist').innerHTML = list.length ? list.map(rowL).join('') : '<div class="empty">No pages match.</div>';
+    }
+    function rowL(r){
+      var rm=LK_ROLE[r.derived_role]||{c:'var(--dim)',t:r.derived_role};
+      var hc=lkHealthColor(r.link_health);
+      var inflate = (n(r.ed_in)||0) - (n(r.topical_in)||0);
+      var planned = (n(r.planned_hub_inbound)||0)>0 ? '<span class="chip dim" title="content pieces the plan routes to this hub">plan-backed ×'+r.planned_hub_inbound+'</span>':'';
+      return '<div class="vrow" style="--vc:'+rm.c+'">'+
+        '<div class="vhd"><span class="vbadge" style="background:'+rm.c+'">'+h(rm.t)+'</span>'+
+          '<span class="vslug">'+h(r.slug||'(home)')+'</span>'+
+          '<span class="vrole" style="color:'+hc+'">'+h(r.link_health)+'</span></div>'+
+        (r.validated_focus?'<div class="vfocus">target: <b>'+h(r.validated_focus)+'</b></div>':'')+
+        '<div class="vgates">'+
+          '<span class="chip" title="topical authority = 1 PageRank iteration on topical-only links">authority <b>'+(r.topical_in_weighted==null?'—':r.topical_in_weighted)+'</b></span>'+
+          '<span class="chip" title="topical inbound vs raw inbound — the gap is CTA/nav chrome">topical in '+(r.topical_in||0)+' / raw '+(r.ed_in||0)+(inflate>0?' <span style="color:var(--dim)">(−'+inflate+' chrome)</span>':'')+'</span>'+
+          '<span class="chip">distributes '+(r.topical_out||0)+'</span>'+
+          (n(r.exact_pct)>=0.30?'<span class="chip" style="border-color:var(--warn);color:var(--warn)" title="exact-match anchor share over the 30% over-optimization ceiling">exact '+Math.round(n(r.exact_pct)*100)+'%</span>':'')+
+          planned+
+        '</div>'+
+        '<div class="rdx" style="font-size:11.5px;color:var(--dim)">'+h(r.role_reason||'')+'</div>'+
+      '</div>';
+    }
+    // recommendations
+    function recGroup(kind,title,desc,rowFn){
+      var rows=RC.filter(function(x){return x.kind===kind;});
+      if(!rows.length) return '';
+      return '<div style="margin:6px 0 16px"><div class="sub-h" style="margin:8px 0 8px">'+h(title)+' <span class="c" style="color:var(--accent2)">'+rows.length+'</span></div>'+
+        (desc?'<p class="muted" style="font-size:12px;margin:0 0 9px">'+desc+'</p>':'')+
+        '<div class="recs">'+rows.map(rowFn).join('')+'</div></div>';
+    }
+    var recsHtml='';
+    recsHtml+=recGroup('add','Links to add','Missing topical links into under-linked pages (capped ≤3 per source, ≤5 per target). Anchor suggestions key off the validated focus.',function(x){
+      return '<div class="recrow"><span class="reck add">ADD</span> <code>'+h(x.src||'?')+'</code> → <code>'+h(x.dst)+'</code>'+(x.suggested_anchor?' <span class="recanchor">“'+h(x.suggested_anchor)+'”</span>':'')+'<div class="recwhy">'+h(x.rationale)+'</div></div>'; });
+    recsHtml+=recGroup('hub-compare','Hub ↔ compare pairs','Compare pages need one link to/from the product hub the comparison turns on (matched semantically).',function(x){
+      return '<div class="recrow"><span class="reck add">PAIR</span> <code>'+h(x.dst)+'</code>'+(x.suggested_anchor?' <span class="recanchor">“'+h(x.suggested_anchor)+'”</span>':'')+'<div class="recwhy">'+h(x.rationale)+'</div></div>'; });
+    recsHtml+=recGroup('fix','Anchors to upgrade','Weak/raw anchors on a topical page → a natural partial-match anchor (never exact, to avoid over-optimization).',function(x){
+      return '<div class="recrow"><span class="reck fix">FIX</span> <code>'+h(x.src||'?')+'</code> → <code>'+h(x.dst)+'</code> '+
+        '<span class="recold">“'+h(x.current_anchor||'(empty)')+'”</span>'+(x.suggested_anchor?' → <span class="recanchor">“'+h(x.suggested_anchor)+'”</span>':'')+'</div>'; });
+    recsHtml+=recGroup('structural','Card-link structural fixes','Whole cards wrapped in one link → concatenated anchors. Restructure so only the heading or CTA is the link (implementation, not a content rewrite).',function(x){
+      return '<div class="recrow"><span class="reck str">CARD</span> <span class="recold">“'+h(x.current_anchor)+'”</span><div class="recwhy">'+h(x.rationale)+'</div></div>'; });
+    recsHtml+=recGroup('pending','Pending — blocked on a new page','These links can’t be made until the target page/hub is built (from the content plan).',function(x){
+      return '<div class="recrow"><span class="reck pend">PENDING</span> '+h(x.rationale)+' <span class="recblock">'+h(x.blocked_by)+'</span></div>'; });
+    document.getElementById('lrecs').innerHTML=recsHtml||'<div class="empty">No recommendations.</div>';
+    drawL();
+  }
+  function lkStat(v,l){ return '<div style="text-align:center"><div style="font-size:22px;font-weight:700;color:var(--ink)">'+fmtNum(v==null?0:v)+'</div><div style="font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:.04em">'+h(l)+'</div></div>'; }
+
+  // ---- ACTION PLAN (capstone synthesis: 3 layers + positioning, prioritized + cross-referenced) ----
+  var SYN_TIER={P1:{c:'#5b8cff',t:'P1 · do first'},P2:{c:'#3fb6a8',t:'P2 · high value'},P3:{c:'#7a8699',t:'P3 · launch / verify'},IMPL:{c:'#b98cff',t:'Implementation phase'}};
+  var LENS_C={linking:'#3fb6a8',schema:'#5b8cff',canonical:'#7a8699',positioning:'#f0883e'};
+  function renderSynthesis(){
+    var el=document.getElementById('view-synthesis'); var SY=DATA.synthesis;
+    if(!SY){ el.innerHTML='<div class="empty">No synthesis persisted. (Run synthesis.mjs.)</div>'; return; }
+    var hd=SY.headline||{};
+    var html='<div class="panel"><div class="ph"><h3>The win — one prioritized plan across every layer</h3>'+
+      '<p>The first five stages made each page individually optimized. These last layers make the pages reinforce each other: internal linking (authority graph), structured data (entity integrity), and canonical (dedup) — plus the positioning flags. Below is the single ranked action list, with the pages each step touches and the <b>cross-cutting pages</b> that show up in multiple layers (fix those first). Reviewable — no live HTML is modified.</p></div>'+
+      '<div style="display:flex;gap:14px;flex-wrap:wrap;padding:4px 18px 14px">'+
+        lkStat(hd.internal_links_to_add,'links to add')+lkStat(hd.breadcrumbs_to_add,'breadcrumbs to add')+lkStat(hd.duplicate_apps_removed,'duplicate apps removed')+
+        lkStat(hd.anchors_to_fix,'anchors to fix')+lkStat(hd.under_linked_pages,'orphaned pages fed')+lkStat(hd.positioning_pages_flagged,'positioning flags')+
+      '</div>'+
+      '<div style="padding:0 18px 14px"><span class="chip dim" style="font-size:12px">Canonical: '+h(hd.canonical_verdict||'—')+'</span></div>'+
+    '</div>';
+    // cross-cutting callout
+    if((SY.cross_cutting||[]).length){
+      html+='<div class="panel" style="margin-top:14px"><div class="ph"><h3>Cross-cutting pages — highest leverage <span class="muted" style="font-weight:400">(touched by 3+ layers)</span></h3></div>'+
+        '<div style="padding:6px 18px 14px">'+SY.cross_cutting.map(function(c){
+          return '<div class="recrow"><code>'+h(c.slug)+'</code> '+c.lenses.map(function(l){return '<span class="chip" style="border-color:'+(LENS_C[l]||'var(--dim)')+';color:'+(LENS_C[l]||'var(--dim)')+';font-size:11px">'+h(l)+'</span>';}).join(' ')+'</div>';
+        }).join('')+'</div></div>';
+    }
+    // prioritized action list
+    html+='<div class="panel" style="margin-top:14px"><div class="ph"><h3>Prioritized actions</h3></div><div style="padding:6px 18px 16px">';
+    (SY.priorities||[]).forEach(function(p){
+      var t=SYN_TIER[p.tier]||{c:'var(--dim)',t:p.tier};
+      html+='<div class="vrow" style="--vc:'+t.c+';margin-bottom:10px">'+
+        '<div class="vhd"><span class="vbadge" style="background:'+t.c+'">'+h(t.t)+'</span>'+
+          '<span class="vslug">'+h(p.theme)+'</span><span class="vrole">'+h(p.layer)+'</span></div>'+
+        '<div class="vfocus" style="font-weight:400">'+h(p.action)+'</div>'+
+        (p.impact?'<div class="rdx" style="color:var(--dim);font-size:11.5px">'+h(p.impact)+'</div>':'')+
+      '</div>';
+    });
+    html+='</div></div>';
+    el.innerHTML=html;
+  }
+
+  // ---- STRUCTURED DATA (Layer 2: schema audit + reviewable JSON-LD diff) ----
+  var SC_ACT={ADD:{c:'var(--ok)',t:'ADD'},REMOVE:{c:'var(--bad)',t:'REMOVE'},REPLACE:{c:'var(--warn)',t:'REPLACE'},KEEP:{c:'var(--dim)',t:'KEEP'}};
+  function renderSchema(){
+    var el=document.getElementById('view-schema');
+    var S=DATA.schema||[]; var RC=DATA.schemaRecs||[];
+    if(!S.length){ el.innerHTML='<div class="empty">No structured-data audit persisted. (Run schema-run.mjs.)</div>'; return; }
+    var ac=DATA.schemaActionCounts||{};
+    var bcAdd=RC.filter(function(r){return r.type==='BreadcrumbList'&&r.action==='ADD';}).length;
+    var saRemove=RC.filter(function(r){return r.type==='SoftwareApplication'&&r.action==='REMOVE';}).length;
+    var drift=S.filter(function(r){return r.drift_outlier;}).length;
+    var html='<div class="panel"><div class="ph"><h3>Structured data — whole-site entity integrity</h3>'+
+      '<p>Schema is per-page JSON-LD, but its <b>correctness is a whole-site property</b>: one Organization identity, one platform entity (not 28 duplicate apps), breadcrumbs that mirror the real URL path, and zero fabricated review/rating markup. Every generated block is validated (required props, breadcrumb position, URL match) — and this is a reviewable <b>diff</b>, your live HTML is never modified.</p></div>'+
+      '<div style="display:flex;gap:14px;flex-wrap:wrap;padding:4px 18px 14px">'+
+        lkStat(S.length,'pages audited')+lkStat(bcAdd,'breadcrumbs to add')+lkStat(saRemove,'duplicate apps removed')+
+        lkStat(1,'platform entity')+lkStat(drift,'identity drift fixes')+lkStat((ac.ADD||0)+(ac.REMOVE||0)+(ac.REPLACE||0),'total changes')+
+      '</div>'+
+      '<div class="chiprow" style="padding:0 18px 14px">'+['ADD','REMOVE','REPLACE','KEEP'].filter(function(k){return ac[k];}).map(function(k){return '<span class="chip" style="border-color:'+SC_ACT[k].c+';color:'+SC_ACT[k].c+'">'+SC_ACT[k].t+' <strong>'+ac[k]+'</strong></span>';}).join('')+'</div>'+
+    '</div>';
+    // controls
+    html+='<div class="controls"><div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>'+
+      '<input id="sq" type="search" placeholder="Search page or type…" autocomplete="off"></div>'+
+      '<div class="filters" id="sfilters">'+
+        '<button class="fchip" data-sf="all" aria-pressed="true">All ('+S.length+')</button>'+
+        '<button class="fchip" data-sf="changed" aria-pressed="false">Has changes ('+S.filter(function(r){return RC.some(function(x){return x.slug===r.slug&&x.action!=='KEEP';});}).length+')</button>'+
+        '<button class="fchip" data-sf="drift" aria-pressed="false">Identity drift ('+drift+')</button>'+
+      '</div></div><p class="count-line" id="sCount"></p><div id="slist"></div>';
+    el.innerHTML=html;
+    var sq=document.getElementById('sq'); if(sq) sq.addEventListener('input',drawS);
+    document.getElementById('sfilters').querySelectorAll('.fchip').forEach(function(b){ b.addEventListener('click',function(){ state.sf=b.getAttribute('data-sf'); document.getElementById('sfilters').querySelectorAll('.fchip').forEach(function(x){x.setAttribute('aria-pressed',x===b);}); drawS(); }); });
+    function drawS(){
+      var term=low((sq&&sq.value||'').trim()); var sf=state.sf||'all';
+      var list=S.filter(function(r){
+        var changes=RC.filter(function(x){return x.slug===r.slug&&x.action!=='KEEP';});
+        if(sf==='changed'&&!changes.length) return false;
+        if(sf==='drift'&&!r.drift_outlier) return false;
+        if(!term) return true; return low(r.slug).indexOf(term)>=0||r.existing_types.join(' ').toLowerCase().indexOf(term)>=0;
+      });
+      var cc=document.getElementById('sCount'); if(cc) cc.textContent=list.length+' of '+S.length+' pages'+(sf!=='all'?(' · '+sf):'')+(term?(' · "'+term+'"'):'');
+      document.getElementById('slist').innerHTML = list.length ? list.map(rowS).join('') : '<div class="empty">No pages match.</div>';
+    }
+    function rowS(r){
+      var changes=RC.filter(function(x){return x.slug===r.slug;});
+      var actChips=changes.map(function(c){ var m=SC_ACT[c.action]||{c:'var(--dim)',t:c.action}; return '<div class="ract"><span class="rrisk" style="color:'+m.c+'">'+m.t+'</span> <span class="rtype">'+h(c.type)+'</span> '+h(c.reason)+'</div>'; }).join('');
+      var bcTrail = r.breadcrumb&&r.breadcrumb.itemListElement ? r.breadcrumb.itemListElement.map(function(i){return h(i.name)+(i.item?'':' ·');}).join(' › ') : '';
+      var vc = r.drift_outlier?'var(--warn)':(changes.some(function(c){return c.action!=='KEEP';})?'var(--ok)':'var(--dim)');
+      return '<div class="vrow" style="--vc:'+vc+'">'+
+        '<div class="vhd"><span class="vbadge" style="background:'+vc+'">'+h(r.decided_type||'WebPage')+'</span>'+
+          '<span class="vslug">'+h(r.slug||'(home)')+'</span>'+
+          (r.drift_outlier?'<span class="vrole" style="color:var(--warn)">identity drift</span>':'')+'</div>'+
+        '<div class="vgates"><span class="chip dim">now: '+(r.existing_types.length?h(r.existing_types.join(', ')):'—')+'</span>'+
+          (bcTrail?'<span class="chip" title="breadcrumb from canonical URL path">'+bcTrail+'</span>':'')+'</div>'+
+        (actChips?'<div class="racts">'+actChips+'</div>':'')+
+      '</div>';
+    }
+    drawS();
+  }
+
+  // ---- CONTENT MAP (competitor blog topics SGEN should own) ----
+  function renderContentMap(){
+    var el=document.getElementById('view-content');
+    var M=DATA.contentMap||[]; var hubs=DATA.contentHubs||{};
+    if(!M.length){ el.innerHTML='<div class="empty">No content map persisted. (Run the content-map workflow + _persist-contentmap.mjs.)</div>'; return; }
+    // group by cluster_theme, themes ordered by total volume
+    var themes={}; M.forEach(function(c){ (themes[c.cluster_theme||'(uncategorized)'] ||= []).push(c); });
+    var themeOrder=Object.keys(themes).sort(function(a,b){
+      var av=themes[a].reduce(function(s,x){return s+(n(x.volume)||0);},0), bv=themes[b].reduce(function(s,x){return s+(n(x.volume)||0);},0);
+      return bv-av;
+    });
+    var hubKeys=Object.keys(hubs).sort(function(a,b){return hubs[b]-hubs[a];});
+    var html='';
+    // intro + the NEW HUBS to build
+    html+='<div class="panel"><div class="ph"><h3>Competitor blog topics to rip off &amp; own</h3>'+
+      '<p>'+fmtNum(M.length)+' on-category topics our direct + content competitors rank for, gated from a '+
+      '485-topic pool, scored by demand × winnability × proven position, and mapped to the page each should link back to. '+
+      'Each carries the angle SGEN should take to beat it.</p></div>';
+    if(hubKeys.length){
+      html+='<div style="padding:12px 18px 16px"><div class="sub-h" style="margin:0 0 9px">New content hubs to build ('+hubKeys.length+')</div><div class="chiprow">'+
+        hubKeys.map(function(k){ return '<span class="chip fam" style="font-size:12px;padding:4px 11px">'+h(k)+' <strong style="color:var(--accent2)">'+hubs[k]+'</strong></span>'; }).join('')+
+        '</div><p class="muted" style="font-size:11.5px;margin:9px 0 0">A “new-hub” topic has no existing page to support it — it’s a net-new content hub worth building.</p></div>';
+    }
+    html+='</div>';
+    // controls
+    html+='<div class="controls"><div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>'+
+      '<input id="cq" type="search" placeholder="Search topics, angle, competitor, target page…" autocomplete="off" aria-label="Search content topics"></div></div>'+
+      '<p class="count-line" id="cCount"></p><div id="cthemes"></div>';
+    el.innerHTML=html;
+    var q=document.getElementById('cq');
+    function draw(){
+      var term=low((q&&q.value||'').trim());
+      var box=document.getElementById('cthemes'); var shown=0; var out='';
+      themeOrder.forEach(function(th){
+        var items=themes[th].filter(function(c){
+          if(!term) return true;
+          return low(c.top_keyword).indexOf(term)>=0||low(c.sgen_angle).indexOf(term)>=0||low(c.competitor).indexOf(term)>=0||low(c.supports_slug).indexOf(term)>=0||low(c.cluster_theme).indexOf(term)>=0;
+        });
+        if(!items.length) return;
+        shown+=items.length;
+        var vol=items.reduce(function(s,x){return s+(n(x.volume)||0);},0);
+        out+='<div class="panel"><div class="ph"><h3 style="text-transform:capitalize">'+h(th)+' <span class="muted" style="font-weight:400;font-size:12.5px">· '+items.length+' topic'+(items.length===1?'':'s')+' · '+fmtNum(vol)+' total vol</span></h3></div>'+
+          '<div class="tablewrap"><table><thead><tr><th>Topic (their winning search)</th><th class="num">Volume</th><th class="num">KD</th><th>Competitor</th><th>Links to</th><th>SGEN angle</th></tr></thead><tbody>'+
+          items.map(rowC).join('')+'</tbody></table></div></div>';
+      });
+      box.innerHTML=out||'<div class="empty">No topics match your search.</div>';
+      var cc=document.getElementById('cCount'); if(cc) cc.textContent=shown+' of '+M.length+' topic'+(M.length===1?'':'s')+(term?(' · "'+term+'"'):'');
+    }
+    function rowC(c){
+      var hub=c.is_new_hub;
+      var target=hub?('<span class="whitetag" style="margin:0">new hub: '+h(c.supports_slug.replace('new-hub:',''))+'</span>')
+                    :('<span style="font-family:var(--mono);font-size:11.5px;color:var(--accent2)">/'+h(c.supports_slug)+'</span>');
+      var comp='<span style="font-size:12px">'+h((c.competitor||'').replace('.com','').replace('.org',''))+'</span>'+(c.is_direct?' <span class="chip dim" style="font-size:9px">direct</span>':'');
+      return '<tr><td class="phrasecell">'+h(c.top_keyword)+'<div style="margin-top:3px">'+intentChip(c.intent_class)+funnelChip(c.funnel_stage)+(c.best_position!=null?'<span class="chip dim">they rank #'+c.best_position+'</span>':'')+'</div></td>'+
+        '<td class="num">'+volBar(c.volume)+'</td>'+
+        '<td class="num">'+kdBar(c.kd)+'</td>'+
+        '<td>'+comp+'</td>'+
+        '<td>'+target+'</td>'+
+        '<td><div class="brief" style="max-width:420px">'+h(c.sgen_angle)+'</div></td></tr>';
+    }
+    if(q) q.addEventListener('input', draw);
+    draw();
+  }
+
+  // ---- NEW-PAGE OPPORTUNITIES ----
+  function renderOrphans(){
+    var el=document.getElementById('view-orphans');
+    var O=DATA.orphans||[];
+    var html='<div class="panel"><div class="ph"><h3>Whitespace → net-new pages &amp; cluster posts</h3>'+
+      '<p>'+fmtNum(O.length)+' high-value phrase'+(O.length===1?'':'s')+' that no existing money page fits above the threshold. Each is a recommended new page or supporting cluster post.</p></div>';
+    if(O.length){
+      html+='<div class="tablewrap"><table><thead><tr><th>Phrase</th><th class="num">Volume</th><th class="num">KD</th><th>Intent</th><th>Recommend</th><th>Brief</th></tr></thead><tbody>'+
+        O.map(function(o){
+          return '<tr><td class="phrasecell">'+h(o.phrase)+'</td>'+
+            '<td class="num">'+volBar(o.volume)+'</td>'+
+            '<td class="num">'+kdBar(o.kd)+'</td>'+
+            '<td>'+(intentChip(o.intent_class)||'<span class="muted">—</span>')+'</td>'+
+            '<td><span class="recpill '+(o.recommended==='new_page'?'new_page':'cluster_post')+'">'+h((o.recommended||'').replace('_',' '))+'</span></td>'+
+            '<td><div class="brief">'+h(o.brief)+'</div></td></tr>';
+        }).join('')+'</tbody></table></div>';
+    } else { html+='<div class="empty">No orphans — every global target found a home page.</div>'; }
+    html+='</div>';
+    el.innerHTML=html;
+  }
+
+  // ---- tabs ----
+  function setTab(id){
+    state.tab=id;
+    document.querySelectorAll('.tab').forEach(function(t){ t.setAttribute('aria-selected', t.getAttribute('data-tab')===id); });
+    document.querySelectorAll('.view').forEach(function(v){ v.classList.toggle('active', v.id==='view-'+id); });
+    if(id==='synthesis') renderSynthesis(); else if(id==='validate') renderValidate(); else if(id==='onpage') renderOnPage(); else if(id==='meta') renderMeta(); else if(id==='linking') renderLinking(); else if(id==='schema') renderSchema(); else if(id==='plan') renderPlan(); else if(id==='pillar') renderPillar(); else if(id==='content') renderContentMap(); else renderOrphans();
+  }
+  function wireTabs(){
+    var tabs=Array.prototype.slice.call(document.querySelectorAll('.tab'));
+    tabs.forEach(function(t,i){
+      t.addEventListener('click', function(){ setTab(t.getAttribute('data-tab')); });
+      t.addEventListener('keydown', function(e){
+        if(e.key==='ArrowRight'||e.key==='ArrowLeft'){ e.preventDefault(); var d=e.key==='ArrowRight'?1:-1; var ni=(i+d+tabs.length)%tabs.length; tabs[ni].focus(); setTab(tabs[ni].getAttribute('data-tab')); }
+      });
+    });
+  }
+
+  // ---- boot ----
+  app.classList.remove('loading');
+  app.innerHTML = shell();
+  wireTabs();
+  setTab(state.tab);
+
+  // global keyboard: '/' focuses search when on the plan tab.
+  document.addEventListener('keydown', function(e){
+    if(e.key==='/' && state.tab==='plan' && document.activeElement && document.activeElement.id!=='q'){ var q=document.getElementById('q'); if(q){ e.preventDefault(); q.focus(); } }
+  });
+})();
+</script>
+</body>
+</html>
