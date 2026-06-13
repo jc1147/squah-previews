@@ -1,0 +1,86 @@
+/* ============================================================================
+   MediMarketing — BESPOKE-TIER polish  ·  P8 foundation  ·  TOKEN-PURE
+   ----------------------------------------------------------------------------
+   THIN by design. Loaded ON TOP of tokens + structural + brand-card-standard
+   for the crafted flagships. Carries ONLY genuine marquee FLOURISHES that layer
+   over the structural section primitives (they are NOT core primitives — each
+   section already renders without them): the hero cinematic depth (ken-burns +
+   glow stack + off-canvas bleed-stat), the 2-KPI SoLV atmosphere (brighter
+   bleed + accent glow wash + deeper chart shadow), and the flagship pricing +
+   closing-CTA radial blooms. The guarantee accountability band itself is a
+   section primitive and now lives in medimarketing-structural.css.
+
+   ZERO raw 6-digit brand hex — every colour resolves through var(--*) from
+   medimarketing-tokens.css (G8 check 1). Reduced motion honoured. UTF-8, no BOM.
+   ============================================================================ */
+
+/* =========================================================================
+   HERO — cinematic depth layers (glow stack + ken-burns + off-canvas stat)
+   ========================================================================= */
+.gf-hero .hero-photo { animation: gf-kenburns 26s ease-in-out infinite alternate; }
+@keyframes gf-kenburns { from { transform: scale(1.08) translate(0, 0); } to { transform: scale(1.16) translate(-1.5%, -1.5%); } }
+
+.gf-hero .hero-glow {
+  position: absolute; z-index: 1; pointer-events: none; width: 760px; height: 760px; left: -160px; top: -180px;
+  background: radial-gradient(circle at center, color-mix(in srgb, var(--glow) 40%, transparent), color-mix(in srgb, var(--accent) 12%, transparent) 40%, transparent 66%);
+  filter: blur(30px);
+}
+.gf-hero .hero-glow.two {
+  left: auto; right: -220px; top: auto; bottom: -260px; width: 680px; height: 680px;
+  background: radial-gradient(circle at center, color-mix(in srgb, var(--accent) 30%, transparent), transparent 64%);
+}
+
+/* off-canvas oversized bleed-stat (display-font element — owns its ch/em sizing) */
+.gf-hero .hero-bleed-stat { position: absolute; z-index: 2; right: -2vw; bottom: 8%; text-align: right; pointer-events: none; }
+.gf-hero .hero-bleed-stat .big {
+  font-family: var(--font);
+  font: 900 clamp(7rem, 17vw, 15rem)/.8 var(--font); letter-spacing: -.05em;
+  color: transparent; -webkit-text-stroke: 1.4px var(--atmos-stroke); opacity: .9;
+}
+.gf-hero .hero-bleed-stat .cap {
+  display: block; margin-top: -.4em; margin-right: .5ch;
+  font: 700 .82rem/1 var(--font); letter-spacing: .2em; text-transform: uppercase; color: var(--ink-2);
+}
+
+/* =========================================================================
+   2-KPI METHOD — atmosphere boost (brighter bleed + accent glow wash)
+   ========================================================================= */
+.ge-solv .solv-bleed { -webkit-text-stroke-color: color-mix(in srgb, var(--accent) 22%, transparent); }
+.ge-solv .solv-glow {
+  position: absolute; z-index: 0; width: 720px; height: 720px; left: -12%; bottom: -22%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--glow) 18%, transparent), transparent 66%);
+  filter: blur(12px); pointer-events: none;
+}
+.ge-solv .chart { box-shadow: var(--shadow-elev), var(--inset-hi); }
+
+/* =========================================================================
+   PRICING — featured-card bloom + glowing radial backdrops (flagship only)
+   ========================================================================= */
+.gf-pricing::before { content: ""; position: absolute; left: 50%; top: 18%; transform: translateX(-50%); width: 1100px; height: 760px; pointer-events: none; background: radial-gradient(50% 50% at 50% 50%, color-mix(in srgb, var(--accent) 22%, transparent), color-mix(in srgb, var(--glow) 6%, transparent) 45%, transparent 70%); filter: blur(20px); }
+.gf-pricing::after { content: ""; position: absolute; right: -10%; bottom: -10%; width: 520px; height: 520px; pointer-events: none; background: radial-gradient(circle, color-mix(in srgb, var(--glow) 14%, transparent), transparent 65%); filter: blur(30px); }
+.gf-pricing .price-card.featured::before {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1px;
+  background: linear-gradient(160deg, color-mix(in srgb, var(--glow) 60%, transparent), transparent 40%);
+  -webkit-mask: linear-gradient(black 0 0) content-box, linear-gradient(black 0 0); -webkit-mask-composite: xor;
+  mask: linear-gradient(black 0 0) content-box, linear-gradient(black 0 0); mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* =========================================================================
+   CLOSING CTA — radial accent bloom behind the headline (flagship only)
+   ========================================================================= */
+.gf-cta::before { content: ""; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 900px; height: 600px; pointer-events: none; background: radial-gradient(50% 50% at 50% 50%, color-mix(in srgb, var(--accent) 26%, transparent), color-mix(in srgb, var(--glow) 6%, transparent) 45%, transparent 70%); filter: blur(24px); }
+
+/* =========================================================================
+   RESPONSIVE — flagship flourishes (additive)
+   ========================================================================= */
+@media (max-width: 900px) {
+  .gf-hero .hero-bleed-stat { display: none; }
+}
+
+/* =========================================================================
+   REDUCED MOTION — honored (flourish animations zeroed)
+   ========================================================================= */
+@media (prefers-reduced-motion: reduce) {
+  .gf-hero .hero-photo { animation: none; }
+}

@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MediMarketing - Chrome Preview (P9 REFINED)</title>
+<meta name="description" content="Self-contained P9 chrome preview (refined): hover-intent grouped header (Packages dropdown + EPIC two-zone Industries mega-menu) + drawer accordions + sticky CTA + the designed closing-CTA footer moment, wrapping a short dark hero + stat row.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<!-- This file IS in _design/, so the five foundation + chrome sheets link by BARE filename. -->
+<link rel="stylesheet" href="medimarketing-tokens.css">
+<link rel="stylesheet" href="medimarketing-structural.css">
+<link rel="stylesheet" href="brand-card-standard.css">
+<link rel="stylesheet" href="brand-card-bespoke.css">
+<link rel="stylesheet" href="medimarketing-chrome.css">
+<style>
+  /* preview-only: a short dark hero so the transparent->glass header + open panels are visible in context. NOT shipped. */
+  .pv-hero { position: relative; min-height: 84vh; display: flex; align-items: center;
+             padding: var(--s-12) 0 var(--s-9); background: var(--bg-3); overflow: hidden; }
+  .pv-hero .pv-glow { position: absolute; inset: -10% -15% auto auto; width: 60%; height: 70%; pointer-events: none;
+             background: radial-gradient(50% 50% at 70% 30%, color-mix(in srgb, var(--glow) 24%, transparent),
+                         color-mix(in srgb, var(--accent) 8%, transparent) 45%, transparent 70%); filter: blur(14px); }
+  .pv-hero .pv-inner { position: relative; z-index: 2; max-width: 820px; }
+  .pv-note { margin-top: 26px; font-size: var(--fs-small); color: var(--ink-3); letter-spacing: .04em; }
+  .pv-spacer { height: 70vh; background: var(--bg-2); display: grid; place-items: center; }
+  .pv-spacer p { color: var(--ink-2); font-size: var(--fs-small); letter-spacing: .1em; text-transform: uppercase; }
+</style>
+</head>
+<body>
+
+<!-- ============ SKIP LINK ============ -->
+<a class="mm-skip" href="#main">Skip to content</a>
+
+<!-- ============ GLOBAL HEADER . grouped agency nav: dropdown + mega-menu ============ -->
+<header class="mm-header" id="mm-header" data-surface="dark">
+  <div class="container mm-nav">
+    <a class="mm-logo" href="index.html" aria-label="MediMarketing home">
+      <img src="img/medimarketing_logo_w.webp" alt="MediMarketing" width="180" height="34">
+    </a>
+
+    <ul class="mm-links" role="list">
+      <!-- Packages: caret DROPDOWN -->
+      <li class="mm-has-panel" data-disclosure="packages">
+        <button class="mm-trigger" type="button"
+                aria-haspopup="true" aria-expanded="false" aria-controls="mm-dd-packages">
+          Packages
+          <svg class="mm-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="mm-panel mm-dropdown" id="mm-dd-packages" role="menu" aria-label="Packages">
+          <span class="mm-panel__bloom" aria-hidden="true"></span>
+          <ul role="list">
+            <li><a role="menuitem" href="marketing-plus.html"><span class="t">Marketing Plus</span><span class="d">Start filling a single-location schedule.</span></a></li>
+            <li><a role="menuitem" href="marketing-pro.html"><span class="t">Marketing Pro</span><span class="d">Dominate local visibility and scale faster.</span></a></li>
+            <li><a role="menuitem" href="compare-packages.html"><span class="t">Compare Packages</span><span class="d">See both plans side by side.</span></a></li>
+            <li><a role="menuitem" href="the-2-kpi-method.html"><span class="t">The 2-KPI Method</span><span class="d">The only two numbers we report on.</span></a></li>
+          </ul>
+        </div>
+      </li>
+
+      <!-- Industries: caret MEGA-MENU . EPIC two-zone showcase (featured rail + 8 sector cards) -->
+      <li class="mm-has-panel" data-disclosure="industries">
+        <button class="mm-trigger" type="button"
+                aria-haspopup="true" aria-expanded="false" aria-controls="mm-mega-industries">
+          Industries
+          <svg class="mm-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="mm-panel mm-mega" id="mm-mega-industries" role="menu" aria-label="Industries">
+          <span class="mm-panel__bloom" aria-hidden="true"></span>
+          <div class="mm-mega__layout">
+
+            <!-- LEFT . the CINEMATIC FEATURED zone (graded clinical image + pill + big headline + CTA) -->
+            <a class="mm-mega__feature" role="menuitem" href="book-an-audit.html">
+              <img src="img/woman_optometrist_retina_and_medical_computer_for_2025_04_06_06_30_15_utc_1536x1025.webp" alt="An optometrist reviewing retinal imaging on a clinical workstation">
+              <span class="eyebrow">8 Specialties</span>
+              <span class="ttl">Built for <span class="accent">your specialty.</span></span>
+              <span class="sub">Marketing engineered around how patients actually find and book your kind of care, not a generic template.</span>
+              <span class="lnk">Book an Audit</span>
+            </a>
+
+            <!-- RIGHT . the verticals zone (eyebrow + 8 icon-rows + note + All-Industries pill) -->
+            <div class="mm-mega__cards">
+              <div class="mm-mega__head">
+                <span class="lbl">Explore by specialty</span>
+              </div>
+              <div class="mm-mega__grid">
+                <a class="mm-mega__card" role="menuitem" href="industries-optometry.html">
+                  <span class="mm-mega__ico"><img src="img/icon_eye.webp" alt="" aria-hidden="true"></span>
+                  <span class="mm-mega__txt"><span class="t">Optometry</span><span class="s">Eye exams and eyewear</span></span>
+                </a>
+                <a class="mm-mega__card" role="menuitem" href="industries-dental.html">
+                  <span class="mm-mega__ico"><img src="img/icon_dentist.webp" alt="" aria-hidden="true"></span>
+                  <span class="mm-mega__txt"><span class="t">Dental</span><span class="s">General and cosmetic</span></span>
+                </a>
+                <a class="mm-mega__card" role="menuitem" href="industries-medi-spa.html">
+                  <span class="mm-mega__ico"><img src="img/icon_nurse.webp" alt="" aria-hidden="true"></span>
+                  <span class="mm-mega__txt"><span class="t">Med Spa</span><span class="s">Aesthetics and wellness</span></span>
+                </a>
+                <a class="mm-mega__card" role="menuitem" href="industries-chiropractic.html">
+                  <span class="mm-mega__ico"><img src="img/icon_doctor.webp" alt="" aria-hidden="true"></span>
+                  <span class="mm-mega__txt"><span class="t">Chiropractic</span><span class="s">Spinal and joint care</span></span>
+                </a>
+                <a class="mm-mega__card" role="menuitem" href="industries-vet-clinic.html">
+                  <span class="mm-mega__ico"><img src="img/icon_dog.webp" alt="" aria-hidden="true"></span>
+                  <span class="mm-mega__txt"><span class="t">Vet Clinic</span><span class="s">Companion animal care</span></span>
+                </a>
+                <a class="mm-mega__card" role="menuitem" href="industries-pain-management.html">
+                  <span class="mm-mega__ico"><img src="img/icon_bandage.webp" alt="" aria-hidden="true"></span>
+                  <span class="mm-mega__txt"><span class="t">Pain Management</span><span class="s">Interventional relief</span></span>
+                </a>
+                <a class="mm-mega__card" role="menuitem" href="industries-physical-therapy-rehab.html">
+                  <span class="mm-mega__ico"><img src="img/icon_wheelchair.webp" alt="" aria-hidden="true"></span>
+                  <span class="mm-mega__txt"><span class="t">Physical Therapy</span><span class="s">Rehab and recovery</span></span>
+                </a>
+                <a class="mm-mega__card" role="menuitem" href="industries-urgent-care.html">
+                  <span class="mm-mega__ico"><img src="img/icon_ambulance.webp" alt="" aria-hidden="true"></span>
+                  <span class="mm-mega__txt"><span class="t">Urgent Care</span><span class="s">Walk-in and same-day</span></span>
+                </a>
+              </div>
+              <div class="mm-mega__foot">
+                <span class="mm-mega__note">Don't see your field? <b>We likely serve it.</b></span>
+                <a class="mm-mega__all" role="menuitem" href="industries.html">All Industries</a>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </li>
+
+      <!-- direct links -->
+      <li><a class="mm-navlink" href="results.html">Results</a></li>
+      <li><a class="mm-navlink" href="our-story.html">Our Story</a></li>
+      <li><a class="mm-navlink" href="blog.html">Blog</a></li>
+    </ul>
+
+    <a class="btn btn-primary btn-sm mm-cta-desktop" href="book-an-audit.html">
+      Book an Audit <span class="arr">&rarr;</span>
+    </a>
+
+    <button class="mm-burger" id="mm-burger" type="button"
+            aria-label="Open menu" aria-expanded="false" aria-controls="mm-drawer">
+      <span class="bars" aria-hidden="true"><span></span><span></span><span></span></span>
+    </button>
+  </div>
+</header>
+
+<!-- ============ MOBILE DRAWER + OVERLAY . Packages + Industries accordions ============ -->
+<div class="mm-overlay" id="mm-overlay" tabindex="-1" hidden></div>
+
+<aside class="mm-drawer" id="mm-drawer" aria-label="Mobile menu" aria-hidden="true" hidden>
+  <div class="mm-drawer__head">
+    <img src="img/medimarketing_logo_w.webp" alt="MediMarketing" width="148" height="28">
+    <button class="mm-drawer__close" id="mm-drawer-close" type="button" aria-label="Close menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
+        <path d="M6 6l12 12M18 6L6 18"/>
+      </svg>
+    </button>
+  </div>
+
+  <nav class="mm-drawer__nav" aria-label="Mobile primary">
+    <!-- Packages accordion -->
+    <div class="mm-acc">
+      <button class="mm-acc__btn" type="button" aria-expanded="false" aria-controls="mm-acc-packages">
+        Packages
+        <svg class="mm-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="mm-acc__panel" id="mm-acc-packages">
+        <div class="mm-acc__inner">
+          <a href="marketing-plus.html">Marketing Plus</a>
+          <a href="marketing-pro.html">Marketing Pro</a>
+          <a href="compare-packages.html">Compare Packages</a>
+          <a href="the-2-kpi-method.html">The 2-KPI Method</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Industries accordion (sector-icon rows) -->
+    <div class="mm-acc">
+      <button class="mm-acc__btn" type="button" aria-expanded="false" aria-controls="mm-acc-industries">
+        Industries
+        <svg class="mm-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="mm-acc__panel" id="mm-acc-industries">
+        <div class="mm-acc__inner">
+          <a href="industries-optometry.html"><span class="mm-acc__ico"><img src="img/icon_eye.webp" alt="" aria-hidden="true"></span>Optometry</a>
+          <a href="industries-dental.html"><span class="mm-acc__ico"><img src="img/icon_dentist.webp" alt="" aria-hidden="true"></span>Dental</a>
+          <a href="industries-medi-spa.html"><span class="mm-acc__ico"><img src="img/icon_nurse.webp" alt="" aria-hidden="true"></span>Med Spa</a>
+          <a href="industries-chiropractic.html"><span class="mm-acc__ico"><img src="img/icon_doctor.webp" alt="" aria-hidden="true"></span>Chiropractic</a>
+          <a href="industries-vet-clinic.html"><span class="mm-acc__ico"><img src="img/icon_dog.webp" alt="" aria-hidden="true"></span>Vet Clinic</a>
+          <a href="industries-pain-management.html"><span class="mm-acc__ico"><img src="img/icon_bandage.webp" alt="" aria-hidden="true"></span>Pain Management</a>
+          <a href="industries-physical-therapy-rehab.html"><span class="mm-acc__ico"><img src="img/icon_wheelchair.webp" alt="" aria-hidden="true"></span>Physical Therapy</a>
+          <a href="industries-urgent-care.html"><span class="mm-acc__ico"><img src="img/icon_ambulance.webp" alt="" aria-hidden="true"></span>Urgent Care</a>
+          <a href="industries.html">All Industries</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- direct links -->
+    <a class="mm-drawer__link" href="results.html">Results</a>
+    <a class="mm-drawer__link" href="our-story.html">Our Story</a>
+    <a class="mm-drawer__link" href="blog.html">Blog</a>
+  </nav>
+
+  <div class="mm-drawer__cta">
+    <a class="btn btn-primary" href="book-an-audit.html">Book an Audit <span class="arr">&rarr;</span></a>
+  </div>
+</aside>
+
+<!-- ============ REPRESENTATIVE MAIN (short dark hero + one stat row) ============ -->
+<main id="main">
+  <section class="pv-hero">
+    <div class="pv-glow" aria-hidden="true"></div>
+    <div class="container pv-inner">
+      <span class="eyebrow reveal in">Patient acquisition for medical and dental practices</span>
+      <h1 class="h-hero" style="margin-top:18px">New Patients.<br><span class="grad">Guaranteed.</span></h1>
+      <p class="lead" style="margin-top:22px">A representative hero, here only to show the refined chrome in context: the grouped header with a Packages dropdown and the EPIC two-zone Industries mega-menu, the hover-intent open behaviour, the glow CTA, the mobile drawer with accordions, the sticky bar, and the designed closing-CTA footer moment.</p>
+      <div class="hero-actions" style="display:flex;gap:16px;flex-wrap:wrap;margin-top:28px">
+        <a class="btn btn-primary" href="book-an-audit.html">Book a Free Audit <span class="arr">&rarr;</span></a>
+        <a class="btn btn-ghost" href="compare-packages.html">Compare Packages</a>
+      </div>
+      <p class="pv-note">Hover "Packages" / "Industries" and travel the cursor down into the panel: it stays open (flush + bridged gap + close-delay). Resize below 980px to see the hamburger drawer with accordion groups.</p>
+    </div>
+  </section>
+
+  <!-- one stat row -->
+  <section class="ge-stats">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat">
+          <div class="stat-num">500<span class="suf">+</span></div>
+          <div class="stat-lbl"><strong>Practices grown</strong> across optometry, dental, chiro, med-spa and more</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">3.8<span class="suf">&times;</span></div>
+          <div class="stat-lbl"><strong>Average return</strong> measured on tracked patient revenue, not ad spend</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">98<span class="suf">%</span></div>
+          <div class="stat-lbl"><strong>Client retention</strong>, month to month, kept by results</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="pv-spacer"><p>scroll region (so the sticky bar + glass header trigger)</p></div>
+</main>
+
+<!-- ============ GLOBAL FOOTER . FOOTER-STYLES #22 multi-row + #11 accent glow ============ -->
+<footer class="mm-footer" data-surface="dark">
+  <div class="container">
+
+    <!-- Row 1: the designed closing CTA MOMENT (oversized headline + accent glow + masked art + chip + glow CTA) -->
+    <div class="mm-footer__lead">
+      <div class="mm-footer__lead-art" aria-hidden="true">
+        <img src="img/businesswoman_and_woman_people_meeting_in_office_2024_11_01_18_29_56_utc.webp" alt="">
+      </div>
+      <div class="mm-footer__lead-copy">
+        <span class="eyebrow no-rule">Ready when you are</span>
+        <h2>Ready to grow your <span class="accent">practice?</span></h2>
+        <p class="mm-footer__lead-sub">Book a free growth audit. We will show you exactly where new patients are slipping to competitors, and how fast we can win them back.</p>
+      </div>
+      <div class="mm-footer__lead-actions">
+        <a class="btn btn-primary btn-lg" href="book-an-audit.html">Book an Audit <span class="arr">&rarr;</span></a>
+        <span class="guarantee-chip">New Patients Guarantee</span>
+      </div>
+    </div>
+
+    <hr class="mm-footer__divide" aria-hidden="true">
+
+    <!-- Row 2: the nav columns -->
+    <div class="mm-footer__cols">
+      <div class="mm-footer__brand">
+        <img src="img/medimarketing_logo_w.webp" alt="MediMarketing" width="170" height="30">
+        <p class="mm-footer__tagline">Patient acquisition for medical and dental practices, measured on the only two numbers that matter and backed by a written New Patients Guarantee.</p>
+        <div class="mm-footer__contact">
+          <a href="mailto:hello@medimarketing.com">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+            hello@medimarketing.com
+          </a>
+        </div>
+      </div>
+
+      <div class="mm-footer__col">
+        <h4>Services</h4>
+        <ul>
+          <li><a href="marketing-plus.html">Marketing Plus</a></li>
+          <li><a href="marketing-pro.html">Marketing Pro</a></li>
+          <li><a href="compare-packages.html">Compare Packages</a></li>
+          <li><a href="the-2-kpi-method.html">The 2-KPI Method</a></li>
+        </ul>
+      </div>
+
+      <div class="mm-footer__col">
+        <h4>Industries</h4>
+        <ul>
+          <li><a href="industries-optometry.html">Optometry</a></li>
+          <li><a href="industries-dental.html">Dental</a></li>
+          <li><a href="industries-medi-spa.html">Med Spa</a></li>
+          <li><a href="industries-chiropractic.html">Chiropractic</a></li>
+          <li><a href="industries.html">All Industries</a></li>
+        </ul>
+      </div>
+
+      <div class="mm-footer__col">
+        <h4>Resources</h4>
+        <ul>
+          <li><a href="results.html">Results</a></li>
+          <li><a href="blog.html">Blog</a></li>
+          <li><a href="the-2-kpi-method.html">The 2-KPI Method</a></li>
+        </ul>
+      </div>
+
+      <div class="mm-footer__col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="our-story.html">Our Story</a></li>
+          <li><a href="book-an-audit.html">Book an Audit</a></li>
+          <li><a href="privacy.html">Privacy</a></li>
+          <li><a href="terms.html">Terms</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Row 3: white logo + copyright + legal -->
+    <div class="mm-footer__bar">
+      <div class="mm-footer__bar-left">
+        <img src="img/medimarketing_logo_w.webp" alt="MediMarketing" width="135" height="24">
+        <p class="mm-footer__copy">&copy; 2026 MediMarketing. New Patients. Guaranteed.</p>
+      </div>
+      <nav class="mm-footer__legal" aria-label="Legal">
+        <a href="privacy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+      </nav>
+    </div>
+
+  </div>
+</footer>
+
+<!-- ============ STICKY MOBILE CTA BAR ============ -->
+<div class="mm-sticky-cta" id="mm-sticky-cta" aria-hidden="true">
+  <div class="mm-sticky-cta__copy">
+    <b>New Patients. Guaranteed.</b>
+    <span>Book a free growth audit.</span>
+  </div>
+  <a class="btn btn-primary btn-sm" href="book-an-audit.html">Book an Audit</a>
+</div>
+
+<!-- ============ CHROME JS (identical to _build/_template.html) ============ -->
+<script>
+(function () {
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---- Glassy header + sticky CTA reveal on scroll ---- */
+  var header = document.getElementById('mm-header');
+  var sticky = document.getElementById('mm-sticky-cta');
+  function onScroll() {
+    var y = window.scrollY || window.pageYOffset || 0;
+    if (header) header.classList.toggle('scrolled', y > 24);
+    if (sticky) sticky.classList.toggle('show', y > 480);
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  /* ---- DESKTOP GROUPED NAV . dropdown + mega-menu disclosure (hover-intent) ---- */
+  var groups = Array.prototype.slice.call(document.querySelectorAll('.mm-has-panel'));
+  var HOVER_CLOSE_DELAY = 240;   // ms . keeps the menu open across a quick diagonal move
+  function panelOf(group)   { return group.querySelector('.mm-panel'); }
+  function triggerOf(group) { return group.querySelector('.mm-trigger'); }
+  function itemsOf(group)   { return Array.prototype.slice.call(panelOf(group).querySelectorAll('a[href]')); }
+  function openGroup(group, focusFirst) {
+    closeAllGroups(group);
+    group.classList.add('is-open');
+    triggerOf(group).setAttribute('aria-expanded', 'true');
+    if (focusFirst) { var items = itemsOf(group); if (items.length) items[0].focus(); }
+  }
+  function closeGroup(group, focusTrigger) {
+    if (!group.classList.contains('is-open')) return;
+    group.classList.remove('is-open');
+    triggerOf(group).setAttribute('aria-expanded', 'false');
+    if (focusTrigger) triggerOf(group).focus();
+  }
+  function closeAllGroups(except) { groups.forEach(function (g) { if (g !== except) closeGroup(g, false); }); }
+
+  groups.forEach(function (group) {
+    var trigger = triggerOf(group);
+    var items = itemsOf(group);
+    var closeTimer = null;
+
+    function cancelClose() { if (closeTimer) { window.clearTimeout(closeTimer); closeTimer = null; } }
+    function scheduleClose() {
+      cancelClose();
+      closeTimer = window.setTimeout(function () { closeGroup(group, false); }, HOVER_CLOSE_DELAY);
+    }
+    group.addEventListener('pointerenter', function () { cancelClose(); openGroup(group, false); });
+    group.addEventListener('pointerleave', scheduleClose);
+    panelOf(group).addEventListener('pointerenter', cancelClose);
+
+    trigger.addEventListener('click', function (e) {
+      e.preventDefault();
+      cancelClose();
+      if (group.classList.contains('is-open')) closeGroup(group, false);
+      else openGroup(group, false);
+    });
+    trigger.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowDown' || e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+        e.preventDefault(); openGroup(group, true);
+      } else if (e.key === 'Escape') {
+        closeGroup(group, true);
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault(); openGroup(group, true);
+        var its = itemsOf(group); if (its.length) its[its.length - 1].focus();
+      }
+    });
+    items.forEach(function (item, i) {
+      item.addEventListener('keydown', function (e) {
+        if (e.key === 'ArrowDown') { e.preventDefault(); (items[i + 1] || items[0]).focus(); }
+        else if (e.key === 'ArrowUp') { e.preventDefault(); (items[i - 1] || items[items.length - 1]).focus(); }
+        else if (e.key === 'Home') { e.preventDefault(); items[0].focus(); }
+        else if (e.key === 'End') { e.preventDefault(); items[items.length - 1].focus(); }
+        else if (e.key === 'Escape') { e.preventDefault(); closeGroup(group, true); }
+        else if (e.key === 'Tab') { closeGroup(group, false); }
+      });
+    });
+    group.addEventListener('focusout', function (e) {
+      if (!group.contains(e.relatedTarget)) closeGroup(group, false);
+    });
+  });
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest('.mm-has-panel')) closeAllGroups(null);
+  });
+
+  /* ---- MOBILE DRAWER . open / close / focus-trap / ESC / overlay / scroll-lock ---- */
+  var burger  = document.getElementById('mm-burger');
+  var drawer  = document.getElementById('mm-drawer');
+  var overlay = document.getElementById('mm-overlay');
+  var closeBtn = document.getElementById('mm-drawer-close');
+  var lastFocus = null;
+  function focusables() {
+    if (!drawer) return [];
+    return Array.prototype.slice.call(
+      drawer.querySelectorAll('a[href], button:not([disabled])')
+    ).filter(function (el) { return el.offsetParent !== null || el === document.activeElement; });
+  }
+  function openDrawer() {
+    if (!drawer || !overlay || !burger) return;
+    lastFocus = document.activeElement;
+    drawer.hidden = false; overlay.hidden = false;
+    requestAnimationFrame(function () { drawer.classList.add('open'); overlay.classList.add('open'); });
+    drawer.setAttribute('aria-hidden', 'false');
+    burger.setAttribute('aria-expanded', 'true');
+    document.body.classList.add('mm-no-scroll');
+    var f = focusables(); if (f.length) f[0].focus();
+  }
+  function closeDrawer() {
+    if (!drawer || !overlay || !burger) return;
+    drawer.classList.remove('open'); overlay.classList.remove('open');
+    drawer.setAttribute('aria-hidden', 'true');
+    burger.setAttribute('aria-expanded', 'false');
+    document.body.classList.remove('mm-no-scroll');
+    var finish = function () { drawer.hidden = true; overlay.hidden = true; };
+    if (reduce) finish(); else window.setTimeout(finish, 360);
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+  }
+  function isOpen() { return drawer && drawer.classList.contains('open'); }
+
+  if (burger)  burger.addEventListener('click', function () { isOpen() ? closeDrawer() : openDrawer(); });
+  if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
+  if (overlay) overlay.addEventListener('click', closeDrawer);
+
+  document.addEventListener('keydown', function (e) {
+    if (!isOpen()) return;
+    if (e.key === 'Escape' || e.key === 'Esc') { e.preventDefault(); closeDrawer(); return; }
+    if (e.key === 'Tab') {
+      var f = focusables(); if (!f.length) return;
+      var first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  });
+
+  /* ---- DRAWER ACCORDIONS . Packages + Industries ---- */
+  Array.prototype.slice.call(drawer ? drawer.querySelectorAll('.mm-acc__btn') : []).forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var panel = document.getElementById(btn.getAttribute('aria-controls'));
+      var open = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', open ? 'false' : 'true');
+      if (panel) panel.classList.toggle('open', !open);
+    });
+  });
+
+  var mq = window.matchMedia('(min-width: 981px)');
+  function onMQ(e) { if (e.matches && isOpen()) closeDrawer(); }
+  if (mq.addEventListener) mq.addEventListener('change', onMQ);
+  else if (mq.addListener) mq.addListener(onMQ);
+})();
+</script>
+
+</body>
+</html>

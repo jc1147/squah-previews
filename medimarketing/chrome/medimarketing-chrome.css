@@ -1,0 +1,853 @@
+/* ============================================================================
+   MediMarketing  .  GLOBAL CHROME  .  P9 (REFINED)  .  TOKEN-PURE
+   ----------------------------------------------------------------------------
+   The production chrome shared by all pages. This is a REFINEMENT of the
+   approved P9 chrome (the nav grouping, footer columns, drawer, and a11y are
+   KEPT verbatim) that lifts four owner critiques:
+
+     FIX 1  HOVER-INTENT . the Packages dropdown + Industries mega-menu used to
+            CLOSE as the cursor crossed the dead gap between the trigger and the
+            panel. Now the trigger + panel are ONE continuous hover area:
+            - open is driven by :hover / :focus-within on the PARENT <li>
+              (.mm-has-panel:hover > .mm-panel) AND by JS .is-open;
+            - the panel sits FLUSH (4px) under the trigger and a transparent
+              hover-BRIDGE (.mm-panel::after) fills that gap, so the cursor never
+              touches a non-hover zone on the way down;
+            - a JS close-DELAY (~240ms, cleared on re-enter) keeps it open across
+              a quick diagonal move. Keyboard / click / focus / Esc unchanged.
+
+     FIX 2  EPIC INDUSTRIES MEGA-MENU . redesigned from a flat 8-icon grid into a
+            DESIGNED SHOWCASE: a wide glass panel (layered shadow + hairline +
+            inset top-highlight + a soft accent-glow bloom) split into a LEFT
+            FEATURED zone (a graded clinical image + scrim + eyebrow + a
+            confident line + a Book-an-Audit link) and a RIGHT 2-col grid of
+            polished sector cards (brand-tinted icon chip + label + tagline +
+            arrow), each with a hover-lift + accent corner-bloom.
+
+     FIX 3  PRE-FOOTER CTA . the footer Row 1 "Ready to grow your practice?" band
+            is rebuilt into a DESIGNED MOMENT: an oversized headline, an accent
+            gradient/glow ground with a masked image accent, the New Patients
+            Guarantee chip, a strong glow CTA, and intentional asymmetry.
+
+     FIX 4  MOBILE . tightened header / drawer / sticky-bar spacing + alignment
+            (additive @media only; scrollWidth stays <= 390, burger reachable,
+            logo uncliped).
+
+   GROUNDED IN:
+   - NAV-PATTERNS.md #13 (agency-hybrid, progressive disclosure) on the #2
+     classic full-bar spine: transparent over the dark hero, glass on scroll,
+     grouped top-level with a caret DROPDOWN (Packages) + a wide MEGA-MENU
+     (Industries) + direct links + glow CTA.
+   - FOOTER-STYLES.md #22 multi-row layered (closing CTA moment + trust chip +
+     contact . nav columns row . white-logo + legal row) + #11 dark-gradient
+     animated accent glow floor. Honest, no fabricated badges.
+   - _MODERN-WOW-SPEC: glass nav, layered depth on the disclosure panels, hover
+     micro-interactions (underline grow, arrow slide, card lift + corner-bloom),
+     graded/masked imagery, accent glow. Restraint: wow is felt, not noticed.
+
+   ARCHITECTURE: loads AFTER tokens -> structural -> standard -> bespoke. Every
+   colour resolves through var(--*) from medimarketing-tokens.css (ZERO raw
+   6-digit brand hex . G8 check 1). The header sits over the dark spine; a
+   transparent-over-hero state turns glassy on .scrolled. Reduced motion honoured
+   (G8 check 3). @media blocks are ADDITIVE and never alter the desktop rules.
+   UTF-8, no BOM.
+   ============================================================================ */
+
+/* =========================================================================
+   SKIP LINK . visually hidden until focused, jumps to #main (a11y)
+   ========================================================================= */
+.mm-skip {
+  position: absolute; left: 50%; top: 0; transform: translate(-50%, -120%);
+  z-index: 2000;
+  padding: .7rem 1.25rem; border-radius: 0 0 var(--r-control) var(--r-control);
+  font: 600 var(--fs-small)/1 var(--font);
+  color: var(--cta-ink); background: var(--cta-bg);
+  box-shadow: var(--shadow-glow);
+  transition: transform var(--t-fast) var(--ease);
+}
+.mm-skip:focus,
+.mm-skip:focus-visible {
+  transform: translate(-50%, 0);
+  outline: 2px solid var(--ink); outline-offset: 2px;
+  text-decoration: none;
+}
+
+/* =========================================================================
+   HEADER . sticky, transparent over the hero, glassy on .scrolled
+   (scales up .gf-header / .gf-header.is-solid from the approved foundation)
+   ========================================================================= */
+.mm-header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  padding: 18px 0; border-bottom: 1px solid transparent;
+  transition: background var(--t-base) var(--ease),
+              backdrop-filter var(--t-base) var(--ease),
+              box-shadow var(--t-base) var(--ease),
+              border-color var(--t-base) var(--ease),
+              padding var(--t-base) var(--ease);
+}
+.mm-header.scrolled {
+  background: color-mix(in srgb, var(--bg-2) 72%, transparent);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  border-bottom: 1px solid var(--line);
+  box-shadow: var(--shadow-elev);
+  padding: 10px 0;
+}
+.mm-nav { display: flex; align-items: center; gap: 24px; }
+.mm-logo { display: inline-flex; align-items: center; flex: none; }
+.mm-logo img {
+  height: 34px; width: auto;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, .4));
+  transition: height var(--t-base) var(--ease);
+}
+.mm-header.scrolled .mm-logo img { height: 30px; }
+
+/* the grouped desktop nav row (links + disclosure triggers) */
+.mm-links {
+  display: flex; align-items: center; gap: 4px;
+  margin-left: auto;
+  list-style: none; margin-block: 0; padding: 0;
+}
+.mm-links > li { position: relative; }
+
+/* a top-level nav item: plain link OR a disclosure trigger button */
+.mm-navlink,
+.mm-trigger {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 10px 14px; border-radius: var(--r-control);
+  font: 600 .92rem/1 var(--font);
+  color: var(--ink-2); background: transparent; border: 1px solid transparent;
+  cursor: pointer; white-space: nowrap;
+  transition: color var(--t-fast) var(--ease), background var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease);
+}
+.mm-navlink:hover,
+.mm-trigger:hover,
+.mm-navlink:focus-visible,
+.mm-trigger:focus-visible {
+  color: var(--ink); text-decoration: none;
+  background: var(--surface-2);
+}
+/* active-page underline accent (kept subtle, scales the foundation underline) */
+.mm-navlink[aria-current="page"] { color: var(--ink); }
+.mm-navlink[aria-current="page"]::after {
+  content: ""; position: absolute; left: 14px; right: 14px; bottom: 4px;
+  height: 2px; border-radius: 2px; background: var(--accent);
+}
+
+/* the caret on a disclosure trigger */
+.mm-caret {
+  width: 14px; height: 14px; flex: none;
+  transition: transform var(--t-base) var(--ease);
+  color: var(--accent-2);
+}
+.mm-trigger[aria-expanded="true"] { color: var(--ink); background: var(--surface-2); border-color: var(--line); }
+.mm-trigger[aria-expanded="true"] .mm-caret { transform: rotate(180deg); }
+/* keep the trigger lit while its own hover keeps the group open (FIX 1) */
+.mm-has-panel:hover > .mm-trigger { color: var(--ink); background: var(--surface-2); border-color: var(--line); }
+.mm-has-panel:hover > .mm-trigger .mm-caret { transform: rotate(180deg); }
+
+/* the glow primary CTA (reuses .btn / .btn-primary token treatment) */
+.mm-cta-desktop { margin-left: 10px; flex: none; }
+
+/* =========================================================================
+   DISCLOSURE PANELS . the shared depth/glass surface behind the dropdown +
+   the mega-menu. Opens on hover (via :hover on the li) AND on click/focus
+   (via .is-open / focus-within toggled by JS). DEPTH per _MODERN-WOW-SPEC.
+
+   FIX 1 HOVER-INTENT . the panel sits FLUSH 4px under the trigger and a
+   transparent hover-BRIDGE (.mm-panel::after) spans that 4px gap (plus a hair
+   wider than the panel) so the cursor stays inside ONE continuous :hover area
+   the whole way from the trigger into the panel. The visible accent bloom moved
+   to .mm-panel__bloom (a child) so ::after can be the invisible bridge.
+   ========================================================================= */
+.mm-panel {
+  position: absolute; top: calc(100% + 4px); z-index: 1050;
+  background: color-mix(in srgb, var(--bg-2) 94%, transparent);
+  backdrop-filter: blur(22px) saturate(150%);
+  -webkit-backdrop-filter: blur(22px) saturate(150%);
+  border: 1px solid var(--line);
+  border-radius: var(--r-surface);
+  box-shadow: var(--shadow-elev), var(--inset-hi);
+  padding: 12px;
+  opacity: 0; visibility: hidden; transform: translateY(8px);
+  transition: opacity var(--t-base) var(--ease), transform var(--t-base) var(--ease), visibility var(--t-base) var(--ease);
+  pointer-events: none;
+}
+/* the transparent HOVER-BRIDGE: bridges the 4px trigger-to-panel gap (and a few
+   px to each side) so the cursor never crosses a non-:hover zone. Invisible. */
+.mm-panel::after {
+  content: ""; position: absolute; left: -10px; right: -10px; top: -12px; height: 14px;
+  pointer-events: auto;
+}
+/* the visible accent-glow bloom at the panel's top edge (subtle, felt) */
+.mm-panel__bloom {
+  content: ""; position: absolute; inset: 0 0 auto 0; height: 46%; z-index: 0;
+  border-radius: var(--r-surface) var(--r-surface) 0 0; pointer-events: none;
+  background: radial-gradient(120% 80% at 30% 0, color-mix(in srgb, var(--glow) 11%, transparent), transparent 60%);
+}
+.mm-panel > *:not(.mm-panel__bloom) { position: relative; z-index: 1; }
+
+/* OPEN: on hover of the parent li, OR when JS sets .is-open / focus-within */
+.mm-has-panel:hover > .mm-panel,
+.mm-has-panel.is-open > .mm-panel,
+.mm-has-panel:focus-within > .mm-panel {
+  opacity: 1; visibility: visible; transform: translateY(0); pointer-events: auto;
+}
+
+/* ---- DROPDOWN (Packages) . a compact single-column list of links ---------- */
+.mm-dropdown { left: 0; min-width: 268px; }
+.mm-dropdown ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+.mm-dropdown a {
+  display: flex; flex-direction: column; gap: 2px;
+  padding: 11px 14px; border-radius: var(--r-control);
+  color: var(--ink); position: relative;
+  transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease), padding-left var(--t-fast) var(--ease);
+}
+.mm-dropdown a .t { font: 600 .95rem/1.2 var(--font); }
+.mm-dropdown a .d { font: 400 .8rem/1.35 var(--body); color: var(--ink-2); }
+.mm-dropdown a:hover,
+.mm-dropdown a:focus-visible {
+  background: var(--surface-2); text-decoration: none; padding-left: 18px;
+}
+.mm-dropdown a:hover .t,
+.mm-dropdown a:focus-visible .t { color: var(--accent-2); }
+
+/* =========================================================================
+   MEGA-MENU (Industries) . FIX 2 . the CINEMATIC IMAGE-LED showcase (owner-PICKED
+   tournament Variant A, GRAFTED + ENLARGED on the build's PROVEN hover-intent)
+   ----------------------------------------------------------------------------
+   This is the owner's chosen design ("this one is awesome, I just wish it was
+   bigger"). It reuses the .mm-* class names + the shared .mm-panel surface so the
+   PROVEN hover-intent stays: the parent group-hover open rule
+   (.mm-has-panel:hover > .mm-mega), the transparent .mm-panel::after hover-BRIDGE,
+   and the ~240ms JS close-delay ALL still drive it. Variant A's own JS / close
+   logic is NOT imported (its hover test failed).
+
+   BIGGER (the owner ask): the panel spans ~the full nav width (up to 1240px,
+   centered under the bar) and reads noticeably taller. It is capped so it never
+   overflows a 1440 viewport (>=100px side margins) and fits a 900px viewport
+   (max-height + the rows fit, no clipping).
+
+   LOOK = Variant A "Cinematic Image-Led": a LEFT featured zone = a graded clinical
+   photo with a teal duotone scrim + vignette + an "8 SPECIALTIES" pill + a big
+   accent-gradient headline + a confident line + a glow Book-an-Audit CTA; a RIGHT
+   zone = an "EXPLORE BY SPECIALTY" eyebrow over the 8 verticals as clean icon-rows
+   (icon chip + name + sub) + a "Don't see your field?" note + an All-Industries pill.
+   ========================================================================= */
+.mm-mega {
+  left: 50%; transform: translateX(-50%) translateY(8px);
+  /* BIGGER: span ~the full nav width, capped to never overflow 1440 (>=100px
+     side margins) and to stay within the viewport at any width. */
+  width: min(1240px, calc(100vw - 48px));
+  /* the cinematic panel paints its own edge-to-edge image + grade, so the glass
+     .mm-panel shell carries no inner padding here (the panel IS the surface). */
+  padding: 0; overflow: hidden;
+  /* fit a 900px viewport gracefully: cap height + let the inner zones scroll
+     rather than clip if a very short viewport ever demands it. */
+  max-height: min(76vh, 560px);
+}
+.mm-has-panel:hover > .mm-mega,
+.mm-has-panel.is-open > .mm-mega,
+.mm-has-panel:focus-within > .mm-mega { transform: translateX(-50%) translateY(0); }
+/* the cinematic image grade needs the bloom OFF (the panel paints its own light) */
+.mm-mega > .mm-panel__bloom { display: none; }
+
+/* the two zones edge-to-edge inside the glass shell: image rail (left, ~40%) +
+   the verticals (right, ~60%). align stretch so the image fills full height. */
+.mm-mega__layout {
+  display: grid; grid-template-columns: 40% 60%; gap: 0; align-items: stretch;
+  max-height: inherit;
+}
+
+/* ---- LEFT . the CINEMATIC FEATURED zone (graded clinical image, big copy) -- */
+.mm-mega__feature {
+  position: relative; overflow: hidden;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  /* BIGGER featured image + more generous padding */
+  min-height: 440px; padding: 36px 32px;
+  isolation: isolate;
+}
+.mm-mega__feature img {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; z-index: -3;
+  /* cohesive teal duotone grade (Variant A) */
+  filter: saturate(.6) contrast(1.04) brightness(.92);
+  transform: scale(1.04);
+  transform-origin: 60% 40%;
+  transition: transform var(--t-slow) var(--ease);
+}
+.mm-has-panel:hover .mm-mega__feature img,
+.mm-has-panel.is-open .mm-mega__feature img { transform: scale(1.09); }
+/* dark teal duotone scrim + bottom-weighted darkening so the overlaid copy reads */
+.mm-mega__feature::before {
+  content: ""; position: absolute; inset: 0; z-index: -2; pointer-events: none;
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--bg-3) 22%, transparent) 0%, transparent 28%, color-mix(in srgb, var(--bg-3) 88%, transparent) 100%),
+    linear-gradient(115deg, color-mix(in srgb, var(--bg) 70%, transparent), color-mix(in srgb, var(--accent) 22%, transparent) 120%);
+}
+/* accent glow bloom top-left + a vignette for depth (Variant A) */
+.mm-mega__feature::after {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: radial-gradient(60% 50% at 18% 14%, color-mix(in srgb, var(--glow) 22%, transparent), transparent 62%);
+  box-shadow: inset 0 0 90px 12px color-mix(in srgb, var(--bg-3) 52%, transparent);
+}
+/* the "8 SPECIALTIES" pill */
+.mm-mega__feature .eyebrow {
+  display: inline-flex; align-items: center; gap: 8px; align-self: flex-start;
+  padding: 6px 13px; border-radius: var(--r-pill);
+  font: 700 var(--fs-eyebrow)/1 var(--body);
+  letter-spacing: .14em; text-transform: uppercase; color: var(--ink);
+  background: color-mix(in srgb, var(--bg-3) 42%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+  backdrop-filter: blur(6px);
+  margin-bottom: 16px;
+}
+.mm-mega__feature .eyebrow::before {
+  content: ""; width: 7px; height: 7px; border-radius: 50%; flex: none;
+  background: var(--glow); box-shadow: 0 0 10px 1px var(--glow);
+}
+/* BIGGER headline with the accent gradient on "your specialty" */
+.mm-mega__feature .ttl {
+  display: block; font: 800 clamp(1.7rem, 1.9vw, 2.2rem)/1.05 var(--font);
+  letter-spacing: -.015em; color: var(--ink); margin: 0 0 12px; max-width: 16ch;
+  text-wrap: balance;
+}
+.mm-mega__feature .ttl .accent {
+  background: var(--grad-text); -webkit-background-clip: text; background-clip: text;
+  color: transparent;
+}
+.mm-mega__feature .sub {
+  font: 400 .95rem/1.5 var(--body); color: var(--ink-2);
+  max-width: 36ch; margin: 0 0 20px;
+}
+.mm-mega__feature .lnk {
+  display: inline-flex; align-items: center; gap: 9px;
+  align-self: flex-start;
+  padding: 12px 20px; border-radius: var(--r-pill);
+  font: 700 .9rem/1 var(--body); color: var(--cta-ink);
+  background: var(--cta-bg); background-image: var(--grad-accent);
+  border: 1px solid color-mix(in srgb, var(--glow) 60%, transparent);
+  box-shadow: var(--shadow-glow);
+  transition: transform var(--t-fast) var(--ease), box-shadow var(--t-base) var(--ease), filter var(--t-fast) var(--ease);
+}
+.mm-mega__feature .lnk::after { content: "\2192"; transition: transform var(--t-fast) var(--ease); }
+.mm-mega__feature .lnk:hover {
+  text-decoration: none; transform: translateY(-2px);
+  box-shadow: var(--shadow-glow); filter: brightness(1.05);
+}
+.mm-mega__feature .lnk:hover::after { transform: translateX(4px); }
+
+/* ---- RIGHT . the verticals zone (EXPLORE BY SPECIALTY + 8 icon-rows) ------ */
+.mm-mega__cards {
+  display: flex; flex-direction: column; min-width: 0;
+  /* BIGGER: more generous padding on the verticals column */
+  padding: 32px 32px 26px; overflow: auto;
+}
+.mm-mega__head {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 16px;
+  padding: 0 6px 16px; margin-bottom: 6px;
+}
+.mm-mega__head .lbl {
+  font: 700 var(--fs-eyebrow)/1 var(--body);
+  letter-spacing: .16em; text-transform: uppercase; color: var(--ink-3);
+}
+
+.mm-mega__grid {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; flex: 1;
+}
+/* an icon-ROW: icon chip + name + a short sub + a hover arrow */
+.mm-mega__card {
+  display: flex; align-items: center; gap: 14px;
+  /* BIGGER row height + padding */
+  padding: 14px 14px; border-radius: var(--r-control);
+  border: 1px solid transparent; position: relative; overflow: hidden;
+  transition: background var(--t-base) var(--ease), border-color var(--t-base) var(--ease), transform var(--t-fast) var(--ease);
+}
+.mm-mega__card::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  background: radial-gradient(120% 90% at 100% 0, color-mix(in srgb, var(--accent) 12%, transparent), transparent 58%);
+  opacity: 0; transition: opacity var(--t-base) var(--ease);
+}
+.mm-mega__card:hover,
+.mm-mega__card:focus-visible {
+  background: var(--surface-2); border-color: var(--line);
+  transform: translateX(2px); text-decoration: none;
+}
+.mm-mega__card:hover::after,
+.mm-mega__card:focus-visible::after { opacity: 1; }
+
+/* BIGGER icon chips */
+.mm-mega__ico {
+  width: 46px; height: 46px; flex: none;
+  display: grid; place-items: center;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--accent) 11%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 24%, transparent);
+  box-shadow: var(--inset-hi);
+  transition: background var(--t-base) var(--ease), border-color var(--t-base) var(--ease), box-shadow var(--t-base) var(--ease);
+}
+.mm-mega__card:hover .mm-mega__ico,
+.mm-mega__card:focus-visible .mm-mega__ico {
+  background: color-mix(in srgb, var(--accent) 20%, transparent);
+  border-color: color-mix(in srgb, var(--glow) 50%, transparent);
+  box-shadow: var(--inset-hi), 0 0 18px -4px color-mix(in srgb, var(--glow) 70%, transparent);
+}
+/* tint the source webp icons to the brand teal so they read on the dark glass */
+.mm-mega__ico img {
+  width: 23px; height: 23px;
+  filter: brightness(0) saturate(100%) invert(82%) sepia(20%) saturate(640%) hue-rotate(140deg) brightness(101%) contrast(94%);
+}
+.mm-mega__txt { min-width: 0; flex: 1; }
+.mm-mega__txt .t {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  font: 600 1rem/1.2 var(--font); color: var(--ink);
+  transition: color var(--t-fast) var(--ease);
+}
+/* the per-row arrow that slides on hover */
+.mm-mega__txt .t::after {
+  content: "\2192"; color: var(--accent-2); opacity: 0;
+  transform: translateX(-4px);
+  transition: transform var(--t-fast) var(--ease), opacity var(--t-fast) var(--ease);
+}
+.mm-mega__card:hover .t,
+.mm-mega__card:focus-visible .t { color: var(--accent-2); }
+.mm-mega__card:hover .t::after,
+.mm-mega__card:focus-visible .t::after { opacity: 1; transform: translateX(0); }
+.mm-mega__txt .s {
+  display: block; margin-top: 3px;
+  font: 400 .8rem/1.3 var(--body); color: var(--ink-2);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+/* the footer row of the verticals zone: a note + an All-Industries pill */
+.mm-mega__foot {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--divider);
+}
+.mm-mega__note { font: 400 .82rem/1.35 var(--body); color: var(--ink-2); }
+.mm-mega__note b { color: var(--ink); font-weight: 600; }
+.mm-mega__all {
+  display: inline-flex; align-items: center; gap: 8px; flex: none;
+  padding: 10px 17px; border-radius: var(--r-pill);
+  font: 700 .85rem/1 var(--body); color: var(--ink);
+  background: var(--surface-2); border: 1px solid var(--line);
+  transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease);
+}
+.mm-mega__all::after { content: "\2192"; color: var(--accent-2); transition: transform var(--t-fast) var(--ease); }
+.mm-mega__all:hover {
+  color: var(--cta-ink); background: var(--grad-accent); border-color: transparent;
+  text-decoration: none;
+}
+.mm-mega__all:hover::after { color: var(--cta-ink); transform: translateX(4px); }
+
+/* =========================================================================
+   HAMBURGER BUTTON . hidden on desktop, the nav trigger on mobile
+   ========================================================================= */
+.mm-burger {
+  display: none;                       /* shown <= 980px */
+  margin-left: auto;
+  width: 44px; height: 44px; padding: 0;
+  align-items: center; justify-content: center;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r-control);
+  backdrop-filter: blur(6px);
+  cursor: pointer;
+  transition: border-color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
+}
+.mm-burger:hover { border-color: var(--accent); }
+.mm-burger .bars { position: relative; width: 20px; height: 14px; display: block; }
+.mm-burger .bars span {
+  position: absolute; left: 0; width: 100%; height: 2px; border-radius: 2px;
+  background: var(--ink);
+  transition: transform var(--t-base) var(--ease), opacity var(--t-fast) var(--ease), top var(--t-base) var(--ease);
+}
+.mm-burger .bars span:nth-child(1) { top: 0; }
+.mm-burger .bars span:nth-child(2) { top: 6px; }
+.mm-burger .bars span:nth-child(3) { top: 12px; }
+/* open state morph to an X (driven by aria-expanded on the button) */
+.mm-burger[aria-expanded="true"] .bars span:nth-child(1) { top: 6px; transform: rotate(45deg); }
+.mm-burger[aria-expanded="true"] .bars span:nth-child(2) { opacity: 0; }
+.mm-burger[aria-expanded="true"] .bars span:nth-child(3) { top: 6px; transform: rotate(-45deg); }
+
+/* =========================================================================
+   OFF-CANVAS DRAWER . the mobile nav panel + dim overlay, with the Packages
+   + Industries groups as ACCORDIONS (expand / collapse inside the drawer)
+   ========================================================================= */
+.mm-overlay {
+  position: fixed; inset: 0; z-index: 1090;
+  background: color-mix(in srgb, var(--bg-3) 74%, transparent);
+  backdrop-filter: blur(3px);
+  opacity: 0; visibility: hidden;
+  transition: opacity var(--t-base) var(--ease), visibility var(--t-base) var(--ease);
+}
+.mm-overlay.open { opacity: 1; visibility: visible; }
+
+.mm-drawer {
+  position: fixed; top: 0; right: 0; bottom: 0; z-index: 1100;
+  width: min(88vw, 384px);
+  display: flex; flex-direction: column;
+  padding: 20px 20px calc(20px + env(safe-area-inset-bottom));
+  background: var(--bg-2);
+  border-left: 1px solid var(--line);
+  box-shadow: var(--shadow-elev);
+  transform: translateX(100%);
+  transition: transform var(--t-base) var(--ease-out);
+  overflow-y: auto; overscroll-behavior: contain;
+}
+.mm-drawer.open { transform: translateX(0); }
+
+.mm-drawer__head {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding-bottom: 16px; margin-bottom: 6px;
+  border-bottom: 1px solid var(--line-2);
+}
+.mm-drawer__head img { height: 28px; width: auto; max-width: 60%; opacity: .95; }
+.mm-drawer__close {
+  width: 40px; height: 40px; flex: none; display: grid; place-items: center;
+  background: var(--surface-2); border: 1px solid var(--line);
+  border-radius: var(--r-control); color: var(--ink); cursor: pointer;
+  transition: border-color var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
+}
+.mm-drawer__close:hover { border-color: var(--accent); color: var(--accent-2); }
+.mm-drawer__close svg { width: 18px; height: 18px; }
+
+.mm-drawer__nav { display: flex; flex-direction: column; padding: 6px 0; }
+
+/* a top-level drawer row (direct link) */
+.mm-drawer__link {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 15px 4px;
+  font: 600 1.05rem/1.2 var(--font);
+  color: var(--ink);
+  border-bottom: 1px solid var(--line-2);
+  transition: color var(--t-fast) var(--ease), padding-left var(--t-fast) var(--ease);
+}
+.mm-drawer__link::after {
+  content: "\2192"; color: var(--accent-2);
+  transition: transform var(--t-fast) var(--ease);
+}
+.mm-drawer__link:hover { color: var(--accent-2); padding-left: 10px; text-decoration: none; }
+.mm-drawer__link:hover::after { transform: translateX(4px); }
+.mm-drawer__link[aria-current="page"] { color: var(--accent-2); }
+
+/* a drawer ACCORDION group (Packages, Industries) */
+.mm-acc { border-bottom: 1px solid var(--line-2); }
+.mm-acc__btn {
+  width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 15px 4px; background: transparent; border: 0; cursor: pointer;
+  font: 600 1.05rem/1.2 var(--font); color: var(--ink); text-align: left;
+  transition: color var(--t-fast) var(--ease);
+}
+.mm-acc__btn:hover { color: var(--accent-2); }
+.mm-acc__btn .mm-caret { width: 16px; height: 16px; transition: transform var(--t-base) var(--ease); }
+.mm-acc__btn[aria-expanded="true"] { color: var(--accent-2); }
+.mm-acc__btn[aria-expanded="true"] .mm-caret { transform: rotate(180deg); }
+
+.mm-acc__panel {
+  overflow: hidden; max-height: 0;
+  transition: max-height var(--t-base) var(--ease);
+}
+.mm-acc__panel.open { max-height: 640px; }
+.mm-acc__inner { padding: 2px 4px 12px; display: flex; flex-direction: column; gap: 2px; }
+.mm-acc__inner a {
+  display: flex; align-items: center; gap: 11px;
+  padding: 11px 10px; border-radius: var(--r-control);
+  color: var(--ink-2);
+  font: 500 .96rem/1.25 var(--body);
+  transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease), padding-left var(--t-fast) var(--ease);
+}
+.mm-acc__inner a:hover { background: var(--surface-2); color: var(--accent-2); text-decoration: none; padding-left: 14px; }
+.mm-acc__ico {
+  width: 30px; height: 30px; flex: none; display: grid; place-items: center;
+  border-radius: 9px; background: color-mix(in srgb, var(--accent) 12%, transparent);
+  border: 1px solid var(--line);
+}
+.mm-acc__ico img {
+  width: 16px; height: 16px;
+  filter: brightness(0) saturate(100%) invert(82%) sepia(20%) saturate(640%) hue-rotate(140deg) brightness(101%) contrast(94%);
+}
+
+.mm-drawer__cta { margin-top: auto; padding-top: 20px; }
+.mm-drawer__cta .btn { width: 100%; justify-content: center; }
+
+/* lock body scroll while the drawer is open (class set by the chrome JS) */
+body.mm-no-scroll { overflow: hidden; }
+
+/* =========================================================================
+   STICKY MOBILE CTA BAR . bottom "Book an Audit" bar (mobile only)
+   ========================================================================= */
+.mm-sticky-cta {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 980;
+  display: none;                       /* shown <= 980px */
+  align-items: center; gap: 14px;
+  padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+  background: color-mix(in srgb, var(--bg-2) 88%, transparent);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  border-top: 1px solid var(--line);
+  box-shadow: 0 -10px 30px -16px rgba(0, 0, 0, .6);
+  transform: translateY(110%);
+  transition: transform var(--t-base) var(--ease-out);
+}
+.mm-sticky-cta.show { transform: translateY(0); }
+.mm-sticky-cta__copy { flex: 1; min-width: 0; }
+.mm-sticky-cta__copy b {
+  display: block; font: 700 .95rem/1.2 var(--font); color: var(--ink);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.mm-sticky-cta__copy span {
+  display: block; font: 400 .78rem/1.2 var(--body); color: var(--ink-2);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.mm-sticky-cta .btn { flex: none; white-space: nowrap; }
+
+/* =========================================================================
+   FOOTER . FOOTER-STYLES #22 multi-row layered + #11 dark-gradient accent glow
+   Row 1 (lead): FIX 3 . the designed closing CTA moment (oversized headline +
+                 accent-glow ground + masked image accent + guarantee chip +
+                 glow CTA + asymmetry)
+   Row 2 (mid):  the nav columns (Services / Industries / Resources / Company)
+   Row 3 (base): white logo + copyright + Privacy / Terms
+   Decorative dark-gradient floor with a slow, subtle animated accent glow.
+   ========================================================================= */
+.mm-footer {
+  position: relative; overflow: hidden;
+  background:
+    radial-gradient(120% 90% at 80% -10%, color-mix(in srgb, var(--accent) 7%, transparent), transparent 55%),
+    linear-gradient(180deg, var(--bg-2), var(--bg-3) 60%);
+  border-top: 1px solid var(--line-2);
+}
+/* #11 slow animated accent glow blob behind the footer (subtle, felt) */
+.mm-footer::before {
+  content: ""; position: absolute; z-index: 0; pointer-events: none;
+  left: 50%; bottom: -38%; width: 70vw; max-width: 1000px; height: 520px;
+  transform: translateX(-50%);
+  background: radial-gradient(50% 50% at 50% 50%, color-mix(in srgb, var(--glow) 12%, transparent), color-mix(in srgb, var(--accent) 5%, transparent) 46%, transparent 70%);
+  filter: blur(26px);
+  animation: mm-footer-glow 14s var(--ease) infinite alternate;
+}
+@keyframes mm-footer-glow {
+  0%   { opacity: .55; transform: translateX(-50%) translateY(0) scale(1); }
+  100% { opacity: 1;   transform: translateX(-50%) translateY(-18px) scale(1.06); }
+}
+.mm-footer .container { position: relative; z-index: 1; }
+
+/* ---- Row 1 . FIX 3 . the designed closing CTA MOMENT ---------------------- */
+.mm-footer__lead {
+  position: relative; overflow: hidden;
+  display: grid; grid-template-columns: 1.35fr .9fr; align-items: center;
+  gap: clamp(28px, 5vw, 60px);
+  margin: clamp(40px, 6vw, 72px) 0 clamp(28px, 4vw, 44px);
+  padding: clamp(34px, 4.6vw, 56px) clamp(28px, 4vw, 52px);
+  border-radius: calc(var(--r-surface) + 4px);
+  border: 1px solid var(--line);
+  background:
+    radial-gradient(120% 140% at 0% 0%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 55%),
+    linear-gradient(180deg, color-mix(in srgb, var(--surface) 70%, transparent), color-mix(in srgb, var(--bg-3) 60%, transparent));
+  box-shadow: var(--shadow-elev), var(--inset-hi);
+}
+/* a soft glow bloom anchored bottom-right (asymmetry + depth) */
+.mm-footer__lead::before {
+  content: ""; position: absolute; z-index: 0; pointer-events: none;
+  right: -8%; bottom: -60%; width: 60%; height: 200%;
+  background: radial-gradient(50% 50% at 50% 50%, color-mix(in srgb, var(--glow) 22%, transparent), color-mix(in srgb, var(--accent) 8%, transparent) 45%, transparent 70%);
+  filter: blur(30px);
+}
+/* a masked clinical image accent peeking from the right edge (felt, not loud) */
+.mm-footer__lead-art {
+  position: absolute; z-index: 0; pointer-events: none;
+  right: 0; top: 0; bottom: 0; width: 42%;
+  -webkit-mask-image: linear-gradient(90deg, transparent, black 60%);
+  mask-image: linear-gradient(90deg, transparent, black 60%);
+  opacity: .22;
+}
+.mm-footer__lead-art img {
+  width: 100%; height: 100%; object-fit: cover;
+  filter: grayscale(.2) saturate(1.05);
+}
+.mm-footer__lead-copy { position: relative; z-index: 1; max-width: 22ch; }
+.mm-footer__lead .eyebrow { margin-bottom: 14px; }
+.mm-footer__lead h2 {
+  font: 800 clamp(2rem, 4.2vw, 3.1rem)/1.04 var(--font); letter-spacing: -.025em;
+  color: var(--ink); margin: 0; max-width: 16ch;
+}
+.mm-footer__lead h2 .accent { color: var(--accent-2); }
+.mm-footer__lead-sub {
+  margin: 14px 0 0; max-width: 32ch;
+  font: 400 var(--fs-body)/1.55 var(--body); color: var(--ink-2);
+}
+.mm-footer__lead-actions {
+  position: relative; z-index: 1;
+  display: flex; flex-direction: column; align-items: flex-start; gap: 16px;
+  justify-self: end;
+}
+.mm-footer__lead-actions .btn { white-space: nowrap; }
+.mm-footer__lead-actions .btn-lg { padding: 1.05rem 2rem; }
+
+/* ---- divider between lead and the nav columns --------------------------- */
+.mm-footer__divide { height: 1px; background: var(--divider); border: 0; margin: 0; }
+
+/* ---- Row 2 . the nav columns -------------------------------------------- */
+.mm-footer__cols {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr;
+  gap: clamp(28px, 4vw, 52px);
+  align-items: start;
+  padding: clamp(36px, 5vw, 56px) 0 clamp(32px, 5vw, 48px);
+}
+.mm-footer__brand { max-width: 320px; }
+.mm-footer__brand img { height: 30px; width: auto; opacity: .95; margin-bottom: 16px; }
+.mm-footer__tagline { font: 400 .92rem/1.6 var(--body); color: var(--ink-2); margin: 0 0 16px; }
+.mm-footer__contact { display: flex; flex-direction: column; gap: 7px; }
+.mm-footer__contact a,
+.mm-footer__contact span {
+  display: inline-flex; align-items: center; gap: 8px;
+  font: 500 .9rem/1.3 var(--body); color: var(--ink-2);
+  transition: color var(--t-fast) var(--ease);
+}
+.mm-footer__contact a:hover { color: var(--accent-2); text-decoration: none; }
+.mm-footer__contact svg { width: 15px; height: 15px; flex: none; color: var(--accent-2); }
+
+.mm-footer__col h4 {
+  font: 700 .76rem/1 var(--font); letter-spacing: .16em; text-transform: uppercase;
+  color: var(--ink); margin: 0 0 16px;
+}
+.mm-footer__col ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 11px; }
+.mm-footer__col a {
+  font: 400 .92rem/1.3 var(--body); color: var(--ink-2);
+  transition: color var(--t-fast) var(--ease), padding-left var(--t-fast) var(--ease);
+}
+.mm-footer__col a:hover { color: var(--accent-2); text-decoration: none; padding-left: 4px; }
+
+/* ---- Row 3 . white logo + copyright + legal ----------------------------- */
+.mm-footer__bar {
+  display: flex; align-items: center; justify-content: space-between; gap: 18px; flex-wrap: wrap;
+  padding: 26px 0 clamp(34px, 5vw, 48px);
+  border-top: 1px solid var(--line-2);
+}
+.mm-footer__bar-left { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+.mm-footer__bar img { height: 24px; width: auto; opacity: .9; }
+.mm-footer__copy { font: 400 .82rem/1.4 var(--body); color: var(--ink-2); margin: 0; }
+.mm-footer__legal { display: flex; gap: 22px; }
+.mm-footer__legal a { font: 400 .82rem/1 var(--body); color: var(--ink-2); transition: color var(--t-fast) var(--ease); }
+.mm-footer__legal a:hover { color: var(--accent-2); text-decoration: none; }
+
+/* =========================================================================
+   RESPONSIVE . ADDITIVE only (never alters the desktop rules above)
+   ========================================================================= */
+@media (max-width: 1280px) {
+  /* keep the enlarged mega within the viewport on mid-large screens (still wide,
+     still imposing, just respecting the side margins) */
+  .mm-mega { width: min(1100px, calc(100vw - 40px)); }
+}
+
+@media (max-width: 1180px) {
+  /* the cinematic image rail narrows before the layout stacks at mobile */
+  .mm-mega { width: min(940px, calc(100vw - 40px)); }
+  .mm-mega__layout { grid-template-columns: 36% 64%; }
+  .mm-mega__feature { min-height: 380px; padding: 30px 26px; }
+  .mm-mega__cards { padding: 26px 26px 22px; }
+
+  .mm-footer__cols { grid-template-columns: 1.4fr 1fr 1fr; gap: 36px 32px; }
+  .mm-footer__brand { grid-column: 1 / -1; max-width: none; }
+}
+
+@media (max-width: 1040px) {
+  /* the desktop nav is about to hand off to the drawer; keep the mega legible by
+     stacking the image over the verticals (still desktop-only; <=980 hides it) */
+  .mm-mega { width: min(620px, calc(100vw - 32px)); max-height: min(82vh, 640px); }
+  .mm-mega__layout { grid-template-columns: 1fr; }
+  .mm-mega__feature { min-height: 220px; padding: 26px 24px; }
+  .mm-mega__grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 980px) {
+  /* ---- MOBILE HEADER: logo (left) + hamburger (right) ONLY ----
+     The grouped desktop nav AND the desktop "Book an Audit" CTA leave the
+     header entirely (they live in the drawer accordions + the sticky bottom
+     CTA bar). This is what guarantees no header overflow at phone widths. */
+  .mm-links { display: none; }
+  .mm-cta-desktop { display: none; }
+  .mm-burger { display: inline-flex; }
+  .mm-sticky-cta { display: flex; }
+  .mm-nav { gap: 12px; }
+
+  /* The white wordmark .webp is intrinsically ~367x30 (aspect ~12.2:1), so a
+     fixed height:34px (width:auto) renders it ~416px wide -- WIDER than a
+     390px phone, which pushed the burger off-screen and clipped the logo.
+     At mobile, cap the logo by WIDTH and let height derive from the aspect
+     ratio (height:auto = no squish/clip). Capped to ~54vw (<= the room the
+     header allows) with a 210px ceiling, so logo + gap + 44px burger always
+     fit inside the container. Both header states (incl. .scrolled, which
+     otherwise re-fixes height:30px) are overridden so the cap holds on
+     scroll. min-width:0 lets the flex:none .mm-logo track the capped img. */
+  .mm-logo { min-width: 0; }
+  .mm-header .mm-logo img,
+  .mm-header.scrolled .mm-logo img {
+    height: auto;
+    width: 210px;
+    max-width: 54vw;
+  }
+
+  /* the closing CTA moment stacks: copy over actions, full-width CTA, the art
+     accent retreats so it never crowds the stacked copy */
+  .mm-footer__lead {
+    grid-template-columns: 1fr; gap: 22px;
+    padding: clamp(28px, 7vw, 40px);
+  }
+  .mm-footer__lead-copy { max-width: none; }
+  .mm-footer__lead-actions { align-items: stretch; justify-self: stretch; }
+  .mm-footer__lead-actions .btn { width: 100%; justify-content: center; }
+  .mm-footer__lead-art { width: 56%; opacity: .14; }
+}
+
+@media (max-width: 760px) {
+  .mm-footer__cols { grid-template-columns: 1fr 1fr; gap: 32px 28px; }
+}
+
+@media (max-width: 560px) {
+  .mm-footer__cols { grid-template-columns: 1fr; gap: 28px; }
+  .mm-footer__bar { flex-direction: column; align-items: flex-start; gap: 14px; }
+  .mm-footer__legal { flex-wrap: wrap; gap: 16px; }
+  .mm-footer__lead-art { display: none; }   /* keep the stacked copy clean on small phones */
+}
+
+/* the drawer + sticky bar ARE the nav at the narrow phone width */
+@media (max-width: 390px) {
+  .mm-header { padding: 12px 0; }
+  .mm-nav { gap: 10px; }
+  .mm-drawer { width: min(94vw, 344px); padding: 18px 18px calc(18px + env(safe-area-inset-bottom)); }
+  .mm-sticky-cta { gap: 10px; padding: 11px 13px calc(11px + env(safe-area-inset-bottom)); }
+  .mm-sticky-cta__copy span { display: none; }   /* keep the bar single-line on tiny screens */
+  .mm-sticky-cta .btn { padding: .62rem 1rem; }
+}
+
+/* =========================================================================
+   REDUCED MOTION . honoured (token tier already zeroes durations; here we
+   also kill the burger morph, drawer/overlay/sticky/panel/accordion
+   transitions, the mega image drift, and the footer glow animation . the
+   chrome appears instantly)
+   ========================================================================= */
+@media (prefers-reduced-motion: reduce) {
+  .mm-header,
+  .mm-logo img,
+  .mm-burger .bars span,
+  .mm-overlay,
+  .mm-drawer,
+  .mm-sticky-cta,
+  .mm-panel,
+  .mm-caret,
+  .mm-acc__panel,
+  .mm-acc__btn .mm-caret,
+  .mm-navlink,
+  .mm-trigger,
+  .mm-drawer__link,
+  .mm-drawer__link::after,
+  .mm-mega__card,
+  .mm-mega__feature img,
+  .mm-mega__feature .lnk,
+  .mm-mega__txt .t::after,
+  .mm-mega__all::after { transition: none !important; }
+  .mm-footer::before { animation: none !important; }
+}

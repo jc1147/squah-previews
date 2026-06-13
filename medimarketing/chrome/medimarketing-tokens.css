@@ -1,0 +1,227 @@
+/* ============================================================================
+   MediMarketing — DESIGN TOKENS (the dual-surface SSOT)  ·  P8 foundation · v2
+   The ONLY file in the foundation that carries brand HEX. structural.css and
+   both brand-card tier sheets reference colour through var(--*) ONLY (G8 check 1).
+
+   v2 RE-DERIVE (C7 v2): primary_surface = DARK. The brand leads with dark IMPACT
+   moments (cinematic hero, billion-scale stat bands, dark CTA) over a light relief.
+   DERIVED from C7 v2 §0 (measured brand signature: balanced/BOLD) + §2 palette +
+   §3 radius/spacing/shadow + the _MODERN-WOW-SPEC bar. v1 (light/timid) is REPLACED.
+
+   SURFACE MODEL (G8 check 2 — dual-surface parity by CATEGORY):
+   - :root            = the DARK spine (DOMINANT). Every surface-dependent category
+                        (SURFACE / INK / ACCENT / CTA / LINE / SHADOW) declared here.
+   - .surface-dark    = re-asserts the SAME dark values, so any nested element can
+                        force-reassert the dark ink (never inherit) AND the gate's
+                        parity check sees a matching dark block. (C7 v2 §2 anti-trap.)
+   - .surface-light   = the light-relief FLIP (the deliberate, minority figure/ground
+                        break). Re-asserts EVERY surface-dependent category to the
+                        light values so a relief section never inherits a dark token.
+
+   CONTRAST DISCIPLINE (rverify enforces WCAG AA at P14; C7 v2 §2):
+   - Dark spine ink --ink #EAF2F4 ≈ 13:1 on --bg; --accent #7FC4CB is lifted teal,
+     AA on the deep navy for FILLS / borders / large; --accent-2 #A6D8DD ≈ 7:1 for
+     small accent text. --cta-bg / --cta-ink is an AA pair each side.
+   - Light relief --accent #2E6A71 = 5.70:1 on #F3F7F8 (passes AA small text — NOT
+     #3E8C94 which is 3.62:1 and fails). --ink #0B425A ≈ 10.5:1 on #F3F7F8.
+   ============================================================================ */
+
+:root {
+  /* ---- SURFACE (page + card grounds) — DARK spine ------------------------- */
+  --bg:          #0B425A;            /* brand deep teal-navy canvas (DOMINANT) */
+  --bg-2:        #082F40;            /* raised band / depth */
+  --bg-3:        #06222F;            /* near-black floor (hero / pricing / CTA) */
+  --surface:     #0E3D52;            /* raised card fill on dark */
+  --surface-2:   rgba(255, 255, 255, 0.045);   /* glassy raised card / icon chip */
+  --surface-3:   rgba(255, 255, 255, 0.028);   /* faintest raised wash */
+  --card-bg:     #0E3D52;
+
+  /* ---- INK (text — re-asserted on every dark section, never inherited) ----- */
+  --ink:         #EAF2F4;            /* ~13:1 on --bg */
+  --ink-2:       #A9C4CD;            /* ~6:1 on --bg — muted */
+  --ink-3:       #6F93A0;            /* dimmest meta (chart axes / fine labels) */
+
+  /* ---- ACCENT --------------------------------------------------------------
+     --accent   : lifted teal — FILLS / borders / glows / large numerals.
+     --accent-2 : accessible teal — small accent TEXT / links / icons.
+     --glow     : brighter cyan — CTA bloom + hero accent moments ONLY.
+     --on-accent: dark ink for an --accent / --glow fill.                       */
+  --accent:      #7FC4CB;
+  --accent-2:    #A6D8DD;            /* ~7:1 on --bg — safe for small text */
+  --glow:        #5FE0D8;            /* brighter cyan glow (CTA / hero) */
+  --on-accent:   #06222F;
+
+  /* ---- CTA fill (primary button — AA pair, each side) -------------------- */
+  --cta-bg:      #5FE0D8;            /* cyan glow fill */
+  --cta-ink:     #06222F;            /* near-black on cyan ≈ 9:1 */
+
+  /* ---- gradients (re-tuned per surface) ----------------------------------- */
+  --grad-text:   linear-gradient(100deg, #5FE0D8 0%, #7FC4CB 60%, #5FB9C2 100%);
+  --grad-accent: linear-gradient(180deg, #5FE0D8, #7FC4CB);
+
+  /* ---- LINE (borders / hairlines / dividers) ------------------------------ */
+  --line:        rgba(159, 242, 240, 0.16);   /* accent-tinted hairline */
+  --line-2:      rgba(234, 242, 244, 0.10);   /* neutral hairline */
+  --card-border: rgba(234, 242, 244, 0.10);
+  --divider:     rgba(255, 255, 255, 0.06);
+
+  /* ---- SHADOW (layered depth on the dark spine + accent-glow bloom) -------- */
+  --shadow-card: 0 1px 0 0 rgba(234, 242, 244, 0.06) inset, 0 24px 60px -28px rgba(0, 0, 0, 0.60), 0 4px 14px -8px rgba(0, 0, 0, 0.40);
+  --shadow-elev: 0 30px 80px -30px rgba(0, 0, 0, 0.55), 0 8px 24px -10px rgba(0, 0, 0, 0.50);
+  --shadow-glow: 0 0 0 1px rgba(95, 224, 216, 0.45), 0 12px 34px -8px rgba(95, 224, 216, 0.50), 0 0 50px -6px rgba(95, 224, 216, 0.45);
+  --inset-hi:    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+
+  /* ---- ATMOS (grain + watermark stroke colour — kills flatness) ----------- */
+  --atmos-stroke: rgba(127, 196, 203, 0.14);  /* oversized watermark text stroke */
+  --grain-opacity: 0.05;
+
+  /* ---- TYPE (surface-invariant — fonts + scale do not flip) --------------- */
+  --font:  'Gotham', 'Montserrat', system-ui, -apple-system, 'Segoe UI', sans-serif;  /* display */
+  --body:  'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;       /* body / UI */
+
+  /* ONE CLEAN TYPE RAMP (clamp). Replaces the graft's ad-hoc rem sizes. ------ */
+  --fs-eyebrow: 0.75rem;                                   /* 12 — uppercase label */
+  --fs-small:   0.8125rem;                                 /* 13 — fine print */
+  --fs-body:    clamp(1rem, 0.25vw + 0.95rem, 1.125rem);   /* 16 → 18 */
+  --fs-lead:    clamp(1.125rem, 0.6vw + 1rem, 1.25rem);    /* 18 → 20 — hero sub / lead */
+  --fs-h3:      clamp(1.2rem, 0.6vw + 1rem, 1.375rem);     /* 19 → 22 */
+  --fs-h2:      clamp(2.1rem, 4.6vw, 3.6rem);              /* 34 → 58 section heads */
+  --fs-h1:      clamp(2.6rem, 5vw, 4rem);                  /* 42 → 64 */
+  --fs-hero:    clamp(3.2rem, 8vw, 7rem);                  /* 51 → 112 hero headline */
+  --fs-stat:    clamp(3.4rem, 9vw, 7rem);                  /* oversized numerals (count-up) */
+  --fs-display: clamp(2.6rem, 6.6vw, 5.4rem);              /* guarantee pull-statement */
+
+  /* ---- ONE MODULAR SPACING SCALE (4-based). Applied throughout structural. -
+     Replaces ALL of the graft's ad-hoc px padding/gaps/sizes (the source of the
+     "padding/spacing/sizing glitches everywhere" — they were graft-stitch noise). */
+  --s-0:   4px;
+  --s-1:   8px;
+  --s-2:   12px;
+  --s-3:   16px;
+  --s-4:   24px;
+  --s-5:   32px;
+  --s-6:   40px;
+  --s-7:   48px;
+  --s-8:   64px;
+  --s-9:   80px;
+  --s-10:  96px;
+  --s-11:  128px;
+  --s-12:  160px;
+
+  /* ---- LAYOUT (surface-invariant) ----------------------------------------- */
+  --maxw:   1200px;
+  --readw:  68ch;
+  --pad:    clamp(var(--s-9), 9vw, var(--s-11));     /* section vertical rhythm: 80 → 128 */
+  --pad-sm: clamp(var(--s-6), 5vw, var(--s-8));      /* tight section: 40 → 64 */
+  --pad-lg: clamp(var(--s-10), 13vw, var(--s-12));   /* generous (hero / CTA): 96 → 160 */
+
+  /* ---- RADIUS (soft, confident — C7 v2 §3) -------------------------------- */
+  --r-surface: 14px;
+  --r-control: 8px;
+  --r-pill:    999px;
+
+  /* ---- MOTION (bold-but-tasteful; reduced-motion honored) ----------------- */
+  --ease:     cubic-bezier(0.16, 0.84, 0.34, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.30, 1);
+  --t-fast:   0.18s;
+  --t-base:   0.35s;
+  --t-slow:   0.8s;
+
+  /* ---- SIGNAL accents (used sparingly) ----------------------------------- */
+  --ok:    #5FE0D8;                  /* guarantee / success (on dark) */
+  --gold:  #F1C75A;                  /* rating stars on dark */
+}
+
+/* ============================================================================
+   DARK SURFACE — re-asserts the SAME dark values. Lets any nested element carry
+   class="surface-dark" to force-reassert dark ink (never inherit), AND gives the
+   G8 parity check a matching dark block (every flip category present in :root).
+   ============================================================================ */
+.surface-dark,
+[data-surface="dark"] {
+  --bg:          #0B425A;
+  --bg-2:        #082F40;
+  --bg-3:        #06222F;
+  --surface:     #0E3D52;
+  --surface-2:   rgba(255, 255, 255, 0.045);
+  --surface-3:   rgba(255, 255, 255, 0.028);
+  --card-bg:     #0E3D52;
+
+  --ink:         #EAF2F4;
+  --ink-2:       #A9C4CD;
+  --ink-3:       #6F93A0;
+
+  --accent:      #7FC4CB;
+  --accent-2:    #A6D8DD;
+  --glow:        #5FE0D8;
+  --on-accent:   #06222F;
+
+  --cta-bg:      #5FE0D8;
+  --cta-ink:     #06222F;
+
+  --grad-text:   linear-gradient(100deg, #5FE0D8 0%, #7FC4CB 60%, #5FB9C2 100%);
+  --grad-accent: linear-gradient(180deg, #5FE0D8, #7FC4CB);
+
+  --line:        rgba(159, 242, 240, 0.16);
+  --line-2:      rgba(234, 242, 244, 0.10);
+  --card-border: rgba(234, 242, 244, 0.10);
+  --divider:     rgba(255, 255, 255, 0.06);
+
+  --shadow-card: 0 1px 0 0 rgba(234, 242, 244, 0.06) inset, 0 24px 60px -28px rgba(0, 0, 0, 0.60), 0 4px 14px -8px rgba(0, 0, 0, 0.40);
+  --shadow-elev: 0 30px 80px -30px rgba(0, 0, 0, 0.55), 0 8px 24px -10px rgba(0, 0, 0, 0.50);
+  --shadow-glow: 0 0 0 1px rgba(95, 224, 216, 0.45), 0 12px 34px -8px rgba(95, 224, 216, 0.50), 0 0 50px -6px rgba(95, 224, 216, 0.45);
+
+  --atmos-stroke: rgba(127, 196, 203, 0.14);
+}
+
+/* ============================================================================
+   LIGHT SURFACE — the deliberate light-relief FLIP (the minority figure/ground
+   break, e.g. the "How it works" method explainer). Re-asserts EVERY surface-
+   dependent category to light, so a relief section never inherits a dark token.
+   ============================================================================ */
+.surface-light {
+  --bg:          #F3F7F8;            /* light relief canvas */
+  --bg-2:        #E8F0F1;            /* alt wash within the relief */
+  --bg-3:        #FFFFFF;
+  --surface:     #FFFFFF;            /* raised card on the light relief */
+  --surface-2:   #EAF2F3;
+  --surface-3:   #F3F7F8;
+  --card-bg:     #FFFFFF;
+
+  --ink:         #0B425A;            /* ~10.5:1 on --bg */
+  --ink-2:       #4E6E78;            /* ~5.0:1 on --bg — muted */
+  --ink-3:       #6E8A92;
+
+  --accent:      #2E6A71;            /* 5.70:1 on #F3F7F8 — AA small text (NOT #3E8C94) */
+  --accent-2:    #2E6A71;            /* same accessible teal for small text */
+  --glow:        #2E6A71;            /* no neon glow on the calm relief */
+  --on-accent:   #FFFFFF;
+
+  --cta-bg:      #0B425A;            /* dark CTA on the light relief */
+  --cta-ink:     #FFFFFF;            /* ~10.5:1 */
+
+  --grad-text:   linear-gradient(100deg, #2E6A71, #0B425A);
+  --grad-accent: linear-gradient(180deg, #2E6A71, #0B425A);
+
+  --line:        rgba(11, 66, 90, 0.12);
+  --line-2:      rgba(11, 66, 90, 0.16);
+  --card-border: rgba(11, 66, 90, 0.08);
+  --divider:     rgba(11, 66, 90, 0.10);
+
+  --shadow-card: 0 1px 0 0 rgba(255, 255, 255, 0.70) inset, 0 24px 50px -30px rgba(11, 66, 90, 0.35);
+  --shadow-elev: 0 1px 0 0 rgba(255, 255, 255, 0.80) inset, 0 36px 70px -34px rgba(11, 66, 90, 0.50);
+  --shadow-glow: 0 10px 30px -10px rgba(11, 66, 90, 0.30);
+
+  --atmos-stroke: rgba(11, 66, 90, 0.10);
+}
+
+/* ============================================================================
+   REDUCED MOTION — honored at the token tier (structural + specimen also guard).
+   ============================================================================ */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --t-fast: 0.001ms;
+    --t-base: 0.001ms;
+    --t-slow: 0.001ms;
+  }
+}
