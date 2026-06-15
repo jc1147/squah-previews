@@ -1,0 +1,188 @@
+/* ============================================================================
+ custom-css.css - BESPOKE-FLOOR SIGNATURE for /custom-css.
+ Crafted-CSS replicas of the real Custom CSS admin (light canvas, red accent),
+ grounded in _depth-library/custom-css.FINAL.md + the buildspec. No stock, no
+ screenshots. Four surfaces:
+   Surface 1 . Populated 7-column management list (All / Active / Inactive / Trash)
+   Surface 2 . Two-column manage form (dark CodeMirror CSS editor = cinematic anchor)
+   Surface 3 . Status workflow + SweetAlert "Are you sure?" safety net
+   Surface 4 . Priority cascade + live site-wide <head> injection (dark emit panel)
+ All var(--sg-*). Reuses the shared .adwin / .adbar atoms from _standard.css (so
+ every white admin card re-asserts the light ink tokens, even on a dark section).
+ ============================================================================ */
+@import "_standard.css";
+
+/* ---- HERO ----------------------------------------------------------------- */
+.cc-hero { padding-block: 9vh var(--sg-pad); }
+.cc-hero .lede { max-width: 980px; }
+.cc-hero h1 { margin-top: 16px; }
+.cc-hero .lead { margin-top: 22px; max-width: 70ch; }
+.cc-hero .beat { margin-top: 16px; max-width: 72ch; color: var(--sg-ink-soft); }
+.cc-hero .cta { margin-top: 30px; }
+.cc-hero .stage { margin-top: 52px; }
+.cc-cap { font-family: var(--sg-mono); font-size: 11px; color: var(--sg-ink-faint); margin-top: 12px; text-align: center; }
+
+/* ===== shared status pill (DRAFT neutral / ACTIVE green / INACTIVE red) ===== */
+/* opaque pale bg + deep text so it stays legible on any surface (dark-panel safe) */
+.statuspill { display: inline-flex; align-items: center; font-family: var(--sg-mono); font-size: 9px; font-weight: 700; letter-spacing: .06em; padding: 3px 8px; border-radius: 5px; }
+.statuspill.act { background: #e7f7ee; color: #1c7a45; }
+.statuspill.inact { background: #fdeaec; color: #a3242f; }
+.statuspill.draft { background: #eceae5; color: #5b5853; }
+
+/* ===== SURFACE 1 . populated 7-column management list ====================== */
+.cc-subhdr { padding: 11px 16px; border-bottom: 1px solid var(--sg-line); background: #fff; font-size: 11.5px; color: var(--sg-ink-faint); }
+.cc-subhdr b { color: var(--sg-ink-soft); font-weight: 600; }
+
+/* 4 status pill tabs with count badges */
+.ccpills { display: flex; gap: 6px; padding: 13px 16px 4px; flex-wrap: wrap; }
+.ccpills.tight { padding: 13px 16px 8px; }
+.ccpill { display: inline-flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 600; color: var(--sg-ink-soft); padding: 7px 12px; border-radius: 999px; border: 1px solid var(--sg-line); }
+.ccpill b { font-family: var(--sg-mono); font-size: 10px; padding: 1px 6px; border-radius: 999px; background: var(--sg-bg-2); color: var(--sg-ink-faint); }
+.ccpill.on { background: var(--sg-red-soft); color: var(--sg-red-deep); border-color: transparent; }
+.ccpill.on b { background: var(--sg-red); color: #fff; }
+
+/* toolbar: bulk + apply (left) . search + magnifier (right) */
+.cctool { display: flex; align-items: center; gap: 10px; padding: 6px 16px 12px; }
+.cctool .sel { font-family: var(--sg-mono); font-size: 11px; color: var(--sg-ink-faint); padding: 7px 11px; border: 1px solid var(--sg-line); border-radius: 8px; background: var(--sg-bg-2); }
+.cctool .ap { font-family: var(--sg-font); font-size: 11px; font-weight: 700; color: #fff; padding: 7px 12px; border-radius: 8px; background: var(--sg-grad-red); box-shadow: var(--sg-shadow-red); }
+.cctool .srch { margin-left: auto; display: inline-flex; align-items: center; gap: 8px; font-family: var(--sg-mono); font-size: 11px; color: var(--sg-ink-faint); padding: 7px 12px; border: 1px solid var(--sg-line); border-radius: 8px; min-width: 180px; }
+.cctool .srch .mag { width: 13px; height: 13px; border-radius: 50%; border: 1.6px solid var(--sg-red); position: relative; margin-left: auto; flex: none; }
+.cctool .srch .mag::after { content: ""; position: absolute; right: -4px; bottom: -3px; width: 6px; height: 1.6px; background: var(--sg-red); transform: rotate(45deg); }
+
+/* the 7-col data table: [ck] Title Status Targets Placement Priority Author CreatedAt */
+.cctab .th, .cctab .tr { display: grid; grid-template-columns: 24px 1.7fr .9fr .7fr .7fr .6fr .8fr 1fr; gap: 11px; align-items: center; padding: 12px 16px; }
+.cctab .th { font-family: var(--sg-mono); font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: var(--sg-ink-faint); border-bottom: 1px solid var(--sg-line); }
+.cctab .tr { border-bottom: 1px solid var(--sg-line-2); font-size: 12.5px; position: relative; }
+.cctab .tr:last-child { border-bottom: 0; }
+.cctab .ck { width: 15px; height: 15px; border: 1px solid var(--sg-line); border-radius: 4px; background: var(--sg-bg-2); }
+.cctab .nm { font-weight: 700; color: var(--sg-ink); }
+.cctab .nm .ract { display: block; margin-top: 3px; font-family: var(--sg-mono); font-size: 9.5px; color: var(--sg-ink-faint); }
+.cctab .nm .ract span { color: var(--sg-red-deep); }
+.cctab .tg { font-family: var(--sg-mono); font-size: 10.5px; color: var(--sg-ink-faint); }
+.cctab .pl { font-family: var(--sg-mono); font-size: 10px; color: var(--sg-red-deep); background: var(--sg-red-soft); padding: 3px 8px; border-radius: 6px; justify-self: start; }
+.cctab .pr { font-family: var(--sg-mono); font-size: 11px; font-weight: 700; color: var(--sg-ink-soft); }
+.cctab .au { font-family: var(--sg-mono); font-size: 11px; color: var(--sg-ink-faint); }
+.cctab .dt { font-family: var(--sg-mono); font-size: 10.5px; color: var(--sg-ink-faint); }
+
+/* CodeIgniter pagination */
+.ccpage { display: flex; align-items: center; gap: 6px; padding: 12px 16px; border-top: 1px solid var(--sg-line); }
+.ccpage .pg { font-family: var(--sg-mono); font-size: 11px; color: var(--sg-ink-faint); padding: 5px 10px; border: 1px solid var(--sg-line); border-radius: 7px; }
+.ccpage .pg.on { background: var(--sg-grad-red); color: #fff; border-color: transparent; box-shadow: var(--sg-shadow-red); }
+.ccpage .pg.ends { color: var(--sg-ink-faint); }
+
+/* ===== SECTION 2 texture strip ============================================ */
+.ccstrip { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 14px 18px; border: 1px solid var(--sg-line); border-radius: 12px; background: var(--sg-card-bg); }
+.ccstrip .ccdiv { width: 1px; height: 18px; background: var(--sg-line); }
+.ccstrip .ccmono { font-family: var(--sg-mono); font-size: 11px; color: var(--sg-ink-faint); padding: 4px 9px; border: 1px solid var(--sg-line); border-radius: 7px; }
+.g-2x2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+
+/* ===== SECTION 3 comparison table fit ===================================== */
+.vs-wrap { overflow-x: auto; }
+.vs thead th.sg { color: var(--sg-red-deep); }
+
+/* ===== SURFACE 2 . two-column manage form (dark CodeMirror anchor) ========= */
+.ccform { display: grid; grid-template-columns: 2fr 1fr; gap: 0; }
+.ccform .main { padding: 18px; border-right: 1px solid var(--sg-line); display: flex; flex-direction: column; gap: 14px; }
+.ccform .side { padding: 18px; background: var(--sg-bg-2); display: flex; flex-direction: column; gap: 13px; }
+.ccform .modlabel { font-family: var(--sg-mono); font-size: 10px; font-weight: 700; letter-spacing: .06em; color: var(--sg-red-deep); background: var(--sg-red-soft); align-self: flex-start; padding: 5px 10px; border-radius: 6px; }
+.ccform .fld .lab { font-family: var(--sg-mono); font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: var(--sg-ink-faint); display: block; margin-bottom: 6px; }
+.ccform .fld .inp { border: 1px solid var(--sg-line); border-radius: 9px; padding: 10px 12px; font-size: 12.5px; color: var(--sg-ink); background: var(--sg-bg-2); }
+.ccform .fld .inp.num { width: 80px; text-align: center; font-family: var(--sg-mono); }
+.ccform .fld .hint { display: block; margin-top: 6px; font-family: var(--sg-mono); font-size: 9.5px; color: var(--sg-ink-faint); }
+
+/* dark CodeMirror code pane (the cinematic anchor) - reused for Surface 4 emit */
+.cocode { border-radius: 11px; overflow: hidden; border: 1px solid #20242e; background: #12141b;
+ --sg-ink: #e9e6df; --sg-ink-soft: #b8b4ab; }
+.cocode .ch { display: flex; align-items: center; gap: 8px; padding: 9px 12px; background: #181b23; border-bottom: 1px solid #20242e; }
+.cocode .ch .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--sg-grad-red); box-shadow: var(--sg-shadow-red); flex: none; }
+.cocode .ch .nm { font-family: var(--sg-mono); font-size: 10px; letter-spacing: .06em; color: #c7c3ba; }
+.cocode .ch .lng { margin-left: auto; font-family: var(--sg-mono); font-size: 9px; color: #6f7480; }
+.cocode .cb { padding: 12px 14px; display: grid; grid-template-columns: 22px 1fr; font-family: var(--sg-mono); font-size: 10.5px; line-height: 1.7; }
+.cocode .cb .ln { color: #4b5160; text-align: right; padding-right: 12px; user-select: none; }
+.cocode .cb .co { color: #cdd2dc; white-space: pre; overflow-x: auto; }
+.cocode .cb .co .t { color: #d57; }
+.cocode .cb .co .sel { color: #d59a3b; }
+.cocode .cb .co .pp { color: #6cb6e0; }
+.cocode .cb .co .vv { color: #7fb069; }
+.cocode .cb .co .c { color: #6f7480; }
+/* lint gutter marker (line-level warning, render-only) */
+.cocode .lint { display: flex; align-items: center; gap: 9px; padding: 8px 14px; border-top: 1px solid #20242e; background: #181b23; }
+.cocode .lint .ltri { color: #d59a3b; font-size: 10px; }
+.cocode .lint .lmsg { font-family: var(--sg-mono); font-size: 9.5px; color: #8a8f9c; }
+
+/* right settings rail */
+.ccform .side .rail-toggle { display: flex; align-items: center; justify-content: space-between; border: 1px solid var(--sg-line); border-radius: 10px; padding: 11px 13px; background: #fff; }
+.ccform .side .rail-toggle .rl { font-family: var(--sg-mono); font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: var(--sg-ink-faint); }
+.ccform .side .rail-toggle .tog { display: inline-flex; align-items: center; gap: 9px; font-size: 12px; font-weight: 700; color: var(--sg-ink-soft); }
+.ccform .side .rail-toggle .tog .sw { width: 34px; height: 20px; border-radius: 999px; background: var(--sg-grad-red); position: relative; box-shadow: 0 0 10px rgba(213,21,34,.35); flex: none; }
+.ccform .side .rail-toggle .tog .sw::after { content: ""; position: absolute; top: 3px; right: 3px; width: 14px; height: 14px; border-radius: 50%; background: #fff; }
+.ccform .side .rail-toggle .tog.on b { color: var(--sg-red-deep); }
+.ccform .side .mk { font-family: var(--sg-font); font-size: 13px; font-weight: 700; color: #fff; padding: 12px; border-radius: 9px; background: var(--sg-grad-red); box-shadow: var(--sg-shadow-red); text-align: center; }
+.ccform .side .del { text-align: center; font-family: var(--sg-mono); font-size: 11px; color: var(--sg-red-deep); }
+.ccform .side .audit { border: 1px solid var(--sg-line); border-radius: 11px; padding: 13px; background: #fff; }
+.ccform .side .audit .al { font-family: var(--sg-mono); font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: var(--sg-ink-faint); margin-bottom: 9px; }
+.ccform .side .audit .arow { display: flex; justify-content: space-between; gap: 12px; font-size: 11px; padding: 6px 0; border-top: 1px solid var(--sg-line-2); }
+.ccform .side .audit .arow:first-of-type { border-top: 0; }
+.ccform .side .audit .arow .k { color: var(--sg-ink-faint); }
+.ccform .side .audit .arow .v { color: var(--sg-ink); font-weight: 600; font-family: var(--sg-mono); font-size: 10px; text-align: right; }
+
+/* ===== SURFACE 3 . status workflow + SweetAlert safety net ================= */
+.ccwork { display: grid; grid-template-columns: 1fr 1.1fr; gap: 24px; align-items: start; }
+/* SweetAlert-style confirmation modal on a soft stage */
+.modal-host .modal-stage { background: linear-gradient(180deg, #f2f1ed, #e6e3dc); padding: 34px 22px; display: grid; place-items: center; min-height: 280px; }
+.swal { background: #fff; border-radius: 14px; box-shadow: var(--sg-shadow-2); padding: 26px 24px; width: 100%; max-width: 320px; text-align: center; border: 1px solid var(--sg-line); }
+.swal .bang { width: 56px; height: 56px; border-radius: 50%; border: 3px solid #e9b949; color: #d59a3b; font-weight: 900; font-size: 30px; line-height: 50px; margin: 0 auto 14px; }
+.swal .swt { font-weight: 900; font-size: 19px; letter-spacing: -.02em; color: var(--sg-ink); }
+.swal .sws { font-size: 12.5px; color: var(--sg-ink-soft); margin: 7px 0 18px; }
+.swal .swbtns { display: flex; gap: 9px; justify-content: center; }
+.swal .swbtns .cancel { font-size: 12px; font-weight: 700; color: var(--sg-ink-soft); padding: 9px 16px; border-radius: 8px; border: 1px solid var(--sg-line); background: #fff; }
+.swal .swbtns .confirm { font-size: 12px; font-weight: 700; color: #fff; padding: 9px 16px; border-radius: 8px; background: var(--sg-grad-red); box-shadow: var(--sg-shadow-red); }
+
+.ccwork-side { display: flex; flex-direction: column; gap: 14px; }
+.ccwork-side .actstrip { padding: 6px 16px 4px; }
+.ccwork-side .ar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 13px 0; border-bottom: 1px solid var(--sg-line-2); font-size: 12.5px; }
+.ccwork-side .ar:last-child { border-bottom: 0; }
+.ccwork-side .ar .arn { font-weight: 700; color: var(--sg-ink); }
+.ccwork-side .ar.trashed .arn { color: var(--sg-ink-faint); text-decoration: line-through; text-decoration-color: rgba(213,21,34,.5); }
+.ccwork-side .ar .arx { font-family: var(--sg-mono); font-size: 10px; color: var(--sg-ink-faint); }
+.ccwork-side .ar .arx .lk { color: var(--sg-red-deep); }
+.cc-note { padding: 0 16px 16px; font-size: 12px; color: var(--sg-ink-soft); line-height: 1.5; }
+
+/* ===== SURFACE 4 . priority cascade + live <head> injection =============== */
+.cccascade { display: grid; grid-template-columns: 1fr; gap: 18px; max-width: 760px; margin-inline: auto; }
+.cccascade .snipcol { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.cccascade .snip { border-radius: 12px; padding: 15px 16px; background: #fff; border: 1px solid #ECEAE5;
+ --sg-ink: #1A1A1A; --sg-ink-soft: #5b5853; --sg-ink-faint: #868279; --sg-line: #ECEAE5; --sg-line-2: #f0eeea; --sg-bg-2: #f9f9f9; --sg-red-soft: #fff1f1; --sg-card-bg: #fff; --sg-card-border: #ECEAE5; color: var(--sg-ink); box-shadow: var(--sg-shadow); }
+.cccascade .snip .sh { display: flex; align-items: center; justify-content: space-between; margin-bottom: 11px; }
+.cccascade .snip .prio { font-family: var(--sg-mono); font-size: 10px; font-weight: 700; letter-spacing: .04em; color: var(--sg-ink-soft); background: var(--sg-bg-2); border: 1px solid var(--sg-line); padding: 4px 9px; border-radius: 999px; }
+.cccascade .snip .prio.hot { color: var(--sg-red-deep); background: var(--sg-red-soft); border-color: transparent; }
+.cccascade .snip .sn { font-weight: 700; font-size: 14px; color: var(--sg-ink); }
+.cccascade .snip .sm { font-family: var(--sg-mono); font-size: 10px; color: var(--sg-ink-faint); margin-top: 4px; }
+.cccascade .cascarrow { display: flex; align-items: center; gap: 14px; }
+.cccascade .cascarrow .aline { flex: 1; height: 1px; background: rgba(255,255,255,.16); }
+.surface-dark .cccascade .cascarrow .alab { font-family: var(--sg-mono); font-size: 10px; letter-spacing: .06em; color: rgba(255,255,255,.62); white-space: nowrap; }
+.cccascade .cocode.emit { box-shadow: var(--sg-shadow-cinematic); }
+
+/* ---- CLOSE --------------------------------------------------------------- */
+.cc-close { text-align: center; }
+.cc-close .related { display: flex; flex-wrap: wrap; gap: 14px 26px; justify-content: center; margin-top: 28px; }
+.cc-close .related a { font-family: var(--sg-mono); font-size: 12px; color: var(--sg-ink); border-bottom: 1px solid var(--sg-red-tint-22); padding-bottom: 2px; }
+.cc-close .related a:hover { color: var(--sg-red-hot); }
+.cc-close .fine { font-family: var(--sg-mono); font-size: 12px; color: var(--sg-ink-faint); margin-top: 22px; }
+
+/* in-prose cross-links (sibling's red-hot link color, dark sections too) */
+.inlink { color: var(--sg-red-hot); }
+
+/* ---- RESPONSIVE ---------------------------------------------------------- */
+@media (max-width: 900px) {
+ .ccform { grid-template-columns: 1fr; }
+ .ccform .main { border-right: 0; border-bottom: 1px solid var(--sg-line); }
+ .ccwork { grid-template-columns: 1fr; }
+ .g-2x2 { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+ .cctab .th { display: none; }
+ .cctab .tr { grid-template-columns: 1fr auto; row-gap: 4px; }
+ .cctab .ck, .cctab .tg, .cctab .pl, .cctab .au, .cctab .dt { display: none; }
+ .cccascade .snipcol { grid-template-columns: 1fr; }
+}

@@ -1,0 +1,133 @@
+/* ============================================================================
+ solutions-small-business.css - TYPE-E PERSONA SIGNATURE for /solutions/small-business.
+ Persona = the one-owner shop (cafe, boutique, local service, trades, clinic-front)
+ that outgrew a rented builder (Wix/Squarespace/GoDaddy) or is tired of a WordPress
+ add-on stack. Wedge: one owned, professional site where the page builder, store,
+ forms, SEO, hosting, and security are all native to ONE platform from $39/mo.
+ Feature-forward, SGEN is the subject of every surface.
+
+ Crafted-CSS product surfaces (modeled on the shared .adwin admin atom + .fpills
+ status tabs + .mk-list / .mk-toolbar from _standard.css). Render as illustrative
+ surfaces, NEVER claimed as live screenshots (brief 5.A.11; aria-hidden on each):
+ (1) SG Builder canvas (.sbcanvas, hero/flagship): section palette + a page taking
+ shape on the canvas + "Publish Changes". The wedge made visible: you run it.
+ (2) Templates library (.sbtpls): the near-screenshot-grade real UI - .fpills status
+ tabs (All/Published/Draft/Trash) + a tile grid. The credibility anchor.
+ (3) Page editor (.sbedit): an editing field + a brand-font field + a drag toggle.
+ (4) Forms submissions inbox (.sbinbox, reuses .mk-toolbar/.mk-list) + Store checkout
+ (.sbstore/.sbcart): native store/forms doing business, crafted (no live capture).
+ (5) Foundation Pack strip (.sb-fp): hosting/SSL/CDN/WAF/patching, posture only.
+ NO "secure/hardened" superlative, NO certs/badges, NO RBAC matrix, NO white-label,
+ NO tier-gating (D9), NO 91% Patchstack stat (rationed off this page). All var(--sg-*).
+ ============================================================================ */
+@import "_standard.css";
+
+/* ---- HERO ------------------------------------------------------------------ */
+.sb-hero { padding-block: 8vh var(--sg-pad); }
+.sb-hero .feat-copy h1 { max-width: 18ch; }
+.sb-hero .feat-copy .lead { max-width: 60ch; }
+.sb-hero .cta { margin-top: 30px; }
+
+/* ===== SG BUILDER CANVAS (hero flagship surface, modeled on .adwin) ========== */
+.sbcanvas { padding: 0; }
+.sbcanvas .cvwrap { display: grid; grid-template-columns: 132px 1fr; min-height: 300px; }
+/* section palette (left rail) */
+.sbcanvas .palette { display: flex; flex-direction: column; gap: 7px; padding: 14px 12px; border-right: 1px solid var(--sg-line); background: var(--sg-bg-2); }
+.sbcanvas .palette .pt { font-family: var(--sg-mono); font-size: 8.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--sg-ink-faint); margin-bottom: 3px; }
+.sbcanvas .palette .blk { font-size: 11.5px; font-weight: 600; color: var(--sg-ink-soft); padding: 8px 11px; border-radius: 8px; border: 1px solid var(--sg-line); background: #fff; cursor: default; }
+.sbcanvas .palette .blk.on { background: var(--sg-red-soft); color: var(--sg-red-deep); border-color: var(--sg-red-tint-22); }
+/* the canvas where the page takes shape */
+.sbcanvas .canvas { padding: 16px; display: flex; flex-direction: column; gap: 10px; background: repeating-linear-gradient(45deg, transparent, transparent 11px, rgba(0,0,0,.012) 11px, rgba(0,0,0,.012) 12px); }
+.sbcanvas .cvsec { position: relative; border: 1px solid var(--sg-line); border-radius: 9px; background: #fff; box-shadow: var(--sg-shadow-rest); padding: 14px; }
+.sbcanvas .cvsec .tag { position: absolute; top: 7px; right: 8px; font-family: var(--sg-mono); font-size: 8px; letter-spacing: .08em; text-transform: uppercase; font-weight: 700; color: var(--sg-ink-faint); }
+.sbcanvas .cvsec.sel { border-color: var(--sg-red); box-shadow: 0 0 0 1.5px var(--sg-red), var(--sg-shadow-rest); }
+.sbcanvas .cvsec.sel .tag { color: #fff; background: var(--sg-grad-red); padding: 2px 7px; border-radius: 999px; box-shadow: var(--sg-shadow-red); top: 8px; }
+/* hero section: a heading bar, headline, paragraph, a button block */
+.sbcanvas .cvsec.hero { display: flex; flex-direction: column; gap: 8px; min-height: 96px; }
+.sbcanvas .cvsec.hero .hb { width: 30%; height: 7px; border-radius: 4px; background: var(--sg-red-soft); }
+.sbcanvas .cvsec.hero .hh { width: 72%; height: 15px; border-radius: 5px; background: #e7e4de; }
+.sbcanvas .cvsec.hero .hp { width: 88%; height: 8px; border-radius: 4px; background: #eceae5; }
+.sbcanvas .cvsec.hero .hc { width: 96px; height: 24px; border-radius: 7px; background: var(--sg-grad-red); box-shadow: var(--sg-shadow-red); margin-top: 4px; }
+/* a 3-card band */
+.sbcanvas .cvsec.band { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
+.sbcanvas .cvsec.band .cb { height: 38px; border-radius: 7px; background: var(--sg-bg-2); border: 1px solid var(--sg-line-2); }
+/* a text line section */
+.sbcanvas .cvsec.line { display: flex; flex-direction: column; gap: 6px; }
+.sbcanvas .cvsec.line span { height: 7px; border-radius: 4px; background: #eceae5; }
+.sbcanvas .cvsec.line span:last-child { width: 64%; }
+
+/* ===== TEMPLATES LIBRARY (the real-UI credibility anchor; .fpills from shared) = */
+.sbtpls { padding: 0; }
+.sbtpls .sbtgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 14px 16px 18px; }
+.sbtpls .tpl { position: relative; border-radius: 9px; overflow: hidden; border: 1px solid var(--sg-line); box-shadow: var(--sg-shadow-rest); background: #fff; }
+.sbtpls .tpl .head { height: 30px; background: var(--sg-bg-2); }
+.sbtpls .tpl .body { padding: 8px; display: flex; flex-direction: column; gap: 4px; }
+.sbtpls .tpl .body span { height: 5px; border-radius: 3px; background: #eceae5; }
+.sbtpls .tpl .body span:nth-child(2) { width: 72%; }
+.sbtpls .tpl .body span:nth-child(3) { width: 54%; }
+.sbtpls .tpl.sel { border-color: var(--sg-red); box-shadow: 0 0 0 1.5px var(--sg-red); }
+.sbtpls .tpl.sel .head { background: var(--sg-grad-red); }
+.sbtpls .tpl .pick { position: absolute; top: 6px; right: 6px; font-family: var(--sg-mono); font-size: 8px; letter-spacing: .08em; text-transform: uppercase; font-weight: 700; color: #fff; padding: 2px 7px; border-radius: 999px; background: var(--sg-grad-red); box-shadow: var(--sg-shadow-red); }
+
+/* ===== PAGE EDITOR (deep-dive support; reuses .ui-field / .ui-toggle) ======== */
+.sbedit { padding: 0; }
+.sbedit .sbedit-rows { padding: 16px; display: flex; flex-direction: column; gap: 11px; }
+.sbedit .sbedit-rows .cc { font-family: var(--sg-mono); font-size: 9px; color: var(--sg-ink-faint); float: right; }
+
+/* ===== FORMS SUBMISSIONS INBOX (reuses .mk-toolbar / .mk-list) =============== */
+.sbinbox { padding: 0; }
+.sbinbox .mk-list .row:last-child { border-bottom: 0; }
+.sbinbox .mk-list .row .st { background: var(--sg-red-soft); color: var(--sg-red-deep); }
+
+/* ===== STORE CHECKOUT (native ecommerce, crafted - NOT a live capture) ======= */
+.sbstore { padding: 0; }
+.sbstore .sbcart { padding: 16px; display: flex; flex-direction: column; gap: 11px; }
+.sbstore .ci { display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: center; }
+.sbstore .ci .th { width: 38px; height: 38px; border-radius: 8px; background: var(--sg-bg-2); border: 1px solid var(--sg-line-2); flex: none; }
+.sbstore .ci .cd { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.sbstore .ci .cn { font-weight: 700; font-size: 12.5px; color: var(--sg-ink); }
+.sbstore .ci .cq { font-family: var(--sg-mono); font-size: 10px; color: var(--sg-ink-faint); }
+.sbstore .ci .cp { font-weight: 800; font-size: 13px; color: var(--sg-ink); font-variant-numeric: tabular-nums; }
+.sbstore .ctot { display: flex; align-items: center; justify-content: space-between; padding-top: 11px; border-top: 1px solid var(--sg-line); font-weight: 700; font-size: 13px; color: var(--sg-ink); }
+.sbstore .ctot .cv { font-weight: 900; font-size: 17px; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.sbstore .cpay { display: grid; grid-template-columns: 1.4fr 1fr; gap: 9px; margin-top: 3px; }
+.sbstore .cpay .pay { text-align: center; font-family: var(--sg-font); font-size: 12px; font-weight: 700; color: #fff; padding: 11px; border-radius: 9px; background: var(--sg-grad-red); box-shadow: var(--sg-shadow-red); }
+.sbstore .cpay .pay.alt { background: #fff; color: var(--sg-ink-soft); border: 1px solid var(--sg-line); box-shadow: none; }
+
+/* ---- FOUNDATION PACK strip (posture only; same pattern as agencies .ag-fp) -- */
+.sb-fp { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 40px; }
+.sb-fp .fp { display: flex; flex-direction: column; padding: 22px; border-radius: var(--sg-r-lg); border: 1px solid var(--sg-line); background: var(--sg-card-bg); }
+.surface-dark .sb-fp .fp { box-shadow: var(--sg-glass-inset); }
+.sb-fp .fp .fk { font-family: var(--sg-mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--sg-red-deep); }
+.surface-dark .sb-fp .fp .fk { color: var(--sg-red-hot); }
+.sb-fp .fp .ft { margin-top: 10px; font-size: 13px; line-height: 1.5; color: var(--sg-ink-soft); }
+
+/* ---- PRICING-FIT row (3 plans, owner-framed: Sandbox / Indie / Studio) ----- */
+.sb-plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 36px; align-items: stretch; }
+.sb-plans .pl { display: flex; flex-direction: column; padding: 26px 24px; border-radius: var(--sg-r-lg); border: 1px solid var(--sg-line); background: var(--sg-card-bg); }
+.sb-plans .pl.featured { box-shadow: 0 0 0 1.5px var(--sg-red), var(--sg-shadow-2); }
+.surface-dark .sb-plans .pl { box-shadow: var(--sg-glass-inset); }
+.sb-plans .pl .pn { font-weight: 800; font-size: 17px; letter-spacing: -.02em; }
+.sb-plans .pl .ps { font-family: var(--sg-mono); font-size: 10.5px; color: var(--sg-ink-faint); margin-top: 4px; }
+.sb-plans .pl .pp { margin-top: 16px; font-weight: 900; font-size: 30px; letter-spacing: -.03em; line-height: 1; font-variant-numeric: tabular-nums; }
+.sb-plans .pl .pp small { font-family: var(--sg-mono); font-weight: 600; font-size: 11px; letter-spacing: 0; color: var(--sg-ink-faint); margin-left: 4px; }
+.sb-plans .pl .pmo { font-family: var(--sg-mono); font-size: 10px; color: var(--sg-ink-faint); margin-top: 6px; }
+.sb-plans .pl .pf { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--sg-line); font-size: 13px; color: var(--sg-ink-soft); }
+.sb-plans .pl .badge { align-self: flex-start; font-family: var(--sg-mono); font-size: 9px; letter-spacing: .1em; text-transform: uppercase; padding: 3px 9px; border-radius: 999px; background: var(--sg-red-soft); color: var(--sg-red-deep); margin-bottom: 12px; }
+
+/* ---- close fine-print ------------------------------------------------------ */
+.sb-fine { font-family: var(--sg-mono); font-size: 12px; color: var(--sg-ink-faint); margin-top: 22px; }
+.surface-dark .sb-fine { color: rgba(255,255,255,.6); }
+
+/* ---- RESPONSIVE ----------------------------------------------------------- */
+@media (max-width: 900px) {
+ .sb-fp { grid-template-columns: 1fr 1fr; }
+ .sb-plans { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+ .sbcanvas .cvwrap { grid-template-columns: 1fr; }
+ .sbcanvas .palette { flex-direction: row; flex-wrap: wrap; border-right: 0; border-bottom: 1px solid var(--sg-line); }
+ .sbcanvas .palette .pt { width: 100%; }
+ .sbtpls .sbtgrid { grid-template-columns: repeat(2, 1fr); }
+ .sb-fp { grid-template-columns: 1fr; }
+}

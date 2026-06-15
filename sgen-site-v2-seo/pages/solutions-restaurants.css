@@ -1,0 +1,206 @@
+/* ============================================================================
+ solutions-restaurants.css - TYPE-E PERSONA SIGNATURE for /solutions/restaurants.
+ Follows the solutions-agencies flagship structure (hero copy + crafted .adwin
+ surface, capability proofs with crafted two-state surfaces, Foundation Pack strip,
+ metric-free pricing-fit, dark CTA). Built STRICTLY from _SOLUTIONS-RESTAURANTS-BRIEF.md
+ showcase order. Restaurant-specific crafted surfaces (all illustrative, aria-hidden):
+ (1) Restaurant front page diorama (.rsfront, hero): events strip + dish cards +
+ hours/location + a reservation request CTA. The wedge made visible.
+ (2) Menu front render (.rsmenu) + Custom Objects admin list (.rsco) = the menu
+ two-state. NO "Menu module"; the menu is Custom Objects + SG Builder.
+ (3) Events admin list (.rsevents) with the Recurrences column + public event page
+ (.rsevpub) with the Add-to-Calendar dropdown. Tabular list, not a booking grid.
+ (4) Reservation Form (.rsform) + Leads inbox (.rsinbox) = the credibility anchor.
+ Framed "reservation request" into an inbox, NEVER a live booking/table system.
+ (5) Online-ordering storefront (.rsstore), shown as optional upside, no per-order fee.
+ (6) Foundation Pack strip (.rs-fp): SSR + hosting/SSL/CDN/WAF/patching, posture only.
+ Modeled on the shared .adwin admin atom (white card, red accent) from _standard.css.
+ HONESTY: reservations = Form, ordering = Ecommerce; no fabricated table-booking
+ surface, no "secure" superlative, no Patchstack 91% stat (rationed off this page).
+ All var(--sg-*).
+ ============================================================================ */
+@import "_standard.css";
+
+/* ---- HERO ------------------------------------------------------------------ */
+.rs-hero { padding-block: 8vh var(--sg-pad); }
+.rs-hero .feat-copy h1 { max-width: 18ch; }
+.rs-hero .feat-copy .lead { max-width: 60ch; }
+.rs-hero .cta { margin-top: 30px; }
+
+/* ===== RESTAURANT FRONT-PAGE DIORAMA (hero surface, the wedge made visible) === */
+.rsfront { padding: 0; }
+.rsfront .rsf-event { display: flex; align-items: center; gap: 10px; padding: 13px 16px; border-bottom: 1px solid var(--sg-line); background: var(--sg-red-soft); font-size: 12.5px; font-weight: 700; color: var(--sg-red-deep); }
+.rsfront .rsf-event .rsf-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--sg-red); box-shadow: 0 0 8px rgba(213,21,34,.5); flex: none; }
+.rsfront .rsf-event .rsf-ev-cta { margin-left: auto; font-family: var(--sg-mono); font-size: 10px; font-weight: 600; color: var(--sg-red-deep); padding: 5px 11px; border-radius: 999px; background: #fff; border: 1px solid var(--sg-red-tint-22); white-space: nowrap; }
+
+.rsfront .rsf-menu { padding: 16px; }
+.rsfront .rsf-menu .rsf-mh { font-family: var(--sg-mono); font-size: 9px; letter-spacing: .14em; text-transform: uppercase; color: var(--sg-ink-faint); margin-bottom: 10px; }
+.rsfront .rsf-dish { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--sg-line-2); }
+.rsfront .rsf-dish:last-child { border-bottom: 0; }
+.rsfront .rsf-d-name { font-weight: 700; font-size: 13px; color: var(--sg-ink); }
+.rsfront .rsf-d-tag { font-family: var(--sg-mono); font-size: 9px; font-weight: 500; color: var(--sg-ink-faint); margin-left: 9px; padding: 2px 7px; border-radius: 999px; background: var(--sg-bg-2); }
+.rsfront .rsf-d-price { font-weight: 900; font-size: 14px; letter-spacing: -.02em; color: var(--sg-ink); font-variant-numeric: tabular-nums; flex: none; }
+
+.rsfront .rsf-foot { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; padding: 14px 16px; border-top: 1px solid var(--sg-line); background: var(--sg-bg-2); }
+.rsfront .rsf-hrs { display: inline-flex; align-items: center; gap: 8px; font-family: var(--sg-mono); font-size: 11px; color: var(--sg-ink-soft); }
+.rsfront .rsf-hrs .rsf-pin { width: 9px; height: 9px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); background: var(--sg-red); box-shadow: 0 0 8px rgba(213,21,34,.45); flex: none; }
+.rsfront .rsf-resv { display: inline-flex; align-items: center; gap: 10px; }
+.rsfront .rsf-resv .rsf-resv-l { font-family: var(--sg-mono); font-size: 10px; color: var(--sg-ink-faint); }
+.rsfront .rsf-resv .rsf-resv-b { font-family: var(--sg-font); font-size: 11px; font-weight: 700; color: #fff; padding: 7px 14px; border-radius: 8px; background: var(--sg-grad-red); box-shadow: var(--sg-shadow-red); white-space: nowrap; }
+
+/* ===== MENU FRONT RENDER (proof 1, left of the two-state) =================== */
+.rsmenu { padding: 0; }
+.rsmenu .rsmfil { display: flex; align-items: center; gap: 6px; padding: 12px 16px; border-bottom: 1px solid var(--sg-line); flex-wrap: wrap; }
+.rsmenu .rsmfil .chip { font-family: var(--sg-mono); font-size: 10px; padding: 6px 12px; border-radius: 999px; border: 1px solid var(--sg-line); color: var(--sg-ink-faint); }
+.rsmenu .rsmfil .chip.on { background: var(--sg-red-soft); color: var(--sg-red-deep); border-color: transparent; }
+.rsmenu .rmlist { padding: 4px 0; }
+.rsmenu .rmrow { display: grid; grid-template-columns: 1.9fr 1fr .8fr; gap: 12px; align-items: center; padding: 12px 16px; border-bottom: 1px solid var(--sg-line-2); font-size: 12.5px; }
+.rsmenu .rmrow:last-child { border-bottom: 0; }
+.rsmenu .rmrow .dish { font-weight: 700; color: var(--sg-ink); }
+.rsmenu .rmrow .dish small { display: block; font-weight: 500; font-family: var(--sg-mono); font-size: 10px; color: var(--sg-ink-faint); margin-top: 2px; }
+.rsmenu .rmrow .sect { font-family: var(--sg-mono); font-size: 10.5px; color: var(--sg-ink-soft); }
+.rsmenu .rmrow .prc { font-weight: 900; font-size: 14px; letter-spacing: -.02em; color: var(--sg-ink); font-variant-numeric: tabular-nums; justify-self: end; }
+.rsmenu .rmrow .prc.edit { color: var(--sg-red-deep); justify-self: end; text-align: right; }
+.rsmenu .rmrow .prc.edit i { display: block; font-style: normal; font-family: var(--sg-mono); font-weight: 600; font-size: 8.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--sg-ink-faint); margin-top: 2px; }
+.rsmenu .rmrow.cur { background: var(--sg-red-soft); }
+
+/* ===== CUSTOM OBJECTS ADMIN LIST (proof 1, the model behind the menu) ======= */
+.rsco { padding: 0; }
+.rsco .cohead, .rsco .corow { display: grid; grid-template-columns: 1.2fr 1fr 1.1fr .7fr; gap: 10px; align-items: center; padding: 11px 16px; }
+.rsco .cohead { font-family: var(--sg-mono); font-size: 8.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--sg-ink-faint); border-bottom: 1px solid var(--sg-line); }
+.rsco .corow { border-bottom: 1px solid var(--sg-line-2); font-size: 12px; }
+.rsco .corow:last-child { border-bottom: 0; }
+.rsco .corow .cot { font-weight: 700; color: var(--sg-ink); }
+.rsco .corow .cos { font-family: var(--sg-mono); font-size: 10.5px; color: var(--sg-red-deep); }
+.rsco .corow .cop { font-family: var(--sg-mono); font-size: 9.5px; color: var(--sg-ink-faint); }
+.rsco .corow .cod { font-family: var(--sg-mono); font-size: 10px; color: var(--sg-ink-soft); justify-self: end; }
+
+/* shared right-column copy wrapper (proofs 1 + 5) */
+.rs-copy { align-self: start; }
+.rs-copy h3 { margin-top: 4px; }
+
+/* ===== EVENTS ADMIN LIST (proof 2a, the Recurrences column) ================= */
+.rsevents { padding: 0; }
+.rsevents .evtabs { display: flex; gap: 6px; padding: 12px 16px 4px; flex-wrap: wrap; }
+.rsevents .evtab { font-family: var(--sg-mono); font-size: 10px; padding: 6px 11px; border-radius: 999px; border: 1px solid var(--sg-line); color: var(--sg-ink-faint); }
+.rsevents .evtab b { font-weight: 800; color: var(--sg-ink-soft); margin-left: 3px; }
+.rsevents .evtab.on { background: var(--sg-red-soft); color: var(--sg-red-deep); border-color: transparent; }
+.rsevents .evtab.on b { color: var(--sg-red-deep); }
+.rsevents .evhead, .rsevents .evrow { display: grid; grid-template-columns: 1.6fr 1.1fr .8fr .8fr; gap: 10px; align-items: center; padding: 11px 16px; }
+.rsevents .evhead { font-family: var(--sg-mono); font-size: 8.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--sg-ink-faint); border-bottom: 1px solid var(--sg-line); margin-top: 8px; }
+.rsevents .evrow { border-bottom: 1px solid var(--sg-line-2); font-size: 12px; }
+.rsevents .evrow:last-child { border-bottom: 0; }
+.rsevents .evrow .evn { font-weight: 700; color: var(--sg-ink); }
+.rsevents .evrow .evd { font-family: var(--sg-mono); font-size: 10px; color: var(--sg-ink-soft); }
+.rsevents .evrow .evc { font-family: var(--sg-mono); font-size: 9.5px; color: var(--sg-ink-faint); }
+.rsevents .evrow .evr { font-family: var(--sg-mono); font-size: 9px; padding: 3px 9px; border-radius: 5px; background: var(--sg-bg-2); color: var(--sg-ink-soft); justify-self: start; white-space: nowrap; }
+.rsevents .evrow.cur { background: var(--sg-red-soft); }
+.rsevents .evrow.cur .evr { background: #fff; color: var(--sg-red-deep); }
+
+/* ===== PUBLIC EVENT PAGE (proof 2a, the Add-to-Calendar dropdown) =========== */
+.rsevpub { padding: 0; align-self: start; }
+.rsevpub .evpub { display: grid; grid-template-columns: auto 1fr; gap: 16px; padding: 18px 16px 6px; }
+.rsevpub .evp-date { grid-row: 1 / span 2; text-align: center; font-family: var(--sg-mono); line-height: 1; padding: 10px 12px; border-radius: 10px; background: var(--sg-grad-red); color: #fff; box-shadow: var(--sg-shadow-red); align-self: start; }
+.rsevpub .evp-date i { display: block; font-style: normal; font-size: 9px; letter-spacing: .12em; text-transform: uppercase; opacity: .9; }
+.rsevpub .evp-date b { display: block; font-size: 22px; font-weight: 900; letter-spacing: -.03em; margin-top: 3px; }
+.rsevpub .evp-head { min-width: 0; }
+.rsevpub .evp-cat { font-family: var(--sg-mono); font-size: 9px; padding: 3px 9px; border-radius: 999px; background: var(--sg-red-soft); color: var(--sg-red-deep); }
+.rsevpub .evp-title { font-weight: 800; font-size: 17px; letter-spacing: -.02em; color: var(--sg-ink); margin: 9px 0 4px; }
+.rsevpub .evp-meta { font-family: var(--sg-mono); font-size: 10px; color: var(--sg-ink-faint); }
+.rsevpub .evp-body { grid-column: 1 / -1; font-size: 12.5px; line-height: 1.55; color: var(--sg-ink-soft); margin: 2px 0 0; }
+.rsevpub .evp-atc { grid-column: 1 / -1; margin: 6px 0 16px; padding: 12px 14px; border-radius: 10px; border: 1px solid var(--sg-line); background: var(--sg-bg-2); }
+.rsevpub .evp-atc .evp-atc-l { display: block; font-family: var(--sg-font); font-size: 11px; font-weight: 800; color: var(--sg-red-deep); }
+.rsevpub .evp-atc .evp-atc-l::before { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 2px; background: var(--sg-grad-red); margin-right: 7px; vertical-align: middle; }
+.rsevpub .evp-atc .evp-atc-list { display: block; font-family: var(--sg-mono); font-size: 10px; color: var(--sg-ink-soft); margin-top: 6px; }
+
+/* ===== RESERVATION FORM (proof 2b, left of the credibility anchor) ========== */
+.rsform { padding: 0; }
+.rsform .rsff { padding: 16px; display: flex; flex-direction: column; gap: 11px; }
+.rsform .ff { display: flex; flex-direction: column; gap: 5px; }
+.rsform .ff-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; }
+.rsform .ff .fl { font-family: var(--sg-mono); font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: var(--sg-ink-faint); }
+.rsform .ff .fi { font-size: 12.5px; font-weight: 600; color: var(--sg-ink); padding: 9px 12px; border-radius: 8px; border: 1px solid var(--sg-line); background: #fff; }
+.rsform .ff .fi.muted { font-weight: 500; color: var(--sg-ink-soft); }
+.rsform .rsf-recap { display: inline-flex; align-items: center; gap: 9px; font-family: var(--sg-mono); font-size: 10.5px; color: var(--sg-ink-soft); padding: 9px 12px; border-radius: 8px; border: 1px solid var(--sg-line); background: var(--sg-bg-2); }
+.rsform .rsf-recap .rsf-recap-box { width: 16px; height: 16px; border-radius: 4px; border: 1px solid var(--sg-line); background: #fff; position: relative; flex: none; }
+.rsform .rsf-recap .rsf-recap-box::after { content: ""; position: absolute; inset: 3px; border-radius: 2px; background: var(--sg-grad-red); }
+.rsform .rsf-submit { margin-top: 3px; align-self: flex-start; font-family: var(--sg-font); font-size: 12px; font-weight: 700; color: #fff; padding: 10px 18px; border-radius: 8px; background: var(--sg-grad-red); box-shadow: var(--sg-shadow-red); }
+
+/* ===== LEADS INBOX (proof 2b, the one screen-grade credibility anchor) ====== */
+.rsinbox { padding: 0; align-self: start; }
+.rsinbox .inbtabs { display: flex; gap: 6px; padding: 12px 16px 4px; flex-wrap: wrap; }
+.rsinbox .inbtab { font-family: var(--sg-mono); font-size: 10px; padding: 6px 11px; border-radius: 999px; border: 1px solid var(--sg-line); color: var(--sg-ink-faint); }
+.rsinbox .inbtab b { font-weight: 800; color: var(--sg-ink-soft); margin-left: 3px; }
+.rsinbox .inbtab.on { background: var(--sg-red-soft); color: var(--sg-red-deep); border-color: transparent; }
+.rsinbox .inbtab.on b { color: var(--sg-red-deep); }
+.rsinbox .inbfil { display: flex; gap: 6px; padding: 8px 16px 10px; flex-wrap: wrap; border-bottom: 1px solid var(--sg-line); }
+.rsinbox .inbfil .inbf { font-family: var(--sg-mono); font-size: 9.5px; color: var(--sg-ink-faint); padding: 6px 11px; border-radius: 8px; border: 1px solid var(--sg-line); background: #fff; }
+.rsinbox .inbrow { display: grid; grid-template-columns: 1.7fr .9fr auto; gap: 10px; align-items: center; padding: 12px 16px; border-bottom: 1px solid var(--sg-line-2); font-size: 12px; }
+.rsinbox .inbrow .inbn { font-weight: 700; color: var(--sg-ink); }
+.rsinbox .inbrow .inbn small { display: block; font-weight: 500; font-family: var(--sg-mono); font-size: 10px; color: var(--sg-ink-faint); margin-top: 2px; }
+.rsinbox .inbrow .inbs { font-family: var(--sg-mono); font-size: 9.5px; color: var(--sg-ink-soft); }
+.rsinbox .inbrow .inbd { font-family: var(--sg-mono); font-size: 9.5px; color: var(--sg-ink-faint); justify-self: end; white-space: nowrap; }
+.rsinbox .inbrow.new { position: relative; }
+.rsinbox .inbrow.new .inbn::before { content: ""; position: absolute; left: 6px; top: 17px; width: 6px; height: 6px; border-radius: 50%; background: var(--sg-red); box-shadow: 0 0 6px rgba(213,21,34,.5); }
+.rsinbox .inbrow.new .inbn { padding-left: 14px; }
+.rsinbox .inbrep { padding: 13px 16px; display: grid; grid-template-columns: auto 1fr; gap: 8px 12px; align-items: center; }
+.rsinbox .inbrep .inbrep-k { font-family: var(--sg-mono); font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: var(--sg-ink-faint); }
+.rsinbox .inbrep .inbrep-bar { height: 8px; border-radius: 999px; background: var(--sg-bg-2); overflow: hidden; }
+.rsinbox .inbrep .inbrep-bar b { display: block; height: 100%; background: var(--sg-grad-red); box-shadow: var(--sg-shadow-red); }
+.rsinbox .inbrep .inbrep-v { grid-column: 1 / -1; font-family: var(--sg-mono); font-size: 10px; color: var(--sg-ink-soft); }
+
+/* ===== ONLINE-ORDERING STOREFRONT (proof 3, optional upside, illustrative) == */
+.rsstore { padding: 0; }
+.rsstore .storegrid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 16px; }
+.rsstore .sitem { display: flex; flex-direction: column; gap: 7px; padding: 12px; border-radius: 12px; border: 1px solid var(--sg-line); background: #fff; }
+.rsstore .sitem .sthumb { aspect-ratio: 16 / 10; border-radius: 8px; background: linear-gradient(135deg, var(--sg-bg-2), var(--sg-red-soft)); }
+.rsstore .sitem .sname { font-weight: 700; font-size: 12px; color: var(--sg-ink); }
+.rsstore .sitem .sprice { font-weight: 900; font-size: 13px; letter-spacing: -.02em; color: var(--sg-ink); font-variant-numeric: tabular-nums; }
+.rsstore .storefoot { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 16px; border-top: 1px solid var(--sg-line); background: var(--sg-bg-2); }
+.rsstore .storefoot .sf-pay { font-family: var(--sg-mono); font-size: 10px; color: var(--sg-ink-soft); }
+.rsstore .storefoot .sf-cta { font-family: var(--sg-font); font-size: 11px; font-weight: 700; color: #fff; padding: 8px 16px; border-radius: 8px; background: var(--sg-grad-red); box-shadow: var(--sg-shadow-red); white-space: nowrap; }
+
+/* ---- FOUNDATION PACK strip (reliability section, iconographic, posture) ----- */
+.rs-fp { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 40px; }
+.rs-fp .fp { display: flex; flex-direction: column; padding: 22px; border-radius: var(--sg-r-lg); border: 1px solid var(--sg-line); background: var(--sg-card-bg); }
+.surface-dark .rs-fp .fp { box-shadow: var(--sg-glass-inset); }
+.rs-fp .fp .fk { font-family: var(--sg-mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--sg-red-deep); }
+.surface-dark .rs-fp .fp .fk { color: var(--sg-red-hot); }
+.rs-fp .fp .ft { margin-top: 10px; font-size: 13px; line-height: 1.5; color: var(--sg-ink-soft); }
+
+/* ---- PRICING-FIT row (3 plans, restaurant-framed; Indie featured for one room) -- */
+.rs-plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 36px; align-items: stretch; }
+.rs-plans .pl { display: flex; flex-direction: column; padding: 26px 24px; border-radius: var(--sg-r-lg); border: 1px solid var(--sg-line); background: var(--sg-card-bg); }
+.rs-plans .pl.featured { box-shadow: 0 0 0 1.5px var(--sg-red), var(--sg-shadow-2); }
+.surface-dark .rs-plans .pl { box-shadow: var(--sg-glass-inset); }
+.rs-plans .pl .pn { font-weight: 800; font-size: 17px; letter-spacing: -.02em; }
+.rs-plans .pl .ps { font-family: var(--sg-mono); font-size: 10.5px; color: var(--sg-ink-faint); margin-top: 4px; }
+.rs-plans .pl .pp { margin-top: 16px; font-weight: 900; font-size: 30px; letter-spacing: -.03em; line-height: 1; font-variant-numeric: tabular-nums; }
+.rs-plans .pl .pp small { font-family: var(--sg-mono); font-weight: 600; font-size: 11px; letter-spacing: 0; color: var(--sg-ink-faint); margin-left: 4px; }
+.rs-plans .pl .pm { font-family: var(--sg-mono); font-size: 10px; color: var(--sg-ink-faint); margin-top: 6px; }
+.rs-plans .pl .pf { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--sg-line); font-size: 13px; color: var(--sg-ink-soft); }
+.rs-plans .pl .badge { align-self: flex-start; font-family: var(--sg-mono); font-size: 9px; letter-spacing: .1em; text-transform: uppercase; padding: 3px 9px; border-radius: 999px; background: var(--sg-red-soft); color: var(--sg-red-deep); margin-bottom: 12px; }
+
+/* ---- close fine-print ------------------------------------------------------ */
+.rs-fine { font-family: var(--sg-mono); font-size: 12px; color: var(--sg-ink-faint); margin-top: 22px; }
+.surface-dark .rs-fine { color: rgba(255,255,255,.6); }
+
+/* ---- RESPONSIVE ----------------------------------------------------------- */
+@media (max-width: 900px) {
+ .rs-plans { grid-template-columns: 1fr; }
+ .rs-fp { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 640px) {
+ .rs-fp { grid-template-columns: 1fr; }
+ .rsmenu .rmrow { grid-template-columns: 1fr auto; }
+ .rsmenu .rmrow .sect { display: none; }
+ .rsco .cohead { display: none; }
+ .rsco .corow { grid-template-columns: 1fr auto; row-gap: 3px; }
+ .rsco .corow .cop { display: none; }
+ .rsevents .evhead { display: none; }
+ .rsevents .evrow { grid-template-columns: 1fr auto; row-gap: 4px; }
+ .rsevents .evrow .evc { display: none; }
+ .rsinbox .inbrow { grid-template-columns: 1fr auto; row-gap: 3px; }
+ .rsinbox .inbrow .inbs { display: none; }
+ .rsstore .storegrid { grid-template-columns: 1fr 1fr; }
+}

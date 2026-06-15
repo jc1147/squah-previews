@@ -1,0 +1,219 @@
+/* ============================================================================
+ solutions-multi-location.css - TYPE-E PERSONA SIGNATURE for /solutions/multi-location.
+ The multi-location / franchise persona page, built to the agencies flagship bar.
+ Crafted-CSS product surfaces that sell the REAL, VERIFIED multi-location capability
+ (every claim traces to _audit/_SOLUTIONS-MULTI-LOCATION-BRIEF.md):
+ (1) All Locations index (hero diorama): 4 status tabs w/ live counts (All/Published/
+ Draft/Trash), search, bulk Action-For-Selected + Apply, 6-col table (Name,
+ auto-formatted Address, # ID:, External integration pill, Edit/Trash row-actions).
+ The wedge made visible: many locations, one brand, one list. (brief 3.1)
+ (2) The rich per-location manage form: 3 cards (General Information w/ structured
+ address + the Mon-Sun Hours-of-Operation matrix, Additional Details w/ hero image
+ + gallery + shop URL, GMB Attributes checkbox grid) + the publish/draft rail.
+ Proves "this is not a flat address field." (brief 3.2)
+ (3) The public Location Selector two-state ("Choose your store" -> persisted "Viewing").
+ The one surface with a REAL anchor (themeable "Location Selections"). (brief 3.3)
+ (4) Per-page SEO / Schema strip: SEO Manager row + Schema Editor (page / Schema Type /
+ Custom JSON-LD) + a LocalBusiness JSON-LD snippet. SEO Manager + Schema Editor have
+ REAL captures, so this is the credibility anchor. "Edit structured data per page,"
+ NEVER "validated rich results." (brief 3.4)
+ (5) Site-count pricing fit (Indie 1 / Scale 10 / Enterprise unlimited). (brief 3.5)
+ Modeled on the shared .adwin admin atom (white card, red accent) from _standard.css.
+ TRUTH: GMB sync = integration CONCEPT not demoed result (External badge only); no
+ listings distribution; editor NEVER "secure"/"hardened"; per-page JSON-LD shown but
+ not labeled "validated"; THREE FIXED ROLES only; every mock illustrative + aria-hidden.
+ NO tier-gating of multi-location tools (D6). All var(--sg-*).
+ ============================================================================ */
+@import "_standard.css";
+
+/* ---- HERO ------------------------------------------------------------------ */
+.ml-hero { padding-block: 8vh var(--sg-pad); }
+.ml-hero .feat-copy h1 { max-width: 17ch; }
+.ml-hero .feat-copy .lead { max-width: 60ch; }
+.ml-hero .cta { margin-top: 30px; }
+
+/* ===== ALL LOCATIONS INDEX (hero diorama, modeled on .adwin) =============== */
+/* status-pill tabs w/ live counts (uses shared .fpills/.fpill from _standard.css) */
+.mldash { padding: 0; }
+.mldash .lbar { display: flex; align-items: center; gap: 10px; padding: 11px 16px 4px; flex-wrap: wrap; }
+.mldash .lbar .find { margin-left: auto; font-family: var(--sg-mono); font-size: 10.5px; color: var(--sg-ink-faint); padding: 7px 13px; border: 1px solid var(--sg-line); border-radius: 8px; background: #fff; min-width: 150px; }
+
+/* bulk Action-For-Selected + Apply bar */
+.mldash .bulk { display: flex; align-items: center; gap: 9px; padding: 9px 16px; border-bottom: 1px solid var(--sg-line); background: var(--sg-bg-2); }
+.mldash .bulk .sel { font-family: var(--sg-mono); font-size: 10.5px; color: var(--sg-ink-faint); padding: 7px 12px; border: 1px solid var(--sg-line); border-radius: 8px; background: #fff; }
+.mldash .bulk .ap { font-family: var(--sg-font); font-size: 10.5px; font-weight: 700; color: var(--sg-ink-soft); padding: 7px 13px; border: 1px solid var(--sg-line); border-radius: 8px; background: #fff; }
+.mldash .bulk .ct { margin-left: auto; font-family: var(--sg-mono); font-size: 9.5px; color: var(--sg-ink-faint); }
+
+/* 6-col table: checkbox | Name+address | # ID: | integration pill | row-actions */
+.mldash .lhead, .mldash .lrow { display: grid; grid-template-columns: 22px 1.9fr 1fr .7fr auto; gap: 12px; align-items: center; padding: 12px 16px; }
+.mldash .lhead { font-family: var(--sg-mono); font-size: 8.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--sg-ink-faint); border-bottom: 1px solid var(--sg-line); }
+.mldash .lrow { border-bottom: 1px solid var(--sg-line-2); font-size: 12.5px; }
+.mldash .lrow:last-child { border-bottom: 0; }
+.mldash .ckbox { width: 14px; height: 14px; border-radius: 4px; border: 1.5px solid var(--sg-line); background: #fff; }
+.mldash .lhead .ckbox { border-color: var(--sg-ink-faint); }
+.mldash .lrow.cur .ckbox { background: var(--sg-grad-red); border-color: transparent; box-shadow: var(--sg-shadow-red); }
+.mldash .lrow .who { font-weight: 700; color: var(--sg-ink); }
+.mldash .lrow .who small { display: block; font-weight: 500; font-family: var(--sg-mono); font-size: 10px; color: var(--sg-ink-faint); margin-top: 2px; }
+.mldash .lrow .lid { font-family: var(--sg-mono); font-size: 10px; color: var(--sg-ink-faint); }
+.mldash .lrow .ext { font-family: var(--sg-mono); font-size: 9px; padding: 3px 9px; border-radius: 999px; background: var(--sg-bg-2); color: var(--sg-ink-soft); border: 1px solid var(--sg-line); justify-self: start; white-space: nowrap; display: inline-flex; align-items: center; gap: 6px; }
+.mldash .lrow .ext::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--sg-grad-red); flex: none; }
+.mldash .lrow .acts { display: inline-flex; gap: 7px; justify-self: end; }
+.mldash .lrow .acts .ed { font-family: var(--sg-font); font-size: 10.5px; font-weight: 700; color: #fff; padding: 6px 12px; border-radius: 8px; background: var(--sg-grad-red); box-shadow: var(--sg-shadow-red); white-space: nowrap; }
+.mldash .lrow .acts .tr { font-family: var(--sg-font); font-size: 10.5px; font-weight: 700; color: var(--sg-ink-faint); padding: 6px 11px; border-radius: 8px; border: 1px solid var(--sg-line); background: #fff; white-space: nowrap; }
+.mldash .lrow.cur { background: var(--sg-red-soft); }
+.mldash .lrow.cur .acts .ed { background: #fff; color: var(--sg-red-deep); border: 1px solid var(--sg-red-tint-22); box-shadow: none; }
+
+/* ===== RICH LOCATION MANAGE FORM (3-card record, modeled on .adwin) ======== */
+/* General Information (structured address + Mon-Sun Hours matrix) + Additional
+ Details (hero image + gallery + shop URL) + GMB Attributes checkbox grid +
+ publish/draft status rail. Card-traced, ILLUSTRATIVE. (brief 3.2) */
+.mlrec { padding: 0; }
+.mlrec .recbody { padding: 16px; display: flex; flex-direction: column; gap: 14px; }
+.mlrec .rcard { border: 1px solid var(--sg-line); border-radius: 12px; overflow: hidden; }
+.mlrec .rcard > .rch { display: flex; align-items: center; justify-content: space-between; padding: 11px 14px; border-bottom: 1px solid var(--sg-line); background: var(--sg-bg-2); }
+.mlrec .rcard > .rch .ct { font-family: var(--sg-mono); font-size: 9.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--sg-red-deep); }
+.mlrec .rcard > .rch .pub { font-family: var(--sg-font); font-size: 9px; font-weight: 700; padding: 3px 9px; border-radius: 999px; background: #e7f7ee; color: #1c7a45; }
+.mlrec .rcard .rcbody { padding: 13px; display: flex; flex-direction: column; gap: 10px; }
+
+/* a labelled field (lab over filled value bar / value text) */
+.mlrec .fld { border: 1px solid var(--sg-line); border-radius: 9px; padding: 9px 12px; }
+.mlrec .fld.active { border-color: var(--sg-red); box-shadow: 0 0 0 3px var(--sg-red-soft); }
+.mlrec .fld .lab { font-family: var(--sg-mono); font-size: 8.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--sg-ink-faint); }
+.mlrec .fld .vv { font-weight: 600; font-size: 12px; color: var(--sg-ink); margin-top: 4px; }
+/* structured-address grid: street full-width, then city/state/zip/country */
+.mlrec .addr { display: grid; grid-template-columns: 1.2fr .8fr .6fr 1fr; gap: 8px; }
+.mlrec .addr .fld.st { grid-column: 1 / -1; }
+
+/* Mon-Sun Hours-of-Operation matrix (7 rows x day + open + close) */
+.mlrec .hours { border: 1px solid var(--sg-line); border-radius: 9px; overflow: hidden; }
+.mlrec .hours .hh { display: grid; grid-template-columns: 64px 1fr 1fr; gap: 8px; padding: 8px 12px; font-family: var(--sg-mono); font-size: 8px; letter-spacing: .1em; text-transform: uppercase; color: var(--sg-ink-faint); background: var(--sg-bg-2); border-bottom: 1px solid var(--sg-line); }
+.mlrec .hours .hrow { display: grid; grid-template-columns: 64px 1fr 1fr; gap: 8px; align-items: center; padding: 7px 12px; border-bottom: 1px solid var(--sg-line-2); font-size: 11px; }
+.mlrec .hours .hrow:last-child { border-bottom: 0; }
+.mlrec .hours .hrow .dy { font-weight: 700; color: var(--sg-ink); }
+.mlrec .hours .hrow .tm { font-family: var(--sg-mono); font-size: 10.5px; color: var(--sg-ink-soft); padding: 5px 9px; border: 1px solid var(--sg-line); border-radius: 7px; background: #fff; }
+.mlrec .hours .hrow.closed .tm { color: var(--sg-ink-faint); background: var(--sg-bg-2); }
+
+/* Additional Details: hero image + gallery thumbs + shop URL */
+.mlrec .media { display: flex; gap: 9px; align-items: stretch; }
+.mlrec .media .hero { flex: 1.4; min-height: 64px; border-radius: 8px; background: linear-gradient(150deg,#f2efe9,#e5e0d6); border: 1px solid var(--sg-line); position: relative; }
+.mlrec .media .hero::after { content: "Hero image"; position: absolute; left: 9px; bottom: 7px; font-family: var(--sg-mono); font-size: 8.5px; color: var(--sg-ink-faint); }
+.mlrec .media .gal { flex: 1; display: grid; grid-template-columns: repeat(3,1fr); gap: 6px; }
+.mlrec .media .gal i { border-radius: 6px; background: linear-gradient(150deg,#f2efe9,#e8e3d9); border: 1px solid var(--sg-line); aspect-ratio: 1; }
+
+/* GMB Attributes checkbox grid */
+.mlrec .gmb { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
+.mlrec .gmb .at { display: inline-flex; align-items: center; gap: 8px; font-size: 11px; color: var(--sg-ink-soft); padding: 7px 10px; border: 1px solid var(--sg-line); border-radius: 8px; }
+.mlrec .gmb .at .bx { width: 13px; height: 13px; border-radius: 4px; border: 1.5px solid var(--sg-line); flex: none; }
+.mlrec .gmb .at.on { color: var(--sg-ink); border-color: var(--sg-red-tint-22); }
+.mlrec .gmb .at.on .bx { background: var(--sg-grad-red); border-color: transparent; box-shadow: var(--sg-shadow-red); }
+
+/* ===== LOCATION SELECTOR (public picker two-state) ========================= */
+.mlsel { padding: 0; }
+.mlsel .selbody { padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+.mlsel .seltitle { font-weight: 900; font-size: 16px; letter-spacing: -.02em; color: var(--sg-ink); }
+.mlsel .selsearch { font-family: var(--sg-mono); font-size: 11px; color: var(--sg-ink-faint); padding: 10px 13px; border: 1px solid var(--sg-line); border-radius: 9px; background: var(--sg-bg-2); }
+.mlsel .selopt { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 14px; border: 1px solid var(--sg-line); border-radius: 10px; }
+.mlsel .selopt.on { border-color: var(--sg-red); box-shadow: 0 0 0 3px var(--sg-red-soft); background: var(--sg-red-soft); }
+.mlsel .selopt .sn { font-weight: 700; font-size: 13px; color: var(--sg-ink); }
+.mlsel .selopt .sn small { display: block; font-weight: 500; font-family: var(--sg-mono); font-size: 9.5px; color: var(--sg-ink-faint); margin-top: 2px; }
+.mlsel .selopt .sh { font-family: var(--sg-mono); font-size: 10px; color: #1c7a45; text-align: right; white-space: nowrap; }
+.mlsel .selopt .sh i { font-style: normal; color: var(--sg-ink-faint); }
+.mlsel .selnote { font-family: var(--sg-mono); font-size: 10px; color: var(--sg-ink-faint); text-align: center; padding-top: 4px; }
+
+/* persisted "Viewing:" state (the second state of the two-state) */
+.mlsel .vstate { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 2px; padding: 13px 14px; border-radius: 10px; background: var(--sg-red-soft); }
+.mlsel .vstate .l { display: inline-flex; align-items: center; gap: 9px; font-weight: 700; font-size: 12.5px; color: var(--sg-red-deep); }
+.mlsel .vstate .l .d { width: 9px; height: 9px; border-radius: 50%; background: var(--sg-red); box-shadow: 0 0 8px rgba(213,21,34,.5); flex: none; }
+.mlsel .vstate .ch { font-family: var(--sg-font); font-size: 10.5px; font-weight: 700; color: var(--sg-red-deep); padding: 6px 12px; border-radius: 8px; background: #fff; border: 1px solid var(--sg-red-tint-22); white-space: nowrap; }
+
+/* ===== PER-PAGE SEO / SCHEMA strip (real-capture-grade credibility anchor) == */
+/* SEO Manager row + Schema Editor (page / Schema Type / Custom JSON-LD) +
+ a LocalBusiness JSON-LD snippet. "Edit structured data per page," NOT
+ "validated rich results." LocalBusiness JSON-LD from General Settings IS
+ emitted (safe to show in source). (brief 3.4 + 5.A.4) */
+.mlseo { padding: 0; }
+.mlseo .seobody { padding: 16px; display: flex; flex-direction: column; gap: 11px; }
+.mlseo .seorow { display: grid; grid-template-columns: 1.2fr .9fr; gap: 9px; }
+.mlseo .fld { border: 1px solid var(--sg-line); border-radius: 9px; padding: 9px 12px; }
+.mlseo .fld.active { border-color: var(--sg-red); box-shadow: 0 0 0 3px var(--sg-red-soft); }
+.mlseo .fld .lab { font-family: var(--sg-mono); font-size: 8.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--sg-ink-faint); }
+.mlseo .fld .vv { font-weight: 600; font-size: 11.5px; color: var(--sg-ink); margin-top: 4px; }
+.mlseo .fld .vv.mono { font-family: var(--sg-mono); font-weight: 500; }
+/* code snippet (LocalBusiness JSON-LD) */
+.mlseo .code { border-radius: 9px; overflow: hidden; border: 1px solid #2a2a30; background: #1b1b20; }
+.mlseo .code .cbar { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-bottom: 1px solid #2a2a30; }
+.mlseo .code .cbar .lb { font-family: var(--sg-mono); font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.5); }
+.mlseo .code .cbar .pill { margin-left: auto; font-family: var(--sg-mono); font-size: 8.5px; padding: 2px 8px; border-radius: 999px; background: rgba(213,21,34,.18); color: var(--sg-red-hot); }
+.mlseo .code pre { margin: 0; padding: 13px 14px; font-family: var(--sg-mono); font-size: 10px; line-height: 1.55; color: #cdd0d6; overflow-x: auto; }
+.mlseo .code pre .k { color: #8fb8ff; }
+.mlseo .code pre .s { color: #9ad0a4; }
+
+/* ---- ECOSYSTEM "what else" rail ------------------------------------------- */
+.ml-eco { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-top: 40px; }
+.ml-eco .ec { padding: 24px; border-radius: var(--sg-r-lg); border: 1px solid var(--sg-line); background: var(--sg-card-bg); }
+.surface-dark .ml-eco .ec { box-shadow: var(--sg-glass-inset); }
+.ml-eco .ec .ek { font-family: var(--sg-mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--sg-red-deep); }
+.surface-dark .ml-eco .ec .ek { color: var(--sg-red-hot); }
+.ml-eco .ec h3 { margin: 10px 0 8px; }
+
+/* ---- ROLES explainer (3 fixed roles, governance honesty) ------------------ */
+.ml-roles { padding: 0; }
+.ml-roles .rl { display: flex; flex-direction: column; }
+.ml-roles .rrow { display: grid; grid-template-columns: 0.85fr 1.7fr; gap: 14px; align-items: baseline; padding: 16px; border-bottom: 1px solid var(--sg-line-2); }
+.ml-roles .rrow:last-child { border-bottom: 0; }
+.ml-roles .rrow .rname { font-weight: 800; font-size: 14px; letter-spacing: -.01em; color: var(--sg-ink); position: relative; padding-left: 16px; }
+.ml-roles .rrow .rname::before { content: ""; position: absolute; left: 0; top: 6px; width: 8px; height: 8px; border-radius: 3px; background: var(--sg-grad-red); box-shadow: var(--sg-shadow-red); }
+.ml-roles .rrow .rdesc { font-size: 12.5px; line-height: 1.5; color: var(--sg-ink-soft); }
+
+/* ---- DUPLICATE / JSON portability mini-surface ---------------------------- */
+.ml-dup { padding: 0; }
+.ml-dup .dupbody { padding: 16px; display: flex; flex-direction: column; gap: 9px; }
+.ml-dup .dsrc { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; border-radius: 10px; background: var(--sg-red-soft); }
+.ml-dup .dsrc .cl { font-family: var(--sg-mono); font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: var(--sg-red-deep); }
+.ml-dup .dsrc .cv { font-weight: 700; font-size: 12.5px; color: var(--sg-red-deep); }
+.ml-dup .darrow { font-family: var(--sg-mono); font-size: 9px; letter-spacing: .14em; text-transform: uppercase; color: var(--sg-ink-faint); text-align: center; padding: 1px 0; }
+.ml-dup .dfield { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 11px 13px; border: 1px solid var(--sg-line); border-radius: 9px; }
+.ml-dup .dfield:first-of-type { border-color: var(--sg-red); box-shadow: 0 0 0 3px var(--sg-red-soft); }
+.ml-dup .dfield .cf { font-family: var(--sg-mono); font-size: 9.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--sg-ink-faint); }
+.ml-dup .dfield .cinp { font-weight: 600; font-size: 12.5px; color: var(--sg-ink); }
+.ml-dup .dports { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 3px; }
+.ml-dup .dports .pc { display: inline-flex; align-items: center; gap: 7px; font-family: var(--sg-mono); font-size: 10px; color: var(--sg-ink); padding: 6px 11px; border: 1px solid var(--sg-red-tint-22); border-radius: 999px; }
+.ml-dup .dports .pc::before { content: ""; width: 11px; height: 11px; border-radius: 4px; background: var(--sg-grad-red); box-shadow: var(--sg-shadow-red); flex: none; }
+
+/* ---- PRICING-FIT row (3 plans, location-framed) --------------------------- */
+.ml-plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 36px; align-items: stretch; }
+.ml-plans .pl { display: flex; flex-direction: column; padding: 26px 24px; border-radius: var(--sg-r-lg); border: 1px solid var(--sg-line); background: var(--sg-card-bg); }
+.ml-plans .pl.featured { box-shadow: 0 0 0 1.5px var(--sg-red), var(--sg-shadow-2); }
+.surface-dark .ml-plans .pl { box-shadow: var(--sg-glass-inset); }
+.ml-plans .pl .pn { font-weight: 800; font-size: 17px; letter-spacing: -.02em; }
+.ml-plans .pl .ps { font-family: var(--sg-mono); font-size: 10.5px; color: var(--sg-ink-faint); margin-top: 4px; }
+.ml-plans .pl .pp { margin-top: 16px; font-weight: 900; font-size: 30px; letter-spacing: -.03em; line-height: 1; font-variant-numeric: tabular-nums; }
+.ml-plans .pl .pp small { font-family: var(--sg-mono); font-weight: 600; font-size: 11px; letter-spacing: 0; color: var(--sg-ink-faint); margin-left: 4px; }
+.ml-plans .pl .pm { font-family: var(--sg-mono); font-size: 10px; color: var(--sg-ink-faint); margin-top: 6px; }
+.ml-plans .pl .pf { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--sg-line); font-size: 13px; color: var(--sg-ink-soft); }
+.ml-plans .pl .badge { align-self: flex-start; font-family: var(--sg-mono); font-size: 9px; letter-spacing: .1em; text-transform: uppercase; padding: 3px 9px; border-radius: 999px; background: var(--sg-red-soft); color: var(--sg-red-deep); margin-bottom: 12px; }
+
+/* ---- close fine-print ------------------------------------------------------ */
+.ml-fine { font-family: var(--sg-mono); font-size: 12px; color: var(--sg-ink-faint); margin-top: 22px; }
+.surface-dark .ml-fine { color: rgba(255,255,255,.6); }
+
+/* ---- RESPONSIVE ----------------------------------------------------------- */
+@media (max-width: 900px) {
+ .ml-eco { grid-template-columns: 1fr; }
+ .ml-plans { grid-template-columns: 1fr; }
+ .mlseo .seorow { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+ .mldash .lhead { display: none; }
+ .mldash .lrow { grid-template-columns: 1fr auto; row-gap: 4px; }
+ .mldash .lrow .ckbox { display: none; }
+ .mldash .lrow .lid { display: none; }
+ .mldash .lrow .ext { grid-column: 1; }
+ .mldash .lrow .acts { grid-row: 1 / span 2; }
+ .mlsel .selopt { flex-direction: column; align-items: flex-start; gap: 4px; }
+ .mlsel .selopt .sh { text-align: left; }
+ .mlrec .addr { grid-template-columns: 1fr 1fr; }
+ .mlrec .media { flex-direction: column; }
+ .mlrec .gmb { grid-template-columns: 1fr; }
+ .ml-roles .rrow { grid-template-columns: 1fr; gap: 6px; }
+}

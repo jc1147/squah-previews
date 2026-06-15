@@ -1,0 +1,123 @@
+/* ============================================================================
+ backups.css - BESPOKE FLAGSHIP SIGNATURE for /backups.
+ Crafted-CSS replicas of the real Migration / Backups admin (light canvas,
+ red accent), grounded in _depth-library/backups.FINAL.md. No stock.
+ Surfaces: the Backups list table (signature screen) with per-row
+ Restore / Rename / Delete, the inline-rename state, the bulk-delete
+ confirmation, the "+ Create a Backup" action + .sgen archive anatomy,
+ and the in-progress (async Cloud Run) banner. All var(--sg-*).
+ HONESTY: no Download button, no self-serve Import/restore-from-file screen,
+ no scheduled/off-site claims. Restore is framed platform-assisted.
+ ============================================================================ */
+@import "_standard.css";
+
+/* ---- HERO ----------------------------------------------------------------- */
+.b-hero { padding-block: 9vh var(--sg-pad); }
+.b-hero .lede { max-width: 980px; }
+.b-hero h1 { margin-top: 16px; }
+.b-hero .lead { margin-top: 22px; max-width: 66ch; }
+.b-hero .beat { margin-top: 16px; max-width: 72ch; color: var(--sg-ink-soft); }
+.b-hero .cta { margin-top: 30px; }
+.b-hero .stage { margin-top: 52px; }
+
+/* ===== shared light admin window (the real sg-admin is white + red accent) == */
+.adwin { border-radius: 16px; overflow: hidden; background: #fff; border: 1px solid var(--sg-line); box-shadow: var(--sg-shadow);
+ --sg-ink: #1A1A1A; --sg-ink-soft: #5b5853; --sg-ink-faint: #868279;
+ --sg-line: #ECEAE5; --sg-line-2: #f0eeea; --sg-bg-2: #f9f9f9; --sg-red-soft: #fff1f1;
+ --sg-card-bg: #fff; --sg-card-border: #ECEAE5; }
+.surface-dark .adwin { box-shadow: var(--sg-shadow-cinematic); }
+
+/* ===== BACKUPS LIST panel (the hero / signature screen) ===================== */
+/* breadcrumb + page header inside the admin window */
+.bcrumb { font-family: var(--sg-mono); font-size: 10px; letter-spacing: .04em; color: var(--sg-ink-faint); padding: 13px 18px 0; }
+.bcrumb b { color: var(--sg-ink-soft); font-weight: 600; }
+.bhead { display: flex; align-items: center; gap: 13px; padding: 10px 18px 16px; border-bottom: 1px solid var(--sg-line); }
+.bhead .hi { width: 34px; height: 34px; border-radius: 10px; background: var(--sg-grad-red); box-shadow: var(--sg-shadow-red); flex: none; position: relative; }
+.bhead .hi::after { content: ""; position: absolute; inset: 9px; border: 2px solid #fff; border-radius: 50%; border-top-color: transparent; }
+.bhead h4 { font-size: 19px; font-weight: 900; letter-spacing: -.02em; color: var(--sg-ink); }
+.bhead .create { margin-left: auto; font-family: var(--sg-font); font-size: 12.5px; font-weight: 800; color: #fff; padding: 10px 15px; border-radius: 9px; background: var(--sg-grad-red); box-shadow: var(--sg-shadow-red); white-space: nowrap; display: inline-flex; align-items: center; gap: 7px; }
+.bhead .create .pl { font-family: var(--sg-mono); font-size: 14px; line-height: 1; }
+
+/* in-progress async banner (Cloud Run job) */
+.bbanner { display: flex; align-items: center; gap: 11px; margin: 14px 18px 0; padding: 11px 14px; border-radius: 10px; background: var(--sg-red-soft); border: 1px solid var(--sg-red-tint-22); }
+.bbanner .spin { width: 15px; height: 15px; border-radius: 50%; border: 2px solid var(--sg-red-tint-22); border-top-color: var(--sg-red); flex: none; }
+.bbanner .bt { font-size: 12px; color: var(--sg-red-deep); font-weight: 600; }
+
+/* toolbar: bulk action + apply + search */
+.bctrl { display: flex; align-items: center; gap: 10px; padding: 14px 18px 12px; flex-wrap: wrap; }
+.bctrl .sel { font-family: var(--sg-mono); font-size: 11px; color: var(--sg-ink-faint); padding: 8px 12px; border: 1px solid var(--sg-line); border-radius: 8px; background: var(--sg-bg-2); }
+.bctrl .ap { font-family: var(--sg-font); font-size: 11px; font-weight: 700; color: #fff; padding: 8px 13px; border-radius: 8px; background: var(--sg-grad-red); box-shadow: var(--sg-shadow-red); }
+.bctrl .srch { margin-left: auto; font-family: var(--sg-mono); font-size: 11px; color: var(--sg-ink-faint); padding: 8px 13px; border: 1px solid var(--sg-line); border-radius: 8px; min-width: 160px; }
+
+/* the table (checkbox / Filename / Size / Date Created / Actions) */
+.btab .th, .btab .tr { display: grid; grid-template-columns: 26px 2fr .7fr 1fr 1.5fr; gap: 12px; align-items: center; padding: 13px 18px; }
+.btab .th { font-family: var(--sg-mono); font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: var(--sg-ink-faint); border-bottom: 1px solid var(--sg-line); }
+.btab .tr { border-bottom: 1px solid var(--sg-line-2); font-size: 13px; }
+.btab .tr:last-child { border-bottom: 0; }
+.btab .tr.sel { background: var(--sg-red-soft); }
+.btab .cb { width: 16px; height: 16px; border-radius: 4px; border: 1.5px solid var(--sg-line); background: #fff; }
+.btab .tr.sel .cb { background: var(--sg-grad-red); border-color: transparent; position: relative; }
+.btab .tr.sel .cb::after { content: ""; position: absolute; left: 5px; top: 2px; width: 4px; height: 8px; border: solid #fff; border-width: 0 2px 2px 0; transform: rotate(42deg); }
+.btab .fn { font-family: var(--sg-mono); font-size: 12px; color: var(--sg-ink); font-weight: 600; word-break: break-all; }
+.btab .sz { font-variant-numeric: tabular-nums; color: var(--sg-ink-soft); font-weight: 600; }
+.btab .dt { font-family: var(--sg-mono); font-size: 11px; color: var(--sg-ink-faint); }
+/* per-row action chips: Restore (green) / Rename / Delete (red) */
+.btab .acts { display: flex; gap: 6px; flex-wrap: wrap; justify-self: start; }
+.btab .ac { font-family: var(--sg-mono); font-size: 10px; font-weight: 600; padding: 5px 10px; border-radius: 7px; border: 1px solid var(--sg-line); color: var(--sg-ink-soft); background: #fff; }
+.btab .ac.restore { color: #1c7a45; border-color: #bfe6cf; background: #effbf4; }
+.btab .ac.del { color: var(--sg-red-deep); border-color: var(--sg-red-tint-22); background: var(--sg-red-soft); }
+/* inline-rename row state */
+.btab .rename { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; }
+.btab .rename .ri { border: 1.5px solid var(--sg-red); border-radius: 7px; padding: 6px 10px; font-family: var(--sg-mono); font-size: 12px; color: var(--sg-ink); background: #fff; box-shadow: 0 0 0 3px var(--sg-red-soft); }
+.btab .rename .hint { font-size: 10px; color: var(--sg-ink-faint); }
+.btab .rename .cancel { font-family: var(--sg-mono); font-size: 10px; color: var(--sg-ink-faint); border: 1px solid var(--sg-line); padding: 5px 9px; border-radius: 7px; }
+/* bulk confirmation footer */
+.bconf { display: flex; align-items: center; gap: 9px; padding: 11px 18px; border-top: 1px solid var(--sg-line); background: #effbf4; font-size: 12px; color: #1c7a45; font-weight: 600; }
+.bconf .dot { width: 7px; height: 7px; border-radius: 50%; background: #1c7a45; flex: none; }
+/* footer pager */
+.bpage { display: flex; align-items: center; gap: 6px; padding: 12px 18px; border-top: 1px solid var(--sg-line); }
+.bpage .pg { font-family: var(--sg-mono); font-size: 11px; color: var(--sg-ink-faint); width: 26px; height: 26px; display: grid; place-items: center; border-radius: 7px; border: 1px solid var(--sg-line); }
+.bpage .pg.on { background: var(--sg-grad-red); color: #fff; border-color: transparent; }
+.bpage .cnt { margin-left: auto; font-family: var(--sg-mono); font-size: 10px; color: var(--sg-ink-faint); }
+
+/* ===== ARCHIVE ANATOMY (what a .sgen file bundles) ========================= */
+.barch { padding: 18px; }
+.barch .file { display: flex; align-items: center; gap: 13px; padding: 14px 16px; border: 1px solid var(--sg-line); border-radius: 12px; background: var(--sg-bg-2); margin-bottom: 14px; }
+.barch .file .glyph { width: 40px; height: 46px; border-radius: 6px; background: linear-gradient(160deg,#fff,#f1eee9); border: 1px solid var(--sg-line); position: relative; flex: none; box-shadow: var(--sg-shadow-2); }
+.barch .file .glyph::before { content: ""; position: absolute; top: 0; right: 0; border-width: 0 11px 11px 0; border-style: solid; border-color: var(--sg-line) #fff #fff var(--sg-line); }
+.barch .file .glyph::after { content: ".sgen"; position: absolute; bottom: 6px; left: 0; right: 0; text-align: center; font-family: var(--sg-mono); font-size: 8px; font-weight: 800; color: var(--sg-red); letter-spacing: .02em; }
+.barch .file .meta .nm { font-family: var(--sg-mono); font-size: 12px; font-weight: 700; color: var(--sg-ink); word-break: break-all; }
+.barch .file .meta .sub { font-family: var(--sg-mono); font-size: 10px; color: var(--sg-ink-faint); margin-top: 3px; }
+.barch .parts { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
+.barch .part { display: flex; align-items: center; gap: 11px; padding: 12px 14px; border: 1px solid var(--sg-line); border-radius: 10px; }
+.barch .part .pic { width: 30px; height: 30px; border-radius: 8px; background: var(--sg-grad-red); display: grid; place-items: center; font-family: var(--sg-mono); font-weight: 800; font-size: 12px; color: #fff; flex: none; }
+.barch .part .pn { font-weight: 700; font-size: 12.5px; color: var(--sg-ink); }
+.barch .part .pd { font-family: var(--sg-mono); font-size: 9.5px; color: var(--sg-ink-faint); margin-top: 1px; }
+
+/* ===== generic "replaces" chips reused from _standard, plus a wedge list ==== */
+.bwedge { display: flex; flex-direction: column; gap: 9px; }
+.bwline { display: flex; align-items: center; gap: 12px; padding: 12px 15px; border: 1px solid var(--sg-line); border-radius: 11px; }
+.bwline .pic { width: 34px; height: 34px; border-radius: 9px; display: grid; place-items: center; font-family: var(--sg-mono); font-weight: 800; font-size: 13px; color: #fff; background: var(--sg-grad-red); flex: none; }
+.bwline .bi { flex: 1; }
+.bwline .bn { font-weight: 700; font-size: 13px; color: var(--sg-ink); }
+.bwline .bm { font-family: var(--sg-mono); font-size: 10px; color: var(--sg-ink-faint); margin-top: 2px; }
+.bwline .pill { font-family: var(--sg-mono); font-size: 9px; padding: 3px 9px; border-radius: 5px; }
+.bwline .pill.on { background: #e7f7ee; color: #1c7a45; }
+
+/* ---- CLOSE --------------------------------------------------------------- */
+.b-close { text-align: center; }
+.b-close .related { display: flex; flex-wrap: wrap; gap: 14px 26px; justify-content: center; margin-top: 28px; }
+.b-close .related a { font-family: var(--sg-mono); font-size: 12px; color: var(--sg-ink); border-bottom: 1px solid var(--sg-red-tint-22); padding-bottom: 2px; }
+.b-close .related a:hover { color: var(--sg-red-hot); }
+.b-close .fine { font-family: var(--sg-mono); font-size: 12px; color: var(--sg-ink-faint); margin-top: 22px; }
+
+/* ---- RESPONSIVE ---------------------------------------------------------- */
+@media (max-width: 900px) {
+ .barch .parts { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+ .btab .th { display: none; }
+ .btab .tr { grid-template-columns: 22px 1fr; row-gap: 4px; }
+ .btab .sz, .btab .dt { display: none; }
+ .btab .acts { grid-column: 2; }
+}

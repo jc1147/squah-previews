@@ -1,0 +1,111 @@
+/* ============================================================================
+ solutions-healthcare.css - TYPE-E PERSONA SIGNATURE for /solutions/healthcare.
+ Forked from solutions-agencies.css (the flagship template). Crafted-CSS product
+ surfaces that sell the REAL, LIVE posture a clinic needs, framed HONESTLY:
+ (1) Consent record (hero): a single defensible per-session consent card, the
+ "when counsel asks, you have it" money shot. Read-only evidence framing.
+ (2) Action log (capability deep-dive): an evidence trail the platform WRITES,
+ who-did-what-and-when. A minimal event list, NOT a browsable/filterable
+ audit-log VIEWER (no viewer UI is verified, brief 5/AUDIT-VIEWER): no filter
+ chips, no Export button, no custom roles (Administrator/Editor/Customer only).
+ (3) Accessibility menu + preview (capability deep-dive): the FOUR verified
+ preferences (high contrast, larger text, reduce motion, underline links).
+ ALL surfaces use the shared .adwin admin atom (white card, red accent, light-token
+ re-assert) from _standard.css. ⚠OWNER HONESTY: NO HIPAA cert claim, NO BAA claim,
+ NO certification badges anywhere, NO "secure/hardened" superlative, NO audit-log
+ VIEWER. var(--sg-*).
+ ============================================================================ */
+@import "_standard.css";
+
+/* ---- HERO ------------------------------------------------------------------ */
+.hc-hero { padding-block: 8vh var(--sg-pad); }
+.hc-hero .feat-copy h1 { max-width: 15ch; }
+.hc-hero .feat-copy .lead { max-width: 60ch; }
+.hc-hero .cta { margin-top: 30px; }
+
+/* ===== CONSENT RECORD (hero surface, modeled on .adwin) ===================== */
+.hcconsent { padding: 0; }
+.hcconsent .hccap { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--sg-line); background: var(--sg-red-soft); }
+.hcconsent .hccap .cs { display: inline-flex; align-items: center; gap: 9px; font-weight: 700; font-size: 12.5px; color: var(--sg-red-deep); }
+.hcconsent .hccap .cs .d { width: 9px; height: 9px; border-radius: 50%; flex: none; }
+.hcconsent .hccap .cs .d.ok { background: #2fae6a; box-shadow: 0 0 8px rgba(47,174,106,.5); }
+.hcconsent .hccap .key { font-family: var(--sg-mono); font-size: 10px; color: var(--sg-red-deep); }
+
+/* the record rows: label | value (+ secondary small) */
+.hcconsent .hcrec { padding: 4px 16px 6px; }
+.hcconsent .hcrec .r { display: grid; grid-template-columns: .9fr 1.4fr; gap: 12px; align-items: baseline; padding: 11px 0; border-bottom: 1px solid var(--sg-line-2); }
+.hcconsent .hcrec .r:last-child { border-bottom: 0; }
+.hcconsent .hcrec .r .k { font-family: var(--sg-mono); font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: var(--sg-ink-faint); }
+.hcconsent .hcrec .r .v { font-weight: 700; font-size: 12.5px; color: var(--sg-ink); }
+.hcconsent .hcrec .r .v small { display: block; font-family: var(--sg-mono); font-weight: 500; font-size: 10px; letter-spacing: 0; color: var(--sg-ink-faint); margin-top: 2px; }
+.hcconsent .hcnote { padding: 12px 16px 14px; border-top: 1px solid var(--sg-line); background: var(--sg-bg-2); font-size: 11.5px; line-height: 1.5; color: var(--sg-ink-soft); }
+
+/* ===== ACTION LOG (capability deep-dive) ===================================== */
+/* The platform WRITES an evidence trail. A minimal read-only event list:
+ NO filter chips, NO Export button, NO custom roles (it stages a viewer that is
+ not verified; brief 5/AUDIT-VIEWER). Each event = time | description | actor. */
+.hclog { padding: 0; }
+.hclog .hclognote { padding: 12px 16px; border-bottom: 1px solid var(--sg-line); background: var(--sg-bg-2); font-size: 11.5px; line-height: 1.5; color: var(--sg-ink-soft); }
+.hclog .hcevents { padding: 6px 16px 14px; }
+.hclog .ev { display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: baseline; padding: 11px 0; border-bottom: 1px solid var(--sg-line-2); }
+.hclog .ev:last-child { border-bottom: 0; }
+.hclog .ev .t { font-family: var(--sg-mono); font-size: 10px; color: var(--sg-ink-faint); font-variant-numeric: tabular-nums; }
+.hclog .ev .d { font-size: 12.5px; font-weight: 600; color: var(--sg-ink); }
+.hclog .ev .who { font-family: var(--sg-mono); font-size: 9.5px; letter-spacing: .03em; color: var(--sg-ink-faint); text-align: right; white-space: nowrap; }
+
+/* ===== ACCESSIBILITY MENU + PREVIEW (capability deep-dive) ================== */
+/* FOUR verified preferences: high contrast / larger text / reduce motion /
+ underline links (accessibility.content.html). Layout supports any number of .sr rows. */
+.hca11y { padding: 0; }
+.hca11y .hcswitch { padding: 14px 16px 4px; display: flex; flex-direction: column; }
+.hca11y .hcswitch .sr { display: flex; align-items: center; justify-content: space-between; padding: 11px 0; border-bottom: 1px solid var(--sg-line-2); }
+.hca11y .hcswitch .sr:last-child { border-bottom: 0; }
+.hca11y .hcswitch .sl { font-weight: 600; font-size: 13px; color: var(--sg-ink-soft); }
+.hca11y .hcswitch .sw { width: 38px; height: 22px; border-radius: 999px; background: var(--sg-line); position: relative; flex: none; }
+.hca11y .hcswitch .sw::after { content: ""; position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.15); transition: left .2s var(--sg-ease); }
+.hca11y .hcswitch .sw.on { background: var(--sg-grad-red); box-shadow: 0 0 12px rgba(213,21,34,.35); }
+.hca11y .hcswitch .sw.on::after { left: 19px; }
+
+/* high-contrast preview pane (shows the toggle's effect) */
+.hca11y .hcpv { margin: 14px 16px 16px; padding: 18px; border-radius: 12px; background: #111; display: flex; flex-direction: column; gap: 12px; }
+.hca11y .hcpv .bk { height: 13px; border-radius: 4px; background: #fff; width: 100%; }
+.hca11y .hcpv .bk.w70 { width: 70%; }
+.hca11y .hcpv .cta-mini { align-self: flex-start; font-weight: 800; font-size: 13px; color: #111; background: #ffe14d; padding: 9px 14px; border-radius: 8px; margin-top: 2px; }
+.hca11y .hcpv .meta { font-family: var(--sg-mono); font-size: 9.5px; letter-spacing: .04em; color: rgba(255,255,255,.6); margin-top: 2px; }
+
+/* ---- ECOSYSTEM "what else" rail (forked from .ag-eco) ---------------------- */
+.hc-eco { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-top: 40px; }
+.hc-eco .ec { padding: 24px; border-radius: var(--sg-r-lg); border: 1px solid var(--sg-line); background: var(--sg-card-bg); }
+.surface-dark .hc-eco .ec { box-shadow: var(--sg-glass-inset); }
+.hc-eco .ec .ek { font-family: var(--sg-mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--sg-red-deep); }
+.surface-dark .hc-eco .ec .ek { color: var(--sg-red-hot); }
+.hc-eco .ec h3 { margin: 10px 0 8px; }
+
+/* ---- PRICING-FIT row (3 plans, clinic-framed; forked from .ag-plans) ------- */
+.hc-plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 36px; align-items: stretch; }
+.hc-plans .pl { display: flex; flex-direction: column; padding: 26px 24px; border-radius: var(--sg-r-lg); border: 1px solid var(--sg-line); background: var(--sg-card-bg); }
+.hc-plans .pl.featured { box-shadow: 0 0 0 1.5px var(--sg-red), var(--sg-shadow-2); }
+.surface-dark .hc-plans .pl { box-shadow: var(--sg-glass-inset); }
+.hc-plans .pl .pn { font-weight: 800; font-size: 17px; letter-spacing: -.02em; }
+.hc-plans .pl .ps { font-family: var(--sg-mono); font-size: 10.5px; color: var(--sg-ink-faint); margin-top: 4px; }
+.hc-plans .pl .pp { margin-top: 16px; font-weight: 900; font-size: 30px; letter-spacing: -.03em; line-height: 1; font-variant-numeric: tabular-nums; }
+.hc-plans .pl .pp small { font-family: var(--sg-mono); font-weight: 600; font-size: 11px; letter-spacing: 0; color: var(--sg-ink-faint); margin-left: 4px; }
+.hc-plans .pl .pm { font-family: var(--sg-mono); font-size: 10px; color: var(--sg-ink-faint); margin-top: 6px; }
+.hc-plans .pl .pf { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--sg-line); font-size: 13px; color: var(--sg-ink-soft); }
+.hc-plans .pl .badge { align-self: flex-start; font-family: var(--sg-mono); font-size: 9px; letter-spacing: .1em; text-transform: uppercase; padding: 3px 9px; border-radius: 999px; background: var(--sg-red-soft); color: var(--sg-red-deep); margin-bottom: 12px; }
+
+/* ---- close fine-print ------------------------------------------------------ */
+.hc-fine { font-family: var(--sg-mono); font-size: 12px; color: var(--sg-ink-faint); margin-top: 22px; }
+.surface-dark .hc-fine { color: rgba(255,255,255,.6); }
+
+/* ---- RESPONSIVE ----------------------------------------------------------- */
+@media (max-width: 900px) {
+ .hc-eco { grid-template-columns: 1fr; }
+ .hc-plans { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+ .hcconsent .hcrec .r { grid-template-columns: 1fr; gap: 3px; }
+ .hca11y .hcpv { padding: 15px; }
+ .hclog .ev { grid-template-columns: auto 1fr; row-gap: 3px; }
+ .hclog .ev .who { grid-column: 2; text-align: left; }
+}
