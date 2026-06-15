@@ -1,16 +1,16 @@
 /* ============================================================================
-   attributions.css — BESPOKE CEILING SIGNATURE for the /attribution flagship.
-   Cinematic dark + light product bands. Crafted real attribution surfaces (no
-   real screenshots, never the buggy analytics donut PT-001):
-     · .att-sessions  — phone-tap session list (hero anchor)
-     · .att-callout   — "third-party call-tracking invoices: 0"
-     · .att-sources   — source-attribution breakdown (6 buckets), real surface
-     · .att-session   — single-session event timeline (incl. a phone-tap event)
-     · .att-consent   — consent settings panel + consent audit log (two panels)
-   Reuses foundation tokens + structural + chrome. Pulls faq/card atoms from
-   _standard.css. ONE accent (red); source identity carried by labels, not a
-   rainbow. All var(--sg-*).
-   ============================================================================ */
+ attributions.css, BESPOKE CEILING SIGNATURE for the /attribution flagship.
+ Cinematic dark + light product bands. Crafted real attribution surfaces (no
+ real screenshots, never the buggy analytics donut PT-001):
+ · .att-sessions, phone-tap session list (hero anchor)
+ · .att-callout, "third-party call-tracking invoices: 0"
+ · .att-sources, source-attribution breakdown (6 buckets), real surface
+ · .att-session, single-session event timeline (incl. a phone-tap event)
+ · .att-consent, consent settings panel + consent audit log (two panels)
+ Reuses foundation tokens + structural + chrome. Pulls faq/card atoms from
+ _standard.css. ONE accent (red); source identity carried by labels, not a
+ rainbow. All var(--sg-*).
+ ============================================================================ */
 @import "_standard.css";
 
 /* ---- HERO ----------------------------------------------------------------- */
@@ -30,8 +30,10 @@
 .att-wb { display: flex; align-items: center; gap: 14px; padding: 12px 16px; background: rgba(255,255,255,.03); border-bottom: 1px solid rgba(255,255,255,.08); }
 .att-wb .lights { display: flex; gap: 7px; }
 .att-wb .lights i { width: 11px; height: 11px; border-radius: 50%; background: rgba(255,255,255,.16); }
-.att-wb .t { font-family: var(--sg-mono); font-size: 12px; color: var(--sg-ink-faint); }
-.att-wb .t b { color: var(--sg-ink); font-weight: 600; }
+/* .att-wb is the dark-glass title bar; pin light ink so the .att-win shell reads
+ on light sections (§4 retention panel) as well as the dark hero. */
+.att-wb .t { font-family: var(--sg-mono); font-size: 12px; color: #aaa7a1; }
+.att-wb .t b { color: #f2f0ec; font-weight: 600; }
 .att-wb .filter { margin-left: auto; font-family: var(--sg-mono); font-size: 11px; color: var(--sg-ink); padding: 7px 12px; border-radius: 8px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.10); display: inline-flex; gap: 9px; align-items: center; white-space: nowrap; }
 .att-wb .filter .cv { color: var(--sg-ink-faint); }
 
@@ -92,6 +94,25 @@
 .att-session .skey .k { font-family: var(--sg-mono); font-size: 12px; color: var(--sg-ink); }
 .att-session .skey .badge { font-family: var(--sg-mono); font-size: 9px; letter-spacing: .1em; text-transform: uppercase; padding: 4px 10px; border-radius: 999px; background: var(--sg-red); color: #fff; }
 
+/* ---- SESSION SUMMARY (fingerprint + 5 UTM badges; added 2026-06-04) ------ */
+/* These panels live inside the dark-glass .att-win shell (gradient #1b1b20→#141418),
+ which is NOT a .surface-dark context, so var(--sg-ink) would resolve to near-black
+ here and land cream/dark-on-dark. Scope to .att-win (covers both the .att-session
+ timeline panel AND the bare-.att-win retention panel in §4) and pin light ink
+ explicitly so the chips read on the dark glass regardless of the section surface. */
+.att-win .ssum { padding: 16px 22px; border-bottom: 1px solid rgba(255,255,255,.08); display: flex; flex-direction: column; gap: 12px; }
+.att-win .ssum .srow { display: flex; align-items: baseline; gap: 12px; }
+.att-win .ssum .srow .k { font-family: var(--sg-mono); font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: #c9c6c0; width: 58px; flex: none; padding-top: 4px; }
+.att-win .ssum .badges { display: flex; flex-wrap: wrap; gap: 6px; }
+.att-win .ssum .bdg { font-family: var(--sg-mono); font-size: 10px; padding: 4px 9px; border-radius: 6px; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.14); color: #f2f0ec; }
+.att-win .ssum .bdg.ip { color: #aaa7a1; }
+.att-win .ssum .bdg.utm { background: var(--sg-red-tint-08); border-color: var(--sg-red-tint-22); color: var(--sg-red-hot); }
+.ev .sc { font-family: var(--sg-mono); font-size: 9px; color: var(--sg-ink-faint); margin-left: 8px; padding: 2px 6px; border-radius: 4px; background: rgba(255,255,255,.05); }
+
+/* ---- RETENTION / PRIVACY surface (added 2026-06-04) ---------------------- */
+.priv { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: start; }
+@media (max-width: 760px) { .priv { grid-template-columns: 1fr; } }
+
 /* ---- CONSENT TWO-PANEL (light) ------------------------------------------- */
 .att-consent { display: grid; grid-template-columns: 1fr 1.18fr; gap: 18px; align-items: start; }
 .att-consent .link { grid-column: 1 / -1; text-align: center; font-family: var(--sg-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--sg-ink-faint); margin: 4px 0 0; }
@@ -120,17 +141,17 @@
 
 /* ---- RESPONSIVE ---------------------------------------------------------- */
 @media (max-width: 960px) {
-  .att-split { grid-template-columns: 1fr; }
-  .att-consent { grid-template-columns: 1fr; }
+ .att-split { grid-template-columns: 1fr; }
+ .att-consent { grid-template-columns: 1fr; }
 }
 @media (max-width: 640px) {
-  .att-sessions .hd { display: none; }
-  .att-sessions .rw { grid-template-columns: 1fr auto; gap: 6px 12px; row-gap: 4px; }
-  .att-sessions .rw .lp { grid-column: 1 / -1; }
-  .att-sessions .rw .pv, .att-sessions .rw .ts { display: none; }
-  .src-row { grid-template-columns: 1fr; gap: 7px; }
-  .src-row .ct { text-align: left; }
-  .clog .lrow { grid-template-columns: 1fr auto; row-gap: 4px; }
-  .clog .lrow .pg, .clog .lrow .tm { display: none; }
-  .clog .exp { grid-template-columns: 1fr; }
+ .att-sessions .hd { display: none; }
+ .att-sessions .rw { grid-template-columns: 1fr auto; gap: 6px 12px; row-gap: 4px; }
+ .att-sessions .rw .lp { grid-column: 1 / -1; }
+ .att-sessions .rw .pv, .att-sessions .rw .ts { display: none; }
+ .src-row { grid-template-columns: 1fr; gap: 7px; }
+ .src-row .ct { text-align: left; }
+ .clog .lrow { grid-template-columns: 1fr auto; row-gap: 4px; }
+ .clog .lrow .pg, .clog .lrow .tm { display: none; }
+ .clog .exp { grid-template-columns: 1fr; }
 }

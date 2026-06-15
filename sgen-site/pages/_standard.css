@@ -1,9 +1,9 @@
 /* ============================================================================
-   _standard.css — shared signature for STANDARD-tier pages (Type-D module,
-   Type-E solution, etc.). Light marketing canvas + ONE dark punctuation, the
-   floor-intensity component vocabulary. Loads on top of the foundation + chrome.
-   Many pages link THIS (not a per-page sheet). All var(--sg-*).
-   ============================================================================ */
+ _standard.css - shared signature for STANDARD-tier pages (Type-D module,
+ Type-E solution, etc.). Light marketing canvas + ONE dark punctuation, the
+ floor-intensity component vocabulary. Loads on top of the foundation + chrome.
+ Many pages link THIS (not a per-page sheet). All var(--sg-*).
+ ============================================================================ */
 
 /* hero (copy + product mock) */
 .std-hero { display:grid; grid-template-columns:1.08fr .92fr; align-items:center; gap:56px; padding-block:7vh var(--sg-pad); }
@@ -11,7 +11,7 @@
 .std-hero .lead { margin-top:20px; }
 .std-hero .cta { margin-top:30px; }
 
-/* clean light product mock (floor depth — not the cinematic canvas) */
+/* clean light product mock (floor depth, not the cinematic canvas) */
 .ui-mock { border-radius:var(--sg-r-lg); background:#fff; border:1px solid var(--sg-line); box-shadow:var(--sg-shadow); overflow:hidden; }
 .ui-bar { display:flex; align-items:center; gap:8px; padding:12px 16px; border-bottom:1px solid var(--sg-line); background:var(--sg-bg-2); }
 .ui-bar .d { width:9px; height:9px; border-radius:50%; background:#d8d4cd; }
@@ -66,13 +66,16 @@
 .faq-list .ans { padding:0 2px 22px; color:var(--sg-ink-soft); max-width:70ch; }
 
 @media (max-width:920px){
-  .std-hero, .feat { grid-template-columns:1fr; gap:40px; }
-  .feat.flip .feat-copy { order:0; }
-  .stat-band { grid-template-columns:1fr; gap:24px; }
-  .stat-band .s { border-left:0; padding:0; }
+ .std-hero, .std-hero.feat { grid-template-columns:1fr; gap:36px; }
+ .std-hero h1 { max-width:none; }
+ .std-hero .ui-mock { max-width:520px; }
+ .feat { grid-template-columns:1fr; gap:30px; }
+ .feat.flip .feat-copy { order:0; }
+ .stat-band { grid-template-columns:1fr; gap:24px; }
+ .stat-band .s { border-left:0; padding:0; }
 }
 
-/* ===== MODULE HERO MOCKS — accurate crafted UI per module (sit in .ui-mock shell) ===== */
+/* ===== MODULE HERO MOCKS: accurate crafted UI per module (sit in .ui-mock shell) ===== */
 /* SERP snippet (seo) */
 .mk-serp { padding:20px; display:flex; flex-direction:column; gap:16px; }
 .mk-serp .url { display:flex; align-items:center; gap:8px; font-size:12px; color:var(--sg-ink-faint); font-family:var(--sg-mono); }
@@ -148,7 +151,7 @@
 .mk-popup .modal .ef { display:flex; gap:8px; }
 .mk-popup .modal .ef .inp { flex:1; border:1px solid var(--sg-line); border-radius:8px; padding:11px; font-size:11px; color:var(--sg-ink-faint); }
 
-/* "replaces the stack" collapse — the replaces-section graphic (franken-stack -> one native module) */
+/* "replaces the stack" collapse: the replaces-section graphic (franken-stack -> one native module) */
 .mk-replaces { padding:24px; display:flex; flex-direction:column; gap:10px; width:100%; }
 .mk-replaces .old { display:flex; flex-direction:column; gap:8px; }
 .mk-replaces .p { display:flex; align-items:center; justify-content:space-between; padding:12px 15px; border:1px solid var(--sg-line); border-radius:10px; background:#fff; }
@@ -174,17 +177,18 @@
 /* report bar chart */
 .mk-chart { padding:20px; }
 .mk-chart .bars { display:flex; align-items:flex-end; gap:9px; height:130px; padding-bottom:8px; border-bottom:1px solid var(--sg-line); }
-.mk-chart .bars i { flex:1; border-radius:6px 6px 0 0; background:var(--sg-bg-2); }
+.mk-chart .bars i { flex:1; height:100%; border-radius:6px 6px 0 0; background:var(--sg-bg-2); }
 .mk-chart .bars i.hot { background:var(--sg-grad-red); box-shadow:var(--sg-shadow-red); }
+.mk-chart.up .bars i.hot { background:linear-gradient(180deg,#4ce592,#22b465); box-shadow:0 2px 12px rgba(40,192,109,.22); }  /* uptime = operational green (matches the status .ok dot) */
 .mk-chart .lg { display:flex; justify-content:space-between; margin-top:10px; font-family:var(--sg-mono); font-size:10px; letter-spacing:.06em; text-transform:uppercase; color:var(--sg-ink-faint); }
 /* settings editor: reuse .ui-field / .ui-toggle (already in this file) for field + toggle rows */
 .mk-editor { padding:18px; display:flex; flex-direction:column; gap:11px; }
 .mk-editor .cc { font-family:var(--sg-mono); font-size:9px; color:var(--sg-ink-faint); float:right; }
 
 /* ============================================================================
-   SHARED ATOMS for compare / solutions / customers / showcase / why-sgen pages
-   (added 2026-06-04 for the full-site build; dual-surface aware, all var(--sg-*))
-   ============================================================================ */
+ SHARED ATOMS for compare / solutions / customers / showcase / why-sgen pages
+ (added 2026-06-04 for the full-site build; dual-surface aware, all var(--sg-*))
+ ============================================================================ */
 
 /* head-to-head comparison table: feature | SGEN | competitor */
 .vs { width:100%; border-collapse:collapse; font-size:14px; border-radius:var(--sg-r-lg); overflow:hidden; box-shadow:var(--sg-shadow-rest); }
@@ -235,6 +239,79 @@
 
 /* comparison tables fit mobile width (fixed layout + wrap) instead of clipping */
 @media (max-width:680px){
-  .vs { table-layout:fixed; width:100%; font-size:12.5px; }
-  .vs th, .vs td { padding:10px 11px; word-break:break-word; overflow-wrap:anywhere; }
+ .vs { table-layout:fixed; width:100%; font-size:12.5px; }
+ .vs th, .vs td { padding:10px 11px; word-break:break-word; overflow-wrap:anywhere; }
 }
+
+/* ============================================================================
+ SHARED ADMIN-SURFACE atoms (promoted from forms.css 2026-06-04 flagship build).
+ Reusable crafted-CSS admin window for product dioramas on any module page.
+ CRITICAL: .adwin re-asserts the LIGHT-surface tokens so a white admin card
+ always reads with dark text, even inside a .surface-dark section (the
+ invisible-text bug). Use .adwin for every white admin product surface.
+ ============================================================================ */
+.adwin { border-radius:16px; overflow:hidden; background:#fff; border:1px solid var(--sg-line); box-shadow:var(--sg-shadow);
+ color:var(--sg-ink);
+ --sg-ink:#1A1A1A; --sg-ink-soft:#5b5853; --sg-ink-faint:#868279;
+ --sg-line:#ECEAE5; --sg-line-2:#f0eeea; --sg-bg-2:#f9f9f9; --sg-red-soft:#fff1f1;
+ --sg-card-bg:#fff; --sg-card-border:#ECEAE5; }
+.surface-dark .adwin { box-shadow:var(--sg-shadow-cinematic); }
+.adbar { display:flex; align-items:center; gap:12px; padding:11px 16px; border-bottom:1px solid var(--sg-line); background:var(--sg-bg-2); }
+.adbar .ic { width:24px; height:24px; border-radius:7px; background:var(--sg-grad-red); box-shadow:var(--sg-shadow-red); flex:none; }
+.adbar .ti { font-weight:800; font-size:14px; letter-spacing:-.01em; color:var(--sg-ink); }
+.adbar .ti small { display:block; font-weight:500; font-size:10.5px; color:var(--sg-ink-faint); letter-spacing:0; margin-top:1px; }
+.adbar .act { margin-left:auto; font-family:var(--sg-font); font-size:12px; font-weight:700; color:#fff; padding:8px 13px; border-radius:8px; background:var(--sg-grad-red); box-shadow:var(--sg-shadow-red); white-space:nowrap; }
+.adbar .act.ghost { background:#fff; color:var(--sg-ink-soft); border:1px solid var(--sg-line); box-shadow:none; }
+/* status-pill tabs (All / Published / ... with counts) */
+.fpills { display:flex; gap:6px; padding:13px 16px 4px; flex-wrap:wrap; }
+.fpill { display:inline-flex; align-items:center; gap:7px; font-size:12px; font-weight:600; color:var(--sg-ink-soft); padding:7px 12px; border-radius:999px; border:1px solid var(--sg-line); }
+.fpill b { font-family:var(--sg-mono); font-size:10px; padding:1px 6px; border-radius:999px; background:var(--sg-bg-2); color:var(--sg-ink-faint); }
+.fpill.on { background:var(--sg-red-soft); color:var(--sg-red-deep); border-color:transparent; }
+.fpill.on b { background:var(--sg-red); color:#fff; }
+/* shared charts: conic-gradient doughnut + crafted SVG line */
+.donut { width:124px; height:124px; border-radius:50%; margin:4px auto 14px;
+ -webkit-mask:radial-gradient(circle 38px at center, transparent 98%, #000 100%); mask:radial-gradient(circle 38px at center, transparent 98%, #000 100%); }
+.dleg { display:flex; flex-direction:column; gap:7px; }
+.dleg .dl { display:flex; align-items:center; gap:9px; font-size:11.5px; color:var(--sg-ink-soft); }
+.dleg .dl .sw { width:10px; height:10px; border-radius:3px; flex:none; }
+.dleg .dl b { margin-left:auto; font-family:var(--sg-mono); color:var(--sg-ink); }
+.lchart { position:relative; height:150px; border-left:1px solid var(--sg-line); border-bottom:1px solid var(--sg-line); }
+.lchart svg { position:absolute; inset:0; width:100%; height:100%; overflow:visible; }
+.chart-axis { display:flex; justify-content:space-between; margin-top:9px; font-family:var(--sg-mono); font-size:9px; color:var(--sg-ink-faint); }
+
+/* ============================================================================
+ DISCUSSIONS atoms (added 2026-06-04, Wave 1): moderation queue + public
+ threaded comments + star reviews. Reused by /discussions and the
+ reviews/comments cross-links on ecommerce, events, blog. All var(--sg-*).
+ ============================================================================ */
+/* shared avatar (initials) */
+.av { display:grid; place-items:center; border-radius:50%; color:#fff; font-weight:800; flex:none; background:var(--sg-grad-red); box-shadow:var(--sg-shadow-red); }
+.av.b1 { background:#3b4a73; box-shadow:none; } .av.b2 { background:#1f5c43; box-shadow:none; }
+.av.b3 { background:#7a2533; box-shadow:none; } .av.g { background:#c9c4bb; box-shadow:none; }
+/* star rating */
+.stars { display:inline-flex; gap:2px; }
+.stars i { width:12px; height:12px; background:var(--sg-grad-red); clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%); }
+.stars i.o { background:#dcd8d0; }
+.stars.sm i { width:10px; height:10px; }
+/* moderation queue list (admin surface) */
+.mk-modq { padding:4px 0; }
+.mk-modq .qrow { display:grid; grid-template-columns:auto 1fr auto; gap:13px; align-items:start; padding:13px 16px; border-bottom:1px solid var(--sg-line-2); }
+.mk-modq .qrow:last-child { border-bottom:0; }
+.mk-modq .qrow .av { width:30px; height:30px; font-size:11px; }
+.mk-modq .bd .who { font-weight:700; font-size:12.5px; display:flex; align-items:center; gap:9px; flex-wrap:wrap; }
+.mk-modq .bd .who .on { font-family:var(--sg-mono); font-size:9px; color:var(--sg-ink-faint); font-weight:400; }
+.mk-modq .bd .cm { font-size:12px; color:var(--sg-ink-soft); margin-top:3px; line-height:1.45; }
+.mk-modq .st { font-family:var(--sg-mono); font-size:9px; padding:3px 8px; border-radius:5px; align-self:center; white-space:nowrap; letter-spacing:.04em; }
+.mk-modq .st.ok { background:var(--sg-red-soft); color:var(--sg-red-deep); }
+.mk-modq .st.pend { background:#f6ead0; color:#7a5b00; }
+.mk-modq .st.spam { background:#26262c; color:#fff; }
+/* public threaded comments + reviews (front surface) */
+.mk-thread { padding:18px; display:flex; flex-direction:column; gap:15px; }
+.mk-cmt { display:grid; grid-template-columns:auto 1fr; gap:11px; }
+.mk-cmt.reply { margin-left:36px; }
+.mk-cmt .av { width:32px; height:32px; font-size:11px; }
+.mk-cmt .meta { display:flex; gap:9px; align-items:center; margin-bottom:5px; }
+.mk-cmt .meta b { color:var(--sg-ink); font-weight:700; font-size:13px; }
+.mk-cmt .meta .t { font-family:var(--sg-mono); font-size:10px; color:var(--sg-ink-faint); }
+.mk-cmt .body { font-size:13px; color:var(--sg-ink-soft); line-height:1.5; }
+.mk-cmt .rep { font-family:var(--sg-mono); font-size:10px; color:var(--sg-red); margin-top:7px; letter-spacing:.04em; }
