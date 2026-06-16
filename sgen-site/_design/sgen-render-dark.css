@@ -1,0 +1,411 @@
+/* SGEN unified dark render skin — promoted from the homepage px3 builder-canvas (na__index__r1).
+   Applied to every .adwin / .ui-mock product mock via the .rdark class. Generated 2026-06-15. */
+/* ============================================================================
+   UNIFIED DARK RENDER SKIN  (".rdark")  — promoted from the homepage px3
+   builder-canvas diorama (na__index__r1). Re-skins any white .adwin / .ui-mock
+   product mock to the dark premium surface. Token-driven: re-points the same
+   --sg-* vars .surface-dark uses, so every inner atom that reads a token flips
+   automatically. Specificity (0,2,0) beats base .adwin/.ui-mock. Leaves the
+   existing .adwin.dark variant (security) untouched.
+   ============================================================================ */
+.adwin.rdark, .ui-mock.rdark {
+  /* dark premium palette (mirrors .surface-dark token flip) */
+  --sg-ink:         #f4f2ee;
+  --sg-ink-soft:    rgba(255,255,255,.64);
+  --sg-ink-faint:   rgba(255,255,255,.42);
+  --sg-line:        rgba(255,255,255,.12);
+  --sg-line-2:      rgba(255,255,255,.07);
+  --sg-bg:          #0d0d11;
+  --sg-bg-2:        rgba(255,255,255,.035);
+  --sg-card-bg:     rgba(255,255,255,.045);
+  --sg-card-border: rgba(255,255,255,.12);
+  --sg-red-soft:    rgba(213,21,34,.16);
+  --sg-red:         #ff3742;   /* brighter so red TEXT reads on dark; still a strong fill (scoped to renders) */
+  --sg-red-deep:    #ff5a66;   /* active/selected pill text → bright on dark (was #b00000) */
+  color: var(--sg-ink);
+  border: 1px solid rgba(255,255,255,.12);
+  box-shadow: var(--sg-shadow-cinematic);
+  /* px3 diorama backdrop: red glow + 28px grid over warm near-black */
+  background:
+    radial-gradient(120% 80% at 78% -8%, rgba(213,21,34,.09), transparent 55%),
+    repeating-linear-gradient(0deg, rgba(255,255,255,.018) 0 1px, transparent 1px 28px),
+    repeating-linear-gradient(90deg, rgba(255,255,255,.018) 0 1px, transparent 1px 28px),
+    linear-gradient(180deg, #16161b, #0e0e12);
+}
+/* header rail / top bar */
+.adwin.rdark .adbar, .ui-mock.rdark .adbar { background: rgba(255,255,255,.03); border-bottom-color: rgba(255,255,255,.08); }
+.adwin.rdark .adbar .ti, .ui-mock.rdark .adbar .ti { color: var(--sg-ink); }
+.adwin.rdark .adbar .act.ghost, .ui-mock.rdark .adbar .act.ghost { background: rgba(255,255,255,.06); color: var(--sg-ink); border-color: rgba(255,255,255,.14); }
+
+/* ===== CURATED residual fixes (colored callouts keep dark text; code-syntax + special) ===== */
+/* light-colored status callouts (alert / validation rows) stay light-bg → force dark text */
+.adwin.rdark .alert .ab, .adwin.rdark .alert .at, .ui-mock.rdark .alert .ab, .ui-mock.rdark .alert .at,
+.adwin.rdark .cc-vrow .cc-code, .adwin.rdark .cc-vrow .cc-vmsg { color:#17150f; }
+.adwin.rdark .cc-vrow.warn .cc-vmsg, .adwin.rdark .cc-vrow.ok .cc-vmsg { color:#3a3320; }
+/* code-pane syntax tokens that read too dark on the dark code surface → brighten */
+.adwin.rdark .phash .uc .snip .tag { color:#7fa8e6; }
+.adwin.rdark .pban .code .tag, .adwin.rdark .cocode .cb .co .t, .adwin.rdark .cc-cm .cb .co .t { color:#ff8a8a; }
+/* light-gradient preview pane (media optimization) → dark */
+.adwin.rdark .medit .pane, .ui-mock.rdark .medit .pane { background:linear-gradient(160deg,#1b1b22,#131318); }
+/* media-library: token-var panels that re-assert light locally → force dark */
+.adwin.rdark .mopt .outl .row, .ui-mock.rdark .mopt .outl .row { background:rgba(255,255,255,.05); color:var(--sg-ink); border-color:rgba(255,255,255,.10); }
+.adwin.rdark .mopt .outl .row b { color:var(--sg-ink); }
+.adwin.rdark .medit .fld .inp, .ui-mock.rdark .medit .fld .inp { background:rgba(255,255,255,.05); color:var(--sg-ink); }
+/* ============================================================================
+   AUTO-GENERATED dark-skin overrides (.rdark) — flips hardcoded light panels /
+   dark text inside re-skinned renders. Generated from page CSS by
+   _gen-overrides.mjs. Pills (light bg + dark text) left intact. DO NOT hand-edit.
+   bg-flips:265 color-flips:4 border-flips:54 pills-left:6
+   ============================================================================ */
+.ui-mock.rdark { --sg-ink:#f4f2ee; --sg-ink-soft:rgba(255,255,255,.64); --sg-ink-faint:rgba(255,255,255,.42); }
+.rdark .swin, .swin.rdark { background:rgba(18,18,24,.92); }
+.rdark .swin, .swin.rdark { --sg-ink:#f4f2ee; --sg-ink-soft:rgba(255,255,255,.64); --sg-ink-faint:rgba(255,255,255,.42); }
+.rdark .srail .stab.on, .srail.rdark .stab.on { background:rgba(18,18,24,.92); }
+.rdark .sw::after, .sw::after.rdark { background:rgba(18,18,24,.92); }
+.rdark .agebg span, .agebg.rdark span { background:rgba(18,18,24,.92); }
+.rdark .agecard, .agecard.rdark { --sg-ink:#f4f2ee; --sg-ink-soft:rgba(255,255,255,.64); }
+.rdark .exck, .exck.rdark { background:rgba(18,18,24,.92); }
+.rdark .exck.on::after, .exck.on::after.rdark { border-bottom-color:rgba(255,255,255,.12); }
+.rdark .frwarn, .frwarn.rdark { border-color:rgba(255,255,255,.12); }
+.rdark .frph, .frph.rdark { background:rgba(18,18,24,.92); }
+.rdark .frrow .frb, .frrow.rdark .frb { background:rgba(18,18,24,.92); }
+.rdark .frchip .frck::after, .frchip.rdark .frck::after { border-bottom-color:rgba(255,255,255,.12); }
+.rdark .att-sources, .att-sources.rdark { background:rgba(18,18,24,.92); }
+.rdark .cwin, .cwin.rdark { background:rgba(18,18,24,.92); }
+.adwin.rdark { background:rgba(18,18,24,.92); }
+.adwin.rdark { --sg-ink:#f4f2ee; --sg-ink-soft:rgba(255,255,255,.64); --sg-ink-faint:rgba(255,255,255,.42); }
+.rdark .bhead .hi::after, .bhead.rdark .hi::after { border-color:rgba(255,255,255,.12); }
+.rdark .btab .cb, .btab.rdark .cb { background:rgba(18,18,24,.92); }
+.rdark .btab .tr.sel .cb::after, .btab.rdark .tr.sel .cb::after { border-color:rgba(255,255,255,.12); }
+.rdark .btab .ac, .btab.rdark .ac { background:rgba(18,18,24,.92); }
+.rdark .btab .ac.restore, .btab.rdark .ac.restore { border-color:rgba(255,255,255,.12); }
+.rdark .btab .rename .ri, .btab.rdark .rename .ri { background:rgba(18,18,24,.92); }
+.rdark .barch .file .glyph, .barch.rdark .file .glyph { background:rgba(18,18,24,.92); }
+.rdark .barch .file .glyph::before, .barch.rdark .file .glyph::before { border-color:rgba(255,255,255,.12); }
+.rdark .layer, .layer.rdark { background:rgba(18,18,24,.92); }
+.rdark .rp-node, .rp-node.rdark { background:rgba(18,18,24,.92); }
+.rdark .nativechecks .nck .mk::after, .nativechecks.rdark .nck .mk::after { border-color:rgba(255,255,255,.12); }
+.rdark .ledmock, .ledmock.rdark { background:rgba(18,18,24,.92); }
+.rdark .nativechecks .nck .mk::after, .nativechecks.rdark .nck .mk::after { border-color:rgba(255,255,255,.12); }
+.rdark .ledmock, .ledmock.rdark { background:rgba(18,18,24,.92); }
+.rdark .nativechecks .nck .mk::after, .nativechecks.rdark .nck .mk::after { border-color:rgba(255,255,255,.12); }
+.rdark .ledmock, .ledmock.rdark { background:rgba(18,18,24,.92); }
+.rdark .nativechecks .nck .mk::after, .nativechecks.rdark .nck .mk::after { border-color:rgba(255,255,255,.12); }
+.rdark .ledmock, .ledmock.rdark { background:rgba(18,18,24,.92); }
+.rdark .nativechecks .nck .mk::after, .nativechecks.rdark .nck .mk::after { border-color:rgba(255,255,255,.12); }
+.rdark .ledmock, .ledmock.rdark { background:rgba(18,18,24,.92); }
+.rdark .cc-subhdr, .cc-subhdr.rdark { background:rgba(18,18,24,.92); }
+.rdark .cc-pill-s.inactive, .cc-pill-s.inactive.rdark { background:rgba(18,18,24,.92); }
+.rdark .cc-cm, .cc-cm.rdark { --sg-ink-soft:rgba(255,255,255,.64); }
+.rdark .cc-toggle .sw::after, .cc-toggle.rdark .sw::after { background:rgba(18,18,24,.92); }
+.rdark .cc-tips .tip, .cc-tips.rdark .tip { background:rgba(18,18,24,.92); }
+.rdark .cc-doc, .cc-doc.rdark { background:rgba(18,18,24,.92); }
+.rdark .cc-band.bstart, .cc-band.bstart.rdark { background:rgba(18,18,24,.92); }
+.rdark .cc-band.content, .cc-band.content.rdark { background:rgba(18,18,24,.92); }
+.rdark .cc-stack, .cc-stack.rdark { background:rgba(18,18,24,.92); }
+.rdark .cc-flow .fnode, .cc-flow.rdark .fnode { background:rgba(18,18,24,.92); }
+.rdark .cc-modal, .cc-modal.rdark { background:rgba(18,18,24,.92); }
+.rdark .cc-vrow.warn, .cc-vrow.warn.rdark { border-color:rgba(255,255,255,.12); }
+.rdark .cc-vrow.ok, .cc-vrow.ok.rdark { border-color:rgba(255,255,255,.12); }
+.rdark .cc-vico.ok::after, .cc-vico.ok::after.rdark { border-bottom-color:rgba(255,255,255,.12); }
+.rdark .cc-subhdr, .cc-subhdr.rdark { background:rgba(18,18,24,.92); }
+.rdark .cocode, .cocode.rdark { --sg-ink-soft:rgba(255,255,255,.64); }
+.rdark .ccform .side .rail-toggle, .ccform.rdark .side .rail-toggle { background:rgba(18,18,24,.92); }
+.rdark .ccform .side .rail-toggle .tog .sw::after, .ccform.rdark .side .rail-toggle .tog .sw::after { background:rgba(18,18,24,.92); }
+.rdark .ccform .side .audit, .ccform.rdark .side .audit { background:rgba(18,18,24,.92); }
+.rdark .modal-host .modal-stage, .modal-host.rdark .modal-stage { background:rgba(18,18,24,.92); }
+.rdark .swal, .swal.rdark { background:rgba(18,18,24,.92); }
+.rdark .swal .swbtns .cancel, .swal.rdark .swbtns .cancel { background:rgba(18,18,24,.92); }
+.rdark .cccascade .snip, .cccascade.rdark .snip { background:rgba(18,18,24,.92); border-color:rgba(255,255,255,.12); }
+.rdark .cccascade .snip, .cccascade.rdark .snip { --sg-ink:#f4f2ee; --sg-ink-soft:rgba(255,255,255,.64); --sg-ink-faint:rgba(255,255,255,.42); }
+.rdark .cfrow, .cfrow.rdark { background:rgba(18,18,24,.92); }
+.rdark .cfloc .lo .bx, .cfloc.rdark .lo .bx { background:rgba(18,18,24,.92); }
+.rdark .cfloc .lo.on .bx::after, .cfloc.rdark .lo.on .bx::after { border-color:rgba(255,255,255,.12); }
+.rdark .cfgrp .tips .tip, .cfgrp.rdark .tips .tip { background:rgba(18,18,24,.92); }
+.rdark .cfchip, .cfchip.rdark { background:rgba(18,18,24,.92); }
+.rdark .mediapick .thumb::after, .mediapick.rdark .thumb::after { background:rgba(18,18,24,.92); }
+.rdark .mediapick .mp-lib, .mediapick.rdark .mp-lib { background:rgba(18,18,24,.92); }
+.rdark .dcard, .dcard.rdark { background:rgba(18,18,24,.92); }
+.rdark .co-subhdr, .co-subhdr.rdark { background:rgba(18,18,24,.92); }
+.adwin.rdark { background:rgba(18,18,24,.92); }
+.adwin.rdark { --sg-ink:#f4f2ee; --sg-ink-soft:rgba(255,255,255,.64); --sg-ink-faint:rgba(255,255,255,.42); }
+.rdark .adbar .act.ghost, .adbar.rdark .act.ghost { background:rgba(18,18,24,.92); }
+.rdark .co-subhdr, .co-subhdr.rdark { background:rgba(18,18,24,.92); }
+.rdark .coseo .vis .sw::after, .coseo.rdark .vis .sw::after { background:rgba(18,18,24,.92); }
+.rdark .cocode, .cocode.rdark { --sg-ink-soft:rgba(255,255,255,.64); }
+.rdark .codef .side .stbox, .codef.rdark .side .stbox { background:rgba(18,18,24,.92); }
+.rdark .cfrow, .cfrow.rdark { background:rgba(18,18,24,.92); }
+.rdark .cfloc .lo .bx, .cfloc.rdark .lo .bx { background:rgba(18,18,24,.92); }
+.rdark .cfloc .lo.on .bx::after, .cfloc.rdark .lo.on .bx::after { border-color:rgba(255,255,255,.12); }
+.rdark .cfgrp .tips .tip, .cfgrp.rdark .tips .tip { background:rgba(18,18,24,.92); }
+.rdark .cfchip, .cfchip.rdark { background:rgba(18,18,24,.92); }
+.rdark .cocat .clh .srch, .cocat.rdark .clh .srch { background:rgba(18,18,24,.92); }
+.rdark .cocat .ctab, .cocat.rdark .ctab { background:rgba(18,18,24,.92); }
+.adwin.rdark { background:rgba(18,18,24,.92); }
+.adwin.rdark { --sg-ink:#f4f2ee; --sg-ink-soft:rgba(255,255,255,.64); --sg-ink-faint:rgba(255,255,255,.42); }
+.rdark .adbar .ic::after, .adbar.rdark .ic::after { border-color:rgba(255,255,255,.12); }
+.rdark .adbar .act.ghost, .adbar.rdark .act.ghost { background:rgba(18,18,24,.92); }
+.rdark .dchk .cx.on .b::after, .dchk.rdark .cx.on .b::after { border-color:rgba(255,255,255,.12); }
+.rdark .sw2::after, .sw2::after.rdark { background:rgba(18,18,24,.92); }
+.rdark .dview .actrow .ab, .dview.rdark .actrow .ab { background:rgba(18,18,24,.92); }
+.rdark .dreply .area, .dreply.rdark .area { background:rgba(18,18,24,.92); }
+.rdark .dpub .pform .fi, .dpub.rdark .pform .fi { background:rgba(18,18,24,.92); }
+.rdark .estore, .estore.rdark { background:rgba(18,18,24,.92); }
+.rdark .estore, .estore.rdark { --sg-ink:#f4f2ee; --sg-ink-soft:rgba(255,255,255,.64); --sg-ink-faint:rgba(255,255,255,.42); }
+.rdark .estore .sh .mini .ic, .estore.rdark .sh .mini .ic { border-color:rgba(255,255,255,.12); }
+.rdark .estore .cats .ct, .estore.rdark .cats .ct { background:rgba(18,18,24,.92); }
+.rdark .estore .pc, .estore.rdark .pc { background:rgba(18,18,24,.92); }
+.rdark .estore .pc .img.b, .estore.rdark .pc .img.b { background:rgba(18,18,24,.92); }
+.rdark .estore .pc .img .pin, .estore.rdark .pc .img .pin { background:rgba(18,18,24,.92); }
+.rdark .ectrl .sb, .ectrl.rdark .sb { background:rgba(18,18,24,.92); }
+.rdark .ecock .rail .stsel .ss, .ecock.rdark .rail .stsel .ss { background:rgba(18,18,24,.92); }
+.rdark .ecock .refund, .ecock.rdark .refund { background:rgba(18,18,24,.92); }
+.rdark .ecock .refund .opt .ck.on::after, .ecock.rdark .refund .opt .ck.on::after { border-bottom-color:rgba(255,255,255,.12); }
+.rdark .ecock .notes .note, .ecock.rdark .notes .note { background:rgba(18,18,24,.92); }
+.rdark .csw::after, .csw::after.rdark { background:rgba(18,18,24,.92); }
+.rdark .cfield .ck.on::after, .cfield.rdark .ck.on::after { border-bottom-color:rgba(255,255,255,.12); }
+.rdark .eacct, .eacct.rdark { background:rgba(18,18,24,.92); }
+.rdark .eacct, .eacct.rdark { --sg-ink:#f4f2ee; --sg-ink-soft:rgba(255,255,255,.64); --sg-ink-faint:rgba(255,255,255,.42); }
+.rdark .eacct .card, .eacct.rdark .card { background:rgba(18,18,24,.92); }
+.rdark .ec-price .top .dot, .ec-price.rdark .top .dot { background:rgba(18,18,24,.92); }
+.rdark .evwys .bar .b, .evwys.rdark .bar .b { background:rgba(18,18,24,.92); }
+.rdark .evwys .bar .dd, .evwys.rdark .bar .dd { background:rgba(18,18,24,.92); }
+.rdark .evrec .seg, .evrec.rdark .seg { background:rgba(18,18,24,.92); }
+.rdark .evrec .day, .evrec.rdark .day { background:rgba(18,18,24,.92); }
+.rdark .evrec .iv .stp, .evrec.rdark .iv .stp { background:rgba(18,18,24,.92); }
+.rdark .evrec .endseg, .evrec.rdark .endseg { background:rgba(18,18,24,.92); }
+.rdark .evrec .endval .stp, .evrec.rdark .endval .stp { background:rgba(18,18,24,.92); }
+.rdark .evside-card, .evside-card.rdark { background:rgba(18,18,24,.92); }
+.rdark .evchk .sw::after, .evchk.rdark .sw::after { background:rgba(18,18,24,.92); }
+.rdark .evcats .crow.on .box::after, .evcats.rdark .crow.on .box::after { border-color:rgba(255,255,255,.12); }
+.rdark .evpub, .evpub.rdark { background:rgba(18,18,24,.92); }
+.rdark .evpub, .evpub.rdark { --sg-ink:#f4f2ee; --sg-ink-soft:rgba(255,255,255,.64); --sg-ink-faint:rgba(255,255,255,.42); }
+.rdark .evpub .brow .url, .evpub.rdark .brow .url { background:rgba(18,18,24,.92); }
+.rdark .evpub .atc, .evpub.rdark .atc { background:rgba(18,18,24,.92); }
+.rdark .evpub .toolbar .tb, .evpub.rdark .toolbar .tb { background:rgba(18,18,24,.92); }
+.rdark .evpub .toolbar .vtog b, .evpub.rdark .toolbar .vtog b { background:rgba(18,18,24,.92); }
+.rdark .evset .cfg .radio b, .evset.rdark .cfg .radio b { background:rgba(18,18,24,.92); }
+.adwin.rdark { background:rgba(18,18,24,.92); }
+.adwin.rdark { --sg-ink:#f4f2ee; --sg-ink-soft:rgba(255,255,255,.64); --sg-ink-faint:rgba(255,255,255,.42); }
+.rdark .adbar .act.ghost, .adbar.rdark .act.ghost { background:rgba(18,18,24,.92); }
+.rdark .fbld .mrow .sw::after, .fbld.rdark .mrow .sw::after { background:rgba(18,18,24,.92); }
+.rdark .fbld .prev, .fbld.rdark .prev { background:rgba(18,18,24,.92); }
+.rdark .fbld .pcard, .fbld.rdark .pcard { background:rgba(18,18,24,.92); }
+.rdark .fmodal, .fmodal.rdark { background:rgba(18,18,24,.92); }
+.rdark .hm-canvas .blk.sel .h, .hm-canvas.rdark .blk.sel .h { background:rgba(18,18,24,.92); }
+.rdark .swx-thumb .tbody b, .swx-thumb.rdark .tbody b { background:rgba(18,18,24,.92); }
+.rdark .swx-t5, .swx-t5.rdark { background:rgba(18,18,24,.92); }
+.rdark .smx-chip, .smx-chip.rdark { background:rgba(18,18,24,.92); }
+.rdark .prx-status--pop i, .prx-status--pop.rdark i { background:rgba(18,18,24,.92); }
+.rdark .sc-facet .box::after, .sc-facet.rdark .box::after { background:rgba(18,18,24,.92); }
+.rdark .pd-panel::after, .pd-panel::after.rdark { background:rgba(18,18,24,.92); }
+.rdark .pd-navbtn:hover, .pd-navbtn:hover.rdark { border-color:rgba(255,255,255,.12); }
+.rdark .px3-h, .px3-h.rdark { background:rgba(18,18,24,.92); }
+.rdark .px3-ed-sw .chip.k, .px3-ed-sw.rdark .chip.k { background:rgba(18,18,24,.92); }
+.rdark .gcard, .gcard.rdark { background:rgba(18,18,24,.92); }
+.rdark .ghost-hub .gh-c, .ghost-hub.rdark .gh-c { background:rgba(18,18,24,.92); }
+.rdark .drawer, .drawer.rdark { background:rgba(18,18,24,.92); }
+.rdark .sw::after, .sw::after.rdark { background:rgba(18,18,24,.92); }
+.rdark .howto, .howto.rdark { border-color:rgba(255,255,255,.12); }
+.adwin.rdark { background:rgba(18,18,24,.92); }
+.adwin.rdark { --sg-ink:#f4f2ee; --sg-ink-soft:rgba(255,255,255,.64); --sg-ink-faint:rgba(255,255,255,.42); }
+.rdark .adbar .act.ghost, .adbar.rdark .act.ghost { background:rgba(18,18,24,.92); }
+.rdark .mtile, .mtile.rdark { background:rgba(18,18,24,.92); }
+.rdark .mopt, .mopt.rdark { background:rgba(18,18,24,.92); }
+.rdark .mopt, .mopt.rdark { --sg-ink:#f4f2ee; --sg-ink-soft:rgba(255,255,255,.64); --sg-ink-faint:rgba(255,255,255,.42); }
+.rdark .medit .pane, .medit.rdark .pane { background:rgba(18,18,24,.92); }
+.rdark .mset .srow .sw.off::after, .mset.rdark .srow .sw.off::after { background:rgba(18,18,24,.92); }
+.rdark .mset .srow .sw.on::after, .mset.rdark .srow .sw.on::after { background:rgba(18,18,24,.92); }
+.adwin.rdark { background:rgba(18,18,24,.92); }
+.adwin.rdark { --sg-ink:#f4f2ee; --sg-ink-soft:rgba(255,255,255,.64); --sg-ink-faint:rgba(255,255,255,.42); }
+.rdark .adbar .act.ghost, .adbar.rdark .act.ghost { background:rgba(18,18,24,.92); }
+.rdark .acc, .acc.rdark { background:rgba(18,18,24,.92); }
+.rdark .acc .prow, .acc.rdark .prow { background:rgba(18,18,24,.92); }
+.rdark .mchip, .mchip.rdark { background:rgba(18,18,24,.92); }
+.rdark .mp-head .li::after, .mp-head.rdark .li::after { background:rgba(18,18,24,.92); }
+.rdark .trow, .trow.rdark { background:rgba(18,18,24,.92); }
+.rdark .megabar, .megabar.rdark { background:rgba(18,18,24,.92); }
+.rdark .loc .assigned, .loc.rdark .assigned { background:rgba(18,18,24,.92); }
+.rdark .pi-board, .pi-board.rdark { background:rgba(18,18,24,.92); }
+.rdark .pi-row .pi-v, .pi-row.rdark .pi-v { background:rgba(18,18,24,.92); }
+.rdark .phone, .phone.rdark { background:rgba(18,18,24,.92); }
+.rdark .phone, .phone.rdark { --sg-ink:#f4f2ee; --sg-ink-soft:rgba(255,255,255,.64); --sg-ink-faint:rgba(255,255,255,.42); }
+.rdark .cv-issues .h, .cv-issues.rdark .h { background:rgba(18,18,24,.92); }
+.rdark .libr, .libr.rdark { background:rgba(18,18,24,.92); }
+.rdark .insp .canv .selbtn .h, .insp.rdark .canv .selbtn .h { background:rgba(18,18,24,.92); }
+.rdark .rvis .ck.hidden .bx::after, .rvis.rdark .ck.hidden .bx::after { border-bottom-color:rgba(255,255,255,.12); }
+.rdark .ssdraw .drawer, .ssdraw.rdark .drawer { background:rgba(18,18,24,.92); }
+.rdark .ssdraw .drawer, .ssdraw.rdark .drawer { --sg-ink:#f4f2ee; --sg-ink-soft:rgba(255,255,255,.64); --sg-ink-faint:rgba(255,255,255,.42); }
+.rdark .dfield .tgl::after, .dfield.rdark .tgl::after { background:rgba(18,18,24,.92); }
+.rdark .ssdraw .dsave, .ssdraw.rdark .dsave { background:rgba(18,18,24,.92); }
+.rdark .mods, .mods.rdark { background:rgba(18,18,24,.92); }
+.rdark .mod.hot, .mod.hot.rdark { background:rgba(18,18,24,.92); }
+.adwin.rdark { background:rgba(18,18,24,.92); }
+.adwin.rdark { --sg-ink:#f4f2ee; --sg-ink-soft:rgba(255,255,255,.64); --sg-ink-faint:rgba(255,255,255,.42); }
+.rdark .adbar .ic.clock::after, .adbar.rdark .ic.clock::after { background:rgba(18,18,24,.92); }
+.rdark .adbar .act.ghost, .adbar.rdark .act.ghost { background:rgba(18,18,24,.92); }
+.rdark .ptab .ck, .ptab.rdark .ck { background:rgba(18,18,24,.92); }
+.rdark .pcmp .inp, .pcmp.rdark .inp { background:rgba(18,18,24,.92); }
+.rdark .pcmp .right .inp, .pcmp.rdark .right .inp { background:rgba(18,18,24,.92); }
+.rdark .pban .bh .chk .box::after, .pban.rdark .bh .chk .box::after { border-color:rgba(255,255,255,.12); }
+.rdark .rsel, .rsel.rdark { background:rgba(18,18,24,.92); }
+.rdark .rtoggle, .rtoggle.rdark { background:rgba(18,18,24,.92); }
+.rdark .rtoggle .sw::after, .rtoggle.rdark .sw::after { background:rgba(18,18,24,.92); }
+.rdark .rthumb, .rthumb.rdark { background:rgba(18,18,24,.92); }
+.rdark .pmodal, .pmodal.rdark { background:rgba(18,18,24,.92); }
+.rdark .wcall, .wcall.rdark { --sg-ink:#f4f2ee; --sg-ink-soft:rgba(255,255,255,.64); }
+.rdark .wcall .lab2, .wcall.rdark .lab2 { background:rgba(18,18,24,.92); }
+.rdark .parch .perm .opt.on .rd, .parch.rdark .perm .opt.on .rd { background:rgba(18,18,24,.92); }
+.rdark .pdisc .dchk, .pdisc.rdark .dchk { background:rgba(18,18,24,.92); }
+.rdark .pdisc .dchk.on .dbox::after, .pdisc.rdark .dchk.on .dbox::after { border-color:rgba(255,255,255,.12); }
+.rdark .pubd .cform .cfi, .pubd.rdark .cform .cfi { background:rgba(18,18,24,.92); }
+.rdark .optz .ohead .oic::after, .optz.rdark .ohead .oic::after { border-top-color:rgba(255,255,255,.12); }
+.rdark .osw::after, .osw::after.rdark { background:rgba(18,18,24,.92); }
+.rdark .svhead .svseg b.on, .svhead.rdark .svseg b.on { background:rgba(18,18,24,.92); }
+.rdark .tside .nav.on .td, .tside.rdark .nav.on .td { background:rgba(18,18,24,.92); }
+.rdark .srep .tpick .pr .cb.on::after, .srep.rdark .tpick .pr .cb.on::after { border-bottom-color:rgba(255,255,255,.12); }
+.rdark .iex .ec.sel .cb::after, .iex.rdark .ec.sel .cb::after { border-bottom-color:rgba(255,255,255,.12); }
+.rdark .glprev .pg, .glprev.rdark .pg { background:rgba(18,18,24,.92); }
+.rdark .mpanel, .mpanel.rdark { --sg-ink:#f4f2ee; --sg-ink-soft:rgba(255,255,255,.64); --sg-ink-faint:rgba(255,255,255,.42); }
+.rdark .mpanel .mpb.ghost, .mpanel.rdark .mpb.ghost { background:rgba(18,18,24,.92); }
+.adwin.rdark { background:rgba(18,18,24,.92); }
+.adwin.rdark { --sg-ink:#f4f2ee; --sg-ink-soft:rgba(255,255,255,.64); --sg-ink-faint:rgba(255,255,255,.42); }
+.rdark .adbar .act.ghost, .adbar.rdark .act.ghost { background:rgba(18,18,24,.92); }
+.rdark .wtool i, .wtool.rdark i { background:rgba(18,18,24,.92); }
+.rdark .wfoot .ptag, .wfoot.rdark .ptag { background:rgba(18,18,24,.92); }
+.rdark .prail .panel, .prail.rdark .panel { background:rgba(18,18,24,.92); }
+.rdark .chk .bx, .chk.rdark .bx { background:rgba(18,18,24,.92); }
+.rdark .chk.on .bx::after, .chk.on.rdark .bx::after { border-color:rgba(255,255,255,.12); }
+.rdark .phash .hbar .code, .phash.rdark .hbar .code { background:rgba(18,18,24,.92); }
+.rdark .phash .uc .demo .lnk.ghost, .phash.rdark .uc .demo .lnk.ghost { background:rgba(18,18,24,.92); }
+.rdark .sc-modal, .sc-modal.rdark { background:rgba(18,18,24,.92); }
+.rdark .psrc .stile .pick, .psrc.rdark .stile .pick { background:rgba(18,18,24,.92); }
+.rdark .psrc .stile .beta, .psrc.rdark .stile .beta { border-color:rgba(255,255,255,.12); }
+.rdark .prend .modal, .prend.rdark .modal { background:rgba(18,18,24,.92); }
+.rdark .prend .modal, .prend.rdark .modal { --sg-ink:#f4f2ee; }
+.rdark .prend .modal .x, .prend.rdark .modal .x { color:var(--sg-ink-soft); }
+.rdark .prend .modal h5, .prend.rdark .modal h5 { color:var(--sg-ink); }
+.rdark .prend .modal p, .prend.rdark .modal p { color:var(--sg-ink); }
+.rdark .plan, .plan.rdark { background:rgba(18,18,24,.92); }
+.adwin.rdark { background:rgba(18,18,24,.92); }
+.adwin.rdark { --sg-ink:#f4f2ee; --sg-ink-soft:rgba(255,255,255,.64); --sg-ink-faint:rgba(255,255,255,.42); }
+.rdark .adbar .act.ghost, .adbar.rdark .act.ghost { background:rgba(18,18,24,.92); }
+.rdark .rtools .tin, .rtools.rdark .tin { background:rgba(18,18,24,.92); }
+.rdark .rtools .tbtn, .rtools.rdark .tbtn { background:rgba(18,18,24,.92); }
+.rdark .rtools .mag::after, .rtools.rdark .mag::after { border-color:rgba(255,255,255,.12); }
+.rdark .rtools .mag::before, .rtools.rdark .mag::before { background:rgba(18,18,24,.92); }
+.rdark .rtab .ck, .rtab.rdark .ck { background:rgba(18,18,24,.92); }
+.rdark .rsim .simbtn, .rsim.rdark .simbtn { background:rgba(18,18,24,.92); }
+.rdark .rconf .cfld .cval, .rconf.rdark .cfld .cval { background:rgba(18,18,24,.92); }
+.rdark .rstate .sw::after, .rstate.rdark .sw::after { background:rgba(18,18,24,.92); }
+.rdark .rexample, .rexample.rdark { background:rgba(18,18,24,.92); }
+.rdark .redit .ig .pre, .redit.rdark .ig .pre { background:rgba(18,18,24,.92); }
+.rdark .redit .chk .box, .redit.rdark .chk .box { background:rgba(18,18,24,.92); }
+.rdark .redit .swrow, .redit.rdark .swrow { background:rgba(18,18,24,.92); }
+.rdark .redit .sw::after, .redit.rdark .sw::after { background:rgba(18,18,24,.92); }
+.adwin.rdark { background:rgba(18,18,24,.92); }
+.adwin.rdark { --sg-ink:#f4f2ee; --sg-ink-soft:rgba(255,255,255,.64); --sg-ink-faint:rgba(255,255,255,.42); }
+.adwin.rdark.dark { --sg-ink-faint:rgba(255,255,255,.42); }
+.rdark .stip .res.ok, .stip.rdark .res.ok { border-color:rgba(255,255,255,.12); }
+.rdark .stip .res.info, .stip.rdark .res.info { border-color:rgba(255,255,255,.12); }
+.rdark .stip .res.err, .stip.rdark .res.err { border-color:rgba(255,255,255,.12); }
+.rdark .setool .tbtn, .setool.rdark .tbtn { background:rgba(18,18,24,.92); }
+.rdark .setab .chk, .setab.rdark .chk { background:rgba(18,18,24,.92); }
+.rdark .serow-controls .idx .sw::after, .serow-controls.rdark .idx .sw::after { background:rgba(18,18,24,.92); }
+.rdark .secols .cg .sw::after, .secols.rdark .cg .sw::after { background:rgba(18,18,24,.92); }
+.rdark .sechips .ch, .sechips.rdark .ch { background:rgba(18,18,24,.92); }
+.rdark .secheck .bx::after, .secheck.rdark .bx::after { border-bottom-color:rgba(255,255,255,.12); }
+.rdark .secheck .bx.off, .secheck.rdark .bx.off { background:rgba(18,18,24,.92); }
+.rdark .seglobal .rail .save .ck, .seglobal.rdark .rail .save .ck { border-bottom-color:rgba(255,255,255,.12); }
+.rdark .setips, .setips.rdark { background:rgba(18,18,24,.92); }
+.rdark .seschema .load, .seschema.rdark .load { background:rgba(18,18,24,.92); }
+.rdark .segsc .steps, .segsc.rdark .steps { border-color:rgba(255,255,255,.12); }
+.adwin.rdark { background:rgba(18,18,24,.92); }
+.adwin.rdark { --sg-ink:#f4f2ee; --sg-ink-soft:rgba(255,255,255,.64); --sg-ink-faint:rgba(255,255,255,.42); }
+.rdark .adbar .act.ghost, .adbar.rdark .act.ghost { background:rgba(18,18,24,.92); }
+.rdark .smset .sw::after, .smset.rdark .sw::after { background:rgba(18,18,24,.92); }
+.rdark .smset .save, .smset.rdark .save { background:rgba(18,18,24,.92); }
+.rdark .smmail .test .ti, .smmail.rdark .test .ti { background:rgba(18,18,24,.92); }
+.rdark .agdash .roster .find, .agdash.rdark .roster .find { background:rgba(18,18,24,.92); }
+.rdark .agdash .arow.cur .login, .agdash.rdark .arow.cur .login { background:rgba(18,18,24,.92); }
+.rdark .aglogin .vstate .back, .aglogin.rdark .vstate .back { background:rgba(18,18,24,.92); }
+.rdark .frhand .ph, .frhand.rdark .ph { background:rgba(18,18,24,.92); }
+.rdark .frhand .ph.done .dot::after, .frhand.rdark .ph.done .dot::after { border-bottom-color:rgba(255,255,255,.12); }
+.rdark .frhand .ph.now .dot, .frhand.rdark .ph.now .dot { background:rgba(18,18,24,.92); }
+.rdark .frhand .ph.now .pt, .frhand.rdark .ph.now .pt { background:rgba(18,18,24,.92); }
+.rdark .frbuild .blk .bb, .frbuild.rdark .blk .bb { background:rgba(18,18,24,.92); }
+.rdark .frbuild .frpub .sw::after, .frbuild.rdark .frpub .sw::after { background:rgba(18,18,24,.92); }
+.rdark .frroles .rt .c .yes::after, .frroles.rdark .rt .c .yes::after { border-bottom-color:rgba(255,255,255,.12); }
+.rdark .hca11y .hcswitch .sw::after, .hca11y.rdark .hcswitch .sw::after { background:rgba(18,18,24,.92); }
+.rdark .hca11y .hcpv .bk, .hca11y.rdark .hcpv .bk { background:rgba(18,18,24,.92); }
+.rdark .mldash .lbar .find, .mldash.rdark .lbar .find { background:rgba(18,18,24,.92); }
+.rdark .mldash .bulk .sel, .mldash.rdark .bulk .sel { background:rgba(18,18,24,.92); }
+.rdark .mldash .bulk .ap, .mldash.rdark .bulk .ap { background:rgba(18,18,24,.92); }
+.rdark .mldash .ckbox, .mldash.rdark .ckbox { background:rgba(18,18,24,.92); }
+.rdark .mldash .lrow .acts .tr, .mldash.rdark .lrow .acts .tr { background:rgba(18,18,24,.92); }
+.rdark .mldash .lrow.cur .acts .ed, .mldash.rdark .lrow.cur .acts .ed { background:rgba(18,18,24,.92); }
+.rdark .mlrec .hours .hrow .tm, .mlrec.rdark .hours .hrow .tm { background:rgba(18,18,24,.92); }
+.rdark .mlsel .vstate .ch, .mlsel.rdark .vstate .ch { background:rgba(18,18,24,.92); }
+.rdark .rsfront .rsf-event .rsf-ev-cta, .rsfront.rdark .rsf-event .rsf-ev-cta { background:rgba(18,18,24,.92); }
+.rdark .rsevents .evrow.cur .evr, .rsevents.rdark .evrow.cur .evr { background:rgba(18,18,24,.92); }
+.rdark .rsform .ff .fi, .rsform.rdark .ff .fi { background:rgba(18,18,24,.92); }
+.rdark .rsform .rsf-recap .rsf-recap-box, .rsform.rdark .rsf-recap .rsf-recap-box { background:rgba(18,18,24,.92); }
+.rdark .rsinbox .inbfil .inbf, .rsinbox.rdark .inbfil .inbf { background:rgba(18,18,24,.92); }
+.rdark .rsstore .sitem, .rsstore.rdark .sitem { background:rgba(18,18,24,.92); }
+.rdark .sbcanvas .palette .blk, .sbcanvas.rdark .palette .blk { background:rgba(18,18,24,.92); }
+.rdark .sbcanvas .cvsec, .sbcanvas.rdark .cvsec { background:rgba(18,18,24,.92); }
+.rdark .sbcanvas .cvsec.hero .hp, .sbcanvas.rdark .cvsec.hero .hp { background:rgba(18,18,24,.92); }
+.rdark .sbcanvas .cvsec.line span, .sbcanvas.rdark .cvsec.line span { background:rgba(18,18,24,.92); }
+.rdark .sbtpls .tpl, .sbtpls.rdark .tpl { background:rgba(18,18,24,.92); }
+.rdark .sbtpls .tpl .body span, .sbtpls.rdark .tpl .body span { background:rgba(18,18,24,.92); }
+.rdark .sbstore .cpay .pay.alt, .sbstore.rdark .cpay .pay.alt { background:rgba(18,18,24,.92); }
+.rdark .sgpush .bt.ghost, .sgpush.rdark .bt.ghost { background:rgba(18,18,24,.92); }
+.rdark .sgjob.done .ok::after, .sgjob.done.rdark .ok::after { border-color:rgba(255,255,255,.12); }
+.rdark .sgclone .tgt .inp, .sgclone.rdark .tgt .inp { background:rgba(18,18,24,.92); }
+.rdark .sgclone .sgjob.done, .sgclone.rdark .sgjob.done, .rdark .sgrestore .sgjob.done, .sgrestore.rdark .sgjob.done { border-color:rgba(255,255,255,.12); }
+.rdark .sgbk .tab .ck, .sgbk.rdark .tab .ck { background:rgba(18,18,24,.92); }
+.adwin.rdark { background:rgba(18,18,24,.92); }
+.adwin.rdark { --sg-ink:#f4f2ee; --sg-ink-soft:rgba(255,255,255,.64); --sg-ink-faint:rgba(255,255,255,.42); }
+.rdark .adbar .act.ghost, .adbar.rdark .act.ghost { background:rgba(18,18,24,.92); }
+.rdark .tbulk .sel.open, .tbulk.rdark .sel.open { background:rgba(18,18,24,.92); }
+.rdark .tbulk .sel .menu, .tbulk.rdark .sel .menu { background:rgba(18,18,24,.92); }
+.rdark .ttab .cb.ck::after, .ttab.rdark .cb.ck::after { border-color:rgba(255,255,255,.12); }
+.rdark .tman .warn, .tman.rdark .warn { border-color:rgba(255,255,255,.12); }
+.rdark .tman .ed, .tman.rdark .ed { background:rgba(18,18,24,.92); }
+.rdark .tman .ed .etool span, .tman.rdark .ed .etool span { background:rgba(18,18,24,.92); }
+.rdark .tman .rail .rcard, .tman.rdark .rail .rcard { background:rgba(18,18,24,.92); }
+.rdark .treuse .src, .treuse.rdark .src { background:rgba(18,18,24,.92); }
+.rdark .treuse .src .sname, .treuse.rdark .src .sname { color:var(--sg-ink); }
+.rdark .tio .btn-io.ghost, .tio.rdark .btn-io.ghost { background:rgba(18,18,24,.92); }
+.rdark .tlib .lcard, .tlib.rdark .lcard { background:rgba(18,18,24,.92); }
+.rdark .tlib .lcard .thumb, .tlib.rdark .lcard .thumb { background:rgba(18,18,24,.92); }
+.rdark .tephead .save .ck::after, .tephead.rdark .save .ck::after { border-bottom-color:rgba(255,255,255,.12); }
+.rdark .tetype .ff, .tetype.rdark .ff { background:rgba(18,18,24,.92); }
+.rdark .tetype .sz, .tetype.rdark .sz { background:rgba(18,18,24,.92); }
+.rdark .teswatch, .teswatch.rdark { background:rgba(18,18,24,.92); }
+.rdark .teswatch .chk::after, .teswatch.rdark .chk::after { border-bottom-color:rgba(255,255,255,.12); }
+.rdark .sgbcanvas .pg .nav .lg, .sgbcanvas.rdark .pg .nav .lg { background:rgba(18,18,24,.92); }
+.rdark .sgbcanvas .pg .hh .h, .sgbcanvas.rdark .pg .hh .h { background:rgba(18,18,24,.92); }
+.rdark .tcfont .wbh .ico i, .tcfont.rdark .wbh .ico i { background:rgba(18,18,24,.92); }
+.rdark .tcfont .wsel, .tcfont.rdark .wsel { background:rgba(18,18,24,.92); }
+.rdark .hfp .fr .sw::after, .hfp.rdark .fr .sw::after { background:rgba(18,18,24,.92); }
+.rdark .hfp .cta1, .hfp.rdark .cta1 { background:rgba(18,18,24,.92); }
+.rdark .hfp .html, .hfp.rdark .html { background:rgba(18,18,24,.92); }
+.rdark .tnav-side .nrow.on .gl, .tnav-side.rdark .nrow.on .gl { background:rgba(18,18,24,.92); }
+.rdark .tnav-card .ch .ti, .tnav-card.rdark .ch .ti { background:rgba(18,18,24,.92); }
+.rdark .tbody .sw::after, .tbody.rdark .sw::after { background:rgba(18,18,24,.92); }
+.rdark .ocard, .ocard.rdark { background:rgba(18,18,24,.92); }
+.rdark .ocard .ctl .ms::after, .ocard.rdark .ctl .ms::after { background:rgba(18,18,24,.92); }
+.rdark .iecards .ec.sel .cb::after, .iecards.rdark .ec.sel .cb::after { border-bottom-color:rgba(255,255,255,.12); }
+.rdark .iefmt .pick, .iefmt.rdark .pick { background:rgba(18,18,24,.92); }
+.rdark .iedrop .chip, .iedrop.rdark .chip { background:rgba(18,18,24,.92); }
+.rdark .srcard .warn, .srcard.rdark .warn { border-color:rgba(255,255,255,.12); }
+.rdark .srlist .trow.on .cb::after, .srlist.rdark .trow.on .cb::after { border-bottom-color:rgba(255,255,255,.12); }
+.rdark .sropt .sw::after, .sropt.rdark .sw::after { background:rgba(18,18,24,.92); }
+.rdark .mm-toggle .sw::after, .mm-toggle.rdark .sw::after { background:rgba(18,18,24,.92); }
+.rdark .bktab .act span.restore, .bktab.rdark .act span.restore { border-color:rgba(255,255,255,.12); }
+.rdark .bktab .tr.renaming .fn .edit, .bktab.rdark .tr.renaming .fn .edit { background:rgba(18,18,24,.92); }
+.rdark .sgpanel, .sgpanel.rdark { --sg-ink-soft:rgba(255,255,255,.64); --sg-ink-faint:rgba(255,255,255,.42); }
+.rdark .uhead .gico::before, .uhead.rdark .gico::before { border-color:rgba(255,255,255,.12); }
+.rdark .uform .sel-role, .uform.rdark .sel-role { background:rgba(18,18,24,.92); }
+.rdark .biobox, .biobox.rdark { background:rgba(18,18,24,.92); }
