@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Helix Integrations — warehouse-native, Segment, Snowflake, dbt &amp; more</title>
+  <meta name="description" content="Connect Helix to your stack: Segment, Snowflake, dbt, BigQuery, Salesforce, HubSpot, Slack, Stripe, Amplitude import, REST + webhooks, Census reverse-ETL and Customer.io. Warehouse-native, no double-instrumentation.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=JetBrains+Mono:wght@500;700&display=swap">
+  <link rel="stylesheet" href="design-system/tokens.css">
+  <link rel="stylesheet" href="design-system/structural.css">
+  <link rel="stylesheet" href="design-system/brand-overlay.css">
+</head>
+<body>
+
+<!-- ════ CANONICAL HEADER (identical to design-system/_chrome.html) ════ -->
+<header class="site-header wow-glass">
+  <div class="container site-header__bar">
+    <a class="brand" href="index.html">
+      <span class="brand__mark">H</span>
+      Helix Analytics
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <a href="platform.html">Platform</a>
+      <a href="integrations.html" aria-current="page">Integrations</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="security.html">Security</a>
+      <a href="customers.html">Customers</a>
+      <a class="btn btn-primary wow-glow" href="demo.html">Book a demo</a>
+    </nav>
+    <button class="site-header__hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-drawer">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+<div class="site-drawer-backdrop" data-open="false"></div>
+<nav id="mobile-drawer" class="site-drawer" aria-hidden="true" aria-label="Mobile">
+  <button class="site-drawer__close" aria-label="Close menu">&times;</button>
+  <ul class="site-drawer__links">
+    <li><a href="platform.html">Platform</a></li>
+    <li><a href="integrations.html" aria-current="page">Integrations</a></li>
+    <li><a href="pricing.html">Pricing</a></li>
+    <li><a href="security.html">Security</a></li>
+    <li><a href="customers.html">Customers</a></li>
+  </ul>
+  <a class="btn btn-primary wow-glow" href="demo.html">Book a demo</a>
+</nav>
+
+<!-- TEMPLATE: integrations-1-grid
+     hero(section--dark) -> warehouse-native feature band -> logo-wall(section--warm)
+       -> ecosystem-block(category grid) -> cross-link-rail -> closing-cta(section--dark)
+     Visuals are MEDIUM-AGNOSTIC inline SVG vendor marks + a warehouse-sync diagram (>=120px) -->
+
+<section class="section hero section--dark wow-bloom wow-grain">
+  <div class="container wow-reveal">
+    <p class="eyebrow">Integrations</p>
+    <h1>Helix plugs into the stack your team already runs.</h1>
+    <p class="lede">Stream events from Segment, model in your warehouse, push product-qualified leads into your CRM and route alerts to Slack &mdash; connect once and analyze in minutes, no double-instrumentation.</p>
+    <div class="cta-row"><a class="btn btn-primary wow-glow" href="demo.html">Book a demo</a></div>
+  </div>
+</section>
+
+<!-- Warehouse-native sync — the connective feature that frames the whole catalog -->
+<section class="section feature-rows wow-divider wow-divider--top">
+  <div class="container wow-reveal">
+    <p class="eyebrow">Warehouse-native</p>
+    <h2>Model once, analyze everywhere</h2>
+    <div class="feature-row">
+      <figure class="feature-row__media wow-zoom">
+        <svg viewBox="0 0 560 360" width="560" height="360" role="img" aria-label="Warehouse-native bidirectional sync between your data warehouse and Helix" style="border-radius:var(--ds-r-lg);background:var(--ds-primary-soft)">
+          <rect x="48" y="96" width="170" height="170" rx="14" fill="#fff" stroke="var(--ds-line)" stroke-width="2"/>
+          <ellipse cx="133" cy="128" rx="58" ry="18" fill="none" stroke="var(--ds-primary)" stroke-width="4"/>
+          <path d="M75 128 V214 a58 18 0 0 0 116 0 V128" fill="none" stroke="var(--ds-primary)" stroke-width="4"/>
+          <ellipse cx="133" cy="171" rx="58" ry="18" fill="none" stroke="var(--ds-primary)" stroke-width="3" opacity=".6"/>
+          <text x="133" y="248" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-size="17" fill="var(--ds-primary-deep)">Warehouse</text>
+          <rect x="342" y="96" width="170" height="170" rx="14" fill="#fff" stroke="var(--ds-line)" stroke-width="2"/>
+          <polyline points="372,212 408,184 444,196 480,150" fill="none" stroke="var(--ds-accent)" stroke-width="5" stroke-linecap="round"/>
+          <circle cx="480" cy="150" r="7" fill="var(--ds-accent)"/>
+          <text x="427" y="248" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-size="17" fill="var(--ds-primary-deep)">Helix</text>
+          <line x1="218" y1="150" x2="342" y2="150" stroke="var(--ds-primary)" stroke-width="5"/><polygon points="342,150 326,142 326,158" fill="var(--ds-primary)"/>
+          <line x1="342" y1="208" x2="218" y2="208" stroke="var(--ds-accent)" stroke-width="5"/><polygon points="218,208 234,200 234,216" fill="var(--ds-accent)"/>
+        </svg>
+      </figure>
+      <div class="feature-row__body">
+        <span class="feature-row__kicker">Warehouse-native sync</span>
+        <!-- src: R-FEAT-05 -->
+        <h3>No double-instrumentation</h3>
+        <p>No double-instrumentation: model once in the warehouse and analyze in Helix &mdash; or mirror Helix events back to Snowflake and BigQuery. One source of truth for every metric definition.</p>
+        <ul class="feature-row__list">
+          <li>Bidirectional sync with Snowflake and BigQuery</li>
+          <li>dbt models read directly so metric definitions stay single-source</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Logo wall — the 6 most-requested connections, inline-SVG vendor marks + a one-line caption -->
+<section class="section logo-wall section--warm wow-divider wow-divider--top">
+  <div class="container wow-reveal">
+    <p class="eyebrow">Connect in one toggle</p>
+    <h2>The connections teams ask for first</h2>
+    <p class="lede">Turn on a source or destination from the integrations catalog &mdash; most are a single toggle, no engineering ticket.</p>
+    <div class="logo-wall__grid wow-stagger">
+      <div class="logo-cell">
+        <svg viewBox="0 0 150 44" width="150" height="44" role="img" aria-label="Segment">
+          <path d="M28 16 a11 11 0 1 0 4 13" fill="none" stroke="var(--ds-accent-ink)" stroke-width="5" stroke-linecap="round"/>
+          <path d="M40 28 a11 11 0 1 0 -4 -13" fill="none" stroke="var(--ds-primary)" stroke-width="5" stroke-linecap="round"/>
+        </svg>
+        <!-- src: R-INTG-01 -->
+        <p class="role">Segment &mdash; stream existing events into Helix with one destination toggle</p>
+      </div>
+      <div class="logo-cell">
+        <svg viewBox="0 0 60 44" width="60" height="44" role="img" aria-label="Snowflake">
+          <g stroke="var(--ds-primary)" stroke-width="4" stroke-linecap="round">
+            <line x1="30" y1="8" x2="30" y2="36"/><line x1="16" y1="16" x2="44" y2="28"/><line x1="16" y1="28" x2="44" y2="16"/>
+          </g>
+        </svg>
+        <!-- src: R-INTG-02 -->
+        <p class="role">Snowflake &mdash; warehouse-native: Helix queries your models &amp; mirrors events back</p>
+      </div>
+      <div class="logo-cell">
+        <svg viewBox="0 0 56 44" width="56" height="44" role="img" aria-label="dbt">
+          <circle cx="28" cy="22" r="15" fill="var(--ds-accent-soft)"/>
+          <path d="M22 22 l4 4 l8 -10" fill="none" stroke="var(--ds-accent-ink)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <!-- src: R-INTG-03 -->
+        <p class="role">dbt &mdash; Helix reads your dbt models so metric definitions stay single-source</p>
+      </div>
+      <div class="logo-cell">
+        <svg viewBox="0 0 60 44" width="60" height="44" role="img" aria-label="BigQuery">
+          <circle cx="26" cy="20" r="12" fill="none" stroke="var(--ds-primary)" stroke-width="4"/>
+          <line x1="35" y1="29" x2="44" y2="38" stroke="var(--ds-primary)" stroke-width="4" stroke-linecap="round"/>
+        </svg>
+        <!-- src: R-INTG-04 -->
+        <p class="role">BigQuery &mdash; bidirectional sync with Google BigQuery for warehouse-native analysis</p>
+      </div>
+      <div class="logo-cell">
+        <svg viewBox="0 0 64 44" width="64" height="44" role="img" aria-label="Salesforce">
+          <path d="M22 34 a10 10 0 0 1 2 -19 a11 11 0 0 1 20 -2 a9 9 0 0 1 4 17 a8 8 0 0 1 -8 4 Z" fill="none" stroke="var(--ds-primary)" stroke-width="4" stroke-linejoin="round"/>
+        </svg>
+        <!-- src: R-INTG-05 -->
+        <p class="role">Salesforce &mdash; join product usage to CRM accounts for PQL scoring &amp; expansion signals</p>
+      </div>
+      <div class="logo-cell">
+        <svg viewBox="0 0 60 44" width="60" height="44" role="img" aria-label="HubSpot">
+          <circle cx="30" cy="14" r="7" fill="none" stroke="var(--ds-accent-ink)" stroke-width="4"/>
+          <line x1="30" y1="21" x2="30" y2="34" stroke="var(--ds-accent-ink)" stroke-width="4"/>
+          <circle cx="22" cy="36" r="5" fill="var(--ds-accent-ink)"/><circle cx="38" cy="36" r="5" fill="var(--ds-accent-ink)"/>
+        </svg>
+        <!-- src: R-INTG-06 -->
+        <p class="role">HubSpot &mdash; pipe product-qualified-lead events into HubSpot workflows</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Ecosystem block — the remaining 6 connections as a category node grid (inline-SVG marks + role caption) -->
+<section class="section ecosystem-block wow-divider wow-divider--top">
+  <div class="container wow-reveal">
+    <p class="eyebrow">Across the lifecycle</p>
+    <h2>Activate behavior into the rest of your stack</h2>
+    <div class="ecosystem-block__grid wow-stagger">
+      <div class="ecosystem-node">
+        <svg viewBox="0 0 96 96" width="96" height="96" role="img" aria-label="Slack">
+          <g fill="none" stroke="var(--ds-accent-ink)" stroke-width="8" stroke-linecap="round">
+            <line x1="34" y1="30" x2="62" y2="30"/><line x1="34" y1="66" x2="62" y2="66"/>
+            <line x1="30" y1="34" x2="30" y2="62"/><line x1="66" y1="34" x2="66" y2="62"/>
+          </g>
+        </svg>
+        <!-- src: R-INTG-07 -->
+        <p class="role">Slack &mdash; anomaly alerts and saved-report digests delivered to any channel</p>
+      </div>
+      <div class="ecosystem-node">
+        <svg viewBox="0 0 96 96" width="96" height="96" role="img" aria-label="Amplitude import">
+          <line x1="20" y1="72" x2="76" y2="72" stroke="var(--ds-line)" stroke-width="5"/>
+          <rect x="28" y="48" width="11" height="24" fill="var(--ds-primary)"/>
+          <rect x="45" y="34" width="11" height="38" fill="var(--ds-accent)"/>
+          <rect x="62" y="22" width="11" height="50" fill="var(--ds-primary)"/>
+          <path d="M48 16 l8 8 h-6 v8 h-4 v-8 h-6 Z" fill="var(--ds-accent-ink)"/>
+        </svg>
+        <!-- src: R-INTG-08 -->
+        <p class="role">Amplitude import &mdash; migrate existing Amplitude events and charts with the guided importer</p>
+      </div>
+      <div class="ecosystem-node">
+        <svg viewBox="0 0 96 96" width="96" height="96" role="img" aria-label="Stripe">
+          <rect x="22" y="26" width="52" height="44" rx="8" fill="none" stroke="var(--ds-primary)" stroke-width="5"/>
+          <path d="M38 56 q4 6 12 2 t8 -10 q-4 -6 -12 -2" fill="none" stroke="var(--ds-accent-ink)" stroke-width="5" stroke-linecap="round"/>
+        </svg>
+        <!-- src: R-INTG-09 -->
+        <p class="role">Stripe &mdash; blend revenue and subscription events with product behavior</p>
+      </div>
+      <div class="ecosystem-node">
+        <svg viewBox="0 0 96 96" width="96" height="96" role="img" aria-label="Webhooks and REST API">
+          <text x="48" y="42" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="26" font-weight="700" fill="var(--ds-primary)">&lt;/&gt;</text>
+          <path d="M30 56 a14 14 0 0 1 28 0" fill="none" stroke="var(--ds-accent-ink)" stroke-width="5" stroke-linecap="round"/>
+          <circle cx="30" cy="56" r="5" fill="var(--ds-accent-ink)"/><circle cx="64" cy="56" r="5" fill="var(--ds-accent-ink)"/>
+        </svg>
+        <!-- src: R-INTG-10 -->
+        <p class="role">Webhooks &amp; REST API &mdash; push or pull any event with a documented REST + webhook API</p>
+      </div>
+      <div class="ecosystem-node">
+        <svg viewBox="0 0 96 96" width="96" height="96" role="img" aria-label="Reverse ETL with Census">
+          <circle cx="34" cy="34" r="9" fill="var(--ds-primary)"/>
+          <circle cx="34" cy="62" r="9" fill="var(--ds-accent)"/>
+          <circle cx="66" cy="48" r="9" fill="var(--ds-accent-ink)"/>
+          <line x1="42" y1="38" x2="58" y2="46" stroke="var(--ds-line)" stroke-width="4"/>
+          <line x1="42" y1="58" x2="58" y2="50" stroke="var(--ds-line)" stroke-width="4"/>
+        </svg>
+        <!-- src: R-INTG-11 -->
+        <p class="role">Reverse ETL (Census) &mdash; activate Helix cohorts back into your tools via Census</p>
+      </div>
+      <div class="ecosystem-node">
+        <svg viewBox="0 0 96 96" width="96" height="96" role="img" aria-label="Customer.io">
+          <path d="M26 34 h44 a4 4 0 0 1 4 4 v20 a4 4 0 0 1 -4 4 h-44 a4 4 0 0 1 -4 -4 v-20 a4 4 0 0 1 4 -4 Z" fill="none" stroke="var(--ds-primary)" stroke-width="5"/>
+          <polyline points="24,38 48,54 72,38" fill="none" stroke="var(--ds-accent-ink)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <!-- src: R-INTG-12 -->
+        <p class="role">Customer.io &mdash; trigger lifecycle messaging from Helix behavioral cohorts</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section cross-link-rail wow-divider wow-divider--top">
+  <div class="container wow-reveal">
+    <p class="eyebrow">Keep exploring</p>
+    <h2>Build the workflow around your connections</h2>
+    <div class="cross-link-rail__rail">
+      <a class="cross-link" href="platform.html">See the full platform &rarr;</a>
+      <a class="cross-link" href="security.html">How we handle your data &rarr;</a>
+      <a class="cross-link" href="pricing.html">Plans &amp; pricing &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<section class="section closing-cta section--dark wow-bloom wow-divider wow-divider--top">
+  <div class="container wow-reveal">
+    <h2>Connect your stack and see insight in minutes</h2>
+    <div class="cta-row"><a class="btn btn-primary wow-glow" href="demo.html">Book a demo</a></div>
+  </div>
+</section>
+
+<!-- ════ CANONICAL FOOTER (identical to design-system/_chrome.html) ════ -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="site-footer__top">
+      <div>
+        <div class="site-footer__brand"><span class="site-footer__brand-mark">H</span>Helix Analytics</div>
+        <p class="site-footer__blurb">Product analytics for PLG teams — insight in minutes, not data-team tickets.</p>
+        <div class="site-footer__hours">
+          <strong>SOC 2 Type II · GDPR · HIPAA · ISO 27001</strong>
+          Trusted by 4,000+ product teams
+        </div>
+      </div>
+      <div class="site-footer__col">
+        <h4>Product</h4>
+        <a href="platform.html">Platform</a>
+        <a href="integrations.html">Integrations</a>
+        <a href="pricing.html">Pricing</a>
+      </div>
+      <div class="site-footer__col">
+        <h4>Trust</h4>
+        <a href="security.html">Security</a>
+        <a href="customers.html">Customers</a>
+      </div>
+      <div class="site-footer__col">
+        <h4>Developers</h4>
+        <a href="docs.html">Docs</a>
+        <a href="https://docs.helixanalytics.example/api">API reference</a>
+      </div>
+      <div class="site-footer__col">
+        <h4>Company</h4>
+        <a href="company.html">About</a>
+        <a href="demo.html">Book a demo</a>
+        <a href="https://status.helixanalytics.example">Status</a>
+      </div>
+    </div>
+    <div class="site-footer__bottom">
+      <span>&copy; 2026 Helix Analytics, Inc.</span>
+      <span class="site-footer__bcorp">Built for product-led teams</span>
+    </div>
+  </div>
+</footer>
+
+<script src="design-system/site.js" defer></script>
+</body>
+</html>

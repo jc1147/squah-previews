@@ -1,0 +1,90 @@
+/* ============================================================================
+   Riverkeep Alliance — design tokens (the ONE visual decision, locked)
+   ----------------------------------------------------------------------------
+   Identity (audit §2, fixed): river blues + living greens + warm sand;
+   friendly-but-credible Fraunces (display) + Public Sans (body);
+   surface/motion/globals = ORGANIC · SOFT-ELEVATED · GENTLE.
+   Global-design-language direction (operator-picked): "Living Water" —
+   cool blue-tinted water-glass · soft cushiony elevation w/ inset highlight ·
+   gentle slower motion (ease-out) · organic wave shape-divider · soft
+   river-blue bloom/wash. Every surface overlays the wow-* classes; polish is
+   INHERITED, never re-invented per page.
+   Contrast: all small-text-on-light + footer-on-dark pairs verified >=4.5:1
+   (accent-ink #2E6B30 = 6.03 on surface / 6.44 on surface-2; CTA label 5.74
+   on primary; footer accent 5.54 on primary-deep). Token-pure: pages read
+   only these var(--ds-*) names via structural.css.
+   ============================================================================ */
+
+:root {
+  /* ---- Color (required) ---- */
+  --ds-primary:        #1C6E8C;   /* river blue — buttons, CTAs, brand mark, links-hover */
+  --ds-primary-deep:   #103A4A;   /* deep slate-teal — body text, footer bg, dark anchor panels */
+  --ds-primary-soft:   #DCEBF0;   /* tinted blue — eyebrows, soft cards, tinted bands */
+  --ds-accent:         #7FBF6A;   /* living green — decorative pop, footer heads/B-Corp ON DARK, large display, icons, borders */
+  --ds-accent-ink:     #2E6B30;   /* darkened green — SMALL text on LIGHT (eyebrows, kickers, th, badge text, stars); >=4.5:1 on surface + surface-2 + warm + accent-soft */
+  --ds-accent-soft:    #E3EEDD;   /* tinted green — soft badge / tag backgrounds */
+  --ds-bg-surface:     #F6F8F5;   /* page background — cool river-mist off-white */
+  --ds-bg-surface-2:   #FFFFFF;   /* card / elevated surface */
+  --ds-bg-warm:        #F1EFE6;   /* warm sand — alternate section bg (.section--warm) */
+  --ds-ink:            #16323D;   /* default text — near-black slate-teal */
+  --ds-ink-soft:       #4A6068;   /* secondary text — muted slate */
+  --ds-line:           #D8E0DC;   /* borders, dividers — soft sage hairline */
+  --ds-ink-on-dark:    #F4FAF7;   /* text on dark / accent surfaces — near-white w/ a green-cool cast */
+  --ds-scrim:          rgba(16, 58, 74, 0.58);   /* image-overlay legibility scrim — brand deep-teal translucent */
+
+  /* ---- Color (optional) ---- */
+  --ds-warning:        #C2502E;   /* terracotta — sparing urgent flags only */
+  --ds-warning-soft:   #F6E1D9;
+  --ds-signature:      #E7B45A;   /* warm sand-gold — personality flourish (river-light) */
+
+  /* ---- Typography ---- */
+  --ds-font-display:   'Fraunces', 'Iowan Old Style', Georgia, serif;
+  --ds-font-body:      'Public Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --ds-font-mono:      'IBM Plex Mono', ui-monospace, 'SFMono-Regular', monospace;
+
+  /* ---- Radius (organic / soft = generous) ---- */
+  --ds-r-sm:   8px;
+  --ds-r-md:   14px;
+  --ds-r-lg:   22px;
+  --ds-r-xl:   30px;
+  --ds-r-pill: 999px;
+
+  /* ---- Shadow (soft-elevated = low-contrast cushiony lifts) ---- */
+  --ds-shadow-card: 0 4px 18px rgba(16, 58, 74, 0.07), 0 14px 40px rgba(16, 58, 74, 0.06);
+  --ds-shadow-lift: 0 10px 30px rgba(16, 58, 74, 0.12), 0 28px 64px rgba(16, 58, 74, 0.12);
+
+  /* ---- Spacing scale (structural) + layout (tunable) ---- */
+  --ds-space-2xs: 4px;
+  --ds-space-xs:  8px;
+  --ds-space-sm:  12px;
+  --ds-space-md:  16px;
+  --ds-space-lg:  24px;
+  --ds-space-xl:  40px;
+  --ds-space-2xl: 64px;
+  --ds-space-3xl: 96px;
+  --ds-section-py:    clamp(64px, 9vw, 120px);
+  --ds-container-max: 1160px;
+
+  /* ---- Motion (base) ---- */
+  --ds-ease: cubic-bezier(0.22, 0.61, 0.27, 1);   /* gentle ease-out */
+  --ds-dur:  220ms;                                /* base transition — unhurried */
+
+  /* ===================================================================
+     GLOBALS OVERLAY — modern-wow (12 tokens) — "Living Water" direction
+     Locked ONCE here at the web card. Every wow-* class skins from these.
+     Textured for a calm, organic, soft, credible nonprofit: cool
+     blue-tinted water-glass · gentle slow motion · soft river bloom.
+     =================================================================== */
+  --ds-glass-bg:     rgba(246, 248, 245, 0.72);                 /* cool river-mist translucent nav/panel fill */
+  --ds-glass-blur:   blur(18px) saturate(140%);                 /* generous, soft water-glass */
+  --ds-glass-border: rgba(28, 110, 140, 0.16);                  /* river-blue hairline on glass */
+  --ds-hairline:     rgba(16, 58, 74, 0.10);                    /* 1px low-opacity slate hairline */
+  --ds-inset-hi:     inset 0 1px 0 rgba(255, 255, 255, 0.55);   /* soft top sheen — cushioned light */
+  --ds-glow:         0 0 46px rgba(28, 110, 140, 0.34);         /* river-blue bloom on CTA/hero */
+  --ds-glow-wash:    radial-gradient(60% 60% at 50% 0%, rgba(28, 110, 140, 0.16), transparent 70%);  /* soft hero/section bloom */
+  --ds-grain:        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");  /* ultra-low river-texture grain */
+  --ds-divider-h:    88px;                                      /* organic wave shape-divider height */
+  --ds-dur-fast:     180ms;                                     /* micro-interactions — soft */
+  --ds-dur-slow:     700ms;                                     /* scroll-reveal — gentle, unhurried */
+  --ds-ease-out:     cubic-bezier(0.2, 0.62, 0.24, 1);          /* reveal/zoom curve — water-glide */
+}

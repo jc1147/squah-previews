@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Platform — Helix Analytics product analytics for PLG teams</title>
+  <meta name="description" content="The Helix platform: real-time funnels, session replay, cohort retention, no-code tracking, warehouse-native sync and anomaly alerts — self-serve product analytics in minutes, not data-team tickets. Book a demo.">
+  <!-- PATTERN SHELL ONLY: no inline style block; tokens.css + structural.css own all styling. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=JetBrains+Mono:wght@500;700&display=swap">
+  <link rel="stylesheet" href="design-system/tokens.css">
+  <link rel="stylesheet" href="design-system/structural.css">
+  <link rel="stylesheet" href="design-system/brand-overlay.css">
+<!--
+  platform.html — INNER PAGE (shell-purity: ONLY COMPONENT-VOCABULARY classes, NO inline styles).
+  TEMPLATE: templates/features/features-1-platform.html
+    SC#1 hero (.section--dark) -> .capability-breakdown (MV feature grid)
+      -> .feature-rows / .feature-row (alternating rows) -> .data-proof (MV stat band)
+      -> .closing-cta. Positioning shapes the hero/kicker; CONVERSION_GOAL book_demo shapes
+    the hero + closing CTA (Book a demo -> demo.html, wow-glow).
+  CHROME: cloned IDENTICALLY from design-system/_chrome.html (same as index.html) — header
+    (.site-header.wow-glass) + mobile drawer + footer + design-system/site.js. Only the active
+    nav state changes (aria-current="page" on the Platform link). All real page links + the
+    Book-a-demo primary CTA preserved.
+  VISUALS: medium-agnostic INLINE SVG (capability icons + dashboard/replay/retention/sync
+    panels), each >=120px in its open tag (CSS sizes them down via canonical classes). No stock.
+-->
+</head>
+<body>
+
+<!-- ════ CANONICAL HEADER (identical to design-system/_chrome.html; active=Platform) ════ -->
+<header class="site-header wow-glass">
+  <div class="container site-header__bar">
+    <a class="brand" href="index.html">
+      <span class="brand__mark">H</span>
+      Helix Analytics
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <a href="platform.html" aria-current="page">Platform</a>
+      <a href="integrations.html">Integrations</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="security.html">Security</a>
+      <a href="customers.html">Customers</a>
+      <a class="btn btn-primary wow-glow" href="demo.html">Book a demo</a>
+    </nav>
+    <button class="site-header__hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-drawer">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+<div class="site-drawer-backdrop" data-open="false"></div>
+<nav id="mobile-drawer" class="site-drawer" aria-hidden="true" aria-label="Mobile">
+  <button class="site-drawer__close" aria-label="Close menu">&times;</button>
+  <ul class="site-drawer__links">
+    <li><a href="platform.html" aria-current="page">Platform</a></li>
+    <li><a href="integrations.html">Integrations</a></li>
+    <li><a href="pricing.html">Pricing</a></li>
+    <li><a href="security.html">Security</a></li>
+    <li><a href="customers.html">Customers</a></li>
+  </ul>
+  <a class="btn btn-primary wow-glow" href="demo.html">Book a demo</a>
+</nav>
+
+<!-- ════ HERO — positioning headline + Book-a-demo CTA + inline SVG product surface ════ -->
+<section class="section hero section--dark wow-bloom wow-grain">
+  <div class="container hero__inner wow-reveal">
+    <p class="eyebrow">The Helix platform</p>
+    <h1>Every product question, answered in minutes.</h1>
+    <p class="lede">Funnels, session replay, retention, no-code tracking, warehouse sync and alerts &mdash; one self-serve platform so any PM or growth engineer gets the answer themselves, no SQL and no data-team ticket.</p>
+    <div class="cta-row">
+      <a class="btn btn-primary wow-glow" href="demo.html">Book a demo</a>
+      <a class="btn btn-secondary" href="integrations.html">See integrations</a>
+    </div>
+    <figure class="wow-zoom" aria-hidden="true">
+      <svg viewBox="0 0 1080 360" width="1080" height="360" role="img" aria-label="Helix platform workspace: funnel, replay timeline and retention curve">
+        <defs>
+          <linearGradient id="pbar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7950F2"/><stop offset="1" stop-color="#4C6EF5"/></linearGradient>
+          <linearGradient id="parea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7950F2" stop-opacity="0.45"/><stop offset="1" stop-color="#4C6EF5" stop-opacity="0"/></linearGradient>
+        </defs>
+        <rect x="0" y="0" width="1080" height="360" rx="16" fill="#0b0e14"/>
+        <rect x="24" y="20" width="1032" height="44" rx="10" fill="#161b27"/>
+        <circle cx="50" cy="42" r="6" fill="#7950F2"/><circle cx="72" cy="42" r="6" fill="#4C6EF5" opacity="0.6"/><circle cx="94" cy="42" r="6" fill="#22B8CF" opacity="0.5"/>
+        <rect x="120" y="35" width="180" height="14" rx="7" fill="#2a3142"/>
+        <text x="1016" y="47" text-anchor="end" font-family="JetBrains Mono, monospace" font-size="13" fill="#7c8aff">p95 184ms</text>
+        <!-- funnel panel -->
+        <rect x="24" y="84" width="336" height="252" rx="14" fill="#12161f" stroke="#222a3a"/>
+        <text x="44" y="116" font-family="Space Grotesk, sans-serif" font-size="15" fill="#EEF1F7" font-weight="600">Real-time funnel</text>
+        <rect x="44" y="132" width="296" height="30" rx="6" fill="url(#pbar)"/>
+        <rect x="44" y="170" width="232" height="30" rx="6" fill="url(#pbar)" opacity="0.85"/>
+        <rect x="44" y="208" width="158" height="30" rx="6" fill="url(#pbar)" opacity="0.7"/>
+        <rect x="44" y="246" width="104" height="30" rx="6" fill="url(#pbar)" opacity="0.55"/>
+        <text x="332" y="153" text-anchor="end" font-family="JetBrains Mono, monospace" font-size="12" fill="#fff">100%</text>
+        <text x="332" y="191" text-anchor="end" font-family="JetBrains Mono, monospace" font-size="12" fill="#cdd5ff">79%</text>
+        <text x="332" y="229" text-anchor="end" font-family="JetBrains Mono, monospace" font-size="12" fill="#cdd5ff">54%</text>
+        <text x="332" y="267" text-anchor="end" font-family="JetBrains Mono, monospace" font-size="12" fill="#cdd5ff">35%</text>
+        <text x="44" y="306" font-family="DM Sans, sans-serif" font-size="11" fill="#7e8aa3">segmentable by any property &middot; live</text>
+        <!-- session replay panel -->
+        <rect x="372" y="84" width="336" height="252" rx="14" fill="#12161f" stroke="#222a3a"/>
+        <text x="392" y="116" font-family="Space Grotesk, sans-serif" font-size="15" fill="#EEF1F7" font-weight="600">Session replay</text>
+        <rect x="392" y="132" width="296" height="120" rx="8" fill="#0b0e14" stroke="#2a3142"/>
+        <path d="M520 168 L552 192 L520 216 Z" fill="#7950F2"/>
+        <circle cx="468" cy="172" r="14" fill="none" stroke="#22B8CF" stroke-width="2"/>
+        <text x="392" y="282" font-family="JetBrains Mono, monospace" font-size="11" fill="#7e8aa3">00:14 / 02:38</text>
+        <rect x="392" y="294" width="296" height="6" rx="3" fill="#2a3142"/>
+        <rect x="392" y="294" width="118" height="6" rx="3" fill="#22B8CF"/>
+        <text x="392" y="322" font-family="DM Sans, sans-serif" font-size="11" fill="#7e8aa3">rage-click tagged &middot; PII masked</text>
+        <!-- retention panel -->
+        <rect x="720" y="84" width="336" height="252" rx="14" fill="#12161f" stroke="#222a3a"/>
+        <text x="740" y="116" font-family="Space Grotesk, sans-serif" font-size="15" fill="#EEF1F7" font-weight="600">Cohort retention</text>
+        <polyline points="740,300 786,250 832,222 878,204 924,194 970,188 1016,184" fill="none" stroke="#7950F2" stroke-width="3"/>
+        <polygon points="740,300 786,250 832,222 878,204 924,194 970,188 1016,184 1016,308 740,308" fill="url(#parea)"/>
+        <circle cx="832" cy="222" r="4" fill="#22B8CF"/><circle cx="970" cy="188" r="4" fill="#22B8CF"/>
+        <line x1="740" y1="308" x2="1016" y2="308" stroke="#2a3142"/>
+        <text x="740" y="326" font-family="JetBrains Mono, monospace" font-size="11" fill="#7e8aa3">D0</text>
+        <text x="1016" y="326" text-anchor="end" font-family="JetBrains Mono, monospace" font-size="11" fill="#7e8aa3">D30</text>
+      </svg>
+    </figure>
+  </div>
+</section>
+
+<!-- ════ CAPABILITY BREAKDOWN — R-FEAT-01/02/03/04 (icon cards) ════ -->
+<section class="section capability-breakdown wow-divider wow-divider--top">
+  <div class="container wow-reveal">
+    <p class="eyebrow">The core four</p>
+    <h2>Built for self-serve answers</h2>
+    <div class="cap-breakdown__grid wow-stagger">
+      <article class="card capability-card wow-lift">
+        <span class="capability-card__icon">
+          <svg viewBox="0 0 128 128" width="128" height="128" role="img" aria-label="Funnel"><path d="M20 28 H108 L76 72 V104 L52 92 V72 Z" fill="none" stroke="var(--ds-primary)" stroke-width="6" stroke-linejoin="round"/></svg>
+        </span>
+        <!-- src: R-FEAT-01 -->
+        <h3>Real-time funnels</h3>
+        <p>Define a multi-step funnel on any event and watch drop-off live &mdash; segmentable by any property, with no SQL.</p>
+      </article>
+      <article class="card capability-card wow-lift">
+        <span class="capability-card__icon">
+          <svg viewBox="0 0 128 128" width="128" height="128" role="img" aria-label="Session replay"><rect x="20" y="28" width="88" height="60" rx="8" fill="none" stroke="var(--ds-primary)" stroke-width="6"/><path d="M56 48 L80 60 L56 72 Z" fill="var(--ds-primary)"/><line x1="44" y1="104" x2="84" y2="104" stroke="var(--ds-primary)" stroke-width="6"/></svg>
+        </span>
+        <!-- src: R-FEAT-02 -->
+        <h3>Session replay</h3>
+        <p>Jump from any anomalous funnel step straight into the recorded sessions &mdash; rage-click and dead-click tagged, PII masked on by default.</p>
+      </article>
+      <article class="card capability-card wow-lift">
+        <span class="capability-card__icon">
+          <svg viewBox="0 0 128 128" width="128" height="128" role="img" aria-label="Cohort retention"><line x1="24" y1="100" x2="104" y2="100" stroke="var(--ds-primary)" stroke-width="6"/><rect x="32" y="68" width="16" height="32" fill="var(--ds-primary)"/><rect x="56" y="52" width="16" height="48" fill="var(--ds-accent)"/><rect x="80" y="36" width="16" height="64" fill="var(--ds-primary)"/></svg>
+        </span>
+        <!-- src: R-FEAT-03 -->
+        <h3>Cohort retention</h3>
+        <p>Build a behavioral cohort from any event and chart N-day or unbounded retention against a baseline.</p>
+      </article>
+      <article class="card capability-card wow-lift">
+        <span class="capability-card__icon">
+          <svg viewBox="0 0 128 128" width="128" height="128" role="img" aria-label="No-code event tracking"><circle cx="64" cy="64" r="40" fill="none" stroke="var(--ds-primary)" stroke-width="6"/><path d="M64 40 V64 L82 78" stroke="var(--ds-accent)" stroke-width="6" fill="none" stroke-linecap="round"/><circle cx="64" cy="64" r="5" fill="var(--ds-accent)"/></svg>
+        </span>
+        <!-- src: R-FEAT-04 -->
+        <h3>No-code event tracking</h3>
+        <p>Capture and name events in the visual editor without shipping code &mdash; with a governance layer that blocks duplicate, dirty events.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ════ FEATURE ROWS — R-FEAT-05/06/07 (alternating media + copy) ════ -->
+<section class="section feature-rows wow-divider wow-divider--top">
+  <div class="container wow-reveal">
+    <p class="eyebrow">Goes deeper</p>
+    <h2>The data team's leverage, not their backlog</h2>
+
+    <div class="feature-row">
+      <figure class="feature-row__media wow-zoom">
+        <svg viewBox="0 0 520 320" width="520" height="320" role="img" aria-label="Warehouse-native sync diagram">
+          <rect x="0" y="0" width="520" height="320" rx="14" fill="#12161f"/>
+          <rect x="40" y="60" width="150" height="200" rx="12" fill="#0b0e14" stroke="#2a3142"/>
+          <text x="115" y="95" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-size="14" fill="#EEF1F7" font-weight="600">Warehouse</text>
+          <text x="115" y="116" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="11" fill="#7e8aa3">Snowflake &middot; BigQuery</text>
+          <rect x="64" y="136" width="102" height="14" rx="4" fill="#2a3142"/>
+          <rect x="64" y="160" width="102" height="14" rx="4" fill="#2a3142"/>
+          <rect x="64" y="184" width="72" height="14" rx="4" fill="#2a3142"/>
+          <rect x="330" y="60" width="150" height="200" rx="12" fill="#0b0e14" stroke="#2a3142"/>
+          <text x="405" y="95" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-size="14" fill="#EEF1F7" font-weight="600">Helix</text>
+          <text x="405" y="116" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="11" fill="#7e8aa3">funnels &middot; retention</text>
+          <rect x="354" y="136" width="102" height="14" rx="4" fill="#7950F2" opacity="0.7"/>
+          <rect x="354" y="160" width="102" height="14" rx="4" fill="#4C6EF5" opacity="0.7"/>
+          <rect x="354" y="184" width="72" height="14" rx="4" fill="#22B8CF" opacity="0.7"/>
+          <path d="M190 150 H330" stroke="#7950F2" stroke-width="3"/>
+          <polygon points="322,144 334,150 322,156" fill="#7950F2"/>
+          <path d="M330 184 H190" stroke="#22B8CF" stroke-width="3"/>
+          <polygon points="198,178 186,184 198,190" fill="#22B8CF"/>
+          <text x="260" y="138" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="10" fill="#7e8aa3">read</text>
+          <text x="260" y="206" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="10" fill="#7e8aa3">mirror back</text>
+        </svg>
+      </figure>
+      <div class="feature-row__body">
+        <span class="feature-row__kicker">Warehouse-native</span>
+        <!-- src: R-FEAT-05 -->
+        <h3>Warehouse-native sync</h3>
+        <p>Model in the warehouse you already trust and Helix reads it directly &mdash; or mirror Helix events back to Snowflake and BigQuery. Zero double-instrumentation.</p>
+        <ul class="feature-row__list">
+          <li>Read live from Snowflake / BigQuery, no copy-and-pray ETL</li>
+          <li>Mirror Helix events back so the warehouse stays the source of truth</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="feature-row">
+      <figure class="feature-row__media wow-zoom">
+        <svg viewBox="0 0 520 320" width="520" height="320" role="img" aria-label="Anomaly alert on a metric breaking its band">
+          <rect x="0" y="0" width="520" height="320" rx="14" fill="#12161f"/>
+          <text x="40" y="58" font-family="Space Grotesk, sans-serif" font-size="14" fill="#EEF1F7" font-weight="600">Activation rate</text>
+          <rect x="40" y="74" width="440" height="120" rx="8" fill="#0b0e14" stroke="#2a3142"/>
+          <path d="M52 150 Q120 110 188 130 T324 120" fill="none" stroke="#4C6EF5" stroke-width="2" stroke-dasharray="5 5" opacity="0.5"/>
+          <path d="M52 96 Q120 70 188 86 T324 80" fill="none" stroke="#4C6EF5" stroke-width="2" stroke-dasharray="5 5" opacity="0.5"/>
+          <polyline points="52,124 120,118 188,108 256,116 324,128 392,176 460,182" fill="none" stroke="#7950F2" stroke-width="3"/>
+          <circle cx="392" cy="176" r="7" fill="none" stroke="#FA5252" stroke-width="3"/>
+          <text x="40" y="184" font-family="DM Sans, sans-serif" font-size="10" fill="#7e8aa3">expected band</text>
+          <rect x="40" y="222" width="440" height="62" rx="10" fill="#1a1410" stroke="#FA5252" stroke-opacity="0.5"/>
+          <circle cx="68" cy="253" r="10" fill="#FA5252"/>
+          <text x="68" y="258" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="13" fill="#0b0e14" font-weight="700">!</text>
+          <text x="92" y="248" font-family="Space Grotesk, sans-serif" font-size="13" fill="#EEF1F7" font-weight="600">Activation broke its band</text>
+          <text x="92" y="268" font-family="DM Sans, sans-serif" font-size="11" fill="#9aa6c0">posted to #growth &middot; 2 min ago</text>
+        </svg>
+      </figure>
+      <div class="feature-row__body">
+        <span class="feature-row__kicker">Always watching</span>
+        <!-- src: R-FEAT-06 -->
+        <h3>Anomaly alerts</h3>
+        <p>Helix watches your key funnels and retention curves and pings Slack or email the moment a metric breaks its expected band &mdash; so you catch the regression before the QBR does.</p>
+        <ul class="feature-row__list">
+          <li>Statistical bands per metric, no static thresholds to babysit</li>
+          <li>Routed to Slack or email with the broken step in context</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="feature-row">
+      <figure class="feature-row__media wow-zoom">
+        <svg viewBox="0 0 520 320" width="520" height="320" role="img" aria-label="Self-serve exploration query builder">
+          <rect x="0" y="0" width="520" height="320" rx="14" fill="#12161f"/>
+          <text x="40" y="58" font-family="Space Grotesk, sans-serif" font-size="14" fill="#EEF1F7" font-weight="600">Ask your own question</text>
+          <rect x="40" y="74" width="440" height="40" rx="8" fill="#0b0e14" stroke="#2a3142"/>
+          <text x="60" y="99" font-family="JetBrains Mono, monospace" font-size="12" fill="#7c8aff">events where plan = pro</text>
+          <rect x="40" y="124" width="210" height="40" rx="8" fill="#0b0e14" stroke="#2a3142"/>
+          <text x="60" y="149" font-family="JetBrains Mono, monospace" font-size="12" fill="#9aa6c0">group by week</text>
+          <rect x="262" y="124" width="218" height="40" rx="8" fill="#7950F2"/>
+          <text x="371" y="149" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-size="13" fill="#fff" font-weight="600">Run &middot; 184ms</text>
+          <rect x="40" y="180" width="440" height="104" rx="8" fill="#0b0e14" stroke="#2a3142"/>
+          <rect x="64" y="252" width="36" height="14" fill="#22B8CF"/>
+          <rect x="128" y="232" width="36" height="34" fill="#4C6EF5"/>
+          <rect x="192" y="216" width="36" height="50" fill="#7950F2"/>
+          <rect x="256" y="226" width="36" height="40" fill="#4C6EF5"/>
+          <rect x="320" y="204" width="36" height="62" fill="#7950F2"/>
+          <rect x="384" y="196" width="36" height="70" fill="#22B8CF"/>
+        </svg>
+      </figure>
+      <div class="feature-row__body">
+        <span class="feature-row__kicker">No more tickets</span>
+        <!-- src: R-FEAT-07 -->
+        <h3>Self-serve exploration</h3>
+        <p>Any PM or growth engineer answers their own product question in minutes &mdash; build the query, slice it, and get the chart, all without filing a data-team ticket.</p>
+        <ul class="feature-row__list">
+          <li>Point-and-click query builder, results in well under a second</li>
+          <li>Share the saved view so the next person doesn't re-ask</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ DATA PROOF / STAT BAND — R-STAT-01/02 + R-PROOF-01 ════ -->
+<section class="section data-proof stat-strip section--dark wow-divider wow-divider--top">
+  <div class="container wow-reveal">
+    <p class="eyebrow">Fast at any scale</p>
+    <h2>Built for billions of events</h2>
+    <div class="data-proof__grid wow-stagger">
+      <div class="stat">
+        <!-- src: R-STAT-01 -->
+        <span class="stat__num">2.4B</span>
+        <span class="stat__label">events ingested per day</span>
+        <span class="data-proof__sub">across all Helix workspaces</span>
+      </div>
+      <div class="stat">
+        <!-- src: R-STAT-02 -->
+        <span class="stat__num">&lt;200ms</span>
+        <span class="stat__label">p95 query latency</span>
+        <span class="data-proof__sub">on funnel + retention queries</span>
+      </div>
+      <div class="stat">
+        <!-- src: R-PROOF-01 -->
+        <span class="stat__num">80%</span>
+        <span class="stat__label">of product questions answered self-serve</span>
+        <span class="data-proof__sub">by PLG teams &mdash; no data-team ticket</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ CLOSING BOOK-A-DEMO CTA — R-PROOF-02 + conversion goal book_demo ════ -->
+<section class="section closing-cta section--dark wow-bloom wow-divider wow-divider--top">
+  <div class="container wow-reveal">
+    <h2>See the whole platform on your own data</h2>
+    <!-- src: R-PROOF-02 -->
+    <p class="lede">Median time-to-first-insight after onboarding is under one day &mdash; book a 30-minute demo and we'll wire funnels, replay and retention to your product live.</p>
+    <div class="cta-row"><a class="btn btn-primary wow-glow" href="demo.html">Book a demo</a></div>
+  </div>
+</section>
+
+<!-- ════ CANONICAL FOOTER (identical to design-system/_chrome.html) ════ -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="site-footer__top">
+      <div>
+        <div class="site-footer__brand"><span class="site-footer__brand-mark">H</span>Helix Analytics</div>
+        <p class="site-footer__blurb">Product analytics for PLG teams — insight in minutes, not data-team tickets.</p>
+        <div class="site-footer__hours">
+          <strong>SOC 2 Type II · GDPR · HIPAA · ISO 27001</strong>
+          Trusted by 4,000+ product teams
+        </div>
+      </div>
+      <div class="site-footer__col">
+        <h4>Product</h4>
+        <a href="platform.html">Platform</a>
+        <a href="integrations.html">Integrations</a>
+        <a href="pricing.html">Pricing</a>
+      </div>
+      <div class="site-footer__col">
+        <h4>Trust</h4>
+        <a href="security.html">Security</a>
+        <a href="customers.html">Customers</a>
+      </div>
+      <div class="site-footer__col">
+        <h4>Developers</h4>
+        <a href="docs.html">Docs</a>
+        <a href="https://docs.helixanalytics.example/api">API reference</a>
+      </div>
+      <div class="site-footer__col">
+        <h4>Company</h4>
+        <a href="company.html">About</a>
+        <a href="demo.html">Book a demo</a>
+        <a href="https://status.helixanalytics.example">Status</a>
+      </div>
+    </div>
+    <div class="site-footer__bottom">
+      <span>&copy; 2026 Helix Analytics, Inc.</span>
+      <span class="site-footer__bcorp">Built for product-led teams</span>
+    </div>
+  </div>
+</footer>
+
+<script src="design-system/site.js" defer></script>
+</body>
+</html>

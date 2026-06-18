@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Helix Analytics — docs, guides & API reference for product teams</title>
+  <meta name="description" content="Helix developer docs: quickstart, full REST + webhook API reference, integration guides, the PLG analytics playbook and event-governance guides. Everything to instrument and scale product analytics.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=JetBrains+Mono:wght@500;700&display=swap">
+  <!-- PATTERN SHELL ONLY: no inline styling. tokens.css + structural.css own all styling. -->
+  <link rel="stylesheet" href="design-system/tokens.css">
+  <link rel="stylesheet" href="design-system/structural.css">
+  <link rel="stylesheet" href="design-system/brand-overlay.css">
+</head>
+<body>
+<!-- TEMPLATE: docs-index-1 "Docs / resources index" - PATTERN SHELL ONLY (zero inline styling)
+     Chrome = LOCKED SHARED chrome, cloned IDENTICALLY from design-system/_chrome.html
+     (head links + full header.site-header.wow-glass + mobile drawer + footer).
+     docs is reached from the footer Developers col, so NO primary-nav link takes an active
+     state - chrome is left byte-identical. CONVERSION_GOAL book_demo -> closing CTA = demo.html.
+     Body = docs-index-1 pattern (hero -> .doc-index category-grouped .doc-list -> .cross-link-rail
+     -> .closing-cta) bound to R-DOC-01..06 + R-FEAT-04, each with an adjacent src marker.
+     Medium-agnostic INLINE SVG visuals (no stock photos): a >=120px docs/API illustration in the
+     hero + per-row SVG glyphs inside each .doc-list__icon. wow-* overlay for depth. -->
+
+<!-- ════ CANONICAL HEADER (identical to design-system/_chrome.html) ════ -->
+<header class="site-header wow-glass">
+  <div class="container site-header__bar">
+    <a class="brand" href="index.html">
+      <span class="brand__mark">H</span>
+      Helix Analytics
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <a href="platform.html">Platform</a>
+      <a href="integrations.html">Integrations</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="security.html">Security</a>
+      <a href="customers.html">Customers</a>
+      <a class="btn btn-primary wow-glow" href="demo.html">Book a demo</a>
+    </nav>
+    <button class="site-header__hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-drawer">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+<div class="site-drawer-backdrop" data-open="false"></div>
+<nav id="mobile-drawer" class="site-drawer" aria-hidden="true" aria-label="Mobile">
+  <button class="site-drawer__close" aria-label="Close menu">&times;</button>
+  <ul class="site-drawer__links">
+    <li><a href="platform.html">Platform</a></li>
+    <li><a href="integrations.html">Integrations</a></li>
+    <li><a href="pricing.html">Pricing</a></li>
+    <li><a href="security.html">Security</a></li>
+    <li><a href="customers.html">Customers</a></li>
+  </ul>
+  <a class="btn btn-primary wow-glow" href="demo.html">Book a demo</a>
+</nav>
+
+<!-- ════ HERO — docs entry + >=120px inline-SVG docs/API illustration ════ -->
+<section class="section hero section--dark wow-bloom wow-grain">
+  <div class="container wow-reveal">
+    <p class="eyebrow">Developer docs &amp; resources</p>
+    <h1>Everything you need to instrument and scale Helix.</h1>
+    <p class="lede">From a 10-minute quickstart to the full API reference, integration guides and the PLG analytics playbook &mdash; the docs your engineers and PMs reach for.</p>
+    <figure class="feature-row__media wow-zoom" aria-hidden="true">
+      <svg viewBox="0 0 760 240" width="760" height="240" role="img" aria-label="Helix docs and API reference illustration">
+        <defs>
+          <linearGradient id="dwin" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7950F2"/><stop offset="1" stop-color="#4C6EF5"/></linearGradient>
+        </defs>
+        <rect x="0" y="0" width="760" height="240" rx="14" fill="#0b0e14"/>
+        <rect x="24" y="24" width="170" height="192" rx="12" fill="#12161f" stroke="#222a3a"/>
+        <rect x="44" y="48" width="120" height="12" rx="6" fill="url(#dwin)"/>
+        <rect x="44" y="76" width="96" height="9" rx="4.5" fill="#2a3142"/>
+        <rect x="44" y="98" width="110" height="9" rx="4.5" fill="#2a3142"/>
+        <rect x="44" y="120" width="80" height="9" rx="4.5" fill="#2a3142"/>
+        <rect x="44" y="142" width="104" height="9" rx="4.5" fill="#2a3142"/>
+        <rect x="44" y="164" width="72" height="9" rx="4.5" fill="#2a3142"/>
+        <rect x="44" y="186" width="98" height="9" rx="4.5" fill="#2a3142"/>
+        <rect x="214" y="24" width="522" height="192" rx="12" fill="#12161f" stroke="#222a3a"/>
+        <text x="236" y="56" font-family="JetBrains Mono, monospace" font-size="13" fill="#7c8aff">POST /v1/events</text>
+        <rect x="236" y="72" width="478" height="1" fill="#222a3a"/>
+        <text x="236" y="100" font-family="JetBrains Mono, monospace" font-size="12" fill="#a7b0c8">{ "event": "project_created",</text>
+        <text x="236" y="122" font-family="JetBrains Mono, monospace" font-size="12" fill="#a7b0c8">&#160;&#160;"user_id": "u_8f21",</text>
+        <text x="236" y="144" font-family="JetBrains Mono, monospace" font-size="12" fill="#a7b0c8">&#160;&#160;"props": { "plan": "pro" } }</text>
+        <rect x="236" y="166" width="120" height="28" rx="6" fill="#173a2a"/>
+        <text x="250" y="185" font-family="JetBrains Mono, monospace" font-size="12" fill="#3ddc84">200 OK &middot; 42ms</text>
+        <circle cx="690" cy="50" r="14" fill="none" stroke="#22B8CF" stroke-width="3"/>
+        <path d="M684 50 l4 4 l8 -9" stroke="#22B8CF" stroke-width="3" fill="none"/>
+      </svg>
+    </figure>
+  </div>
+</section>
+
+<!-- ════ DOCS INDEX — category-grouped resource lists (R-DOC-01..06 + R-FEAT-04) ════ -->
+<section class="section doc-index">
+  <div class="container wow-reveal">
+    <p class="eyebrow">Browse the docs</p>
+    <h2>Guides, references &amp; downloads</h2>
+
+    <div class="doc-index__group">
+      <p class="doc-index__group-title">Get started</p>
+      <div class="doc-list wow-stagger">
+        <a class="doc-list__item wow-lift" href="https://docs.helixanalytics.example/quickstart">
+          <span class="doc-list__icon"><svg viewBox="0 0 128 128" width="128" height="128" role="img" aria-label="Quickstart"><path d="M70 18 L40 70 H64 L58 110 L92 54 H66 Z" fill="none" stroke="var(--ds-accent-ink)" stroke-width="8" stroke-linejoin="round"/></svg></span>
+          <span class="doc-list__text"><!-- src: R-DOC-02 --><span class="doc-list__title">Quickstart: instrument your first event in 10 minutes</span><span class="doc-list__dek">Step-by-step guide to capturing your first event and seeing it land in a live funnel.</span></span>
+          <span class="doc-list__meta">Guide &middot; 10 min</span>
+        </a>
+        <a class="doc-list__item wow-lift" href="https://docs.helixanalytics.example/track">
+          <span class="doc-list__icon"><svg viewBox="0 0 128 128" width="128" height="128" role="img" aria-label="No-code event tracking"><circle cx="50" cy="50" r="26" fill="none" stroke="var(--ds-accent-ink)" stroke-width="8"/><line x1="70" y1="70" x2="104" y2="104" stroke="var(--ds-accent-ink)" stroke-width="8" stroke-linecap="round"/><circle cx="50" cy="50" r="7" fill="var(--ds-accent-ink)"/></svg></span>
+          <span class="doc-list__text"><!-- src: R-FEAT-04 --><span class="doc-list__title">No-code event tracking</span><span class="doc-list__dek">Capture events in the visual editor &mdash; these docs cover the governance layer that keeps them clean.</span></span>
+          <span class="doc-list__meta">Guide</span>
+        </a>
+        <a class="doc-list__item wow-lift" href="https://docs.helixanalytics.example/taxonomy">
+          <span class="doc-list__icon"><svg viewBox="0 0 128 128" width="128" height="128" role="img" aria-label="Event taxonomy"><circle cx="64" cy="30" r="12" fill="none" stroke="var(--ds-accent-ink)" stroke-width="8"/><circle cx="34" cy="98" r="12" fill="none" stroke="var(--ds-accent-ink)" stroke-width="8"/><circle cx="94" cy="98" r="12" fill="none" stroke="var(--ds-accent-ink)" stroke-width="8"/><path d="M64 42 V70 M64 70 L34 86 M64 70 L94 86" stroke="var(--ds-accent-ink)" stroke-width="8" fill="none"/></svg></span>
+          <span class="doc-list__text"><!-- src: R-DOC-06 --><span class="doc-list__title">Event taxonomy &amp; governance guide</span><span class="doc-list__dek">How to keep your event data clean, named and trustworthy as your product scales.</span></span>
+          <span class="doc-list__meta">Guide</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="doc-index__group">
+      <p class="doc-index__group-title">Build &amp; integrate</p>
+      <div class="doc-list wow-stagger">
+        <a class="doc-list__item wow-lift" href="https://docs.helixanalytics.example/api">
+          <span class="doc-list__icon"><svg viewBox="0 0 128 128" width="128" height="128" role="img" aria-label="API reference"><path d="M46 38 L22 64 L46 90" fill="none" stroke="var(--ds-accent-ink)" stroke-width="8" stroke-linejoin="round" stroke-linecap="round"/><path d="M82 38 L106 64 L82 90" fill="none" stroke="var(--ds-accent-ink)" stroke-width="8" stroke-linejoin="round" stroke-linecap="round"/><line x1="72" y1="30" x2="56" y2="98" stroke="var(--ds-accent-ink)" stroke-width="8" stroke-linecap="round"/></svg></span>
+          <span class="doc-list__text"><!-- src: R-DOC-01 --><span class="doc-list__title">API reference</span><span class="doc-list__dek">Full REST + webhook reference with copy-paste examples for every endpoint.</span></span>
+          <span class="doc-list__meta">Reference</span>
+        </a>
+        <a class="doc-list__item wow-lift" href="https://docs.helixanalytics.example/integrations">
+          <span class="doc-list__icon"><svg viewBox="0 0 128 128" width="128" height="128" role="img" aria-label="Integration guides"><rect x="20" y="46" width="36" height="36" rx="8" fill="none" stroke="var(--ds-accent-ink)" stroke-width="8"/><rect x="72" y="46" width="36" height="36" rx="8" fill="none" stroke="var(--ds-accent-ink)" stroke-width="8"/><line x1="56" y1="64" x2="72" y2="64" stroke="var(--ds-accent-ink)" stroke-width="8"/></svg></span>
+          <span class="doc-list__text"><!-- src: R-DOC-04 --><span class="doc-list__title">Integration guides</span><span class="doc-list__dek">Step-by-step setup for Segment, Snowflake, dbt and the rest of your data stack.</span></span>
+          <span class="doc-list__meta">Guides</span>
+        </a>
+        <a class="doc-list__item wow-lift" href="https://docs.helixanalytics.example/case-studies/driftwave.pdf">
+          <span class="doc-list__icon"><svg viewBox="0 0 128 128" width="128" height="128" role="img" aria-label="Driftwave case study PDF"><path d="M34 18 H80 L102 40 V110 H34 Z" fill="none" stroke="var(--ds-accent-ink)" stroke-width="8" stroke-linejoin="round"/><path d="M80 18 V40 H102" fill="none" stroke="var(--ds-accent-ink)" stroke-width="8" stroke-linejoin="round"/><line x1="48" y1="66" x2="88" y2="66" stroke="var(--ds-accent-ink)" stroke-width="7"/><line x1="48" y1="84" x2="76" y2="84" stroke="var(--ds-accent-ink)" stroke-width="7"/></svg></span>
+          <span class="doc-list__text"><!-- src: R-DOC-03 --><span class="doc-list__title">Case study: how Driftwave built PQL scoring on Helix</span><span class="doc-list__dek">A product-qualified-lead model built on Helix events &mdash; the architecture and the results.</span></span>
+          <span class="doc-list__meta">PDF</span>
+        </a>
+        <a class="doc-list__item wow-lift" href="https://docs.helixanalytics.example/plg-playbook.pdf">
+          <span class="doc-list__icon"><svg viewBox="0 0 128 128" width="128" height="128" role="img" aria-label="PLG analytics playbook"><path d="M24 30 q22 -10 40 0 v74 q-18 -10 -40 0 Z" fill="none" stroke="var(--ds-accent-ink)" stroke-width="8" stroke-linejoin="round"/><path d="M104 30 q-22 -10 -40 0 v74 q18 -10 40 0 Z" fill="none" stroke="var(--ds-accent-ink)" stroke-width="8" stroke-linejoin="round"/></svg></span>
+          <span class="doc-list__text"><!-- src: R-DOC-05 --><span class="doc-list__title">PLG analytics playbook</span><span class="doc-list__dek">A whitepaper on running self-serve product analytics for product-led growth teams.</span></span>
+          <span class="doc-list__meta">Whitepaper &middot; PDF</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ CROSS-LINK RAIL — related sections ════ -->
+<section class="section cross-link-rail section--warm wow-divider wow-divider--top">
+  <div class="container wow-reveal">
+    <p class="eyebrow">Keep exploring</p>
+    <h2>Where to go next</h2>
+    <div class="cross-link-rail__rail wow-stagger">
+      <a class="cross-link" href="platform.html">Explore the platform</a>
+      <a class="cross-link" href="integrations.html">All integrations</a>
+      <a class="cross-link" href="security.html">Security &amp; trust center</a>
+      <a class="cross-link" href="customers.html">Customer stories</a>
+    </div>
+  </div>
+</section>
+
+<!-- ════ CLOSING BOOK-A-DEMO CTA (conversion_goal=book_demo -> demo.html) ════ -->
+<section class="section closing-cta section--dark wow-divider wow-divider--top">
+  <div class="container wow-reveal">
+    <h2>Want a guided walkthrough on your own data?</h2>
+    <p class="lede">A 30-minute demo with a solutions engineer &mdash; the docs come to life on your product.</p>
+    <div class="cta-row"><a class="btn btn-primary wow-glow" href="demo.html">Book a demo</a></div>
+  </div>
+</section>
+
+<!-- ════ CANONICAL FOOTER (identical to design-system/_chrome.html) ════ -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="site-footer__top">
+      <div>
+        <div class="site-footer__brand"><span class="site-footer__brand-mark">H</span>Helix Analytics</div>
+        <p class="site-footer__blurb">Product analytics for PLG teams — insight in minutes, not data-team tickets.</p>
+        <div class="site-footer__hours">
+          <strong>SOC 2 Type II · GDPR · HIPAA · ISO 27001</strong>
+          Trusted by 4,000+ product teams
+        </div>
+      </div>
+      <div class="site-footer__col">
+        <h4>Product</h4>
+        <a href="platform.html">Platform</a>
+        <a href="integrations.html">Integrations</a>
+        <a href="pricing.html">Pricing</a>
+      </div>
+      <div class="site-footer__col">
+        <h4>Trust</h4>
+        <a href="security.html">Security</a>
+        <a href="customers.html">Customers</a>
+      </div>
+      <div class="site-footer__col">
+        <h4>Developers</h4>
+        <a href="docs.html">Docs</a>
+        <a href="https://docs.helixanalytics.example/api">API reference</a>
+      </div>
+      <div class="site-footer__col">
+        <h4>Company</h4>
+        <a href="company.html">About</a>
+        <a href="demo.html">Book a demo</a>
+        <a href="https://status.helixanalytics.example">Status</a>
+      </div>
+    </div>
+    <div class="site-footer__bottom">
+      <span>&copy; 2026 Helix Analytics, Inc.</span>
+      <span class="site-footer__bcorp">Built for product-led teams</span>
+    </div>
+  </div>
+</footer>
+
+<script src="design-system/site.js" defer></script>
+</body>
+</html>

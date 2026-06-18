@@ -1,0 +1,103 @@
+<!--
+  _chrome.html — Helix Analytics SHARED CHROME (the ONE locked chrome every page injects)
+  ============================================================================================
+  LOCATION NOTE: placed in design-system/ (not the slug root) because the live
+  verify-inner-page-parity gate scans every root-level <slug>/*.html and does NOT exempt a
+  leading "_" — only the design-system/ + assets/ dirs and the homepage trio are exempt. The
+  design-system dir is the correct home anyway: chrome STYLING is in design-system/structural.css
+  ("SHARED CHROME" block) and BEHAVIOR is in design-system/site.js. (Filing this as a skill
+  finding: the SKILL/site.js convention names it <slug>/_chrome.html, which the parity gate blocks.)
+
+  DERIVED FROM sitemap.yaml (Stage 0.5) — NOT picked-from-a-catalog-and-improvised.
+    · Header nav   = sitemap.nav[] as REAL <slug>.html page links (never #anchors).
+    · Primary CTA  = CONVERSION_GOAL book_demo → "Book a demo" → demo.html (wow-glow).
+                     The nav's 6th entry ("Book a demo") renders as the CTA slot, not a
+                     duplicate plain nav link — plain links = Platform / Integrations /
+                     Pricing / Security / Customers; CTA = Book a demo.
+    · Mobile drawer = SAME nav links + the SAME CTA, aria-wired (hamburger ↔ #mobile-drawer).
+    · Footer       = sitemap.footer[] → 4 cols Product / Trust / Developers / Company
+                     (internal {label,page} → <slug>.html ; external {label,href} → absolute).
+
+  Vocabulary: ONLY the canonical "Shared chrome" classes from COMPONENT-VOCABULARY.md +
+  the wow-* overlay (wow-glass on .site-header, wow-glow on the CTA). Injected IDENTICALLY on
+  the homepage AND every inner page (verify-chrome-consistent). When injected on a page that
+  itself lives in <slug>/ root, the hrefs below are already root-relative (<slug>.html).
+-->
+
+<!-- ════ CANONICAL HEADER — glass full-bar + hamburger + mobile drawer ════ -->
+<header class="site-header wow-glass">
+  <div class="container site-header__bar">
+    <a class="brand" href="index.html">
+      <span class="brand__mark">H</span>
+      Helix Analytics
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <a href="platform.html">Platform</a>
+      <a href="integrations.html">Integrations</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="security.html">Security</a>
+      <a href="customers.html">Customers</a>
+      <a class="btn btn-primary wow-glow" href="demo.html">Book a demo</a>
+    </nav>
+    <button class="site-header__hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-drawer">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- ════ CANONICAL MOBILE DRAWER (slide-from-right, aria-toggled by site.js) ════ -->
+<div class="site-drawer-backdrop" data-open="false"></div>
+<nav id="mobile-drawer" class="site-drawer" aria-hidden="true" aria-label="Mobile">
+  <button class="site-drawer__close" aria-label="Close menu">&times;</button>
+  <ul class="site-drawer__links">
+    <li><a href="platform.html">Platform</a></li>
+    <li><a href="integrations.html">Integrations</a></li>
+    <li><a href="pricing.html">Pricing</a></li>
+    <li><a href="security.html">Security</a></li>
+    <li><a href="customers.html">Customers</a></li>
+  </ul>
+  <a class="btn btn-primary wow-glow" href="demo.html">Book a demo</a>
+</nav>
+
+
+<!-- ════ CANONICAL FOOTER — brand + 4 cols (Product / Trust / Developers / Company) ════ -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="site-footer__top">
+      <div>
+        <div class="site-footer__brand"><span class="site-footer__brand-mark">H</span>Helix Analytics</div>
+        <p class="site-footer__blurb">Product analytics for PLG teams — insight in minutes, not data-team tickets.</p>
+        <div class="site-footer__hours">
+          <strong>SOC 2 Type II · GDPR · HIPAA · ISO 27001</strong>
+          Trusted by 4,000+ product teams
+        </div>
+      </div>
+      <div class="site-footer__col">
+        <h4>Product</h4>
+        <a href="platform.html">Platform</a>
+        <a href="integrations.html">Integrations</a>
+        <a href="pricing.html">Pricing</a>
+      </div>
+      <div class="site-footer__col">
+        <h4>Trust</h4>
+        <a href="security.html">Security</a>
+        <a href="customers.html">Customers</a>
+      </div>
+      <div class="site-footer__col">
+        <h4>Developers</h4>
+        <a href="docs.html">Docs</a>
+        <a href="https://docs.helixanalytics.example/api">API reference</a>
+      </div>
+      <div class="site-footer__col">
+        <h4>Company</h4>
+        <a href="company.html">About</a>
+        <a href="demo.html">Book a demo</a>
+        <a href="https://status.helixanalytics.example">Status</a>
+      </div>
+    </div>
+    <div class="site-footer__bottom">
+      <span>&copy; 2026 Helix Analytics, Inc.</span>
+      <span class="site-footer__bcorp">Built for product-led teams</span>
+    </div>
+  </div>
+</footer>

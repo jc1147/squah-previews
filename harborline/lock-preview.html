@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+═══════════════════════════════════════════════════════════════════════════════
+ WEB-CARD-TEMPLATE — client-web-mockup skill v4 (P5 globals-lock)
+═══════════════════════════════════════════════════════════════════════════════
+
+ Purpose: the WEB CARD is where the brand's GLOBAL design LANGUAGE is locked.
+ It replaces web-mockup's LOCK-PREVIEW 3-bundle WHOLE-LOOK pick with a 3-candidate
+ GLOBAL-DESIGN-LANGUAGE pick: the SAME locked brand (palette/type from the brand
+ card) rendered with the globals overlay applied 3 different ways — different
+ glass / elevation / motion / divider-family / glow-texture. The operator picks
+ ONE direction. That pick fills the 12 globals tokens in tokens.css. Every
+ downstream surface (chrome + every page) INHERITS those globals via the wow-*
+ classes — there is NO second visual pick. (See references/WEB-CARD-SPEC.md +
+ references/GLOBALS-OVERLAY-SPEC.md.)
+
+ This specimen is a REAL composed mini-page (not a swatch sheet): glass nav →
+ hero with bloom + glow CTA → reveal/stagger feature cards (hairline + lift) →
+ image-zoom frame + masked focal → shape-divider → count-up stat row →
+ bento offset moment → closing CTA. It DEMONSTRATES the 12 globals so the
+ operator judges the felt design language, not a token table.
+
+ Procedure (mirrors LOCK-PREVIEW): copy this template THREE TIMES per build,
+ once per candidate direction (A/B/C), substituting the per-direction globals
+ tokens + the shared brand tokens. Output files land at the proven lock-preview*
+ filenames — NOT web-card-* (the gates key off lock-preview*; see WEB-CARD-SPEC.md §3):
+   Code/client-web-mockup/<slug>/lock-preview-a.html
+   Code/client-web-mockup/<slug>/lock-preview-b.html
+   Code/client-web-mockup/<slug>/lock-preview-c.html
+
+ All 3 are auto-opened by the PostToolUse hook. Operator picks one. After pick:
+   - Unpicked 2 files are DELETED
+   - Picked file is RENAMED to lock-preview.html
+   - The picked direction's 12 globals token values are written into
+     <slug>/design-system/tokens.css (the FULL --ds-* set; see BRAND-TOKEN-SCHEMA.md)
+   - verticals/<slug>.md WEB-CARD yaml `picked:` field set to A / B / C
+   - The lock-preview.html existence + tokens.css globals unblock downstream chrome/page writes
+
+ EXEMPT artifact: like index.html / brand-card.html / lock-preview*.html, the
+ web-card is on verify-globals-overlay.mjs's exempt list — it is a homepage-class
+ specimen, so it carries its OWN inline <style> (a self-contained mirror of the
+ structural.css wow-* layer) + the reveal/stagger + count-up IntersectionObserver
+ JS inline. Inner pages never do this; they link structural.css and overlay the
+ classes. This file proves the globals render BEFORE they are committed to tokens.css.
+
+ Tokens to substitute (every occurrence; build agent does this per direction).
+
+   Identity (same across all 3 directions of one brand — from the brand card)
+   harborline                — kebab-case business identifier
+   Harborline Provisions       — display name
+   Coastal specialty foods + café — short descriptor
+   2026-06-17                — YYYY-MM-DD lock date
+
+   Direction identity (varies per A/B/C)
+   A              — "A" / "B" / "C"
+   Harbor Glass            — e.g. "Quiet Glass" / "Editorial Depth" / "Neon Bloom"
+   Warm coastal glass · soft elevation · smooth wave dividers            — one-line felt-description of this globals direction
+   B C      — sibling direction ids (sibling links)
+   Editorial Tide Deep Maritime  — sibling direction names
+
+   Base BRAND tokens (LOCKED at the brand card — IDENTICAL across A/B/C;
+   only the 12 globals below differ between directions)
+   #2C6E8F #14323F #DCE8EC
+   #C8923E #F2E3C8
+   #FAF4E8 #FFFFFF #F3E9D6
+   #1C2A30 #5A6B72 #F6EFE2 #E4D9C2 rgba(20,50,63,0.55)
+   8px 14px 20px 28px
+   0 1px 2px rgba(20,50,63,0.06), 0 8px 24px rgba(20,50,63,0.07) 0 18px 48px rgba(20,50,63,0.16)
+   clamp(56px, 9vw, 96px) 1340px
+   cubic-bezier(.2,.7,.2,1) 240ms
+   Fraunces Inter Inter
+   https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500&display=swap
+
+   THE 12 GLOBALS TOKENS (the ONLY axis that varies A→B→C — this IS the pick)
+   rgba(250,244,232,0.72)      — rgba translucent nav/panel fill
+   blur(16px) saturate(150%)    — filter, e.g. blur(16px) saturate(180%)
+   rgba(20,50,63,0.10)  — rgba hairline on glass surfaces
+   rgba(20,50,63,0.10)      — rgba 1px low-opacity border color
+   inset 0 1px 0 rgba(255,255,255,0.55)      — box-shadow inset top-highlight
+   0 10px 30px rgba(200,146,62,0.32)          — box-shadow accent bloom on CTA/hero
+   radial-gradient(60% 70% at 70% 18%, rgba(200,146,62,0.18), transparent 70%)     — background radial-gradient hero/section bloom
+   url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E")         — background ultra-low-opacity noise (data-uri/url)
+   80px     — length, SVG shape-divider height, e.g. 80px
+   160ms      — duration, micro-interactions, e.g. 160ms
+   600ms      — duration, scroll-reveal, e.g. 600ms
+   cubic-bezier(.2,.6,.2,1)      — easing, reveal/zoom curve, e.g. cubic-bezier(.2,.6,.2,1)
+
+   Specimen copy (re-use the brand's real hero copy; placeholder body otherwise)
+   Hand-harvested · since 2019 The coast, boxed monthly Sea salt, single-origin cold-brew, raw honey and smoked kelp — provisioned from the harbor and shipped to your door, or poured at the Dockside Café.
+   Start a Provisioning Box Good Food Award 2025 · Certified B-Corp
+   Saltcure Sea Salt Flakes Hand-harvested flake salt in a refillable tin. $14. Dockside Cold-Brew 32oz single-origin concentrate, slow-steeped. $22. Harbor Honey — Wildflower Raw, unfiltered 12oz from coastal apiaries. $16.
+   Provisioning Boxes A monthly curated box of coastal pantry goods — rotating salt, honey, cold-brew and seasonings, with the story of each maker. 40,000+ boxes shipped, 4.9★ across 2,300 reviews.
+   assets/hero-harbor.jpg Harbor at first light assets/service-provisioning-box.jpg Coastal pantry provisions still life
+   40000 + Boxes shipped since 2019
+   4.9 ★ Across 2,300 reviews
+   60  Regional grocers stocked
+   Provisions worth the walk down the dock. Start a Provisioning Box, shop the pantry, or visit the Dockside Café on the harborfront. Start a Provisioning Box
+
+ Substitution discipline:
+   - Every placeholder occurrence must be replaced. No raw double-brace tokens left.
+   - Base brand tokens are IDENTICAL across the 3 files — only the 12 globals
+     tokens + the direction identity vary. That is the contract: same brand,
+     3 design languages.
+   - The wow-* classes + the structural rules below are the REAL ones from
+     structural.css / COMPONENT-VOCABULARY.md — do not rename them; the
+     downstream pages depend on the same names.
+   - count-up: data-count="<final>" on .stat__num; data-suffix optional.
+═══════════════════════════════════════════════════════════════════════════════
+-->
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Harborline Provisions — Direction A · Web Card (Globals Lock)</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+/* =============================================================================
+ * Harborline Provisions — Web Card · Direction A (Harbor Glass)
+ *
+ * SELF-CONTAINED specimen. The :root block below is exactly what the picked
+ * direction writes into <slug>/design-system/tokens.css. The base brand tokens
+ * are LOCKED at the brand card (same in all 3 files); the 12 --ds-* GLOBALS are
+ * THIS direction's candidate values (the pick). The wow-* rules mirror
+ * references/structural.css so this previews standalone; inner pages instead
+ * LINK structural.css and only ADD the wow-* classes.
+ * ============================================================================= */
+:root {
+  /* ---- Base brand tokens (LOCKED at brand card — identical across A/B/C) ---- */
+  --ds-primary:        #2C6E8F;
+  --ds-primary-deep:   #14323F;
+  --ds-primary-soft:   #DCE8EC;
+  --ds-accent:         #C8923E;
+  --ds-accent-soft:    #F2E3C8;
+  --ds-bg-surface:     #FAF4E8;
+  --ds-bg-surface-2:   #FFFFFF;
+  --ds-bg-warm:        #F3E9D6;
+  --ds-ink:            #1C2A30;
+  --ds-ink-soft:       #5A6B72;
+  --ds-ink-on-dark:    #F6EFE2;
+  --ds-line:           #E4D9C2;
+  --ds-scrim:          rgba(20,50,63,0.55);
+
+  --ds-font-display:   'Fraunces', Georgia, serif;
+  --ds-font-body:      'Inter', system-ui, sans-serif;
+  --ds-font-mono:      'Inter', ui-monospace, monospace;
+
+  --ds-r-sm:  8px;
+  --ds-r-md:  14px;
+  --ds-r-lg:  20px;
+  --ds-r-xl:  28px;
+  --ds-r-pill: 999px;
+
+  --ds-shadow-card: 0 1px 2px rgba(20,50,63,0.06), 0 8px 24px rgba(20,50,63,0.07);
+  --ds-shadow-lift: 0 18px 48px rgba(20,50,63,0.16);
+
+  --ds-space-2xs: 4px;
+  --ds-space-xs:  8px;
+  --ds-space-sm:  12px;
+  --ds-space-md:  16px;
+  --ds-space-lg:  24px;
+  --ds-space-xl:  40px;
+  --ds-space-2xl: 64px;
+  --ds-space-3xl: 96px;
+  --ds-section-py:    clamp(56px, 9vw, 96px);
+  --ds-container-max: 1340px;
+
+  --ds-ease: cubic-bezier(.2,.7,.2,1);
+  --ds-dur:  240ms;
+
+  /* ---- THE 12 GLOBALS — Direction A candidate values (the pick) ---- */
+  --ds-glass-bg:     rgba(250,244,232,0.72);
+  --ds-glass-blur:   blur(16px) saturate(150%);
+  --ds-glass-border: rgba(20,50,63,0.10);
+  --ds-hairline:     rgba(20,50,63,0.10);
+  --ds-inset-hi:     inset 0 1px 0 rgba(255,255,255,0.55);
+  --ds-glow:         0 10px 30px rgba(200,146,62,0.32);
+  --ds-glow-wash:    radial-gradient(60% 70% at 70% 18%, rgba(200,146,62,0.18), transparent 70%);
+  --ds-grain:        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  --ds-divider-h:    80px;
+  --ds-dur-fast:     160ms;
+  --ds-dur-slow:     600ms;
+  --ds-ease-out:     cubic-bezier(.2,.6,.2,1);
+}
+
+/* ===== reset + base (mirror structural.css) ===== */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body { font-family: var(--ds-font-body); color: var(--ds-ink); background: var(--ds-bg-surface); line-height: 1.55; -webkit-font-smoothing: antialiased; }
+img { display: block; max-width: 100%; }
+h1, h2, h3 { font-family: var(--ds-font-display); color: var(--ds-primary-deep); line-height: 1.08; margin: 0; font-weight: 600; }
+h1 { font-size: clamp(40px, 6vw, 72px); }
+h2 { font-size: clamp(28px, 4vw, 44px); }
+h3 { font-size: 20px; }
+p { margin: 0; }
+.section { padding-block: var(--ds-section-py); background: var(--ds-bg-surface); color: var(--ds-ink); position: relative; }
+.section--dark { background: var(--ds-primary-deep); color: var(--ds-ink-on-dark); }
+.section--dark h1, .section--dark h2, .section--dark h3 { color: var(--ds-ink-on-dark); }
+.section--warm { background: var(--ds-bg-warm); }
+.container { max-width: var(--ds-container-max); margin-inline: auto; padding-inline: var(--ds-space-lg); }
+.eyebrow { font-family: var(--ds-font-mono); font-size: 13px; letter-spacing: .14em; text-transform: uppercase; color: var(--ds-ink-soft); margin-bottom: var(--ds-space-sm); }
+.section--dark .eyebrow { color: var(--ds-accent); }
+.lede { font-size: clamp(17px, 2vw, 20px); color: var(--ds-ink-soft); max-width: 50ch; margin-top: var(--ds-space-md); }
+.section--dark .lede { color: var(--ds-ink-on-dark); opacity: .85; }
+
+/* ===== buttons (mirror structural.css) ===== */
+.btn { display: inline-block; font-family: var(--ds-font-body); font-weight: 600; text-decoration: none; border: 0; cursor: pointer; border-radius: var(--ds-r-pill); padding: var(--ds-space-sm) var(--ds-space-lg); transition: transform var(--ds-dur) var(--ds-ease), box-shadow var(--ds-dur) var(--ds-ease), background var(--ds-dur) var(--ds-ease); }
+.btn-primary { background: var(--ds-primary); color: var(--ds-ink-on-dark); }
+.btn-primary:hover { background: var(--ds-primary-deep); transform: translateY(-2px); box-shadow: var(--ds-shadow-lift); }
+.btn-primary:focus-visible { outline: 3px solid var(--ds-accent); outline-offset: 2px; }
+.btn-secondary { background: transparent; color: var(--ds-primary-deep); border: 1.5px solid var(--ds-line); }
+.section--dark .btn-secondary { color: var(--ds-ink-on-dark); border-color: var(--ds-glass-border); }
+.btn-secondary:hover { border-color: var(--ds-primary); background: var(--ds-primary-soft); }
+.cta-row { display: flex; flex-wrap: wrap; gap: var(--ds-space-sm); margin-top: var(--ds-space-lg); align-items: center; }
+.cta-meta { font-family: var(--ds-font-mono); font-size: 12px; letter-spacing: .08em; color: var(--ds-ink-soft); }
+.section--dark .cta-meta { color: var(--ds-ink-on-dark); opacity: .7; }
+
+/* ===== card base (mirror structural.css) ===== */
+.card { background: var(--ds-bg-surface-2); border: 1px solid var(--ds-line); border-radius: var(--ds-r-lg); box-shadow: var(--ds-shadow-card); padding: var(--ds-space-xl); }
+.card h3 { margin-bottom: var(--ds-space-xs); }
+.card p { color: var(--ds-ink-soft); }
+.stat { display: flex; flex-direction: column; gap: var(--ds-space-2xs); }
+.stat__num { font-family: var(--ds-font-display); font-size: clamp(40px, 6vw, 68px); color: var(--ds-primary-deep); line-height: 1; }
+.section--dark .stat__num { color: var(--ds-accent); }
+.stat__label { font-size: 14px; color: var(--ds-ink-soft); }
+.section--dark .stat__label { color: var(--ds-ink-on-dark); font-weight: 600; }
+
+/* =====================================================================
+   GLOBALS OVERLAY (modern-wow) — EXACT mirror of references/structural.css.
+   These are the wow-* classes the picked direction's tokens skin. Inner pages
+   get these from structural.css; this specimen embeds them so it renders alone.
+   ===================================================================== */
+.wow-glass { background: var(--ds-glass-bg); -webkit-backdrop-filter: var(--ds-glass-blur); backdrop-filter: var(--ds-glass-blur); border-bottom: 1px solid var(--ds-glass-border); }
+.wow-hairline { border: 1px solid var(--ds-hairline); box-shadow: var(--ds-shadow-card), var(--ds-inset-hi); }
+.wow-lift { transition: transform var(--ds-dur) var(--ds-ease), box-shadow var(--ds-dur) var(--ds-ease); }
+.wow-lift:hover { transform: translateY(-6px); box-shadow: var(--ds-shadow-lift); }
+.wow-reveal { opacity: 0; transform: translateY(24px); transition: opacity var(--ds-dur-slow) var(--ds-ease-out), transform var(--ds-dur-slow) var(--ds-ease-out); }
+.wow-reveal.in-view { opacity: 1; transform: none; }
+.wow-stagger > * { opacity: 0; transform: translateY(20px); transition: opacity var(--ds-dur-slow) var(--ds-ease-out), transform var(--ds-dur-slow) var(--ds-ease-out); }
+.wow-stagger.in-view > * { opacity: 1; transform: none; }
+.wow-stagger.in-view > *:nth-child(2) { transition-delay: 90ms; }
+.wow-stagger.in-view > *:nth-child(3) { transition-delay: 180ms; }
+.wow-stagger.in-view > *:nth-child(4) { transition-delay: 270ms; }
+.wow-zoom { overflow: hidden; border-radius: var(--ds-r-lg); }
+.wow-zoom img { transition: transform var(--ds-dur-slow) var(--ds-ease-out); }
+.wow-zoom:hover img { transform: scale(1.05); }
+.wow-sticky { position: sticky; top: var(--ds-space-2xl); }
+.wow-grain { position: relative; }
+.wow-grain::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: var(--ds-grain); opacity: .5; mix-blend-mode: overlay; }
+.wow-bloom { position: relative; isolation: isolate; }
+.wow-bloom::before { content: ""; position: absolute; z-index: -1; inset: 0; pointer-events: none; background: var(--ds-glow-wash); }
+.wow-glow { box-shadow: var(--ds-glow); }
+.wow-bento { display: grid; gap: var(--ds-space-lg); grid-template-columns: repeat(6, 1fr); }
+.wow-bento > * { grid-column: span 2; }
+.wow-mask { border-radius: var(--ds-r-xl); overflow: hidden; }
+.wow-divider { position: absolute; left: 0; width: 100%; line-height: 0; pointer-events: none; }
+.wow-divider--top { top: 0; }
+.wow-divider--bottom { bottom: 0; }
+.wow-divider svg { display: block; width: 100%; height: var(--ds-divider-h); }
+.wow-parallax { will-change: transform; }
+@media (prefers-reduced-motion: reduce) {
+  .wow-reveal, .wow-stagger > * { opacity: 1 !important; transform: none !important; }
+  .wow-lift, .wow-zoom img { transition: none !important; }
+  .wow-lift:hover { transform: none !important; }
+  .wow-zoom:hover img { transform: none !important; }
+  .wow-parallax { will-change: auto !important; }
+}
+
+/* ===== Web-card chrome: direction banner + spec strip (mono, specimen-only) ===== */
+.wc-banner { background: var(--ds-primary-deep); color: var(--ds-ink-on-dark); padding: 16px clamp(20px, 4vw, 48px); display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap; position: relative; z-index: 60; }
+.wc-banner-id { display: inline-flex; align-items: center; gap: 16px; }
+.wc-id-chip { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: var(--ds-accent); color: var(--ds-primary-deep); font-family: var(--ds-font-mono); font-size: 18px; font-weight: 800; border-radius: var(--ds-r-pill); }
+.wc-banner-name { font-family: var(--ds-font-display); font-size: 22px; font-weight: 600; margin: 0; color: var(--ds-ink-on-dark); }
+.wc-banner-vibe { font-family: var(--ds-font-body); font-size: 13px; opacity: .8; margin: 2px 0 0; }
+.wc-banner-siblings { display: flex; gap: 14px; font-family: var(--ds-font-mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; flex-wrap: wrap; }
+.wc-banner-siblings a { color: var(--ds-ink-on-dark); opacity: .8; text-decoration: underline; text-decoration-color: var(--ds-accent); text-underline-offset: 4px; }
+.wc-banner-siblings a:hover { opacity: 1; color: var(--ds-accent); }
+.wc-doc-note { background: var(--ds-bg-warm); border-bottom: 1px solid var(--ds-line); padding: 12px clamp(20px, 4vw, 48px); font-family: var(--ds-font-mono); font-size: 11px; letter-spacing: .04em; color: var(--ds-ink-soft); text-align: center; }
+.wc-doc-note strong { color: var(--ds-primary-deep); }
+
+/* ===== Glass nav (the brand nav with the locked glass globals overlaid) ===== */
+.wc-nav { position: sticky; top: 0; z-index: 50; }
+.wc-nav__bar { display: flex; align-items: center; justify-content: space-between; max-width: var(--ds-container-max); margin-inline: auto; padding: var(--ds-space-md) var(--ds-space-lg); }
+.wc-brand { display: flex; align-items: center; gap: var(--ds-space-sm); font-family: var(--ds-font-display); font-size: 20px; color: var(--ds-primary-deep); text-decoration: none; }
+.wc-brand__mark { width: 34px; height: 34px; border-radius: var(--ds-r-pill); background: var(--ds-primary); color: var(--ds-ink-on-dark); display: grid; place-items: center; font-size: 16px; }
+.wc-nav__links { display: flex; gap: var(--ds-space-lg); align-items: center; }
+.wc-nav__links a { text-decoration: none; color: var(--ds-ink); font-size: 15px; transition: color var(--ds-dur-fast) var(--ds-ease-out); }
+.wc-nav__links a:hover { color: var(--ds-primary); }
+
+/* ===== Hero ===== */
+.wc-hero { padding-block: clamp(72px, 11vw, 140px); overflow: hidden; }
+.wc-hero .container { position: relative; z-index: 1; }
+.wc-hero h1 { max-width: 17ch; margin-bottom: var(--ds-space-md); }
+.wc-hero h1 .accent { color: var(--ds-accent); font-style: italic; }
+.wc-hero .lede { max-width: 52ch; }
+
+/* ===== feature card grid ===== */
+.wc-features__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--ds-space-lg); margin-top: var(--ds-space-xl); }
+.wc-feature__icon { width: 48px; height: 48px; border-radius: var(--ds-r-md); background: var(--ds-primary-soft); display: grid; place-items: center; margin-bottom: var(--ds-space-md); color: var(--ds-primary-deep); font-family: var(--ds-font-mono); font-weight: 700; }
+
+/* ===== showcase: image-zoom frame + masked focal (bento offset) ===== */
+.wc-showcase__layout { display: grid; grid-template-columns: 1.2fr 1fr; gap: var(--ds-space-2xl); align-items: center; margin-top: var(--ds-space-xl); }
+.wc-showcase__media img { width: 100%; aspect-ratio: 16 / 11; object-fit: cover; }
+.wc-showcase__body h2 { margin-bottom: var(--ds-space-sm); }
+.wc-showcase__body p { color: var(--ds-ink-soft); margin-bottom: var(--ds-space-lg); }
+.wc-bento__cell { aspect-ratio: 1 / 1; }
+.wc-bento__cell img { width: 100%; height: 100%; object-fit: cover; }
+.wc-bento__cell.tall { grid-row: span 2; aspect-ratio: 1 / 2; }
+
+/* ===== stat row (count-up) ===== */
+.wc-stats__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--ds-space-xl); margin-top: var(--ds-space-lg); }
+
+/* ===== closing CTA ===== */
+.wc-cta { text-align: center; }
+.wc-cta .container { position: relative; z-index: 1; max-width: 760px; }
+.wc-cta h2 { margin-bottom: var(--ds-space-sm); }
+.wc-cta .cta-row { justify-content: center; }
+
+/* ===== Globals spec strip (the 12 token values this direction would LOCK) ===== */
+.wc-spec { background: var(--ds-bg-surface-2); border-top: 1px solid var(--ds-line); }
+.wc-spec .container { padding-block: var(--ds-space-2xl); }
+.wc-spec h2 { font-size: 24px; margin-bottom: var(--ds-space-sm); }
+.wc-spec__note { color: var(--ds-ink-soft); font-size: 14px; max-width: 64ch; margin-bottom: var(--ds-space-lg); }
+.wc-spec__table { width: 100%; border-collapse: collapse; font-family: var(--ds-font-mono); font-size: 12px; }
+.wc-spec__table th, .wc-spec__table td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--ds-line); vertical-align: top; }
+.wc-spec__table th { color: var(--ds-accent); letter-spacing: .08em; text-transform: uppercase; font-size: 10px; width: 22%; }
+.wc-spec__table td { color: var(--ds-ink); word-break: break-word; }
+.wc-spec__table td.demo-cell { width: 90px; }
+.wc-spec__demo { display: inline-block; width: 64px; height: 28px; border-radius: var(--ds-r-sm); }
+
+.wc-foot { padding: var(--ds-space-xl) var(--ds-space-lg); font-family: var(--ds-font-mono); font-size: 11px; letter-spacing: .08em; color: var(--ds-ink-soft); text-transform: uppercase; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; max-width: var(--ds-container-max); margin-inline: auto; }
+
+@media (max-width: 860px) {
+  .wc-features__grid { grid-template-columns: 1fr; }
+  .wc-showcase__layout { grid-template-columns: 1fr; gap: var(--ds-space-lg); }
+  .wc-stats__grid { grid-template-columns: 1fr; gap: var(--ds-space-lg); }
+  .wc-nav__links { gap: var(--ds-space-md); }
+  .wc-bento { grid-template-columns: repeat(2, 1fr); }
+  .wc-bento__cell.tall { grid-row: span 1; aspect-ratio: 1 / 1; }
+}
+</style>
+</head>
+<body>
+
+<!-- ════ Direction banner (varies per A/B/C) — specimen chrome, not part of the built site ════ -->
+<div class="wc-banner">
+  <div class="wc-banner-id">
+    <span class="wc-id-chip">A</span>
+    <div>
+      <p class="wc-banner-name">Harbor Glass</p>
+      <p class="wc-banner-vibe">Warm coastal glass · soft elevation · smooth wave dividers</p>
+    </div>
+  </div>
+  <div class="wc-banner-siblings">
+    <span>&#10003; Direction A locked &middot; Editorial Tide (B) and Deep Maritime (C) retired</span>
+  </div>
+</div>
+<div class="wc-doc-note">
+  WEB CARD · <strong>Harborline Provisions</strong> — same locked brand, 3 GLOBAL design languages. Pick ONE direction → its 12 globals tokens lock into <strong>tokens.css</strong> → every page inherits. <strong>This is the one visual pick; there is no second pick downstream.</strong>
+</div>
+
+<!-- ════ Glass nav — brand nav + locked glass/hairline globals overlaid (.wow-glass) ════ -->
+<header class="wc-nav wow-glass">
+  <div class="wc-nav__bar">
+    <a class="wc-brand" href="#">
+      <span class="wc-brand__mark">Harborline Provisions</span>
+      Harborline Provisions
+    </a>
+    <nav class="wc-nav__links">
+      <a href="#features">Services</a>
+      <a href="#showcase">Work</a>
+      <a href="#stats">Results</a>
+      <a class="btn btn-primary wow-glow" href="#cta">Start a Provisioning Box</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ════ Hero — bloom wash behind + grain texture + glowing primary CTA ════ -->
+<section class="section wc-hero wow-bloom wow-grain">
+  <div class="container">
+    <p class="eyebrow wow-reveal">Hand-harvested · since 2019</p>
+    <h1 class="wow-reveal">The coast, <span class="accent">boxed monthly</span></h1>
+    <p class="lede wow-reveal">Sea salt, single-origin cold-brew, raw honey and smoked kelp — provisioned from the harbor and shipped to your door, or poured at the Dockside Café.</p>
+    <div class="cta-row wow-reveal">
+      <a class="btn btn-primary wow-glow" href="#cta">Start a Provisioning Box</a>
+      <a class="btn btn-secondary" href="#showcase">See the work</a>
+      <span class="cta-meta">Good Food Award 2025 · Certified B-Corp</span>
+    </div>
+  </div>
+  <!-- SVG shape-divider into the next section (.wow-divider; fill = next bg) -->
+  <div class="wow-divider wow-divider--bottom" aria-hidden="true">
+    <svg viewBox="0 0 1200 80" preserveAspectRatio="none"><path d="M0,40 C300,90 900,-10 1200,40 L1200,80 L0,80 Z" fill="var(--ds-bg-surface-2)"></path></svg>
+  </div>
+</section>
+
+<!-- ════ Feature cards — hairline + inset-highlight + stagger reveal + hover-lift ════ -->
+<section class="section" id="features" style="background: var(--ds-bg-surface-2);">
+  <div class="container">
+    <p class="eyebrow wow-reveal">What you get</p>
+    <h2 class="wow-reveal">Provisioning Boxes</h2>
+    <div class="wc-features__grid wow-stagger">
+      <article class="card wow-hairline wow-lift">
+        <div class="wc-feature__icon">01</div>
+        <h3>Saltcure Sea Salt Flakes</h3>
+        <p>Hand-harvested flake salt in a refillable tin. $14.</p>
+      </article>
+      <article class="card wow-hairline wow-lift">
+        <div class="wc-feature__icon">02</div>
+        <h3>Dockside Cold-Brew</h3>
+        <p>32oz single-origin concentrate, slow-steeped. $22.</p>
+      </article>
+      <article class="card wow-hairline wow-lift">
+        <div class="wc-feature__icon">03</div>
+        <h3>Harbor Honey — Wildflower</h3>
+        <p>Raw, unfiltered 12oz from coastal apiaries. $16.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ════ Showcase — image-zoom frame + masked bento focal (.wow-zoom / .wow-mask / .wow-bento) ════ -->
+<section class="section section--warm" id="showcase">
+  <div class="container">
+    <div class="wc-showcase__layout">
+      <div class="wc-showcase__media wow-zoom wow-reveal">
+        <img src="assets/hero-harbor.jpg" alt="Harbor at first light" loading="lazy">
+      </div>
+      <div class="wc-showcase__body wow-reveal">
+        <p class="eyebrow">Selected work</p>
+        <h2>Provisioning Boxes</h2>
+        <p>A monthly curated box of coastal pantry goods — rotating salt, honey, cold-brew and seasonings, with the story of each maker. 40,000+ boxes shipped, 4.9★ across 2,300 reviews.</p>
+        <div class="wc-bento wow-bento">
+          <div class="wc-bento__cell tall wow-mask">
+            <img src="assets/service-provisioning-box.jpg" alt="Coastal pantry provisions still life" loading="lazy">
+          </div>
+          <div class="wc-bento__cell wow-mask">
+            <img src="assets/hero-harbor.jpg" alt="Harbor at first light" loading="lazy">
+          </div>
+          <div class="wc-bento__cell wow-mask">
+            <img src="assets/service-provisioning-box.jpg" alt="Coastal pantry provisions still life" loading="lazy">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ Stat row — count-up on .stat__num (IntersectionObserver, inline JS below) ════ -->
+<section class="section section--dark wow-grain" id="stats">
+  <div class="container">
+    <p class="eyebrow wow-reveal">By the numbers</p>
+    <div class="wc-stats__grid wow-stagger">
+      <div class="stat">
+        <span class="stat__num" data-count="40000" data-suffix="+">0+</span>
+        <span class="stat__label">Boxes shipped since 2019</span>
+      </div>
+      <div class="stat">
+        <span class="stat__num" data-count="4.9" data-suffix="★">0★</span>
+        <span class="stat__label">Across 2,300 reviews</span>
+      </div>
+      <div class="stat">
+        <span class="stat__num" data-count="60" data-suffix="">0</span>
+        <span class="stat__label">Regional grocers stocked</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ Closing CTA — bloom wash + glowing button ════ -->
+<section class="section wc-cta wow-bloom" id="cta">
+  <div class="container">
+    <p class="eyebrow wow-reveal">Hand-harvested · since 2019</p>
+    <h2 class="wow-reveal">Provisions worth the walk down the dock.</h2>
+    <p class="lede wow-reveal" style="margin-inline: auto;">Start a Provisioning Box, shop the pantry, or visit the Dockside Café on the harborfront.</p>
+    <div class="cta-row wow-reveal">
+      <a class="btn btn-primary wow-glow" href="#">Start a Provisioning Box</a>
+      <span class="cta-meta">Good Food Award 2025 · Certified B-Corp</span>
+    </div>
+  </div>
+</section>
+
+<!-- ════ Globals spec strip — the EXACT 12 token values this direction would LOCK ════ -->
+<section class="wc-spec">
+  <div class="container">
+    <h2>Direction A — the 12 globals this pick locks</h2>
+    <p class="wc-spec__note">These values flow into <code>harborline/design-system/tokens.css</code> the moment Direction A is picked. Every downstream surface skins from them via the <code>wow-*</code> classes — no second visual decision. (Spec: <code>BRAND-TOKEN-SCHEMA.md</code> §Globals overlay + <code>GLOBALS-OVERLAY-SPEC.md</code>.)</p>
+    <table class="wc-spec__table">
+      <tbody>
+        <tr><th>--ds-glass-bg</th><td>rgba(250,244,232,0.72)</td><td class="demo-cell"><span class="wc-spec__demo wow-glass" style="border:0;"></span></td></tr>
+        <tr><th>--ds-glass-blur</th><td>blur(16px) saturate(150%)</td><td class="demo-cell"></td></tr>
+        <tr><th>--ds-glass-border</th><td>rgba(20,50,63,0.10)</td><td class="demo-cell"><span class="wc-spec__demo" style="border:1px solid var(--ds-glass-border);"></span></td></tr>
+        <tr><th>--ds-hairline</th><td>rgba(20,50,63,0.10)</td><td class="demo-cell"><span class="wc-spec__demo wow-hairline"></span></td></tr>
+        <tr><th>--ds-inset-hi</th><td>inset 0 1px 0 rgba(255,255,255,0.55)</td><td class="demo-cell"></td></tr>
+        <tr><th>--ds-glow</th><td>0 10px 30px rgba(200,146,62,0.32)</td><td class="demo-cell"><span class="wc-spec__demo wow-glow" style="background: var(--ds-primary);"></span></td></tr>
+        <tr><th>--ds-glow-wash</th><td>radial-gradient(60% 70% at 70% 18%, rgba(200,146,62,0.18), transparent 70%)</td><td class="demo-cell"><span class="wc-spec__demo" style="background: var(--ds-glow-wash);"></span></td></tr>
+        <tr><th>--ds-grain</th><td>url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E")</td><td class="demo-cell"></td></tr>
+        <tr><th>--ds-divider-h</th><td>80px</td><td class="demo-cell"></td></tr>
+        <tr><th>--ds-dur-fast</th><td>160ms</td><td class="demo-cell"></td></tr>
+        <tr><th>--ds-dur-slow</th><td>600ms</td><td class="demo-cell"></td></tr>
+        <tr><th>--ds-ease-out</th><td>cubic-bezier(.2,.6,.2,1)</td><td class="demo-cell"></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<footer class="wc-foot">
+  <span>Harborline Provisions · Coastal specialty foods + café · Web Card Direction A (Harbor Glass)</span>
+  <span>Globals lock · verticals/harborline.md</span>
+  <span>Generated 2026-06-17</span>
+</footer>
+
+<script>
+/* =============================================================================
+ * Web-card inline JS — the SAME reveal/stagger + count-up + parallax behavior
+ * that ships from the locked homepage/design-system and is inherited by every
+ * page (the page only adds the wow-* classes; the JS lives once). Embedded here
+ * because the web-card is an exempt, homepage-class specimen that must render
+ * standalone. All motion respects prefers-reduced-motion.
+ * ============================================================================= */
+(function () {
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ---- scroll-reveal + stagger (IntersectionObserver toggles .in-view) ----
+  var revealTargets = document.querySelectorAll('.wow-reveal, .wow-stagger');
+  if (reduce || !('IntersectionObserver' in window)) {
+    revealTargets.forEach(function (el) { el.classList.add('in-view'); });
+  } else {
+    var io = new IntersectionObserver(function (entries, obs) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -10% 0px' });
+    revealTargets.forEach(function (el) { io.observe(el); });
+  }
+
+  // ---- count-up stats (animate .stat__num[data-count] when first revealed) ----
+  function animateCount(el) {
+    var target = parseFloat(el.getAttribute('data-count')) || 0;
+    var suffix = el.getAttribute('data-suffix') || '';
+    var decimals = (String(el.getAttribute('data-count')).split('.')[1] || '').length;
+    if (reduce) { el.textContent = target.toFixed(decimals) + suffix; return; }
+    var dur = 1400, start = null;
+    function frame(ts) {
+      if (start === null) start = ts;
+      var p = Math.min((ts - start) / dur, 1);
+      var eased = 1 - Math.pow(1 - p, 3); // easeOutCubic
+      el.textContent = (target * eased).toFixed(decimals) + suffix;
+      if (p < 1) requestAnimationFrame(frame);
+      else el.textContent = target.toFixed(decimals) + suffix;
+    }
+    requestAnimationFrame(frame);
+  }
+  var counts = document.querySelectorAll('.stat__num[data-count]');
+  if (reduce || !('IntersectionObserver' in window)) {
+    counts.forEach(animateCount);
+  } else {
+    var cio = new IntersectionObserver(function (entries, obs) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) { animateCount(entry.target); obs.unobserve(entry.target); }
+      });
+    }, { threshold: 0.5 });
+    counts.forEach(function (el) { cio.observe(el); });
+  }
+
+  // ---- subtle hero parallax (transform on .wow-parallax; rAF-throttled) ----
+  if (!reduce) {
+    var px = document.querySelectorAll('.wow-parallax');
+    if (px.length) {
+      var ticking = false;
+      window.addEventListener('scroll', function () {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(function () {
+          var y = window.scrollY;
+          px.forEach(function (el) {
+            var speed = parseFloat(el.getAttribute('data-parallax')) || 0.15;
+            el.style.transform = 'translateY(' + (y * speed) + 'px)';
+          });
+          ticking = false;
+        });
+      }, { passive: true });
+    }
+  }
+})();
+</script>
+</body>
+</html>

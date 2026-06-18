@@ -1,0 +1,60 @@
+site:    helix
+brand:   "Helix Analytics"
+site_type: saas            # b2b-saas (photo-light) — relaxes the substantive-visual floor; visuals are inline SVG dashboards/charts/logo wall, not stock photos
+vertical: b2b-saas
+design_system: design-system/
+
+# SITE TYPE: from-scratch SaaS (site_type: saas). Greenfield — page list DERIVED from the
+# Stage-0 fact types present (feature / integration / pricing_tier / certification /
+# customer_logo / proof / doc_resource / team_member) x the b2b-saas vertical. NO product
+# facts -> NO Shop (the B2B inversion of the retail fold: certification + customer_logo +
+# proof become DESTINATION pages, not About footnotes). conversion_goal=book_demo lives in
+# _content-requirements/_strategy.md (NOT a sitemap field); its destination `demo` IS a page.
+
+# Header nav — built from sitemap.nav[] as REAL <slug>.html page links (never #anchors).
+# IA emphasis from CONVERSION_GOAL=book_demo: leads with Platform/Integrations/Pricing/
+# Security/Customers, primary CTA "Book a demo" LAST (right-aligned). Each page resolves to pages[].
+nav:
+  - { label: "Platform",     page: platform }
+  - { label: "Integrations", page: integrations }
+  - { label: "Pricing",      page: pricing }
+  - { label: "Security",     page: security }
+  - { label: "Customers",    page: customers }
+  - { label: "Book a demo",  page: demo }
+
+footer:
+  - title: "Product"
+    links:
+      - { label: "Platform",     page: platform }
+      - { label: "Integrations", page: integrations }
+      - { label: "Pricing",      page: pricing }
+  - title: "Trust"
+    links:
+      - { label: "Security",     page: security }
+      - { label: "Customers",    page: customers }
+  - title: "Developers"
+    links:
+      - { label: "Docs",         page: docs }
+      - { label: "API reference", href: "https://docs.helixanalytics.example/api" }
+  - title: "Company"
+    links:
+      - { label: "About",        page: company }
+      - { label: "Book a demo",  page: demo }
+      - { label: "Status",       href: "https://status.helixanalytics.example" }
+
+# Every fixed page. slug -> built <slug>.html. Templates are the purpose-built non-retail
+# page types under templates/{features,integrations,pricing,security-trust,customers,
+# docs-index} + about-1 for the company page; re-skinned to the Helix identity (builder owns look).
+pages:
+  - { slug: index,        template: home,                       kind: home,    title: "Helix Analytics — product analytics for PLG teams, insight in minutes" }
+  - { slug: platform,     template: features-1-platform,        kind: service, title: "The Helix Platform" }
+  - { slug: integrations, template: integrations-1-grid,        kind: service, title: "Integrations" }
+  - { slug: pricing,      template: pricing-1-tiers,            kind: service, title: "Pricing" }
+  - { slug: security,     template: security-trust-1-compliance, kind: about,   title: "Security & Compliance" }
+  - { slug: customers,    template: customers-1-proof,          kind: shop,    title: "Customers & Results" }
+  - { slug: docs,         template: docs-index-1-resources,     kind: blog,    title: "Docs & Resources" }
+  - { slug: company,      template: about-1,                    kind: about,   title: "Company" }
+  - { slug: demo,         template: features-1-platform,        kind: service, title: "Book a demo" }
+
+# SaaS — auth/app provided by the CMS, NOT built here (NOT a retail cart/checkout triple).
+platform_pages: [ login, signup, app ]

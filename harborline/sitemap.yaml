@@ -1,0 +1,47 @@
+# Harborline Provisions — full-site assembly manifest (Stage 0.5 SITE-PLAN)
+# Site type: FROM-SCRATCH (Type 2). Rationale: greenfield fictional brand; the
+# audit (verticals/harborline.md §1) already scanned 6 vertical references, so no
+# crawl. Page list derived purely from the Stage-0 R-* facts + food/retail norms.
+# Every nav[].page and internal footer[].page resolves to a declared pages[] slug.
+# NO positioning / SEO / visual field — page-list + nav skeleton only.
+
+site:    harborline
+brand:   "Harborline Provisions"
+design_system: design-system/
+
+# Canonical header nav — injected into every page's {{HEADER}} + mobile drawer.
+# Each page MUST be a slug in pages[] (verify-nav-integrity). REAL <slug>.html, never #anchors.
+nav:
+  - { label: "Shop the Pantry", page: shop }
+  - { label: "Provisioning",    page: services }
+  - { label: "Our Story",       page: about }
+  - { label: "Contact",         page: contact }
+
+# Footer columns — injected into every page's {{FOOTER}}. Internal links use real slugs.
+footer:
+  - title: "Shop"
+    links:
+      - { label: "The Pantry",        page: shop }
+      - { label: "Saltcure Sea Salt", page: shop }
+      - { label: "Dockside Cold-Brew", page: shop }
+      - { label: "Harbor Honey",      page: shop }
+  - title: "Provisions"
+    links:
+      - { label: "Provisioning Boxes", page: services }
+      - { label: "Dockside Café",      page: services }
+      - { label: "Corporate Gifting",  page: services }
+  - title: "Harborline"
+    links:
+      - { label: "Our Story", page: about }
+      - { label: "Contact",   page: contact }
+
+# Every fixed page → built <slug>.html in the site root.
+pages:
+  - { slug: index,    template: home,      kind: home,    title: "Harborline Provisions — Coastal pantry, hand-harvested & boxed monthly" }
+  - { slug: shop,     template: shop-1,    kind: shop,    title: "Shop the Pantry — Harborline Provisions" }
+  - { slug: services, template: service-1, kind: service, title: "Provisioning, Café & Corporate Gifting — Harborline Provisions" }
+  - { slug: about,    template: about-1,   kind: about,   title: "Our Story — Harborline Provisions" }
+  - { slug: contact,  template: about-1,   kind: about,   title: "Visit & Contact — Harborline Provisions" }
+
+# Platform-provided pages, OUT OF SCOPE (SGEN CMS provides them).
+platform_pages: [ cart, checkout, my-account ]

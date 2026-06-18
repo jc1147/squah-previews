@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Harborline Provisions — Design System (Harbor Glass · locked globals)</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+
+<!-- THE locked design system every page inherits: base brand tokens + 12 globals + the wow-* impl -->
+<link rel="stylesheet" href="design-system/tokens.css">
+<link rel="stylesheet" href="design-system/structural.css">
+
+<!--
+  Harborline Provisions — DESIGN SYSTEM (implementation contract, Direction A "Harbor Glass").
+  This page is implementation-ONLY (identity / voice live in brand-card.html):
+    • the full :root token table (base brand + the 12 globals)
+    • the final header + footer chrome rendered live
+    • the component library in EVERY state with the wow-* overlay shown live
+      (buttons / cards / forms / inputs / badges / dividers incl hover/focus)
+    • the wow-* globals demonstrated live (glass / lift / zoom / reveal / stagger /
+      shape-divider / bloom / glow / grain / bento / mask)
+    • the §2.20 section-rhythm reference table
+    • the canonical reveal/stagger + count-up + parallax IntersectionObserver JS
+      that EVERY inner page inherits (inner pages add wow-* classes only, ship no JS)
+  Catalog picks (bundle A) referenced for the catalog-picks gate:
+    NAV-PATTERNS.md #2 · HERO-COMPOSITIONS.md #5 · FOOTER-STYLES.md #14 ·
+    CARD-VARIATIONS.md #2 · CTA-PATTERNS.md #1 · DIVIDER-PATTERNS.md #2
+  Homepage-class exempt artifact: carries its own inline specimen <style>/<JS>.
+-->
+<style>
+/* ===== design-system page chrome (specimen-only scaffolding; token-pure) ===== */
+body { background: var(--ds-bg-surface); }
+.ds-masthead { background: var(--ds-primary-deep); color: var(--ds-ink-on-dark); padding: clamp(40px, 7vw, 80px) 0; position: relative; overflow: hidden; }
+.ds-masthead .container { position: relative; z-index: 1; }
+.ds-eyebrow { font-family: var(--ds-font-body); font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--ds-accent); }
+.ds-masthead h1 { color: var(--ds-ink-on-dark); margin: var(--ds-space-sm) 0; }
+.ds-masthead p { color: var(--ds-ink-on-dark); opacity: .82; max-width: 60ch; }
+.ds-section { padding-block: clamp(48px, 7vw, 88px); border-bottom: 1px solid var(--ds-line); }
+.ds-section > .container > .ds-h { margin-bottom: var(--ds-space-xl); }
+.ds-h h2 { font-size: clamp(26px, 3.4vw, 38px); }
+.ds-h p { color: var(--ds-ink-soft); margin-top: var(--ds-space-xs); max-width: 64ch; }
+.ds-kicker { font-family: var(--ds-font-mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--ds-accent-ink); margin-bottom: var(--ds-space-xs); }
+.ds-grid { display: grid; gap: var(--ds-space-lg); }
+.ds-grid--3 { grid-template-columns: repeat(3, 1fr); }
+.ds-grid--2 { grid-template-columns: repeat(2, 1fr); }
+.ds-row { display: flex; flex-wrap: wrap; gap: var(--ds-space-md); align-items: center; }
+.ds-label { font-family: var(--ds-font-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--ds-ink-soft); margin-bottom: var(--ds-space-sm); display: block; }
+
+/* token table */
+.ds-token-table { width: 100%; border-collapse: collapse; font-family: var(--ds-font-mono); font-size: 12px; }
+.ds-token-table th, .ds-token-table td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--ds-line); vertical-align: middle; }
+.ds-token-table th { color: var(--ds-accent-ink); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; }
+.ds-token-table td.val { color: var(--ds-ink); word-break: break-word; }
+.ds-swatch { display: inline-block; width: 40px; height: 24px; border-radius: var(--ds-r-sm); border: 1px solid var(--ds-line); vertical-align: middle; }
+
+/* swatch row */
+.ds-swatches { display: grid; grid-template-columns: repeat(6, 1fr); gap: var(--ds-space-md); }
+.ds-color { border: 1px solid var(--ds-line); border-radius: var(--ds-r-md); overflow: hidden; background: var(--ds-bg-surface-2); }
+.ds-color__chip { height: 72px; }
+.ds-color__meta { padding: var(--ds-space-sm); font-family: var(--ds-font-mono); font-size: 11px; }
+.ds-color__meta b { display: block; color: var(--ds-ink); }
+.ds-color__meta span { color: var(--ds-ink-soft); }
+
+/* badge specimens */
+.ds-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: var(--ds-r-pill); font-size: 12px; font-weight: 600; font-family: var(--ds-font-body); }
+.ds-badge--accent { background: var(--ds-accent); color: var(--ds-primary-deep); }
+.ds-badge--soft { background: var(--ds-accent-soft); color: var(--ds-accent-ink); }
+.ds-badge--primary { background: var(--ds-primary-soft); color: var(--ds-primary-deep); }
+.ds-badge--outline { border: 1px solid var(--ds-line); color: var(--ds-ink-soft); }
+.ds-badge::before { content: ""; width: 6px; height: 6px; border-radius: var(--ds-r-pill); background: currentColor; }
+
+/* divider specimen holder */
+.ds-divider-demo { position: relative; height: 120px; background: var(--ds-bg-warm); border-radius: var(--ds-r-md); overflow: hidden; }
+.ds-divider-demo .wow-divider svg path { fill: var(--ds-primary-deep); }
+
+/* dark band specimen (re-light proof) */
+.ds-darkband { background: var(--ds-primary-deep); border-radius: var(--ds-r-lg); padding: var(--ds-space-2xl) var(--ds-space-xl); }
+.ds-darkband .stat__num { font-family: var(--ds-font-display); font-size: clamp(40px, 6vw, 64px); color: var(--ds-accent); line-height: 1; }
+.ds-darkband .stat__label { color: var(--ds-ink-on-dark); opacity: .85; font-size: 14px; }
+.ds-darkband .ds-darkband__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--ds-space-xl); }
+
+/* bento + zoom + mask demos */
+.ds-bento__cell { aspect-ratio: 1/1; }
+.ds-bento__cell.tall { grid-row: span 2; aspect-ratio: 1/2; }
+.ds-bento__cell img { width: 100%; height: 100%; object-fit: cover; }
+.ds-zoom-demo { aspect-ratio: 16/10; }
+.ds-zoom-demo img { width: 100%; height: 100%; object-fit: cover; }
+
+/* rhythm reference table */
+.ds-rhythm { width: 100%; border-collapse: collapse; font-size: 13px; }
+.ds-rhythm th, .ds-rhythm td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--ds-line); }
+.ds-rhythm th { font-family: var(--ds-font-mono); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--ds-accent-ink); }
+.ds-rhythm .pip { display: inline-block; width: 12px; height: 12px; border-radius: 3px; vertical-align: middle; margin-right: 6px; border: 1px solid var(--ds-line); }
+.pip-dark { background: var(--ds-primary-deep); }
+.pip-light { background: var(--ds-bg-surface); }
+.pip-accent { background: var(--ds-accent); }
+.pip-warm { background: var(--ds-bg-warm); }
+.pip-grad { background: linear-gradient(180deg, var(--ds-bg-warm), var(--ds-bg-surface)); }
+
+/* chrome preview wraps */
+.ds-chrome-wrap { border: 1px solid var(--ds-line); border-radius: var(--ds-r-lg); overflow: hidden; }
+.ds-chrome-wrap .site-header { position: static; }
+
+@media (max-width: 1024px) {
+  .ds-swatches { grid-template-columns: repeat(4, 1fr); }
+  .ds-grid--3 { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+  .ds-swatches { grid-template-columns: repeat(2, 1fr); }
+  .ds-grid--3, .ds-grid--2 { grid-template-columns: 1fr; }
+  .ds-darkband .ds-darkband__grid { grid-template-columns: 1fr; gap: var(--ds-space-lg); }
+}
+</style>
+</head>
+<body>
+
+<!-- ════ Masthead (grain texture overlay) ════ -->
+<header class="ds-masthead wow-grain">
+  <div class="container">
+    <p class="ds-eyebrow">Harborline Provisions · Design System</p>
+    <h1>Harbor Glass — the locked global language</h1>
+    <p>Implementation contract for every page. The 12 globals were locked once at the web card (Direction A); every surface inherits them via the <code>wow-*</code> classes. This page renders the tokens, the chrome, every component state, the live wow effects, and ships the reveal / count-up / parallax JS every inner page inherits.</p>
+  </div>
+</header>
+
+<!-- ════ §1 Tokens — base brand + the 12 globals ════ -->
+<section class="ds-section">
+  <div class="container">
+    <div class="ds-h"><p class="ds-kicker">§1 · tokens.css</p><h2>Design tokens</h2><p>The full <code>:root</code> set. Base brand tokens are locked at the brand card; the 12 globals are Direction A's picked values. This is the single source of brand truth.</p></div>
+
+    <span class="ds-label">Color</span>
+    <div class="ds-swatches" style="margin-bottom: var(--ds-space-2xl);">
+      <div class="ds-color"><div class="ds-color__chip" style="background: var(--ds-primary);"></div><div class="ds-color__meta"><b>--ds-primary</b><span>#2C6E8F</span></div></div>
+      <div class="ds-color"><div class="ds-color__chip" style="background: var(--ds-primary-deep);"></div><div class="ds-color__meta"><b>--ds-primary-deep</b><span>#14323F</span></div></div>
+      <div class="ds-color"><div class="ds-color__chip" style="background: var(--ds-primary-soft);"></div><div class="ds-color__meta"><b>--ds-primary-soft</b><span>#DCE8EC</span></div></div>
+      <div class="ds-color"><div class="ds-color__chip" style="background: var(--ds-accent);"></div><div class="ds-color__meta"><b>--ds-accent</b><span>#C8923E</span></div></div>
+      <div class="ds-color"><div class="ds-color__chip" style="background: var(--ds-accent-soft);"></div><div class="ds-color__meta"><b>--ds-accent-soft</b><span>#F2E3C8</span></div></div>
+      <div class="ds-color"><div class="ds-color__chip" style="background: var(--ds-bg-surface);"></div><div class="ds-color__meta"><b>--ds-bg-surface</b><span>#FAF4E8</span></div></div>
+      <div class="ds-color"><div class="ds-color__chip" style="background: var(--ds-bg-surface-2); border-bottom: 1px solid var(--ds-line);"></div><div class="ds-color__meta"><b>--ds-bg-surface-2</b><span>#FFFFFF</span></div></div>
+      <div class="ds-color"><div class="ds-color__chip" style="background: var(--ds-bg-warm);"></div><div class="ds-color__meta"><b>--ds-bg-warm</b><span>#F3E9D6</span></div></div>
+      <div class="ds-color"><div class="ds-color__chip" style="background: var(--ds-ink);"></div><div class="ds-color__meta"><b>--ds-ink</b><span>#1C2A30</span></div></div>
+      <div class="ds-color"><div class="ds-color__chip" style="background: var(--ds-ink-soft);"></div><div class="ds-color__meta"><b>--ds-ink-soft</b><span>#5A6B72</span></div></div>
+      <div class="ds-color"><div class="ds-color__chip" style="background: var(--ds-ink-on-dark);"></div><div class="ds-color__meta"><b>--ds-ink-on-dark</b><span>#F6EFE2</span></div></div>
+      <div class="ds-color"><div class="ds-color__chip" style="background: var(--ds-line);"></div><div class="ds-color__meta"><b>--ds-line</b><span>#E4D9C2</span></div></div>
+    </div>
+
+    <div class="ds-grid ds-grid--2">
+      <div>
+        <span class="ds-label">Type / radius / shadow / motion</span>
+        <table class="ds-token-table">
+          <tr><th>--ds-font-display</th><td class="val">'Fraunces', Georgia, serif</td></tr>
+          <tr><th>--ds-font-body</th><td class="val">'Inter', system-ui, sans-serif</td></tr>
+          <tr><th>--ds-r-sm / md / lg / xl / pill</th><td class="val">8 / 14 / 20 / 28 / 999px</td></tr>
+          <tr><th>--ds-shadow-card</th><td class="val">0 1px 2px / 0 8px 24px rgba(20,50,63,.06–.07)</td></tr>
+          <tr><th>--ds-shadow-lift</th><td class="val">0 18px 48px rgba(20,50,63,0.16)</td></tr>
+          <tr><th>--ds-ease / --ds-dur</th><td class="val">cubic-bezier(.2,.7,.2,1) / 240ms</td></tr>
+          <tr><th>--ds-section-py</th><td class="val">clamp(56px, 9vw, 96px)</td></tr>
+        </table>
+      </div>
+      <div>
+        <span class="ds-label">The 12 globals (Direction A — Harbor Glass)</span>
+        <table class="ds-token-table">
+          <tr><th>--ds-glass-bg</th><td class="val">rgba(250,244,232,0.72) <span class="ds-swatch wow-glass" style="border:0;"></span></td></tr>
+          <tr><th>--ds-glass-blur</th><td class="val">blur(16px) saturate(150%)</td></tr>
+          <tr><th>--ds-glass-border</th><td class="val">rgba(20,50,63,0.10)</td></tr>
+          <tr><th>--ds-hairline</th><td class="val">rgba(20,50,63,0.10) <span class="ds-swatch wow-hairline"></span></td></tr>
+          <tr><th>--ds-inset-hi</th><td class="val">inset 0 1px 0 rgba(255,255,255,0.55)</td></tr>
+          <tr><th>--ds-glow</th><td class="val">0 10px 30px rgba(200,146,62,0.32) <span class="ds-swatch wow-glow" style="background:var(--ds-primary);"></span></td></tr>
+          <tr><th>--ds-glow-wash</th><td class="val">radial-gradient(…amber…) <span class="ds-swatch" style="background:var(--ds-glow-wash);"></span></td></tr>
+          <tr><th>--ds-grain</th><td class="val">fractalNoise data-uri, opacity .04</td></tr>
+          <tr><th>--ds-divider-h</th><td class="val">80px</td></tr>
+          <tr><th>--ds-dur-fast / slow</th><td class="val">160ms / 600ms</td></tr>
+          <tr><th>--ds-ease-out</th><td class="val">cubic-bezier(.2,.6,.2,1)</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ §2 Chrome — header + footer rendered live ════ -->
+<section class="ds-section">
+  <div class="container">
+    <div class="ds-h"><p class="ds-kicker">§2 · chrome</p><h2>Header &amp; footer</h2><p>The locked chrome injected on every page. Nav = NAV-PATTERNS.md #2 (classic full-bar over hero) with the glass globals overlaid; footer = FOOTER-STYLES.md #14 (hours-and-contact prominent).</p></div>
+
+    <span class="ds-label">Site header — glass nav (.site-header + .wow-glass overlay)</span>
+    <div class="ds-chrome-wrap" style="margin-bottom: var(--ds-space-2xl);">
+      <header class="site-header wow-glass" style="position: static;"><div class="container site-header__bar">
+        <a class="brand" href="index.html"><span class="brand__mark">H</span>Harborline Provisions</a>
+        <nav class="site-nav"><a href="#">Shop the Pantry</a><a href="#">Provisioning Box</a><a href="#">Dockside Café</a><a href="#">Our Story</a></nav>
+      </div></header>
+    </div>
+
+    <span class="ds-label">Site footer (FOOTER-STYLES.md #14)</span>
+    <div class="ds-chrome-wrap">
+      <footer class="site-footer"><div class="container site-footer__cols">
+        <div><strong>Harborline Provisions</strong><p>Coastal specialty foods, hand-harvested from the harbor — with a dockside café and a monthly Provisioning Box.</p></div>
+        <div><strong>Shop</strong><a href="#">The Pantry</a><a href="#">Provisioning Box</a><a href="#">Corporate Gifting</a></div>
+        <div><strong>Visit</strong><a href="#">Dockside Café</a><a href="#">Hours &amp; Map</a><a href="#">Wholesale</a></div>
+      </div></footer>
+    </div>
+  </div>
+</section>
+
+<!-- ════ §3 Buttons — every state ════ -->
+<section class="ds-section">
+  <div class="container">
+    <div class="ds-h"><p class="ds-kicker">§3 · components</p><h2>Buttons (CTA-PATTERNS.md #1 Solid pill primary)</h2><p>Default, hover, focus-visible, and the glow overlay. Hover/focus styling lives in structural.css; the page never restyles it.</p></div>
+    <div class="ds-row">
+      <a class="btn btn-primary" href="#">Primary</a>
+      <a class="btn btn-primary wow-glow" href="#">Primary + .wow-glow</a>
+      <a class="btn btn-secondary" href="#">Secondary (ghost)</a>
+      <button class="btn btn-primary" type="button" style="box-shadow: var(--ds-shadow-lift); transform: translateY(-2px); background: var(--ds-primary-deep);">Hover state (held)</button>
+      <button class="btn btn-primary" type="button" style="outline: 3px solid var(--ds-accent); outline-offset: 2px;">Focus-visible (held)</button>
+    </div>
+  </div>
+</section>
+
+<!-- ════ §4 Cards — base + hairline + lift + zoom ════ -->
+<section class="ds-section">
+  <div class="container">
+    <div class="ds-h"><p class="ds-kicker">§4 · components</p><h2>Cards (CARD-VARIATIONS.md #2) — hover to feel the lift</h2><p>The card chrome with the globals overlaid: <code>.wow-hairline</code> (hairline + inset top-highlight), <code>.wow-lift</code> (hover-lift + shadow bloom), <code>.wow-zoom</code> (image-zoom inside a clipped frame).</p></div>
+    <div class="ds-grid ds-grid--3">
+      <article class="card wow-lift" style="padding: var(--ds-space-xl);">
+        <h3 style="margin-bottom: var(--ds-space-xs);">.card .wow-lift</h3>
+        <p style="color: var(--ds-ink-soft);">Base surface + radius + card shadow; hover lifts 6px and the shadow blooms.</p>
+      </article>
+      <article class="card wow-hairline wow-lift" style="padding: var(--ds-space-xl);">
+        <h3 style="margin-bottom: var(--ds-space-xs);">.wow-hairline .wow-lift</h3>
+        <p style="color: var(--ds-ink-soft);">Adds the 1px hairline + inset top-highlight for the glass-edge feel.</p>
+      </article>
+      <article class="card wow-lift" style="padding: 0; overflow: hidden;">
+        <div class="wow-zoom" style="aspect-ratio: 16/10;"><img src="assets/product-sea-salt.jpg" alt="Sea salt flakes" loading="lazy" style="width:100%;height:100%;object-fit:cover;"></div>
+        <div style="padding: var(--ds-space-lg);"><h3 style="margin-bottom: 4px;">.wow-zoom frame</h3><p style="color: var(--ds-ink-soft);">Image scales 1.05 inside the clipped frame on hover.</p></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ════ §5 Forms / inputs — every state ════ -->
+<section class="ds-section">
+  <div class="container">
+    <div class="ds-h"><p class="ds-kicker">§5 · components</p><h2>Forms &amp; inputs</h2><p>Boxed default + pill newsletter input. Focus rings are <code>:focus-visible</code> (keyboard only).</p></div>
+    <div class="ds-grid ds-grid--2">
+      <form class="form" onsubmit="return false" style="background: var(--ds-primary-deep); padding: var(--ds-space-xl); border-radius: var(--ds-r-lg);">
+        <div class="field"><label for="ds-name">Name</label><input id="ds-name" type="text" placeholder="Your name"></div>
+        <div class="field"><label for="ds-email">Email</label><input id="ds-email" type="email" placeholder="you@email.com"></div>
+        <div class="field"><label for="ds-msg">Message</label><textarea id="ds-msg" placeholder="A note…"></textarea></div>
+        <button class="btn btn-primary wow-glow" type="submit">Send</button>
+      </form>
+      <div>
+        <span class="ds-label">Pill newsletter input + badges</span>
+        <form class="newsletter__form" onsubmit="return false" style="max-width: none; margin-top: 0;">
+          <input type="email" aria-label="Email" placeholder="you@email.com">
+          <button class="btn btn-primary wow-glow" type="submit">Subscribe</button>
+        </form>
+        <div class="ds-row" style="margin-top: var(--ds-space-xl);">
+          <span class="ds-badge ds-badge--accent">Bestseller</span>
+          <span class="ds-badge ds-badge--soft">New</span>
+          <span class="ds-badge ds-badge--primary">B-Corp</span>
+          <span class="ds-badge ds-badge--outline">Limited</span>
+        </div>
+        <div class="ds-row" style="margin-top: var(--ds-space-lg);">
+          <span class="t-card__stars" style="color: var(--ds-accent-ink); letter-spacing: 2px;">★★★★★</span>
+          <span style="color: var(--ds-ink-soft); font-size: 14px;">4.9 average · 2,300 reviews</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ §6 Dividers — wave shape-divider (DIVIDER-PATTERNS.md #2) ════ -->
+<section class="ds-section">
+  <div class="container">
+    <div class="ds-h"><p class="ds-kicker">§6 · globals</p><h2>Section dividers (DIVIDER-PATTERNS.md #2 Wave smooth) + bloom</h2><p>The <code>.wow-divider</code> SVG shape-divider (single smooth wave) between bands, and the <code>.wow-bloom</code> radial amber wash.</p></div>
+    <div class="ds-divider-demo wow-bloom">
+      <div class="wow-divider wow-divider--bottom" aria-hidden="true">
+        <svg viewBox="0 0 1200 80" preserveAspectRatio="none"><path d="M0,40 C300,90 900,-10 1200,40 L1200,80 L0,80 Z"></path></svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ §7 Layout globals — bento + mask + reveal/stagger ════ -->
+<section class="ds-section">
+  <div class="container">
+    <div class="ds-h"><p class="ds-kicker">§7 · globals</p><h2>Bento offset + masked focal + reveal/stagger</h2><p><code>.wow-bento</code> offset grid, <code>.wow-mask</code> rounded clip, and the <code>.wow-reveal</code>/<code>.wow-stagger</code> scroll entrances (watch them fade-up on first scroll into view).</p></div>
+    <div class="wow-bento wow-stagger" style="grid-auto-rows: 1fr;">
+      <div class="ds-bento__cell tall wow-mask"><img src="assets/service-provisioning-box.jpg" alt="Coastal pantry still life" loading="lazy"></div>
+      <div class="ds-bento__cell wow-mask"><img src="assets/hero-harbor.jpg" alt="Harbor at first light" loading="lazy"></div>
+      <div class="ds-bento__cell wow-mask"><img src="assets/product-honey.jpg" alt="Raw honey" loading="lazy"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ §8 Dark band re-light proof + count-up ════ -->
+<section class="ds-section">
+  <div class="container">
+    <div class="ds-h"><p class="ds-kicker">§8 · globals</p><h2>Dark band + count-up (ink-on-dark re-asserted)</h2><p>On a <code>section--dark</code> band, stat numerals re-light to <code>--ds-accent</code> and labels to <code>--ds-ink-on-dark</code> — no dark-on-dark invisible text. Count-up runs once on scroll into view.</p></div>
+    <div class="ds-darkband wow-grain">
+      <div class="ds-darkband__grid">
+        <div class="stat"><span class="stat__num" data-count="40000" data-suffix="+">0+</span><span class="stat__label">Boxes shipped since 2019</span></div>
+        <div class="stat"><span class="stat__num" data-count="4.9" data-suffix="★">0★</span><span class="stat__label">Across 2,300 reviews</span></div>
+        <div class="stat"><span class="stat__num" data-count="60" data-suffix="">0</span><span class="stat__label">Regional grocers stocked</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ §9 Section visual rhythm reference (§2.20) ════ -->
+<section class="ds-section">
+  <div class="container">
+    <div class="ds-h"><p class="ds-kicker">§9 · §2.20 reference</p><h2>Section visual rhythm</h2><p>The locked per-section bg / imagery / chrome plan the homepage implements. ≥2 non-light anchors, a non-light anchor mid-page, no 4 consecutive same-bg or same-chrome, ≥50% sections with imagery.</p></div>
+    <table class="ds-rhythm">
+      <thead><tr><th>#</th><th>Section</th><th>Background</th><th>Imagery</th><th>Chrome</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Hero</td><td><span class="pip pip-dark"></span>dark</td><td>full-bleed photo</td><td>open-layout</td></tr>
+        <tr><td>2</td><td>Awards band</td><td><span class="pip pip-grad"></span>gradient</td><td>icon accolades</td><td>open-layout</td></tr>
+        <tr><td>3</td><td>Featured collection</td><td><span class="pip pip-light"></span>light</td><td>3 product photos</td><td>shadow-lift</td></tr>
+        <tr><td>4</td><td>Numbered process</td><td><span class="pip pip-dark"></span>dark</td><td>inset photo</td><td>dark-anchor-panel</td></tr>
+        <tr><td>5</td><td>Services 3-col</td><td><span class="pip pip-warm"></span>warm</td><td>3 inset photos</td><td>hairline-card</td></tr>
+        <tr><td>6</td><td>Stat strip</td><td><span class="pip pip-accent"></span>accent</td><td>count-up numerals</td><td>open-layout</td></tr>
+        <tr><td>7</td><td>Testimonials</td><td><span class="pip pip-light"></span>light</td><td>avatars</td><td>hairline-card</td></tr>
+        <tr><td>8</td><td>Press band</td><td><span class="pip pip-grad"></span>gradient</td><td>logos-as-imagery</td><td>open-layout</td></tr>
+        <tr><td>9</td><td>Newsletter</td><td><span class="pip pip-light"></span>light</td><td>image-overlay photo</td><td>image-overlay</td></tr>
+        <tr><td>10</td><td>Closing CTA</td><td><span class="pip pip-dark"></span>dark</td><td>full-bleed photo</td><td>open-layout</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ════ §10 Inherited JS ════ -->
+<section class="ds-section" style="border-bottom: 0;">
+  <div class="container">
+    <div class="ds-h"><p class="ds-kicker">§10 · inherited behavior</p><h2>The JS every page inherits</h2><p>The reveal/stagger + count-up + parallax IntersectionObserver behavior lives here once. Inner pages ship NO JS — they only add the <code>wow-*</code> classes and inherit this. All motion is <code>prefers-reduced-motion</code>-gated (it falls back to fully-visible, no animation).</p></div>
+    <article class="card wow-hairline" style="padding: var(--ds-space-xl);">
+      <p style="font-family: var(--ds-font-mono); font-size: 12px; color: var(--ds-ink-soft); line-height: 1.7;">IntersectionObserver toggles <code>.in-view</code> on <code>.wow-reveal</code> / <code>.wow-stagger</code> (threshold .12, rootMargin -8%). <code>.stat__num[data-count]</code> counts up once at 50% visibility (easeOutCubic, ~1.5s). <code>.wow-parallax</code> translates on scroll (rAF-throttled, <code>data-parallax</code> speed). Reduced-motion → instant, no transforms.</p>
+    </article>
+  </div>
+</section>
+
+<!-- shared inherited motion + chrome behavior (reveal/stagger + count-up + parallax + drawer) -->
+<script src="design-system/site.js" defer></script>
+</body>
+</html>

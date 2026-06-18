@@ -1,0 +1,93 @@
+<!--
+  _chrome.html — Riverkeep Alliance SHARED CHROME (locked, injected IDENTICALLY on every page)
+  ===========================================================================================
+  DERIVED FROM sitemap.yaml (Stage 0.5): header nav = sitemap.nav[] as REAL <slug>.html links;
+  primary CTA = CONVERSION_GOAL `donate` -> "Donate" -> donate.html; secondary = "Volunteer"
+  -> get-involved.html (per _strategy.md 0c). Footer = sitemap.footer[] 4 columns
+  (The Mission / Get Involved / Give / Connect). Mobile drawer carries the SAME nav links +
+  Donate + Volunteer, aria-wired (hamburger aria-expanded/aria-controls; #mobile-drawer
+  aria-hidden; backdrop). Uses ONLY COMPONENT-VOCABULARY "Shared chrome" classes + the locked
+  globals overlay (wow-glass on .site-header, wow-glow on the primary CTA). Token-pure styling
+  lives in design-system/structural.css; behavior in design-system/site.js. NO #anchor links.
+
+  The four non-Donate nav entries from sitemap.nav[] render as text links; the Donate nav entry
+  renders as the primary CTA button (single, consistent everywhere) so Donate is not duplicated.
+-->
+
+<!-- ════ CANONICAL HEADER — water-glass full-bar + hamburger + mobile drawer ════ -->
+<header class="site-header wow-glass">
+  <div class="container site-header__bar">
+    <a class="brand" href="index.html">
+      <span class="brand__mark">R</span>
+      Riverkeep Alliance
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <a href="programs.html">Programs</a>
+      <a href="impact.html">Our Impact</a>
+      <a href="get-involved.html">Get Involved</a>
+      <a href="about.html">About</a>
+      <a class="btn btn-secondary" href="get-involved.html">Volunteer</a>
+      <a class="btn btn-primary wow-glow" href="donate.html">Donate</a>
+    </nav>
+    <button class="site-header__hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-drawer">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- ════ CANONICAL MOBILE DRAWER (slide-from-right, aria-toggled by site.js) ════ -->
+<div class="site-drawer-backdrop" data-open="false"></div>
+<nav id="mobile-drawer" class="site-drawer" aria-hidden="true" aria-label="Mobile">
+  <button class="site-drawer__close" aria-label="Close menu">&times;</button>
+  <ul class="site-drawer__links">
+    <li><a href="programs.html">Programs</a></li>
+    <li><a href="impact.html">Our Impact</a></li>
+    <li><a href="get-involved.html">Get Involved</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="donate.html">Donate</a></li>
+  </ul>
+  <a class="btn btn-secondary" href="get-involved.html">Volunteer</a>
+  <a class="btn btn-primary wow-glow" href="donate.html">Donate</a>
+</nav>
+
+
+<!-- ════ CANONICAL FOOTER — 4-col (The Mission / Get Involved / Give / Connect) + B-Corp bottom bar ════ -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="site-footer__top">
+      <div>
+        <div class="site-footer__brand"><span class="site-footer__brand-mark">R</span>Riverkeep Alliance</div>
+        <p class="site-footer__blurb">The community alliance keeping our rivers swimmable, fishable, and wild — restoring watersheds one mile at a time.</p>
+        <div class="site-footer__hours">
+          <strong>Volunteer Hours</strong>
+          Field days run Sat 9am–1pm, Mar–Nov. Office: Mon–Fri 9am–5pm.
+        </div>
+      </div>
+      <div class="site-footer__col">
+        <h4>The Mission</h4>
+        <a href="programs.html">Our Programs</a>
+        <a href="impact.html">Our Impact</a>
+        <a href="about.html">About Us</a>
+      </div>
+      <div class="site-footer__col">
+        <h4>Get Involved</h4>
+        <a href="get-involved.html">Volunteer</a>
+        <a href="get-involved.html">Events</a>
+        <a href="get-involved.html">Become a Member</a>
+      </div>
+      <div class="site-footer__col">
+        <h4>Give</h4>
+        <a href="donate.html">Donate</a>
+        <a href="donate.html">Monthly Giving</a>
+        <a href="donate.html">Legacy Giving</a>
+      </div>
+    </div>
+    <div class="site-footer__bottom">
+      <span>&copy; 2026 Riverkeep Alliance. A registered 501(c)(3) nonprofit. EIN 00-0000000.</span>
+      <span class="site-footer__bcorp">
+        <a href="https://www.charitynavigator.org">Charity Navigator 4-Star</a>
+        &middot; <a href="https://instagram.com/riverkeepalliance">Instagram</a>
+      </span>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Riverkeep Alliance — keeping our rivers swimmable, fishable, and wild</title>
+<meta name="description" content="Riverkeep Alliance is the community alliance restoring watersheds one mile at a time — river cleanups, riparian restoration, water-quality monitoring, and education. Donate or volunteer to keep our rivers swimmable, fishable, and wild.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+<!-- LOCKED design system: base brand tokens + the 12 globals ("Living Water" direction) + the wow-* overlay impl.
+     ALL real styling is inherited from structural.css via the canonical vocabulary classes; the home carries
+     ONLY the token-pure band-rhythm map below (homepage-class artifact, exempt per SKILL.md line 262) so the
+     section-visual-rhythm gate can classify each band. No brand literals, no font names — every value is var(--ds-*). -->
+<link rel="stylesheet" href="design-system/tokens.css">
+<link rel="stylesheet" href="design-system/structural.css">
+<style>
+/* Home band-rhythm map — TOKEN-PURE (var(--ds-*) only); classifiable by verify-section-visual-rhythm.
+   These reassert the SAME band backgrounds structural.css already paints from the modifier classes,
+   so the home renders identically AND the rhythm gate can read the figure/ground sequence. */
+.section--dark { background: var(--ds-primary-deep); }
+.section--warm { background: var(--ds-bg-warm); }
+.section--accent { background: var(--ds-accent); }
+</style>
+
+<!--
+  Riverkeep Alliance HOME — client-web-mockup v4 · nonprofit vertical · CONVERSION_GOAL=donate.
+  Shell-pure intent: ONLY COMPONENT-VOCABULARY classes; the single <style> above is the token-pure
+  band-rhythm map (no brand literals, no fonts). Composed home: hero (Donate primary) -> impact stat
+  band -> programs preview -> featured restoration story -> ways-to-give teaser -> events teaser ->
+  partner/proof band -> closing Donate CTA. Band rhythm: dark, dark, light, warm, accent, light, dark, dark
+  (no 4 in a row; 4 non-light anchors incl. 2 in the middle). Visuals = medium-agnostic INLINE SVG
+  (river / leaf / water motifs, impact donut, program icons, all >=120px), NO stock photos. Client
+  facts bound with adjacent src: R-* markers next to the rendered fact text. Chrome (glass header +
+  drawer + 4-col footer) injected IDENTICALLY from design-system/_chrome.html; behavior = site.js.
+-->
+</head>
+<body>
+
+<!-- ════ CANONICAL HEADER — water-glass full-bar + hamburger + mobile drawer (identical on every page) ════ -->
+<header class="site-header wow-glass">
+  <div class="container site-header__bar">
+    <a class="brand" href="index.html">
+      <span class="brand__mark">R</span>
+      Riverkeep Alliance
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <a href="programs.html">Programs</a>
+      <a href="impact.html">Our Impact</a>
+      <a href="get-involved.html">Get Involved</a>
+      <a href="about.html">About</a>
+      <a class="btn btn-secondary" href="get-involved.html">Volunteer</a>
+      <a class="btn btn-primary wow-glow" href="donate.html">Donate</a>
+    </nav>
+    <button class="site-header__hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-drawer">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- ════ CANONICAL MOBILE DRAWER (slide-from-right, aria-toggled by site.js) ════ -->
+<div class="site-drawer-backdrop" data-open="false"></div>
+<nav id="mobile-drawer" class="site-drawer" aria-hidden="true" aria-label="Mobile">
+  <button class="site-drawer__close" aria-label="Close menu">&times;</button>
+  <ul class="site-drawer__links">
+    <li><a href="programs.html">Programs</a></li>
+    <li><a href="impact.html">Our Impact</a></li>
+    <li><a href="get-involved.html">Get Involved</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="donate.html">Donate</a></li>
+  </ul>
+  <a class="btn btn-secondary" href="get-involved.html">Volunteer</a>
+  <a class="btn btn-primary wow-glow" href="donate.html">Donate</a>
+</nav>
+
+<main>
+
+<!-- ════ 1 · HERO (dark anchor) — swimmable/fishable/wild promise + Donate primary, Volunteer secondary ════
+     SC#1 hero · medium-agnostic INLINE SVG river scene (no photo). bg: dark. -->
+<section class="section hero wow-bloom wow-grain section--dark">
+  <div class="container hero__inner wow-reveal">
+    <p class="eyebrow">Community watershed alliance &middot; restoring one mile at a time</p>
+    <h1>Keeping our rivers swimmable, fishable, and&nbsp;wild.</h1>
+    <p class="lede">Riverkeep Alliance is the community alliance restoring watersheds one mile at a time — cleanups, replanted streambanks, a volunteer water-testing network, and the next generation learning the river firsthand.</p>
+    <div class="cta-row">
+      <a class="btn btn-primary wow-glow" href="donate.html">Donate</a>
+      <a class="btn btn-secondary" href="get-involved.html">Volunteer</a>
+    </div>
+    <figure class="hero__inner" aria-hidden="true">
+      <svg width="640" height="300" viewBox="0 0 640 300" role="img" preserveAspectRatio="xMidYMid meet">
+        <defs>
+          <linearGradient id="rk-sky" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#7FBF6A" stop-opacity="0.16"/>
+            <stop offset="1" stop-color="#1C6E8C" stop-opacity="0.40"/>
+          </linearGradient>
+          <linearGradient id="rk-water" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#7FBF6A" stop-opacity="0.75"/>
+            <stop offset="1" stop-color="#1C6E8C" stop-opacity="0.95"/>
+          </linearGradient>
+        </defs>
+        <rect x="0" y="0" width="640" height="300" rx="22" fill="url(#rk-sky)"/>
+        <circle cx="520" cy="70" r="38" fill="#E7B45A" opacity="0.9"/>
+        <path d="M0,150 C120,120 180,200 320,170 C460,140 520,210 640,180 L640,300 L0,300 Z" fill="url(#rk-water)"/>
+        <path d="M0,150 C120,120 180,200 320,170 C460,140 520,210 640,180" fill="none" stroke="#F4FAF7" stroke-opacity="0.6" stroke-width="3"/>
+        <path d="M70,300 C70,250 50,230 30,215 C70,225 90,250 95,300 Z" fill="#7FBF6A" opacity="0.92"/>
+        <path d="M150,300 C150,240 130,222 108,206 C150,218 172,246 178,300 Z" fill="#7FBF6A" opacity="0.72"/>
+        <path d="M250,80 C268,64 296,66 308,86 C292,80 270,82 256,96 Z" fill="#7FBF6A" opacity="0.85"/>
+        <path d="M256,96 C242,110 244,134 262,146 C250,130 250,112 256,96 Z" fill="#7FBF6A" opacity="0.62"/>
+      </svg>
+    </figure>
+  </div>
+</section>
+
+<!-- ════ 2 · IMPACT STAT BAND (dark anchor) — the headline conservation math (count-up) ════
+     SC#3 stat-strip composed as .data-proof on dark · R-STAT-01 / R-STAT-02 / R-STAT-03 + R-PROOF-01. -->
+<section class="section data-proof stat-strip wow-bloom section--dark">
+  <div class="container">
+    <p class="eyebrow">Our impact, in the open</p>
+    <h2>Conservation you can count.</h2>
+    <p class="lede">Local, measurable, and accountable. Every number here is restoration on the ground — not a slogan.</p>
+    <div class="data-proof__grid wow-stagger">
+      <div class="stat">
+        <!-- src: R-STAT-01 -->
+        <span class="stat__num" data-count="1240" data-suffix="">0</span>
+        <span class="stat__label">river miles restored across the watershed since founding</span>
+        <span class="data-proof__sub">Counted mile by mile, every season.</span>
+      </div>
+      <div class="stat">
+        <!-- src: R-STAT-02 -->
+        <span class="stat__num" data-count="38000" data-suffix="+">0</span>
+        <span class="stat__label">volunteer hours contributed every year</span>
+        <span class="data-proof__sub">Neighbors, anglers, paddlers, and families — on the water.</span>
+      </div>
+      <div class="stat">
+        <!-- src: R-STAT-03 -->
+        <span class="stat__num" data-count="92" data-suffix="&cent;">0</span>
+        <span class="stat__label">of every $1 goes straight to programs</span>
+        <span class="data-proof__sub">Independently rated for accountability + transparency.</span>
+      </div>
+    </div>
+    <!-- src: R-PROOF-01 -->
+    <p class="trust-note">Native trees planted along 84 miles of streambank in the last five years.</p>
+  </div>
+</section>
+
+<!-- ════ 3 · PROGRAMS PREVIEW (light default) — the four programs, each an inline-SVG icon card ════
+     SC#11 composed as .capability-breakdown · R-SVC-01..R-SVC-04 (marker sits next to the title text). -->
+<section class="section capability-breakdown">
+  <div class="container">
+    <p class="eyebrow">What we do on the river</p>
+    <h2>Four programs, one watershed.</h2>
+    <p class="lede">From the first bag of trash hauled out to a streambank that cools the water for decades, the work moves one mile at a time.</p>
+    <div class="cap-breakdown__grid wow-stagger">
+      <article class="card capability-card wow-lift wow-hairline">
+        <span class="capability-card__icon" aria-hidden="true">
+          <svg width="120" height="120" viewBox="0 0 48 48" fill="none" stroke="#1C6E8C" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" role="img">
+            <path d="M6 30c5 4 11 4 18 0s13-4 18 0"/>
+            <path d="M16 30l2-14h12l2 14"/>
+            <path d="M14 16h20"/><path d="M22 12V9h4v3"/>
+          </svg>
+        </span>
+        <!-- src: R-SVC-01 -->
+        <h3>River Cleanups</h3>
+        <p>Community work days hauling trash, tires, and debris out of the river corridor — turning a neglected bank back into a place people gather.</p>
+      </article>
+      <article class="card capability-card wow-lift wow-hairline">
+        <span class="capability-card__icon" aria-hidden="true">
+          <svg width="120" height="120" viewBox="0 0 48 48" fill="none" stroke="#2E6B30" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" role="img">
+            <path d="M24 42V20"/>
+            <path d="M24 26c0-7 5-12 14-13-1 9-7 13-14 13z"/>
+            <path d="M24 22c0-6-4-10-12-11 1 8 6 11 12 11z"/>
+            <path d="M10 42h28"/>
+          </svg>
+        </span>
+        <!-- src: R-SVC-02 -->
+        <h3>Riparian Restoration</h3>
+        <p>Replanting native streambank buffers to cool the water, hold the soil, and rebuild the habitat fish and birds depend on.</p>
+      </article>
+      <article class="card capability-card wow-lift wow-hairline">
+        <span class="capability-card__icon" aria-hidden="true">
+          <svg width="120" height="120" viewBox="0 0 48 48" fill="none" stroke="#1C6E8C" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" role="img">
+            <path d="M19 6h10"/><path d="M21 6v9l-8 18a4 4 0 0 0 4 6h14a4 4 0 0 0 4-6l-8-18V6"/>
+            <path d="M16 30c4 3 12 3 16 0"/>
+            <circle cx="22" cy="35" r="1.4" fill="#7FBF6A" stroke="none"/>
+            <circle cx="28" cy="38" r="1.2" fill="#7FBF6A" stroke="none"/>
+          </svg>
+        </span>
+        <!-- src: R-SVC-03 -->
+        <h3>Water-Quality Monitoring</h3>
+        <p>A trained volunteer network samples sites monthly for bacteria, nutrients, and temperature — so the data, not guesswork, drives the work.</p>
+      </article>
+      <article class="card capability-card wow-lift wow-hairline">
+        <span class="capability-card__icon" aria-hidden="true">
+          <svg width="120" height="120" viewBox="0 0 48 48" fill="none" stroke="#2E6B30" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" role="img">
+            <path d="M6 18l18-8 18 8-18 8z"/>
+            <path d="M14 22v9c0 3 5 5 10 5s10-2 10-5v-9"/>
+            <path d="M42 18v10"/>
+          </svg>
+        </span>
+        <!-- src: R-SVC-04 -->
+        <h3>Youth &amp; Community Education</h3>
+        <p>River classrooms, school field programs, and watershed workshops that turn curiosity into a lifelong habit of stewardship.</p>
+      </article>
+    </div>
+    <div class="cta-row">
+      <a class="btn btn-secondary" href="programs.html">Explore all programs</a>
+    </div>
+  </div>
+</section>
+
+<!-- ════ 4 · FEATURED RESTORATION STORY (warm band) — a single mile, made whole ════
+     SC#11 composed as .differentiator-narrative (one image-led story row) · binds R-PROOF-01 + R-STAT-01. -->
+<section class="section differentiator-narrative section--warm">
+  <div class="container">
+    <p class="eyebrow">A restoration story</p>
+    <h2>One mile at Miller's Bend, brought back to life.</h2>
+    <div class="diff-row">
+      <figure class="diff-row__media wow-mask wow-zoom" aria-hidden="true">
+        <svg width="560" height="380" viewBox="0 0 560 380" role="img" preserveAspectRatio="xMidYMid slice">
+          <defs>
+            <linearGradient id="rk-bank" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#E3EEDD"/>
+              <stop offset="1" stop-color="#F1EFE6"/>
+            </linearGradient>
+            <linearGradient id="rk-flow" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" stop-color="#1C6E8C"/>
+              <stop offset="1" stop-color="#7FBF6A"/>
+            </linearGradient>
+          </defs>
+          <rect x="0" y="0" width="560" height="380" fill="url(#rk-bank)"/>
+          <path d="M0,210 C140,170 200,260 300,225 C420,182 470,250 560,215 L560,380 L0,380 Z" fill="url(#rk-flow)" opacity="0.92"/>
+          <path d="M0,210 C140,170 200,260 300,225 C420,182 470,250 560,215" fill="none" stroke="#FFFFFF" stroke-opacity="0.6" stroke-width="4"/>
+          <g fill="#2E6B30">
+            <path d="M60,260 C60,210 44,194 26,180 C62,190 80,214 86,260 Z"/>
+            <path d="M120,266 C120,222 106,206 88,192 C122,202 140,224 146,266 Z"/>
+            <path d="M470,250 C470,206 484,190 502,176 C468,186 452,210 446,250 Z"/>
+          </g>
+          <g stroke="#2E6B30" stroke-width="3" fill="none">
+            <path d="M210,300 V250"/><path d="M210,266 l-12,-12"/><path d="M210,272 l12,-12"/>
+            <path d="M350,310 V262"/><path d="M350,278 l-12,-12"/><path d="M350,284 l12,-12"/>
+          </g>
+        </svg>
+      </figure>
+      <div class="diff-row__body">
+        <span class="diff-row__num">Before &rarr; After</span>
+        <h3>From a dumping ground to a swimmable reach.</h3>
+        <p>Miller's Bend was where the river went to be forgotten — bald banks, eroding soil, a corridor people drove past. Volunteers cleared it, replanted it, and have measured it monthly ever since. Today it is one of the reaches we point to first.</p>
+        <ul class="diff-row__list">
+          <!-- src: R-PROOF-01 -->
+          <li>Native trees planted along 84 miles of streambank in the last five years</li>
+          <!-- src: R-STAT-01 -->
+          <li>Part of 1,240 river miles restored across the watershed since founding</li>
+        </ul>
+        <div class="cta-row">
+          <a class="btn btn-secondary" href="impact.html">See the full impact</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ 5 · WAYS-TO-GIVE TEASER (accent band) — three giving levels, monthly featured ════
+     SC#32 composed as .plan-cards · binds R-OFFER-01 (River Guardian monthly). Donate primary on featured tier. -->
+<section class="section plan-cards section--accent">
+  <div class="container">
+    <p class="eyebrow">Ways to give</p>
+    <h2>Fund the restoration.</h2>
+    <div class="plan-cards__grid wow-stagger">
+      <div class="card price-card wow-lift">
+        <p class="plan-card__name">One-time gift</p>
+        <p class="plan-card__blurb">Pitch in for the next field day.</p>
+        <p class="price-card__amount">$50</p>
+        <ul class="price-card__features">
+          <li>Funds a volunteer cleanup crew for a morning</li>
+          <li>92&cent; of every dollar reaches programs</li>
+          <li>Tax-deductible receipt by email</li>
+        </ul>
+        <a class="btn btn-secondary" href="donate.html">Give once</a>
+      </div>
+      <div class="card price-card plan-card--featured wow-lift">
+        <span class="plan-card__ribbon">Most impact</span>
+        <!-- src: R-OFFER-01 -->
+        <p class="plan-card__name">River Guardian &middot; monthly</p>
+        <p class="plan-card__blurb">Give monthly as a River Guardian — sustaining gifts fund year-round restoration.</p>
+        <p class="price-card__amount">$20<span class="pricing-tier__period">/mo</span></p>
+        <ul class="price-card__features">
+          <li>Steady funding for replanting and monitoring all year</li>
+          <li>Plants native streambank trees every season</li>
+          <li>Guardian updates from the reaches you sustain</li>
+        </ul>
+        <a class="btn btn-primary wow-glow" href="donate.html">Donate monthly</a>
+      </div>
+      <div class="card price-card wow-lift">
+        <p class="plan-card__name">Legacy &amp; major gifts</p>
+        <p class="plan-card__blurb">Protect the watershed for the next generation.</p>
+        <p class="price-card__amount">Custom</p>
+        <ul class="price-card__features">
+          <li>Name a restored reach or a planting season</li>
+          <li>Multi-year watershed commitments</li>
+          <li>Talk directly with our stewardship team</li>
+        </ul>
+        <a class="btn btn-secondary" href="donate.html">Start a conversation</a>
+      </div>
+    </div>
+    <p class="trust-note">Prefer to give your time instead? <a class="cross-link" href="get-involved.html">Volunteer with us</a></p>
+  </div>
+</section>
+
+<!-- ════ 6 · EVENTS TEASER (light default) — the next time to show up ════
+     SC#27 composed as .process (the path from sign-up to the riverbank) · binds R-EVT-01 + R-STAT-02.
+     Carries a sized inline-SVG calendar motif so this light band also counts toward imagery rhythm. -->
+<section class="section process">
+  <div class="container">
+    <p class="eyebrow">Show up for the river</p>
+    <h2>Your next field day is on the calendar.</h2>
+    <p class="lede">No experience needed — gloves, bags, and coffee are on us. Here is how a Saturday on the water goes.</p>
+    <figure class="process" aria-hidden="true">
+      <svg width="200" height="160" viewBox="0 0 200 160" role="img">
+        <rect x="20" y="24" width="160" height="120" rx="14" fill="none" stroke="#1C6E8C" stroke-width="3"/>
+        <path d="M20 56 H180" stroke="#1C6E8C" stroke-width="3"/>
+        <path d="M56 14 V36 M144 14 V36" stroke="#2E6B30" stroke-width="4" stroke-linecap="round"/>
+        <rect x="120" y="84" width="40" height="40" rx="8" fill="#7FBF6A" opacity="0.85"/>
+        <path d="M128 104 l8 8 16-18" fill="none" stroke="#103A4A" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M40 76 H72 M40 96 H64 M40 116 H80" stroke="#4A6068" stroke-width="3" stroke-linecap="round"/>
+      </svg>
+    </figure>
+    <div class="process__steps wow-stagger">
+      <article class="step wow-hairline">
+        <span class="step__num">1</span>
+        <!-- src: R-EVT-01 -->
+        <h3>Spring Watershed Cleanup</h3>
+        <p>Saturday, May 17, 8am at the Miller's Bend access. Park, sign the waiver, grab a crew — it is the biggest day of our year.</p>
+      </article>
+      <article class="step wow-hairline">
+        <span class="step__num">2</span>
+        <h3>Work the bank, mile by mile</h3>
+        <p>Haul debris, plant buffers, or join the monitoring crew. Every pair of hands moves the restoration line a little further upstream.</p>
+      </article>
+      <article class="step wow-hairline">
+        <span class="step__num">3</span>
+        <!-- src: R-STAT-02 -->
+        <h3>Add to 38,000+ volunteer hours a year</h3>
+        <p>Your morning joins the 38,000 volunteer hours the watershed counts on every year. Lunch, stories, and a cleaner river to show for it.</p>
+      </article>
+    </div>
+    <div class="cta-row">
+      <a class="btn btn-secondary" href="get-involved.html">See all events &amp; volunteer days</a>
+    </div>
+  </div>
+</section>
+
+<!-- ════ 7 · PARTNER / PROOF BAND (dark anchor) — membership, partners, accountability ════
+     SC#3 composed as .real-proof (stat ladder + pull-quote) · binds R-SOC-01 + R-ACCO-01 + R-STAT-03. -->
+<section class="section real-proof wow-bloom section--dark">
+  <div class="container">
+    <p class="eyebrow">A watershed-wide alliance</p>
+    <div class="stat-strip__row wow-stagger">
+      <div class="stat">
+        <!-- src: R-SOC-01 -->
+        <span class="stat__num" data-count="11400" data-suffix="">0</span>
+        <span class="stat__label">members across the watershed</span>
+      </div>
+      <div class="stat">
+        <span class="stat__num" data-count="60" data-suffix="+">0</span>
+        <span class="stat__label">partner organizations rowing the same direction</span>
+      </div>
+      <div class="stat">
+        <!-- src: R-STAT-03 -->
+        <span class="stat__num" data-count="92" data-suffix="&cent;">0</span>
+        <span class="stat__label">of every dollar to programs</span>
+      </div>
+    </div>
+    <div class="real-proof__quote">
+      <!-- src: R-ACCO-01 -->
+      <blockquote>&ldquo;Charity Navigator 4-star rated for accountability and transparency — proof that the river, not overhead, is where the money goes.&rdquo;</blockquote>
+      <!-- src: R-SOC-01 -->
+      <cite class="real-proof__cite">11,400 members and 60+ partner organizations, one watershed</cite>
+    </div>
+    <figure class="real-proof__quote" aria-hidden="true">
+      <svg width="160" height="160" viewBox="0 0 160 160" role="img">
+        <circle cx="80" cy="80" r="64" fill="none" stroke="#F4FAF7" stroke-opacity="0.18" stroke-width="16"/>
+        <circle cx="80" cy="80" r="64" fill="none" stroke="#7FBF6A" stroke-width="16" stroke-linecap="round"
+                stroke-dasharray="402.1" stroke-dashoffset="32.2" transform="rotate(-90 80 80)"/>
+        <text x="80" y="74" text-anchor="middle" font-family="Fraunces, Georgia, serif" font-size="34" fill="#F4FAF7">92&cent;</text>
+        <text x="80" y="98" text-anchor="middle" font-family="'Public Sans', sans-serif" font-size="11" fill="#7FBF6A">to programs</text>
+      </svg>
+    </figure>
+  </div>
+</section>
+
+<!-- ════ 8 · CLOSING DONATE CTA (dark anchor) — the single primary action, restated ════
+     SC#41 closing-cta · Donate primary (Volunteer secondary). -->
+<section class="section closing-cta wow-bloom wow-grain section--dark">
+  <div class="container wow-reveal">
+    <p class="eyebrow">Swimmable, fishable, wild</p>
+    <h2>Keep the river worth coming back to.</h2>
+    <p class="lede">Give today and your gift goes straight to the next mile — cleaned, replanted, monitored, and handed to the next generation.</p>
+    <figure class="closing-cta" aria-hidden="true">
+      <svg width="420" height="120" viewBox="0 0 420 120" role="img" preserveAspectRatio="xMidYMid meet">
+        <path d="M0,66 C70,42 130,86 210,64 C290,42 350,84 420,60" fill="none" stroke="#7FBF6A" stroke-width="4" stroke-linecap="round"/>
+        <path d="M0,80 C70,58 130,100 210,78 C290,56 350,98 420,74" fill="none" stroke="#F4FAF7" stroke-opacity="0.45" stroke-width="3" stroke-linecap="round"/>
+        <path d="M0,52 C70,30 130,72 210,50 C290,28 350,70 420,46" fill="none" stroke="#1C6E8C" stroke-opacity="0.55" stroke-width="3" stroke-linecap="round"/>
+      </svg>
+    </figure>
+    <div class="cta-row">
+      <a class="btn btn-primary wow-glow" href="donate.html">Donate</a>
+      <a class="btn btn-secondary" href="get-involved.html">Volunteer</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ════ CANONICAL FOOTER — 4-col (The Mission / Get Involved / Give / Connect) + 501(c)(3) bottom bar ════ -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="site-footer__top">
+      <div>
+        <div class="site-footer__brand"><span class="site-footer__brand-mark">R</span>Riverkeep Alliance</div>
+        <p class="site-footer__blurb">The community alliance keeping our rivers swimmable, fishable, and wild — restoring watersheds one mile at a time.</p>
+        <div class="site-footer__hours">
+          <strong>Volunteer Hours</strong>
+          Field days run Sat 9am–1pm, Mar–Nov. Office: Mon–Fri 9am–5pm.
+        </div>
+      </div>
+      <div class="site-footer__col">
+        <h4>The Mission</h4>
+        <a href="programs.html">Our Programs</a>
+        <a href="impact.html">Our Impact</a>
+        <a href="about.html">About Us</a>
+      </div>
+      <div class="site-footer__col">
+        <h4>Get Involved</h4>
+        <a href="get-involved.html">Volunteer</a>
+        <a href="get-involved.html">Events</a>
+        <a href="get-involved.html">Become a Member</a>
+      </div>
+      <div class="site-footer__col">
+        <h4>Give</h4>
+        <a href="donate.html">Donate</a>
+        <a href="donate.html">Monthly Giving</a>
+        <a href="donate.html">Legacy Giving</a>
+      </div>
+    </div>
+    <div class="site-footer__bottom">
+      <span>&copy; 2026 Riverkeep Alliance. A registered 501(c)(3) nonprofit. EIN 00-0000000.</span>
+      <span class="site-footer__bcorp">
+        <a href="https://www.charitynavigator.org">Charity Navigator 4-Star</a>
+        &middot; <a href="https://instagram.com/riverkeepalliance">Instagram</a>
+      </span>
+    </div>
+  </div>
+</footer>
+
+<script defer src="design-system/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+/* =============================================================================
+ * Helix Analytics — BRAND OVERLAY (loaded AFTER design-system/structural.css)
+ * -----------------------------------------------------------------------------
+ * WHY THIS FILE EXISTS (and is NOT in canonical structural.css):
+ * structural.css is the SHARED single-source-of-truth, byte-identical across every
+ * build, and it assumes the canonical LIGHT chrome (light .site-header, nav links in
+ * --ds-ink, brand in --ds-primary-deep) + a dark .site-footer whose accent text uses
+ * the raw --ds-accent. Helix made a DISTINCTIVE brand decision: a translucent
+ * DARK-GLASS nav (.wow-glass over --ds-glass-bg). On that dark glass the canonical
+ * dark nav text renders dark-on-dark (~2.09:1). Helix's violet --ds-accent is also
+ * only 3.21:1 on the dark navy panel, and white on --ds-primary is only 3.82:1.
+ *
+ * These are HELIX-BRAND relights (they encode helix's dark-glass chrome + its
+ * accent-on-dark / cta tokens), NOT a generic fix — merging them into canonical
+ * would push helix's dark chrome palette onto every fresh build. So they live here,
+ * token-pure (var(--ds-*) only — the on-dark/cta tokens are declared in tokens.css),
+ * loaded after structural.css so they win the cascade for helix only.
+ *
+ * Every rule re-asserts an EXISTING canonical selector with a helix-correct token.
+ * No hard hex / font literals — only --ds-* tokens already defined in tokens.css.
+ * ============================================================================= */
+
+/* ---- DARK-GLASS HEADER: relight the nav chrome text for the dark glass bar ---- */
+/* .wow-glass paints --ds-glass-bg (dark navy translucent) on .site-header; the
+   canonical nav text is dark (--ds-ink / --ds-primary-deep) = invisible on it. */
+.site-header.wow-glass .brand { color: var(--ds-ink-on-dark); }
+.site-header.wow-glass .site-nav a:not(.btn) { color: var(--ds-ink-on-dark); }
+.site-header.wow-glass .site-nav a:not(.btn):hover { color: var(--ds-accent-on-dark); }
+.site-header.wow-glass .site-nav a:not(.btn)::after { background: var(--ds-accent-on-dark); }
+.site-header.wow-glass .site-header__hamburger span { background: var(--ds-ink-on-dark); }
+
+/* ---- PRIMARY-ON-PRIMARY: white on helix's raw --ds-primary (#4C6EF5) is only
+   3.82:1 — sub-AA. EVERY .btn-primary (header CTA, hero CTA, form submit, in-band
+   CTAs) and the brand mark must sit on --ds-primary-cta (darker indigo, white
+   5.01:1 — verified in tokens.css). This is a brand-token relight for helix's light
+   indigo; canonical's .btn-primary base (on --ds-primary) is correct for builds
+   whose --ds-primary is dark enough, so it stays out of canonical. Hover keeps the
+   canonical --ds-primary-deep (fine). ---- */
+.btn-primary { background: var(--ds-primary-cta); color: var(--ds-ink-on-dark); }
+.site-header.wow-glass .brand__mark { background: var(--ds-primary-cta); color: var(--ds-ink-on-dark); }
+
+/* ---- ACCENT-ON-DARK: raw violet --ds-accent is only 3.21:1 on the dark navy panel
+   (.section--dark) and on the dark footer. Helix's --ds-accent-on-dark (lightened
+   violet, 4.73:1 on the navy — verified in tokens.css) is the safe small-text accent. ---- */
+.section--dark .eyebrow { color: var(--ds-accent-on-dark); }
+.section--dark .feature-row__kicker { color: var(--ds-accent-on-dark); }
+.section--dark .diff-row__num { color: var(--ds-accent-on-dark); }
+.section--dark .stat__num { color: var(--ds-accent-on-dark); }
+
+/* footer (its base background is --ds-primary-deep, a dark panel) */
+.site-footer__hours strong { color: var(--ds-accent-on-dark); }
+.site-footer__col h4 { color: var(--ds-accent-on-dark); }
+
+/* the footer brand mark fills with --ds-accent and prints --ds-primary-deep on it
+   (3.21:1). Flip to --ds-accent-on-dark fill + dark ink → AA. */
+.site-footer__brand-mark { background: var(--ds-accent-on-dark); color: var(--ds-primary-deep); }
+
+/* ---- PRIMARY-FILL CHROME elsewhere: the plan-card ribbon and "Included" matrix
+   tick both print on / in --ds-primary (3.82 / 4.07:1). Use --ds-primary-cta. ---- */
+.plan-card__ribbon { background: var(--ds-primary-cta); color: var(--ds-ink-on-dark); }
+.comparison-matrix__yes { color: var(--ds-primary-cta); }
+
+/* ---- case-study link (uses --ds-primary on light) — keep AA on light surface ---- */
+.case-study__link { color: var(--ds-primary-cta); }
+.case-study__link:hover { border-bottom-color: var(--ds-primary-cta); }

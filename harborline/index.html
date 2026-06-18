@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Harborline Provisions — The coast, boxed monthly</title>
+<meta name="description" content="Harborline Provisions — hand-harvested coastal sea salt, single-origin cold-brew, raw honey and seasonings, provisioned from the harbor. Start a monthly Provisioning Box or visit the Dockside Café.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+
+<!-- LOCKED design system: base brand tokens + the 12 globals (Direction A 'Harbor Glass') + the wow-* overlay impl -->
+<link rel="stylesheet" href="design-system/tokens.css">
+<link rel="stylesheet" href="design-system/structural.css">
+
+<!--
+  Harborline Provisions homepage — client-web-mockup v4, Direction A "Harbor Glass".
+  Catalog picks implemented (picked bundle A), annotated inline at each surface:
+    nav     : NAV-PATTERNS.md #2 Classic full-bar over hero
+    hero    : HERO-COMPOSITIONS.md #5 Full-bleed image + overlay text
+    footer  : FOOTER-STYLES.md #14 Hours-and-contact prominent
+    card    : CARD-VARIATIONS.md #2 Light feature card with embedded mini-visual
+    cta     : CTA-PATTERNS.md #1 Solid pill primary
+    divider : DIVIDER-PATTERNS.md #2 Wave smooth (single curve)
+    sticky  : STICKY-CTA-BAR.md #1 Full-width pill bottom-bar (mobile)
+  Globals are INHERITED from design-system/{tokens,structural}.css via wow-* classes.
+  This homepage-class file carries a small inline <style> ONLY for page-specific layout
+  scaffolding — token-pure, all brand values via var(--ds-*); it is on the
+  shell-purity/globals-overlay EXEMPT list. All 4 breakpoints (375/768/1024/1440)
+  authored in ONE pass below. Section-rhythm: each section's identifying class
+  carries an explicit, classifiable background so figure/ground alternates
+  (dark / gradient / light / accent — never 4 same in a row).
+-->
+<style>
+/* =========================================================================
+   index.html — page-specific layout scaffolding (token-pure; exempt page).
+   ========================================================================= */
+
+/* ---- announcement strip (above nav) ---- */
+.topbar { background: var(--ds-primary-deep); color: var(--ds-ink-on-dark); text-align: center; font-family: var(--ds-font-body); font-size: 13px; letter-spacing: .04em; padding: 8px 16px; }
+.topbar strong { color: var(--ds-accent); font-weight: 600; }
+
+/* ---- chrome (nav / hamburger / drawer / footer) is the LOCKED SHARED CHROME,
+       styled by design-system/structural.css "SHARED CHROME" block — NOT inlined here. ---- */
+
+/* ---- HERO: HERO-COMPOSITIONS.md #5 Full-bleed image + overlay text · bg=dark anchor ---- */
+.hero { background: var(--ds-primary-deep); position: relative; min-height: 86vh; display: flex; align-items: flex-end; overflow: hidden; padding-block: clamp(96px, 16vw, 200px) clamp(56px, 9vw, 110px); }
+.hero__photo { position: absolute; inset: 0; z-index: 0; }
+.hero__photo img { width: 100%; height: 100%; object-fit: cover; }
+.hero__scrim { position: absolute; inset: 0; z-index: 1; background: linear-gradient(180deg, rgba(20,50,63,0.30) 0%, rgba(20,50,63,0.20) 40%, rgba(20,50,63,0.78) 100%); }
+.hero .container { position: relative; z-index: 2; }
+.hero h1 { color: var(--ds-ink-on-dark); max-width: 16ch; margin-bottom: var(--ds-space-md); font-size: clamp(44px, 8vw, 88px); }
+.hero h1 .accent { color: var(--ds-accent); font-style: italic; }
+.hero .lede { color: var(--ds-ink-on-dark); opacity: .92; max-width: 54ch; }
+.hero__trust { display: flex; flex-wrap: wrap; gap: var(--ds-space-md); margin-top: var(--ds-space-lg); align-items: center; }
+.hero__badge { display: inline-flex; align-items: center; gap: var(--ds-space-xs); font-family: var(--ds-font-body); font-size: 13px; font-weight: 500; letter-spacing: .04em; color: var(--ds-ink-on-dark); padding: 6px 14px; border: 1px solid rgba(246,239,226,0.34); border-radius: var(--ds-r-pill); background: rgba(20,50,63,0.30); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+.hero__badge::before { content: ""; width: 7px; height: 7px; border-radius: var(--ds-r-pill); background: var(--ds-accent); flex: 0 0 auto; }
+
+/* ---- AWARDS BAND · bg=gradient (warm fade) ---- */
+.awards { background: linear-gradient(180deg, var(--ds-bg-warm) 0%, var(--ds-bg-surface) 100%); text-align: center; }
+.awards__row { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: var(--ds-space-md) var(--ds-space-2xl); margin-top: var(--ds-space-lg); }
+.award { display: inline-flex; align-items: center; gap: var(--ds-space-sm); font-family: var(--ds-font-display); font-size: 18px; color: var(--ds-primary-deep); }
+.award__icon { width: 40px; height: 40px; border-radius: var(--ds-r-pill); background: var(--ds-accent-soft); color: var(--ds-accent); display: grid; place-items: center; flex: 0 0 auto; }
+.award__icon svg { width: 22px; height: 22px; }
+
+/* ---- FEATURED COLLECTION · bg=light · shadow-lift cards — CARD-VARIATIONS.md #2 ---- */
+.featured { background: #FAF4E8; position: relative; }
+.featured__head { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--ds-space-lg); flex-wrap: wrap; }
+.featured__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--ds-space-lg); margin-top: var(--ds-space-xl); }
+.prod-card { display: flex; flex-direction: column; overflow: hidden; padding: 0; }
+.prod-card__media { aspect-ratio: 4 / 5; overflow: hidden; position: relative; }
+.prod-card__media img { width: 100%; height: 100%; object-fit: cover; }
+.prod-card__badge { position: absolute; top: var(--ds-space-sm); left: var(--ds-space-sm); background: var(--ds-accent); color: var(--ds-primary-deep); font-size: 11px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; padding: 4px 11px; border-radius: var(--ds-r-pill); }
+.prod-card__body { padding: var(--ds-space-lg); display: flex; flex-direction: column; gap: var(--ds-space-2xs); }
+.prod-card__name { font-family: var(--ds-font-display); font-size: 22px; color: var(--ds-primary-deep); }
+.prod-card__desc { color: var(--ds-ink-soft); font-size: 15px; }
+.prod-card__foot { display: flex; align-items: center; justify-content: space-between; margin-top: var(--ds-space-sm); }
+.prod-card__price { font-family: var(--ds-font-display); font-size: 20px; color: var(--ds-primary); }
+.prod-card__cart { font-family: var(--ds-font-body); font-size: 13px; font-weight: 600; color: var(--ds-primary-deep); text-decoration: none; display: inline-flex; align-items: center; gap: 4px; }
+.prod-card__cart::after { content: "\2192"; transition: transform var(--ds-dur) var(--ds-ease-out); }
+.prod-card:hover .prod-card__cart::after { transform: translateX(4px); }
+
+/* ---- NUMBERED PROCESS · bg=dark anchor panel — SECTION-COMPONENTS #27 ---- */
+.process { background: var(--ds-primary-deep); position: relative; }
+.process__layout { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: var(--ds-space-2xl); align-items: center; }
+.process__media { aspect-ratio: 4 / 5; }
+.process__media img { width: 100%; height: 100%; object-fit: cover; border-radius: var(--ds-r-lg); }
+.process__copy h2 { color: var(--ds-ink-on-dark); }
+.process__copy .eyebrow { color: var(--ds-accent); }
+.process__copy .lede { color: var(--ds-ink-on-dark); opacity: .86; }
+.process__steps { display: flex; flex-direction: column; gap: var(--ds-space-lg); margin-top: var(--ds-space-lg); }
+.proc-step { display: grid; grid-template-columns: 56px 1fr; gap: var(--ds-space-md); align-items: start; padding: var(--ds-space-md); border: 1px solid rgba(246,239,226,0.16); border-radius: var(--ds-r-lg); background: rgba(246,239,226,0.05); }
+.proc-step__num { width: 48px; height: 48px; border-radius: var(--ds-r-pill); background: var(--ds-accent); color: var(--ds-primary-deep); display: grid; place-items: center; font-family: var(--ds-font-display); font-size: 22px; }
+.proc-step h3 { color: var(--ds-ink-on-dark); margin-bottom: 4px; }
+.proc-step p { color: var(--ds-ink-on-dark); opacity: .78; font-size: 15px; }
+
+/* ---- SERVICES 3-col · bg=light (warm-toned) · hairline cards + inset photo — SECTION-COMPONENTS #9 ---- */
+.services { background: #F3E9D6; }
+.services__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--ds-space-lg); margin-top: var(--ds-space-xl); }
+.svc-card { display: flex; flex-direction: column; overflow: hidden; padding: 0; }
+.svc-card__media { aspect-ratio: 16 / 10; overflow: hidden; }
+.svc-card__media img { width: 100%; height: 100%; object-fit: cover; }
+.svc-card__body { padding: var(--ds-space-lg); display: flex; flex-direction: column; gap: var(--ds-space-xs); flex: 1; }
+.svc-card__body h3 { font-family: var(--ds-font-display); font-size: 23px; color: var(--ds-primary-deep); }
+.svc-card__body p { color: var(--ds-ink-soft); font-size: 15px; flex: 1; }
+.svc-card__link { font-family: var(--ds-font-body); font-size: 14px; font-weight: 600; color: var(--ds-primary); text-decoration: none; display: inline-flex; align-items: center; gap: 6px; margin-top: var(--ds-space-xs); }
+.svc-card__link::after { content: "\2192"; transition: transform var(--ds-dur) var(--ds-ease-out); }
+.svc-card:hover .svc-card__link::after { transform: translateX(4px); }
+
+/* ---- STAT BAND · bg=accent · count-up numerals (band IS the visual) ---- */
+.statband { background: var(--ds-accent); position: relative; }
+.statband .container { position: relative; z-index: 1; }
+.statband__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--ds-space-xl); }
+.statband .stat { text-align: center; align-items: center; }
+.statband .stat__num { font-family: var(--ds-font-display); font-size: clamp(48px, 8vw, 84px); color: var(--ds-primary-deep); line-height: 1; }
+.statband .stat__label { font-size: 15px; color: var(--ds-primary-deep); opacity: .82; margin-top: var(--ds-space-xs); }
+
+/* ---- TESTIMONIALS · bg=light · hairline cards — SECTION-COMPONENTS #24 ---- */
+.testimonials { background: #FAF4E8; }
+.tg__grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--ds-space-lg); margin-top: var(--ds-space-xl); }
+.t-card { padding: var(--ds-space-xl); display: flex; flex-direction: column; gap: var(--ds-space-md); }
+.t-card__stars { color: var(--ds-accent-ink); letter-spacing: 2px; font-size: 15px; }
+.t-card blockquote { margin: 0; font-family: var(--ds-font-display); font-size: 21px; line-height: 1.45; color: var(--ds-ink); }
+.t-card__who { display: flex; align-items: center; gap: var(--ds-space-sm); margin-top: auto; padding-top: var(--ds-space-md); border-top: 1px solid var(--ds-line); }
+.t-card__avatar { width: 48px; height: 48px; border-radius: var(--ds-r-pill); object-fit: cover; }
+.t-card__name { font-weight: 600; color: var(--ds-ink); }
+.t-card__role { font-size: 13px; color: var(--ds-ink-soft); }
+
+/* ---- PRESS BAND · bg=gradient (warm) · logos serve as imagery ---- */
+.press { background: linear-gradient(180deg, var(--ds-bg-surface) 0%, var(--ds-bg-warm) 100%); text-align: center; }
+.press__logos { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: var(--ds-space-lg) var(--ds-space-2xl); margin-top: var(--ds-space-lg); }
+.press__logo { font-family: var(--ds-font-display); font-size: clamp(18px, 2.4vw, 24px); color: var(--ds-ink-soft); letter-spacing: .02em; opacity: .75; transition: opacity var(--ds-dur) var(--ds-ease), color var(--ds-dur) var(--ds-ease); }
+.press__logo:hover { opacity: 1; color: var(--ds-primary-deep); }
+
+/* ---- NEWSLETTER · bg=light · image-overlay panel — SECTION-COMPONENTS #38 ---- */
+.nl { background: #FAF4E8; }
+.nl__panel { position: relative; border-radius: var(--ds-r-xl); overflow: hidden; min-height: 360px; display: flex; align-items: center; }
+.nl__photo { position: absolute; inset: 0; z-index: 0; }
+.nl__photo img { width: 100%; height: 100%; object-fit: cover; }
+.nl__overlay { position: absolute; inset: 0; z-index: 1; background: linear-gradient(100deg, rgba(20,50,63,0.86) 0%, rgba(20,50,63,0.62) 55%, rgba(20,50,63,0.28) 100%); }
+.nl__inner { position: relative; z-index: 2; padding: clamp(32px, 6vw, 64px); max-width: 560px; }
+.nl__inner h2 { color: var(--ds-ink-on-dark); }
+.nl__inner p { color: var(--ds-ink-on-dark); opacity: .88; margin-top: var(--ds-space-sm); }
+.nl__form { display: flex; gap: var(--ds-space-sm); margin-top: var(--ds-space-lg); flex-wrap: wrap; }
+.nl__form input { flex: 1; min-width: 200px; font-family: var(--ds-font-body); font-size: 15px; padding: var(--ds-space-sm) var(--ds-space-md); border: 1px solid rgba(246,239,226,0.34); border-radius: var(--ds-r-pill); background: rgba(250,244,232,0.94); color: var(--ds-ink); }
+.nl__form input:focus-visible { outline: 3px solid var(--ds-accent); outline-offset: 2px; }
+
+/* ---- CLOSING CTA · bg=dark · full-bleed photo — CTA-PATTERNS.md #1 ---- */
+.close-cta { background: var(--ds-primary-deep); position: relative; overflow: hidden; text-align: center; padding-block: clamp(80px, 13vw, 150px); }
+.close-cta__photo { position: absolute; inset: 0; z-index: 0; }
+.close-cta__photo img { width: 100%; height: 100%; object-fit: cover; }
+.close-cta__scrim { position: absolute; inset: 0; z-index: 1; background: linear-gradient(180deg, rgba(20,50,63,0.74) 0%, rgba(20,50,63,0.88) 100%); }
+.close-cta .container { position: relative; z-index: 2; max-width: 760px; }
+.close-cta h2 { color: var(--ds-ink-on-dark); font-size: clamp(34px, 5.5vw, 58px); }
+.close-cta .eyebrow { color: var(--ds-accent); }
+.close-cta .lede { color: var(--ds-ink-on-dark); opacity: .9; margin-inline: auto; }
+.close-cta .cta-row { justify-content: center; }
+
+/* ---- footer is the LOCKED SHARED CHROME (.site-footer), styled by structural.css "SHARED CHROME" block. ---- */
+
+/* ---- sticky CTA bar (mobile only): STICKY-CTA-BAR.md #1 Full-width pill bottom-bar ---- */
+.sticky-cta { position: fixed; bottom: 0; left: 0; right: 0; z-index: 50; display: none; align-items: center; justify-content: space-between; gap: var(--ds-space-md); padding: 12px 16px; background: var(--ds-bg-surface-2); box-shadow: 0 -8px 28px rgba(20,50,63,0.14); border-top: 1px solid var(--ds-line); }
+.sticky-cta__info { display: flex; flex-direction: column; }
+.sticky-cta__label { font-size: 12px; color: var(--ds-ink-soft); }
+.sticky-cta__price { font-family: var(--ds-font-display); font-size: 18px; color: var(--ds-primary-deep); }
+.sticky-cta .btn { flex: 0 0 auto; }
+
+/* =========================================================================
+   RESPONSIVE — all 4 breakpoints in one pass (1440 base above; 1024 → 768 → 375).
+   ========================================================================= */
+@media (max-width: 1024px) {
+  .featured__grid, .services__grid { grid-template-columns: repeat(2, 1fr); }
+  .process__layout { grid-template-columns: 1fr; gap: var(--ds-space-xl); }
+  /* footer reflow handled by the SHARED CHROME block in structural.css */
+}
+@media (max-width: 768px) {
+  /* nav→hamburger swap + footer reflow are handled by the SHARED CHROME block in structural.css */
+  .hero { min-height: 78vh; }
+  .statband__grid { grid-template-columns: 1fr; gap: var(--ds-space-lg); }
+  .tg__grid { grid-template-columns: 1fr; }
+  .sticky-cta { display: flex; }
+  body { padding-bottom: 72px; }
+}
+@media (max-width: 480px) {
+  .featured__grid, .services__grid { grid-template-columns: 1fr; }
+  .featured__head { flex-direction: column; align-items: flex-start; }
+  .awards__row { gap: var(--ds-space-md); }
+  .hero h1 { font-size: clamp(38px, 11vw, 52px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .prod-card__cart::after, .svc-card__link::after, .press__logo { transition: none !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- ════ Announcement strip ════ -->
+<div class="topbar">Free shipping on Provisioning Boxes &amp; orders <strong>$75+</strong> &middot; New: smoked-kelp seasoning now in every winter box</div>
+
+<!-- ════ LOCKED SHARED CHROME — canonical header (glass full-bar + hamburger + #mobile-drawer).
+     Injected identically on every page from _chrome.html; nav = REAL <slug>.html links from sitemap.nav. ════ -->
+<header class="site-header wow-glass">
+  <div class="container site-header__bar">
+    <a class="brand" href="index.html">
+      <span class="brand__mark">H</span>
+      Harborline Provisions
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <a href="shop.html">Shop the Pantry</a>
+      <a href="services.html">Provisioning</a>
+      <a href="about.html">Our Story</a>
+      <a href="contact.html">Contact</a>
+      <a class="btn btn-primary wow-glow" href="services.html">Start a Box</a>
+    </nav>
+    <button class="site-header__hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-drawer">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- ════ LOCKED SHARED CHROME — canonical mobile drawer (slide-from-right, aria-toggled by site.js) ════ -->
+<div class="site-drawer-backdrop" data-open="false"></div>
+<nav id="mobile-drawer" class="site-drawer" aria-hidden="true" aria-label="Mobile">
+  <button class="site-drawer__close" aria-label="Close menu">&times;</button>
+  <ul class="site-drawer__links">
+    <li><a href="shop.html">Shop the Pantry</a></li>
+    <li><a href="services.html">Provisioning</a></li>
+    <li><a href="about.html">Our Story</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <a class="btn btn-primary wow-glow" href="services.html">Start a Box</a>
+</nav>
+
+<!-- ════ HERO — HERO-COMPOSITIONS.md #5 Full-bleed image + overlay text · bloom + grain globals ════ -->
+<section class="section section--dark wow-bloom wow-grain hero">
+  <div class="hero__photo wow-parallax" data-parallax="0.12">
+    <img src="assets/hero-harbor.jpg" alt="Harbor at first light, fishing boats moored along the dock">
+  </div>
+  <div class="hero__scrim"></div>
+  <div class="container">
+    <p class="eyebrow wow-reveal" style="color: var(--ds-accent);">Hand-harvested on the harbor &middot; since 2019</p>
+    <h1 class="wow-reveal">The coast, <span class="accent">boxed monthly</span></h1>
+    <p class="lede wow-reveal">Sea salt, single-origin cold-brew, raw honey and smoked kelp &mdash; provisioned from the harbor and shipped to your door, or poured at the Dockside Café.</p>
+    <div class="cta-row wow-reveal">
+      <a class="btn btn-primary wow-glow" href="#boxes">Start a Provisioning Box</a>
+      <a class="btn btn-secondary" href="#pantry" style="color: var(--ds-ink-on-dark); border-color: rgba(246,239,226,0.4);">See the pantry</a>
+    </div>
+    <div class="hero__trust wow-reveal">
+      <!-- src: R-ACCO-01 --><span class="hero__badge">Good Food Award 2025</span>
+      <!-- src: R-ACCO-02 --><span class="hero__badge">Certified B-Corp</span>
+      <!-- src: R-PROOF-03 --><span class="hero__badge">Stocked in 60 grocers</span>
+    </div>
+  </div>
+  <!-- DIVIDER-PATTERNS.md #2 Wave smooth · hero→awards · svg fill = NEXT section (awards warm gradient top) -->
+  <div class="wow-divider wow-divider--bottom" aria-hidden="true">
+    <svg viewBox="0 0 1440 80" preserveAspectRatio="none"><path d="M0,40 C360,80 1080,8 1440,44 L1440,80 L0,80 Z" fill="var(--ds-bg-warm)"></path></svg>
+  </div>
+</section>
+
+<!-- ════ AWARDS BAND (gradient) — accolade row · SECTION-COMPONENTS #5 ════ -->
+<section class="section awards">
+  <div class="container">
+    <p class="eyebrow wow-reveal">Recognized along the coast</p>
+    <div class="awards__row wow-stagger">
+      <!-- src: R-ACCO-01 -->
+      <span class="award"><span class="award__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="9" r="6"/><path d="M9 14l-2 7 5-3 5 3-2-7"/></svg></span>Good Food Award &middot; Pantry, 2025</span>
+      <!-- src: R-ACCO-02 -->
+      <span class="award"><span class="award__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/><path d="M9 12l2 2 4-4"/></svg></span>Certified B-Corp &middot; 2024</span>
+      <!-- src: R-ACCO-03 -->
+      <span class="award"><span class="award__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7h18M3 12h18M3 17h18"/><circle cx="7" cy="7" r="1.5" fill="currentColor"/></svg></span>Coastal Made Member</span>
+    </div>
+  </div>
+</section>
+
+<!-- ════ FEATURED COLLECTION (light, shadow-lift) — CARD-VARIATIONS.md #2 Light feature card w/ embedded mini-visual ════ -->
+<section class="section featured" id="pantry">
+  <div class="container">
+    <div class="featured__head">
+      <div>
+        <p class="eyebrow wow-reveal">This week from the pantry</p>
+        <h2 class="wow-reveal">Provisions, freshly landed</h2>
+      </div>
+      <a class="btn btn-secondary wow-reveal" href="#pantry">Shop all 40 goods</a>
+    </div>
+    <div class="featured__grid wow-stagger">
+      <article class="card wow-lift prod-card">
+        <div class="prod-card__media wow-zoom">
+          <img src="assets/product-sea-salt.jpg" alt="Flaky sea salt in a small dish on a rustic surface" loading="lazy">
+          <span class="prod-card__badge">Bestseller</span>
+        </div>
+        <div class="prod-card__body">
+          <span class="prod-card__name">Saltcure Sea Salt Flakes</span>
+          <span class="prod-card__desc">Hand-harvested flake salt in a refillable tin.</span>
+          <div class="prod-card__foot">
+            <span class="prod-card__price">$14</span>
+            <a class="prod-card__cart" href="#pantry">Add to box</a>
+          </div>
+        </div>
+      </article>
+      <article class="card wow-lift prod-card">
+        <div class="prod-card__media wow-zoom">
+          <img src="assets/product-cold-brew.jpg" alt="Glass bottle of cold-brew coffee concentrate beside a glass of ice" loading="lazy">
+        </div>
+        <div class="prod-card__body">
+          <span class="prod-card__name">Dockside Cold-Brew</span>
+          <span class="prod-card__desc">32oz single-origin concentrate, slow-steeped 18 hours.</span>
+          <div class="prod-card__foot">
+            <span class="prod-card__price">$22</span>
+            <a class="prod-card__cart" href="#pantry">Add to box</a>
+          </div>
+        </div>
+      </article>
+      <article class="card wow-lift prod-card">
+        <div class="prod-card__media wow-zoom">
+          <img src="assets/product-honey.jpg" alt="Jar of raw honey with a wooden dipper" loading="lazy">
+        </div>
+        <div class="prod-card__body">
+          <span class="prod-card__name">Harbor Honey &mdash; Wildflower</span>
+          <span class="prod-card__desc">Raw, unfiltered 12oz from coastal apiaries.</span>
+          <div class="prod-card__foot">
+            <span class="prod-card__price">$16</span>
+            <a class="prod-card__cart" href="#pantry">Add to box</a>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+  <!-- DIVIDER-PATTERNS.md #2 Wave smooth · products→dark process · svg fill = NEXT section (process deep) -->
+  <div class="wow-divider wow-divider--bottom" aria-hidden="true">
+    <svg viewBox="0 0 1440 80" preserveAspectRatio="none"><path d="M0,44 C420,4 1020,80 1440,40 L1440,80 L0,80 Z" fill="var(--ds-primary-deep)"></path></svg>
+  </div>
+</section>
+
+<!-- ════ NUMBERED PROCESS (DARK anchor panel) — sourcing story · ink-on-dark re-asserted, NO dark-on-dark ════ -->
+<section class="section section--dark wow-grain process" id="story">
+  <div class="container">
+    <div class="process__layout">
+      <div class="process__media wow-zoom wow-mask wow-reveal">
+        <img src="assets/section-process.jpg" alt="Coastal harvester working the shoreline at low tide" loading="lazy">
+      </div>
+      <div class="process__copy wow-reveal">
+        <p class="eyebrow">How it's made</p>
+        <h2>From the harbor, by hand</h2>
+        <p class="lede">Every provision is traced to a maker we know by name &mdash; harvested, steeped, or pressed within a day's drive of the dock.</p>
+        <div class="process__steps wow-stagger">
+          <div class="proc-step">
+            <span class="proc-step__num">1</span>
+            <div><h3>Harvested at the tideline</h3><p>Sea salt raked from clean coastal flats and solar-dried in open pans.</p></div>
+          </div>
+          <div class="proc-step">
+            <span class="proc-step__num">2</span>
+            <div><h3>Steeped &amp; pressed small-lot</h3><p>Cold-brew slow-steeped 18 hours; honey pulled raw from coastal apiaries.</p></div>
+          </div>
+          <div class="proc-step">
+            <span class="proc-step__num">3</span>
+            <div><h3>Boxed &amp; shipped from the dock</h3><p>Curated monthly, packed in the harbor warehouse, on your doorstep in days.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ SERVICES 3-col (light/warm-toned, hairline cards + inset photo) — SECTION-COMPONENTS #9 ════ -->
+<section class="section services" id="boxes">
+  <div class="container">
+    <p class="eyebrow wow-reveal">Three ways to provision</p>
+    <h2 class="wow-reveal">Pick your harbor habit</h2>
+    <div class="services__grid wow-stagger">
+      <!-- src: R-SVC-01 -->
+      <article class="card wow-hairline wow-lift svc-card">
+        <div class="svc-card__media wow-zoom"><img src="assets/service-provisioning-box.jpg" alt="A curated box of coastal pantry provisions" loading="lazy"></div>
+        <div class="svc-card__body">
+          <h3>Provisioning Boxes</h3>
+          <p>A monthly curated box of coastal pantry goods &mdash; rotating salt, honey, cold-brew and seasonings, with the story of each maker.</p>
+          <a class="svc-card__link" href="#boxes">Start a box</a>
+        </div>
+      </article>
+      <!-- src: R-SVC-02 -->
+      <article class="card wow-hairline wow-lift svc-card" id="cafe">
+        <div class="svc-card__media wow-zoom"><img src="assets/cafe-interior.jpg" alt="Café counter with espresso and pastries by a window" loading="lazy"></div>
+        <div class="svc-card__body">
+          <h3>Dockside Café</h3>
+          <p>Our harborfront counter for cold-brew, pastries, and provisions &mdash; the dockside ritual worth the walk down.</p>
+          <a class="svc-card__link" href="#cafe">Visit the café</a>
+        </div>
+      </article>
+      <!-- src: R-SVC-03 -->
+      <article class="card wow-hairline wow-lift svc-card">
+        <div class="svc-card__media wow-zoom"><img src="assets/service-gift-boxes.jpg" alt="Gift boxes wrapped in kraft paper and twine" loading="lazy"></div>
+        <div class="svc-card__body">
+          <h3>Corporate Gifting</h3>
+          <p>Custom bulk gift boxes for teams and clients &mdash; coastal provisions, branded to your occasion.</p>
+          <a class="svc-card__link" href="#boxes">Request a quote</a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ════ STAT BAND (ACCENT) — count-up numerals · imagery=none (band IS the visual) ════ -->
+<section class="section wow-reveal statband">
+  <div class="container">
+    <div class="statband__grid wow-stagger">
+      <!-- src: R-PROOF-01 -->
+      <div class="stat">
+        <span class="stat__num" data-count="40000" data-suffix="+">0+</span>
+        <span class="stat__label">Boxes shipped since 2019</span>
+      </div>
+      <!-- src: R-PROOF-02 -->
+      <div class="stat">
+        <span class="stat__num" data-count="4.9" data-suffix="★">0★</span>
+        <span class="stat__label">Average across 2,300 reviews</span>
+      </div>
+      <!-- src: R-PROOF-03 -->
+      <div class="stat">
+        <span class="stat__num" data-count="60" data-suffix="">0</span>
+        <span class="stat__label">Regional grocers stocked</span>
+      </div>
+    </div>
+  </div>
+  <!-- DIVIDER-PATTERNS.md #2 Wave smooth · stat-band→testimonials · svg fill = NEXT section (testimonials light) -->
+  <div class="wow-divider wow-divider--bottom" aria-hidden="true">
+    <svg viewBox="0 0 1440 80" preserveAspectRatio="none"><path d="M0,40 C360,80 1080,8 1440,44 L1440,80 L0,80 Z" fill="#FAF4E8"></path></svg>
+  </div>
+</section>
+
+<!-- ════ TESTIMONIALS (light, hairline cards) — SECTION-COMPONENTS #24 ════ -->
+<section class="section testimonials">
+  <div class="container">
+    <p class="eyebrow wow-reveal">From the dock and the shelf</p>
+    <h2 class="wow-reveal">Worth the walk down</h2>
+    <div class="tg__grid wow-stagger">
+      <!-- src: R-SOC-01 -->
+      <figure class="card wow-hairline t-card">
+        <div class="t-card__stars" aria-label="5 out of 5 stars">★★★★★</div>
+        <blockquote>The dockside counter is my Saturday ritual; the cold-brew alone is worth the walk down.</blockquote>
+        <figcaption class="t-card__who">
+          <img class="t-card__avatar" src="assets/avatar-dana.jpg" alt="Dana M." loading="lazy">
+          <span><span class="t-card__name">Dana M.</span><br><span class="t-card__role">Café regular</span></span>
+        </figcaption>
+      </figure>
+      <!-- src: R-SOC-02 -->
+      <figure class="card wow-hairline t-card">
+        <div class="t-card__stars" aria-label="5 out of 5 stars">★★★★★</div>
+        <blockquote>Harborline moves off our shelves faster than any specialty line we carry.</blockquote>
+        <figcaption class="t-card__who">
+          <img class="t-card__avatar" src="assets/avatar-priya.jpg" alt="Priya R." loading="lazy">
+          <span><span class="t-card__name">Priya R.</span><br><span class="t-card__role">Grocery buyer</span></span>
+        </figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ════ PRESS BAND (gradient) — featured-in · imagery=logos serve as imagery ════ -->
+<section class="section press">
+  <div class="container">
+    <p class="eyebrow wow-reveal">As provisioned for</p>
+    <div class="press__logos wow-stagger">
+      <!-- src: R-WORK-01 -->
+      <span class="press__logo">Maritime Museum</span>
+      <!-- src: R-WORK-02 -->
+      <span class="press__logo">Harbor Festival 2025</span>
+      <span class="press__logo">Coast &amp; Table</span>
+      <span class="press__logo">The Provisioner</span>
+      <span class="press__logo">Saltwater Weekly</span>
+    </div>
+  </div>
+</section>
+
+<!-- ════ NEWSLETTER (light, image-overlay panel) — SECTION-COMPONENTS #38 ════ -->
+<section class="section nl">
+  <div class="container">
+    <div class="nl__panel wow-reveal">
+      <div class="nl__photo wow-zoom">
+        <img src="assets/section-coastal-morning.jpg" alt="Warm coastal morning light over the water" loading="lazy">
+      </div>
+      <div class="nl__overlay"></div>
+      <div class="nl__inner">
+        <p class="eyebrow" style="color: var(--ds-accent);">The harbor dispatch</p>
+        <h2>One letter a month from the dock</h2>
+        <p>New provisions, the maker behind each box, and a recipe or two from the Dockside Café.</p>
+        <form class="nl__form" onsubmit="return false">
+          <input type="email" aria-label="Email address" placeholder="you@email.com" required>
+          <button class="btn btn-primary wow-glow" type="submit">Subscribe</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ CLOSING CTA (DARK, full-bleed photo) — CTA-PATTERNS.md #1 Solid pill primary + glow ════ -->
+<section class="section section--dark wow-bloom close-cta">
+  <div class="close-cta__photo wow-parallax" data-parallax="0.08">
+    <img src="assets/section-provisions-spread.jpg" alt="Coastal provisions spread on a weathered dock table" loading="lazy">
+  </div>
+  <div class="close-cta__scrim"></div>
+  <div class="container">
+    <p class="eyebrow wow-reveal">Hand-harvested on the harbor</p>
+    <h2 class="wow-reveal">Provisions worth the walk down the dock.</h2>
+    <p class="lede wow-reveal">Start a Provisioning Box, shop the pantry, or visit the Dockside Café on the harborfront.</p>
+    <div class="cta-row wow-reveal">
+      <a class="btn btn-primary wow-glow" href="#boxes">Start a Provisioning Box</a>
+      <a class="btn btn-secondary" href="#pantry" style="color: var(--ds-ink-on-dark); border-color: rgba(246,239,226,0.4);">Shop the pantry</a>
+    </div>
+  </div>
+  <!-- DIVIDER-PATTERNS.md #2 Wave smooth · closing-cta→footer · svg fill = NEXT section (footer deep) -->
+  <div class="wow-divider wow-divider--bottom" aria-hidden="true">
+    <svg viewBox="0 0 1440 80" preserveAspectRatio="none"><path d="M0,44 C420,4 1020,80 1440,40 L1440,80 L0,80 Z" fill="var(--ds-primary-deep)"></path></svg>
+  </div>
+</section>
+
+<!-- ════ LOCKED SHARED CHROME — canonical 4-col footer (hours + B-Corp bottom bar).
+     Injected identically on every page from _chrome.html; internal links = REAL <slug>.html. ════ -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="site-footer__top">
+      <div>
+        <div class="site-footer__brand"><span class="site-footer__brand-mark">H</span>Harborline Provisions</div>
+        <p class="site-footer__blurb">Coastal specialty foods, hand-harvested from the harbor &mdash; with a dockside café and a monthly Provisioning Box.</p>
+        <div class="site-footer__hours">
+          <strong>Dockside Café Hours</strong>
+          Mon–Fri 7am–3pm &middot; Sat–Sun 8am–4pm
+        </div>
+      </div>
+      <div class="site-footer__col">
+        <h4>Shop</h4>
+        <a href="shop.html">The Pantry</a>
+        <a href="shop.html">Saltcure Sea Salt</a>
+        <a href="shop.html">Dockside Cold-Brew</a>
+        <a href="shop.html">Harbor Honey</a>
+      </div>
+      <div class="site-footer__col">
+        <h4>Provisions</h4>
+        <a href="services.html">Provisioning Boxes</a>
+        <a href="services.html">Dockside Café</a>
+        <a href="services.html">Corporate Gifting</a>
+      </div>
+      <div class="site-footer__col">
+        <h4>Visit &amp; Contact</h4>
+        <p>14 Dock Street, Harborfront</p>
+        <a href="mailto:hello@harborlineprovisions.com">hello@harborlineprovisions.com</a>
+        <a href="tel:+15550148820">(555) 014-8820</a>
+        <a href="contact.html">Visit &amp; Map</a>
+      </div>
+    </div>
+    <div class="site-footer__bottom">
+      <span>&copy; 2026 Harborline Provisions. Coastal Made.</span>
+      <span class="site-footer__bcorp">Certified B-Corp since 2024 &middot; Good Food Award 2025</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ════ STICKY CTA (mobile only) — STICKY-CTA-BAR.md #1 Full-width pill bottom-bar ════ -->
+<div class="sticky-cta" role="region" aria-label="Start a Provisioning Box">
+  <div class="sticky-cta__info">
+    <span class="sticky-cta__label">Monthly box from</span>
+    <span class="sticky-cta__price">$39 / mo</span>
+  </div>
+  <a class="btn btn-primary wow-glow" href="#boxes">Start a Box →</a>
+</div>
+
+<!-- Homepage carries its OWN inline drawer wiring (homepage trio = the canonical inline-JS
+     surface). Sets data-drawer-wired so the shared site.js skips its drawer block (no double-bind);
+     site.js still owns reveal/stagger + count-up + parallax for this page. -->
+<script>
+(function () {
+  document.documentElement.setAttribute('data-drawer-wired', '1');
+  var hamburger = document.querySelector('.site-header__hamburger');
+  var drawer = document.getElementById('mobile-drawer');
+  var backdrop = document.querySelector('.site-drawer-backdrop');
+  var closeBtn = document.querySelector('.site-drawer__close');
+  if (!hamburger || !drawer) return;
+  function setDrawer(open) {
+    hamburger.setAttribute('aria-expanded', String(open));
+    drawer.setAttribute('aria-hidden', String(!open));
+    if (backdrop) backdrop.setAttribute('data-open', String(open));
+    document.body.style.overflow = open ? 'hidden' : '';
+  }
+  hamburger.addEventListener('click', function () {
+    setDrawer(hamburger.getAttribute('aria-expanded') !== 'true');
+  });
+  if (closeBtn) closeBtn.addEventListener('click', function () { setDrawer(false); });
+  if (backdrop) backdrop.addEventListener('click', function () { setDrawer(false); });
+  drawer.querySelectorAll('a').forEach(function (a) { a.addEventListener('click', function () { setDrawer(false); }); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setDrawer(false); });
+})();
+</script>
+
+<!-- shared inherited motion (reveal/stagger + count-up + parallax); drawer block self-skips via data-drawer-wired -->
+<script src="design-system/site.js" defer></script>
+</body>
+</html>

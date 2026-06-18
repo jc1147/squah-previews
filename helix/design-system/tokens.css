@@ -1,0 +1,105 @@
+/* =============================================================================
+ * Helix Analytics — design tokens (the ONE visual decision, locked)
+ * client-web-mockup v4 · brand IDENTITY (palette/type) + WEB-CARD globals overlay.
+ * Vertical: b2b-saas (site_type: saas) · cool-tech indigo/violet on a clean LIGHT
+ * surface, with dark indigo-navy panels available via .section--dark.
+ *
+ * PROVENANCE (catalog picks — client-web-mockup references/):
+ *   - Palette  : COLOR-THEORY-PRESETS.md #19 "Linear Dark + Electric Indigo"
+ *                (the indigo/violet engine — linear.app / vercel dark vibe), re-grounded
+ *                on a LIGHT marketing surface; dark panel hexes kept for .section--dark.
+ *                Indigo scale [OC-indigo-*], Violet scale [OC-violet-*].
+ *   - Type     : TYPOGRAPHY-PAIRINGS.md #4 "Space Grotesk + DM Sans"
+ *                (technical / developer-aesthetic / industrial-modern; fits technical B2B)
+ *                + JetBrains Mono for numerics / metric counters (p95, 2.4B, uptime).
+ *   - Radius   : SURFACE-PATTERNS.md §1 corner radii — soft-modern (sm 8 / md 12 / lg 18 / xl 28).
+ *   - Shadow   : SURFACE-PATTERNS.md §2 card chrome — layered ambient+key, cool-tinted.
+ *   - Globals  : WEB-CARD globals-lock — direction "glassy / elevated / glow"
+ *                (translucent dark glass nav, layered elevation, indigo-violet glow bloom,
+ *                soft scroll-reveal motion, subtle grain). 12 tokens per BRAND-TOKEN-SCHEMA.md.
+ *
+ * ACCESSIBILITY (verified, not eyeballed — WCAG 2.1 contrast, sRGB):
+ *   --ds-accent-ink #5B34C7 hits: 7.16:1 on --ds-bg-surface (#F7F8FB),
+ *   7.61:1 on --ds-bg-surface-2 (#FFFFFF), 6.42:1 on --ds-accent-soft (#EEE9FF).
+ *   ALL >= 4.5:1 (AA small text). Raw --ds-accent #7950f2 is only 4.66/4.95 on light
+ *   and 3.21 on the dark panel = NOT safe for small text on light -> accent is used for
+ *   LARGE display / borders / icons / on-dark text ONLY (per BRAND-TOKEN-SCHEMA.md).
+ *   --ds-ink #1A2233 = 14.97:1 on surface; --ds-ink-soft #5A6478 = 5.60:1; ink-on-dark
+ *   #EEF1F7 = 14.06:1 on the deep navy panel.
+ * ============================================================================= */
+
+:root {
+  /* ---- Color (required) ---- */
+  --ds-primary:        #4C6EF5;   /* [OC-indigo-6] brand indigo — large accents / icons / fills */
+  --ds-primary-cta:    #3B5BDB;   /* [OC-indigo-7] DARKER indigo — solid-button bg + small links on light (white-on-it 5.01:1; on light surface 5.34:1; on white 5.67:1 — verified) */
+  --ds-primary-deep:   #1A2233;   /* deep cool navy — body text on light, dark panels, footer */
+  --ds-primary-soft:   #DBE4FF;   /* [OC-indigo-1] tinted backgrounds, eyebrows, soft cards */
+  --ds-accent:         #7950F2;   /* [OC-violet-6] electric violet — LARGE display / borders / icons (3.21:1 on navy = NOT safe for small on-dark text) */
+  --ds-accent-on-dark: #9775FA;   /* [OC-violet-4] LIGHTENED violet for SMALL accent text/marks ON the dark navy panel/footer — 4.73:1 on #1A2233 (verified) */
+  --ds-accent-ink:     #5B34C7;   /* DARKENED violet for SMALL text on light — 7.16/7.61/6.42:1 (verified) */
+  --ds-accent-soft:    #EEE9FF;   /* violet tint backgrounds (badges/eyebrows) */
+  --ds-bg-surface:     #F7F8FB;   /* page background — cool off-white (custom, blue-grey tint) */
+  --ds-bg-surface-2:   #FFFFFF;   /* card / elevated surface */
+  --ds-bg-warm:        #EEF1FA;   /* "warm" alternate band — kept COOL here (indigo wash), per cool-tech identity */
+  --ds-ink:            #1A2233;   /* default text (= primary-deep) */
+  --ds-ink-soft:       #5A6478;   /* secondary text — cool grey, 5.60:1 on surface */
+  --ds-line:           #E4E8F0;   /* borders, dividers — cool hairline */
+  --ds-ink-on-dark:    #EEF1F7;   /* near-white text on dark/accent surfaces — 14.06:1 on primary-deep */
+  --ds-scrim:          rgba(11, 14, 20, 0.62);  /* image-overlay legibility scrim (dark navy translucent) */
+
+  /* ---- Color (optional) ---- */
+  --ds-warning:        #F03E3E;   /* urgent flags only (sparingly) */
+  --ds-warning-soft:   #FFE3E3;
+  --ds-signature:      #22B8CF;   /* optional cyan flourish (data/pulse accents) [OC-cyan-5] */
+
+  /* ---- Typography ---- */
+  --ds-font-display:   'Space Grotesk', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  --ds-font-body:      'DM Sans', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  --ds-font-mono:      'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* ---- Radius ---- */
+  --ds-r-sm:   8px;
+  --ds-r-md:   12px;
+  --ds-r-lg:   18px;
+  --ds-r-xl:   28px;
+  --ds-r-pill: 999px;
+
+  /* ---- Shadow (layered ambient + key, cool indigo-tinted) ---- */
+  --ds-shadow-card: 0 1px 2px rgba(26, 34, 51, 0.06), 0 8px 24px rgba(26, 34, 51, 0.08);
+  --ds-shadow-lift: 0 4px 12px rgba(26, 34, 51, 0.10), 0 24px 56px rgba(26, 34, 51, 0.16);
+
+  /* ---- Spacing scale + layout ---- */
+  --ds-space-2xs: 4px;
+  --ds-space-xs:  8px;
+  --ds-space-sm:  12px;
+  --ds-space-md:  16px;
+  --ds-space-lg:  24px;
+  --ds-space-xl:  40px;
+  --ds-space-2xl: 64px;
+  --ds-space-3xl: 96px;
+  --ds-section-py:    clamp(72px, 9vw, 128px);
+  --ds-container-max: 1180px;
+
+  /* ---- Motion (base) ---- */
+  --ds-ease: cubic-bezier(0.65, 0, 0.35, 1);
+  --ds-dur:  220ms;
+
+  /* ===========================================================================
+   * GLOBALS OVERLAY — modern-wow (12 tokens) · WEB-CARD lock
+   * Direction: "glassy / elevated / glow" — translucent dark glass chrome,
+   * layered elevation w/ inset top-highlight, indigo-violet glow bloom on CTA/hero,
+   * soft scroll-reveal motion, subtle grain. Textured to the cool indigo palette.
+   * ======================================================================== */
+  --ds-glass-bg:     rgba(16, 20, 30, 0.72);                 /* dark navy translucent nav/panel fill */
+  --ds-glass-blur:   blur(16px) saturate(180%);              /* frosted-glass filter */
+  --ds-glass-border: rgba(124, 138, 255, 0.18);              /* indigo-tinted hairline on glass */
+  --ds-hairline:     rgba(26, 34, 51, 0.10);                 /* 1px low-opacity cool border */
+  --ds-inset-hi:     inset 0 1px 0 rgba(255, 255, 255, 0.70);/* inset top highlight on elevated cards */
+  --ds-glow:         0 0 0 1px rgba(121, 80, 242, 0.35), 0 8px 30px rgba(76, 110, 245, 0.45); /* accent bloom on CTA/hero */
+  --ds-glow-wash:    radial-gradient(60% 80% at 50% 0%, rgba(121, 80, 242, 0.22), rgba(76, 110, 245, 0.10) 45%, transparent 72%); /* hero/section bloom */
+  --ds-grain:        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E"); /* ultra-low-opacity noise */
+  --ds-divider-h:    84px;                                   /* SVG shape-divider height */
+  --ds-dur-fast:     160ms;                                  /* micro-interactions */
+  --ds-dur-slow:     600ms;                                  /* scroll-reveal */
+  --ds-ease-out:     cubic-bezier(0.2, 0.6, 0.2, 1);         /* reveal / zoom curve */
+}

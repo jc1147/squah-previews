@@ -1,0 +1,60 @@
+site:    riverkeep
+brand:   "Riverkeep Alliance"
+site_type: nonprofit       # community watershed/river-conservation nonprofit — membership + donor + volunteer driven; no product, no commercial transaction
+vertical: nonprofit
+design_system: design-system/
+
+# SITE TYPE: from-scratch nonprofit (site_type: nonprofit). Greenfield — page list DERIVED from
+# the Stage-0 fact types present (service[programs] / stat_metric+proof+work+accolade[impact] /
+# event+offer_promo[get-involved] / team_member+faq+accolade[about] / offer_promo[donate]) x the
+# nonprofit vertical norms (Cause/Programs + Impact + Get-Involved + About + Donate). NO product
+# facts -> NO Shop. The nonprofit fold: trust facts (stat_metric / proof / work / accolade) become
+# a DESTINATION Impact page + a Home impact band, not About footnotes. conversion_goal=donate lives
+# in _content-requirements/_strategy.md (NOT a sitemap field); its destination `donate` IS a page.
+
+# Header nav — built from sitemap.nav[] as REAL <slug>.html page links (never #anchors).
+# IA emphasis from CONVERSION_GOAL=donate (SITE-PLAN Step c.1: Cause/Impact/Events -> Donate):
+# leads with Programs/Impact/Get-Involved/About, primary CTA "Donate" LAST (right-aligned).
+# Secondary action "Volunteer" routes to get-involved. Each page resolves to a pages[] slug.
+nav:
+  - { label: "Programs",     page: programs }
+  - { label: "Our Impact",   page: impact }
+  - { label: "Get Involved", page: get-involved }
+  - { label: "About",        page: about }
+  - { label: "Donate",       page: donate }
+
+footer:
+  - title: "The Mission"
+    links:
+      - { label: "Our Programs",   page: programs }
+      - { label: "Our Impact",     page: impact }
+      - { label: "About Us",       page: about }
+  - title: "Get Involved"
+    links:
+      - { label: "Volunteer",      page: get-involved }
+      - { label: "Events",         page: get-involved }
+      - { label: "Become a Member", page: get-involved }
+  - title: "Give"
+    links:
+      - { label: "Donate",         page: donate }
+      - { label: "Monthly Giving", page: donate }
+      - { label: "Legacy Giving",  page: donate }
+  - title: "Connect"
+    links:
+      - { label: "Charity Navigator", href: "https://www.charitynavigator.org" }
+      - { label: "Instagram",      href: "https://instagram.com/riverkeepalliance" }
+
+# Every fixed page. slug -> built <slug>.html. Templates reuse the built page-type templates,
+# re-skinned to the Riverkeep identity (builder owns the look): programs = service (program grid),
+# impact = blog/about (proof+work+stats), get-involved = service (events+ways-to-help),
+# about = about-1 (team+story+faq), donate = service (ways-to-give form/tiers).
+pages:
+  - { slug: index,        template: home,      kind: home,    title: "Riverkeep Alliance — keeping our rivers swimmable, fishable, and wild" }
+  - { slug: programs,     template: service-1, kind: service, title: "Our Programs — Restoring the Watershed" }
+  - { slug: impact,       template: about-1,   kind: about,   title: "Our Impact — One Mile at a Time" }
+  - { slug: get-involved, template: service-1, kind: service, title: "Get Involved — Volunteer, Join, Show Up" }
+  - { slug: about,        template: about-1,   kind: about,   title: "About Riverkeep Alliance" }
+  - { slug: donate,       template: service-1, kind: service, title: "Donate — Fund the Restoration" }
+
+# nonprofit (donate) — the hosted donation/checkout flow is platform-provided, NOT built here.
+platform_pages: [ donate-checkout ]

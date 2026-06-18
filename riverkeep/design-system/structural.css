@@ -1,0 +1,1043 @@
+/* =====================================================================
+   structural.css  —  shared structural layer for web-mockup templates.
+   Ships with the skill. Styles the canonical vocabulary
+   (references/COMPONENT-VOCABULARY.md) using ONLY var(--ds-*) for every
+   brand-variable value. Per-site brand values come from
+   <slug>/design-system/tokens.css, which each page links alongside this file.
+
+   ALLOWED literals here = structural only: font-size scale, line-height,
+   grid track counts, element dimensions (px/%/ch/em), z-index, opacity.
+   These are candidates the Phase 3.5 tokenization QC measures; promote any
+   that needs brand variation to a --ds-* token.
+   FORBIDDEN here: hex/rgb/hsl colors, font-family names, box-shadow values,
+   border-radius lengths (use --ds-r-*). All such values are var(--ds-*).
+   ===================================================================== */
+
+/* --- reset --- */
+*, *::before, *::after { box-sizing: border-box; }
+/* Clip horizontal overflow from the off-canvas mobile drawer (.site-drawer sits
+   at right:0 translated 100% off-screen, extending scrollWidth on pages that
+   establish no clipping ancestor). overflow-x:clip (NOT hidden) does not create
+   a scroll container, so the sticky .site-header is preserved. */
+html { overflow-x: clip; }
+body { margin: 0; font-family: var(--ds-font-body); color: var(--ds-ink); background: var(--ds-bg-surface); line-height: 1.55; -webkit-font-smoothing: antialiased; overflow-x: clip; }
+img { display: block; max-width: 100%; }
+/* Responsive media: inline content SVG must never exceed its container (prevents
+   horizontal overflow at narrow viewports — fixed-width hero/figure SVGs). Icon
+   SVGs sized by a component rule keep their explicit size (higher specificity). */
+svg { max-width: 100%; }
+figure { max-width: 100%; margin-inline: 0; }
+figure svg { width: 100%; height: auto; }
+
+/* --- type scale (sizes are structural; families + colors are tokens) --- */
+h1, h2, h3 { font-family: var(--ds-font-display); color: var(--ds-primary-deep); line-height: 1.08; margin: 0; font-weight: 600; }
+h1 { font-size: clamp(40px, 6vw, 72px); }
+h2 { font-size: clamp(28px, 4vw, 44px); }
+h3 { font-size: 20px; }
+p { margin: 0; }
+
+/* --- section bands + container --- */
+.section { padding-block: var(--ds-section-py); background: var(--ds-bg-surface); color: var(--ds-ink); }
+.section--dark { background: var(--ds-primary-deep); color: var(--ds-ink-on-dark); }
+.section--dark h1, .section--dark h2, .section--dark h3 { color: var(--ds-ink-on-dark); }
+.section--accent { background: var(--ds-accent); color: var(--ds-primary-deep); }
+.section--accent h1, .section--accent h2 { color: var(--ds-primary-deep); }
+.section--warm { background: var(--ds-bg-warm); }
+.container { max-width: var(--ds-container-max); margin-inline: auto; padding-inline: var(--ds-space-lg); }
+
+/* --- eyebrow + lede --- */
+.eyebrow { font-family: var(--ds-font-body); font-size: 13px; letter-spacing: .14em; text-transform: uppercase; color: var(--ds-ink-soft); margin-bottom: var(--ds-space-sm); }
+.section--dark .eyebrow { color: var(--ds-accent); }
+/* CONTRAST: on a .section--accent (light green) band, --ds-ink-soft measured
+   3.02:1. The accent band's designated foreground is --ds-primary-deep (5.54:1
+   on accent — see .section--accent base rule). Relight the eyebrow to match. */
+.section--accent .eyebrow { color: var(--ds-primary-deep); }
+.lede { font-size: clamp(17px, 2vw, 20px); color: var(--ds-ink-soft); max-width: 46ch; margin-top: var(--ds-space-md); }
+.section--dark .lede { color: var(--ds-ink-on-dark); opacity: .85; }
+
+/* --- buttons (all states) --- */
+/* TAP TARGET: inline-flex + centered so the label centers and the control clears
+   the 44px minimum touch height at every viewport. Structural literals only. */
+.btn { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; font-family: var(--ds-font-body); font-weight: 600; text-decoration: none; border: 0; cursor: pointer; border-radius: var(--ds-r-pill); padding: var(--ds-space-sm) var(--ds-space-lg); transition: transform var(--ds-dur) var(--ds-ease), box-shadow var(--ds-dur) var(--ds-ease), background var(--ds-dur) var(--ds-ease); }
+.btn-primary { background: var(--ds-primary); color: var(--ds-ink-on-dark); }
+.btn-primary:hover { background: var(--ds-primary-deep); transform: translateY(-2px); box-shadow: var(--ds-shadow-lift); }
+.btn-primary:focus-visible { outline: 3px solid var(--ds-accent); outline-offset: 2px; }
+.btn-secondary { background: transparent; color: var(--ds-primary-deep); border: 1.5px solid var(--ds-primary); }
+.btn-secondary:hover { border-color: var(--ds-primary-deep); background: var(--ds-primary-soft); }
+/* CONTRAST: the ghost secondary CTA's resting border was --ds-line — a hairline
+   tuned for dividers (~1.3:1 on the light surface), below the 3:1 WCAG UI/graphic
+   bar for a control outline. Re-point the resting border to --ds-primary (a brand
+   color that clears 3:1 on both light surfaces); hover deepens to --ds-primary-deep.
+   Token-pure. The label stays --ds-primary-deep (12:1 on light). */
+/* CONTRAST: a ghost secondary CTA on a .section--dark band would render its
+   default --ds-primary-deep label + --ds-line border on the --ds-primary-deep
+   bg (~1:1, an invisible label + ~1.3:1 border). Re-light label + border to
+   --ds-ink-on-dark; hover fills with a translucent light wash. Token-pure. */
+.section--dark .btn-secondary { color: var(--ds-ink-on-dark); border-color: var(--ds-ink-on-dark); }
+.section--dark .btn-secondary:hover { background: color-mix(in srgb, var(--ds-ink-on-dark) 14%, transparent); border-color: var(--ds-ink-on-dark); }
+.cta-row { display: flex; flex-wrap: wrap; gap: var(--ds-space-sm); margin-top: var(--ds-space-lg); }
+
+/* --- card base + role --- */
+/* CONTRAST: a .card is a LIGHT surface (--ds-bg-surface-2). When one is nested
+   inside a .section--dark / .section--accent band, the band's inherited `color`
+   (--ds-ink-on-dark near-white / --ds-primary-deep) bled into the card's text —
+   e.g. a .price-card's plain <li> features rendered near-white-on-white (~1.06:1).
+   The card must RE-ASSERT its own light-surface ink so nested text doesn't inherit
+   the dark band's foreground. Token-pure. (Children that opt into a soft tint set
+   their own ink as needed.) */
+.card { background: var(--ds-bg-surface-2); color: var(--ds-ink); border: 1px solid var(--ds-line); border-radius: var(--ds-r-lg); box-shadow: var(--ds-shadow-card); transition: transform var(--ds-dur) var(--ds-ease), box-shadow var(--ds-dur) var(--ds-ease); }
+.card:hover { transform: translateY(-4px); box-shadow: var(--ds-shadow-lift); }
+.role { font-size: 13px; color: var(--ds-ink-soft); }
+
+/* --- SC#1 hero --- */
+.hero__inner { display: flex; flex-direction: column; align-items: flex-start; gap: var(--ds-space-md); }
+.hero h1 { max-width: 16ch; }
+
+/* --- SC#8 manifesto --- */
+.manifesto__text { font-family: var(--ds-font-display); font-size: clamp(24px, 3.4vw, 40px); line-height: 1.25; color: var(--ds-primary-deep); max-width: 24ch; margin-inline: auto; text-align: center; }
+
+/* --- SC#16 founder bio split --- */
+.founder-bio__layout { display: grid; grid-template-columns: 1fr 1fr; gap: var(--ds-space-2xl); align-items: center; }
+.founder-bio__media img { width: 100%; border-radius: var(--ds-r-lg); object-fit: cover; }
+.founder-bio__body h2 { margin-bottom: var(--ds-space-xs); }
+.founder-bio__body .role { margin-bottom: var(--ds-space-md); }
+
+/* --- SC#3 stat strip --- */
+.stat-strip__row { display: flex; flex-wrap: wrap; gap: var(--ds-space-xl); justify-content: space-between; }
+.stat { display: flex; flex-direction: column; gap: var(--ds-space-2xs); }
+.stat__num { font-family: var(--ds-font-display); font-size: clamp(36px, 5vw, 56px); color: var(--ds-primary-deep); line-height: 1; }
+.stat__label { font-size: 14px; color: var(--ds-ink-soft); }
+
+/* --- SC#18 team grid 3-col --- */
+.team-grid h2 { margin-bottom: var(--ds-space-lg); }
+.team-grid__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--ds-space-lg); }
+.team-card { padding: var(--ds-space-lg); text-align: center; }
+.team-card__photo { width: 96px; height: 96px; border-radius: var(--ds-r-pill); object-fit: cover; margin: 0 auto var(--ds-space-md); }
+.team-card h3 { margin-bottom: var(--ds-space-2xs); }
+
+/* --- SC#41 closing CTA --- */
+.closing-cta { text-align: center; }
+.closing-cta .cta-row { justify-content: center; }
+
+/* --- shared chrome: header --- (canonical definition lives in the SHARED CHROME block below) */
+
+/* --- shared chrome: footer --- (canonical 4-col additions live in the SHARED CHROME block below) */
+.site-footer { background: var(--ds-primary-deep); color: var(--ds-ink-on-dark); padding-block: var(--ds-space-2xl); }
+.site-footer strong { display: block; margin-bottom: var(--ds-space-xs); }
+.site-footer a { display: block; margin-block: var(--ds-space-2xs); color: var(--ds-ink-on-dark); text-decoration: none; opacity: .8; }
+.site-footer a:hover { opacity: 1; }
+.site-footer__cols { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: var(--ds-space-xl); }
+
+/* =====================================================================
+   SHARED CHROME (canonical, promoted from homepage)
+   The ONE chrome every page injects identically — homepage + inner.
+   Promoted from the homepage's bespoke .nav/.footer inline <style> onto the
+   SHARED .site-header / .site-footer classes so inner pages get the SAME glass
+   nav (with hamburger + slide-from-right mobile drawer) and the SAME 4-col
+   footer (hours + B-Corp bottom bar) by inheritance — no per-page chrome.
+   Token-pure: every color/shadow/radius/font is var(--ds-*); only structural
+   lengths / grid tracks / opacity / z-index / motion timing are literal.
+   Drawer motion is prefers-reduced-motion-safe (gate block at file end).
+   Drawer behavior JS = design-system/site.js (shared, linked on every page).
+   The .wow-glass overlay carries the glass translucency (locked globals).
+   ===================================================================== */
+
+/* ---- canonical header: glass full-bar (.site-header), sticky over hero ---- */
+.site-header { position: sticky; top: 0; z-index: 40; background: var(--ds-bg-surface); border-bottom: 1px solid var(--ds-line); }
+.site-header__bar { display: flex; align-items: center; justify-content: space-between; max-width: var(--ds-container-max); margin-inline: auto; padding: var(--ds-space-md) var(--ds-space-lg); }
+.brand { display: flex; align-items: center; gap: var(--ds-space-sm); font-family: var(--ds-font-display); font-size: 21px; color: var(--ds-primary-deep); text-decoration: none; font-weight: 600; }
+.brand__mark { width: 36px; height: 36px; border-radius: var(--ds-r-pill); background: var(--ds-primary); color: var(--ds-ink-on-dark); display: grid; place-items: center; font-size: 17px; }
+.site-nav { display: flex; gap: var(--ds-space-lg); align-items: center; }
+/* CONTRAST: scope the nav-link color to NON-button links. As `.site-nav a`
+   (specificity 0,1,1) it cascaded onto the header CTA `a.btn-primary`
+   (0,1,0), overriding its --ds-ink-on-dark label with --ds-ink and rendering
+   the CTA dark-on-blue (~2.62:1). `:not(.btn)` keeps the CTA's own label. */
+.site-nav a:not(.btn) { text-decoration: none; color: var(--ds-ink); font-size: 15px; font-weight: 500; position: relative; transition: color var(--ds-dur-fast) var(--ds-ease-out); }
+.site-nav a:not(.btn)::after { content: ""; position: absolute; left: 0; right: 0; bottom: -4px; height: 2px; background: var(--ds-accent); transform: scaleX(0); transform-origin: left; transition: transform var(--ds-dur) var(--ds-ease-out); }
+.site-nav a:not(.btn):hover { color: var(--ds-primary); }
+.site-nav a:not(.btn):hover::after { transform: scaleX(1); }
+
+/* ---- canonical header: hamburger (hidden on desktop, shown at ≤768) ---- */
+.site-header__hamburger { display: none; flex-direction: column; justify-content: center; gap: 5px; width: 44px; height: 44px; background: transparent; border: 0; cursor: pointer; padding: 10px; border-radius: var(--ds-r-sm); }
+.site-header__hamburger span { display: block; height: 2px; width: 100%; background: var(--ds-primary-deep); border-radius: var(--ds-r-sm); transition: transform var(--ds-dur) var(--ds-ease), opacity var(--ds-dur) var(--ds-ease); }
+.site-header__hamburger:focus-visible { outline: 3px solid var(--ds-accent); outline-offset: 2px; }
+
+/* ---- canonical mobile drawer (slide-from-right, aria-toggled by site.js) ---- */
+/* CONTRAST/RENDER: the mobile drawer + backdrop are display:none above the
+   mobile breakpoint. Previously they stayed laid out (just translated off-canvas)
+   at every width, so at desktop the contrast walker sampled the off-screen
+   drawer's --ds-ink links against whatever band sat behind the clamped sample
+   point (the dark hero) and false-scored dark-on-dark (~1.1:1). The drawer is
+   only reachable via the hamburger, which itself only shows at <=768px, so
+   removing it from the desktop layout is purely correct (no behavior change).
+   It is re-enabled (display:flex) at <=768 alongside the hamburger. */
+.site-drawer-backdrop { display: none; position: fixed; inset: 0; background: var(--ds-scrim); opacity: 0; visibility: hidden; transition: opacity var(--ds-dur) var(--ds-ease); z-index: 90; }
+.site-drawer-backdrop[data-open="true"] { opacity: 1; visibility: visible; }
+.site-drawer { display: none; position: fixed; top: 0; right: 0; width: 300px; max-width: 84vw; height: 100vh; background: var(--ds-bg-surface-2); box-shadow: var(--ds-shadow-lift); transform: translateX(100%); transition: transform 320ms cubic-bezier(0.65, 0, 0.35, 1); z-index: 100; flex-direction: column; padding: var(--ds-space-2xl) var(--ds-space-xl); gap: var(--ds-space-lg); }
+.site-drawer[aria-hidden="false"] { transform: translateX(0); }
+.site-drawer__close { position: absolute; top: 18px; right: 18px; width: 44px; height: 44px; background: transparent; border: 0; cursor: pointer; font-size: 26px; line-height: 1; color: var(--ds-primary-deep); border-radius: var(--ds-r-sm); }
+.site-drawer__close:focus-visible { outline: 3px solid var(--ds-accent); outline-offset: 2px; }
+.site-drawer__links { display: flex; flex-direction: column; gap: var(--ds-space-md); margin-top: var(--ds-space-xl); list-style: none; padding: 0; }
+/* RENDER (tap targets): drawer nav links must be >=40px tall at 375 (a thumb
+   action target). The 22px display text gave a ~25px box; min-height+line-height
+   44px clears the floor (matches the proven harborline drawer pattern). */
+.site-drawer__links a { display: block; min-height: 44px; line-height: 44px; text-decoration: none; color: var(--ds-ink); font-family: var(--ds-font-display); font-size: 22px; }
+.site-drawer__links a:hover { color: var(--ds-primary); }
+.site-drawer .btn { margin-top: var(--ds-space-sm); text-align: center; }
+
+/* ---- canonical footer: 4-col + hours + B-Corp bottom bar (.site-footer) ---- */
+.site-footer__top { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1.1fr; gap: var(--ds-space-2xl); padding-block: var(--ds-space-2xl); }
+.site-footer__brand { font-family: var(--ds-font-display); font-size: 24px; color: var(--ds-ink-on-dark); display: flex; align-items: center; gap: var(--ds-space-sm); }
+.site-footer__brand-mark { width: 38px; height: 38px; border-radius: var(--ds-r-pill); background: var(--ds-accent); color: var(--ds-primary-deep); display: grid; place-items: center; font-size: 18px; }
+.site-footer__blurb { color: var(--ds-ink-on-dark); opacity: .76; margin-top: var(--ds-space-md); max-width: 34ch; font-size: 15px; }
+.site-footer__hours { margin-top: var(--ds-space-md); font-size: 14px; color: var(--ds-ink-on-dark); opacity: .82; }
+.site-footer__hours strong { display: block; color: var(--ds-accent); font-family: var(--ds-font-body); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; margin-bottom: var(--ds-space-2xs); opacity: 1; }
+.site-footer__col h4 { font-family: var(--ds-font-body); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--ds-accent); margin: 0 0 var(--ds-space-md); }
+.site-footer__col a, .site-footer__col p { display: block; color: var(--ds-ink-on-dark); opacity: .78; text-decoration: none; margin-block: var(--ds-space-xs); font-size: 15px; }
+.site-footer__col a:hover { opacity: 1; }
+.site-footer__bottom { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--ds-space-md); padding-block: var(--ds-space-lg); border-top: 1px solid color-mix(in srgb, var(--ds-ink-on-dark) 14%, transparent); font-size: 13px; color: var(--ds-ink-on-dark); opacity: .7; }
+.site-footer__bcorp { display: inline-flex; align-items: center; gap: var(--ds-space-xs); }
+
+/* --- responsive --- */
+@media (max-width: 860px) {
+  .founder-bio__layout { grid-template-columns: 1fr; gap: var(--ds-space-lg); }
+  .team-grid__grid { grid-template-columns: 1fr; }
+  .stat-strip__row { gap: var(--ds-space-lg); }
+  .site-footer__cols { grid-template-columns: 1fr; }
+  .site-nav { gap: var(--ds-space-md); }
+}
+
+/* --- canonical chrome responsive: footer reflow + drawer breakpoints --- */
+@media (max-width: 1024px) {
+  .site-footer__top { grid-template-columns: 1fr 1fr; gap: var(--ds-space-xl); }
+}
+@media (max-width: 768px) {
+  .site-nav { display: none; }
+  .site-header__hamburger { display: flex; }
+  /* re-enable the mobile drawer (display:none above this width — see .site-drawer) */
+  .site-drawer { display: flex; }
+  .site-drawer-backdrop { display: block; }
+  .site-footer__top { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 480px) {
+  .site-footer__top { grid-template-columns: 1fr; gap: var(--ds-space-xl); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .site-nav a::after, .site-header__hamburger span,
+  .site-drawer-backdrop, .site-drawer { transition: none !important; }
+}
+
+/* ===== Service set (template service-1) ===== */
+
+/* --- SC#7 problem framing --- */
+.problem__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--ds-space-lg); margin-top: var(--ds-space-lg); }
+.problem-card { padding: var(--ds-space-lg); }
+.problem-card h3 { margin-bottom: var(--ds-space-xs); }
+
+/* --- SC#11 service pillars (alternating image side) --- */
+.pillar { display: grid; grid-template-columns: 1fr 1fr; gap: var(--ds-space-2xl); align-items: center; margin-block: var(--ds-space-2xl); }
+.pillar:nth-child(even) .pillar__media { order: 2; }
+.pillar__media img { width: 100%; border-radius: var(--ds-r-lg); object-fit: cover; }
+
+/* --- SC#27 process steps --- */
+.process__steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--ds-space-lg); margin-top: var(--ds-space-lg); }
+.step__num { display: inline-grid; place-items: center; width: 40px; height: 40px; border-radius: var(--ds-r-pill); background: var(--ds-accent); color: var(--ds-primary-deep); font-family: var(--ds-font-display); margin-bottom: var(--ds-space-sm); }
+.step h3 { margin-bottom: var(--ds-space-2xs); }
+
+/* --- SC#32 pricing single --- */
+.pricing-single .price-card { max-width: 420px; margin-inline: auto; padding: var(--ds-space-xl); text-align: center; }
+.price-card__amount { font-family: var(--ds-font-display); font-size: clamp(40px, 6vw, 64px); color: var(--ds-primary-deep); margin-block: var(--ds-space-sm); }
+.price-card__features { list-style: none; padding: 0; margin: 0 0 var(--ds-space-lg); text-align: left; }
+.price-card__features li { padding-block: var(--ds-space-xs); border-bottom: 1px solid var(--ds-line); }
+
+/* --- SC#34 FAQ (native details/summary) --- */
+.faq__list { max-width: 720px; margin-inline: auto; }
+.faq-item { border-bottom: 1px solid var(--ds-line); }
+.faq-item__q { cursor: pointer; padding-block: var(--ds-space-md); font-family: var(--ds-font-display); font-size: 20px; color: var(--ds-primary-deep); list-style: none; }
+.faq-item__q::-webkit-details-marker { display: none; }
+.faq-item__a { padding-bottom: var(--ds-space-md); color: var(--ds-ink-soft); }
+
+/* --- SC#37 CTA form (split pitch + form, on dark) --- */
+.cta-form__layout { display: grid; grid-template-columns: 2fr 3fr; gap: var(--ds-space-2xl); align-items: start; }
+.cta-form__pitch h2 { color: var(--ds-ink-on-dark); }
+.form .field { margin-bottom: var(--ds-space-md); }
+.form label { display: block; font-size: 14px; margin-bottom: var(--ds-space-2xs); color: var(--ds-ink-on-dark); }
+.form input, .form textarea { width: 100%; font-family: var(--ds-font-body); font-size: 15px; padding: var(--ds-space-sm) var(--ds-space-md); border: 1px solid var(--ds-line); border-radius: var(--ds-r-md); background: var(--ds-bg-surface); color: var(--ds-ink); }
+.form input:focus, .form textarea:focus { outline: none; border-color: var(--ds-accent); }
+.form textarea { min-height: 120px; resize: vertical; }
+
+@media (max-width: 860px) {
+  .problem__grid, .process__steps { grid-template-columns: 1fr; }
+  .pillar, .cta-form__layout { grid-template-columns: 1fr; gap: var(--ds-space-lg); }
+  .pillar:nth-child(even) .pillar__media { order: 0; }
+}
+
+/* ===== Shop set (template shop-1) ===== */
+
+/* --- SC#45 category tiles (image-overlay) --- */
+.category-tiles__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--ds-space-lg); margin-top: var(--ds-space-lg); }
+.category-card { position: relative; display: block; border-radius: var(--ds-r-lg); overflow: hidden; aspect-ratio: 4 / 5; }
+.category-card img { width: 100%; height: 100%; object-fit: cover; }
+.category-card__overlay { position: absolute; inset: 0; background: linear-gradient(to top, var(--ds-scrim), transparent 60%); }
+.category-card__label { position: absolute; left: var(--ds-space-md); bottom: var(--ds-space-md); z-index: 1; color: var(--ds-ink-on-dark); font-family: var(--ds-font-display); font-size: 24px; }
+
+/* --- SC#44 product collection grid --- */
+.collection__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--ds-space-lg); margin-top: var(--ds-space-lg); }
+.product-card__media { position: relative; border-radius: var(--ds-r-md); overflow: hidden; aspect-ratio: 1 / 1; margin-bottom: var(--ds-space-sm); }
+.product-card__media img { width: 100%; height: 100%; object-fit: cover; }
+.product-card__badge { position: absolute; top: var(--ds-space-sm); left: var(--ds-space-sm); background: var(--ds-accent); color: var(--ds-primary-deep); font-size: 12px; font-weight: 600; padding: 2px 10px; border-radius: var(--ds-r-pill); }
+.product-card__name { font-size: 16px; margin-bottom: var(--ds-space-2xs); }
+.product-card__price { font-family: var(--ds-font-display); color: var(--ds-primary-deep); }
+
+/* --- SC#38 newsletter band --- */
+.newsletter { text-align: center; }
+.newsletter__form { display: flex; gap: var(--ds-space-sm); max-width: 480px; margin: var(--ds-space-lg) auto 0; }
+.newsletter__form input { flex: 1; font-family: var(--ds-font-body); font-size: 15px; padding: var(--ds-space-sm) var(--ds-space-md); border: 1px solid var(--ds-line); border-radius: var(--ds-r-pill); background: var(--ds-bg-surface); color: var(--ds-ink); }
+
+@media (max-width: 860px) {
+  .category-tiles__grid, .collection__grid { grid-template-columns: 1fr 1fr; }
+  .newsletter__form { flex-direction: column; }
+}
+
+/* ===== Blog set (template blog-1) ===== */
+
+/* --- SC#47 featured article (image-overlay, reuses .category-card__overlay scrim) --- */
+.featured-article__card { position: relative; display: block; border-radius: var(--ds-r-lg); overflow: hidden; aspect-ratio: 16 / 7; }
+.featured-article__card img { width: 100%; height: 100%; object-fit: cover; }
+.featured-article__body { position: absolute; left: var(--ds-space-xl); right: var(--ds-space-xl); bottom: var(--ds-space-xl); z-index: 1; color: var(--ds-ink-on-dark); }
+.featured-article__body h2 { color: var(--ds-ink-on-dark); max-width: 22ch; margin-top: var(--ds-space-xs); }
+
+/* --- SC#45 topic nav chips --- */
+.topic-nav__chips { display: flex; flex-wrap: wrap; gap: var(--ds-space-sm); }
+.chip { display: inline-block; padding: var(--ds-space-2xs) var(--ds-space-md); border: 1px solid var(--ds-line); border-radius: var(--ds-r-pill); text-decoration: none; color: var(--ds-ink); font-size: 14px; transition: background var(--ds-dur) var(--ds-ease), border-color var(--ds-dur) var(--ds-ease); }
+.chip:hover { border-color: var(--ds-primary); background: var(--ds-primary-soft); color: var(--ds-primary-deep); }
+
+/* --- SC#48 article grid --- */
+.article-grid__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--ds-space-xl); margin-top: var(--ds-space-lg); }
+.article-card__media { border-radius: var(--ds-r-md); overflow: hidden; aspect-ratio: 3 / 2; margin-bottom: var(--ds-space-sm); }
+.article-card__media img { width: 100%; height: 100%; object-fit: cover; }
+.article-card__tag { display: inline-block; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--ds-accent); margin-bottom: var(--ds-space-2xs); }
+.article-card__dek { color: var(--ds-ink-soft); margin-top: var(--ds-space-2xs); }
+.article-card__meta { font-size: 13px; color: var(--ds-ink-soft); margin-top: var(--ds-space-sm); }
+
+@media (max-width: 860px) {
+  .article-grid__grid { grid-template-columns: 1fr; }
+  .featured-article__body { left: var(--ds-space-lg); right: var(--ds-space-lg); bottom: var(--ds-space-lg); }
+}
+
+/* ===== Product-detail set (template product-1) ===== */
+
+/* --- product hero: gallery + buy-box split --- */
+.product-hero__layout { display: grid; grid-template-columns: 1fr 1fr; gap: var(--ds-space-2xl); align-items: start; }
+.product-hero__gallery img { width: 100%; border-radius: var(--ds-r-lg); object-fit: cover; }
+.product-hero__price { font-family: var(--ds-font-display); font-size: clamp(28px, 4vw, 40px); color: var(--ds-primary-deep); margin-block: var(--ds-space-sm); }
+
+/* --- specs label/value --- */
+.specs__list { max-width: 640px; margin: var(--ds-space-lg) auto 0; }
+.specs__row { display: flex; justify-content: space-between; gap: var(--ds-space-lg); padding-block: var(--ds-space-sm); border-bottom: 1px solid var(--ds-line); }
+.specs__row dt { color: var(--ds-ink-soft); margin: 0; }
+.specs__row dd { margin: 0; font-weight: 600; }
+
+/* --- reviews: avatar + stars --- */
+.reviews__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--ds-space-lg); margin-top: var(--ds-space-lg); }
+.review-card { padding: var(--ds-space-lg); }
+.review-card__stars { color: var(--ds-accent); letter-spacing: 2px; margin-bottom: var(--ds-space-sm); }
+.review-card__author { display: flex; align-items: center; gap: var(--ds-space-sm); margin-top: var(--ds-space-md); }
+.review-card__avatar { width: 40px; height: 40px; border-radius: var(--ds-r-pill); object-fit: cover; }
+
+@media (max-width: 860px) {
+  .product-hero__layout { grid-template-columns: 1fr; }
+  .reviews__grid { grid-template-columns: 1fr; }
+}
+
+/* ===== Blog-post set (article reading view) ===== */
+
+/* --- article header --- */
+.article-header__inner { max-width: 720px; margin-inline: auto; text-align: center; }
+.article-header__inner h1 { margin-block: var(--ds-space-sm); }
+.article-header__media { width: 100%; border-radius: var(--ds-r-lg); object-fit: cover; aspect-ratio: 16 / 8; margin-top: var(--ds-space-xl); }
+
+/* --- article body prose --- */
+.article-body__prose { max-width: 680px; margin-inline: auto; }
+.article-body__prose p { margin-bottom: var(--ds-space-md); font-size: 18px; line-height: 1.7; }
+.article-body__prose h2 { font-size: clamp(24px, 3vw, 32px); margin-top: var(--ds-space-xl); margin-bottom: var(--ds-space-sm); }
+.article-body__prose h3 { margin-top: var(--ds-space-lg); margin-bottom: var(--ds-space-xs); }
+.article-body__prose blockquote { margin: var(--ds-space-lg) 0; padding-left: var(--ds-space-lg); border-left: 3px solid var(--ds-accent); font-family: var(--ds-font-display); font-size: 24px; line-height: 1.4; color: var(--ds-primary-deep); }
+
+/* =====================================================================
+   MV: marketing / SaaS set
+   ~28 LAYER-2 marketing-class wrappers over LAYER-1 slot atoms + a LOOK
+   pattern. Source: .claude/design-system/VOCABULARY.md LAYER 2 +
+   styleguide/sections-{pricing,features,proof,trust-stats,cta-faq,
+   forms-leadgen}. Token-pure: every brand value is var(--ds-*); only
+   structural literals (grid counts, dimensions, type-scale, z-index,
+   opacity, ch/em) are inline, per this file's header rule. Tables reflow
+   to stacked cards at the canonical 860px breakpoint; interactive
+   elements carry :focus-visible; transitions respect reduced-motion.
+   ===================================================================== */
+
+/* ---- Narrative / wedge ---- */
+
+/* .differentiator-narrative — alternating pain->fix rows (extends .service-pillars / S-DEEPDIVE B3-as-rows) */
+.diff-row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--ds-space-2xl); align-items: center; margin-block: var(--ds-space-2xl); }
+.diff-row:nth-child(even) .diff-row__media { order: 2; }
+.diff-row__media img { width: 100%; border-radius: var(--ds-r-lg); object-fit: cover; box-shadow: var(--ds-shadow-card); }
+/* CONTRAST: --ds-accent (bright green) at 14px on a light band measured 1.91:1.
+   Small accent text on LIGHT must use --ds-accent-ink (the darkened green built
+   for exactly this — >=4.5:1 on surface/surface-2/warm; 5.59 on warm). On a dark
+   ancestor the bright accent is fine, so relight is scoped (see below). */
+.diff-row__num { font-family: var(--ds-font-display); color: var(--ds-accent-ink); font-size: 14px; letter-spacing: .05em; }
+.section--dark .diff-row__num { color: var(--ds-accent); }
+.diff-row__body h3 { margin-block: var(--ds-space-xs); }
+.diff-row__list { list-style: none; padding: 0; margin: var(--ds-space-sm) 0 0; display: flex; flex-direction: column; gap: var(--ds-space-2xs); }
+.diff-row__list li { padding-left: var(--ds-space-md); position: relative; color: var(--ds-ink-soft); }
+.diff-row__list li::before { content: "\2713"; position: absolute; left: 0; color: var(--ds-accent); font-weight: 700; }
+
+/* .replaces-wedge / .replaces-block — "replaces N tools" chip wedge (S-DEEPDIVE B3-row + chip) */
+.replaces { text-align: center; }
+.replaces__chips { display: flex; flex-wrap: wrap; gap: var(--ds-space-sm); justify-content: center; margin-top: var(--ds-space-lg); }
+.replaces-chip { display: inline-flex; align-items: center; gap: var(--ds-space-2xs); padding: var(--ds-space-2xs) var(--ds-space-md); border: 1px solid var(--ds-line); border-radius: var(--ds-r-pill); background: var(--ds-bg-surface-2); color: var(--ds-ink-soft); font-size: 14px; }
+.replaces-chip__strike { text-decoration: line-through; opacity: .7; }
+
+/* .inclusion-value — accent band stating the all-in value (S-INTRO/S-SERVICES E4+G1) */
+.inclusion-value { text-align: center; }
+.inclusion-value__pill { display: inline-flex; align-items: center; gap: var(--ds-space-2xs); padding: var(--ds-space-2xs) var(--ds-space-md); border-radius: var(--ds-r-pill); background: var(--ds-primary-soft); color: var(--ds-primary-deep); font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; margin-top: var(--ds-space-md); }
+
+/* .full-teardown — feature-by-feature table w/ sticky how-we-differ column (S-SHOWCASE-as-table G7) */
+.full-teardown__wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: var(--ds-space-lg); }
+.full-teardown__table { width: 100%; border-collapse: separate; border-spacing: 0; min-width: 640px; }
+.full-teardown__table th, .full-teardown__table td { padding: var(--ds-space-sm) var(--ds-space-md); text-align: left; border-bottom: 1px solid var(--ds-line); vertical-align: top; }
+.full-teardown__table thead th { font-family: var(--ds-font-display); color: var(--ds-primary-deep); }
+.full-teardown__table thead th:last-child, .full-teardown__table td:last-child { position: sticky; right: 0; background: var(--ds-primary-soft); color: var(--ds-primary-deep); }
+
+/* ---- Capability ---- */
+
+/* .capability-switcher — tabbed (native radio, no heavy JS) (S-SERVICES/S-DEEPDIVE tabbed; G4+I5 + tab Comp) */
+.capability-switcher-section .capability-switcher { margin-top: var(--ds-space-lg); }
+.capability-switcher { max-width: 980px; margin-inline: auto; }
+.cap-switch__radio { position: absolute; opacity: 0; width: 0; height: 0; pointer-events: none; }
+.cap-switch__tabs { display: flex; flex-wrap: wrap; gap: var(--ds-space-sm); justify-content: center; margin-bottom: var(--ds-space-lg); }
+.cap-switch__tab { display: inline-flex; align-items: center; gap: var(--ds-space-2xs); padding: var(--ds-space-sm) var(--ds-space-lg); min-height: 44px; border: 1px solid var(--ds-line); border-radius: var(--ds-r-pill); background: var(--ds-bg-surface-2); color: var(--ds-ink-soft); font-family: var(--ds-font-body); font-weight: 600; cursor: pointer; transition: color var(--ds-dur) var(--ds-ease), border-color var(--ds-dur) var(--ds-ease), background var(--ds-dur) var(--ds-ease); }
+.cap-switch__tab:hover { border-color: var(--ds-primary); color: var(--ds-primary-deep); }
+.cap-switch__panel { display: none; }
+.cap-switch__panels > .cap-switch__panel { border: 1px solid var(--ds-line); border-radius: var(--ds-r-lg); padding: var(--ds-space-xl); background: var(--ds-bg-surface-2); }
+/* radio-driven reveal + active-tab look (sibling combinators; up to 4 panels) */
+.cap-switch__radio:nth-of-type(1):checked ~ .cap-switch__panels > .cap-switch__panel:nth-of-type(1),
+.cap-switch__radio:nth-of-type(2):checked ~ .cap-switch__panels > .cap-switch__panel:nth-of-type(2),
+.cap-switch__radio:nth-of-type(3):checked ~ .cap-switch__panels > .cap-switch__panel:nth-of-type(3),
+.cap-switch__radio:nth-of-type(4):checked ~ .cap-switch__panels > .cap-switch__panel:nth-of-type(4) { display: block; }
+.cap-switch__radio:nth-of-type(1):checked ~ .cap-switch__tabs .cap-switch__tab:nth-of-type(1),
+.cap-switch__radio:nth-of-type(2):checked ~ .cap-switch__tabs .cap-switch__tab:nth-of-type(2),
+.cap-switch__radio:nth-of-type(3):checked ~ .cap-switch__tabs .cap-switch__tab:nth-of-type(3),
+.cap-switch__radio:nth-of-type(4):checked ~ .cap-switch__tabs .cap-switch__tab:nth-of-type(4) { background: var(--ds-primary); color: var(--ds-ink-on-dark); border-color: var(--ds-primary); }
+.cap-switch__radio:nth-of-type(1):focus-visible ~ .cap-switch__tabs .cap-switch__tab:nth-of-type(1),
+.cap-switch__radio:nth-of-type(2):focus-visible ~ .cap-switch__tabs .cap-switch__tab:nth-of-type(2),
+.cap-switch__radio:nth-of-type(3):focus-visible ~ .cap-switch__tabs .cap-switch__tab:nth-of-type(3),
+.cap-switch__radio:nth-of-type(4):focus-visible ~ .cap-switch__tabs .cap-switch__tab:nth-of-type(4) { outline: 3px solid var(--ds-accent); outline-offset: 2px; }
+
+/* .capability-showcase — alternating image+copy showcase rows (S-DEEPDIVE/S-SHOWCASE B3-rows + H1) */
+.cap-showcase__row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--ds-space-2xl); align-items: center; margin-block: var(--ds-space-2xl); }
+.cap-showcase__row:nth-child(even) .cap-showcase__media { order: 2; }
+.cap-showcase__media img { width: 100%; border-radius: var(--ds-r-lg); object-fit: cover; box-shadow: var(--ds-shadow-card); }
+.cap-showcase__body h3 { margin-bottom: var(--ds-space-sm); }
+
+/* .capability-breakdown — capability cards grid (S-SERVICES G4+I5) */
+.cap-breakdown__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--ds-space-lg); margin-top: var(--ds-space-lg); }
+.capability-card { padding: var(--ds-space-lg); display: flex; flex-direction: column; }
+.capability-card__icon { width: 54px; height: 54px; border-radius: var(--ds-r-md); background: var(--ds-primary-soft); display: grid; place-items: center; margin-bottom: var(--ds-space-md); }
+/* icon glyph (medium-agnostic): an inline <svg> or <img> sized to the icon box so
+   it never inherits an intrinsic width and overflows the 54px holder. */
+.capability-card__icon svg { width: 32px; height: 32px; }
+.capability-card__icon img { width: 32px; height: 32px; object-fit: contain; }
+.capability-card h3 { margin-bottom: var(--ds-space-xs); }
+.capability-card p { color: var(--ds-ink-soft); }
+
+/* ---- Proof ---- */
+
+/* .data-proof — count-up stat band (extends .stat-strip / S-STATS C3/I3) */
+.data-proof__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--ds-space-lg); margin-top: var(--ds-space-lg); }
+.data-proof .stat { padding: var(--ds-space-lg); }
+.data-proof__sub { font-size: 13px; color: var(--ds-ink-soft); margin-top: var(--ds-space-2xs); }
+
+/* .stat--badge — an accolade rendered as a STATIC badge, NOT a count-up.
+   A count-up target must be a magnitude; a year/award-date must never ease from 0
+   (enforced by verify-countup-sanity.mjs). The badge has no data-count, so site.js
+   never animates it. Token-pure: every color/radius/font is var(--ds-*); only the
+   type-scale clamp + line-height are structural literals. */
+.stat--badge { justify-content: flex-start; }
+.stat__badge {
+  display: inline-flex; align-items: center; align-self: flex-start;
+  font-family: var(--ds-font-display); font-size: clamp(18px, 2.2vw, 26px); line-height: 1.15;
+  color: var(--ds-primary-deep);
+  border: 1px solid var(--ds-line); border-radius: var(--ds-r-pill);
+  padding: var(--ds-space-2xs) var(--ds-space-md);
+}
+.section--dark .stat__badge { color: var(--ds-accent); border-color: color-mix(in srgb, var(--ds-accent) 45%, transparent); }
+
+/* .customer-proof — testimonial cards, equal-height, rating + attribution (S-TESTIMONIAL I4 + C1) */
+.customer-proof__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--ds-space-lg); margin-top: var(--ds-space-lg); align-items: stretch; }
+.testimonial-card { padding: var(--ds-space-lg); display: flex; flex-direction: column; }
+.testimonial-card__stars { color: var(--ds-accent); letter-spacing: 2px; margin-bottom: var(--ds-space-sm); }
+.testimonial-card blockquote { margin: 0 0 var(--ds-space-md); font-family: var(--ds-font-display); color: var(--ds-ink); line-height: 1.5; }
+.testimonial-card__who { display: flex; align-items: center; gap: var(--ds-space-sm); margin-top: auto; padding-top: var(--ds-space-md); border-top: 1px solid var(--ds-line); }
+.testimonial-card__avatar { width: 44px; height: 44px; border-radius: var(--ds-r-pill); object-fit: cover; }
+.testimonial-card__name { font-weight: 700; color: var(--ds-ink); }
+.testimonial-card__role { font-size: 13px; color: var(--ds-ink-soft); }
+
+/* .real-proof — stacked proof ladder: stats -> logos -> pull-quote (S-STATS->S-TEAM->S-TESTIMONIAL) */
+.real-proof__quote { max-width: 30ch; margin: var(--ds-space-2xl) auto 0; text-align: center; }
+.real-proof__quote blockquote { margin: 0; font-family: var(--ds-font-display); font-size: clamp(24px, 3.4vw, 40px); line-height: 1.2; color: var(--ds-primary-deep); }
+.real-proof__cite { display: block; margin-top: var(--ds-space-md); font-size: 14px; color: var(--ds-ink-soft); }
+
+/* ---- Comparison ---- */
+
+/* .comparison-matrix — plan x feature grid; reflows to cards <720px (S-PRICING/S-SHOWCASE-as-table G6/G7 + Comp6) */
+.comparison-matrix__wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: var(--ds-space-lg); }
+.comparison-matrix__table { width: 100%; border-collapse: separate; border-spacing: 0; min-width: 640px; }
+.comparison-matrix__table th, .comparison-matrix__table td { padding: var(--ds-space-sm) var(--ds-space-md); text-align: center; border-bottom: 1px solid var(--ds-line); vertical-align: middle; }
+.comparison-matrix__table thead th { font-family: var(--ds-font-display); color: var(--ds-primary-deep); }
+.comparison-matrix__table .rowhead { text-align: left; color: var(--ds-ink); font-weight: 600; }
+.comparison-matrix__table .is-feat { background: var(--ds-primary-soft); }
+.comparison-matrix__yes { color: var(--ds-primary); font-weight: 700; }
+.comparison-matrix__no { color: var(--ds-ink-soft); }
+
+/* .comparison-table / .at-a-glance-table — generic 2-col compare table (S-SHOWCASE-as-table G7 + Comp6) */
+.at-glance__wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: var(--ds-space-lg); }
+.at-glance__table { width: 100%; border-collapse: separate; border-spacing: 0; min-width: 560px; }
+.at-glance__table th, .at-glance__table td { padding: var(--ds-space-sm) var(--ds-space-md); text-align: left; border-bottom: 1px solid var(--ds-line); }
+.at-glance__table thead th { font-family: var(--ds-font-display); color: var(--ds-primary-deep); }
+.at-glance__table td.is-ours { color: var(--ds-primary-deep); font-weight: 600; }
+
+/* ---- Pricing ---- */
+
+/* .plan-cards — multi-tier, middle featured (extends .price-card / S-PRICING G6) */
+.plan-cards__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--ds-space-lg); align-items: stretch; margin-top: var(--ds-space-lg); }
+.plan-cards .price-card { display: flex; flex-direction: column; padding: var(--ds-space-xl); text-align: left; max-width: none; margin-inline: 0; }
+/* CONTRAST: --ds-ink-soft on a tinted/featured plan card (--ds-primary-soft blend)
+   measured 4.17:1 — under the 4.5 normal-text bar. A plan name is a primary label
+   (like .testimonial-card__name, which uses --ds-ink), not muted secondary copy, so
+   give it full ink (13.48:1 on white, clears all card tints). Token-pure. */
+.plan-card__name { font-family: var(--ds-font-body); font-weight: 700; text-transform: uppercase; letter-spacing: .1em; font-size: 13px; color: var(--ds-ink); }
+.plan-card__blurb { color: var(--ds-ink-soft); margin-block: var(--ds-space-sm); }
+/* RIBBON CLEARANCE: the .plan-card__ribbon is absolute, top:0, translateY(-50%)
+   so it straddles the card's top edge and dips into the card. With only the
+   standard card padding-top the first content (.plan-card__name) renders UNDER the
+   ribbon — dark name on the --ds-primary ribbon scored 2.35:1. Reserve extra top
+   padding on the featured card so the ribbon never overlaps content (matches the
+   well-cleared .pricing-tier featured path). Token-pure (--ds-space-*). */
+.plan-card--featured { position: relative; border-color: var(--ds-primary); box-shadow: var(--ds-shadow-lift); padding-top: calc(var(--ds-space-xl) + var(--ds-space-md)); }
+.plan-card__ribbon { position: absolute; top: 0; left: 50%; transform: translate(-50%, -50%); background: var(--ds-primary); color: var(--ds-ink-on-dark); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; padding: var(--ds-space-2xs) var(--ds-space-md); border-radius: var(--ds-r-pill); }
+.plan-card .price-card__features { margin-top: auto; }
+
+/* .inclusion-band — full-width "everything included" checklist band (S-PRICING composed, G6) */
+.inclusion-band__grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--ds-space-sm) var(--ds-space-xl); margin-top: var(--ds-space-lg); list-style: none; padding: 0; }
+.inclusion-band__grid li { display: flex; gap: var(--ds-space-sm); align-items: flex-start; color: var(--ds-ink-soft); }
+.inclusion-band__grid li::before { content: "\2713"; flex: 0 0 auto; color: var(--ds-primary); font-weight: 700; }
+
+/* .add-ons — optional extras cards (S-PRICING composed, G6) */
+.add-ons__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--ds-space-lg); margin-top: var(--ds-space-lg); }
+.add-on-card { padding: var(--ds-space-lg); }
+.add-on-card__price { font-family: var(--ds-font-display); color: var(--ds-primary-deep); margin-block: var(--ds-space-sm); }
+
+/* .bundle — bundled-offer feature panel (S-PRICING composed, G6) */
+.bundle__panel { max-width: 720px; margin: var(--ds-space-lg) auto 0; padding: var(--ds-space-xl); }
+.bundle__price { font-family: var(--ds-font-display); font-size: clamp(40px, 6vw, 64px); color: var(--ds-primary-deep); }
+.bundle__was { color: var(--ds-ink-soft); text-decoration: line-through; margin-left: var(--ds-space-sm); }
+.bundle__list { list-style: none; padding: 0; margin: var(--ds-space-md) 0 var(--ds-space-lg); display: grid; grid-template-columns: 1fr 1fr; gap: var(--ds-space-2xs) var(--ds-space-lg); }
+.bundle__list li { padding-block: var(--ds-space-2xs); border-bottom: 1px solid var(--ds-line); }
+
+/* .pricing-toggle — monthly/annual switch (native checkbox, no heavy JS) (S-PRICING composed, G6) */
+.pricing-toggle-section { text-align: center; }
+.pricing-toggle { display: flex; align-items: center; justify-content: center; gap: var(--ds-space-md); flex-wrap: wrap; margin-block: var(--ds-space-lg); }
+.pricing-toggle__lbl { font-weight: 600; color: var(--ds-ink-soft); }
+/* CONTRAST: a pricing toggle placed inside a .section--dark band rendered its
+   --ds-ink-soft labels dark-on-dark (~1.83:1). Re-light on a dark/accent
+   ancestor (matches the .eyebrow / .lede / .trust-note relight pattern). */
+.section--dark .pricing-toggle__lbl { color: var(--ds-ink-on-dark); }
+.section--accent .pricing-toggle__lbl { color: var(--ds-primary-deep); }
+.pricing-toggle__switch { position: relative; display: inline-flex; align-items: center; width: 56px; height: 30px; flex: 0 0 auto; cursor: pointer; }
+.pricing-toggle__switch input { position: absolute; opacity: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; }
+.pricing-toggle__track { width: 56px; height: 30px; border-radius: var(--ds-r-pill); background: var(--ds-line); transition: background var(--ds-dur) var(--ds-ease); }
+.pricing-toggle__track::after { content: ""; position: absolute; left: 3px; top: 3px; width: 24px; height: 24px; border-radius: var(--ds-r-pill); background: var(--ds-bg-surface); transition: transform var(--ds-dur) var(--ds-ease); }
+.pricing-toggle__switch input:checked ~ .pricing-toggle__track { background: var(--ds-primary); }
+.pricing-toggle__switch input:checked ~ .pricing-toggle__track::after { transform: translateX(26px); }
+.pricing-toggle__switch input:focus-visible ~ .pricing-toggle__track { outline: 3px solid var(--ds-accent); outline-offset: 2px; }
+.pricing-toggle__save { display: inline-flex; align-items: center; padding: var(--ds-space-2xs) var(--ds-space-sm); border-radius: var(--ds-r-pill); background: var(--ds-primary-soft); color: var(--ds-primary-deep); font-size: 13px; font-weight: 600; }
+
+/* ---- Persona / routing ---- */
+
+/* .persona-pillars — 3-up audience routing pillars (extends .service-pillars / S-SERVICES G4+I5) */
+.persona-pillars__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--ds-space-lg); margin-top: var(--ds-space-lg); }
+.persona-card { padding: var(--ds-space-lg); display: flex; flex-direction: column; }
+.persona-card h3 { margin-bottom: var(--ds-space-xs); }
+.persona-card p { color: var(--ds-ink-soft); flex: 1; }
+.persona-card .btn { margin-top: var(--ds-space-md); align-self: flex-start; }
+
+/* .ecosystem-block — connected-products / integrations grid (S-SHOWCASE) */
+.ecosystem-block__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--ds-space-md); margin-top: var(--ds-space-lg); }
+.ecosystem-node { padding: var(--ds-space-md); text-align: center; }
+.ecosystem-node img { width: 48px; height: 48px; margin: 0 auto var(--ds-space-sm); object-fit: contain; }
+
+/* .cross-link-rail / .routing-band — chip rail of cross-links (S-CTA mini / nav; I1 chips + cta-row) */
+.cross-link-rail__rail { display: flex; flex-wrap: wrap; gap: var(--ds-space-sm); margin-top: var(--ds-space-md); }
+.cross-link { display: inline-flex; align-items: center; gap: var(--ds-space-2xs); padding: var(--ds-space-xs) var(--ds-space-md); border: 1px solid var(--ds-line); border-radius: var(--ds-r-pill); text-decoration: none; color: var(--ds-ink); font-size: 14px; transition: background var(--ds-dur) var(--ds-ease), border-color var(--ds-dur) var(--ds-ease); }
+.cross-link:hover { border-color: var(--ds-primary); background: var(--ds-primary-soft); color: var(--ds-primary-deep); }
+.cross-link:focus-visible { outline: 3px solid var(--ds-accent); outline-offset: 2px; }
+
+/* ---- Legal / trust ---- */
+
+/* .controls-list — security/compliance controls grid (doc section; 09-accessibility) */
+.controls-list__grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--ds-space-lg); margin-top: var(--ds-space-lg); }
+.control-item { padding: var(--ds-space-lg); }
+.control-item h3 { margin-bottom: var(--ds-space-xs); }
+.control-item p { color: var(--ds-ink-soft); }
+
+/* .compliance-roadmap — status-tagged compliance timeline (doc section; 13-utility-pages) */
+.compliance-roadmap__list { list-style: none; padding: 0; margin: var(--ds-space-lg) 0 0; display: flex; flex-direction: column; gap: var(--ds-space-md); }
+.compliance-item { display: flex; align-items: baseline; gap: var(--ds-space-md); padding-bottom: var(--ds-space-md); border-bottom: 1px solid var(--ds-line); }
+.compliance-item__status { flex: 0 0 auto; padding: var(--ds-space-2xs) var(--ds-space-sm); border-radius: var(--ds-r-pill); background: var(--ds-primary-soft); color: var(--ds-primary-deep); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
+
+/* .sub-processors — sub-processor disclosure table (doc section; 13-utility-pages) */
+.sub-processors__wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: var(--ds-space-lg); }
+.sub-processors__table { width: 100%; border-collapse: separate; border-spacing: 0; min-width: 560px; }
+.sub-processors__table th, .sub-processors__table td { padding: var(--ds-space-sm) var(--ds-space-md); text-align: left; border-bottom: 1px solid var(--ds-line); }
+.sub-processors__table thead th { font-family: var(--ds-font-display); color: var(--ds-primary-deep); }
+
+/* .native-accessibility-feature — a11y feature callout cards (doc section; 09-accessibility) */
+.native-a11y__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--ds-space-lg); margin-top: var(--ds-space-lg); }
+.a11y-feature { padding: var(--ds-space-lg); }
+.a11y-feature h3 { margin-bottom: var(--ds-space-xs); }
+.a11y-feature p { color: var(--ds-ink-soft); }
+
+/* .anchored-toc — sticky in-page table of contents + body (doc section; 13-utility-pages) */
+.anchored-toc__layout { display: grid; grid-template-columns: 240px 1fr; gap: var(--ds-space-2xl); align-items: start; }
+.anchored-toc__nav { position: sticky; top: var(--ds-space-2xl); display: flex; flex-direction: column; gap: var(--ds-space-2xs); }
+.anchored-toc__nav a { text-decoration: none; color: var(--ds-ink-soft); font-size: 14px; padding-block: var(--ds-space-2xs); border-left: 2px solid var(--ds-line); padding-left: var(--ds-space-sm); transition: color var(--ds-dur) var(--ds-ease), border-color var(--ds-dur) var(--ds-ease); }
+.anchored-toc__nav a:hover { color: var(--ds-primary-deep); border-color: var(--ds-primary); }
+.anchored-toc__nav a:focus-visible { outline: 3px solid var(--ds-accent); outline-offset: 2px; }
+
+/* .trust-note — small reassurance note under a form/CTA (doc section / S-CONTACT) */
+.trust-note { display: flex; align-items: center; gap: var(--ds-space-sm); justify-content: center; color: var(--ds-ink-soft); font-size: 14px; margin-top: var(--ds-space-md); }
+.trust-note::before { content: ""; width: 8px; height: 8px; border-radius: var(--ds-r-pill); background: var(--ds-primary); flex: 0 0 auto; }
+/* CONTRAST: a .trust-note sitting on a .section--dark band (e.g. the contact CTA
+   pitch) keeps its light-band --ds-ink-soft (#5A6B72-class), which is ~2.43:1 on
+   the dark --ds-primary-deep bg = AA fail. Re-light to --ds-ink-on-dark on dark.
+   Token-pure; placed after the base so it wins the cascade. */
+.section--dark .trust-note { color: var(--ds-ink-on-dark); }
+/* CONTRAST: a .trust-note on a .section--accent (light green) band rendered
+   --ds-ink-soft at 3.02:1; relight to the accent band's --ds-primary-deep. */
+.section--accent .trust-note { color: var(--ds-primary-deep); }
+
+/* ---- MV dark-band re-light: a .stat block + pull-quote/cite that sit DIRECTLY on a section--dark
+   band (data-proof, real-proof) inherit light-band colors (.stat__num = --ds-primary-deep == the
+   dark bg -> invisible; .stat__label/__sub/__cite = --ds-ink-soft -> low-contrast). Re-light them.
+   Scoped to `.section--dark <child>` so it catches BOTH data-proof + real-proof but NOT a .stat
+   inside a light panel. NOTE: .bundle is intentionally absent — its content sits on a LIGHT .card
+   panel (.bundle__panel), so its ORIGINAL dark colors are correct (re-lighting them = invisible).
+   Placed after all MV definitions so it wins the cascade. ---- */
+.section--dark .stat__num { color: var(--ds-accent); }
+.section--dark .stat__label { color: var(--ds-ink-on-dark); font-weight: 600; }
+/* CONTRAST: these relights were UNQUALIFIED — they forced --ds-ink-on-dark
+   (near-white) onto .data-proof__sub / .real-proof__cite / real-proof quote
+   EVERYWHERE, including when the band (or a nested .card) is LIGHT, rendering
+   near-white-on-white (~1.06:1). The base rules (.data-proof__sub line 419,
+   .real-proof__cite line 434) already set the correct light-band --ds-ink-soft;
+   the relight must apply ONLY on a dark/accent ancestor. Scope it. On a
+   .section--accent (light green) the on-dark near-white fails (~2:1), so the
+   accent foreground is --ds-primary-deep (5.54:1 on accent). Token-pure. */
+.section--dark .real-proof__quote blockquote { color: var(--ds-ink-on-dark); }
+.section--accent .real-proof__quote blockquote { color: var(--ds-primary-deep); }
+.section--dark .data-proof__sub, .section--dark .real-proof__cite { color: var(--ds-ink-on-dark); opacity: .78; }
+.section--accent .data-proof__sub, .section--accent .real-proof__cite { color: var(--ds-primary-deep); opacity: .82; }
+
+/* ---- MV responsive: reflow grids + tables to stacked cards at the canonical 860px breakpoint ---- */
+@media (max-width: 860px) {
+  .cap-breakdown__grid, .data-proof__grid, .customer-proof__grid, .add-ons__grid,
+  .persona-pillars__grid, .controls-list__grid, .native-a11y__grid, .plan-cards__grid,
+  .inclusion-band__grid, .bundle__list, .ecosystem-block__grid { grid-template-columns: 1fr; }
+  .diff-row, .diff-row:nth-child(even), .cap-showcase__row, .cap-showcase__row:nth-child(even) { grid-template-columns: 1fr; gap: var(--ds-space-lg); }
+  .diff-row:nth-child(even) .diff-row__media, .cap-showcase__row:nth-child(even) .cap-showcase__media { order: 0; }
+  .anchored-toc__layout { grid-template-columns: 1fr; }
+  .anchored-toc__nav { position: static; }
+
+  /* tables reflow to one stacked card per row; data-label echoes the column header */
+  .comparison-matrix__table, .at-glance__table, .full-teardown__table, .sub-processors__table { min-width: 0; }
+  .comparison-matrix__wrap, .at-glance__wrap, .full-teardown__wrap, .sub-processors__wrap { overflow: visible; }
+  .comparison-matrix__table thead, .at-glance__table thead, .full-teardown__table thead, .sub-processors__table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .comparison-matrix__table tr, .at-glance__table tr, .full-teardown__table tr, .sub-processors__table tr { display: block; border: 1px solid var(--ds-line); border-radius: var(--ds-r-md); margin-bottom: var(--ds-space-sm); padding: var(--ds-space-sm) var(--ds-space-md); background: var(--ds-bg-surface-2); }
+  .comparison-matrix__table td, .at-glance__table td, .full-teardown__table td, .sub-processors__table td { display: flex; justify-content: space-between; gap: var(--ds-space-md); text-align: right; border-bottom: none; padding: var(--ds-space-2xs) 0; }
+  .comparison-matrix__table td::before, .at-glance__table td::before, .full-teardown__table td::before, .sub-processors__table td::before { content: attr(data-label); font-weight: 700; color: var(--ds-ink-soft); text-align: left; }
+  .full-teardown__table thead th:last-child, .full-teardown__table td:last-child { position: static; background: transparent; }
+  .comparison-matrix__table .rowhead { display: block; text-align: left; border-bottom: 1px solid var(--ds-line); margin-bottom: var(--ds-space-2xs); padding-bottom: var(--ds-space-2xs); }
+  .comparison-matrix__table .rowhead::before, .at-glance__table .rowhead::before, .full-teardown__table .rowhead::before, .sub-processors__table .rowhead::before { content: none; }
+}
+
+/* MV motion gate — neutralize the transitions this block introduces */
+@media (prefers-reduced-motion: reduce) {
+  .cap-switch__tab, .cross-link, .anchored-toc__nav a,
+  .pricing-toggle__track, .pricing-toggle__track::after { transition: none; }
+}
+
+/* =====================================================================
+   GLOBALS OVERLAY (modern-wow)  —  the locked design LANGUAGE.
+   Source: .claude/design-system/libraries/_MODERN-WOW-SPEC.md.
+   Locked ONCE per brand at the WEB CARD (values in tokens.css); every
+   surface OVERLAYS these wow-* classes so depth/glass/motion/texture/light
+   are INHERITED, never re-invented per page. Token-pure (var(--ds-*) for all
+   color/shadow/radius); all motion gated behind prefers-reduced-motion.
+   ===================================================================== */
+
+/* §1 Depth — glass chrome, hairline + inset highlight, hover-lift bloom */
+.wow-glass { background: var(--ds-glass-bg); -webkit-backdrop-filter: var(--ds-glass-blur); backdrop-filter: var(--ds-glass-blur); border-bottom: 1px solid var(--ds-glass-border); }
+.wow-hairline { border: 1px solid var(--ds-hairline); box-shadow: var(--ds-shadow-card), var(--ds-inset-hi); }
+.wow-lift { transition: transform var(--ds-dur) var(--ds-ease), box-shadow var(--ds-dur) var(--ds-ease); }
+.wow-lift:hover { transform: translateY(-6px); box-shadow: var(--ds-shadow-lift); }
+
+/* §2 Motion — scroll-reveal + sibling stagger (JS toggles .in-view) */
+.wow-reveal { opacity: 0; transform: translateY(24px); transition: opacity var(--ds-dur-slow) var(--ds-ease-out), transform var(--ds-dur-slow) var(--ds-ease-out); }
+.wow-reveal.in-view { opacity: 1; transform: none; }
+.wow-stagger > * { opacity: 0; transform: translateY(20px); transition: opacity var(--ds-dur-slow) var(--ds-ease-out), transform var(--ds-dur-slow) var(--ds-ease-out); }
+.wow-stagger.in-view > * { opacity: 1; transform: none; }
+
+/* §2 Motion — image-zoom inside a clipped frame */
+.wow-zoom { overflow: hidden; border-radius: var(--ds-r-lg); }
+.wow-zoom img { transition: transform var(--ds-dur-slow) var(--ds-ease-out); }
+.wow-zoom:hover img { transform: scale(1.05); }
+/* inline-SVG media (medium-agnostic visuals) sized responsively inside the clipped
+   frame, parallel to the img rule above — so an inline <svg> visual fills + zooms
+   like a raster would. width:100% + height:auto lets the viewBox scale to the column. */
+.wow-zoom svg { display: block; width: 100%; height: auto; transition: transform var(--ds-dur-slow) var(--ds-ease-out); }
+.wow-zoom:hover svg { transform: scale(1.05); }
+
+/* §2 Motion — sticky-wrap moment (one per page) */
+.wow-sticky { position: sticky; top: var(--ds-space-2xl); }
+
+/* §3 Texture — grain overlay + radial bloom wash */
+.wow-grain { position: relative; }
+.wow-grain::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: var(--ds-grain); opacity: .5; mix-blend-mode: overlay; }
+.wow-bloom { position: relative; isolation: isolate; }
+.wow-bloom::before { content: ""; position: absolute; z-index: -1; inset: 0; pointer-events: none; background: var(--ds-glow-wash); }
+
+/* §5 Light — accent glow on the primary CTA / a hero moment */
+.wow-glow { box-shadow: var(--ds-glow); }
+
+/* §6 Layout — bento/offset grid + masked focal image */
+.wow-bento { display: grid; gap: var(--ds-space-lg); grid-template-columns: repeat(6, 1fr); }
+.wow-bento > * { grid-column: span 2; }
+.wow-mask { border-radius: var(--ds-r-xl); overflow: hidden; }
+/* content SVGs in a masked figure must be fluid (an SVG with an explicit width
+   attr keeps that intrinsic width and forces grid-column overflow at narrow widths
+   — same fluid pattern as .wow-zoom svg / .feature-row__media svg). */
+.wow-mask svg { display: block; width: 100%; height: auto; }
+
+/* §6 Layout — section shape-divider.
+   Applied to a SECTION host (e.g. <section class="section wow-divider wow-divider--top ...">).
+   The HOST must stay in normal flow. Making `.wow-divider` itself position:absolute
+   yanked EVERY divider-bearing section to top:0 and collapsed the whole page into an
+   overlapping stack — so the host is position:relative and the decorative divider is
+   drawn by a ::before/::after pinned to the section's top/bottom edge, keeping sections
+   in flow while still rendering a crisp divider line. An explicit child SVG holder
+   (.wow-divider > svg) still works for pages that inject one. */
+.wow-divider { position: relative; }
+.wow-divider--top::before,
+.wow-divider--bottom::after { content: ""; position: absolute; left: 0; width: 100%; height: 1px; background: linear-gradient(90deg, transparent, var(--ds-line) 18%, var(--ds-line) 82%, transparent); pointer-events: none; }
+.wow-divider--top::before { top: 0; }
+.wow-divider--bottom::after { bottom: 0; }
+.section--dark.wow-divider--top::before,
+.section--dark.wow-divider--bottom::after { background: linear-gradient(90deg, transparent, var(--ds-glass-border) 18%, var(--ds-glass-border) 82%, transparent); }
+/* explicit SVG divider holder (only when a page nests one inside the section) */
+.wow-divider > svg { display: block; position: absolute; left: 0; width: 100%; height: var(--ds-divider-h); pointer-events: none; }
+.wow-divider--top > svg { top: 0; }
+.wow-divider--bottom > svg { bottom: 0; }
+
+/* parallax hint (JS-driven; structural baseline only) */
+.wow-parallax { will-change: transform; }
+
+@media (prefers-reduced-motion: reduce) {
+  .wow-reveal, .wow-stagger > * { opacity: 1 !important; transform: none !important; }
+  .wow-lift, .wow-zoom img { transition: none !important; }
+  .wow-lift:hover { transform: none !important; }
+  .wow-zoom:hover img { transform: none !important; }
+  .wow-parallax { will-change: auto !important; }
+}
+
+/* =====================================================================
+   NON-RETAIL ARCHETYPE SET
+   Section blocks for the universal NON-food/retail page types:
+   pricing (.pricing-grid) · features/platform (.feature-row) ·
+   integrations + customers (.logo-wall) · security-trust (.cert-badge) ·
+   docs-index (.doc-list). Token-pure: every color/shadow/radius/font is
+   var(--ds-*); only structural literals (grid counts, dimensions,
+   type-scale, aspect, z-index, opacity) are inline, per this file's header
+   rule. Grids reflow to one column at the canonical 860px breakpoint;
+   hover/transition elements respect prefers-reduced-motion (gate at end).
+   ===================================================================== */
+
+/* ---- pricing tier matrix (.pricing-grid) — extends .price-card ---- */
+.pricing-grid__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--ds-space-lg); align-items: stretch; margin-top: var(--ds-space-lg); }
+.pricing-tier { display: flex; flex-direction: column; padding: var(--ds-space-xl); text-align: left; max-width: none; margin-inline: 0; }
+.pricing-tier .price-card__features { margin-top: auto; }
+.pricing-tier__period { font-family: var(--ds-font-body); font-size: 15px; font-weight: 500; color: var(--ds-ink-soft); margin-left: var(--ds-space-2xs); }
+.pricing-tier.plan-card--featured { position: relative; border-color: var(--ds-primary); box-shadow: var(--ds-shadow-lift); }
+
+/* ---- alternating feature rows (.feature-row) ---- */
+.feature-row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--ds-space-2xl); align-items: center; margin-block: var(--ds-space-2xl); }
+.feature-row:nth-child(even) .feature-row__media { order: 2; }
+.feature-row__media img { width: 100%; border-radius: var(--ds-r-lg); object-fit: cover; box-shadow: var(--ds-shadow-card); }
+/* inline-SVG media (medium-agnostic) fills the row's media column like a raster would */
+.feature-row__media svg { display: block; width: 100%; height: auto; border-radius: var(--ds-r-lg); box-shadow: var(--ds-shadow-card); }
+/* CONTRAST: --ds-accent (bright green) at 12px on a light/warm band measured
+   1.91:1. Small accent kicker on LIGHT uses --ds-accent-ink (5.59 on warm);
+   on a dark ancestor the bright accent stays. Token-pure. */
+.feature-row__kicker { display: inline-block; font-family: var(--ds-font-body); font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .1em; color: var(--ds-accent-ink); margin-bottom: var(--ds-space-2xs); }
+.section--dark .feature-row__kicker { color: var(--ds-accent); }
+.feature-row__body h3 { margin-bottom: var(--ds-space-sm); }
+.feature-row__body p { color: var(--ds-ink-soft); }
+.feature-row__list { list-style: none; padding: 0; margin: var(--ds-space-md) 0 0; display: flex; flex-direction: column; gap: var(--ds-space-2xs); }
+.feature-row__list li { padding-left: var(--ds-space-md); position: relative; color: var(--ds-ink-soft); }
+.feature-row__list li::before { content: "\2713"; position: absolute; left: 0; color: var(--ds-accent); font-weight: 700; }
+
+/* ---- logo / category wall (.logo-wall) ---- */
+/* minmax(0, 1fr) lets each track shrink below its content's min-content size
+   (belt-and-braces with .logo-cell min-width:0 below) so an un-capped inline
+   <svg> logo never forces the column wider than its share. */
+.logo-wall__grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: var(--ds-space-md); margin-top: var(--ds-space-lg); }
+/* OVERFLOW: a grid item's default min-width:auto is its content's min-content
+   size. With an inline <svg width=120 height=120> logo, the cell's aspect-ratio
+   (3/2) made the cell width follow the un-capped SVG height (~231px), so the
+   cell refused to shrink below its content and overflowed its narrow column at
+   375 (scrollWidth 502). min-width:0 lets the cell shrink to its track; the
+   SVG content is capped exactly like an <img> logo (max-width/height, auto).
+   overflow:clip (not hidden) caps content without creating a scroll container. */
+.logo-cell { min-width: 0; display: grid; place-items: center; aspect-ratio: 3 / 2; padding: var(--ds-space-md); background: var(--ds-bg-surface-2); border: 1px solid var(--ds-line); border-radius: var(--ds-r-md); overflow: clip; }
+.logo-cell img, .logo-cell svg { max-width: 100%; max-height: 56px; width: auto; height: auto; object-fit: contain; }
+/* OVERFLOW (TEXT CHILD): a cell that carries a flow TEXT child (e.g. a long
+   .role caption beside the mark, not just an <img>/<svg>) inherits that child's
+   min-content (longest word) as the cell's min-content, so a long caption forces
+   the cell PAST its 1fr track (cell rendered 202px in a 155px track → x-overflow
+   at 375). Cap any direct flow child to the cell width, allow long words to break,
+   and remove the aspect-ratio floor when a caption is present so the cell sizes to
+   its (now-wrapping) content height instead of a fixed 3/2 box. Token-pure:
+   only structural keywords/100%, no brand values. */
+.logo-cell > :not(img):not(svg) { max-width: 100%; min-width: 0; overflow-wrap: anywhere; text-align: center; }
+.logo-cell:has(> :not(img):not(svg):not(:empty)) { aspect-ratio: auto; }
+
+/* ---- cert / compliance badges (.cert-badge) — extends .card ---- */
+.cert-badges__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--ds-space-lg); margin-top: var(--ds-space-lg); }
+.cert-badge { padding: var(--ds-space-lg); text-align: center; display: flex; flex-direction: column; align-items: center; }
+.cert-badge__mark { width: 64px; height: 64px; border-radius: var(--ds-r-md); background: var(--ds-primary-soft); display: grid; place-items: center; margin-bottom: var(--ds-space-md); }
+.cert-badge__mark img { width: 36px; height: 36px; object-fit: contain; }
+.cert-badge h3 { margin-bottom: var(--ds-space-xs); }
+.cert-badge p { color: var(--ds-ink-soft); font-size: 14px; }
+
+/* ---- docs / resource list (.doc-list) ---- */
+.doc-list { display: flex; flex-direction: column; gap: var(--ds-space-sm); margin-top: var(--ds-space-lg); }
+.doc-list__item { display: flex; align-items: center; gap: var(--ds-space-md); padding: var(--ds-space-md) var(--ds-space-lg); background: var(--ds-bg-surface-2); border: 1px solid var(--ds-line); border-radius: var(--ds-r-md); text-decoration: none; color: var(--ds-ink); transition: border-color var(--ds-dur) var(--ds-ease), background var(--ds-dur) var(--ds-ease); }
+.doc-list__item:hover { border-color: var(--ds-primary); background: var(--ds-primary-soft); }
+.doc-list__item:focus-visible { outline: 3px solid var(--ds-accent); outline-offset: 2px; }
+.doc-list__icon { flex: 0 0 auto; width: 44px; height: 44px; border-radius: var(--ds-r-pill); background: var(--ds-primary-soft); display: grid; place-items: center; }
+.doc-list__icon img { width: 22px; height: 22px; object-fit: contain; }
+.doc-list__text { display: flex; flex-direction: column; gap: 2px; flex: 1; }
+.doc-list__title { font-family: var(--ds-font-display); font-size: 18px; color: var(--ds-primary-deep); }
+.doc-list__dek { font-size: 14px; color: var(--ds-ink-soft); }
+.doc-list__meta { flex: 0 0 auto; font-size: 13px; color: var(--ds-ink-soft); }
+.doc-index__group + .doc-index__group { margin-top: var(--ds-space-2xl); }
+.doc-index__group-title { font-family: var(--ds-font-display); font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--ds-ink-soft); padding-bottom: var(--ds-space-xs); border-bottom: 1px solid var(--ds-line); }
+
+/* ---- customers: case-study cards (.case-study) — extends .card; logo proof above via .logo-wall ---- */
+.case-study-grid__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--ds-space-lg); align-items: stretch; margin-top: var(--ds-space-lg); }
+.case-study { display: flex; flex-direction: column; padding: var(--ds-space-xl); text-align: left; }
+.case-study__logo { height: 32px; width: auto; margin-bottom: var(--ds-space-md); object-fit: contain; object-position: left; }
+.case-study__metric { margin-bottom: var(--ds-space-md); }
+.case-study__metric-num { display: block; font-family: var(--ds-font-display); font-size: clamp(32px, 4vw, 48px); line-height: 1; color: var(--ds-primary); }
+.case-study__metric-label { display: block; font-size: 14px; color: var(--ds-ink-soft); margin-top: var(--ds-space-2xs); }
+.case-study__quote { margin: 0 0 var(--ds-space-md); font-family: var(--ds-font-display); color: var(--ds-ink); line-height: 1.5; }
+.case-study__who { display: flex; flex-direction: column; gap: 2px; margin-top: auto; padding-top: var(--ds-space-md); border-top: 1px solid var(--ds-line); }
+.case-study__name { font-weight: 700; color: var(--ds-ink); }
+.case-study__org { font-size: 13px; color: var(--ds-ink-soft); }
+.case-study__link { margin-top: var(--ds-space-md); align-self: flex-start; text-decoration: none; color: var(--ds-primary); font-weight: 600; font-size: 14px; border-bottom: 1px solid transparent; transition: border-color var(--ds-dur) var(--ds-ease); }
+.case-study__link:hover { border-bottom-color: var(--ds-primary); }
+.case-study__link:focus-visible { outline: 3px solid var(--ds-accent); outline-offset: 2px; }
+
+/* ---- non-retail responsive: reflow grids at the canonical 860px breakpoint ---- */
+@media (max-width: 1024px) {
+  .logo-wall__grid { grid-template-columns: repeat(3, 1fr); }
+  .cert-badges__grid { grid-template-columns: repeat(2, 1fr); }
+  .case-study-grid__grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 860px) {
+  .pricing-grid__grid, .cert-badges__grid, .case-study-grid__grid { grid-template-columns: 1fr; }
+  .feature-row, .feature-row:nth-child(even) { grid-template-columns: 1fr; gap: var(--ds-space-lg); }
+  .feature-row:nth-child(even) .feature-row__media { order: 0; }
+  .logo-wall__grid { grid-template-columns: repeat(2, 1fr); }
+  .doc-list__item { flex-wrap: wrap; }
+  .doc-list__meta { width: 100%; }
+}
+
+/* non-retail motion gate — neutralize the transitions this block introduces */
+@media (prefers-reduced-motion: reduce) {
+  .doc-list__item, .case-study__link { transition: none; }
+}
+
+/* =====================================================================
+   VISUAL POLISH OVERHAUL (shared defaults — every build inherits these)
+   Mechanical fixes for the litter the owner found at readable resolution.
+   Placed LAST so each rule wins the cascade for its class (intentional).
+   Token-pure: every color/shadow/radius/font value is var(--ds-*); the
+   only literals are STRUCTURAL (display/flex/grid keywords, dims in
+   px/%/auto/ch, line-height, type-scale clamp sizes, z-index, opacity) —
+   the same literal grammar this file's header already permits. No hex/rgb/
+   hsl, no font-family names, no box-shadow values, no px border-radius.
+   Lettered to the brief: B equal-height, C type scale, D rhythm,
+   E scroll-padding, G hero scrim, H headline wrap.
+   ===================================================================== */
+
+/* ---- (E) SCROLL-PADDING: keep in-page anchors + section tops clear of the
+   sticky .site-header. Header height = padding-block var(--ds-space-md)*2 +
+   a ~36px brand-mark line; the literal below comfortably clears it plus a
+   small gap. scroll-padding-top is a structural length (allowed literal). ---- */
+html { scroll-padding-top: 88px; }
+
+/* ---- (D) SECTION RHYTHM: a band must START near its eyebrow, not after a
+   tall blank strip. The band's own padding-block (var(--ds-section-py)) is the
+   rhythm; the leading gap came from the FIRST flow child's own top margin
+   stacking ON TOP of that padding. Zero the first-child top margin inside the
+   container so the eyebrow/heading sits at the padding edge. Symmetric padding
+   is preserved (consistent vertical rhythm); only the redundant leading
+   margin is removed. ---- */
+.section > .container > :first-child,
+.section > .container > .wow-reveal:first-child { margin-top: 0; }
+
+/* ---- (B) CARD EQUAL-HEIGHT + ALIGNMENT: every card-grid row stretches its
+   cards to the tallest sibling, and each card lays out as a flex column so its
+   CTA/footer can pin to the bottom (shared baseline across the row). Grids that
+   already declare align-items:stretch (customer-proof, plan-cards, pricing-grid,
+   case-study-grid) are harmless to re-list — this is idempotent. ---- */
+.team-grid__grid,
+.problem__grid,
+.process__steps,
+.category-tiles__grid,
+.collection__grid,
+.article-grid__grid,
+.reviews__grid,
+.cap-breakdown__grid,
+.data-proof__grid,
+.add-ons__grid,
+.persona-pillars__grid,
+.controls-list__grid,
+.native-a11y__grid,
+.ecosystem-block__grid,
+.logo-wall__grid,
+.cert-badges__grid,
+.customer-proof__grid,
+.plan-cards__grid,
+.pricing-grid__grid,
+.case-study-grid__grid { align-items: stretch; }
+
+/* card itself = flex column so footers pin to the bottom (margin-top:auto).
+   EXCLUDES image-overlay tiles (.category-card): aspect-ratio-framed <a> tiles
+   with an absolute overlay + label and a single height:100% <img>, no in-flow
+   footer to pin — flex-column there would fight the aspect-ratio box. */
+.team-card,
+.problem-card,
+.product-card,
+.article-card,
+.review-card,
+.capability-card,
+.persona-card,
+.add-on-card,
+.control-item,
+.a11y-feature,
+.cert-badge,
+.testimonial-card,
+.price-card,
+.plan-cards .price-card,
+.pricing-tier,
+.case-study { display: flex; flex-direction: column; }
+
+/* pin the card's terminal action/footer/link to the bottom so buttons share a
+   baseline across the row. (Existing per-card pins — .testimonial-card__who,
+   .case-study__who/__link, .plan-card/.pricing-tier .price-card__features,
+   .persona-card .btn — already do this; these add the missing card types.) */
+.problem-card > .btn:last-child,
+.capability-card > .btn:last-child,
+.add-on-card > .btn:last-child,
+.control-item > .btn:last-child,
+.a11y-feature > .btn:last-child,
+.review-card > .btn:last-child,
+.article-card > .btn:last-child,
+.product-card > .btn:last-child,
+.team-card > .btn:last-child,
+/* PLAN/PRICE CARD CTA: when a plan/price card ends with a CTA AFTER its features
+   list, the features' margin-top:auto pinned the FEATURES (not the button) to the
+   bottom, so trailing CTAs across a row didn't baseline (spread 47-73px when blurbs
+   differ in length). Pin the terminal CTA itself; the :has() guard below stops the
+   features list from ALSO claiming the auto-space (double-auto would re-strand the
+   button). Token-pure (margin keyword only). */
+.price-card > .btn:last-child,
+.plan-cards .price-card > .btn:last-child { margin-top: auto; }
+/* when a CTA follows the features list, the FEATURES must NOT eat the flex space
+   (only the trailing CTA should) — otherwise the button no longer sits at the card
+   floor. Scope the features auto-margin away when a sibling CTA is the last child. */
+.plan-card:has(> .btn:last-child) .price-card__features,
+.plan-cards .price-card:has(> .btn:last-child) .price-card__features,
+.pricing-tier:has(> .btn:last-child) .price-card__features { margin-top: 0; }
+/* media-led content cards have no CTA — pin their natural terminal line
+   (product price / article meta) so those baselines align across the row. */
+.product-card__price { margin-top: auto; }
+.article-card__meta { margin-top: auto; }
+
+/* consistent block treatment so price/title/description rows line up across a
+   tier row: the blurb region reserves flexible space so feature lists + CTAs
+   align even when blurbs differ in length. (price-card__features already pins
+   via margin-top:auto on plan/pricing slots.) */
+.plan-card__blurb { flex: 0 0 auto; }
+
+/* (B cont.) remove the only fixed min-height that forces too-tall empty cards:
+   a card's height should follow content but STRETCH to its tallest sibling via
+   align-items:stretch above. (No fixed card min-heights exist in this file
+   today; this guards against inherited ones — height stays auto, min-height
+   yields to the stretch.) */
+.card { min-height: 0; }
+
+/* ---- (C) TYPE SCALE: one canonical price scale so a TEXT value ("Custom") and
+   a NUMERIC value ("$50") in the SAME tier slot render at the SAME size. All
+   tier-slot prices use .price-card__amount (single / plan-cards / pricing-tier),
+   so pinning ONE clamp there guarantees parity. text-wrap keeps a one-word
+   "Custom" from getting an awkward display treatment. The size is a structural
+   type-scale literal (allowed). ---- */
+.price-card__amount,
+.pricing-single .price-card__amount,
+.plan-cards .price-card__amount,
+.pricing-tier .price-card__amount { font-size: clamp(36px, 5vw, 52px); line-height: 1.05; text-wrap: balance; }
+/* the period suffix stays a small body-scale label regardless of the amount. */
+.pricing-tier__period { font-size: 15px; }
+
+/* ---- (G) HERO SCRIM: white hero/overlay text over a busy bright photo must
+   stay legible. Deepen the shared image-overlay scrim used by hero-over-photo,
+   category tiles, and the featured-article card: a two-stop gradient that is
+   strong at the text edge and clears toward the top. Colors come from
+   var(--ds-scrim) (brand-tinted dark translucent token); only the gradient
+   STOP percentages + the supplementary opacity are structural literals. ---- */
+.category-card__overlay,
+.hero--photo__scrim,
+.hero__scrim { background: linear-gradient(to top, var(--ds-scrim) 0%, var(--ds-scrim) 18%, transparent 78%); }
+/* featured-article card carries its own clipped frame; lay a matching scrim so
+   its on-image white heading/body clears a bright photo too. */
+.featured-article__card::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(to top, var(--ds-scrim) 0%, var(--ds-scrim) 16%, transparent 72%); }
+.featured-article__body, .featured-article__card img { position: relative; }
+.featured-article__body { z-index: 1; }
+
+/* ---- (H) HEADLINE WRAP: balance hero + section headlines so lines are even and
+   the italic/accent span doesn't orphan or wrap awkwardly. text-wrap:balance is
+   a progressive enhancement (ignored where unsupported). The accent span is kept
+   on its own wrapping context so it breaks cleanly, not mid-phrase. ---- */
+h1, h2, .hero h1, .wc-hero h1, .manifesto__text,
+.featured-article__body h2, .real-proof__quote blockquote { text-wrap: balance; }
+.hero h1 .accent, .wc-hero h1 .accent { display: inline-block; }
+
+/* polish motion gate — these polish rules introduce no transitions, but keep the
+   featured-article scrim inert for reduced-motion users (no animation anyway). */
+@media (prefers-reduced-motion: reduce) {
+  .featured-article__card::after { transition: none; }
+}
