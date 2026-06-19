@@ -88,6 +88,21 @@
   }
 
   // ---- count-up stats ----
+  // Format a numeric value with en-US thousands grouping on the INTEGER part
+  // while preserving the exact decimal count (4.9 -> "4.9", never "4.900";
+  // 40000 -> "40,000"; 2400000000 -> "2,400,000,000"). Built from toFixed so
+  // the decimal count matches data-count exactly, then commas are injected only
+  // into the integer digits — avoids toLocaleString stripping/locale quirks.
+  function groupNum(value, decimals) {
+    var fixed = value.toFixed(decimals);          // e.g. "40000" or "4.9"
+    var neg = fixed.charAt(0) === '-';
+    if (neg) fixed = fixed.slice(1);
+    var dot = fixed.indexOf('.');
+    var intPart = dot === -1 ? fixed : fixed.slice(0, dot);
+    var fracPart = dot === -1 ? '' : fixed.slice(dot);   // includes the '.'
+    intPart = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    return (neg ? '-' : '') + intPart + fracPart;
+  }
   function animateCount(el) {
     if (el.getAttribute('data-counted') === '1') return;
     el.setAttribute('data-counted', '1');
@@ -96,9 +111,10 @@
     var suffix = el.getAttribute('data-suffix') || '';
     var decimals = (String(raw).split('.')[1] || '').length;
     // EXACT final string the animation MUST land on (snap target). Computed
-    // once so the last frame is value-identical to data-count, never a rounded
-    // intermediate (fixes 184≠183 / 4000≠3973: the final frame == data-count).
-    var finalText = target.toFixed(decimals) + suffix;
+    // once so the last frame is value-identical to data-count (grouped), never a
+    // rounded intermediate (fixes 184≠183 / 4000≠3973: the final frame ==
+    // grouped data-count) and never an ungrouped 40000 next to a "40,000" label.
+    var finalText = groupNum(target, decimals) + suffix;
     if (reduce) { el.textContent = finalText; return; }
     var dur = 1500, start = null;
     function frame(ts) {
@@ -106,7 +122,7 @@
       var p = Math.min((ts - start) / dur, 1);
       if (p >= 1) { el.textContent = finalText; return; } // snap to exact target; do NOT schedule another frame
       var eased = 1 - Math.pow(1 - p, 3);
-      el.textContent = (target * eased).toFixed(decimals) + suffix;
+      el.textContent = groupNum(target * eased, decimals) + suffix;
       requestAnimationFrame(frame);
     }
     requestAnimationFrame(frame);

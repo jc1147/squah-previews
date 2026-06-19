@@ -750,6 +750,31 @@ p { margin: 0; }
 .wow-divider--top > svg { top: 0; }
 .wow-divider--bottom > svg { bottom: 0; }
 
+/* EMPTY-STRIP FIX: a SECTION that nests a bottom shape-divider as a CHILD div
+   (`<section class="section …"> … <div class="wow-divider wow-divider--bottom">
+   <svg></svg></div></section>`) rendered a DEAD colored strip below the last
+   content row. Why: the child holder's only child (the wave <svg>) is
+   position:absolute, so the holder collapses to ZERO height and lands ABOVE the
+   section's bottom padding (var(--ds-section-py), up to 96px); the wave pins to
+   bottom:0 of that zero-height holder, so the full section padding-bottom is
+   painted as an empty colored band BELOW the wave AND the wave rides UP over the
+   last content row (measured: 96px dead strip below + 80px overlap above).
+   Fix token-pure so the wave becomes the section's clean terminal edge with a
+   modest breathing gap ABOVE it (not a dead band below it):
+   (a) drop the section's OWN bottom padding (it was painting the dead strip);
+   (b) give the child holder a REAL height = the divider height so it occupies
+       the wave's space in normal flow (no more collapse / overlap), pin its
+       <svg> to fill that holder (top:0), and add a single breathing margin
+       ABOVE the holder so the wave doesn't crowd the last row. With
+       padding-bottom:0 any space below the wave would re-introduce a strip, so
+       the breathing room MUST live above the wave — hence margin-top, not
+       padding. :has() guards scope this to sections that actually carry an SVG
+       shape divider; the hairline ::before/::after dividers (no <svg>) are
+       untouched. Token-pure: only the divider-height + spacing tokens. */
+.section:has(> .wow-divider--bottom > svg) { padding-bottom: 0; }
+.wow-divider--bottom:has(> svg) { height: var(--ds-divider-h); margin-top: var(--ds-space-xl); }
+.wow-divider--bottom:has(> svg) > svg { top: 0; bottom: auto; }
+
 /* parallax hint (JS-driven; structural baseline only) */
 .wow-parallax { will-change: transform; }
 
@@ -1013,20 +1038,61 @@ html { scroll-padding-top: 88px; }
 /* the period suffix stays a small body-scale label regardless of the amount. */
 .pricing-tier__period { font-size: 15px; }
 
-/* ---- (G) HERO SCRIM: white hero/overlay text over a busy bright photo must
-   stay legible. Deepen the shared image-overlay scrim used by hero-over-photo,
-   category tiles, and the featured-article card: a two-stop gradient that is
-   strong at the text edge and clears toward the top. Colors come from
-   var(--ds-scrim) (brand-tinted dark translucent token); only the gradient
-   STOP percentages + the supplementary opacity are structural literals. ---- */
-.category-card__overlay,
+/* ---- (G) HERO SCRIM: hero/overlay text over a busy BRIGHT photo (golden-hour
+   sky) must stay legible at EVERY edge. A .hero__inner lays content out
+   flex-start (eyebrow + headline at the TOP) while bespoke hero variants anchor
+   copy flex-end (CTAs at the BOTTOM) — so the OLD bottom-only scrim
+   (transparent above 78%) left the TOP eyebrow + italic headline accent sitting
+   on raw bright sky (the contrast trap the owner flagged). The hero now carries
+   a DUAL graduated veil: a strong bottom band (bottom-anchored CTAs) PLUS a
+   strong top band (top-anchored eyebrow/headline) PLUS a continuous brand-tinted
+   wash across the WHOLE text zone, so no text edge ever falls on bare photo. It
+   stays graduated (darker at both edges, lighter through the middle) — never a
+   flat black box. Colors are var(--ds-scrim) (brand-tinted translucent token)
+   and a softer veil derived from the SAME token via color-mix; only the gradient
+   STOP percentages are structural literals (the same token-pure grammar already
+   used for color-mix veils elsewhere in this file). The category tile + the
+   featured-article card carry only a BOTTOM label, so they keep the
+   bottom-weighted scrim (a top veil there would needlessly darken the image). */
+.category-card__overlay { background: linear-gradient(to top, var(--ds-scrim) 0%, var(--ds-scrim) 18%, transparent 78%); }
 .hero--photo__scrim,
-.hero__scrim { background: linear-gradient(to top, var(--ds-scrim) 0%, var(--ds-scrim) 18%, transparent 78%); }
+.hero__scrim {
+  background:
+    /* bottom band — bottom-anchored CTAs / trust badges */
+    linear-gradient(to top, var(--ds-scrim) 0%, var(--ds-scrim) 24%, transparent 62%),
+    /* top band — top-anchored eyebrow + italic headline accent. Two stacked
+       passes deepen the very top so the eyebrow zone is dark enough for its
+       (re-lit, cream) text to clear AA, then grade out to the lighter middle. */
+    linear-gradient(to bottom, var(--ds-scrim) 0%, var(--ds-scrim) 30%, transparent 64%),
+    linear-gradient(to bottom, var(--ds-scrim) 0%, var(--ds-scrim) 14%, transparent 40%),
+    /* continuous readability wash — a lighter brand-tinted veil over the
+       whole hero so a bright sky never shows through behind any text */
+    color-mix(in srgb, var(--ds-scrim) 70%, transparent);
+}
 /* featured-article card carries its own clipped frame; lay a matching scrim so
    its on-image white heading/body clears a bright photo too. */
 .featured-article__card::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(to top, var(--ds-scrim) 0%, var(--ds-scrim) 16%, transparent 72%); }
 .featured-article__body, .featured-article__card img { position: relative; }
 .featured-article__body { z-index: 1; }
+
+/* (G cont.) PHOTO-HERO FOREGROUND RE-LIGHT: over a bright photo (even under the
+   deepened scrim above), the brand AMBER (--ds-accent #C8923E) used for the
+   .section--dark eyebrow + the italic headline accent is a CONTRAST TRAP — amber
+   sits at ~0.22 relative luminance, so on the scrim's mid-tone composite it
+   measured ~1.5-2.1:1 (AA fail) no matter how dark the veil, while the cream
+   --ds-ink-on-dark headline cleared its bar. Amber stays correct for borders /
+   large display / solid dark BANDS (where it's fine); but on a hero PHOTO scrim
+   its TEXT must re-light to the cream on-dark ink (the same "re-light foreground
+   on a dark/photo ancestor" pattern this file already applies to .eyebrow /
+   .lede / .trust-note / .pricing-toggle / .stat__num etc.). Scoped via :has()
+   to ONLY heroes that carry a photo scrim, so amber-on-solid-dark heroes are
+   untouched. Token-pure. */
+.hero:has(> .hero__scrim) .eyebrow,
+.hero:has(> .hero--photo__scrim) .eyebrow,
+.hero--photo:has(.hero__scrim) .eyebrow { color: var(--ds-ink-on-dark); }
+.hero:has(> .hero__scrim) h1 .accent,
+.hero:has(> .hero--photo__scrim) h1 .accent,
+.hero--photo:has(.hero__scrim) h1 .accent { color: var(--ds-ink-on-dark); }
 
 /* ---- (H) HEADLINE WRAP: balance hero + section headlines so lines are even and
    the italic/accent span doesn't orphan or wrap awkwardly. text-wrap:balance is
@@ -1041,3 +1107,167 @@ h1, h2, .hero h1, .wc-hero h1, .manifesto__text,
 @media (prefers-reduced-motion: reduce) {
   .featured-article__card::after { transition: none; }
 }
+
+/* =====================================================================
+   (ORPHAN/BALANCE) CARD-GRID COLUMN ADAPT — shared default, every build
+   inherits. THE LITTER THIS FIXES (owner reviewed built sites at readable
+   resolution): a fixed-column card-grid whose ITEM COUNT does not divide
+   the column count leaves a ragged last row — a lone trailing card stranded
+   against an otherwise-full row (a 4-item group in a 3-col grid = 3+1), or
+   empty trailing columns (a 2-item group in a 3-col grid, a 2/3-item group
+   in a 4-col grid). Both read as a broken, unbalanced layout.
+
+   THE FIX: adapt the column count to the EXACT direct-card-child count via
+   CSS quantity queries (:has() + :nth-last-child / :only-child) so the row
+   is always balanced — 2 items -> 2 centered cols, 4 items -> 2x2, 3 -> 3,
+   6 -> 3, etc. — never an orphan row and never an empty trailing column.
+   A trailing PARTIAL row (e.g. 5 in a 3-col base) is centered via
+   justify-content:center so a lone last card is not left-stranded.
+
+   These re-declare grid-template-columns, so they MUST sit AFTER every base
+   grid rule (cascade) and be SCOPED above the mobile breakpoint so the
+   1-col mobile reflow (the max-width:860px blocks above) still wins at
+   narrow widths. Token-pure: only structural literals (grid track counts,
+   the breakpoint, justify keyword) — no brand values.
+
+   :has() and quantity queries (:nth-last-child) are baseline in all modern
+   evergreen engines; where unsupported the grid simply keeps its base
+   column count (graceful — same as today), so this is a safe enhancement.
+   ===================================================================== */
+
+/* shorthand groups (kept as variables-in-comment for the reader):
+   BASE-3 card-grids ......... 3 cols at desktop, balance 2 & 4 & orphan-1
+   BASE-4 card-grids ......... 4 cols at desktop, balance 2 & 3 & 5/6 & orphan-1
+   BASE-2 card-grids ......... 2 cols at desktop, balance odd trailing single */
+
+@media (min-width: 861px) {
+
+  /* ---- center any trailing partial row so a lone last card is not stranded
+     to the left. Harmless when the row is full (nothing to center). ---- */
+  .team-grid__grid, .problem__grid, .process__steps, .reviews__grid,
+  .article-grid__grid, .cap-breakdown__grid, .data-proof__grid,
+  .customer-proof__grid, .add-ons__grid, .persona-pillars__grid,
+  .native-a11y__grid, .controls-list__grid, .ecosystem-block__grid,
+  .category-tiles__grid, .collection__grid {
+    justify-content: center;
+  }
+
+  /* ===== BASE-3 grids: 3 cols normally. 2 items -> 2 cols (no empty 3rd);
+     4 items -> 2x2 (no 3+1 orphan); a count that would leave a lone last
+     card (n%3==1, i.e. 4,7,10) drops to a divisor layout. ===== */
+  /* exactly 2 children -> 2 columns */
+  .team-grid__grid:has(> :last-child:nth-child(2)),
+  .problem__grid:has(> :last-child:nth-child(2)),
+  .process__steps:has(> :last-child:nth-child(2)),
+  .reviews__grid:has(> :last-child:nth-child(2)),
+  .article-grid__grid:has(> :last-child:nth-child(2)),
+  .cap-breakdown__grid:has(> :last-child:nth-child(2)),
+  .data-proof__grid:has(> :last-child:nth-child(2)),
+  .customer-proof__grid:has(> :last-child:nth-child(2)),
+  .add-ons__grid:has(> :last-child:nth-child(2)),
+  .persona-pillars__grid:has(> :last-child:nth-child(2)),
+  .native-a11y__grid:has(> :last-child:nth-child(2)),
+  .category-tiles__grid:has(> :last-child:nth-child(2)) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  /* exactly 4 children -> 2x2 (avoids the 3+1 orphan) */
+  .team-grid__grid:has(> :last-child:nth-child(4)),
+  .problem__grid:has(> :last-child:nth-child(4)),
+  .process__steps:has(> :last-child:nth-child(4)),
+  .reviews__grid:has(> :last-child:nth-child(4)),
+  .article-grid__grid:has(> :last-child:nth-child(4)),
+  .cap-breakdown__grid:has(> :last-child:nth-child(4)),
+  .data-proof__grid:has(> :last-child:nth-child(4)),
+  .customer-proof__grid:has(> :last-child:nth-child(4)),
+  .add-ons__grid:has(> :last-child:nth-child(4)),
+  .persona-pillars__grid:has(> :last-child:nth-child(4)),
+  .native-a11y__grid:has(> :last-child:nth-child(4)),
+  .category-tiles__grid:has(> :last-child:nth-child(4)) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* ===== BASE-4 grids: 4 cols normally. Balance small counts and the
+     4+1 orphan. .collection__grid is base-4; .ecosystem-block__grid is
+     base-4; .cert-badges__grid base-4 (handled in the 1024 band below). ===== */
+  /* collection + ecosystem: base 4 cols at desktop. Restate the base here (after
+     the BASE-3 block) so the cascade order is unambiguous, then balance by count. */
+  .collection__grid, .ecosystem-block__grid { grid-template-columns: repeat(4, 1fr); }
+  /* exactly 2 -> 2 cols */
+  .collection__grid:has(> :last-child:nth-child(2)),
+  .ecosystem-block__grid:has(> :last-child:nth-child(2)) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  /* exactly 3 -> 3 cols (no empty 4th) */
+  .collection__grid:has(> :last-child:nth-child(3)),
+  .ecosystem-block__grid:has(> :last-child:nth-child(3)) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  /* exactly 5 -> 3 cols (avoids the 4+1 orphan; trailing 2 center via justify) */
+  .collection__grid:has(> :last-child:nth-child(5)),
+  .ecosystem-block__grid:has(> :last-child:nth-child(5)) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  /* exactly 6 -> 3 cols (clean 3x2) */
+  .collection__grid:has(> :last-child:nth-child(6)),
+  .ecosystem-block__grid:has(> :last-child:nth-child(6)) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  /* ===== PRICING grids (.plan-cards__grid, .pricing-grid__grid): base 3 tiers,
+     middle featured. A 2-tier model -> 2 cols (no empty 3rd); a 4-tier model
+     -> 2x2 (no 3+1 orphan); a single tier -> one centered tier (matches the
+     .pricing-single 420px single-card width). These keep their own
+     align-items:stretch + featured-ribbon rules untouched. ===== */
+  .plan-cards__grid, .pricing-grid__grid { justify-content: center; }
+  .plan-cards__grid:has(> :last-child:nth-child(2)),
+  .pricing-grid__grid:has(> :last-child:nth-child(2)),
+  .plan-cards__grid:has(> :last-child:nth-child(4)),
+  .pricing-grid__grid:has(> :last-child:nth-child(4)) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .plan-cards__grid:has(> :only-child),
+  .pricing-grid__grid:has(> :only-child) {
+    grid-template-columns: minmax(0, 420px);
+  }
+
+  /* ===== BASE-2 grid: .controls-list__grid is 2 cols. A single item ->
+     1 col (no empty 2nd column); odd trailing single centers via justify. ===== */
+  .controls-list__grid:has(> :only-child) { grid-template-columns: 1fr; }
+
+  /* a single card in ANY of these grids -> 1 centered column (no empty cols) */
+  .team-grid__grid:has(> :only-child),
+  .problem__grid:has(> :only-child),
+  .process__steps:has(> :only-child),
+  .reviews__grid:has(> :only-child),
+  .article-grid__grid:has(> :only-child),
+  .cap-breakdown__grid:has(> :only-child),
+  .data-proof__grid:has(> :only-child),
+  .customer-proof__grid:has(> :only-child),
+  .add-ons__grid:has(> :only-child),
+  .persona-pillars__grid:has(> :only-child),
+  .native-a11y__grid:has(> :only-child),
+  .category-tiles__grid:has(> :only-child),
+  .collection__grid:has(> :only-child),
+  .ecosystem-block__grid:has(> :only-child) {
+    grid-template-columns: minmax(0, 420px);
+  }
+}
+
+/* ===== 1024-tier base-4 grids (.cert-badges__grid) + base-3 (.case-study-grid__grid):
+   these reflow at 1024 (cert 4->2, case-study 3->2) then at 860 (->1). Adapt their
+   counts only in the band where they are still multi-col (>=1025px), so the existing
+   1024/860 reflows still win below. ===== */
+@media (min-width: 1025px) {
+  .cert-badges__grid, .case-study-grid__grid { justify-content: center; }
+  /* cert base-4: 2->2, 3->3, 5->3 (avoid 4+1) */
+  .cert-badges__grid:has(> :last-child:nth-child(2)) { grid-template-columns: repeat(2, 1fr); }
+  .cert-badges__grid:has(> :last-child:nth-child(3)) { grid-template-columns: repeat(3, 1fr); }
+  .cert-badges__grid:has(> :last-child:nth-child(5)) { grid-template-columns: repeat(3, 1fr); }
+  .cert-badges__grid:has(> :only-child) { grid-template-columns: minmax(0, 420px); }
+  /* case-study base-3: 2->2, 4->2x2 */
+  .case-study-grid__grid:has(> :last-child:nth-child(2)) { grid-template-columns: repeat(2, 1fr); }
+  .case-study-grid__grid:has(> :last-child:nth-child(4)) { grid-template-columns: repeat(2, 1fr); }
+  .case-study-grid__grid:has(> :only-child) { grid-template-columns: minmax(0, 420px); }
+}
+
+/* balance motion gate — these layout rules introduce no transitions. */
