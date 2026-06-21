@@ -27,8 +27,11 @@
 .hero h1 { color: var(--ds-ink-on-dark); max-width: 18ch; }
 .hero .eyebrow { color: var(--ds-accent-on-dark); }
 .hero .lede { color: var(--ds-ink-on-dark); opacity: .9; max-width: 60ch; }
-.hero__media { margin-top: var(--ds-space-2xl); }
-.hero__media svg { width: 100%; height: auto; }
+/* full-width dashboard showcase: figure must STRETCH across the flex-column
+   cross-axis (parent .hero__inner is align-items:flex-start, which otherwise
+   collapses the figure to the SVG's intrinsic width → tiny corner thumbnail). */
+.hero__media { align-self: stretch; width: 100%; max-width: 1080px; margin: var(--ds-space-2xl) auto 0; }
+.hero__media svg { display: block; width: 100%; height: auto; }
 
 /* ---- LOGO WALL · bg=gradient (indigo wash) ---- */
 .logowall { background: linear-gradient(180deg, var(--ds-bg-warm) 0%, var(--ds-bg-surface) 100%); text-align: center; }
@@ -149,8 +152,8 @@
       <a class="btn btn-primary wow-glow" href="demo.html">Book a demo</a>
       <a class="btn btn-secondary" href="platform.html">Explore the platform</a>
     </div>
-    <figure class="hero__media wow-zoom" aria-hidden="true">
-      <svg viewBox="0 0 1080 420" role="img" aria-label="Helix product-analytics dashboard" style="border-radius:var(--ds-r-lg);background:linear-gradient(180deg,#10141e,#0b0e14);box-shadow:var(--ds-glow)">
+    <figure class="hero__media wow-zoom wow-glass" aria-hidden="true">
+      <svg viewBox="0 0 1080 420" role="img" aria-label="Helix product-analytics dashboard" style="border-radius:var(--ds-r-lg);background:linear-gradient(180deg,var(--ds-primary-deep),#0b0e14);box-shadow:var(--ds-glow)">
         <defs>
           <linearGradient id="hbar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7950F2"/><stop offset="1" stop-color="#4C6EF5"/></linearGradient>
           <linearGradient id="harea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7950F2" stop-opacity="0.45"/><stop offset="1" stop-color="#4C6EF5" stop-opacity="0"/></linearGradient>
@@ -367,12 +370,9 @@
         <a href="pricing.html">Pricing</a>
       </div>
       <div class="site-footer__col">
-        <h4>Trust</h4>
+        <h4>Resources</h4>
         <a href="security.html">Security</a>
         <a href="customers.html">Customers</a>
-      </div>
-      <div class="site-footer__col">
-        <h4>Developers</h4>
         <a href="docs.html">Docs</a>
         <a href="https://docs.helixanalytics.example/api">API reference</a>
       </div>
