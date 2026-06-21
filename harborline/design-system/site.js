@@ -76,15 +76,24 @@
       if (inOrAboveFold(el)) { el.classList.add('in-view'); }
       else { io.observe(el); }
     });
-    // Belt-and-braces: re-run the initial check after first layout settles,
-    // in case fonts/images shifted an element into the fold post-paint.
-    requestAnimationFrame(function () {
+    // Belt-and-braces: re-run the initial check after layout settles. Web-font
+    // swap (Fraunces/Inter load async), late images, and reflows can shift an
+    // element INTO the fold AFTER first paint — past a single rAF — leaving a
+    // card peeking at the fold edge permanently opacity:0. Re-check on rAF,
+    // font-ready, full load, and two short timeouts; reveal any not-yet-shown
+    // element now in/above the fold.
+    var recheck = function () {
       revealTargets.forEach(function (el) {
         if (!el.classList.contains('in-view') && inOrAboveFold(el)) {
           el.classList.add('in-view'); io.unobserve(el);
         }
       });
-    });
+    };
+    requestAnimationFrame(recheck);
+    if (document.fonts && document.fonts.ready && document.fonts.ready.then) { document.fonts.ready.then(recheck); }
+    window.addEventListener('load', recheck);
+    setTimeout(recheck, 200);
+    setTimeout(recheck, 600);
   }
 
   // ---- count-up stats ----
