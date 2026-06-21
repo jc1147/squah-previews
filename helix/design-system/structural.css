@@ -64,7 +64,7 @@ p { margin: 0; }
 .btn-primary { background: var(--ds-primary); color: var(--ds-ink-on-dark); }
 .btn-primary:hover { background: var(--ds-primary-deep); transform: translateY(-2px); box-shadow: var(--ds-shadow-lift); }
 .btn-primary:focus-visible { outline: 3px solid var(--ds-accent); outline-offset: 2px; }
-.btn-secondary { background: transparent; color: var(--ds-primary-deep); border: 1.5px solid var(--ds-line); }
+.btn-secondary { background: transparent; color: var(--ds-primary-deep); border: 1.5px solid var(--ds-primary); }
 .btn-secondary:hover { border-color: var(--ds-primary); background: var(--ds-primary-soft); }
 .cta-row { display: flex; flex-wrap: wrap; gap: var(--ds-space-sm); margin-top: var(--ds-space-lg); }
 
@@ -110,8 +110,15 @@ p { margin: 0; }
 .brand { display: flex; align-items: center; gap: var(--ds-space-sm); font-family: var(--ds-font-display); font-size: 20px; color: var(--ds-primary-deep); text-decoration: none; }
 .brand__mark { width: 34px; height: 34px; border-radius: var(--ds-r-pill); background: var(--ds-primary); color: var(--ds-ink-on-dark); display: grid; place-items: center; }
 .site-nav { display: flex; gap: var(--ds-space-lg); }
-.site-nav a { text-decoration: none; color: var(--ds-ink); font-size: 15px; transition: color var(--ds-dur) var(--ds-ease); }
-.site-nav a:hover { color: var(--ds-primary); }
+.site-nav a:not(.btn) { text-decoration: none; color: var(--ds-ink); font-size: 15px; transition: color var(--ds-dur) var(--ds-ease); }
+.site-nav a:not(.btn):hover { color: var(--ds-primary); }
+/* v4 chrome puts a .btn CTA inside .site-nav, and secondary buttons land on dark
+   bands — the proven base colored both with dark ink. Re-light both (regression
+   the re-baseline dropped): header CTA keeps its cream label; dark-section
+   secondary buttons get a visible cream label + border (was 1:1 invisible). */
+.site-header .btn-primary, .site-nav a.btn { color: var(--ds-ink-on-dark); }
+.section--dark .btn-secondary { color: var(--ds-ink-on-dark); border-color: var(--ds-ink-on-dark); }
+.section--accent .btn-secondary { color: var(--ds-primary-deep); border-color: var(--ds-primary-deep); }
 
 /* --- shared chrome: footer --- */
 .site-footer { background: var(--ds-primary-deep); color: var(--ds-ink-on-dark); padding-block: var(--ds-space-2xl); }
@@ -492,8 +499,8 @@ p { margin: 0; }
    Placed after all MV definitions so it wins the cascade. ---- */
 .section--dark .stat__num { color: var(--ds-accent); }
 .section--dark .stat__label { color: var(--ds-ink-on-dark); font-weight: 600; }
-.real-proof__quote blockquote { color: var(--ds-ink-on-dark); }
-.data-proof__sub, .real-proof__cite { color: var(--ds-ink-on-dark); opacity: .78; }
+.section--dark .real-proof__quote blockquote { color: var(--ds-ink-on-dark); }
+.section--dark .data-proof__sub, .section--dark .real-proof__cite { color: var(--ds-ink-on-dark); opacity: .78; }
 
 /* ---- MV responsive: reflow grids + tables to stacked cards at the canonical 860px breakpoint ---- */
 @media (max-width: 860px) {
