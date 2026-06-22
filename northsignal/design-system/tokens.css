@@ -1,0 +1,173 @@
+/* =============================================================================
+ * Northsignal — design-system/tokens.css
+ * The LOCKED brand tokens. WEB CARD pick: Direction B (Signal Gradient),
+ * locked 2026-06-22. See verticals/northsignal.md §4 (picked: B).
+ *
+ * THEME POLARITY: dark (§2.0 — L(--ds-bg-surface #0B0E14) = 0.0046 < 0.18).
+ * Dev-infra convention (Linear / Vercel / Stripe-dark). Because the page ground
+ * is near-black, the THEME-POLAR inks flip LIGHT:
+ *   - --ds-ink           = off-white  (#E2E5EA)  body / default text reads on dark
+ *   - --ds-ink-heading   = LIGHT      (#E2E5EA)  h1/h2/h3 read on the dark ground
+ *                                                 (NOT --ds-primary-deep / near-black,
+ *                                                  which would be invisible dark-on-dark)
+ *   - eyebrow / .lede / card ink inherit --ds-ink / --ds-ink-soft → light by construction
+ * --ds-primary-deep stays the NEAR-BLACK dark ground (.section--dark + footer bg
+ * + on-dark surfaces), with --ds-ink-on-dark painted on top (AXIS-1 contract).
+ *
+ * verify-tokens-sane (both axes) PASSES:
+ *   AXIS 1  --ds-ink-on-dark (#F4F6FA) on --ds-primary-deep (#0B0E14)  ~18.6:1  ✓
+ *   AXIS 2  --ds-ink-heading (#E2E5EA) on --ds-bg-surface (#0B0E14)    ~15.9:1  ✓
+ *                                       on --ds-bg-surface-2 (#141822) ~13.9:1  ✓
+ *                                       on --ds-bg-warm (#10141D)      ~15.0:1  ✓
+ *
+ * Inner pages LINK this + structural.css and overlay the wow-* classes; this
+ * file carries ZERO layout — only the :root token contract.
+ * ============================================================================= */
+
+:root {
+  /* ---- Color (LOCKED brand identity, audit §2.1; Direction-B accent texture) ---- */
+  --ds-primary:        #4263eb;   /* Direction-B indigo (picked: B §4 palette) — buttons, CTAs, brand accent. Reconciled from the stray #5c7cfa (Direction-A value) so --ds-ink-on-dark cream clears WCAG AA (4.60:1) on the primary CTA fill; verify-contrast pins this. */
+  --ds-primary-deep:   #0B0E14;   /* ⚠ NEAR-BLACK DARK GROUND — .section--dark + .site-footer bg + on-dark base. NOT a deeper indigo. */
+  --ds-primary-soft:   #1b2440;   /* tinted-dark background, eyebrows, soft cards */
+  --ds-accent:         #845ef7;   /* violet — hover, secondary CTA, decorative pop (large/on-dark) */
+  --ds-accent-ink:     #b9a9ff;   /* lightened accent for SMALL text on dark (>=4.5:1 on dark grounds) */
+  --ds-accent-soft:    #251a44;   /* tinted-dark accent background */
+  --ds-bg-surface:     #0B0E14;   /* dark page background */
+  --ds-bg-surface-2:   #141822;   /* elevated / card surface (dark) */
+  --ds-bg-warm:        #10141D;   /* alternate dark band (.section--warm) */
+  --ds-ink:            #E2E5EA;   /* off-white DEFAULT text (DARK brand → light ink) */
+  --ds-ink-heading:    #E2E5EA;   /* THEME-POLAR heading ink: DARK brand → LIGHT (= --ds-ink). Literal hex so the gate measures AXIS 2. */
+  --ds-ink-soft:       #8B92A0;   /* secondary text (light-gray, reads on dark) */
+  --ds-line:           #1F2530;   /* borders, dividers */
+  --ds-ink-on-dark:    #F4F6FA;   /* near-white text on dark / accent surfaces */
+  --ds-scrim:          rgba(8,10,16,.72);  /* image-overlay legibility scrim (brand-tinted dark) */
+
+  /* ---- Color (optional / gradient group — Direction-B consumers) ---- */
+  --ds-signature:      #22b8cf;   /* cyan signal flourish (the 3rd color; count-up + signal lines) */
+  --ds-accent-2:       #22b8cf;   /* duotone gradient 2nd stop (cyan) */
+  --ds-grad-brand:     linear-gradient(100deg, var(--ds-primary), var(--ds-accent));      /* indigo→violet brand gradient (CTAs) */
+  --ds-grad-text:      linear-gradient(100deg, var(--ds-primary), var(--ds-accent-2));    /* clipped-text fill for the mega-menu featured .accent */
+  --ds-grad-hero:      linear-gradient(135deg, var(--ds-primary) 0%, var(--ds-accent) 50%, var(--ds-accent-2) 100%);
+  --ds-fade-to-paper:  linear-gradient(180deg, rgba(11,14,20,0) 0%, var(--ds-bg-surface) 65%);
+
+  /* ---- Typography (audit §2.2 Candidate A — Space Grotesk + DM Sans + IBM Plex Mono) ---- */
+  --ds-font-display:   'Space Grotesk', system-ui, sans-serif;
+  --ds-font-body:      'DM Sans', system-ui, sans-serif;
+  --ds-font-mono:      'IBM Plex Mono', ui-monospace, monospace;
+
+  /* ---- Radius (Direction-B soft-radius, SURFACE-PATTERNS #3 10-14px) ---- */
+  --ds-r-sm:  4px;
+  --ds-r-md:  8px;
+  --ds-r-lg:  12px;
+  --ds-r-xl:  16px;
+  --ds-r-pill: 999px;
+
+  /* ---- Shadow (Direction-B: card lift + cyan-tinted hover bloom) ---- */
+  --ds-shadow-card: 0 1px 0 rgba(255,255,255,.03), 0 10px 30px rgba(0,0,0,.45);
+  --ds-shadow-lift: 0 2px 0 rgba(255,255,255,.05), 0 24px 60px rgba(34,184,207,.12), 0 24px 60px rgba(0,0,0,.55);
+
+  /* ---- Spacing scale + layout ---- */
+  --ds-space-2xs: 4px;
+  --ds-space-xs:  8px;
+  --ds-space-sm:  12px;
+  --ds-space-md:  16px;
+  --ds-space-lg:  24px;
+  --ds-space-xl:  40px;
+  --ds-space-2xl: 64px;
+  --ds-space-3xl: 96px;
+  --ds-section-py:    clamp(64px, 9vw, 96px);
+  --ds-container-max: 1340px;
+
+  /* ---- Motion (base — Direction-B: 250ms gradient-shift / settle curve) ---- */
+  --ds-ease: cubic-bezier(.4,0,.2,1);
+  --ds-dur:  250ms;
+
+  /* =========================================================================
+   * THE 13 GLOBALS OVERLAY — Direction B (Signal Gradient), locked at the web card.
+   * Gradient-warm texture: deeper frosted glass, soft raised inset-highlight,
+   * indigo accent bloom + indigo→cyan gradient-mesh wash, subtle grain, techy-slant
+   * shape divider, slow cinematic eased reveal. subtle > flashy.
+   * ========================================================================= */
+  --ds-glass-bg:     rgba(20,24,34,.78);                 /* deeper frosted dark glass (nav/panel fill) */
+  --ds-glass-blur:   blur(20px) saturate(180%);          /* heavy premium frost */
+  --ds-glass-border: rgba(34,184,207,.14);               /* cyan-tinted glass edge */
+  --ds-hairline:     rgba(226,229,234,.10);              /* 1px low-opacity light line */
+  --ds-inset-hi:     inset 0 1px 0 rgba(255,255,255,.08);/* soft raised top highlight */
+  --ds-glow:         0 0 44px rgba(92,124,250,.32);      /* indigo accent bloom on CTA/hero */
+  --ds-glow-wash:    radial-gradient(120% 100% at 50% -5%, rgba(92,124,250,.22), rgba(34,184,207,.10) 45%, transparent 70%); /* indigo→cyan mesh */
+  --ds-grain:        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.05'/%3E%3C/svg%3E");
+  --ds-divider-h:    72px;                                /* SVG shape-divider (techy Tilt/Triangle) height */
+  --ds-dur-fast:     200ms;                               /* micro-interactions */
+  --ds-dur-slow:     640ms;                               /* slow cinematic scroll-reveal */
+  --ds-ease-out:     cubic-bezier(.16,.84,.32,1);         /* eased reveal/zoom curve */
+  --ds-icon-tint:    brightness(0) saturate(100%) invert(54%) sepia(56%) saturate(2300%) hue-rotate(216deg) brightness(101%) contrast(96%); /* recolor source (non-currentColor) icons → indigo accent on the dark glass mega-menu / drawer chips */
+}
+
+/* =============================================================================
+ * DARK-BRAND INK RELIGHT (per-site signature override — token-pure, additive)
+ * -----------------------------------------------------------------------------
+ * structural.css is the SACRED web-mockup copy: a LIGHT-default system. It colors
+ * headings + several display primitives `var(--ds-primary-deep)` (near-black) and
+ * only re-lights them inside `.section--dark` / `.section--accent`. On THIS DARK
+ * brand the page base (`--ds-bg-surface`), the `.section--warm` ground (`--ds-bg-warm`)
+ * and the elevated card surface (`--ds-bg-surface-2`) are ALL near-black, so those
+ * `--ds-primary-deep` primitives render near-black-on-near-black (the dark-panel
+ * contrast trap). This block RE-ASSERTS light ink for the dark-brand grounds the
+ * sacred sheet does not cover. It is ADDITIVE (placed after the :root token contract,
+ * never editing structural.css), uses ONLY `--ds-*` tokens (no literals, no inline
+ * style), and is scoped so it cannot regress the proven `.section--accent` (violet)
+ * relights. verify-contrast pins every selector here.
+ * ========================================================================= */
+
+/* NOTE ON CASCADE (the load-bearing fix): tokens.css is linked BEFORE structural.css, and
+ * structural.css ships a `:root { --ds-ink-heading: var(--ds-primary-deep) }` polarity-hinge
+ * default (block [F], structural.css:1226) that LOADS LATER, so it CLOBBERS any `:root`
+ * `--ds-ink-heading` override set above — the documented dark-brand hinge cannot work by
+ * `:root` override alone under this link order. So every relight below (a) is scoped under an
+ * ancestor class (`.section` / `.site-header`) to win by SPECIFICITY not order, and (b) names a
+ * LIGHT ink token DIRECTLY (`--ds-ink-on-dark` cream), NOT `--ds-ink-heading` (which is pinned
+ * back to near-black by structural's later `:root`). On a `.section--dark` / `.section--accent`
+ * band the structural band-relights tie and (loading later) win — the desired on-dark / deep-on
+ * -accent behavior — so these base relights only take effect on the default + `.section--warm`
+ * near-black grounds. Token-pure: no literals, no inline style. verify-contrast pins each one. */
+
+/* Base headings: relight inside any section ground (`.section h1-h3` = 0,1,1 beats structural's
+ * bare `h1,h2,h3` = 0,0,1). The accent rule (also 0,1,1) follows so it wins the tie on violet. */
+.section h1, .section h2, .section h3 { color: var(--ds-ink-on-dark); }
+.section--accent h1, .section--accent h2, .section--accent h3 { color: var(--ds-primary-deep); }
+
+/* Display / text primitives structural.css colors `--ds-primary-deep` (directly or via the
+ * clobbered `--ds-ink-heading`) and never relights: scope each under `.section` (0,2,0 >
+ * structural's 0,1,0) → cream on the dark grounds; the `.section--accent` rule (0,2,0, declared
+ * after) keeps deep ink on the violet band. */
+.section .manifesto__text,
+.section .faq-item__q,
+.section .price-card__amount,
+.section .plan-card__name,
+.section .product-card__price,
+.section .product-hero__price,
+.section .stat__num { color: var(--ds-ink-on-dark); }
+.section--accent .manifesto__text,
+.section--accent .faq-item__q,
+.section--accent .price-card__amount,
+.section--accent .plan-card__name,
+.section--accent .stat__num { color: var(--ds-primary-deep); }
+
+/* The brand wordmark in the glass header (near-black `--ds-primary-deep` on dark glass):
+ * relight to light ink (`.site-header .brand` = 0,2,0 beats structural's `.brand` = 0,1,0). */
+.site-header .brand,
+.mm-drawer__head .brand { color: var(--ds-ink-on-dark); }
+
+/* The .stat__label on the violet `.section--accent` band: structural leaves it gray
+ * (`--ds-ink-soft`, 1.36:1 on violet). Deep ink clears AA on the accent fill. */
+.section--accent .stat__label { color: var(--ds-primary-deep); }
+.section--accent .data-proof__sub { color: var(--ds-primary-deep); opacity: .82; }
+
+/* The outline `.btn-secondary` lands on the dark page / warm grounds here (light bands in a
+ * LIGHT brand): structural gives it `--ds-primary-deep` text + `--ds-line` border (both
+ * near-black on near-black). Relight to light ink + a visible hairline on the dark grounds
+ * (`.section .btn-secondary` = 0,2,0 beats structural's `.btn-secondary` = 0,1,0). The
+ * `.section--dark` / `.section--accent` variants structural already handles stay correct. */
+.section .btn-secondary { color: var(--ds-ink); border-color: var(--ds-ink-soft); }
+.section--dark .btn-secondary { color: var(--ds-ink-on-dark); border-color: var(--ds-ink-on-dark); }
+.section--accent .btn-secondary { color: var(--ds-primary-deep); border-color: var(--ds-primary-deep); }

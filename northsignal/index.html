@@ -1,0 +1,455 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta name="robots" content="noindex,nofollow">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Northsignal — Pipeline-native data observability that catches broken data before it ships</title>
+  <meta name="description" content="Northsignal wires freshness, volume, schema, and distribution monitoring into your warehouse and dbt graph from the first run — a catch-before-ship gate that stops bad data pre-merge, with a median 4-minute time-to-detect.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="design-system/tokens.css">
+  <link rel="stylesheet" href="design-system/structural.css">
+</head>
+<body>
+
+<!-- ZONE 1 NAV : shared sitemap-driven chrome (skip-link + glass header + drawer), injected from _chrome.html -->
+<a class="mm-skip" href="#main">Skip to content</a>
+
+<header class="site-header wow-glass" id="site-header">
+  <div class="container site-header__bar">
+    <a class="brand" href="index.html">
+      <span class="brand__mark">N</span>
+      Northsignal
+    </a>
+
+    <ul class="site-nav" role="list" aria-label="Primary">
+
+      <li class="mm-has-panel" data-disclosure="platform">
+        <button class="mm-trigger" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="mm-mega-platform">
+          Platform
+          <svg class="mm-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="mm-panel mm-mega" id="mm-mega-platform" role="menu" aria-label="Platform">
+          <span class="mm-panel__bloom" aria-hidden="true"></span>
+          <div class="mm-mega__layout">
+            <a class="mm-mega__feature" role="menuitem" href="demo.html">
+              <img src="assets/nav-feature-pipeline.jpg" alt="Northsignal catching a bad merge in the pipeline, live">
+              <span class="eyebrow">See it live</span>
+              <span class="ttl">Watch auto-coverage catch a bad merge <span class="accent">in real time</span></span>
+              <span class="sub">A 30-minute walkthrough: connect a sample warehouse, watch monitors auto-generate, and stop a bad merge before it ships.</span>
+              <span class="lnk">Book a demo</span>
+            </a>
+            <div class="mm-mega__cards">
+              <div class="mm-mega__head"><span class="lbl">Explore the platform</span></div>
+              <div class="mm-mega__grid">
+                <a class="mm-mega__card" role="menuitem" href="platform.html">
+                  <span class="mm-mega__ico"><img src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='%235c7cfa'%20stroke-width='2'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cpath%20d='M3%2012h4l3%208%204-16%203%208h4'/%3E%3C/svg%3E" alt="" aria-hidden="true"></span>
+                  <span class="mm-mega__txt"><span class="t">The platform</span><span class="s">Pipeline-native observability, end to end</span></span>
+                </a>
+                <a class="mm-mega__card" role="menuitem" href="integrations.html">
+                  <span class="mm-mega__ico"><img src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='%235c7cfa'%20stroke-width='2'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Crect%20x='3'%20y='3'%20width='7'%20height='7'%20rx='1'/%3E%3Crect%20x='14'%20y='3'%20width='7'%20height='7'%20rx='1'/%3E%3Crect%20x='3'%20y='14'%20width='7'%20height='7'%20rx='1'/%3E%3Crect%20x='14'%20y='14'%20width='7'%20height='7'%20rx='1'/%3E%3C/svg%3E" alt="" aria-hidden="true"></span>
+                  <span class="mm-mega__txt"><span class="t">Integrations</span><span class="s">60+ native connectors</span></span>
+                </a>
+                <a class="mm-mega__card" role="menuitem" href="docs.html">
+                  <span class="mm-mega__ico"><img src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='%235c7cfa'%20stroke-width='2'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cpolyline%20points='16%2018%2022%2012%2016%206'/%3E%3Cpolyline%20points='8%206%202%2012%208%2018'/%3E%3C/svg%3E" alt="" aria-hidden="true"></span>
+                  <span class="mm-mega__txt"><span class="t">Docs &amp; API</span><span class="s">REST API, SDK &amp; Terraform</span></span>
+                </a>
+                <a class="mm-mega__card" role="menuitem" href="security.html">
+                  <span class="mm-mega__ico"><img src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='%235c7cfa'%20stroke-width='2'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cpath%20d='M12%2022s8-4%208-10V5l-8-3-8%203v7c0%206%208%2010%208%2010z'/%3E%3C/svg%3E" alt="" aria-hidden="true"></span>
+                  <span class="mm-mega__txt"><span class="t">Security &amp; trust</span><span class="s">Metadata-only, SOC 2 &amp; HIPAA</span></span>
+                </a>
+              </div>
+              <div class="mm-mega__foot">
+                <span class="mm-mega__note">Metadata only &mdash; <b>your row data never leaves the warehouse</b></span>
+                <a class="mm-mega__all" role="menuitem" href="platform.html">See the full platform</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </li>
+
+      <li class="mm-has-panel" data-disclosure="solutions">
+        <button class="mm-trigger" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="mm-dd-solutions">
+          Solutions
+          <svg class="mm-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="mm-panel mm-dropdown" id="mm-dd-solutions" role="menu" aria-label="Solutions">
+          <span class="mm-panel__bloom" aria-hidden="true"></span>
+          <ul role="list">
+            <li><a role="menuitem" href="customers.html"><span class="t">Customers &amp; results</span><span class="d">Outcomes from teams running the modern data stack</span></a></li>
+            <li><a role="menuitem" href="security.html"><span class="t">Security &amp; compliance</span><span class="d">SOC 2, HIPAA, GDPR &amp; ISO 27001</span></a></li>
+            <li><a role="menuitem" href="pricing.html"><span class="t">Pricing</span><span class="d">Priced by warehouse &mdash; Starter, Team, Enterprise</span></a></li>
+          </ul>
+        </div>
+      </li>
+
+      <li><a class="mm-navlink" href="integrations.html">Integrations</a></li>
+      <li><a class="mm-navlink" href="pricing.html">Pricing</a></li>
+      <li><a class="mm-navlink" href="customers.html">Customers</a></li>
+
+      <li class="mm-cta-desktop"><a class="btn btn-primary wow-glow" href="demo.html">Book a demo</a></li>
+    </ul>
+
+    <button class="site-header__hamburger mm-burger" id="mm-burger" type="button"
+            aria-label="Open menu" aria-expanded="false" aria-controls="mobile-drawer">
+      <span class="bars" aria-hidden="true"><span></span><span></span><span></span></span>
+    </button>
+  </div>
+</header>
+
+<div class="site-drawer-backdrop mm-overlay" id="mm-overlay" data-open="false" tabindex="-1" hidden></div>
+<nav id="mobile-drawer" class="site-drawer" aria-hidden="true" aria-label="Mobile" hidden>
+  <div class="mm-drawer__head">
+    <a class="brand" href="index.html"><span class="brand__mark">N</span>Northsignal</a>
+    <button class="site-drawer__close" id="mm-drawer-close" type="button" aria-label="Close menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+
+  <div class="mm-drawer__nav">
+
+    <div class="mm-acc">
+      <button class="mm-acc__btn" type="button" aria-expanded="false" aria-controls="mm-acc-platform">
+        Platform
+        <svg class="mm-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="mm-acc__panel" id="mm-acc-platform">
+        <div class="mm-acc__inner">
+          <a href="platform.html"><span class="mm-acc__ico"><img src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='%235c7cfa'%20stroke-width='2'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cpath%20d='M3%2012h4l3%208%204-16%203%208h4'/%3E%3C/svg%3E" alt="" aria-hidden="true"></span>The platform</a>
+          <a href="integrations.html"><span class="mm-acc__ico"><img src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='%235c7cfa'%20stroke-width='2'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Crect%20x='3'%20y='3'%20width='7'%20height='7'%20rx='1'/%3E%3Crect%20x='14'%20y='3'%20width='7'%20height='7'%20rx='1'/%3E%3Crect%20x='3'%20y='14'%20width='7'%20height='7'%20rx='1'/%3E%3Crect%20x='14'%20y='14'%20width='7'%20height='7'%20rx='1'/%3E%3C/svg%3E" alt="" aria-hidden="true"></span>Integrations</a>
+          <a href="docs.html"><span class="mm-acc__ico"><img src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='%235c7cfa'%20stroke-width='2'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cpolyline%20points='16%2018%2022%2012%2016%206'/%3E%3Cpolyline%20points='8%206%202%2012%208%2018'/%3E%3C/svg%3E" alt="" aria-hidden="true"></span>Docs &amp; API</a>
+          <a href="security.html"><span class="mm-acc__ico"><img src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='%235c7cfa'%20stroke-width='2'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cpath%20d='M12%2022s8-4%208-10V5l-8-3-8%203v7c0%206%208%2010%208%2010z'/%3E%3C/svg%3E" alt="" aria-hidden="true"></span>Security &amp; trust</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="mm-acc">
+      <button class="mm-acc__btn" type="button" aria-expanded="false" aria-controls="mm-acc-solutions">
+        Solutions
+        <svg class="mm-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="mm-acc__panel" id="mm-acc-solutions">
+        <div class="mm-acc__inner">
+          <a href="customers.html"><span class="mm-acc__ico"><img src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='%2322b8cf'%20stroke-width='2'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cpath%20d='M20%206L9%2017l-5-5'/%3E%3C/svg%3E" alt="" aria-hidden="true"></span>Customers &amp; results</a>
+          <a href="security.html"><span class="mm-acc__ico"><img src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='%2322b8cf'%20stroke-width='2'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cpath%20d='M12%2022s8-4%208-10V5l-8-3-8%203v7c0%206%208%2010%208%2010z'/%3E%3C/svg%3E" alt="" aria-hidden="true"></span>Security &amp; compliance</a>
+          <a href="pricing.html"><span class="mm-acc__ico"><img src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='%2322b8cf'%20stroke-width='2'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cline%20x1='12'%20y1='1'%20x2='12'%20y2='23'/%3E%3Cpath%20d='M17%205H9.5a3.5%203.5%200%200%200%200%207h5a3.5%203.5%200%200%201%200%207H6'/%3E%3C/svg%3E" alt="" aria-hidden="true"></span>Pricing</a>
+        </div>
+      </div>
+    </div>
+
+    <a class="mm-drawer__link" href="integrations.html">Integrations</a>
+    <a class="mm-drawer__link" href="pricing.html">Pricing</a>
+    <a class="mm-drawer__link" href="customers.html">Customers</a>
+  </div>
+
+  <div class="mm-drawer__cta">
+    <a class="btn btn-primary wow-glow" href="demo.html">Book a demo</a>
+  </div>
+</nav>
+
+<main id="main">
+
+<!-- ZONE 2 HERO : SECTION-COMPONENTS 1 / HERO-COMPOSITIONS 7 (dark device-mockup split + floating proof), stamped from heroes/07-dashboard-device.partial.html -->
+<section class="section hero section--dark wow-bloom">
+  <div class="container product-hero__layout">
+    <div class="hero__inner">
+      <p class="eyebrow">// PIPELINE-NATIVE DATA OBSERVABILITY</p>
+      <h1>Catch broken data &mdash; before it ships.</h1>
+      <p class="lede">Northsignal wires monitoring into your warehouse and dbt graph from the first run &mdash; freshness, volume, schema, and distribution coverage auto-generated, with a catch-before-ship gate that stops bad data pre-merge, not the next morning.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary wow-glow" href="demo.html">Book a demo</a>
+        <a class="btn btn-secondary" href="docs.html">Read the docs</a>
+      </div>
+      <div class="stat-strip__row">
+        <!-- src: R-STAT-01 -->
+        <div class="stat"><span class="stat__num" data-count="4" data-suffix="-min">4-min</span><span class="stat__label">Median time-to-detect across monitored pipelines</span></div>
+        <!-- src: R-STAT-02 -->
+        <div class="stat"><span class="stat__num" data-count="1800" data-suffix="+">1,800+</span><span class="stat__label">Production pipelines monitored on Northsignal</span></div>
+      </div>
+    </div>
+    <figure class="product-hero__gallery wow-zoom"><img src="assets/hero-dashboard.jpg" alt="The Northsignal data-observability dashboard showing freshness, volume, and schema monitors across a warehouse"></figure>
+  </div>
+</section>
+
+<!-- ZONE 3 TRUST / INTRO : SECTION-COMPONENTS 8 manifesto positioning bridge + 2 trust strip. One band, one container, single centered intro column -->
+<section class="section manifesto section--warm">
+  <div class="container">
+    <p class="eyebrow">Trusted on the modern data stack</p>
+    <p class="manifesto__text">Dashboards tell you something broke after it already reached a customer report. Northsignal moves the check upstream &mdash; into the pipeline, before the merge &mdash; so the number is trusted by the time anyone reads it.</p>
+    <div class="logo-wall__grid">
+      <div class="logo-cell"><img src="assets/bento-lineage.jpg" alt="Aperture Labs"></div>
+      <div class="logo-cell"><img src="assets/process-pipeline.jpg" alt="Northwind Freight"></div>
+      <div class="logo-cell"><img src="assets/pricing-coverage.jpg" alt="Cobalt Health"></div>
+      <div class="logo-cell"><img src="assets/testimonial-team.jpg" alt="Meridian Pay"></div>
+      <div class="logo-cell"><img src="assets/feature-incident-timeline.jpg" alt="Solene Retail"></div>
+    </div>
+    <!-- src: R-LOGO-01 -->
+    <p class="lede">Trusted by data teams at Aperture Labs, Northwind Freight, Cobalt Health, Meridian Pay, and Solene Retail.</p>
+  </div>
+</section>
+
+<!-- ZONE 3b HOW IT WORKS : SECTION-COMPONENTS 27 Numbered process steps (EARLY, per audit). dark band; process-pipeline imagery -->
+<section class="section process section--dark">
+  <div class="container">
+    <p class="eyebrow">How it works</p>
+    <h2>From warehouse connect to caught-before-ship in three steps</h2>
+    <figure class="feature-row__media wow-zoom"><img src="assets/process-pipeline.jpg" alt="Abstract pipeline-flow diagram of data streaming from warehouse through Northsignal's catch-before-ship gate"></figure>
+    <div class="process__steps wow-stagger">
+      <article class="step wow-lift"><span class="step__num">1</span><h3>Connect your warehouse</h3><p>Point Northsignal at Snowflake, Databricks, BigQuery, or Redshift. It reads query history and metadata only &mdash; nothing to install in your data plane.</p></article>
+      <article class="step wow-lift"><span class="step__num">2</span><h3>Coverage auto-generates</h3><p>Northsignal reads your warehouse and dbt graph and generates freshness, volume, schema, and distribution monitors on the first run &mdash; no checks to hand-author.</p></article>
+      <article class="step wow-lift"><span class="step__num">3</span><h3>Bad data is caught pre-merge</h3><p>The catch-before-ship gate runs in-pipeline on every dbt run and pre-merge, so broken data is stopped before it reaches a dashboard or report.</p></article>
+    </div>
+  </div>
+</section>
+
+<!-- ZONE 4 VALUE / CAPABILITY : SECTION-COMPONENTS 13 Bento feature grid, rendered as the canonical capability-breakdown cards grid (the grid-reflow overlay class is banned). light band; inset imagery -->
+<section class="section capability-breakdown">
+  <div class="container">
+    <p class="eyebrow">The platform</p>
+    <h2>Pipeline-native observability, end to end</h2>
+    <div class="cap-breakdown__grid wow-stagger">
+      <!-- src: R-FEAT-01 -->
+      <article class="card capability-card wow-lift"><span class="capability-card__icon"><img src="assets/bento-lineage.jpg" alt="Auto-coverage monitoring"></span><h3>Auto-coverage monitoring</h3><p>Northsignal reads your warehouse and dbt graph and generates freshness, volume, schema, and distribution monitors on the first run &mdash; no checks to hand-author.</p></article>
+      <!-- src: R-FEAT-02 -->
+      <article class="card capability-card wow-lift"><span class="capability-card__icon"><img src="assets/feature-incident-timeline.jpg" alt="Catch-before-ship gate"></span><h3>Catch-before-ship gate</h3><p>Detection runs in-pipeline on every dbt run and pre-merge, so broken data is stopped before it reaches a dashboard, feature store, or customer report.</p></article>
+      <article class="card capability-card wow-lift"><span class="capability-card__icon"><img src="assets/process-pipeline.jpg" alt="Column-level lineage"></span><h3>Column-level lineage</h3><p>Every incident ties back to the upstream model, source, and the commit that caused it &mdash; so on-call resolves at the root instead of triaging the symptom.</p></article>
+    </div>
+  </div>
+</section>
+
+<!-- ZONE 5a PROOF : SECTION-COMPONENTS 3 count-up stat band on an accent anchor. Stat grid on an INNER div. data-count is a real magnitude -->
+<section class="section data-proof stat-strip section--accent">
+  <div class="container">
+    <p class="eyebrow">The proof</p>
+    <h2>Reliability you can put a number on</h2>
+    <div class="data-proof__grid">
+      <!-- src: R-STAT-01 -->
+      <div class="stat"><span class="stat__num" data-count="4" data-suffix="-min">4-min</span><span class="stat__label">Median time-to-detect</span><span class="data-proof__sub">across monitored pipelines, not the next morning</span></div>
+      <!-- src: R-PROOF-01 -->
+      <div class="stat"><span class="stat__num" data-count="71" data-suffix="%">71%</span><span class="stat__label">Less triage time</span><span class="data-proof__sub">teams cut data-incident triage time in the first quarter on Northsignal</span></div>
+      <!-- src: R-STAT-02 -->
+      <div class="stat"><span class="stat__num" data-count="1800" data-suffix="+">1,800+</span><span class="stat__label">Production pipelines</span><span class="data-proof__sub">monitored on Northsignal today</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ZONE 5b SEE IT IN ACTION : SECTION-COMPONENTS 12 Feature row with screenshot. The 2-col feature-row is an INNER div inside the container, never on the band. dark band -->
+<section class="section feature-rows section--dark">
+  <div class="container">
+    <p class="eyebrow">See it in action</p>
+    <h2>Watch a bad merge get stopped before it ships</h2>
+    <div class="feature-row wow-reveal">
+      <figure class="feature-row__media wow-zoom"><img src="assets/feature-incident-timeline.jpg" alt="The Northsignal incident timeline catching a schema drift on a developer screen"></figure>
+      <div class="feature-row__body">
+        <span class="feature-row__kicker">Catch-before-ship gate</span>
+        <h3>The gate runs where the data does</h3>
+        <p>Every anomaly opens an incident with the impacted-asset blast radius, the owner, and the upstream commit &mdash; routed to Slack or PagerDuty the moment it trips, pre-merge.</p>
+        <ul class="feature-row__list">
+          <li>Runs in-pipeline on every dbt run and pre-merge</li>
+          <li>Fails the build on a schema, freshness, or volume breach</li>
+        </ul>
+      </div>
+    </div>
+    <div class="feature-row wow-reveal">
+      <figure class="feature-row__media wow-zoom"><img src="assets/bento-lineage.jpg" alt="Column-level lineage tracing an incident back to its upstream model on a dark dashboard"></figure>
+      <div class="feature-row__body">
+        <span class="feature-row__kicker">Root cause, not just alerts</span>
+        <h3>From alert to upstream commit in one hop</h3>
+        <p>Column-level lineage maps every monitored table to its sources, models, and the change that broke it, so the on-call engineer resolves the cause instead of chasing the symptom.</p>
+        <ul class="feature-row__list">
+          <li>Impacted-asset blast radius on every incident</li>
+          <li>Adaptive ML baselines cut false positives versus static thresholds</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ZONE 6 VERTICAL BLOCK : PRICING. SECTION-COMPONENTS 31 Pricing 3-tier (plan-cards). light band; inset imagery; middle card featured; real prices from pricing.md -->
+<section class="section plan-cards">
+  <div class="container">
+    <p class="eyebrow">Pricing</p>
+    <h2>Priced by warehouse &mdash; never per seat, never per row</h2>
+    <figure class="feature-row__media wow-zoom"><img src="assets/pricing-coverage.jpg" alt="Macro of data infrastructure representing the warehouse-native layer every plan covers"></figure>
+    <div class="plan-cards__grid wow-stagger">
+      <div class="card price-card wow-lift">
+        <p class="plan-card__name">Starter</p>
+        <p class="plan-card__blurb">For the first warehouse and the first monitors.</p>
+        <p class="price-card__amount">$0</p>
+        <ul class="price-card__features">
+          <li>1 warehouse, up to 50 monitored tables</li>
+          <li>Freshness + volume monitors, Slack alerts</li>
+        </ul>
+        <a class="btn btn-secondary" href="pricing.html">See Starter</a>
+      </div>
+      <div class="card price-card plan-card--featured wow-lift">
+        <span class="plan-card__ribbon">Most popular</span>
+        <p class="plan-card__name">Team</p>
+        <p class="plan-card__blurb">All monitor types, lineage, and contracts.</p>
+        <p class="price-card__amount">$1,200</p>
+        <ul class="price-card__features">
+          <li>Unlimited tables, all monitor types incl. distribution + schema</li>
+          <li>Column-level lineage, data contracts, SSO, 90-day history</li>
+        </ul>
+        <a class="btn btn-primary wow-glow" href="demo.html">Book a demo</a>
+      </div>
+      <div class="card price-card wow-lift">
+        <p class="plan-card__name">Enterprise</p>
+        <p class="plan-card__blurb">VPC deployment, ML baselines, and a dedicated SLA.</p>
+        <p class="price-card__amount">Custom</p>
+        <ul class="price-card__features">
+          <li>Unlimited warehouses, anomaly ML baselines, Terraform + API</li>
+          <li>SAML SSO + SCIM, HIPAA BAA, dedicated solutions architect</li>
+        </ul>
+        <a class="btn btn-secondary" href="pricing.html">Talk to sales</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ZONE 7a PROOF (testimonials) : SECTION-COMPONENTS 24 Testimonials grid (glass quote cards). warm band; inset imagery per card avatar -->
+<section class="section customer-proof section--warm">
+  <div class="container">
+    <p class="eyebrow">What data teams say</p>
+    <h2>Trusted by the people on call at 3am</h2>
+    <div class="customer-proof__grid wow-stagger">
+      <article class="card testimonial-card wow-lift">
+        <div class="testimonial-card__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <blockquote>We went from 40 hours of monthly firefighting to a 4-minute median detect. The pager finally got quiet.</blockquote>
+        <div class="testimonial-card__who"><img class="testimonial-card__avatar" src="assets/testimonial-team.jpg" alt="Dana R."><div><span class="testimonial-card__name">Dana R.</span><span class="testimonial-card__role">Lead Data Engineer, Northwind Freight</span></div></div>
+      </article>
+      <article class="card testimonial-card wow-lift">
+        <div class="testimonial-card__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <blockquote>Auto-coverage replaced 600 hand-authored dbt tests on day one. We stopped maintaining checks and started shipping.</blockquote>
+        <div class="testimonial-card__who"><img class="testimonial-card__avatar" src="assets/testimonial-team.jpg" alt="Priya M."><div><span class="testimonial-card__name">Priya M.</span><span class="testimonial-card__role">Analytics Engineering, Reef Analytics</span></div></div>
+      </article>
+      <article class="card testimonial-card wow-lift">
+        <div class="testimonial-card__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <blockquote>It caught a schema drift in a payments model pre-merge and prevented a reconciliation error across millions of transactions.</blockquote>
+        <div class="testimonial-card__who"><img class="testimonial-card__avatar" src="assets/testimonial-team.jpg" alt="Sam T."><div><span class="testimonial-card__name">Sam T.</span><span class="testimonial-card__role">Platform Lead, Meridian Pay</span></div></div>
+      </article>
+    </div>
+    <!-- src: R-SOC-01 -->
+    <p class="lede">Rated 4.8 / 5 across 340+ verified G2 reviews in the Data Observability category.</p>
+  </div>
+</section>
+
+<!-- ZONE 7b INFORMATION : SECTION-COMPONENTS 34 FAQ accordion. dark band; text-only by convention; also carries the security/compliance trust proof (R-CERT-01) -->
+<section class="section faq section--dark">
+  <div class="container">
+    <p class="eyebrow">Good to know</p>
+    <h2>Questions data teams ask first</h2>
+    <div class="faq__list">
+      <details class="faq-item"><summary class="faq-item__q">Do I need to deploy an agent?</summary><div class="faq-item__a">No. Northsignal connects to your warehouse's query history and metadata, so there is nothing to install in your data plane.</div></details>
+      <details class="faq-item"><summary class="faq-item__q">How long does setup take?</summary><div class="faq-item__a">Most teams connect a warehouse and see auto-generated monitors live in under 30 minutes, with no checks to hand-author.</div></details>
+      <!-- src: R-CERT-01 -->
+      <details class="faq-item"><summary class="faq-item__q">Is our data secure?</summary><div class="faq-item__a">Northsignal is SOC 2 Type II, HIPAA, and GDPR audited annually, with data encrypted in transit and at rest. It reads metadata only &mdash; your row data never leaves the warehouse.</div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ZONE 8a CONVERSION : SECTION-COMPONENTS 41 Closing CTA (gradient demo panel). dark anchor band; full-bleed signal imagery; the 2-col cta-form layout is on the INNER container (both columns are real children) -->
+<section class="section cta-form section--dark wow-bloom">
+  <div class="container cta-form__layout">
+    <div class="cta-form__pitch">
+      <h2>See it catch a bad merge</h2>
+      <p class="lede">Book a 30-minute walkthrough with a solutions engineer &mdash; connect a sample warehouse, watch monitors auto-generate, and stop a bad merge in real time. Every demo includes a 14-day full-feature Team trial, no credit card.</p>
+      <figure class="feature-row__media wow-zoom"><img src="assets/cta-data-network.jpg" alt="Abstract dark data-network of glowing nodes and edges in an indigo-to-cyan signal mood"></figure>
+    </div>
+    <form class="form" onsubmit="return false">
+      <div class="field"><label for="hp-name">Work email</label><input id="hp-name" type="email"></div>
+      <div class="field"><label for="hp-email">Warehouse (Snowflake, Databricks&hellip;)</label><input id="hp-email" type="text"></div>
+      <button class="btn btn-primary wow-glow" type="submit">Book a demo</button>
+    </form>
+  </div>
+</section>
+
+</main>
+
+<!-- ZONE 8 FOOTER : shared sitemap-driven chrome (closing-CTA lead + nav cols + bottom bar), injected from _chrome.html -->
+<footer class="site-footer">
+  <div class="container">
+
+    <div class="mm-footer__lead">
+      <div class="mm-footer__lead-art" aria-hidden="true">
+        <img src="assets/closing-cta-signal.jpg" alt="">
+      </div>
+      <div class="mm-footer__lead-copy">
+        <p class="eyebrow">See it catch a bad merge</p>
+        <h2>Trust every number <span class="accent">before it ships.</span></h2>
+        <p class="mm-footer__lead-sub">Book a 30-minute walkthrough with a solutions engineer &mdash; connect a sample warehouse, watch monitors auto-generate, and stop a bad merge in real time.</p>
+      </div>
+      <div class="mm-footer__lead-actions">
+        <a class="btn btn-primary wow-glow" href="demo.html">Book a demo</a>
+        <span class="mm-footer__lead-note">Includes a 14-day Team trial &middot; no credit card</span>
+      </div>
+    </div>
+
+    <hr class="mm-footer__divide" aria-hidden="true">
+
+    <div class="site-footer__top">
+      <div>
+        <div class="site-footer__brand"><span class="site-footer__brand-mark">N</span>Northsignal</div>
+        <p class="site-footer__blurb">Pipeline-native data observability &mdash; monitoring wired into your warehouse and dbt graph from the first run, so bad data is caught before it ships.</p>
+        <div class="site-footer__hours">
+          <strong>Support hours</strong>
+          6am&ndash;6pm Mountain, Mon&ndash;Fri &middot; 24/7 on-call for Enterprise SLAs
+        </div>
+      </div>
+
+      <div class="site-footer__col">
+        <h4>Product</h4>
+        <ul>
+          <li><a href="platform.html">Platform</a></li>
+          <li><a href="integrations.html">Integrations</a></li>
+          <li><a href="pricing.html">Pricing</a></li>
+        </ul>
+      </div>
+
+      <div class="site-footer__col">
+        <h4>Trust</h4>
+        <ul>
+          <li><a href="security.html">Security</a></li>
+          <li><a href="customers.html">Customers</a></li>
+        </ul>
+      </div>
+
+      <div class="site-footer__col">
+        <h4>Developers</h4>
+        <ul>
+          <li><a href="docs.html">Docs &amp; API</a></li>
+          <li><a href="https://status.northsignal.io">Status</a></li>
+        </ul>
+      </div>
+
+      <div class="site-footer__col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="company.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="demo.html">Book a demo</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="site-footer__bottom">
+      <span>&copy; 2026 Northsignal, Inc. &middot; Denver, Colorado</span>
+      <span class="site-footer__bcorp">SOC 2 Type II &middot; HIPAA &middot; GDPR &middot; ISO 27001</span>
+    </div>
+
+  </div>
+</footer>
+
+<div class="mm-sticky-cta" id="mm-sticky-cta" aria-hidden="true">
+  <div class="mm-sticky-cta__copy">
+    <b>See it catch a bad merge</b>
+    <span>30-min demo &middot; 14-day trial</span>
+  </div>
+  <a class="btn btn-primary btn-sm" href="demo.html">Book a demo</a>
+</div>
+
+<script src="design-system/site.js" defer></script>
+</body>
+</html>
