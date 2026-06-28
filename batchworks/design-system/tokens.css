@@ -1,0 +1,196 @@
+/* ============================================================================
+   BATCHWORKS — BRAND-CARD CONCEPT A · "Bold Foundry" · candidate identity tokens
+   ----------------------------------------------------------------------------
+   Tournament-local token sheet (lives INSIDE the free brand-card concept folder,
+   NOT the FOUNDATION-locked _design/ root). If the owner picks Concept A, this
+   :root + .surface-dark pair is what gets grafted onto the locked
+   _design/batchworks-tokens.css.
+
+   Direction: owner-picked Direction 2 "Blueprint" (C7) — DARK-dominant industrial
+   (dark_ratio ~0.7), technical-grid texture, target/dial motif, big confident
+   condensed display, TEAL as the PRIMARY WORKHORSE accent, machined-metal/foundry
+   material cues. The page reads dark; the light surface is the punctuation.
+
+   G8 contract honoured (so it can graft cleanly):
+     · token-complete families (COLOR / TYPE / SPACE / RADIUS / SHADOW / MOTION)
+     · DUAL-SURFACE PARITY — every FLIP_REQUIRED category (ACCENT/INK/SURFACE/
+       LINE/SHADOW) declared in BOTH :root (light) and .surface-dark (dark)
+     · ZERO raw brand hex outside :root / .surface-dark — components elsewhere
+       (the brand-card.html <style>) reference colour via var(--ds-*) ONLY
+
+   applies _MODERN-WOW-SPEC  (TOP-12 #1 ONE accent over committed neutrals ·
+                              #3 ink-tinted layered shadow · §1 depth · §3 texture)
+   composition-manufacturing-industrial  (one accent over near-black + warm
+                              off-white · slab/grotesque display · restraint)
+   ============================================================================ */
+
+/* ----------------------------------------------------------------------------
+   :root — the LIGHT surface (the punctuation band; ink-on-paper).
+   BatchWorks is dark-dominant, so light is the minority surface — but it is a
+   real, fully-specified surface so a light band never inherits a dark token.
+   This is the ONE place light-surface brand hex is allowed to live.
+   ---------------------------------------------------------------------------- */
+:root {
+  /* ===== COLOR — surface (light) ===== */
+  --ds-bg-surface:     #EEF2F6;   /* light-grey paper — the punctuation ground */
+  --ds-bg-surface-2:   #FFFFFF;   /* raised light card */
+  --ds-bg-warm:        #E3E9F0;   /* sunk light band */
+
+  /* ===== COLOR — ink (on light) ===== */
+  --ds-ink:            #0E1426;   /* industrial-navy ink on paper */
+  --ds-ink-soft:       #475264;   /* secondary steel ink on paper */
+  --ds-ink-on-dark:    #EAF1F4;   /* near-white for the rare dark chip on a light band */
+
+  /* ===== COLOR — accent (TEAL is the workhorse) ===== */
+  --ds-accent:         #2E6E76;   /* teal darkened for AA as SMALL text/links on paper (#56A7AF is large-only on light) */
+  --ds-accent-strong:  #1F5057;   /* pressed teal on light */
+  --ds-accent-bright:  #56A7AF;   /* the true brand teal — large display / borders / icons on light */
+  --ds-on-accent:      #0A1422;   /* ink that sits ON a teal fill (dark, for AA on bright teal) */
+  --ds-accent-soft:    rgba(46,110,118,0.12);  /* teal tint wash on light */
+
+  /* ===== COLOR — line / hairline (on light) ===== */
+  --ds-line:           #C5CCD6;   /* light-grey hairline */
+  --ds-line-strong:    #A6B0BF;   /* heavier light rule */
+  --ds-divider:        #C5CCD6;
+  --ds-glass-border:   rgba(14,20,38,0.12);
+
+  /* ===== COLOR — scrim / overlay ===== */
+  --ds-scrim:          rgba(11,20,38,0.55);
+
+  /* ===== TYPE — owner fonts Gotham + Poppins; web-safe condensed fallbacks ===== */
+  --ds-font-display:   "Oswald", "Gotham", "Arial Narrow", system-ui, sans-serif;       /* BIG condensed confident display */
+  --ds-font-body:      "Poppins", system-ui, -apple-system, "Segoe UI", sans-serif;     /* calm geometric body */
+  --ds-font-mono:      "Space Grotesk", ui-monospace, "Consolas", monospace;            /* labels / numerals / spec ramp */
+
+  --ds-fs-display:     clamp(52px, 8vw, 104px); /* the signature oversized display */
+  --ds-fs-h1:          clamp(38px, 5.2vw, 64px);
+  --ds-fs-h2:          clamp(27px, 3.2vw, 38px);
+  --ds-fs-h3:          clamp(20px, 2.1vw, 24px);
+  --ds-fs-body:        17px;
+  --ds-fs-caption:     12px;
+  --ds-tracking-disp:  -0.02em;   /* tight on display */
+  --ds-tracking-label: 0.16em;    /* wide on labels/eyebrows */
+  --ds-lh-tight:       1.02;
+  --ds-lh-body:        1.62;
+
+  /* ===== SPACE ===== */
+  --ds-space-2xs: 4px;
+  --ds-space-xs:  8px;
+  --ds-space-sm:  12px;
+  --ds-space-md:  16px;
+  --ds-space-lg:  24px;
+  --ds-space-xl:  40px;
+  --ds-space-2xl: 64px;
+  --ds-space-3xl: 96px;
+  --ds-section-py:    clamp(40px, 7vw, 72px);
+  --ds-container-max: 1180px;
+
+  /* ===== RADIUS — 3 ROLE-NAMED steps (industrial, sharp-leaning; DS constraint 2026-06-24) =====
+     Collapsed from the old 6-step chip/sm/md/lg/xl/pill scale to 3 SEMANTIC roles:
+       control — buttons / inputs / search / top-bar / badges / tags / bullets / index chips (was chip 4px + sm 6px)
+       surface — cards / panels / media frames / stat anchor / compare / proof / tex / quote-ask / mega panel (was md 10 + lg 14 + xl 20)
+       pill    — full-round (pills / avatars / flags / icons) — unchanged */
+  --ds-r-control: 6px;
+  --ds-r-surface: 14px;
+  --ds-r-pill:    999px;
+
+  /* ===== SHADOW — ink-tinted toward industrial-navy, NEVER pure black (WOW §1/#3) ===== */
+  --ds-shadow-rest:  0 2px 6px rgba(14,20,38,0.10);
+  --ds-shadow-card:  0 1px 2px rgba(14,20,38,0.08), 0 14px 34px -12px rgba(14,20,38,0.18);
+  --ds-shadow-lift:  0 24px 56px -16px rgba(14,20,38,0.26), 0 0 0 1px var(--ds-line);
+  --ds-glow:         0 0 0 1px rgba(46,110,118,0.30), 0 14px 38px -10px rgba(46,110,118,0.30);
+  --ds-inset-hi:     inset 0 1px 0 rgba(255,255,255,0.70);
+
+  /* ===== MATERIAL / TEXTURE — the signature technical-grid + machined-metal cues ===== */
+  /* technical blueprint grid: a faint teal lattice, lighter at the top (per the Blueprint direction) */
+  --ds-grid:         linear-gradient(rgba(46,110,118,0.10) 1px, transparent 1px),
+                     linear-gradient(90deg, rgba(46,110,118,0.10) 1px, transparent 1px);
+  --ds-grid-size:    34px 34px;
+  --ds-metal:        linear-gradient(160deg, #FFFFFF 0%, #E3E9F0 48%, #FFFFFF 100%);  /* brushed light metal */
+  --ds-glow-wash:    radial-gradient(60% 70% at 72% 14%, rgba(46,110,118,0.16), transparent 70%);
+  --ds-grain:        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+
+  /* ===== MOTION ===== */
+  --ds-ease:      cubic-bezier(.05,.5,.3,1);
+  --ds-ease-out:  cubic-bezier(.2,.6,.2,1);
+  --ds-dur-fast:  160ms;
+  --ds-dur:       240ms;
+  --ds-dur-slow:  600ms;
+
+  /* ===== MOTION — count-up data duration (DS constraint 2026-06-24) =====
+     The over-generated 1..5 step scale + dur-bar + the 4 extra easings (ease-settle/in/spring/soft)
+     were DROPPED — verified zero consumers; the 5 CONSUMED motion tokens (--ds-dur-fast / --ds-dur /
+     --ds-dur-slow / --ds-ease / --ds-ease-out, all above) are the whole live vocabulary. The ONE
+     off-scale token kept is the JS count-up duration, now READ by the count-up rAF (foundation-specimen). */
+  --ds-dur-data:    1400ms;  /* OFF-SCALE — JS count-up (read via getComputedStyle --ds-dur-data) */
+
+  /* ===== Z-INDEX SCALE (DS constraint 2026-06-24, specs/_SCROLL-STICKY §3.2 flattened to --ds-z-*) =====
+     Constrained to the 8 SEMANTIC layers with real/standard consumers (the 7 speculative chrome tiers —
+     sticky-rail/announce/backtotop/cookiebar/mobilecta/skiplink/floating — were DROPPED: no consumer in
+     this build). Renumbered cleanly; drawer ABOVE overlay/scrim. Theme-agnostic (z does not flip per
+     surface) so it lives ONLY in :root, not .surface-dark. */
+  --ds-z-below:    -1;     /* decorative layer BEHIND content (bg img, grain veil) */
+  --ds-z-base:      0;     /* default in-flow stacking ground (incl. in-section decorative/scrim layers) */
+  --ds-z-raised:    1;     /* in-section content lifted above a sibling decorative/scrim layer */
+  --ds-z-sticky:    1000;  /* sticky/fixed header, scroll-progress, mobile sticky-CTA (different screen edges) */
+  --ds-z-overlay:   1040;  /* drawer/menu/exit-popup SCRIM */
+  --ds-z-drawer:    1050;  /* the off-canvas drawer/menu surface itself (ABOVE its scrim) */
+  --ds-z-modal:     1060;  /* modal / dialog / lightbox */
+  --ds-z-toast:     1080;  /* toast / snackbar / skip-link — above modals so it is never buried */
+
+  /* ===== OPACITY SCALE (DS adoption 2026-06-24) — theme-agnostic, :root only ===== */
+  --ds-opacity-muted:    .72;  /* de-emphasized but legible */
+  --ds-opacity-disabled: .45;  /* disabled / inert UI */
+  --ds-opacity-faint:    .12;  /* faint tint wash */
+  --ds-opacity-scrim:    .55;  /* image-overlay legibility scrim */
+  --ds-opacity-texture:  .40;  /* grain / noise / texture veil */
+  --ds-opacity-veil:     .85;  /* heavy overlay veil */
+}
+
+/* ----------------------------------------------------------------------------
+   .surface-dark — the PRIMARY surface (dark-dominant per Direction 2 "Blueprint").
+   Same --ds-* names, flipped values. Every FLIP_REQUIRED category
+   (ACCENT / INK / SURFACE / LINE / SHADOW) is re-declared here so a dark region
+   never inherits a light token (the dark-on-dark / cream-on-white contrast trap).
+   This is the second place brand hex is allowed to live.
+   ---------------------------------------------------------------------------- */
+.surface-dark {
+  /* ===== SURFACE — the industrial near-black ground stack ===== */
+  --ds-bg-surface:     #0E1426;   /* industrial-navy — the page base */
+  --ds-bg-surface-2:   #15203A;   /* raised dark card (navy-leaning) */
+  --ds-bg-warm:        #0A1020;   /* deepest sunk band — bottom of the grid gradient */
+
+  /* ===== INK — on dark ===== */
+  --ds-ink:            #EAF1F4;   /* near-white primary ink on dark */
+  --ds-ink-soft:       #9DACBD;   /* desaturated steel body on dark */
+  --ds-ink-on-dark:    #EAF1F4;   /* alias kept for parity */
+
+  /* ===== ACCENT — teal SHINES on dark; the bright brand teal is the workhorse here ===== */
+  --ds-accent:         #56A7AF;   /* true brand teal — AA-bright on the dark ground */
+  --ds-accent-strong:  #6FC2CB;   /* hover / brighter rule on dark */
+  --ds-accent-bright:  #6FC2CB;   /* large display / glow */
+  --ds-on-accent:      #07121E;   /* ink ON a teal fill (dark for AA on bright teal) */
+  --ds-accent-soft:    rgba(86,167,175,0.14);   /* teal tint wash on dark */
+
+  /* ===== LINE — hairlines on dark ===== */
+  --ds-line:           rgba(197,204,214,0.14);  /* faint light-grey hairline on dark */
+  --ds-line-strong:    rgba(197,204,214,0.26);
+  --ds-divider:        rgba(86,167,175,0.40);   /* teal rule on dark */
+  --ds-glass-border:   rgba(197,204,214,0.16);
+
+  /* ===== SCRIM ===== */
+  --ds-scrim:          rgba(7,18,30,0.66);
+
+  /* ===== SHADOW — deeper, ink-tinted toward the deepest ground; + teal glow ===== */
+  --ds-shadow-rest:  0 2px 6px rgba(6,10,20,0.45);
+  --ds-shadow-card:  0 18px 44px -14px rgba(6,10,20,0.72), 0 4px 12px -4px rgba(6,10,20,0.50);
+  --ds-shadow-lift:  0 34px 68px -18px rgba(6,10,20,0.85), 0 0 0 1px var(--ds-divider);
+  --ds-glow:         0 0 0 1px rgba(86,167,175,0.40), 0 16px 44px -10px rgba(86,167,175,0.42);
+  --ds-inset-hi:     inset 0 1px 0 rgba(255,255,255,0.06);
+
+  /* ===== MATERIAL / TEXTURE — grid brighter on dark; machined gunmetal ===== */
+  --ds-grid:         linear-gradient(rgba(86,167,175,0.14) 1px, transparent 1px),
+                     linear-gradient(90deg, rgba(86,167,175,0.14) 1px, transparent 1px);
+  --ds-metal:        linear-gradient(160deg, #1B2842 0%, #0E1426 52%, #1B2842 100%);  /* brushed gunmetal */
+  --ds-glow-wash:    radial-gradient(60% 70% at 72% 14%, rgba(86,167,175,0.22), transparent 70%);
+}

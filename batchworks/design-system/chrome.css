@@ -1,0 +1,485 @@
+/* batchworks-chrome.css — LOCKED chrome (concept C "Bolder Industrial"), extracted VERBATIM from
+   _design/_tournament/chrome-c/preview.html (owner-approved 2026-06-24: toned drawer + §2.3 sticky hide-at-footer).
+   Base reset + header/nav/mega-menu/drawer/scrim/pre-footer-CTA/footer/sticky + responsive. The chrome JS
+   (scroll-state + canonical drawer + mega + §2.3 sticky observers) lives in the page template, not here. */
+/* ============================================================================
+   CHROME-C OWN RULES — the "Foundry Bar" chrome. Token-pure: every colour is a
+   var(--ds-*) resolved from the LINKED batchworks-tokens.css (:root light +
+   .surface-dark dark flip). No raw brand hex here.
+   ============================================================================ */
+*,*::before,*::after{ box-sizing:border-box; }
+html{ -webkit-text-size-adjust:100%; scroll-behavior:smooth; }
+body{
+  margin:0; font-family:var(--ds-font-body); font-size:var(--ds-fs-body);
+  line-height:var(--ds-lh-body); color:var(--ds-ink);
+  background:var(--ds-bg-surface); -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+img{ max-width:100%; display:block; }
+a{ color:inherit; text-decoration:none; }
+.container{ max-width:var(--ds-container-max); margin-inline:auto; padding-inline:clamp(16px,4vw,32px); }
+
+/* skip-link (a11y) */
+.skip-link{ position:absolute; left:-9999px; top:0; z-index:var(--ds-z-toast);
+  background:var(--ds-accent); color:var(--ds-on-accent); padding:10px 16px;
+  font-family:var(--ds-font-mono); font-size:12px; letter-spacing:.08em; text-transform:uppercase; border-radius:0 0 var(--ds-r-control) 0; }
+.skip-link:focus{ left:0; }
+
+/* ============================================================================
+   INTERACTION-STATE SYSTEM (a11y focus · press · disabled) — DS PATTERN, additive.
+   ----------------------------------------------------------------------------
+   A coherent, token-pure state layer for EVERY interactive element in the chrome.
+   It is purely ADDITIVE: the locked LOOK (hover lifts, underline sweeps, colour
+   flips above) is untouched; these rules add the three states the look was missing.
+   This is the GENERAL design-system pattern — keyboard a11y, tactile press, and an
+   inert/disabled treatment — and is mirrored for body-section controls in
+   batchworks-structural.css. Every value is a var(--ds-*) token or a trivial layout
+   literal (0 / 1px-2px hairline) so it satisfies the page-token gate (G-PTS).
+
+   (1) :focus-visible — a VISIBLE keyboard focus ring on every interactive element
+       (buttons, nav links, the Capabilities mega trigger, drawer controls, the
+       accordion trigger, all links, the hamburgers, any input/select/textarea).
+       Token-driven: outline:2px solid var(--ds-accent) + outline-offset:2px, plus a
+       soft teal halo (var(--ds-glow)) so the ring reads on both light + dark surfaces.
+   (2) :focus:not(:focus-visible) — kept CLEAN: a mouse/touch click never shows a ring
+       (the ring is for keyboard navigation only).
+   (3) :active — a subtle tactile PRESS (settle to translateY(0) + scale(.98)) on
+       buttons + pressable controls, on the fast motion token.
+   (4) [disabled] / [aria-disabled="true"] — consumes --ds-opacity-disabled (the
+       previously-defined-but-unconsumed token) + cursor:not-allowed + NO hover lift.
+   ============================================================================ */
+
+/* (1) a11y FOCUS RING — one grouped rule covering every interactive element in the chrome.
+   :focus-visible fires only for keyboard/AT focus, so the ring never shows on a mouse click. */
+.btn:focus-visible,
+.nav__link:focus-visible,
+.rail-burger:focus-visible,
+.site-header__hamburger:focus-visible,
+.mega__feat-link:focus-visible,
+.mega__item:focus-visible,
+.mega__viewall a:focus-visible,
+.drawer__close:focus-visible,
+.drawer__link:focus-visible,
+.acc__trigger:focus-visible,
+.acc__sub:focus-visible,
+.footer__col a:focus-visible,
+.footer__legal a:focus-visible,
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible{
+  outline:2px solid var(--ds-accent);
+  outline-offset:2px;
+  border-radius:var(--ds-r-control);   /* keep the ring corner on-scale even for square targets */
+  box-shadow:var(--ds-glow);           /* soft teal halo — reads on both light + dark surfaces */
+}
+/* (2) MOUSE/TOUCH focus stays CLEAN — no ring when focus did not come from the keyboard. */
+.btn:focus:not(:focus-visible),
+.nav__link:focus:not(:focus-visible),
+.rail-burger:focus:not(:focus-visible),
+.site-header__hamburger:focus:not(:focus-visible),
+.mega__feat-link:focus:not(:focus-visible),
+.mega__item:focus:not(:focus-visible),
+.mega__viewall a:focus:not(:focus-visible),
+.drawer__close:focus:not(:focus-visible),
+.drawer__link:focus:not(:focus-visible),
+.acc__trigger:focus:not(:focus-visible),
+.acc__sub:focus:not(:focus-visible),
+.footer__col a:focus:not(:focus-visible),
+.footer__legal a:focus:not(:focus-visible),
+a:focus:not(:focus-visible),
+button:focus:not(:focus-visible),
+input:focus:not(:focus-visible),
+select:focus:not(:focus-visible),
+textarea:focus:not(:focus-visible){
+  outline:none;
+  box-shadow:none;
+}
+
+/* (3) PRESS — a subtle tactile settle on buttons + pressable chrome controls (fast motion token).
+   The :active settle to translateY(0) deliberately overrides the hover lift while held. */
+.btn:active,
+.mega__feat-link:active{ transform:translateY(0) scale(.98); }
+.rail-burger:active,
+.site-header__hamburger:active,
+.drawer__close:active{ transform:scale(.96); }
+.mega__item:active{ transform:translateX(3px) scale(.99); }
+
+/* (4) DISABLED / inert — consumes --ds-opacity-disabled; no pointer, no hover lift. Covers
+   buttons + the hamburgers + inputs whether disabled via [disabled] or [aria-disabled="true"]. */
+.btn[disabled], .btn[aria-disabled="true"],
+button[disabled], button[aria-disabled="true"],
+.rail-burger[disabled], .rail-burger[aria-disabled="true"],
+.site-header__hamburger[disabled], .site-header__hamburger[aria-disabled="true"],
+.drawer__close[disabled], .drawer__close[aria-disabled="true"],
+.acc__trigger[disabled], .acc__trigger[aria-disabled="true"],
+input[disabled], select[disabled], textarea[disabled]{
+  opacity:var(--ds-opacity-disabled);
+  cursor:not-allowed;
+  box-shadow:none;
+}
+/* a disabled control must NOT lift/press/colour-flip on hover or active */
+.btn[disabled]:hover, .btn[aria-disabled="true"]:hover,
+.btn[disabled]:active, .btn[aria-disabled="true"]:active,
+button[disabled]:hover, button[aria-disabled="true"]:hover{
+  transform:none;
+  background:var(--ds-accent-soft);
+  border-color:var(--ds-divider);
+  color:var(--ds-ink-soft);
+  box-shadow:none;
+}
+
+/* ============================== HEADER (glass, scroll-state, bold industrial) ============================== */
+.site-header{
+  position:fixed; inset:0 0 auto 0; z-index:var(--ds-z-sticky);
+  /* GRID removed from the fixed header — it sat on a persistently-visible bar, so it read as
+     "everywhere". The glass blur + ink gradient + the scrolled hairline carry the header; the grid
+     stays an accent on the mega panel + drawer below. */
+  background:
+    linear-gradient(180deg, rgba(7,18,30,0.55), rgba(7,18,30,0.10));
+  background-size:auto;
+  background-position:center;
+  backdrop-filter:blur(6px) saturate(120%); -webkit-backdrop-filter:blur(6px) saturate(120%);
+  border-bottom:1px solid transparent;
+  transition:background-color var(--ds-dur) var(--ds-ease-out),
+             box-shadow var(--ds-dur) var(--ds-ease-out),
+             border-color var(--ds-dur) var(--ds-ease-out),
+             backdrop-filter var(--ds-dur) var(--ds-ease-out);
+}
+/* scrolled: solid glass band + layered ink-tinted shadow + teal hairline */
+.site-header.is-scrolled{
+  /* GRID removed (matches .site-header above — the fixed bar must not carry the grid). */
+  background:
+    linear-gradient(180deg, var(--ds-bg-surface-2), var(--ds-bg-surface));
+  background-size:auto;
+  background-position:center;
+  backdrop-filter:blur(16px) saturate(140%); -webkit-backdrop-filter:blur(16px) saturate(140%);
+  border-bottom:1px solid var(--ds-divider);
+  box-shadow:var(--ds-shadow-card);
+}
+.site-header__bar{
+  display:flex; align-items:center; gap:clamp(14px,2vw,28px);
+  height:74px; transition:height var(--ds-dur) var(--ds-ease-out);
+}
+.site-header.is-scrolled .site-header__bar{ height:64px; }
+
+/* --- logo lockup (dial mark PROMINENT — Concept C) --- */
+.brand{ display:flex; align-items:center; gap:13px; flex:0 0 auto; }
+.brand__mark{ width:42px; height:42px; flex:0 0 auto; filter:drop-shadow(0 0 10px rgba(86,167,175,0.35)); }
+.brand__mark .ring-o{ fill:none; stroke:var(--ds-accent); stroke-width:3; }
+.brand__mark .ring-i{ fill:none; stroke:var(--ds-line-strong); stroke-width:2; }
+.brand__mark .tick{ stroke:var(--ds-accent); stroke-width:3; stroke-linecap:round; }
+.brand__mark .cross{ stroke:var(--ds-accent-strong); stroke-width:1.5; opacity:.5; }
+.brand__mark .node{ fill:var(--ds-accent); }
+.brand__name{
+  font-family:var(--ds-font-display); font-weight:700; text-transform:uppercase;
+  letter-spacing:var(--ds-tracking-disp); line-height:.92; font-size:25px; color:var(--ds-ink);
+}
+.brand__name .lo{ font-weight:400; color:var(--ds-accent); }
+
+/* --- the logo-adjacent structural affordance. MOBILE-ONLY (owner fix): on desktop the full inline
+       .nav + Capabilities mega-menu already expose everything, so a hamburger next to the logo is
+       redundant. Base hidden; the real mobile drawer toggle is .site-header__hamburger (shown ≤860px). --- */
+.nav-rail{ display:none; align-items:center; gap:18px; margin-left:6px; }
+.rail-burger{
+  display:inline-flex; flex-direction:column; gap:4px; width:34px; height:34px;
+  align-items:center; justify-content:center; cursor:pointer;
+  border:1px solid var(--ds-line-strong); border-radius:var(--ds-r-control);
+  background:var(--ds-accent-soft); transition:border-color var(--ds-dur) var(--ds-ease-out), background-color var(--ds-dur) var(--ds-ease-out); }
+.rail-burger:hover{ border-color:var(--ds-accent); background:var(--ds-accent); }
+.rail-burger span{ width:16px; height:2px; background:var(--ds-accent); transition:background-color var(--ds-dur) var(--ds-ease-out); }
+.rail-burger:hover span{ background:var(--ds-on-accent); }
+
+/* --- center inline nav --- */
+.nav{ display:flex; align-items:center; gap:clamp(6px,1.4vw,22px); margin-inline:auto; }
+.nav__link{
+  position:relative; font-family:var(--ds-font-mono); font-weight:500; font-size:13px;
+  letter-spacing:.06em; text-transform:uppercase; color:var(--ds-ink); padding:8px 4px;
+  display:inline-flex; align-items:center; gap:7px; cursor:pointer; background:none; border:0;
+  transition:color var(--ds-dur) var(--ds-ease-out); }
+.nav__link::after{ content:""; position:absolute; left:4px; right:4px; bottom:2px; height:2px;
+  background:var(--ds-accent); transform:scaleX(0); transform-origin:left; transition:transform var(--ds-dur) var(--ds-ease-out); }
+.nav__link:hover, .nav__link:focus-visible{ color:var(--ds-accent); outline:none; }
+.nav__link:hover::after, .nav__link:focus-visible::after{ transform:scaleX(1); }
+.nav__caret{ width:9px; height:9px; transition:transform var(--ds-dur) var(--ds-ease-out); }
+
+/* --- right-side CTA --- */
+.btn{ font-family:var(--ds-font-mono); font-weight:700; font-size:13px; letter-spacing:.08em;
+  text-transform:uppercase; padding:12px 24px; border-radius:var(--ds-r-control); cursor:pointer;
+  border:1.5px solid transparent; display:inline-flex; align-items:center; gap:8px;
+  transition:background-color var(--ds-dur) var(--ds-ease-out), color var(--ds-dur) var(--ds-ease-out),
+             border-color var(--ds-dur) var(--ds-ease-out), box-shadow var(--ds-dur) var(--ds-ease-out),
+             transform var(--ds-dur-fast) var(--ds-ease-out); }
+.btn--primary{ background:var(--ds-accent); color:var(--ds-on-accent); box-shadow:var(--ds-glow); }
+.btn--primary:hover{ background:var(--ds-accent-strong); transform:translateY(-2px); }
+.btn--secondary{ background:transparent; color:var(--ds-accent); border-color:var(--ds-accent); }
+.btn--secondary:hover{ background:var(--ds-accent); color:var(--ds-on-accent); }
+.header-cta{ flex:0 0 auto; margin-left:auto; }
+
+/* hamburger (mobile drawer toggle) — canonical contract class for the CVV functional gate */
+.site-header__hamburger{
+  display:none; flex-direction:column; gap:5px; width:46px; height:46px; align-items:center;
+  justify-content:center; cursor:pointer; border:1px solid var(--ds-line-strong);
+  border-radius:var(--ds-r-control); background:var(--ds-accent-soft); margin-left:auto; }
+.site-header__hamburger span{ width:22px; height:2px; background:var(--ds-accent); transition:transform var(--ds-dur) var(--ds-ease-out), opacity var(--ds-dur) var(--ds-ease-out); }
+
+/* ============================== MEGA-MENU (Capabilities, dark panel — Concept C signature) ============================== */
+.mega-wrap{ position:static; }
+.mega{
+  position:fixed; left:0; right:0; top:74px; z-index:var(--ds-z-raised);
+  opacity:0; visibility:hidden; transform:translateY(-10px) scaleY(.985); transform-origin:top;
+  transition:opacity var(--ds-dur) var(--ds-ease-out), transform var(--ds-dur) var(--ds-ease-out), visibility var(--ds-dur);
+  pointer-events:none;
+}
+.site-header.is-scrolled .mega{ top:64px; }
+/* a no-gap hover bridge so the trigger->panel traverse never hits a dead pixel band */
+.mega::before{ content:""; position:absolute; left:0; right:0; top:-14px; height:14px; }
+.mega.is-open{ opacity:1; visibility:visible; transform:translateY(0) scaleY(1); pointer-events:auto; }
+.mega__inner{
+  /* DARK PANEL — the .surface-dark flip is applied on the panel so its var(--ds-*) resolve dark */
+  background:
+    var(--ds-glow-wash),
+    var(--ds-grid),
+    var(--ds-metal);
+  background-size:auto, var(--ds-grid-size), auto;
+  background-position:center, center top, center;
+  border:1px solid var(--ds-divider); border-top:0;
+  border-radius:0 0 var(--ds-r-surface) var(--ds-r-surface);
+  box-shadow:var(--ds-shadow-lift);
+  overflow:hidden;
+  display:grid; grid-template-columns:1.05fr 1fr 1fr; gap:clamp(20px,2.4vw,36px);
+  padding:clamp(24px,3vw,40px);
+}
+.mega__inner::after{ content:""; position:absolute; inset:0; background-image:var(--ds-grain);
+  background-size:120px 120px; opacity:.45; mix-blend-mode:overlay; pointer-events:none; }
+.mega__col{ position:relative; z-index:var(--ds-z-raised); min-width:0; }
+.mega__lbl{ font-family:var(--ds-font-mono); font-size:11px; letter-spacing:var(--ds-tracking-label);
+  text-transform:uppercase; color:var(--ds-accent); margin:0 0 16px; display:flex; align-items:center; gap:10px; }
+.mega__lbl::after{ content:""; flex:1; height:1px; background:var(--ds-divider); }
+
+/* featured zone (Concept C: the mega is a SHOWCASE, not a plain grid) */
+.mega__feature{ position:relative; z-index:var(--ds-z-raised); display:flex; flex-direction:column; justify-content:flex-end;
+  border-radius:var(--ds-r-surface); overflow:hidden; padding:clamp(18px,2vw,26px); min-height:230px;
+  background:
+    var(--ds-glow-wash),
+    linear-gradient(180deg, var(--ds-bg-surface-2) 0%, var(--ds-bg-surface) 60%, var(--ds-bg-warm) 100%);
+  border:1px solid var(--ds-divider); box-shadow:var(--ds-shadow-card), var(--ds-inset-hi); }
+/* GRID removed from the inner feature card — the parent .mega__inner panel already carries the grid
+   signature, so this nested layer was doubling the texture inside one panel. */
+.mega__feat-eyebrow{ position:relative; font-family:var(--ds-font-mono); font-size:10px; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--ds-accent); margin-bottom:10px; }
+.mega__feat-h{ position:relative; font-family:var(--ds-font-display); font-weight:700; text-transform:uppercase;
+  letter-spacing:var(--ds-tracking-disp); line-height:1.0; font-size:clamp(22px,2.4vw,30px); color:var(--ds-ink); margin:0 0 8px; }
+.mega__feat-h .ac{ color:var(--ds-accent); }
+.mega__feat-sub{ position:relative; font-family:var(--ds-font-body); font-size:13px; color:var(--ds-ink-soft); margin:0 0 16px; max-width:34ch; }
+.mega__feat-link{ position:relative; font-family:var(--ds-font-mono); font-size:12px; font-weight:700;
+  letter-spacing:.06em; text-transform:uppercase; color:var(--ds-on-accent); background:var(--ds-accent);
+  padding:9px 16px; border-radius:var(--ds-r-control); align-self:flex-start; box-shadow:var(--ds-glow);
+  transition:background-color var(--ds-dur) var(--ds-ease-out), transform var(--ds-dur-fast) var(--ds-ease-out); }
+.mega__feat-link:hover{ background:var(--ds-accent-strong); transform:translateY(-2px); }
+
+/* mega item cards */
+.mega__list{ display:grid; gap:8px; }
+.mega__item{ display:flex; align-items:flex-start; gap:12px; padding:11px 12px; border-radius:var(--ds-r-control);
+  border:1px solid transparent; transition:background-color var(--ds-dur) var(--ds-ease-out),
+  border-color var(--ds-dur) var(--ds-ease-out), transform var(--ds-dur-fast) var(--ds-ease-out); }
+.mega__item:hover{ background:var(--ds-accent-soft); border-color:var(--ds-divider); transform:translateX(3px); }
+.mega__ico{ width:30px; height:30px; flex:0 0 auto; border-radius:var(--ds-r-control); display:grid; place-items:center;
+  background:var(--ds-accent-soft); border:1px solid var(--ds-divider); }
+.mega__ico svg{ width:16px; height:16px; stroke:var(--ds-accent); fill:none; stroke-width:1.8; }
+.mega__it-name{ display:block; font-family:var(--ds-font-body); font-weight:600; font-size:14px; color:var(--ds-ink); line-height:1.15; }
+.mega__it-name .flag{ font-family:var(--ds-font-mono); font-size:9px; letter-spacing:.08em; text-transform:uppercase;
+  color:var(--ds-accent); border:1px dashed var(--ds-divider); border-radius:var(--ds-r-pill); padding:1px 6px; margin-left:6px; vertical-align:middle; }
+.mega__it-desc{ display:block; font-family:var(--ds-font-body); font-size:12px; color:var(--ds-ink-soft); line-height:1.35; margin-top:2px; }
+.mega__viewall{ grid-column:2 / -1; margin-top:6px; display:flex; align-items:center; justify-content:space-between;
+  gap:12px; padding:14px 16px; border-top:1px solid var(--ds-divider); }
+.mega__viewall-txt{ font-family:var(--ds-font-body); font-size:13px; color:var(--ds-ink-soft); }
+.mega__viewall a{ font-family:var(--ds-font-mono); font-size:12px; font-weight:700; letter-spacing:.06em;
+  text-transform:uppercase; color:var(--ds-accent); display:inline-flex; align-items:center; gap:8px; }
+.mega__viewall a:hover{ color:var(--ds-accent-strong); }
+.mega__viewall a span{ transition:transform var(--ds-dur) var(--ds-ease-out); }
+.mega__viewall a:hover span{ transform:translateX(4px); }
+
+/* ============================== MOBILE DRAWER (accordion — canonical contract) ============================== */
+.drawer-scrim{ position:fixed; inset:0; z-index:var(--ds-z-overlay); background:var(--ds-scrim);
+  opacity:0; visibility:hidden; transition:opacity var(--ds-dur) var(--ds-ease-out), visibility var(--ds-dur);
+  -webkit-backdrop-filter:blur(2px); backdrop-filter:blur(2px); }
+#mobile-drawer[aria-hidden="false"] + .drawer-scrim,
+.drawer-scrim.is-open{ opacity:1; visibility:visible; }
+#mobile-drawer{
+  position:fixed; top:0; right:0; bottom:0; z-index:var(--ds-z-drawer); width:min(86vw,360px);
+  transform:translateX(102%); transition:transform var(--ds-dur) var(--ds-ease-out);
+  background-color:var(--ds-bg-surface-2);
+  background-image:linear-gradient(180deg, var(--ds-bg-surface-2) 0%, var(--ds-bg-surface) 70%, var(--ds-bg-warm) 100%);
+  border-left:1px solid var(--ds-divider); box-shadow:var(--ds-shadow-lift);
+  display:flex; flex-direction:column; overflow-y:auto; }
+/* technical-grid TONED DOWN: a faint hint behind the nav (was a full-strength layer = too noisy) */
+#mobile-drawer::before{ content:""; position:absolute; inset:0; pointer-events:none; z-index:var(--ds-z-base);
+  background:var(--ds-grid); background-size:var(--ds-grid-size); opacity:.2; }
+#mobile-drawer > *{ position:relative; z-index:var(--ds-z-raised); }
+#mobile-drawer[aria-hidden="false"]{ transform:translateX(0); }
+.drawer__head{ display:flex; align-items:center; justify-content:space-between; gap:12px;
+  padding:18px clamp(16px,5vw,22px); border-bottom:1px solid var(--ds-divider); }
+.drawer__close{ width:42px; height:42px; border-radius:var(--ds-r-control); border:1px solid var(--ds-line-strong);
+  background:var(--ds-accent-soft); color:var(--ds-accent); font-size:22px; line-height:1; cursor:pointer;
+  display:grid; place-items:center; transition:background-color var(--ds-dur) var(--ds-ease-out), color var(--ds-dur) var(--ds-ease-out); }
+.drawer__close:hover{ background:var(--ds-accent); color:var(--ds-on-accent); }
+.drawer__nav{ padding:8px clamp(16px,5vw,22px) 20px; display:flex; flex-direction:column; }
+.drawer__link{ font-family:var(--ds-font-display); font-weight:600; text-transform:uppercase;
+  letter-spacing:.01em; font-size:22px; color:var(--ds-ink); padding:15px 0; border-bottom:1px solid var(--ds-line);
+  transition:color var(--ds-dur) var(--ds-ease-out); }
+.drawer__link:hover{ color:var(--ds-accent); }
+/* accordion group */
+.acc__trigger{ width:100%; display:flex; align-items:center; justify-content:space-between; gap:10px;
+  font-family:var(--ds-font-display); font-weight:600; text-transform:uppercase; font-size:22px; color:var(--ds-ink);
+  padding:15px 0; border:0; border-bottom:1px solid var(--ds-line); background:none; cursor:pointer; text-align:left; }
+.acc__trigger .chev{ width:16px; height:16px; stroke:var(--ds-accent); fill:none; stroke-width:2.2;
+  transition:transform var(--ds-dur) var(--ds-ease-out); flex:0 0 auto; }
+.acc__trigger[aria-expanded="true"] .chev{ transform:rotate(180deg); }
+.acc__panel{ max-height:0; overflow:hidden; transition:max-height var(--ds-dur) var(--ds-ease-out); }
+.acc__panel.is-open{ max-height:760px; }
+.acc__sub-lbl{ font-family:var(--ds-font-mono); font-size:10px; letter-spacing:var(--ds-tracking-label);
+  text-transform:uppercase; color:var(--ds-accent); padding:14px 0 6px; }
+.acc__sub{ font-family:var(--ds-font-body); font-weight:500; font-size:15px; color:var(--ds-ink-soft);
+  padding:9px 0 9px 14px; border-left:2px solid var(--ds-divider); margin-left:2px; display:block;
+  transition:color var(--ds-dur) var(--ds-ease-out); }
+.acc__sub:hover{ color:var(--ds-accent); }
+.acc__sub .flag{ font-family:var(--ds-font-mono); font-size:9px; letter-spacing:.06em; text-transform:uppercase;
+  color:var(--ds-accent); border:1px dashed var(--ds-divider); border-radius:var(--ds-r-pill); padding:1px 6px; margin-left:6px; }
+.drawer__cta{ margin-top:18px; }
+.drawer__cta .btn{ width:100%; justify-content:center; }
+
+/* ============================== BODY STUB (hero + one section) ============================== */
+main{ padding-top:74px; }
+.hero{
+  position:relative; overflow:hidden; min-height:78vh; display:flex; align-items:center;
+  background:
+    var(--ds-glow-wash),
+    var(--ds-grid),
+    linear-gradient(180deg, var(--ds-bg-surface-2) 0%, var(--ds-bg-surface) 55%, var(--ds-bg-warm) 100%);
+  background-size:auto, var(--ds-grid-size), auto;
+  background-position:center, center top, center;
+}
+.hero::after{ content:""; position:absolute; inset:0; background-image:var(--ds-grain); background-size:120px 120px;
+  opacity:.5; mix-blend-mode:overlay; pointer-events:none; }
+.hero__inner{ position:relative; z-index:var(--ds-z-raised); padding-block:clamp(54px,9vw,110px); max-width:920px; }
+.hero__eyebrow{ font-family:var(--ds-font-mono); font-size:12px; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--ds-accent); margin-bottom:18px; display:inline-flex; align-items:center; gap:10px; }
+.hero__eyebrow::before{ content:""; width:34px; height:1px; background:var(--ds-divider); }
+.hero__h{ font-family:var(--ds-font-display); font-weight:700; text-transform:uppercase;
+  letter-spacing:var(--ds-tracking-disp); line-height:.96; font-size:var(--ds-fs-display); color:var(--ds-ink); margin:0 0 18px; }
+.hero__h .ac{ color:var(--ds-accent); }
+.hero__sub{ font-family:var(--ds-font-body); font-size:18px; color:var(--ds-ink-soft); max-width:54ch; margin:0 0 30px; }
+.hero__cta{ display:flex; gap:14px; flex-wrap:wrap; align-items:center; }
+.hero__stat{ font-family:var(--ds-font-mono); font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--ds-ink-soft); }
+.hero__stat b{ font-family:var(--ds-font-display); font-weight:700; font-size:20px; color:var(--ds-accent); letter-spacing:var(--ds-tracking-disp); }
+
+/* one light section (the punctuation surface) to prove dark->light figure/ground under the chrome */
+.section{ padding-block:var(--ds-section-py); background:var(--ds-bg-surface); }
+.section__lbl{ font-family:var(--ds-font-mono); font-size:11px; letter-spacing:var(--ds-tracking-label);
+  text-transform:uppercase; color:var(--ds-accent); margin:0 0 14px; }
+.section__h{ font-family:var(--ds-font-display); font-weight:600; text-transform:uppercase;
+  letter-spacing:var(--ds-tracking-disp); line-height:1.04; font-size:var(--ds-fs-h2); color:var(--ds-ink); margin:0 0 28px; max-width:20ch; }
+.section__grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(16px,2vw,24px); }
+.card{ background:var(--ds-bg-surface-2); border:1px solid var(--ds-line); border-radius:var(--ds-r-surface);
+  overflow:hidden; box-shadow:var(--ds-shadow-card), var(--ds-inset-hi);
+  transition:transform var(--ds-dur) var(--ds-ease), box-shadow var(--ds-dur) var(--ds-ease); }
+.card:hover{ transform:translateY(-5px); box-shadow:var(--ds-shadow-lift); }
+.card__top{ height:74px; background:var(--ds-metal); position:relative; border-bottom:1px solid var(--ds-line); }
+/* GRID removed from the card cap — it repeated on every card in a 3-up grid (the owner's
+   "repetitive" complaint). The brushed-metal cap still reads as a distinct card header. */
+.card__body{ padding:18px; }
+.card__k{ font-family:var(--ds-font-display); font-weight:700; font-size:26px; color:var(--ds-accent); letter-spacing:var(--ds-tracking-disp); line-height:1; }
+.card__t{ font-family:var(--ds-font-body); font-weight:600; font-size:15px; color:var(--ds-ink); margin-top:6px; }
+.card__d{ font-family:var(--ds-font-body); font-size:13px; color:var(--ds-ink-soft); margin-top:5px; }
+
+/* ============================== PRE-FOOTER CLOSING CTA (FOOTER-STYLES #21) ============================== */
+.precta{ position:relative; overflow:hidden; padding-block:clamp(54px,8vw,92px);
+  background:
+    var(--ds-glow-wash),
+    var(--ds-grid),
+    var(--ds-metal);
+  background-size:auto, var(--ds-grid-size), auto;
+  background-position:center, center top, center;
+  border-top:1px solid var(--ds-divider); }
+.precta::after{ content:""; position:absolute; inset:0; background-image:var(--ds-grain); background-size:120px 120px;
+  opacity:.45; mix-blend-mode:overlay; pointer-events:none; }
+.precta__inner{ position:relative; z-index:var(--ds-z-raised); display:flex; align-items:center; justify-content:space-between;
+  gap:clamp(24px,4vw,56px); flex-wrap:wrap; }
+.precta__eyebrow{ font-family:var(--ds-font-mono); font-size:11px; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--ds-accent); margin-bottom:14px; }
+.precta__h{ font-family:var(--ds-font-display); font-weight:700; text-transform:uppercase;
+  letter-spacing:var(--ds-tracking-disp); line-height:.98; font-size:clamp(32px,5vw,58px); color:var(--ds-ink); margin:0; max-width:18ch; }
+.precta__h .ac{ color:var(--ds-accent); }
+.precta__side{ display:flex; flex-direction:column; gap:14px; align-items:flex-start; }
+.precta__guarantee{ font-family:var(--ds-font-mono); font-size:12px; letter-spacing:.04em; color:var(--ds-ink-soft);
+  display:inline-flex; align-items:center; gap:9px; }
+.precta__guarantee .dot{ width:8px; height:8px; border-radius:50%; background:var(--ds-accent-bright); box-shadow:var(--ds-glow); }
+
+/* ============================== FOOTER (multi-row columns) ============================== */
+.site-footer{ background:var(--ds-bg-warm); border-top:1px solid var(--ds-divider); padding-block:clamp(40px,6vw,64px) 0; }
+.footer__grid{ display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:clamp(24px,3vw,48px); }
+.footer__brand .brand{ margin-bottom:16px; }
+.footer__tag{ font-family:var(--ds-font-body); font-size:14px; color:var(--ds-ink-soft); max-width:34ch; margin:0 0 16px; }
+.footer__honesty{ font-family:var(--ds-font-mono); font-size:11px; letter-spacing:.04em; color:var(--ds-ink-soft);
+  display:inline-flex; align-items:center; gap:8px; border:1px dashed var(--ds-divider); border-radius:var(--ds-r-pill); padding:6px 13px; }
+.footer__honesty .dot{ width:7px; height:7px; border-radius:50%; background:var(--ds-accent-bright); }
+.footer__col h4{ font-family:var(--ds-font-mono); font-size:11px; letter-spacing:var(--ds-tracking-label);
+  text-transform:uppercase; color:var(--ds-accent); margin:0 0 16px; }
+.footer__col ul{ list-style:none; margin:0; padding:0; display:grid; gap:11px; }
+.footer__col a{ font-family:var(--ds-font-body); font-size:14px; color:var(--ds-ink-soft);
+  transition:color var(--ds-dur) var(--ds-ease-out); }
+.footer__col a:hover{ color:var(--ds-accent); }
+.footer__bar{ margin-top:clamp(32px,4vw,48px); border-top:1px solid var(--ds-line);
+  padding-block:22px; display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; }
+.footer__copy{ font-family:var(--ds-font-mono); font-size:11px; letter-spacing:.05em; text-transform:uppercase; color:var(--ds-ink-soft); }
+.footer__legal{ display:flex; gap:18px; flex-wrap:wrap; }
+.footer__legal a{ font-family:var(--ds-font-mono); font-size:11px; letter-spacing:.05em; text-transform:uppercase; color:var(--ds-ink-soft);
+  transition:color var(--ds-dur) var(--ds-ease-out); }
+.footer__legal a:hover{ color:var(--ds-accent); }
+
+/* ============================== STICKY CTA (STICKY-CTA-BAR #2 dual-button) — mobile only ============================== */
+.sticky-cta{ position:fixed; left:0; right:0; bottom:0; z-index:var(--ds-z-sticky); display:none;
+  gap:10px; padding:12px clamp(12px,4vw,16px) calc(12px + env(safe-area-inset-bottom));
+  background:linear-gradient(180deg, rgba(7,18,30,0.0), var(--ds-bg-surface-2) 30%);
+  -webkit-backdrop-filter:blur(14px); backdrop-filter:blur(14px);
+  border-top:1px solid var(--ds-divider); box-shadow:0 -10px 30px -12px rgba(6,10,20,0.6); }
+.sticky-cta .btn{ flex:1; justify-content:center; }
+.sticky-cta .btn--primary{ flex:1.5; }
+/* ── SCROLL/STICKY BEHAVIOR (_SCROLL-STICKY-BEHAVIOR-LIBRARY §2.3 — F2 appear-past-hero +
+   second-observer hide-at-real-CTA/footer). Behavior only: transform/opacity/pointer-events
+   layered ON TOP of the @media display:flex; the bar's visual style is untouched.
+   Default rest state when JS is active = OFF-SCREEN (revealed only past the hero). ── */
+.sticky-cta.js-sticky{ transform:translateY(120%); opacity:0; pointer-events:none;
+  transition:transform .28s var(--ds-ease-out), opacity .28s var(--ds-ease-out); }
+.sticky-cta.js-sticky.is-revealed{ transform:translateY(0); opacity:1; pointer-events:auto; }
+@media (prefers-reduced-motion:reduce){ .sticky-cta.js-sticky{ transition:none; } }
+
+/* ============================== RESPONSIVE (mobile-clean, no h-overflow) ============================== */
+@media (max-width:1024px){
+  .nav{ gap:10px; }
+  .nav__link{ font-size:12px; }
+  .mega__inner{ grid-template-columns:1fr 1fr; }
+  .mega__feature{ grid-column:1 / -1; min-height:170px; }
+  .mega__viewall{ grid-column:1 / -1; }
+}
+@media (max-width:860px){
+  /* collapse inline nav -> hamburger + drawer; hide center nav + header CTA (.nav-rail is already base-hidden) */
+  .nav, .nav-rail, .header-cta{ display:none; }
+  .site-header__hamburger{ display:flex; }   /* the ONE hamburger — mobile-only drawer toggle */
+  .mega{ display:none; }                 /* mega-menu becomes the drawer accordion at mobile */
+  .section__grid{ grid-template-columns:1fr 1fr; }
+  .footer__grid{ grid-template-columns:1fr 1fr; }
+}
+@media (max-width:560px){
+  .section__grid{ grid-template-columns:1fr; }
+  .footer__grid{ grid-template-columns:1fr; }
+  .sticky-cta{ display:flex; }
+  main{ padding-bottom:84px; }           /* clear the sticky bar */
+  .precta__inner{ flex-direction:column; align-items:flex-start; }
+}
+@media (prefers-reduced-motion:reduce){
+  *{ transition:none !important; scroll-behavior:auto !important; }
+}

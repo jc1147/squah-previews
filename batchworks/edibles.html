@@ -1,0 +1,850 @@
+<!-- BATCHWORKS shared chrome shell. build.mjs wraps each pages/<slug>.content.html in
+     this template and fills the per-build slots in the <head> below (title, meta
+     description, noindex, the cache-busted design CSS links, the per-page signature
+     CSS) plus the page content slot in <main>. NOTE: do not repeat any slot token in
+     this comment -- build.mjs fills only the FIRST occurrence of each, so a token named
+     here would steal the real <head> slot's fill (see build.mjs HEADER_MODS note).
+
+     CHROME = LOCKED BLOCK, NOT grammar-governed (2026-06-24, owner decision). The chrome
+     regions -- header, the #mega mega-menu panel, the #mobile-drawer, the pre-footer closing
+     CTA, and the footer -- are sourced VERBATIM from the chrome stage's winner
+     (_design/_tournament/chrome-c/preview.html). They are a LOCKED BLOCK and are NOT wrapped
+     in the section -> div.container -> div.row -> div.col -> OBJECT grammar. The FORCED
+     DOM-STRUCTURE GRAMMAR (G-DOM) governs the <main>/BODY content ONLY; verify-dom-structure
+     SKIPS the chrome regions. The retrofit that wrapped the chrome in .container/.row/.col
+     BROKE it -- it made the mega feature panel a grid CELL (collapsed to ~235px content
+     height) instead of a DIRECT child of the mega inner grid (which stretches it to the
+     column height ~424px). The structure below restores chrome-c's exact DOM: in #mega, the
+     mega feature panel and the mega columns are DIRECT children of the mega inner grid (no
+     .col wrappers). The MANDATORY chrome guard is verify-chrome-parity.mjs -- it RENDERS the
+     built chrome vs the locked chrome reference (chrome-c/preview.html) at header / mega-open /
+     mobile-drawer states and BLOCKS on any divergence (e.g. the 235-vs-424 feature-panel bug).
+     All chrome BEHAVIORS are preserved verbatim (the JS selects #siteHeader / #megaWrap /
+     #megaTrigger / #mega / #hamburger / #mobile-drawer / #drawerScrim / #drawerClose /
+     #accTrigger / #accPanel and the hero / closing-CTA / footer / sticky bar). The the head/content slots
+     below replace chrome-c's hard-coded values; the chrome DOM is otherwise byte-faithful. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>edibles | BatchWorks</title>
+<meta name="description" content="">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="design-system/tokens.css?v=e2e311a0">
+  <link rel="stylesheet" href="design-system/chrome.css?v=8190dd34">
+  <link rel="stylesheet" href="design-system/structural.css?v=e246022f">
+
+</head>
+<body class="surface-dark">
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- ═══════════════════════════ HEADER (LOCKED BLOCK · NAV-PATTERNS.md #13) ═══════════════════════════
+     Sourced VERBATIM from chrome-c/preview.html. NOT wrapped in the DOM-structure grammar. -->
+<header class="site-header" id="siteHeader">
+  <div class="container site-header__bar">
+
+    <!-- logo lockup with the PROMINENT dial mark (Concept C) -->
+    <a class="brand" href="index.html" aria-label="BatchWorks home">
+      <svg class="brand__mark" viewBox="0 0 100 100" role="img" aria-label="BatchWorks dial mark">
+        <circle class="ring-o" cx="50" cy="50" r="44"/>
+        <circle class="ring-i" cx="50" cy="50" r="29"/>
+        <line class="cross" x1="50" y1="6" x2="50" y2="94"/>
+        <line class="cross" x1="6" y1="50" x2="94" y2="50"/>
+        <line class="tick" x1="50" y1="6"  x2="50" y2="18"/>
+        <line class="tick" x1="50" y1="82" x2="50" y2="94"/>
+        <line class="tick" x1="6"  y1="50" x2="18" y2="50"/>
+        <line class="tick" x1="82" y1="50" x2="94" y2="50"/>
+        <circle class="node" cx="50" cy="50" r="8"/>
+      </svg>
+      <span class="brand__name">Batch<span class="lo">Works</span></span>
+    </a>
+
+    <!-- #13 signature: an always-visible structural affordance beside the logo (desktop too) -->
+    <div class="nav-rail" aria-hidden="true">
+      <span class="rail-burger" title="Site index"><span></span><span></span><span></span></span>
+    </div>
+
+    <!-- center inline nav (real hrefs from sitemap.yaml) -->
+    <nav class="nav" aria-label="Primary">
+      <a class="nav__link" href="how-it-works.html">How It Works</a>
+
+      <!-- Capabilities = a caret trigger opening the DARK mega-menu panel -->
+      <div class="mega-wrap" id="megaWrap">
+        <button class="nav__link" id="megaTrigger" aria-haspopup="true" aria-expanded="false" aria-controls="mega">
+          Capabilities
+          <svg class="nav__caret" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+
+      <a class="nav__link" href="pricing.html">Pricing</a>
+      <a class="nav__link" href="about.html">About</a>
+    </nav>
+
+    <a class="btn btn--primary header-cta" href="contact.html">Request a Quote</a>
+
+    <!-- canonical mobile-drawer toggle (CVV functional contract: .site-header__hamburger -> #mobile-drawer) -->
+    <button class="site-header__hamburger" id="hamburger"
+            aria-label="Open menu" aria-controls="mobile-drawer" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <!-- ── DARK MEGA-MENU PANEL · Capabilities (groups the 9 feature pages + view-all anchor) ──
+       .mega__feature + .mega__col are DIRECT children of .mega__inner (no .col wrappers) - this is
+       what restores the ~424px feature-panel stretch (the 235-vs-424 bug the retrofit caused). -->
+  <div class="mega" id="mega" role="region" aria-label="Capabilities">
+    <div class="container">
+      <div class="mega__inner surface-dark">
+
+        <!-- featured showcase zone. The chrome supplies .mega__feature VERBATIM; the foundation adds a REAL
+             photo (joints-production.jpg) BEHIND the feature text via the bw-mega-feat scoped wrapper
+             (defined in structural.css, NOT chrome.css) - it rides the OBJECT, the direct-child nesting is intact. -->
+        <div class="mega__feature bw-mega-feat">
+          <img class="bw-mega-feat__img" src="assets/joints-production.jpg" width="640" height="460"
+               alt="Pre-rolled joints being produced by the BatchWorks robotics line">
+          <span class="mega__feat-eyebrow">Flagship · operator to operator</span>
+          <h3 class="mega__feat-h">Pre-roll, <span class="ac">at scale</span></h3>
+          <p class="mega__feat-sub">A per-strain robotics line with a human-QC finish - the proven flagship the whole shop is built around.</p>
+          <a class="mega__feat-link" href="pre-roll.html">See the flagship →</a>
+        </div>
+
+        <!-- PRODUCTS group -->
+        <div class="mega__col">
+          <p class="mega__lbl">Products</p>
+          <div class="mega__list">
+            <a class="mega__item" href="pre-roll.html">
+              <span class="mega__ico"><svg viewBox="0 0 24 24"><path d="M3 14l14-9 4 4-9 14H7l-4-4z"/></svg></span>
+              <span><span class="mega__it-name">Pre-Roll</span><span class="mega__it-desc">Robotics line · flagship</span></span>
+            </a>
+            <a class="mega__item" href="concentrates.html">
+              <span class="mega__ico"><svg viewBox="0 0 24 24"><path d="M7 3h10M9 3v6l-5 9a2 2 0 002 3h12a2 2 0 002-3l-5-9V3"/></svg></span>
+              <span><span class="mega__it-name">Concentrates</span><span class="mega__it-desc">Extraction &amp; refinement</span></span>
+            </a>
+            <a class="mega__item" href="distillate.html">
+              <span class="mega__ico"><svg viewBox="0 0 24 24"><path d="M6 2v6l-3 7a2 2 0 002 3h14a2 2 0 002-3l-3-7V2M6 2h12"/></svg></span>
+              <span><span class="mega__it-name">Distillate</span><span class="mega__it-desc">High-purity oil</span></span>
+            </a>
+            <a class="mega__item" href="edibles.html">
+              <span class="mega__ico"><svg viewBox="0 0 24 24"><path d="M4 13a8 8 0 0116 0M2 13h20M6 17h12"/></svg></span>
+              <span><span class="mega__it-name">Edibles</span><span class="mega__it-desc">Dosed formats</span></span>
+            </a>
+            <a class="mega__item" href="gummies.html">
+              <span class="mega__ico"><svg viewBox="0 0 24 24"><rect x="4" y="8" width="16" height="11" rx="3"/><path d="M8 8V6a4 4 0 018 0v2"/></svg></span>
+              <span><span class="mega__it-name">Gummies</span><span class="mega__it-desc">Pectin &amp; gelatin</span></span>
+            </a>
+            <a class="mega__item" href="vapes-carts.html">
+              <span class="mega__ico"><svg viewBox="0 0 24 24"><rect x="9" y="2" width="6" height="20" rx="2"/><path d="M9 7h6"/></svg></span>
+              <span><span class="mega__it-name">Vapes &amp; Carts</span><span class="mega__it-desc">510 &amp; all-in-one</span></span>
+            </a>
+          </div>
+        </div>
+
+        <!-- SERVICES group -->
+        <div class="mega__col">
+          <p class="mega__lbl">Services</p>
+          <div class="mega__list">
+            <a class="mega__item" href="packaging.html">
+              <span class="mega__ico"><svg viewBox="0 0 24 24"><path d="M3 7l9-4 9 4-9 4-9-4zM3 7v10l9 4 9-4V7M12 11v10"/></svg></span>
+              <span><span class="mega__it-name">Packaging</span><span class="mega__it-desc">Compliant &amp; retail-ready</span></span>
+            </a>
+            <a class="mega__item" href="white-label.html">
+              <span class="mega__ico"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 9h8M8 13h5"/></svg></span>
+              <span><span class="mega__it-name">White-Label <span class="flag">partner</span></span><span class="mega__it-desc">Your brand, our line</span></span>
+            </a>
+            <a class="mega__item" href="rd.html">
+              <span class="mega__ico"><svg viewBox="0 0 24 24"><path d="M9 3v6l-5 9a2 2 0 002 3h12a2 2 0 002-3l-5-9V3M9 3h6M8 16h8"/></svg></span>
+              <span><span class="mega__it-name">R&amp;D</span><span class="mega__it-desc">Idea-to-shelf formulation</span></span>
+            </a>
+          </div>
+
+          <!-- the "view all capabilities" anchor (Concept C requirement) -->
+          <div class="mega__viewall">
+            <span class="mega__viewall-txt">Full-service umbrella - pre-roll flagship.</span>
+            <a href="how-it-works.html">View all capabilities <span aria-hidden="true">→</span></a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════════════════ MOBILE DRAWER (LOCKED BLOCK · accordion · canonical contract) ═══════════════════════════
+     Sourced VERBATIM from chrome-c/preview.html. NOT wrapped in the DOM-structure grammar. The chrome JS contract
+     (#mobile-drawer[aria-hidden] toggled by .site-header__hamburger, + .drawer-scrim) is untouched. -->
+<aside id="mobile-drawer" aria-hidden="true" aria-label="Mobile menu">
+  <div class="drawer__head">
+    <a class="brand" href="index.html" aria-label="BatchWorks home">
+      <svg class="brand__mark" viewBox="0 0 100 100" aria-hidden="true">
+        <circle class="ring-o" cx="50" cy="50" r="44"/><circle class="ring-i" cx="50" cy="50" r="29"/>
+        <line class="tick" x1="50" y1="6" x2="50" y2="18"/><line class="tick" x1="50" y1="82" x2="50" y2="94"/>
+        <line class="tick" x1="6" y1="50" x2="18" y2="50"/><line class="tick" x1="82" y1="50" x2="94" y2="50"/>
+        <circle class="node" cx="50" cy="50" r="8"/>
+      </svg>
+      <span class="brand__name">Batch<span class="lo">Works</span></span>
+    </a>
+    <button class="drawer__close" id="drawerClose" aria-label="Close menu">&times;</button>
+  </div>
+
+  <nav class="drawer__nav" aria-label="Mobile primary">
+    <a class="drawer__link" href="how-it-works.html">How It Works</a>
+
+    <!-- Capabilities as an accordion group (mega-menu collapses to this at mobile) -->
+    <button class="acc__trigger" id="accTrigger" aria-expanded="false" aria-controls="accPanel">
+      Capabilities
+      <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8l8 8 8-8" fill="none" stroke="currentColor" stroke-linecap="round"/></svg>
+    </button>
+    <div class="acc__panel" id="accPanel">
+      <p class="acc__sub-lbl">Products</p>
+      <a class="acc__sub" href="pre-roll.html">Pre-Roll</a>
+      <a class="acc__sub" href="concentrates.html">Concentrates</a>
+      <a class="acc__sub" href="distillate.html">Distillate</a>
+      <a class="acc__sub" href="edibles.html">Edibles</a>
+      <a class="acc__sub" href="gummies.html">Gummies</a>
+      <a class="acc__sub" href="vapes-carts.html">Vapes &amp; Carts</a>
+      <p class="acc__sub-lbl">Services</p>
+      <a class="acc__sub" href="packaging.html">Packaging</a>
+      <a class="acc__sub" href="white-label.html">White-Label <span class="flag">partner</span></a>
+      <a class="acc__sub" href="rd.html">R&amp;D</a>
+      <a class="acc__sub" href="how-it-works.html" style="border-left-color:var(--ds-accent);color:var(--ds-accent);">View all capabilities →</a>
+    </div>
+
+    <a class="drawer__link" href="pricing.html">Pricing</a>
+    <a class="drawer__link" href="about.html">About</a>
+
+    <div class="drawer__cta">
+      <a class="btn btn--primary" href="contact.html">Request a Quote</a>
+    </div>
+  </nav>
+</aside>
+<div class="drawer-scrim" id="drawerScrim"></div>
+
+<!-- ═══════════════════════════ BODY (FOUNDATION FINAL · one continuous dark flow) ═══════════════════════════
+     GRAMMAR per section: section.bw-flow -> .container--full -> .row -> .col(.col--measure) -> [bw-* objects].
+     .col--measure reproduces the old .bw-wide measure EXACTLY (max-width var(--bw-measure) centred + same
+     inline padding); each bw-* layout object keeps its OWN grid/flex inside the .col, so the body renders
+     byte-identically to the pre-grammar layout. -->
+<main id="main" class="bw-body">
+<!-- BatchWorks /edibles - T-FEATURE (F2). COMPOSED 2026-06-27 from _copy/edibles.md + _handoff/briefs/edibles.md +
+     the locked batchworks-*.css system + the G-DOM grammar. The template (concentrates.content.html) is LOCKED, so
+     this page is composed ON it (BULK, no tournament) and VARIED from concentrates by TWO distinct levers so the
+     two never read as the same body stamped (G12/G13):
+       LEVER 1 (§4 capability) - a horizontal LIVE FORMAT-FAMILY RAIL (.bw-demo, MEDIA-LESS): the edible format
+         families (gummies -> chocolate -> baked -> beverage -> tincture) sweep on one auto-running rail, so the
+         BREADTH claim is shown RUNNING, not asserted. concentrates fronts §4 with a media+2x2 grid (.bw-media-grid);
+         edibles fronts the same slot with the live rail. This is the page's distinct lever.
+       LEVER 2 (§6 replaces) - a STANDALONE COMPARE MATRIX (.bw-compare, MEDIA-LESS): the build-it-yourself kitchen
+         vs routing it through BatchWorks, laid out as pure data. concentrates pairs its compare with a capped photo
+         (.bw-mediacompare); edibles drops the media (img 1 -> 0) so the teardown reads as a clean matrix.
+     RESULT (verify-page-distinct LCS): the ordered section skeleton diverges from concentrates at §3 (media-card
+     pillar), §4 (demo rail) and §6 (media-less compare) - well under the 0.80 copy-paste threshold; pairwise max vs
+     the other built pages ~0.667. So DISTINCT (G13); no same-type fanout (G12: concentrates is the only feature-1
+     sibling on disk, under the 2-sibling fire threshold).
+     PROGRESSIVE-NOT-REPETITIVE (G-REPEAT): each fact OWNS one section and is only briefly called back elsewhere with
+     varied wording - full-service one-stop owns the hero + the format rail; the 6-10 / 10-person headcount owns §2 and
+     is called back in the §6 matrix; ~95% yield owns §5; 1,000 / 24-hour / no-minimums owns §8; the per-unit quote
+     owns §9. No 3-6 word content phrase repeats across 3+ sections.
+     SECTION-PATTERN VARIETY (G-SVAR): no two ADJACENT sections share a coarse shape -
+       §1 image+measure hero · §2 copy-left + portrait-media split · §3 3-up pillar grid (one media card) · §4 horizontal
+       live format-family rail (media-less) · §5 media-left + metrics-right proof (light band) · §6 standalone compare
+       matrix (media-less) · §7 banner media | 3-across strip · §8 numbered Q-steps · §9 quote-model split.
+     GRAMMAR per section (G-DOM): section -> div.container--full -> div.row -> div.col(.col--measure) -> bw-* OBJECT.
+     IMAGERY (G-IMG-CAP + G-RHYTHM 50% floor): 5 image sections / 5 refs - hero edibles-gummies (TOPIC edibles, unique
+       to §1, exempt); §2-trap automation-line (GENERIC - the kitchen/line you would otherwise build); §3 spec card
+       precision-calipers (GENERIC - measured-to-spec, a tight fit for the spec-control pillar, carries the §3 imagery
+       the rhythm floor needs); §5 proof cannabis-flower-qc (TOPIC, non-generic QC bench); §7 banner full-service-
+       umbrella (TOPIC). §4/§6 stay MEDIA-LESS (the distinct levers). 2 generic of 4 distinct non-hero (not a majority)
+       -> RULE 3 ok; 5 refs / 5 distinct -> RULE 1+2 ok.
+     HONESTY FENCE (client-rules.json + content-bible): edibles is PARTNER-FACILITATED, framed full-service /
+       partner-facilitated throughout, NEVER as an operated-in-house kitchen as operational fact. The in-house flagship
+       is pre-roll. The pre-roll ~95% yield appears ONLY as the flagship reference / the standard the edibles partners
+       are held to, never re-attributed to edibles. Edibles are INFUSED, never "injected" (owner banned vocab).
+       Quote-only - no public price. The §5 proof carries a VISIBLE "Representative example" badge (F2 fabricated-
+       fallback). HYPHEN-CLEAN (0 em/en dashes). -->
+
+<!--META {"title":"Cannabis Edibles & Infused Products | BatchWorks","desc":"Add cannabis edibles and infused products to your line without building a kitchen. Full-service, partner-facilitated edibles coordinated to your spec for licensed Nevada brands. COA per lot, quote-only pricing.","css":"","darkHero":true}-->
+
+<!-- pick: HERO-COMPOSITIONS.md #5 | considered: #22,#7 | why: an image-led full-bleed hero opens the page on the edible product itself, a more confident opener than a stat-only band or a floating-card hero for this F2 capability page. -->
+<!-- src: D-POSITION-W6 -->
+<section class="bw-hero hero surface-dark" aria-label="Cannabis edibles and infused products">
+  <div class="container--full">
+    <div class="row">
+      <div class="col">
+        <img class="bw-hero__img" src="assets/edibles-gummies.jpg" style="object-fit:cover;object-position:center 45%"
+             alt="Dosed cannabis gummies in deep navy and teal industrial light, the edible formats coordinated to spec">
+      </div>
+      <div class="col col--measure">
+        <div class="bw-hero__inner">
+          <span class="bw-hero__eyebrow bw-rise">Edibles &middot; full-service, partner-facilitated</span>
+          <h1 class="bw-hero__h bw-rise" style="--i:1">Add edibles to your line. <span class="ac">Without building a kitchen.</span></h1>
+          <p class="bw-hero__sub bw-rise" style="--i:2">Cannabis edibles and infused products, made to spec through BatchWorks, the full-service one-stop for licensed Nevada brands. Edibles is a partner-facilitated vertical: we coordinate vetted kitchens against your dose and format spec so you ship the SKU on your timeline, not theirs. The in-house flagship is pre-roll.</p>
+          <div class="bw-hero__cta bw-rise" style="--i:3">
+            <a class="btn btn--primary" href="contact.html">Request a Quote</a>
+            <a class="btn btn--secondary" href="pricing.html">See pricing</a>
+          </div>
+          <span class="bw-hero__note bw-rise" style="--i:4"><span class="dot"></span>Spec-controlled &middot; dose verified per lot &middot; edibles made to your spec</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- pick: SECTION-COMPONENTS.md #11 | considered: #12,#16 | why: a copy-left split with a portrait line photo carries the build-it-yourself kitchen trap beside the headcount cost, denser and more concrete than a prose-only stakes band. -->
+<!-- src: D-INCUMBENT-ROLLROOM -->
+<section class="bw-flow surface-dark" aria-label="The cost of building an edibles kitchen in-house">
+  <div class="container--full">
+    <div class="row">
+      <div class="col col--measure">
+        <div class="bw-split">
+          <div class="bw-split__copy bw-rise">
+            <span class="bw-eyebrow"><span class="bw-idx">01</span>The build-it-yourself trap</span>
+            <h2 class="bw-h2">Standing up an edibles kitchen is a capital project, <span class="ac">not a SKU.</span></h2>
+            <p class="bw-lede">Making edibles the hard way means commissioning or licensing a commercial kitchen of your own, the same headcount math that traps brands in a manual roll room. A semi-manual operation runs on a 6-10 person crew; a 10-person payroll, the equipment, the buildout and a fresh compliance surface all land before a single unit ships. That is fixed cost you carry whether or not the SKU sells. We turn it into something you plug into instead of something you staff up.</p>
+            <ul class="bw-split__list">
+              <li>Kitchen headcount: a 6-10 person crew before the first unit ships.</li>
+              <li>A 10-person payroll, equipment depreciation and a fresh compliance surface.</li>
+              <li>Fixed cost carried whether or not the SKU sells.</li>
+            </ul>
+          </div>
+          <div class="bw-split__visual bw-rise" style="--i:1">
+            <div class="bw-tex bw-tex--portrait">
+              <img src="assets/automation-line.jpg" style="object-fit:cover;object-position:center"
+                   alt="A stainless commercial production line of the kind a brand would have to build and staff to make edibles in-house">
+              <div class="bw-tex__badge">
+                <b>6-10</b>
+                <span>person crew an in-house edibles kitchen needs</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- pick: CARD-VARIATIONS.md #3 | considered: #1,#5 | why: a three-up pillar grid states the one-partner reasons, with one media card carrying a real spec-control photo so the band reads varied, not a row of identical icon tiles. -->
+<!-- src: D-POSITION-W6 -->
+<section class="bw-flow" aria-label="Why route edibles through one partner">
+  <div class="container--full">
+    <div class="row">
+      <div class="col col--measure">
+        <div class="bw-head bw-head--split bw-rise">
+          <div>
+            <span class="bw-eyebrow"><span class="bw-idx">02</span>Why route it through one partner</span>
+            <h2 class="bw-h2">One partner. Spec-controlled. <span class="ac">Compliant.</span></h2>
+          </div>
+          <p class="bw-lede">Brands want a single coordinated partner for the whole program, so edibles runs through the same relationship as everything else you make with us, never a separate vendor to stand up and manage.</p>
+        </div>
+
+        <div class="bw-cap__grid">
+          <article class="bw-cap bw-cap--spec bw-rise">
+            <div class="bw-cap__body">
+              <span class="bw-cap__ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 7l9-4 9 4-9 4-9-4zM3 7v10l9 4 9-4V7M12 11v10"/></svg></span>
+              <h3 class="bw-cap__h">One partner, <span class="ac">one PO</span></h3>
+              <p class="bw-cap__d">Edibles route through one purchase order and one point of contact, the coordinated partner that already handles the rest of your catalog, so adding a format never adds a vendor.</p>
+            </div>
+          </article>
+          <article class="bw-cap bw-rise" style="--i:1">
+            <div class="bw-cap__media">
+              <img src="assets/precision-calipers.jpg" style="object-fit:cover;object-position:center" alt="Precision steel calipers measuring a unit to spec on the QC bench, the dose and format control held to your target">
+            </div>
+            <div class="bw-cap__body">
+              <h3 class="bw-cap__h">Spec-controlled</h3>
+              <p class="bw-cap__d">You set the format, the dose target and the finish; we hold the partner to it, with a COA per lot. Partner-facilitated does not mean hands-off.</p>
+            </div>
+          </article>
+          <article class="bw-cap bw-cap--spec bw-rise" style="--i:2">
+            <div class="bw-cap__body">
+              <span class="bw-cap__ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4z"/></svg></span>
+              <h3 class="bw-cap__h">Compliant <span class="ac">by design</span></h3>
+              <p class="bw-cap__d">Dose, homogeneity and labeling run to Nevada cannabis requirements and are confirmed on the panel, not improvised in a back room.</p>
+              <p class="bw-cap__spec"><span>DOSING <b>to spec</b></span><span>LABEL <b>compliant</b></span></p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- pick: SECTION-COMPONENTS.md #28 | considered: #27,#23 | why: a horizontal live rail sweeps the edible format families running back to back, proving the breadth-of-formats claim instead of asserting it, and a media-less shape concentrates never uses for its capability slot. -->
+<!-- src: D-MARKET-SE7EN -->
+<section class="bw-flow" aria-label="The edible formats we coordinate, running">
+  <div class="container--full">
+    <div class="row">
+      <div class="col col--measure">
+        <div class="bw-head bw-head--center bw-rise">
+          <span class="bw-eyebrow"><span class="bw-idx">03</span>What we coordinate</span>
+          <h2 class="bw-h2">The edible formats, <span class="ac">coordinated to spec.</span></h2>
+          <p class="bw-lede">Nevada brands want one full-service one-stop partner so the edible menu can run broad, and the honesty stays plain: these formats are coordinated through vetted kitchens, not run on our own floor. Each family is finished to your dose and returned with its own lot panel.</p>
+        </div>
+
+        <div class="bw-demo bw-rise" style="--i:1">
+          <div class="bw-demo__bar">
+            <span class="bw-demo__live"><span class="dot"></span>Live &middot; format-family sweep</span>
+            <span class="bw-demo__caption">Dose and homogeneity re-set per format &middot; five edible families under one partner &middot; pre-roll runs in-house as the flagship</span>
+          </div>
+          <div class="bw-demo__track" role="list" aria-label="The edible format families, coordinated">
+            <div class="bw-demo__stage" role="listitem" style="--i:0">
+              <span class="bw-demo__dot">1</span>
+              <span class="bw-demo__label">Gummies</span>
+              <span class="bw-demo__note">Gummies and pate de fruit, dosed and homogenized to your potency target.</span>
+            </div>
+            <div class="bw-demo__stage" role="listitem" style="--i:1">
+              <span class="bw-demo__dot">2</span>
+              <span class="bw-demo__label">Chocolate</span>
+              <span class="bw-demo__note">Molded and enrobed chocolates and confections for the premium segment.</span>
+            </div>
+            <div class="bw-demo__stage" role="listitem" style="--i:2">
+              <span class="bw-demo__dot">3</span>
+              <span class="bw-demo__label">Baked</span>
+              <span class="bw-demo__note">Cookies, brownies and soft chews held to a steady dose per piece.</span>
+            </div>
+            <div class="bw-demo__stage" role="listitem" style="--i:3">
+              <span class="bw-demo__dot">4</span>
+              <span class="bw-demo__label">Beverage</span>
+              <span class="bw-demo__note">Fast-acting infused drinks and shots, mixed and metered to spec.</span>
+            </div>
+            <div class="bw-demo__stage" role="listitem" style="--i:4">
+              <span class="bw-demo__dot">5</span>
+              <span class="bw-demo__label">Tincture</span>
+              <span class="bw-demo__note">Sublingual tinctures and infused liquids, measured by the dropper.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- pick: PROOF-SECTIONS.md #4 | considered: #5,#2 | why: a metric-led case band on the page's one light surface carries the yield-discipline proof, and the representative panel wears a visible swappable badge so no illustrative figure reads as verified owner data. -->
+<!-- src: D-OFFER-010 -->
+<section class="bw-flow bw-light" aria-label="The yield discipline applied to your batch">
+  <div class="container--full">
+    <div class="row">
+      <div class="col col--measure">
+        <div class="bw-proof">
+          <figure class="bw-proof__media bw-rise">
+            <img src="assets/cannabis-flower-qc.jpg" style="object-fit:cover;object-position:center"
+                 alt="Cannabis under hand inspection on the QC bench, the measurement discipline held across every lot">
+            <figcaption class="bw-frame__badge"><span class="dot"></span>Representative example - real lot data swaps in</figcaption>
+          </figure>
+          <div class="bw-rise" style="--i:1">
+            <span class="bw-eyebrow"><span class="bw-idx">04</span>What the discipline buys you</span>
+            <p class="bw-proof__q">The same yield discipline, <span class="ac">applied to your batch.</span></p>
+            <p class="bw-lede" style="margin-bottom:var(--ds-space-lg)">The pre-roll flagship runs at ~95% yield, a measurable yield of roughly ~95% average against 80-85% on a manual line, and that 95% yield discipline is the standard the edibles partners are held to. Recovered material is recovered margin: the gap between a sloppy run and a controlled one is product you can actually sell.</p>
+            <div class="bw-proof__metrics">
+              <div class="bw-metric"><div class="bw-metric__n">~95<small>%</small></div><div class="bw-metric__l">Yield target vs 80-85% uncontrolled</div></div>
+              <div class="bw-metric"><div class="bw-metric__n">COA</div><div class="bw-metric__l">Every lot &middot; dose + homogeneity</div></div>
+              <div class="bw-metric"><div class="bw-metric__n">1</div><div class="bw-metric__l">Per-batch runs, no pooled-batch drift</div></div>
+            </div>
+            <p class="bw-qm__fine"><span class="dot"></span>Representative metrics, marked swappable, real lot data swaps in when supplied.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- pick: SECTION-COMPONENTS.md #15 | considered: #23,#29 | why: a media-less comparison matrix lays the build-it-yourself kitchen against routing it through BatchWorks, the honest cost teardown rendered as pure data, distinct from concentrates which pairs its compare with a photo. -->
+<!-- src: D-INCUMBENT-ROLLROOM -->
+<section class="bw-flow surface-dark" aria-label="What routing edibles through BatchWorks replaces">
+  <div class="container--full">
+    <div class="row">
+      <div class="col col--measure">
+        <div class="bw-head bw-rise">
+          <span class="bw-eyebrow"><span class="bw-idx">05</span>What this replaces</span>
+          <h2 class="bw-h2">Replaces standing up a separate <span class="ac">edibles operation.</span></h2>
+          <p class="bw-lede">Route edibles through BatchWorks and you retire a whole operation of your own: the buildout, a crew of 6-10, the equipment depreciation, a second compliance surface to keep audited. A 10-person kitchen payroll turns into a per-unit line you pay only as you produce, so the line launches without the overhead behind it.</p>
+        </div>
+
+        <div class="bw-compare bw-rise" style="--i:1" role="table" aria-label="Build the kitchen yourself versus route it through BatchWorks">
+          <div class="bw-compare__row bw-compare__row--head" role="row">
+            <div class="bw-compare__cell" role="columnheader">What it costs you</div>
+            <div class="bw-compare__cell bw-compare__cell--us" role="columnheader">Through BatchWorks</div>
+            <div class="bw-compare__cell bw-compare__cell--them" role="columnheader">Build it yourself</div>
+          </div>
+          <div class="bw-compare__row" role="row">
+            <div class="bw-compare__cell bw-compare__cell--label" role="rowheader">Kitchen crew</div>
+            <div class="bw-compare__cell bw-compare__cell--us" role="cell"><svg class="bw-mk bw-mk--yes" viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg>None to staff</div>
+            <div class="bw-compare__cell bw-compare__cell--them" role="cell"><svg class="bw-mk bw-mk--no" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>A 6-10 person crew</div>
+          </div>
+          <div class="bw-compare__row" role="row">
+            <div class="bw-compare__cell bw-compare__cell--label" role="rowheader">Payroll</div>
+            <div class="bw-compare__cell bw-compare__cell--us" role="cell"><svg class="bw-mk bw-mk--yes" viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg>A per-unit line item</div>
+            <div class="bw-compare__cell bw-compare__cell--them" role="cell"><svg class="bw-mk bw-mk--no" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>A 10-person payroll</div>
+          </div>
+          <div class="bw-compare__row" role="row">
+            <div class="bw-compare__cell bw-compare__cell--label" role="rowheader">Compliance surface</div>
+            <div class="bw-compare__cell bw-compare__cell--us" role="cell"><svg class="bw-mk bw-mk--yes" viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg>Coordinated for you</div>
+            <div class="bw-compare__cell bw-compare__cell--them" role="cell"><svg class="bw-mk bw-mk--no" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>A second one to own</div>
+          </div>
+          <div class="bw-compare__row" role="row">
+            <div class="bw-compare__cell bw-compare__cell--label" role="rowheader">Fixed cost when idle</div>
+            <div class="bw-compare__cell bw-compare__cell--us" role="cell"><svg class="bw-mk bw-mk--yes" viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg>Spend when you produce</div>
+            <div class="bw-compare__cell bw-compare__cell--them" role="cell"><svg class="bw-mk bw-mk--no" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>Carried regardless</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- pick: CARD-VARIATIONS.md #4 | considered: #18,#1 | why: a narrow media panel beside a three-across link strip routes onward to the pre-roll flagship, gummies and pricing without stacking a card grid or a second closing CTA band. -->
+<!-- src: D-POSITION-W6 -->
+<section class="bw-flow" aria-label="Part of the full-service umbrella">
+  <div class="container--full">
+    <div class="row">
+      <div class="col col--measure">
+        <div class="bw-head bw-rise">
+          <span class="bw-eyebrow"><span class="bw-idx">06</span>Part of the full-service umbrella</span>
+          <h2 class="bw-h2">One umbrella, <span class="ac">every vertical.</span></h2>
+          <p class="bw-lede">Edibles is one vertical under the BatchWorks umbrella; the flagship pre-roll line is the one we run in-house, and everything around it is coordinated to your spec.</p>
+        </div>
+
+        <div class="bw-banner bw-rise" style="--i:1">
+          <figure class="bw-banner__media">
+            <img src="assets/full-service-umbrella.jpg" style="object-fit:cover;object-position:center"
+                 alt="The coordinated full-service one-stop facility floor that runs every vertical under one umbrella">
+            <figcaption class="bw-frame__badge"><span class="dot"></span>One umbrella &middot; pre-roll flagship in-house</figcaption>
+          </figure>
+          <div class="bw-banner__cards">
+            <article class="bw-cap bw-cap--spec">
+              <div class="bw-cap__body">
+                <span class="bw-cap__ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 14l14-9 4 4-9 14H7l-4-4z"/></svg></span>
+                <h3 class="bw-cap__h">Pre-Roll</h3>
+                <p class="bw-cap__d">The flagship line we run ourselves, the proven core the whole shop is built around.</p>
+                <a class="bw-link" href="pre-roll.html">See the flagship <span aria-hidden="true">&rarr;</span></a>
+              </div>
+            </article>
+            <article class="bw-cap bw-cap--spec">
+              <div class="bw-cap__body">
+                <span class="bw-cap__ico" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4" y="8" width="16" height="11" rx="3"/><path d="M8 8V6a4 4 0 018 0v2"/></svg></span>
+                <h3 class="bw-cap__h">Gummies</h3>
+                <p class="bw-cap__d">Dosed gummies, coordinated to spec under the same umbrella.</p>
+                <a class="bw-link" href="gummies.html">See gummies <span aria-hidden="true">&rarr;</span></a>
+              </div>
+            </article>
+            <article class="bw-cap bw-cap--spec">
+              <div class="bw-cap__body">
+                <span class="bw-cap__ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg></span>
+                <h3 class="bw-cap__h">Pricing</h3>
+                <p class="bw-cap__d">How the per-unit quote model works, scaled to your run.</p>
+                <a class="bw-link" href="pricing.html">See pricing <span aria-hidden="true">&rarr;</span></a>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- pick: SECTION-COMPONENTS.md #34 | considered: #27,#33 | why: numbered question steps answer the in-house-vs-partner, dosing and lead-time objections plainly, a read-in-order shape used nowhere else on the page. -->
+<!-- src: D-POSITION-W3 -->
+<section class="bw-flow surface-dark" aria-label="Edibles frequently asked questions">
+  <div class="container--full">
+    <div class="row">
+      <div class="col col--measure">
+        <div class="bw-head bw-rise">
+          <span class="bw-eyebrow"><span class="bw-idx">07</span>Straight answers</span>
+          <h2 class="bw-h2">Edibles, <span class="ac">answered plainly.</span></h2>
+        </div>
+
+        <div class="bw-steps">
+          <div class="bw-step bw-rise">
+            <div class="bw-step__n">Q</div>
+            <div class="bw-step__b">
+              <h3 class="bw-h3">Is the edibles kitchen operated in-house?</h3>
+              <p class="bw-step__d">No. Edibles is partner-facilitated: we coordinate vetted kitchens to your spec and hold them to a COA per lot. Pre-roll is the one line we operate ourselves, named plainly rather than implying a line we do not own.</p>
+            </div>
+          </div>
+          <div class="bw-step bw-rise" style="--i:1">
+            <div class="bw-step__n">Q</div>
+            <div class="bw-step__b">
+              <h3 class="bw-h3">How are dosing and compliance handled?</h3>
+              <p class="bw-step__d">Dose, homogeneity and labeling are set to your spec and meet Nevada cannabis rules, checked on the lab panel for every lot.</p>
+            </div>
+          </div>
+          <div class="bw-step bw-rise" style="--i:2">
+            <div class="bw-step__n">Q</div>
+            <div class="bw-step__b">
+              <h3 class="bw-h3">Lead times and minimums?</h3>
+              <p class="bw-step__d">Quoted per program; a pilot can move on a short 24-hour scope turnaround once specs are set. No minimums: there is no 1,000-unit floor to clear before you start.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- pick: SECTION-COMPONENTS.md #33 | considered: #41,#37 | why: a custom-quote driver folds the dual action into a content-rich pricing model so the page closes on how the quote works, not a second bare CTA band on top of the chrome closing band. -->
+<!-- src: D-POSITION-W4 --><!-- src: D-OFFER-006 -->
+<section class="bw-flow" aria-label="How edibles pricing works">
+  <div class="container--full">
+    <div class="row">
+      <div class="col col--measure">
+        <div class="bw-qm">
+          <div class="bw-rise">
+            <span class="bw-eyebrow"><span class="bw-idx">08</span>How pricing works</span>
+            <h2 class="bw-qm__model">A variable per-unit cost, <span class="ac">quoted to your program.</span></h2>
+            <p class="bw-lede" style="margin-top:var(--ds-space-md)">Edibles is priced the way the whole shop is priced: a variable per-unit cost quoted to your format mix, volume and dose. It is quote-only pricing, no public number, because the right rate depends on your program. The point is the shape of the cost, not a sticker price.</p>
+          </div>
+          <div class="bw-qm__ask bw-rise" style="--i:1">
+            <h3 class="bw-qm__ask-h">What the quote model gives you.</h3>
+            <p class="bw-qm__ask-d">A fixed kitchen payroll becomes a per-unit cost you spend only when you produce. No minimums and no 1,000-unit floor, so a pilot and a full launch are priced on the same path, scaled to your volume. Tell us your SKUs and your volume and the quote follows your format mix.</p>
+            <p class="bw-cap__spec"><span>MODEL <b>per-unit</b></span><span>MINIMUMS <b>none</b></span><span>PRICING <b>quote-only</b></span></p>
+            <p class="bw-qm__fine"><span class="dot"></span>Quote-only pricing &middot; no minimums &middot; <a class="bw-link" href="contact.html">tell us your SKUs and your volume <span aria-hidden="true">&rarr;</span></a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ═══════════════════════════ PRE-FOOTER CLOSING CTA (LOCKED BLOCK · FOOTER-STYLES.md #21) ═══════════════════════════
+     Sourced VERBATIM from chrome-c/preview.html. NOT wrapped in the DOM-structure grammar. It sits OUTSIDE <main>
+     (a top-level locked-block section), exactly like chrome-c. -->
+<section class="precta">
+  <div class="container precta__inner">
+    <div>
+      <p class="precta__eyebrow">Ready when you are</p>
+      <h2 class="precta__h">Tell us your SKUs and your <span class="ac">volume.</span></h2>
+    </div>
+    <div class="precta__side">
+      <span class="precta__guarantee"><span class="dot"></span>COA on file · human-QC finish · no minimums</span>
+      <a class="btn btn--primary" href="contact.html">Request a Quote</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ FOOTER (LOCKED BLOCK · multi-row columns) ═══════════════════════════
+     Sourced VERBATIM from chrome-c/preview.html. NOT wrapped in the DOM-structure grammar. -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer__grid">
+
+      <div class="footer__brand">
+        <a class="brand" href="index.html" aria-label="BatchWorks home">
+          <svg class="brand__mark" viewBox="0 0 100 100" aria-hidden="true">
+            <circle class="ring-o" cx="50" cy="50" r="44"/><circle class="ring-i" cx="50" cy="50" r="29"/>
+            <line class="tick" x1="50" y1="6" x2="50" y2="18"/><line class="tick" x1="50" y1="82" x2="50" y2="94"/>
+            <line class="tick" x1="6" y1="50" x2="18" y2="50"/><line class="tick" x1="82" y1="50" x2="94" y2="50"/>
+            <circle class="node" cx="50" cy="50" r="8"/>
+          </svg>
+          <span class="brand__name">Batch<span class="lo">Works</span></span>
+        </a>
+        <p class="footer__tag">Cannabis manufacturing, operator to operator. Pre-roll flagship, full-service umbrella.</p>
+        <span class="footer__honesty"><span class="dot"></span>Some lines partner-facilitated</span>
+      </div>
+
+      <div class="footer__col">
+        <h4>Capabilities</h4>
+        <ul>
+          <li><a href="pre-roll.html">Pre-Roll</a></li>
+          <li><a href="concentrates.html">Concentrates</a></li>
+          <li><a href="distillate.html">Distillate</a></li>
+          <li><a href="edibles.html">Edibles</a></li>
+          <li><a href="gummies.html">Gummies</a></li>
+          <li><a href="vapes-carts.html">Vapes &amp; Carts</a></li>
+          <li><a href="packaging.html">Packaging</a></li>
+          <li><a href="white-label.html">White-Label</a></li>
+          <li><a href="rd.html">R&amp;D</a></li>
+        </ul>
+      </div>
+
+      <div class="footer__col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="how-it-works.html">How It Works</a></li>
+          <li><a href="pricing.html">Pricing</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Request a Quote</a></li>
+        </ul>
+      </div>
+
+      <div class="footer__col">
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="privacy.html">Privacy</a></li>
+          <li><a href="terms.html">Terms</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="footer__bar">
+      <span class="footer__copy">© 2026 BatchWorks · Cannabis manufacturing</span>
+      <nav class="footer__legal" aria-label="Legal">
+        <a href="privacy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══════════════════════════ STICKY CTA (LOCKED BLOCK · STICKY-CTA-BAR.md #2 dual-button · mobile) ═══════════════════════════
+     A top-level fixed overlay sourced VERBATIM from chrome-c/preview.html. NOT a grammar root. -->
+<div class="sticky-cta" aria-label="Quick actions">
+  <a class="btn btn--primary" href="contact.html">Request a Quote</a>
+  <a class="btn btn--secondary" href="how-it-works.html">See process</a>
+</div>
+
+<script>
+/* ───────────────────────────────────────────────────────────────────────────
+   CHROME SCRIPT - copied VERBATIM from _tournament/chrome-c/preview.html
+   (glass scroll-state · desktop mega hover-intent · canonical mobile drawer +
+   accordion · STICKY-CTA §2.3 two-observer behavior). The chrome is a LOCKED
+   BLOCK; the markup above is un-retrofitted to match chrome-c byte-faithfully, so
+   every id/class the JS selects (#siteHeader, #megaWrap, #megaTrigger, #mega,
+   #hamburger, #mobile-drawer, #drawerScrim, #drawerClose, #accTrigger, #accPanel,
+   .hero, .precta, .site-footer, .sticky-cta) resolves exactly as in chrome-c.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+/* ── glass scroll-state ── */
+(function(){
+  var h = document.getElementById('siteHeader');
+  function onScroll(){ if (window.scrollY > 40) h.classList.add('is-scrolled'); else h.classList.remove('is-scrolled'); }
+  window.addEventListener('scroll', onScroll, { passive:true }); onScroll();
+})();
+
+/* ── desktop mega-menu: hover-intent (group-hover + no-gap bridge + JS close-delay ~240ms) + click + keyboard ── */
+(function(){
+  var wrap = document.getElementById('megaWrap');
+  var trigger = document.getElementById('megaTrigger');
+  var mega = document.getElementById('mega');
+  if(!wrap || !trigger || !mega) return;
+  var closeTimer = null;
+  function open(){ clearTimeout(closeTimer); mega.classList.add('is-open'); trigger.setAttribute('aria-expanded','true'); }
+  function close(){ mega.classList.remove('is-open'); trigger.setAttribute('aria-expanded','false'); }
+  function scheduleClose(){ clearTimeout(closeTimer); closeTimer = setTimeout(close, 240); }
+  trigger.addEventListener('mouseenter', open);
+  trigger.addEventListener('mouseleave', scheduleClose);
+  mega.addEventListener('mouseenter', function(){ clearTimeout(closeTimer); });
+  mega.addEventListener('mouseleave', scheduleClose);
+  trigger.addEventListener('click', function(e){ e.preventDefault(); (mega.classList.contains('is-open') ? close() : open()); });
+  trigger.addEventListener('keydown', function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); open(); } });
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ close(); } });
+  document.addEventListener('click', function(e){ if(!wrap.contains(e.target) && !mega.contains(e.target)) close(); });
+})();
+
+/* ── mobile drawer (canonical contract: .site-header__hamburger -> #mobile-drawer[aria-hidden]) ── */
+(function(){
+  var burger = document.getElementById('hamburger');
+  var drawer = document.getElementById('mobile-drawer');
+  var scrim = document.getElementById('drawerScrim');
+  var closeBtn = document.getElementById('drawerClose');
+  if(!burger || !drawer) return;
+  function openDrawer(){ drawer.setAttribute('aria-hidden','false'); burger.setAttribute('aria-expanded','true');
+    if(scrim) scrim.classList.add('is-open'); document.body.style.overflow='hidden'; }
+  function closeDrawer(){ drawer.setAttribute('aria-hidden','true'); burger.setAttribute('aria-expanded','false');
+    if(scrim) scrim.classList.remove('is-open'); document.body.style.overflow=''; }
+  burger.addEventListener('click', function(){ (drawer.getAttribute('aria-hidden')==='false' ? closeDrawer() : openDrawer()); });
+  if(closeBtn) closeBtn.addEventListener('click', closeDrawer);
+  if(scrim) scrim.addEventListener('click', closeDrawer);
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape' && drawer.getAttribute('aria-hidden')==='false') closeDrawer(); });
+
+  var accT = document.getElementById('accTrigger');
+  var accP = document.getElementById('accPanel');
+  if(accT && accP){
+    accT.addEventListener('click', function(){
+      var open = accP.classList.toggle('is-open');
+      accT.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+  }
+})();
+
+/* ── STICKY-CTA scroll behavior (_SCROLL-STICKY-BEHAVIOR-LIBRARY §2.3) ── */
+(function(){
+  var bar = document.querySelector('.sticky-cta');
+  if(!bar || !('IntersectionObserver' in window)) return;
+  var hero     = (document.querySelector('.hero')||document.querySelector('main>section')||document.querySelector('main>*'));
+  var realCta  = document.querySelector('.precta');
+  var footer   = document.querySelector('.site-footer');
+  if(!hero) return;
+  bar.classList.add('js-sticky');
+  var pastHero = false, atEnd = false;
+  function apply(){ bar.classList.toggle('is-revealed', pastHero && !atEnd); }
+  new IntersectionObserver(function(entries){
+    pastHero = !entries[0].isIntersecting; apply();
+  }, { threshold: 0, rootMargin: '0px 0px -10% 0px' }).observe(hero);
+  var endEls = [realCta, footer].filter(Boolean);
+  if(endEls.length){
+    var seen = new WeakSet();
+    var endObs = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if(e.isIntersecting) seen.add(e.target); else seen.delete(e.target); });
+      atEnd = endEls.some(function(el){ return seen.has(el); });
+      apply();
+    }, { threshold: 0.01 });
+    endEls.forEach(function(el){ endObs.observe(el); });
+  }
+})();
+
+/* ───────────────────────────────────────────────────────────────────────────
+   BODY MOTION - the ROBUST, transform-ONLY reveal + count-up.
+   CRITICAL: content is VISIBLE ON LOAD. .bw-rise is opacity:1 in CSS at all times;
+   this only adds .is-in to LAND the 14px translateY settle. If IO is unsupported or
+   reduced-motion is set, we still add .is-in immediately (no hidden state ever).
+   ─────────────────────────────────────────────────────────────────────────── */
+(function(){
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var riseEls  = [].slice.call(document.querySelectorAll('.bw-rise'));
+  var countEls = [].slice.call(document.querySelectorAll('[data-count]'));
+
+  if(reduce || !('IntersectionObserver' in window)){
+    riseEls.forEach(function(el){ el.classList.add('is-in'); });
+    countEls.forEach(function(el){ paintFinal(el); });
+    return;
+  }
+
+  var revObs = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('is-in'); revObs.unobserve(e.target); } });
+  }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+  riseEls.forEach(function(el){ revObs.observe(el); });
+
+  /* count-up the stat / metric numerals on reveal (rAF ease-out-cubic ~1.4s). The markup already
+     carries the FINAL value as text, so even if this never runs the numbers are correct + visible. */
+  function paintFinal(el){
+    var pre = el.getAttribute('data-prefix') || '';
+    var suf = el.getAttribute('data-suffix') || '';
+    el.innerHTML = pre + (el.getAttribute('data-count') || '0') + (suf ? '<small>' + suf + '</small>' : '');
+  }
+  /* read the count-up duration from the design-system token --ds-dur-data (tokenized; falls back to 1400ms) */
+  function dataDurMs(){
+    var raw = getComputedStyle(document.documentElement).getPropertyValue('--ds-dur-data').trim();
+    if(!raw) return 1400;
+    var n = parseFloat(raw);
+    if(isNaN(n)) return 1400;
+    return /ms\s*$/.test(raw) ? n : (/s\s*$/.test(raw) ? n * 1000 : n);   /* "1400ms" | "1.4s" | bare ms */
+  }
+  function runCount(el){
+    var target = parseFloat(el.getAttribute('data-count')) || 0;
+    var pre = el.getAttribute('data-prefix') || '';
+    var suf = el.getAttribute('data-suffix') || '';
+    var start = null, dur = dataDurMs();
+    function frame(ts){
+      if(start === null) start = ts;
+      var p = Math.min((ts - start) / dur, 1);
+      var eased = 1 - Math.pow(1 - p, 3);
+      var val = Math.round(target * eased);
+      el.innerHTML = pre + val + (suf ? '<small>' + suf + '</small>' : '');
+      if(p < 1) requestAnimationFrame(frame); else el.innerHTML = pre + target + (suf ? '<small>' + suf + '</small>' : '');
+    }
+    requestAnimationFrame(frame);
+  }
+  var cntObs = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){ if(e.isIntersecting){ runCount(e.target); cntObs.unobserve(e.target); } });
+  }, { threshold: 0.3 });
+  countEls.forEach(function(el){ cntObs.observe(el); });
+})();
+</script>
+</body>
+</html>

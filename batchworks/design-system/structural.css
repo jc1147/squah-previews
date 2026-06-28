@@ -1,0 +1,1689 @@
+/* ============================================================================
+   BATCHWORKS — FOUNDATION FINAL · BODY structural sheet  (the locked body design)
+   ----------------------------------------------------------------------------
+   Composed from the owner's two picks: foundation-A's "EDITORIAL CALM" HERO FEEL
+   (big confident display, generous air) made IMAGE-LED, + foundation-B's BODY
+   SECTION SYSTEM (stat band · numbered process · capability grid · compare ·
+   proof). The IDENTITY (brand-card concept A "Bold Foundry" -> batchworks-tokens.css)
+   and the CHROME (concept C "Bolder Industrial" -> batchworks-chrome.css) are LOCKED
+   + stamped; this sheet locks ONLY the body between the locked header and footer.
+
+   ═══ THE COHESIVE-FLOW FIX (owner's critical note) ═══════════════════════════
+   foundation-B read "designed row-by-row" because it put SHARP clip-path bevels
+   (.bw-bevel-top/bottom) + ALTERNATING section backgrounds on EVERY section. That
+   is DROPPED here. This page flows as ONE experience:
+     · ONE continuous dark ground (body.surface-dark) carries the whole page; the
+       per-section bg is `transparent` so every section reads on the same ground.
+     · only 2-3 INTENTIONAL anchored moments break the flow:
+         - .bw-anchor : a dark STAT anchor (metal + glow + grain) — the scale band.
+         - .bw-light  : ONE light punctuation band (flips to paper) — the QC/proof
+                        beat, the page's single figure/ground inversion.
+     · ONE shared vertical rhythm (--bw-flow) on every section; NO hard dividers
+       between most sections (a soft hairline appears only where two same-tone bands
+       actually meet — restraint over decoration, V17: no SVG/clip-path edges).
+
+   ═══ REAL IMAGERY (the whole point) ═════════════════════════════════════════
+   The 6 real photos are placed as REAL <img src> across the body. NO token-built
+   CSS "imagery" where a real photo belongs. Token material (grid/grain/glow/metal)
+   is used ONLY as the connective GROUND + as overlay scrims for legibility, never
+   as a stand-in for a photo. Placement:
+     hero-facility      -> full-bleed HERO background image
+     automation-line    -> capability grid (robotics flagship tile, framed)
+     packaging-line     -> numbered-process media rail (packaging step) + capability
+     precision-calipers -> the dark stat-anchor side image (QC precision)
+     cannabis-flower-qc -> the LIGHT proof band image (the flower hand-QC finish)
+     machined-detail    -> the yield-math split visual (brushed-metal texture accent)
+
+   ═══ ROBUST REVEAL (owner's critical note — prior foundations failed this) ═══
+   Content is VISIBLE ON LOAD. The reveal NEVER uses opacity:0. `.bw-rise` starts at
+   opacity:1 (a subtle 14px translateY settle only); JS adds `.is-in` to land it.
+   Even if the IntersectionObserver never fires (no JS, reduced-motion, off-screen),
+   every element stays at opacity:1 — nothing is ever hidden. This guarantees the
+   renders-on-load gate (opacity >= 0.9 at load) with margin to spare.
+
+   G8 CONTRACT: ZERO raw brand hex below this banner. EVERY colour resolves through
+   var(--ds-*) from the LINKED batchworks-tokens.css (:root light + .surface-dark
+   dark flip). The only literal values are layout geometry (grid tracks, %, vw, ch,
+   deg, aspect-ratios, line-heights, opacities, blur radii, px offsets) — never colour.
+
+   ═══ DESIGN-SYSTEM CITATIONS (resolve under .claude/design-system-unified/) ═══
+     library   -> _MODERN-WOW-SPEC               (§1 depth/figure-ground · §2 restrained
+                  transform-only reveal + count-up + card-lift · §3 grain/grid/metal texture ·
+                  §4 display-scale contrast + oversized numerals · §5 one-accent glow ·
+                  §6 generous negative-space rhythm)
+     library   -> _RESPONSIVE-PATTERN-LIBRARY     (G1/G4 grid cascade · T1 type ladder · Comp7 icon-above-text stack)
+     library   -> _SCROLL-STICKY-BEHAVIOR-LIBRARY (F2 IntersectionObserver settle · reduced-motion gate)
+     blueprint -> composition-manufacturing-industrial  (V17 spine: image-led capability hero · quantified
+                  scale band HIGH on a dark anchor · how-it-works EARLY as the infrastructure-not-labor
+                  wedge · capability grid honesty-fenced · compare-vs-generalist · metric-led proof ·
+                  yield-math · quote-MODEL not public price · restraint over decoration — NO shape/bevel dividers)
+     composition -> composition-manufacturing-industrial  (the composition the body order is composed from)
+     menu      -> HERO-COMPOSITIONS.md #5    (Full-bleed image hero w/ scrim + display headline — the image-led hero)
+     menu      -> SECTION-COMPONENTS.md #3   (Stat strip / metric band — the dark scale anchor, high)
+     menu      -> SECTION-COMPONENTS.md #27  (Numbered process steps — how-it-works EARLY, with a media rail)
+     menu      -> SECTION-COMPONENTS.md #11  (Service pillars 2-col with image — the yield-math split)
+     menu      -> SECTION-COMPONENTS.md #15  (Comparison table us-vs-them — compare-vs-generalist)
+     menu      -> SECTION-COMPONENTS.md #33  (Custom-quote driver — the quote-MODEL band, no public price)
+     menu      -> CARD-VARIATIONS.md #1      (Dark service tile w/ image + view-more — the capability grid)
+     menu      -> TRUST-STATS-SECTIONS.md #4 (Stats — big-number band, dark anchor — the scale strip)
+     menu      -> PROOF-SECTIONS.md #4       (Case-study / metric-led proof — the flower hand-QC light band)
+     menu      -> CTA-PATTERNS.md #7         (Multi-CTA cluster primary+secondary — hero + quote band)
+   ============================================================================ */
+
+/* ----------------------------------------------------------------------------
+   0 · FLOW PRIMITIVES — the ONE shared rhythm. Every section is TRANSPARENT so
+   the body's continuous dark ground shows through (cohesive flow, not stacked
+   tiles). Two anchored exceptions (.bw-anchor dark / .bw-light paper) below.
+   ---------------------------------------------------------------------------- */
+:root{
+  --bw-flow: clamp(72px, 10vw, 132px);   /* the shared vertical rhythm — generous (Editorial Calm air) */
+  --bw-measure: 1180px;                   /* the body measure (matches the chrome container feel, a touch wider) */
+}
+.bw-flow{
+  position:relative;
+  padding-block: var(--bw-flow);
+  background: transparent;                /* THE FIX: no per-section bg — the body dark ground carries everything */
+  color: var(--ds-ink);
+}
+/* a SOFT hairline only where genuinely needed (two same-tone bands meeting). Used sparingly. */
+.bw-flow--seam{ border-top:1px solid var(--ds-line); }
+
+/* ── UNIFORM SECTION SPACING CADENCE (owner T8, 2026-06-25) ───────────────────
+   THE DEFECT this kills: every .bw-flow section has a SYMMETRIC padding-block
+   (var(--bw-flow), the shared rhythm token), so leading must equal trailing. But
+   at 375 the TRAILING space measured 72px on .bw-split(§1) + .bw-proof(§4) and 58px
+   on every other section. ROOT CAUSE: the mobile reading-order interleave puts the
+   copy wrapper at display:contents and reorders the leaf children with `order`. A
+   display:contents wrapper BREAKS margin-collapse through it, so the reordered LAST
+   leaf child's bottom margin (e.g. .bw-split__list / .bw-proof__metrics / a trailing
+   <p>) no longer collapses into the section padding the way the FIRST child's top
+   margin does — it stacks ON TOP of the padding, inflating ONLY the trailing edge of
+   exactly those two display:contents sections (72 vs 58) and desyncing the cadence.
+
+   THE FIX (slug-neutral, pattern-INDEPENDENT, display:contents-proof): drive the
+   WHOLE inter-section rhythm from the section padding alone (the --bw-flow token) and
+   neutralize any child margin that could leak past it — so the EFFECTIVE top+bottom
+   rhythm is identical on EVERY section regardless of inner pattern (.bw-split /
+   .bw-proof / .bw-media-grid / .bw-mediacompare / .bw-banner / .bw-anchor / .bw-qm)
+   AND regardless of display:contents. leading == trailing == var(--bw-flow) at every
+   breakpoint. This is the cadence the verify-section-rhythm.mjs render gate enforces.
+
+   (1) Zero the FIRST flow child's top margin + the LAST flow child's bottom margin
+       inside each section's measure column, so the only vertical space at a section's
+       two edges is the symmetric .bw-flow padding (no first/last child margin adds to
+       one edge but not the other). :first-child/:last-child are layout-position
+       selectors, not brand classes — fully slug-neutral. */
+.bw-flow > .container--full > .row > .col > :first-child,
+.bw-flow > .container--full > .row > .col { margin-block-start: 0; }
+.bw-flow > .container--full > .row > .col > :last-child,
+.bw-flow > .container--full > .row > .col { margin-block-end: 0; }
+
+/* (2) display:contents NEUTRALIZER — the load-bearing half. When a copy wrapper is
+   display:contents (the ≤1024 reading-order interleave on .bw-process/.bw-proof/.bw-split),
+   the section's measure col holds the GRID and the grid's items are the reordered leaf
+   children. Margin no longer collapses through the vanished wrapper, so the visually-last
+   ordered leaf would otherwise leak its bottom margin past the padding (the 72px). Pin the
+   grid item children's block margins to 0 so NO reordered leaf can add space at either edge;
+   the grid's own gap handles INTER-item spacing, the .bw-flow padding handles the EDGES.
+   Scoped to the three interleave grids so it only touches the display:contents case. */
+.bw-process > div:first-child,
+.bw-proof > *:not(.bw-proof__media),
+.bw-split__copy { margin-block:0; }
+@media (max-width:1024px){
+  /* the reordered leaf children become direct grid items here; zero their block margins so
+     the FIRST (order:-1 heading) adds nothing to the leading edge and the LAST (order:1 body)
+     adds nothing to the trailing edge — the grid gap + section padding own all spacing. */
+  .bw-process > div:first-child > .bw-head,
+  .bw-process > div:first-child > .bw-steps,
+  .bw-process > .bw-frame,
+  .bw-proof > *:not(.bw-proof__media) > *,
+  .bw-proof__media,
+  .bw-split__copy > *,
+  .bw-split__visual{ margin-block:0; }
+}
+
+.bw-wide{ max-width: var(--bw-measure); margin-inline:auto; padding-inline:clamp(16px,4vw,32px); }
+.bw-narrow{ max-width: 760px; }
+
+/* ----------------------------------------------------------------------------
+   0b · DOM-STRUCTURE GRAMMAR PRIMITIVES — the FORCED structural spine (G-DOM).
+   Owner law (2026-06-24): EVERY region (header · each <main> section · footer ·
+   drawer · mega) is built  section/root -> div.container -> div.row -> div.col
+   -> OBJECT. These three LAYOUT-ONLY classes are that spine. The component SKIN
+   (bw-*/site-*/nav__*/mega__*/footer__*) lives on the OBJECT inside the .col,
+   NEVER on .container/.row/.col (R5). Token-pure: every value is a var(--ds-*)
+   or a trivial layout literal (no brand hex), so structural stays G8-clean.
+
+   VISUAL-PRESERVING DEFAULT: .row and .col default to a TRANSPARENT block
+   pass-through (display:block; the col stretches full width) so wrapping an
+   existing bw-* layout object in .row > .col does NOT change its rendering — the
+   inner object keeps its OWN grid/flex. Where a region's layout genuinely lives
+   on the spine (the header bar, the mega tri-column, a two-up split) we OPT IN
+   with a row/col MODIFIER below, moving that flex/grid onto the structure layer
+   per the law (layout on the structure, skin on the object).
+
+   NB: .container is already defined (chrome sheet: max-width var(--ds-container-max)
+   + centred + responsive inline padding) — used by the CHROME regions verbatim.
+   For the BODY the section measure is carried SELF-CONTAINED here by .container--full
+   (full-bleed wrapper) + .col--measure (which reproduces the old .bw-wide measure
+   EXACTLY: max-width var(--bw-measure) centred + the same inline padding), so the
+   body renders byte-identically to the pre-grammar .bw-wide layout. */
+.container--full{ width:100%; max-width:none; margin-inline:0; padding-inline:0; }
+.row{}                              /* transparent pass-through by default */
+.col, .col--full{ display:block; min-width:0; }     /* a leaf cell — full width, never overflows */
+[class*="col--span-"]{ display:block; min-width:0; }
+
+/* .col--measure — the body section measure, reproducing the old .bw-wide EXACTLY
+   (max-width centred + the same responsive inline padding). The bw-* layout object
+   inside keeps its OWN grid/flex, so the rendered body is unchanged by the retrofit. */
+.col--measure{ width:100%; max-width:var(--bw-measure); margin-inline:auto; padding-inline:clamp(16px,4vw,32px); }
+
+/* row/col LAYOUT MODIFIERS — opt-in flex/grid on the structure layer (the law's
+   "layout lives on .container/.row/.col"). Used where a region's arrangement is
+   the structural spine itself, not an inner object's private grid. */
+.row--flex{ display:flex; align-items:center; gap:clamp(14px,2vw,28px); }
+.row--flex-between{ display:flex; align-items:center; justify-content:space-between; gap:clamp(24px,4vw,56px); flex-wrap:wrap; }
+.row--bar{ display:flex; align-items:center; gap:clamp(14px,2vw,28px); }   /* the header bar row */
+.row--stretch{ display:flex; align-items:stretch; }
+.col--grow{ flex:1 1 auto; min-width:0; }
+.col--auto{ flex:0 0 auto; }
+.col--push{ margin-left:auto; }                     /* push a col to the far end of a flex row */
+.col--center{ margin-inline:auto; }
+.col--fill{ width:100%; }                           /* a col that should span its container's full width */
+
+/* ----------------------------------------------------------------------------
+   THE CONTINUOUS GROUND — painted ONCE on <main>, so the whole page is one
+   uninterrupted dark experience (WOW §1 figure/ground; V17 dark-dominant). The
+   grid/glow/grain ride the WHOLE page, not re-stated per section.
+   ---------------------------------------------------------------------------- */
+.bw-body{
+  position:relative;
+  /* GRID is OPT-IN (accent, not blanket): the page-wide --ds-grid layer was removed here so the
+     technical-grid reads as a deliberate signature on hero/anchor/precta, not as wallpaper. The
+     glow-wash + base gradient + the grain veil below still kill flatness. Use .bw-gridded to opt a
+     surface back into the grid where it earns the accent. */
+  background:
+    var(--ds-glow-wash),
+    linear-gradient(180deg, var(--ds-bg-surface-2) 0%, var(--ds-bg-surface) 42%, var(--ds-bg-warm) 100%);
+  background-size: auto, auto;
+  background-position: center top, center;
+  background-attachment: scroll, scroll;
+}
+.bw-body::before{                          /* one page-wide grain veil (cheap, kills flatness) */
+  content:""; position:absolute; inset:0; pointer-events:none; z-index:var(--ds-z-base);
+  background-image: var(--ds-grain); background-size:120px 120px;
+  opacity:.40; mix-blend-mode:overlay;
+}
+.bw-body > *{ position:relative; z-index:var(--ds-z-raised); }
+
+/* ----------------------------------------------------------------------------
+   GRID ACCENT — opt-in (the technical-grid is now an ACCENT, not blanket wallpaper).
+   The blanket grid was stripped from .bw-body / .bw-cap--spec / .bw-tex and the chrome base
+   surfaces; the grid survives CSS-intrinsically only on the earned signatures (hero, anchor,
+   precta, mega panel, drawer). To grant the grid to any OTHER surface, add .bw-gridded to its
+   markup (the host must be position:relative; the host's content should sit on z-raised). The
+   ::before is masked top-faded + pointer-inert so it never costs legibility or interaction.
+   ---------------------------------------------------------------------------- */
+.bw-gridded{ position:relative; }
+.bw-gridded::before{
+  content:""; position:absolute; inset:0; pointer-events:none; z-index:var(--ds-z-base);
+  background:var(--ds-grid); background-size:var(--ds-grid-size); background-position:center top;
+  -webkit-mask-image:linear-gradient(180deg,transparent,var(--ds-ink) 90%);
+  mask-image:linear-gradient(180deg,transparent,var(--ds-ink) 90%);
+  opacity:.7;
+}
+.bw-gridded > *{ position:relative; z-index:var(--ds-z-raised); }
+
+/* ----------------------------------------------------------------------------
+   1 · TYPE LADDER — large editorial jumps, calm body (WOW §4 / T1).
+   ---------------------------------------------------------------------------- */
+.bw-eyebrow{
+  font-family:var(--ds-font-mono); font-size:var(--ds-fs-caption);
+  letter-spacing:var(--ds-tracking-label); text-transform:uppercase;
+  color:var(--ds-accent); margin:0 0 var(--ds-space-lg);
+  display:inline-flex; align-items:center; gap:12px;
+}
+.bw-eyebrow::before{ content:""; width:34px; height:1px; background:var(--ds-divider); }
+.bw-eyebrow .bw-idx{
+  font-weight:700; color:var(--ds-accent-bright); letter-spacing:.04em;
+  border:1px solid var(--ds-divider); border-radius:var(--ds-r-control);
+  padding:2px 7px; margin-right:2px;
+}
+.bw-h2{
+  font-family:var(--ds-font-display); font-weight:600; text-transform:uppercase;
+  letter-spacing:var(--ds-tracking-disp); line-height:var(--ds-lh-tight);
+  font-size:clamp(31px, 4.4vw, 54px);
+  color:var(--ds-ink); margin:0 0 var(--ds-space-lg); max-width:13em;
+}
+.bw-h2 .ac{ color:var(--ds-accent); }
+.bw-h3{
+  font-family:var(--ds-font-display); font-weight:600; text-transform:uppercase;
+  letter-spacing:.01em; line-height:1.08; font-size:clamp(20px,2vw,25px);
+  color:var(--ds-ink); margin:0 0 var(--ds-space-sm);
+}
+.bw-lede{
+  font-family:var(--ds-font-body); font-size:clamp(17px,1.5vw,20px);
+  line-height:var(--ds-lh-body); color:var(--ds-ink-soft);
+  max-width:36em; margin:0;
+}
+/* section head: a calm two-part cluster (eyebrow+head | lede) — used across the body system */
+.bw-head{ margin-bottom:clamp(36px,5vw,64px); }
+.bw-head--split{ display:grid; grid-template-columns:1.1fr .9fr; gap:clamp(28px,4vw,64px); align-items:end; }
+.bw-head--center{ max-width:780px; margin-inline:auto; text-align:center; }
+.bw-head--center .bw-eyebrow{ justify-content:center; }
+.bw-head--center .bw-h2{ margin-inline:auto; }
+.bw-head--center .bw-lede{ margin-inline:auto; }
+
+/* ----------------------------------------------------------------------------
+   2 · HERO — IMAGE-LED (foundation-A's Editorial-Calm FEEL: big display, deep air),
+   now driven by the REAL hero-facility.jpg full-bleed photo with a legibility scrim
+   (HERO-COMPOSITIONS #5 · composition-manufacturing-industrial image-led hero · WOW §6).
+   The photo IS the hero; type sits over a left-weighted gradient scrim.
+   ---------------------------------------------------------------------------- */
+.bw-hero{
+  position:relative; overflow:hidden;
+  min-height:clamp(620px, 88vh, 940px);
+  display:flex; align-items:center;
+  isolation:isolate;
+}
+.bw-hero__img{
+  position:absolute; inset:0; width:100%; height:100%;
+  object-fit:cover; object-position:center 42%;
+  z-index:var(--ds-z-below);   /* image BELOW scrim — restore dark hero (constrain collapsed img+scrim to base) */
+}
+/* legibility scrim: a left-weighted ink gradient + a faint teal glow + the brand grid,
+   so the display type is AA-legible over the photo (WOW §1 depth, §5 one-accent glow) */
+.bw-hero::before{
+  content:""; position:absolute; inset:0; z-index:var(--ds-z-base); pointer-events:none;
+  background:
+    linear-gradient(90deg, var(--ds-bg-surface) 0%, rgba(14,20,38,0.78) 42%, rgba(14,20,38,0.30) 78%, rgba(14,20,38,0.10) 100%),
+    linear-gradient(180deg, rgba(14,20,38,0.45) 0%, transparent 28%, transparent 62%, var(--ds-bg-warm) 100%);
+}
+.bw-hero::after{
+  content:""; position:absolute; inset:0; z-index:var(--ds-z-base); pointer-events:none;
+  background: var(--ds-glow-wash), var(--ds-grid);
+  background-size:auto, var(--ds-grid-size);
+  background-position:center, center top;
+  opacity:.55; mix-blend-mode:screen;
+}
+.bw-hero__inner{
+  position:relative; z-index:var(--ds-z-raised);
+  padding-block:clamp(96px, 13vw, 168px);
+  max-width:920px;
+}
+.bw-hero__eyebrow{
+  font-family:var(--ds-font-mono); font-size:var(--ds-fs-caption);
+  letter-spacing:var(--ds-tracking-label); text-transform:uppercase;
+  color:var(--ds-accent-bright); margin:0 0 var(--ds-space-lg);
+  display:inline-flex; align-items:center; gap:12px;
+}
+.bw-hero__eyebrow::before{ content:""; width:34px; height:1px; background:var(--ds-accent); }
+.bw-hero__h{
+  font-family:var(--ds-font-display); font-weight:700; text-transform:uppercase;
+  letter-spacing:var(--ds-tracking-disp); line-height:.94;
+  font-size:var(--ds-fs-display); color:var(--ds-ink);
+  margin:0 0 var(--ds-space-lg); max-width:11em;
+  text-shadow:0 2px 30px rgba(7,18,30,0.55);
+}
+.bw-hero__h .ac{ color:var(--ds-accent-bright); }
+.bw-hero__sub{
+  font-family:var(--ds-font-body); font-size:clamp(18px,1.7vw,22px);
+  line-height:var(--ds-lh-body); color:var(--ds-ink);
+  max-width:32em; margin:0 0 var(--ds-space-xl); opacity:.92;
+}
+.bw-hero__cta{ display:flex; gap:var(--ds-space-md); flex-wrap:wrap; align-items:center; }
+.bw-hero__note{
+  margin-top:var(--ds-space-xl);
+  font-family:var(--ds-font-mono); font-size:var(--ds-fs-caption);
+  letter-spacing:.04em; color:var(--ds-ink); opacity:.86;
+  display:inline-flex; align-items:center; gap:10px; flex-wrap:wrap;
+}
+.bw-hero__note .dot{ width:7px; height:7px; border-radius:50%; background:var(--ds-accent-bright); box-shadow:var(--ds-glow); }
+
+/* ----------------------------------------------------------------------------
+   3 · SCALE BAND — the DARK STAT ANCHOR (one of the 2 intentional moments).
+   Big-number band (TRUST-STATS-SECTIONS #4 · SECTION-COMPONENTS #3), V17 quantified
+   scale HIGH. A dedicated metal+glow+grain panel anchors the flow, paired with the
+   REAL precision-calipers photo (QC precision side image). Oversized numerals (WOW §4).
+   ---------------------------------------------------------------------------- */
+.bw-anchor{ position:relative; }
+.bw-anchor__panel{
+  position:relative; overflow:hidden;
+  border:1px solid var(--ds-divider); border-radius:var(--ds-r-surface);
+  background:
+    var(--ds-glow-wash),
+    var(--ds-grid),
+    var(--ds-metal);
+  background-size:auto, var(--ds-grid-size), auto;
+  background-position:center, center top, center;
+  box-shadow:var(--ds-shadow-lift), var(--ds-inset-hi);
+  display:grid; grid-template-columns:1.25fr .75fr; gap:0;
+}
+.bw-anchor__panel::after{
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background-image:var(--ds-grain); background-size:120px 120px;
+  opacity:.45; mix-blend-mode:overlay;
+}
+.bw-anchor__body{ position:relative; z-index:var(--ds-z-raised); padding:clamp(28px,3.4vw,56px); }
+.bw-anchor__media{ position:relative; min-height:100%; border-left:1px solid var(--ds-divider); overflow:hidden; }
+.bw-anchor__media img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center; }
+.bw-anchor__media::after{        /* a teal duotone wash so the photo reads as a brand specimen, AA on the panel */
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background:linear-gradient(180deg, rgba(86,167,175,0.10), rgba(14,20,38,0.36));
+  mix-blend-mode:multiply;
+}
+.bw-scale__grid{
+  display:grid; grid-template-columns:repeat(2, 1fr);
+  gap:clamp(20px,2.6vw,40px) clamp(24px,3vw,48px);
+  margin-top:clamp(28px,3.4vw,44px);
+}
+.bw-stat{ }
+.bw-stat__n{
+  font-family:var(--ds-font-display); font-weight:700;
+  font-size:clamp(42px,5.6vw,84px); line-height:.88;
+  letter-spacing:-.04em; color:var(--ds-accent);
+  font-variant-numeric:tabular-nums;
+  /* the figure + its affix small stay ONE big line: inline-block makes the box height track
+     line-height (not the display font's tall content box) so G-STAT's height/line-height ratio
+     reads 1 line at 375; nowrap guards the affix from ever breaking off. */
+  display:inline-block; white-space:nowrap;
+}
+.bw-stat__n small{ font-size:.42em; color:var(--ds-accent-bright); margin-left:.06em; letter-spacing:0; }
+.bw-stat__l{
+  margin-top:var(--ds-space-md);
+  font-family:var(--ds-font-mono); font-size:var(--ds-fs-caption);
+  letter-spacing:var(--ds-tracking-label); text-transform:uppercase;
+  color:var(--ds-ink); display:block;
+}
+.bw-stat__d{ margin-top:6px; font-family:var(--ds-font-body); font-size:14px; line-height:1.45; color:var(--ds-ink-soft); }
+
+/* ----------------------------------------------------------------------------
+   3b · LIVE-DEMO TRACK — the T-MARQUEE §3 "differentiator shown WORKING" (the one
+   marquee section the readiness flagged as a missing vocabulary). A horizontal
+   SEQUENCED process RAIL: N stage nodes threaded on ONE connecting line, with an
+   auto-running accent SWEEP that travels the rail + a LIVE status pill — so the
+   differentiator reads as a process RUNNING (interactive FEEL), not a static image.
+   The feel is pure SCROLL-REVEAL / stepped-sequence MOTION (a transform-only staged
+   entrance + the auto sweep), NOT click-controls: there is NO data-filter / search /
+   cart / tab to wire, so verify-interactive has no control to require wired. Used as
+   a per-strain process stepper (how-it-works: biomass -> grind -> homogenize -> fill
+   -> Dutch-Crown -> dual-QC) or a format-family swap (pre-roll: each stage is a
+   format family the sweep lights in turn).
+
+   VISUALLY DISTINCT (G-SVAR): a full-width HORIZONTAL rail of equal stage nodes — a
+   different coarse SHAPE from the .bw-process 2-col [steps | media], the .bw-split
+   2-col [copy | visual] and the .bw-cap 3-col card grid, so it gives G-SVAR a fresh
+   shape to rotate in. COMPACT by construction (ONE banded row -> stays well under the
+   G-DENSITY 1.65vh ceiling, dense + balanced). RENDERS-ON-LOAD: opacity stays 1
+   ALWAYS — the entrance is a transform-only settle and the live sweep / pulse animate
+   position + transform, never any content opacity. Token-pure: every colour resolves
+   via var(--ds-*); only layout geometry is literal.
+
+   DESIGN-SYSTEM CITATIONS (resolve under .claude/design-system-unified/):
+     menu    -> SECTION-COMPONENTS.md #27 (Numbered process steps — re-shaped HORIZONTAL, shown running)
+     library -> _MODERN-WOW-SPEC §2 restrained transform-only motion · §5 one-accent glow
+     library -> _SCROLL-STICKY-BEHAVIOR-LIBRARY F2 reveal settle + reduced-motion gate
+   ---------------------------------------------------------------------------- */
+.bw-demo{ position:relative; }
+/* the demo's OWN status row — a LIVE pill that signals "running" (the section eyebrow +
+   title live in the .bw-head above). Distinct from a static caption: it is the cue the
+   differentiator is shown WORKING. */
+.bw-demo__bar{
+  display:flex; align-items:center; gap:clamp(12px,1.6vw,20px); flex-wrap:wrap;
+  margin-bottom:clamp(22px,3vw,40px);
+}
+.bw-demo__live{
+  display:inline-flex; align-items:center; gap:9px;
+  font-family:var(--ds-font-mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase;
+  color:var(--ds-accent); background:var(--ds-accent-soft);
+  border:1px solid var(--ds-divider); border-radius:var(--ds-r-pill); padding:7px 14px;
+}
+.bw-demo__live .dot{
+  width:8px; height:8px; flex:0 0 auto; border-radius:50%;
+  background:var(--ds-accent-bright); box-shadow:var(--ds-glow);
+  animation:bw-demo-pulse 1.8s var(--ds-ease) infinite;     /* transform-only pulse (never opacity) */
+}
+.bw-demo__caption{
+  font-family:var(--ds-font-mono); font-size:11px; letter-spacing:.05em; text-transform:uppercase;
+  color:var(--ds-ink-soft);
+}
+
+/* THE TRACK — a horizontal rail of equal stage nodes (the distinct coarse SHAPE).
+   grid-auto-flow:column + grid-auto-columns:1fr makes it work for any N stages. */
+.bw-demo__track{
+  position:relative;
+  display:grid; grid-auto-flow:column; grid-auto-columns:1fr;
+  gap:clamp(10px,1.4vw,20px);
+  padding:clamp(20px,2.4vw,34px) clamp(16px,2vw,28px) clamp(22px,2.6vw,36px);
+  border:1px solid var(--ds-divider); border-radius:var(--ds-r-surface);
+  background:linear-gradient(180deg, var(--ds-bg-surface-2) 0%, var(--ds-bg-surface) 100%);
+  box-shadow:var(--ds-shadow-card), var(--ds-inset-hi);
+  overflow:hidden;
+}
+/* the connecting RAIL line that threads the stage nodes (sits behind them, on the badge row). */
+.bw-demo__track::before{
+  content:""; position:absolute; z-index:var(--ds-z-base); pointer-events:none;
+  left:clamp(16px,2vw,28px); right:clamp(16px,2vw,28px);
+  top:calc(clamp(20px,2.4vw,34px) + 17px);          /* = track padding-top + half the 34px badge */
+  height:2px; background:var(--ds-divider);
+}
+/* the LIVE SWEEP — an accent highlight that auto-travels the rail (the "running" feel).
+   Animates background-position ONLY (never content opacity), so renders-on-load holds. */
+.bw-demo__track::after{
+  content:""; position:absolute; z-index:var(--ds-z-base); pointer-events:none;
+  left:clamp(16px,2vw,28px); right:clamp(16px,2vw,28px);
+  top:calc(clamp(20px,2.4vw,34px) + 16px); height:4px; border-radius:2px;
+  background:linear-gradient(90deg, transparent, var(--ds-accent-bright), transparent);
+  background-size:34% 100%; background-repeat:no-repeat;
+  animation:bw-demo-sweep 4.6s var(--ds-ease) infinite;
+}
+.bw-demo__track > *{ position:relative; z-index:var(--ds-z-raised); }
+
+/* a STAGE node — a numbered badge ON the rail + a label + a one-line micro-caption.
+   Staggered transform-only entrance via inline style="--i:N" (opacity:1 throughout). */
+.bw-demo__stage{
+  --i:0;
+  display:flex; flex-direction:column; align-items:center; text-align:center; gap:10px;
+  min-width:0;
+  opacity:1;                                        /* NEVER hidden — visible on load, guaranteed */
+  transform:translateY(10px);
+  animation:bw-demo-rise var(--ds-dur-slow) var(--ds-ease-out) both;
+  animation-delay:calc(var(--i) * 90ms);
+}
+.bw-demo__dot{
+  width:34px; height:34px; flex:0 0 auto; border-radius:50%;
+  display:grid; place-items:center;
+  font-family:var(--ds-font-display); font-weight:700; font-size:14px;
+  color:var(--ds-accent); background:var(--ds-bg-surface-2);
+  border:2px solid var(--ds-accent); box-shadow:var(--ds-glow);
+  font-variant-numeric:tabular-nums;
+}
+.bw-demo__label{
+  font-family:var(--ds-font-display); font-weight:700; text-transform:uppercase;
+  letter-spacing:var(--ds-tracking-disp); line-height:1.05;
+  font-size:clamp(13px,1.2vw,16px); color:var(--ds-ink);
+}
+.bw-demo__note{
+  font-family:var(--ds-font-body); font-size:12.5px; line-height:1.4; color:var(--ds-ink-soft);
+  max-width:141px;  /* 141px = 18ch in the Poppins body font; A3 gate flags ch on body-font text */
+}
+/* a small DIRECTIONAL connector between stages — an accent chevron over the rail so the
+   sequence reads left -> right. Hidden on the last node (no stage follows it). */
+.bw-demo__stage::after{
+  content:""; position:absolute; top:17px; right:-3px;
+  width:7px; height:7px; border-top:2px solid var(--ds-accent); border-right:2px solid var(--ds-accent);
+  transform:translate(50%,-50%) rotate(45deg); opacity:.7;
+}
+.bw-demo__stage:last-child::after{ display:none; }
+
+@keyframes bw-demo-rise{ from{ transform:translateY(10px); } to{ transform:none; } }
+@keyframes bw-demo-pulse{ 0%,100%{ transform:scale(1); } 50%{ transform:scale(1.45); } }
+@keyframes bw-demo-sweep{ 0%{ background-position:-20% 0; } 100%{ background-position:120% 0; } }
+
+@media (prefers-reduced-motion:reduce){
+  .bw-demo__stage{ transform:none; animation:none; }
+  .bw-demo__track::after, .bw-demo__live .dot{ animation:none; }
+}
+
+/* RESPONSIVE — the horizontal rail re-flows to a 2-up then 1-up node grid at narrow
+   widths; the rail line + sweep + chevrons are the DESKTOP-rail treatment and hide once
+   it wraps (so the line never crosses a wrapped gap). Stays compact + balanced (G-DENSITY). */
+@media (max-width:760px){
+  .bw-demo__track{ grid-auto-flow:row; grid-template-columns:repeat(2,1fr); grid-auto-columns:auto; }
+  .bw-demo__track::before, .bw-demo__track::after{ display:none; }
+  .bw-demo__stage::after{ display:none; }
+  .bw-demo__stage{ align-items:flex-start; text-align:left; }
+  .bw-demo__note{ max-width:none; }
+}
+@media (max-width:430px){
+  .bw-demo__track{ grid-template-columns:1fr; }
+}
+
+/* ----------------------------------------------------------------------------
+   4 · PROCESS — numbered steps with a MEDIA RAIL (SECTION-COMPONENTS #27).
+   V17 how-it-works EARLY (infrastructure-not-labor wedge). The process copy sits
+   beside a framed REAL packaging-line photo (the "package & fulfill" step made real).
+   ---------------------------------------------------------------------------- */
+.bw-process{ display:grid; grid-template-columns:1.05fr .95fr; gap:clamp(32px,5vw,72px); align-items:center; }
+.bw-steps{ display:grid; gap:clamp(22px,3vw,36px); }
+.bw-step{ display:grid; grid-template-columns:auto 1fr; gap:clamp(16px,2vw,26px); align-items:start; }
+.bw-step__n{
+  font-family:var(--ds-font-display); font-weight:700;
+  font-size:clamp(30px,3.2vw,46px); line-height:1; letter-spacing:var(--ds-tracking-disp);
+  color:var(--ds-accent); opacity:.92;
+  border-right:2px solid var(--ds-divider); padding-right:clamp(14px,1.6vw,22px);
+  font-variant-numeric:tabular-nums;
+}
+.bw-step__b{ }
+.bw-step__d{ font-family:var(--ds-font-body); font-size:15px; line-height:var(--ds-lh-body); color:var(--ds-ink-soft); margin:0; max-width:30em; }
+/* the framed media rail (REAL photo) */
+.bw-frame{
+  position:relative; overflow:hidden; margin:0;
+  border:1px solid var(--ds-divider); border-radius:var(--ds-r-surface);
+  box-shadow:var(--ds-shadow-lift), var(--ds-inset-hi);
+  aspect-ratio:4 / 3;
+}
+.bw-frame img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center; }
+.bw-frame::after{                 /* faint brand wash so the photo integrates with the dark ground (AA, not a stand-in) */
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background:linear-gradient(180deg, rgba(14,20,38,0.05) 0%, rgba(14,20,38,0.40) 100%);
+}
+.bw-frame__badge{
+  position:absolute; left:clamp(12px,1.4vw,18px); bottom:clamp(12px,1.4vw,18px); z-index:var(--ds-z-raised);
+  display:inline-flex; align-items:center; gap:9px;
+  background:var(--ds-bg-surface-2); border:1px solid var(--ds-divider);
+  border-radius:var(--ds-r-pill); padding:8px 14px;
+  font-family:var(--ds-font-mono); font-size:11px; letter-spacing:.05em; text-transform:uppercase; color:var(--ds-ink);
+  box-shadow:var(--ds-shadow-card);
+}
+.bw-frame__badge .dot{ width:7px; height:7px; border-radius:50%; background:var(--ds-accent-bright); box-shadow:var(--ds-glow); }
+
+/* ----------------------------------------------------------------------------
+   5 · CAPABILITY GRID — the zone-6 identity payload (CARD-VARIATIONS #1 dark service
+   tile w/ image + view-more). V17 multi-vertical capability surface, HONESTY-FENCED.
+   The two lead tiles carry REAL photos (automation-line robotics flagship, packaging);
+   the rest are token-built spec tiles — VARIED treatment (kills monotony).
+   ---------------------------------------------------------------------------- */
+.bw-cap__grid{ display:grid; grid-template-columns:repeat(3, 1fr); gap:clamp(16px,1.8vw,24px); }
+.bw-cap{
+  position:relative; overflow:hidden;
+  background:linear-gradient(180deg, var(--ds-bg-surface-2) 0%, var(--ds-bg-surface) 78%);
+  border:1px solid var(--ds-divider); border-radius:var(--ds-r-surface);
+  box-shadow:var(--ds-shadow-card);
+  transition:transform var(--ds-dur) var(--ds-ease), box-shadow var(--ds-dur) var(--ds-ease);
+  display:flex; flex-direction:column;
+}
+.bw-cap:hover{ transform:translateY(-5px); box-shadow:var(--ds-shadow-lift); }
+/* media tile variant — the lead tiles with a REAL photo header */
+.bw-cap__media{ position:relative; overflow:hidden; aspect-ratio:16 / 10; }
+.bw-cap__media img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center; transition:transform var(--ds-dur-slow) var(--ds-ease); }
+.bw-cap:hover .bw-cap__media img{ transform:scale(1.05); }
+.bw-cap__media::after{ content:""; position:absolute; inset:0; pointer-events:none;
+  background:linear-gradient(180deg, transparent 38%, rgba(14,20,38,0.66) 100%); }
+/* TEXT-OVERLAP LAW (owner screenshot 5): a flag/badge inside a card BODY is an
+   IN-FLOW eyebrow that STACKS above the title with spacing — never an absolute
+   chip painted on top of the heading. The absolute treatment is reserved for a
+   badge floating over a PHOTO header (.bw-cap__media), where there is no flowing
+   text under it to collide with. Default is in-flow (fail-safe): so a badge that
+   lands anywhere other than a media header can never overlap the title. */
+.bw-cap__flag{
+  display:inline-flex; align-items:center; align-self:flex-start;
+  font-family:var(--ds-font-mono); font-size:10px; letter-spacing:.08em; text-transform:uppercase;
+  color:var(--ds-on-accent); background:var(--ds-accent);
+  border-radius:var(--ds-r-pill); padding:3px 11px; box-shadow:var(--ds-glow);
+  margin:0 0 var(--ds-space-sm); max-width:100%;
+}
+/* badge over a photo header: the ONE place absolute is correct (no flow text under it) */
+.bw-cap__media .bw-cap__flag,
+.bw-cap__media > .bw-cap__flag{
+  position:absolute; left:14px; top:14px; z-index:var(--ds-z-raised); margin:0;
+}
+.bw-cap__flag--partner{ color:var(--ds-ink); background:var(--ds-accent-soft); border:1px dashed var(--ds-divider); box-shadow:none; }
+.bw-cap__body{ padding:clamp(20px,2vw,28px); display:flex; flex-direction:column; flex:1; }
+.bw-cap__h{
+  font-family:var(--ds-font-display); font-weight:700; text-transform:uppercase;
+  letter-spacing:var(--ds-tracking-disp); line-height:1.0;
+  font-size:clamp(20px,2vw,25px); color:var(--ds-ink); margin:0 0 var(--ds-space-sm);
+}
+.bw-cap__h .ac{ color:var(--ds-accent); }
+.bw-cap__d{ font-family:var(--ds-font-body); font-size:14px; line-height:1.55; color:var(--ds-ink-soft); margin:0 0 var(--ds-space-lg); }
+.bw-cap__spec{ display:flex; flex-wrap:wrap; gap:8px 14px; margin:0 0 var(--ds-space-lg); }
+.bw-cap__spec span{ font-family:var(--ds-font-mono); font-size:11px; letter-spacing:.04em; text-transform:uppercase; color:var(--ds-ink-soft); }
+.bw-cap__spec b{ color:var(--ds-accent); font-weight:700; }
+/* token-built spec tile (no photo) — a DISTINCT treatment from the media tiles.
+   GRID removed (was a per-tile ::before that repeated ~10x on a page = the owner's "everywhere"
+   complaint). The tile stays distinct via its bg-surface-2 fill + icon + the metal card chrome.
+   To grant the grid accent back to a specific tile, add .bw-gridded to that tile's markup. */
+.bw-cap--spec{ background:var(--ds-bg-surface-2); }
+.bw-cap--spec .bw-cap__body{ padding-top:clamp(24px,2.4vw,34px); }
+.bw-cap--spec > *{ position:relative; z-index:var(--ds-z-raised); }
+.bw-cap__ico{ width:48px; height:48px; flex:0 0 auto; border-radius:var(--ds-r-pill); display:grid; place-items:center;
+  background:var(--ds-accent-soft); border:1px solid var(--ds-divider); margin-bottom:var(--ds-space-lg); }
+.bw-cap__ico svg{ width:22px; height:22px; stroke:var(--ds-accent); fill:none; stroke-width:1.7; }
+.bw-link{
+  margin-top:auto; font-family:var(--ds-font-mono); font-size:11px; font-weight:700;
+  letter-spacing:.06em; text-transform:uppercase; color:var(--ds-accent);
+  display:inline-flex; align-items:center; gap:8px; align-self:flex-start;
+}
+.bw-link span{ transition:transform var(--ds-dur) var(--ds-ease-out); }
+.bw-cap:hover .bw-link span{ transform:translateX(4px); }
+
+/* ----------------------------------------------------------------------------
+   5a · MEDIA + 2x2-CARD GRID — the COMPACT media/cards split (PAGE-COMPOSITION LAW).
+   ----------------------------------------------------------------------------
+   THE FIX for the dead-space arm the owner flagged (T2): a media+cards section must
+   NOT be a SINGLE capped media beside a 1xN (>=4) vertical card STACK — that pairs a
+   short capped image against a tall column and leaves a column of dead space (the bad
+   "image-left / 1x4-stack-right" composition: §3 concentrates rendered a 401px media
+   beside an 862px stack = 461px void). Instead the cards form a 2x2 (or 2-3 item)
+   GRID and the MEDIA COLUMN STRETCHES to the grid's full height so the two columns end
+   level — no void. (PAGE-COMPOSITION rule 1; CARD-VARIATIONS #1 dark service tile in
+   a 2x2; SECTION-COMPONENTS #11 service-pillars-2col-with-image shell.)
+
+   Structure: a 2-col split — .bw-media-grid__media (LEFT, stretches) | .bw-media-grid__cards
+   (RIGHT, a 2-col card grid). align-items:stretch on the split + height:100% on the media
+   frame makes the media match the grid height at every breakpoint. The cards are a GRID,
+   never a 1xN stack: 2 cols (2x2 for 4 items / 2x1 for 2 / 2-then-1 for 3) so the right
+   column never out-runs the media. Caps at <=1024 to media-on-top + a 2-up card grid
+   (still a grid, not a stack), and at <=640 to a single column. */
+.bw-media-grid{
+  display:grid; grid-template-columns:1fr 1fr;        /* media | cards, balanced split */
+  gap:clamp(20px,3vw,44px); align-items:stretch;      /* STRETCH so the media matches the grid height — kills the void */
+}
+.bw-media-grid__media{
+  position:relative; overflow:hidden; margin:0;
+  align-self:stretch; height:100%; min-width:0; min-height:0;  /* min-width:0 lets the grid ITEM shrink to its 1fr track on mobile (aspect-ratio+min-height was computing width=400px > the 375 viewport); stretches to grid height */
+  border:1px solid var(--ds-divider); border-radius:var(--ds-r-surface);
+  box-shadow:var(--ds-shadow-lift), var(--ds-inset-hi);
+  /* NB: NO aspect-ratio cap here (that is what shrank the media against the tall stack);
+     the frame takes its height from the stretched grid track instead. */
+}
+.bw-media-grid__media img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center; }
+.bw-media-grid__media::after{               /* the same brand wash the .bw-frame uses, so the photo integrates AA */
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background:linear-gradient(180deg, rgba(14,20,38,0.05) 0%, rgba(14,20,38,0.40) 100%);
+}
+/* the RIGHT column is a 2-col card GRID (2x2 / 2x1 / 2-then-1) — NEVER a 1xN vertical stack */
+.bw-media-grid__cards{
+  display:grid; grid-template-columns:repeat(2, 1fr);
+  gap:clamp(14px,1.6vw,22px); align-content:stretch;
+}
+.bw-media-grid__cards > *{ height:100%; }    /* cards fill their grid cell so the 2x2 reads as a tidy block */
+
+@media (max-width:1024px){
+  .bw-media-grid{ grid-template-columns:1fr; }        /* one column: HEADING (in the .bw-head above) -> MEDIA -> CARDS */
+  /* READING ORDER (owner law): the section HEADING lives in the .bw-head block ABOVE this grid, so the
+     grid's own first child (the media) already renders below the heading. The media is FIRST in SOURCE
+     ORDER inside the grid (figure before .bw-media-grid__cards), so a single-column grid stacks it
+     ABOVE the cards/body with NO order override — heading -> media -> body. The media-first order:-1 is
+     REMOVED (it was the rejected media-above-everything flip; source order alone is correct here). */
+  .bw-media-grid__media{ width:100%; min-height:300px; height:auto; aspect-ratio:16 / 9; }  /* a sane cap once stacked */
+}
+@media (max-width:640px){
+  .bw-media-grid__cards{ grid-template-columns:1fr; } /* single column only at phone width */
+  .bw-media-grid__media{ aspect-ratio:4 / 3; }
+}
+
+/* ----------------------------------------------------------------------------
+   5c · TWO COMPACT SIDE-BY-SIDE PATTERNS — the G-DENSITY fix for the two tall
+   full-width-media-THEN-content rows (concentrates §5 compare + §6 umbrella).
+   ----------------------------------------------------------------------------
+   THE FAILURE both rows shared: a section head + a FULL-WIDTH capped .bw-frame image
+   STACKED ABOVE its content (a compare matrix / a 3-card row). That stacks two tall
+   blocks vertically → the section renders > 1.65 viewports and reads SPARSE (§5
+   2.19vh / density 284; §6 1.76vh / density 190 — both FAIL verify-section-density).
+   A full-width-media-then-content stack for a FEATURE row is the anti-pattern.
+
+   THE FIX: each row gets a DISTINCT compact SIDE-BY-SIDE pattern so the media sits
+   BESIDE the content (one viewport, no scroll-up-and-down), with the media CAPPED
+   (aspect-ratio + max-height + object-fit:cover) so it can never balloon the row.
+   The two patterns are visibly distinct from EACH OTHER and from the §4 image-left
+   split (.bw-split, media | a 1xN .bw-steps stack) and the 5a 2x2 grid
+   (.bw-media-grid, media | a 2-col card grid):
+
+     (a) .bw-mediacompare  — capped media (LEFT) | the compare TABLE (RIGHT) fills the
+                             other column. Shape = MEDIA + TABLE. Used by §5 (compare).
+     (b) .bw-banner        — a wide BANNER row: a narrow capped media panel (LEFT) | a
+                             HORIZONTAL 3-card strip (RIGHT, repeat(3,1fr)). Shape =
+                             MEDIA + 3-ACROSS CARD STRIP. Used by §6 (umbrella).
+
+   (a) is a 2-col table-split; (b) is a banner with a 3-WIDE card strip; §4 is a
+   media|vertical-stack; 5a is a media|2x2-grid — four distinct shapes (G-SVAR ok). */
+
+/* (a) .bw-mediacompare — CAPPED MEDIA | COMPARE TABLE (the compare row). The media
+   column is capped (aspect-ratio + max-height) and STRETCHES to the table's height so
+   the two columns end level; the .bw-compare matrix fills the wider right column. */
+.bw-mediacompare{
+  display:grid; grid-template-columns:minmax(0,0.82fr) minmax(0,1.18fr);  /* media | table (table wider) */
+  gap:clamp(20px,3vw,44px); align-items:stretch;
+}
+.bw-mediacompare__media{
+  position:relative; overflow:hidden; margin:0;
+  align-self:stretch; width:100%; min-width:0; height:100%; min-height:0;   /* width:100% ANCHORS to the grid track (aspect-ratio+stretch was computing width from height -> 480px > the 440px track -> overlapped the table) */
+  aspect-ratio:4 / 3; max-height:clamp(300px,40vh,440px);   /* CAP — can never balloon the row */
+  border:1px solid var(--ds-divider); border-radius:var(--ds-r-surface);
+  box-shadow:var(--ds-shadow-lift), var(--ds-inset-hi);
+}
+.bw-mediacompare__media img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center; }
+.bw-mediacompare__media::after{               /* the brand wash the .bw-frame uses, so the photo integrates AA */
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background:linear-gradient(180deg, rgba(14,20,38,0.05) 0%, rgba(14,20,38,0.40) 100%);
+}
+.bw-mediacompare > .bw-compare{ align-self:stretch; }   /* the matrix fills the right column */
+
+/* (b) .bw-banner — a wide BANNER: a NARROW capped media panel (LEFT) beside a
+   HORIZONTAL 3-card strip (RIGHT). Distinct from every other split — the cards run
+   ACROSS in a 3-col strip (not stacked, not a 2x2), so the row reads as one wide
+   designed band, not media-then-an-orphan-card-row. */
+.bw-banner{
+  display:grid; grid-template-columns:minmax(0,0.62fr) minmax(0,1.38fr);  /* narrow media | wide card strip */
+  gap:clamp(20px,3vw,44px); align-items:stretch;
+}
+.bw-banner__media{
+  position:relative; overflow:hidden; margin:0;
+  align-self:stretch; width:100%; min-width:0; height:100%; min-height:0;   /* width:100% ANCHORS to the grid track (same fix as mediacompare) */
+  aspect-ratio:3 / 4; max-height:clamp(280px,38vh,420px);   /* CAP — a tall-ish banner panel, can never balloon */
+  border:1px solid var(--ds-divider); border-radius:var(--ds-r-surface);
+  box-shadow:var(--ds-shadow-lift), var(--ds-inset-hi);
+}
+.bw-banner__media img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center; }
+.bw-banner__media::after{
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background:linear-gradient(180deg, rgba(14,20,38,0.05) 0%, rgba(14,20,38,0.45) 100%);
+}
+.bw-banner__media .bw-frame__badge{ position:absolute; left:clamp(12px,1.2vw,16px); bottom:clamp(12px,1.2vw,16px); }
+.bw-banner__cards{
+  display:grid; grid-template-columns:repeat(3, 1fr);    /* the 3 cross-link cards run ACROSS (banner strip) */
+  gap:clamp(14px,1.6vw,22px); align-content:stretch; align-self:stretch;
+}
+.bw-banner__cards > *{ height:100%; }
+
+@media (max-width:1024px){
+  /* READING ORDER (owner law): in BOTH rows the section HEADING lives in the .bw-head block ABOVE the
+     split, so the split's media (FIRST in source order inside the grid) stacks under the heading and
+     above its body. heading -> media -> body (table / card-strip). The media-first order:-1 is REMOVED
+     (rejected flip); source order alone gives the correct stack. Media stays CAPPED (no full-bleed balloon). */
+  /* (a) heading (above) -> capped media -> compare table */
+  .bw-mediacompare{ grid-template-columns:1fr; }
+  .bw-mediacompare__media{ aspect-ratio:16 / 9; max-height:clamp(240px,34vh,340px); }
+  /* (b) heading (above) -> capped media -> the 3-card strip stays 3-across until phone width */
+  .bw-banner{ grid-template-columns:1fr; }
+  .bw-banner__media{ aspect-ratio:16 / 9; max-height:clamp(220px,30vh,320px); }
+}
+@media (max-width:640px){
+  .bw-banner__cards{ grid-template-columns:1fr; }   /* the 3-card strip stacks only at phone width */
+  .bw-mediacompare__media, .bw-banner__media{ aspect-ratio:4 / 3; }
+}
+
+/* ----------------------------------------------------------------------------
+   5b · MEGA FEATURE IMAGE — re-integrated cannabis imagery into the LOCKED chrome's
+   capability-overview panel. The chrome (batchworks-chrome.css) owns .mega__feature
+   VERBATIM (a positioned flex container, text justified flex-end over a token ground).
+   We do NOT re-author that — we only ADD a REAL photo (joints-production.jpg) BEHIND the
+   feature text via these bw-* scoped helpers. The <img> is absolutely positioned + object-
+   fit:cover (it can never push layout or cause h-overflow; width/height are on the tag),
+   and a left-weighted ink scrim keeps the feature copy AA-legible (WOW §1 depth + §5 glow).
+   Defined HERE (structural sheet), NEVER in the locked chrome.css.
+   ---------------------------------------------------------------------------- */
+.bw-mega-feat{ position:relative; isolation:isolate; }
+.bw-mega-feat__img{
+  position:absolute; inset:0; width:100%; height:100%;
+  object-fit:cover; object-position:center; z-index:var(--ds-z-base); border-radius:inherit;
+}
+.bw-mega-feat::after{                 /* legibility scrim so the locked feature text reads AA over the photo */
+  content:""; position:absolute; inset:0; z-index:var(--ds-z-base); pointer-events:none; border-radius:inherit;
+  background:linear-gradient(180deg, rgba(14,20,38,0.30) 0%, rgba(14,20,38,0.62) 58%, rgba(14,20,38,0.86) 100%);
+}
+/* the locked .mega__feat-* children already carry position:relative; ride them above the scrim */
+.bw-mega-feat > .mega__feat-eyebrow,
+.bw-mega-feat > .mega__feat-h,
+.bw-mega-feat > .mega__feat-sub,
+.bw-mega-feat > .mega__feat-link{ z-index:var(--ds-z-raised); }
+
+/* ----------------------------------------------------------------------------
+   6 · COMPARE — us-vs-generalist matrix (SECTION-COMPONENTS #15). V17 first-class
+   slot. A clean dense matrix on the continuous ground — token-built (no photo here;
+   the data IS the content). Distinct treatment again (kills monotony).
+   ---------------------------------------------------------------------------- */
+.bw-compare{
+  /* mobile per-option source labels (CSS-var driven, slug-neutral pattern — see <=640 block) */
+  --compare-us-label:"Through BatchWorks"; --compare-them-label:"Build it yourself";
+  border:1px solid var(--ds-divider); border-radius:var(--ds-r-surface); overflow:hidden;
+  box-shadow:var(--ds-shadow-card);
+  background:linear-gradient(180deg, var(--ds-bg-surface-2) 0%, var(--ds-bg-surface) 100%);
+}
+.bw-compare__row{ display:grid; grid-template-columns:1.4fr 1fr 1fr; align-items:center; }
+.bw-compare__row + .bw-compare__row{ border-top:1px solid var(--ds-line); }
+.bw-compare__row--head .bw-compare__cell{ font-family:var(--ds-font-mono); font-size:11px; letter-spacing:var(--ds-tracking-label);
+  text-transform:uppercase; color:var(--ds-accent); padding-block:clamp(14px,1.6vw,20px); }
+.bw-compare__cell{ padding:clamp(13px,1.5vw,18px) clamp(14px,1.8vw,24px); font-family:var(--ds-font-body); font-size:14px; color:var(--ds-ink); display:flex; align-items:center; gap:9px; }
+.bw-compare__cell--label{ font-family:var(--ds-font-mono); font-size:12px; letter-spacing:.03em; text-transform:uppercase; color:var(--ds-ink-soft); }
+.bw-compare__cell--us{ background:var(--ds-accent-soft); color:var(--ds-ink); font-weight:600; }
+.bw-compare__cell--them{ color:var(--ds-ink-soft); }   /* the competing option — targetable so it gets its OWN label on mobile (never orphaned) */
+.bw-mk{ width:18px; height:18px; flex:0 0 auto; fill:none; stroke-width:2.4; stroke-linecap:round; stroke-linejoin:round; }
+.bw-mk--yes{ stroke:var(--ds-accent-bright); }
+.bw-mk--no{ stroke:var(--ds-ink-soft); opacity:.7; }
+
+/* ----------------------------------------------------------------------------
+   7 · PROOF — the LIGHT PUNCTUATION BAND (the page's single figure/ground inversion;
+   the 2nd intentional anchored moment). Metric-led proof (PROOF-SECTIONS #4) built
+   around the REAL cannabis-flower-qc photo (the flower hand-QC finish). Flips to paper for impact.
+   ---------------------------------------------------------------------------- */
+.bw-light{
+  /* the ONE light band: re-assert the :root (light) tokens locally by NOT being .surface-dark.
+     The section paints the light paper ground explicitly so it reads as a deliberate inversion. */
+  background:
+    linear-gradient(180deg, var(--ds-bg-surface-2) 0%, var(--ds-bg-surface) 100%);
+  color:var(--ds-ink);
+  box-shadow: inset 0 1px 0 var(--ds-divider), inset 0 -1px 0 var(--ds-divider);
+}
+.bw-proof{ display:grid; grid-template-columns:1fr 1fr; gap:clamp(28px,4vw,64px); align-items:center; }
+.bw-proof__media{ position:relative; overflow:hidden; margin:0; border-radius:var(--ds-r-surface);
+  border:1px solid var(--ds-line); box-shadow:var(--ds-shadow-lift); aspect-ratio:4 / 3; }
+.bw-proof__media img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center; }
+.bw-proof__q{
+  font-family:var(--ds-font-display); font-weight:500;
+  font-size:clamp(24px,3vw,40px); line-height:1.14; letter-spacing:var(--ds-tracking-disp);
+  color:var(--ds-ink); margin:0 0 var(--ds-space-lg); max-width:14em;
+}
+.bw-proof__q .ac{ color:var(--ds-accent); }
+/* ── STAT-BLOCK TREATMENT (T7) — to the DS big-number-band spec ──────────────
+   _MODERN-DESIGN-PATTERN-LIBRARY Pattern D / SECTION-COMPONENTS #3 / TRUST-STATS #4:
+   oversized display numerals (clamp 46–84 standalone; 44–72 fine in-section), weight
+   ~300, tight -.05em tracking, tabular-nums (digits never jitter), HAIRLINE DIVIDERS
+   between figures (the figures sit in open space, NOT carded), generous gap. The OLD
+   .bw-proof__metrics was clamp(30–44) + flex-WRAP + no hairlines — cramped + plain,
+   and on mobile it SHRANK + wrapped to tiny text. THE FIX: a flex row with a left
+   hairline between figures, and on MOBILE it stacks 1-up with a TOP hairline between —
+   the numeral stays LARGE (never shrunk to fit), so the stat reads attractive at 375.
+   verify-stat-treatment.mjs renders the floor (a stat numeral must be >= 34px at 375). */
+.bw-proof__metrics{
+  display:flex; flex-wrap:nowrap; align-items:stretch;
+  gap:0; margin-bottom:var(--ds-space-xl);
+}
+.bw-metric{ display:flex; flex-direction:column; flex:1 1 0; min-width:0; }
+/* HAIRLINE DIVIDERS between figures (first column's divider dropped) — the figures sit
+   in open space, the divider is the only chrome (TRUST-STATS #4 hairline-divided). */
+.bw-metric + .bw-metric{
+  border-left:1px solid var(--ds-divider);
+  padding-left:clamp(18px,2.4vw,36px); margin-left:clamp(18px,2.4vw,36px);
+}
+.bw-metric__n{
+  font-family:var(--ds-font-display); font-weight:300;     /* light-at-large per spec (E2/Pattern D) */
+  font-size:clamp(44px,5vw,72px); line-height:.92;          /* big in-section numeral (the standalone band goes bigger, below) */
+  letter-spacing:-.05em; color:var(--ds-accent); font-variant-numeric:tabular-nums;
+}
+.bw-metric__n small{ font-size:.42em; color:var(--ds-accent-bright); margin-left:.06em; letter-spacing:0; font-weight:400; }
+.bw-metric__l{
+  margin-top:var(--ds-space-sm); font-family:var(--ds-font-mono); font-size:var(--ds-fs-caption);
+  letter-spacing:var(--ds-tracking-label); text-transform:uppercase; color:var(--ds-ink-soft); display:block;
+}
+
+/* ── STANDALONE BIG-NUMBER BAND (the dark scale anchor) — can go BIGGER ──────────
+   On the dedicated anchor band (.bw-anchor / .bw-scale__grid) the numerals are the
+   message, so they go to the full clamp(46–84) spec ceiling. The §3 .bw-stat__n
+   (above) already carries clamp(42–84); here we re-state weight 300 + -.05em + the
+   hairline-between treatment so the standalone band matches Pattern D exactly. */
+.bw-scale__grid .bw-stat__n{ font-weight:300; letter-spacing:-.05em; }
+.bw-proof__by{ display:inline-flex; align-items:center; gap:13px; }
+.bw-proof__avatar{ width:48px; height:48px; flex:0 0 auto; border-radius:var(--ds-r-pill);
+  background:var(--ds-accent-soft); border:1px solid var(--ds-divider); display:grid; place-items:center;
+  font-family:var(--ds-font-display); font-weight:700; font-size:16px; color:var(--ds-accent); }
+.bw-proof__name{ font-family:var(--ds-font-body); font-weight:600; font-size:15px; color:var(--ds-ink); }
+.bw-proof__role{ font-family:var(--ds-font-mono); font-size:11px; letter-spacing:.05em; text-transform:uppercase; color:var(--ds-ink-soft); margin-top:3px; }
+
+/* ----------------------------------------------------------------------------
+   8 · YIELD-MATH SPLIT — service pillars 2-col with image (SECTION-COMPONENTS #11).
+   The proof that the headline number means money. The visual side is the REAL
+   machined-detail brushed-metal texture (a material/texture accent — appropriate
+   here, where a literal product photo would say less than the material does).
+   ---------------------------------------------------------------------------- */
+.bw-split{ display:grid; grid-template-columns:1.05fr 1fr; gap:clamp(32px,5vw,80px); align-items:center; }
+.bw-split__copy .bw-h2{ max-width:11em; }
+.bw-split__list{ list-style:none; margin:var(--ds-space-lg) 0 0; padding:0; display:grid; gap:12px; }
+.bw-split__list li{ position:relative; padding-left:26px; font-family:var(--ds-font-body); font-size:15px; line-height:1.5; color:var(--ds-ink-soft); }
+.bw-split__list li::before{ content:""; position:absolute; left:0; top:8px; width:13px; height:13px; border-radius:var(--ds-r-control);
+  background:var(--ds-accent-soft); border:1px solid var(--ds-accent); }
+.bw-kpi-row{ display:flex; gap:clamp(20px,3vw,44px); flex-wrap:wrap; margin-top:var(--ds-space-xl); }
+.bw-kpi{ display:flex; flex-direction:column; }
+.bw-kpi__n{ font-family:var(--ds-font-display); font-weight:700; font-size:clamp(38px,3.4vw,48px); line-height:1;
+  letter-spacing:-.03em; color:var(--ds-accent); font-variant-numeric:tabular-nums;
+  /* display-numeral: inline-block + nowrap so the figure stays ONE big line and the affix small never breaks
+     off; clamp MIN raised to 38px so it clears the G-STAT 34px mobile floor at 375 instead of shrinking to 32px. */
+  display:inline-block; white-space:nowrap; }
+.bw-kpi__n small{ font-size:.44em; color:var(--ds-accent-bright); }
+.bw-kpi__l{ margin-top:var(--ds-space-xs); font-family:var(--ds-font-mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--ds-ink-soft); }
+.bw-split__visual{ position:relative; }
+.bw-tex{
+  position:relative; overflow:hidden; border-radius:var(--ds-r-surface);
+  border:1px solid var(--ds-divider); box-shadow:var(--ds-shadow-lift), var(--ds-inset-hi);
+  aspect-ratio:4 / 3; display:flex; align-items:flex-end; padding:clamp(20px,2.4vw,32px);
+}
+.bw-tex img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center; z-index:var(--ds-z-base); }
+/* PORTRAIT media slot — ORIENTATION-PER-PATTERN (imagery-system.md §5): a media slot inside a SPLIT /
+   feature-card pattern (.bw-split) is PORTRAIT so it FILLS the column beside the copy, instead of a
+   landscape/square texture cover-cropped into a 4:3 box that under-fills the column. The slot's SOURCE
+   image is generated portrait (portrait_4_3 in _images.json — e.g. extraction-pour); this modifier makes
+   the FRAME portrait (3:4) to match. Capped (max-height) so the taller media column never dwarfs the copy
+   column = section-density (G-DENSITY) safe. Token-pure: aspect-ratio/max-height are layout literals. */
+.bw-tex--portrait{ aspect-ratio:3 / 4; max-height:min(72vh, 620px); margin-inline:auto; }
+.bw-tex::after{ content:""; position:absolute; inset:0; z-index:var(--ds-z-base); pointer-events:none;
+  /* GRID layer removed (repeated ~5x/page = blanket); the bottom ink-fade that makes the badge
+     legible over the photo stays. Add .bw-gridded to a .bw-tex frame to opt the grid back in. */
+  background:linear-gradient(180deg, transparent 40%, rgba(14,20,38,0.55) 100%);
+  background-size:auto; opacity:.85; }
+.bw-tex__badge{ position:relative; z-index:var(--ds-z-raised); background:var(--ds-bg-surface-2); border:1px solid var(--ds-divider);
+  border-radius:var(--ds-r-control); padding:14px 18px; box-shadow:var(--ds-shadow-card); }
+.bw-tex__badge b{ display:block; font-family:var(--ds-font-display); font-weight:700; font-size:clamp(24px,2.4vw,32px);
+  letter-spacing:-.02em; color:var(--ds-accent); line-height:1; }
+.bw-tex__badge span{ display:block; margin-top:6px; font-family:var(--ds-font-mono); font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--ds-ink-soft); }
+
+/* ----------------------------------------------------------------------------
+   9 · QUOTE-MODEL BAND — custom-quote driver (SECTION-COMPONENTS #33). V17 HARD RULE:
+   NO public price. The cost MODEL + a Request-a-Quote CTA. Token-built panel on the
+   continuous ground (distinct treatment).
+   ---------------------------------------------------------------------------- */
+.bw-qm{ display:grid; grid-template-columns:1.15fr .85fr; gap:clamp(32px,5vw,72px); align-items:center; }
+.bw-qm__model{
+  font-family:var(--ds-font-display); font-weight:600; text-transform:uppercase;
+  letter-spacing:var(--ds-tracking-disp); line-height:1.06;
+  font-size:clamp(26px,3vw,42px); color:var(--ds-ink); margin:var(--ds-space-md) 0 0; max-width:13em;
+}
+.bw-qm__model .ac{ color:var(--ds-accent); }
+.bw-qm__ask{
+  background:linear-gradient(180deg, var(--ds-bg-surface-2) 0%, var(--ds-bg-surface) 100%);
+  border:1px solid var(--ds-divider); border-radius:var(--ds-r-surface);
+  padding:clamp(26px,2.6vw,40px); box-shadow:var(--ds-shadow-lift), var(--ds-inset-hi);
+}
+.bw-qm__ask-h{ font-family:var(--ds-font-body); font-weight:600; font-size:18px; color:var(--ds-ink); margin:0 0 var(--ds-space-sm); }
+.bw-qm__ask-d{ font-family:var(--ds-font-body); font-size:15px; line-height:1.55; color:var(--ds-ink-soft); margin:0 0 var(--ds-space-lg); }
+.bw-qm__ask .btn{ width:100%; justify-content:center; }
+.bw-qm__fine{ margin-top:var(--ds-space-md); font-family:var(--ds-font-mono); font-size:11px; letter-spacing:.04em;
+  color:var(--ds-ink-soft); display:flex; align-items:center; gap:9px; }
+.bw-qm__fine .dot{ width:7px; height:7px; border-radius:50%; background:var(--ds-accent-bright); }
+
+/* ----------------------------------------------------------------------------
+   10 · MOTION — the ROBUST, transform-ONLY reveal (WOW §2 · SCROLL-STICKY F2).
+   CONTENT IS VISIBLE ON LOAD. opacity stays 1 ALWAYS; the entrance is a subtle 14px
+   translateY settle that JS lands via .is-in. If JS never runs / reduced-motion /
+   off-screen, the element keeps opacity:1 (a tiny offset at worst, never hidden).
+   This is the deliberate fix for the prior foundations that left elements at opacity:0.
+   ---------------------------------------------------------------------------- */
+.bw-rise{
+  --i:0;                                        /* stagger-index default; inline style="--i:N" overrides per element */
+  opacity:1;                                   /* NEVER hidden — visible on load, guaranteed */
+  transform:translateY(14px);
+  transition:transform var(--ds-dur-slow) var(--ds-ease-out);
+  will-change:transform;
+}
+.bw-rise.is-in{ transform:none; }
+/* stagger via inline --i (transform-delay only; opacity is never animated) */
+.bw-rise[style*="--i"]{ transition-delay:calc(var(--i) * 70ms); }
+/* entry-animation TYPE catalog — transform-only (renders-on-load safe); compose as .bw-rise .bw-rise--<variant> */
+.bw-rise--from-left{ transform:translateX(-18px); }
+.bw-rise--from-right{ transform:translateX(18px); }
+.bw-rise--scale{ transform:scale(.965); transform-origin:center; }
+.bw-rise--from-left.is-in, .bw-rise--from-right.is-in, .bw-rise--scale.is-in{ transform:none; }
+
+@media (prefers-reduced-motion:reduce){
+  .bw-rise, .bw-rise--from-left, .bw-rise--from-right, .bw-rise--scale{ transform:none; transition:none; }
+  .bw-cap, .bw-cap__media img{ transition:none; }
+}
+
+/* ----------------------------------------------------------------------------
+   11 · RESPONSIVE — the look survives 375 -> 1920 (RESPONSIVE-PATTERN-LIBRARY
+   G1/G4 grid cascade · Comp7 icon-above-text stack · T1 type ladder). MOBILE-CLEAN:
+   no horizontal overflow; grids cascade 3->2->1, splits stack, the matrix becomes
+   label/value rows. The chrome's own collapse is owned by batchworks-chrome.css.
+   ---------------------------------------------------------------------------- */
+@media (max-width:1024px){
+  .bw-head--split{ grid-template-columns:1fr; gap:var(--ds-space-lg); align-items:start; }
+  .bw-anchor__panel{ grid-template-columns:1fr; }
+  .bw-anchor__media{ border-left:0; border-top:1px solid var(--ds-divider); min-height:280px; }
+  /* ── READING-ORDER LAW (owner, non-negotiable) ─────────────────────────────
+     On mobile EVERY media-split section reads TOP-TO-BOTTOM: HEADING (eyebrow + title)
+     -> MEDIA (image) -> BODY (paragraph/list/steps/metrics) -> CTA (last). The media
+     must NEVER paint above the section's heading. There is NO "intended flip" — the
+     media-first order:-1 is REMOVED everywhere; instead each split below INTERLEAVES
+     its heading children before the media and its body/CTA children after it, robustly,
+     via display:contents on the copy wrapper + order on the leaf children. Where the
+     heading already lives in a standalone .bw-head ABOVE the split (media-grid /
+     mediacompare / banner), source order alone is correct and no interleave is needed. */
+
+  /* §4 PROCESS — .bw-process = [ <div>(.bw-head heading + .bw-steps body) | figure.bw-frame media ].
+     The copy wrapper goes display:contents so .bw-head, .bw-steps + the media frame become
+     direct items of the single-column .bw-process grid; order lands HEADING -> MEDIA -> STEPS. */
+  .bw-process{ grid-template-columns:1fr; gap:clamp(28px,5vw,44px); }
+  .bw-process > div:first-child{ display:contents; }       /* lift .bw-head + .bw-steps into the grid */
+  .bw-process > div:first-child > .bw-head{ order:-1; }     /* HEADING first (eyebrow + title) */
+  .bw-process > .bw-frame{ order:0; }                       /* MEDIA after the heading */
+  .bw-process > div:first-child > .bw-steps{ order:1; }     /* BODY (numbered steps) last */
+
+  .bw-cap__grid{ grid-template-columns:repeat(2, 1fr); }
+
+  /* §5 PROOF — .bw-proof = [ figure.bw-proof__media media | div.bw-rise copy(eyebrow, q, lede, metrics, fine) ].
+     The copy wrapper (the non-media child) goes display:contents so its heading children (eyebrow + the
+     .bw-proof__q title) order BEFORE the media and its body children (lede, metrics, fine) order AFTER it. */
+  .bw-proof{ grid-template-columns:1fr; gap:clamp(24px,5vw,40px); }
+  .bw-proof > *:not(.bw-proof__media){ display:contents; }            /* lift the copy children into the grid */
+  .bw-proof__media{ order:0; }                                        /* MEDIA sits between heading and body */
+  .bw-proof > *:not(.bw-proof__media) > .bw-eyebrow,
+  .bw-proof > *:not(.bw-proof__media) > .bw-proof__q{ order:-1; }      /* HEADING first (eyebrow + title) */
+  .bw-proof > *:not(.bw-proof__media) > .bw-lede,
+  .bw-proof > *:not(.bw-proof__media) > .bw-proof__metrics,
+  .bw-proof > *:not(.bw-proof__media) > .bw-qm__fine{ order:1; }       /* BODY (lede, metrics, fine) last */
+
+  /* §2/§8 SPLIT — .bw-split = [ .bw-split__copy(eyebrow, title, lede, list, CTA) | .bw-split__visual media ].
+     The copy wrapper goes display:contents so its heading children (eyebrow + .bw-h2/.bw-h3 title) order
+     BEFORE the visual and its body/CTA children (lede, list, buttons) order AFTER it. */
+  .bw-split{ grid-template-columns:1fr; gap:clamp(28px,5vw,44px); }
+  .bw-split__copy{ display:contents; }                                /* lift the copy children into the grid */
+  .bw-split__visual{ order:0; }                                       /* MEDIA between heading and body */
+  .bw-split__copy > .bw-eyebrow,
+  .bw-split__copy > .bw-h2,
+  .bw-split__copy > .bw-h3{ order:-1; }                               /* HEADING first (eyebrow + title) */
+  .bw-split__copy > .bw-lede,
+  .bw-split__copy > .bw-split__list,
+  .bw-split__copy > .bw-kpi-row,
+  .bw-split__copy > .bw-hero__cta,
+  .bw-split__copy > .btn,
+  .bw-split__copy > .bw-cta,
+  .bw-split__copy > p{ order:1; }                                     /* BODY + CTA last (after media) */
+
+  .bw-qm{ grid-template-columns:1fr; gap:clamp(28px,5vw,44px); }
+}
+@media (max-width:640px){
+  /* HERO MOBILE VERTICAL RHYTHM (HERO-MOBILE-TOP-PADDING STANDARD).
+     On mobile the hero must NOT float its (short) content to the vertical centre of a
+     tall min-height box, and its interior top padding must be the SECTION rhythm token
+     (--ds-section-py) — never a desktop padding-block floor. Two fixes:
+       1) align-items:flex-start — short content sits just below the header, no mid-box float.
+          (the fixed header is already cleared by `main{padding-top}` in the chrome; the hero
+           top padding is INTERIOR rhythm only and must not re-reserve header height.)
+       2) min-height relaxes to content + a sane mobile floor so the box stops over-running.
+     The inner top padding becomes --ds-section-py (the scale token) instead of the
+     desktop clamp(96px,13vw,168px) one-off whose 96px FLOOR was the dead-space at 375. */
+  .bw-hero{ align-items:flex-start; min-height:clamp(440px, 72vh, 620px); }
+  .bw-hero__inner{ padding-block:var(--ds-section-py) var(--ds-space-3xl); }
+  .bw-scale__grid{ grid-template-columns:1fr; }
+  .bw-cap__grid{ grid-template-columns:1fr; }
+  /* STAT-BLOCK at 375 (T7): the proof metrics STACK 1-up with a TOP hairline between —
+     the numeral stays LARGE (clamp floor 40px, well above the 34px gate floor), NEVER
+     shrunk to fit. The vertical divider becomes a horizontal one; gap is restored. */
+  .bw-proof__metrics{ flex-direction:column; flex-wrap:wrap; gap:0; }
+  .bw-metric{ flex:1 1 auto; }
+  .bw-metric + .bw-metric{
+    border-left:0; padding-left:0; margin-left:0;
+    border-top:1px solid var(--ds-divider);
+    padding-top:clamp(16px,4vw,22px); margin-top:clamp(16px,4vw,22px);
+  }
+  .bw-metric__n{ font-size:clamp(40px,12vw,60px); }    /* stays LARGE on mobile — not shrunk/wrapped */
+  /* COMPARE MATRIX -> PER-ROW CARD (a DESIGNED mobile treatment, not a broken collapse).
+     Each row = a card: the cost LABEL is the heading (full width), then US + THEM are a
+     labeled 2-up PAIR. Every option carries its OWN source label (CSS-var driven, slug-
+     neutral) so neither value is orphaned under the other. Mirrors the slug template's
+     .__client__-compare block — keep the two in sync (this is the reference impl). */
+  .bw-compare__row{
+    grid-template-columns:1fr 1fr;                 /* US | THEM side by side */
+    grid-template-areas:"label label" "us them";   /* label spans the top; options below */
+    gap:0; padding:clamp(12px,4vw,16px);
+  }
+  .bw-compare__row + .bw-compare__row{ border-top:1px solid var(--ds-line); }
+  .bw-compare__row--head{ display:none; }          /* per-cell labels replace the column head */
+  .bw-compare__cell{ padding:0; border:0; align-items:flex-start; }
+  .bw-compare__cell--label{
+    grid-area:label; border:0; padding:0 0 clamp(8px,2.6vw,12px);
+    font-size:13px; color:var(--ds-ink); font-weight:600;
+  }
+  /* ROBUST: the "them" cell is matched POSITIONALLY (:not(--label):not(--us)) as well as
+     by the optional --them class, so the fix works on existing 3-cell rows whether or not
+     the third cell was tagged --them in markup. */
+  .bw-compare__cell--us,
+  .bw-compare__cell--them,
+  .bw-compare__row:not(.bw-compare__row--head) > .bw-compare__cell:not(.bw-compare__cell--label):not(.bw-compare__cell--us){
+    display:grid; grid-template-columns:auto 1fr;   /* marker | value text */
+    gap:4px 8px; align-items:center;
+    padding:clamp(10px,3vw,13px); border-radius:var(--ds-r-md,10px);
+    font-size:13.5px; line-height:1.35;
+  }
+  .bw-compare__cell--us{ grid-area:us; background:var(--ds-accent-soft); margin-right:6px; }
+  .bw-compare__cell--them,
+  .bw-compare__row:not(.bw-compare__row--head) > .bw-compare__cell:not(.bw-compare__cell--label):not(.bw-compare__cell--us){
+    grid-area:them; background:var(--ds-bg-surface-2,transparent); border:1px solid var(--ds-line); margin-left:6px;
+  }
+  /* the OWN source label — symmetric, both options get one, so nothing reads as orphaned.
+     Spans both columns as a full-width heading; marker (col1) + value text (col2, auto) below. */
+  .bw-compare__cell--us::before,
+  .bw-compare__cell--them::before,
+  .bw-compare__row:not(.bw-compare__row--head) > .bw-compare__cell:not(.bw-compare__cell--label):not(.bw-compare__cell--us)::before{
+    grid-column:1 / -1;
+    font-family:var(--ds-font-mono); font-size:10px; letter-spacing:.08em;
+    text-transform:uppercase; font-weight:600; opacity:.85;
+  }
+  .bw-compare__cell--us::before{ content:var(--compare-us-label); color:var(--ds-accent); }
+  .bw-compare__cell--them::before,
+  .bw-compare__row:not(.bw-compare__row--head) > .bw-compare__cell:not(.bw-compare__cell--label):not(.bw-compare__cell--us)::before{
+    content:var(--compare-them-label); color:var(--ds-ink-faint,var(--ds-ink-soft));
+  }
+}
+
+/* ----------------------------------------------------------------------------
+   12 · INTERACTION-STATE SYSTEM (a11y focus · press · disabled) — DS PATTERN, additive.
+   ----------------------------------------------------------------------------
+   The BODY-SECTION half of the coherent state system whose chrome half lives in
+   batchworks-chrome.css (the global focus-ring grouped selector, the :active press,
+   and the [disabled]/[aria-disabled] inert treatment). The chrome layer's grouped
+   :focus-visible / :active / [disabled] rules ALSO cover any .btn, link, input, or
+   [tabindex] element that appears inside the body (the .btn quote-CTA in §9, footer
+   links, etc.) because those selectors are element/role-based, so the BODY inherits
+   the same a11y ring + press + disabled behaviour with nothing extra to author.
+
+   This sheet adds ONLY the body-OWN interactive primitives the chrome can't name:
+     · .bw-link            — the per-card "view-more" affordance (a focusable link).
+     · .bw-cap             — the pressable capability CARD (it already lifts on hover;
+                             here it gains a keyboard focus ring + a press settle).
+   GENERAL PATTERN (applies DS-wide): every interactive element earns three states —
+   a keyboard-only :focus-visible ring (token outline + halo, clean on mouse via
+   :focus:not(:focus-visible)), a subtle :active press, and an inert [disabled]/
+   [aria-disabled] treatment that consumes --ds-opacity-disabled. Additive only —
+   the locked LOOK (card hover-lift, link arrow-nudge) is untouched. Token-pure:
+   every value is a var(--ds-*) or a trivial layout literal (0 / 1px-2px hairline),
+   so structural stays G8 token-pure AND nothing here would trip the page-token gate.
+   ---------------------------------------------------------------------------- */
+
+/* (1) a11y FOCUS RING — body-own interactive primitives (keyboard-only). */
+.bw-link:focus-visible,
+.bw-cap:focus-visible,
+.bw-cap a:focus-visible{
+  outline:2px solid var(--ds-accent);
+  outline-offset:2px;
+  border-radius:var(--ds-r-control);
+  box-shadow:var(--ds-glow);
+}
+/* the pressable CARD: ring hugs its own surface radius (it is a panel, not a chip) */
+.bw-cap:focus-visible{ border-radius:var(--ds-r-surface); }
+
+/* (2) MOUSE/TOUCH focus stays CLEAN — no ring unless focus came from the keyboard. */
+.bw-link:focus:not(:focus-visible),
+.bw-cap:focus:not(:focus-visible),
+.bw-cap a:focus:not(:focus-visible){
+  outline:none;
+  box-shadow:none;
+}
+
+/* (3) PRESS — the capability card settles on a tactile press (overrides the hover lift
+   while held). Rides the card's existing transform transition (var(--ds-dur) var(--ds-ease)). */
+.bw-cap:active{ transform:translateY(0) scale(.99); }
+
+/* (4) DISABLED / inert — a body-section .btn or input goes inert via the chrome's grouped
+   [disabled]/[aria-disabled] rules; this covers the body-own .bw-link affordance too. */
+.bw-link[disabled], .bw-link[aria-disabled="true"]{
+  opacity:var(--ds-opacity-disabled);
+  cursor:not-allowed;
+}
+
+@media (prefers-reduced-motion:reduce){
+  /* the press is motion — honour reduced-motion (mirrors the chrome's global reduce rule) */
+  .bw-cap:active{ transform:none; }
+}
+
+/* ----------------------------------------------------------------------------
+   13 · ABOUT / T-COMPANY COMPOSITION STRUCTURES — the per-TYPE vocabulary an
+   about/company page composes from, VISIBLY DISTINCT from the service (T-FEATURE)
+   row patterns above (§2 hero · §3 anchor · §4 process · §5 cap/media-grid ·
+   §5c mediacompare/banner · §6 compare · §7 proof · §9 qm). The about page is
+   EDITORIAL — a founder statement, an oversized creed, a dated origin spine, named
+   founder bios with contact, third-party coverage — NOT a stack of capability
+   tiles / media+cards feature rows. FIVE structures, each a distinct coarse SHAPE
+   (G-SVAR adjacency-safe):
+     (a) .bw-founder   — founder / company EDITORIAL hero (type-led, NOT the §2 product hero)
+     (b) .bw-manifesto — oversized VALUES / creed type-block (NOT a §5 spec-card grid)
+     (c) .bw-timeline  — origin story-arc on a single vertical SPINE (NOT the §4 process rail / not a feature row)
+     (d) .bw-team--duo — named FOUNDER BIOS grid (portrait + name + role + contact, e.g. Jacob Silverstein + Zach LoBello)
+     (e) .bw-press     — third-party coverage / logo strip
+
+   This is the 1:1 reference impl of the slug template
+   (.claude/skills/client-site-build/_design-templates/__client__-structural.css —
+    .__client__-founder/manifesto/timeline/team--duo/press); a NEW slug copies the
+   template and inherits this WORKING CSS, not just prose.
+
+   DESIGN-SYSTEM CITATIONS (resolve under .claude/design-system-unified/):
+     menu -> sections/company/menu.md #1 (Founder / company editorial hero)
+     menu -> sections/company/menu.md #2 (Manifesto / values creed type-block)
+     menu -> sections/company/menu.md #3 (Origin timeline — single vertical spine)
+     menu -> sections/company/menu.md #4 (Founder bios — named duo grid + contact)
+     menu -> sections/company/menu.md #5 (Press / third-party coverage strip)
+     library -> _MODERN-WOW-SPEC §4 display-scale contrast / oversized type · §6 generous negative space
+
+   Token-pure (every colour resolves via var(--ds-*); only layout geometry is
+   literal). COMPACT (each section <= 1.65vh; the manifesto/founder read DENSE,
+   text-led). Any STRETCHED grid-track media frame carries width:100% + min-width:0
+   (the media-fits-track anchor, G-MEDIA-TRACK). Copy wrappers carry a *__copy class
+   so the §0 display:contents cadence-neutralizer keeps leading == trailing.
+   ---------------------------------------------------------------------------- */
+
+/* (a) FOUNDER / COMPANY EDITORIAL HERO — a type-led mission statement (LEFT) beside a
+   framed founders portrait (RIGHT). The register is a masthead / signed letter, not the
+   §2 full-bleed photo+scrim product hero. */
+.bw-founder{
+  display:grid; grid-template-columns:1.15fr .85fr; gap:clamp(32px,5vw,72px); align-items:center;
+}
+.bw-founder__copy{ max-width:32em; }
+.bw-founder__kicker{
+  font-family:var(--ds-font-mono); font-size:var(--ds-fs-caption);
+  letter-spacing:var(--ds-tracking-label); text-transform:uppercase;
+  color:var(--ds-accent); margin:0 0 var(--ds-space-lg);
+  display:inline-flex; align-items:center; gap:12px;
+}
+.bw-founder__kicker::before{ content:""; width:34px; height:1px; background:var(--ds-divider); }
+.bw-founder__h{
+  font-family:var(--ds-font-display); font-weight:700; text-transform:uppercase;
+  letter-spacing:var(--ds-tracking-disp); line-height:1.0;
+  font-size:clamp(34px,5vw,64px); color:var(--ds-ink); margin:0 0 var(--ds-space-lg); max-width:13em;
+}
+.bw-founder__h .ac{ color:var(--ds-accent); }
+.bw-founder__lede{
+  font-family:var(--ds-font-body); font-size:clamp(17px,1.5vw,21px);
+  line-height:var(--ds-lh-body); color:var(--ds-ink-soft); margin:0; max-width:34em;
+}
+/* the SIGNED credibility line — the editorial signature ("a founder wrote this"). */
+.bw-founder__sig{
+  margin-top:var(--ds-space-xl); padding-top:var(--ds-space-lg);
+  border-top:1px solid var(--ds-divider);
+  display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+}
+.bw-founder__sig-name{ font-family:var(--ds-font-display); font-weight:700; font-size:16px; letter-spacing:.01em; color:var(--ds-ink); }
+.bw-founder__sig-role{ font-family:var(--ds-font-mono); font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--ds-ink-soft); }
+/* the framed founders portrait — a STRETCHED grid-track media frame (G-MEDIA-TRACK anchor). */
+.bw-founder__portrait{
+  position:relative; overflow:hidden; margin:0;
+  align-self:stretch; width:100%; min-width:0; height:100%; min-height:0;   /* width:100% + min-width:0 ANCHOR to the 1fr grid track (G-MEDIA-TRACK) */
+  aspect-ratio:4 / 5; max-height:clamp(360px,52vh,560px);
+  border:1px solid var(--ds-divider); border-radius:var(--ds-r-surface);
+  box-shadow:var(--ds-shadow-lift), var(--ds-inset-hi);
+}
+.bw-founder__portrait img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center; }
+.bw-founder__portrait::after{ content:""; position:absolute; inset:0; pointer-events:none;
+  background:linear-gradient(180deg, rgba(14,20,38,0.04) 0%, rgba(14,20,38,0.34) 100%); }
+
+/* (b) MANIFESTO / VALUES CREED — an OVERSIZED editorial type-block: a giant lead creed,
+   then the brand principles as oversized typographic statements separated by hairlines
+   (open type — NOT cards, NOT the §5 spec grid). */
+.bw-manifesto{ max-width:var(--bw-measure); }
+.bw-manifesto__lead{
+  font-family:var(--ds-font-display); font-weight:600; text-transform:uppercase;
+  letter-spacing:var(--ds-tracking-disp); line-height:1.04;
+  font-size:clamp(30px,4.4vw,58px); color:var(--ds-ink); margin:0 0 clamp(36px,5vw,64px); max-width:18em;
+}
+.bw-manifesto__lead .ac{ color:var(--ds-accent); }
+.bw-manifesto__values{ display:grid; gap:0; }
+.bw-manifesto__value{
+  display:grid; grid-template-columns:auto 1fr; gap:clamp(18px,3vw,48px);
+  padding:clamp(22px,3vw,38px) 0; border-top:1px solid var(--ds-divider);
+}
+.bw-manifesto__value:last-child{ border-bottom:1px solid var(--ds-divider); }
+.bw-manifesto__idx{
+  font-family:var(--ds-font-mono); font-size:13px; font-weight:700; letter-spacing:.04em;
+  color:var(--ds-accent); font-variant-numeric:tabular-nums; padding-top:.55em;
+}
+.bw-manifesto__vbody{ min-width:0; }
+.bw-manifesto__line{
+  font-family:var(--ds-font-display); font-weight:600; text-transform:uppercase;
+  letter-spacing:.005em; line-height:1.06; font-size:clamp(22px,2.6vw,36px);
+  color:var(--ds-ink); margin:0;
+}
+.bw-manifesto__line .ac{ color:var(--ds-accent); }
+.bw-manifesto__support{
+  font-family:var(--ds-font-body); font-size:15px; line-height:1.55;
+  color:var(--ds-ink-soft); margin:var(--ds-space-sm) 0 0; max-width:36em;
+}
+
+/* (c) ORIGIN TIMELINE — the story arc on ONE vertical SPINE. A single continuous line
+   runs down the left; each dated entry hangs a node on it. Distinct from the §4 numbered
+   process rail (no media rail, no 2-col split) and from a feature row. */
+.bw-timeline{ --tl-gutter:44px; --tl-spine:12px; --tl-node:14px; position:relative; max-width:780px; }
+.bw-timeline__track{ position:relative; padding-left:var(--tl-gutter); }
+.bw-timeline__track::before{   /* THE SPINE — one continuous vertical line */
+  content:""; position:absolute; left:var(--tl-spine); top:10px; bottom:10px; width:2px; background:var(--ds-divider);
+}
+.bw-timeline__entry{ position:relative; padding:clamp(16px,2.4vw,30px) 0; }
+.bw-timeline__entry::before{   /* the node on the spine (centred on the 2px line) */
+  content:""; position:absolute; left:calc(var(--tl-spine) - 6px - var(--tl-gutter));
+  top:calc(clamp(16px,2.4vw,30px) + 10px);
+  width:var(--tl-node); height:var(--tl-node); border-radius:var(--ds-r-pill);
+  background:var(--ds-accent); border:3px solid var(--ds-bg-surface); box-shadow:var(--ds-glow);
+}
+.bw-timeline__year{
+  font-family:var(--ds-font-display); font-weight:700; font-size:clamp(20px,2.2vw,30px);
+  line-height:1; letter-spacing:-.02em; color:var(--ds-accent); font-variant-numeric:tabular-nums; margin:0 0 var(--ds-space-sm);
+}
+.bw-timeline__h{
+  font-family:var(--ds-font-display); font-weight:600; text-transform:uppercase; letter-spacing:.01em;
+  line-height:1.1; font-size:clamp(17px,1.7vw,21px); color:var(--ds-ink); margin:0 0 var(--ds-space-xs);
+}
+.bw-timeline__d{
+  font-family:var(--ds-font-body); font-size:15px; line-height:1.55; color:var(--ds-ink-soft); margin:0; max-width:42em;
+}
+
+/* (d) TEAM — FOUNDER BIOS, NAMED DUO GRID. A balanced 2-up people grid (portrait + name
+   + role + contact). Two columns (--duo) keep the columns balanced so the tall-stack
+   density heuristic (M3) can never fire. Distinct from the §5 3-col capability grid. */
+.bw-team{ display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(18px,2.4vw,32px); }
+.bw-team--duo{ grid-template-columns:repeat(2,1fr); gap:clamp(22px,3vw,44px); }
+.bw-team__member{
+  display:grid; grid-template-columns:minmax(0,.6fr) minmax(0,1fr); gap:clamp(18px,2.4vw,30px); align-items:center;
+  background:linear-gradient(180deg, var(--ds-bg-surface-2) 0%, var(--ds-bg-surface) 80%);
+  border:1px solid var(--ds-divider); border-radius:var(--ds-r-surface);
+  box-shadow:var(--ds-shadow-card); padding:clamp(18px,2vw,26px);
+}
+.bw-team__portrait{
+  position:relative; overflow:hidden; margin:0;
+  width:100%; min-width:0;                 /* anchor the portrait to its grid track (G-MEDIA-TRACK) */
+  aspect-ratio:4 / 5; max-height:clamp(220px,30vh,320px);
+  border:1px solid var(--ds-divider); border-radius:var(--ds-r-control);
+}
+.bw-team__portrait img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center top; }
+.bw-team__body{ min-width:0; }
+.bw-team__name{
+  font-family:var(--ds-font-display); font-weight:700; text-transform:uppercase;
+  letter-spacing:var(--ds-tracking-disp); line-height:1.04; font-size:clamp(19px,2vw,25px); color:var(--ds-ink); margin:0 0 4px;
+}
+.bw-team__role{ font-family:var(--ds-font-mono); font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--ds-accent); margin:0 0 var(--ds-space-md); }
+.bw-team__bio{ font-family:var(--ds-font-body); font-size:14px; line-height:1.55; color:var(--ds-ink-soft); margin:0 0 var(--ds-space-md); }
+.bw-team__contact{ display:flex; flex-direction:column; gap:7px; }
+.bw-team__contact a{ font-family:var(--ds-font-mono); font-size:12px; letter-spacing:.03em; color:var(--ds-ink); display:inline-flex; align-items:center; gap:8px; }
+.bw-team__contact a:hover{ color:var(--ds-accent); }
+.bw-team__contact .dot{ width:6px; height:6px; border-radius:var(--ds-r-pill); background:var(--ds-accent-bright); flex:0 0 auto; }
+
+/* (e) PRESS — THIRD-PARTY COVERAGE / LOGO STRIP. A compact row of coverage items (an
+   outlet LOGO image where available, OR a named-outlet lockup + the coverage line + a
+   verify link). A horizontal strip between hairlines, NOT a §5c media+cards feature row. */
+.bw-press__strip{
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(190px,1fr)); gap:clamp(16px,2.4vw,32px);
+  align-items:stretch; border-top:1px solid var(--ds-divider); border-bottom:1px solid var(--ds-divider);
+  padding-block:clamp(22px,3vw,38px);
+}
+.bw-press__item{ display:flex; flex-direction:column; gap:10px; min-width:0; }
+.bw-press__logo{ height:28px; width:auto; max-width:150px; object-fit:contain; object-position:left center;
+  opacity:var(--ds-opacity-muted); filter:grayscale(1); transition:opacity var(--ds-dur) var(--ds-ease), filter var(--ds-dur) var(--ds-ease); }
+.bw-press__item:hover .bw-press__logo{ opacity:1; filter:grayscale(0); }
+.bw-press__outlet{ font-family:var(--ds-font-display); font-weight:700; text-transform:uppercase; letter-spacing:.04em; font-size:15px; color:var(--ds-ink); }
+.bw-press__quote{ font-family:var(--ds-font-body); font-size:13.5px; line-height:1.5; color:var(--ds-ink-soft); margin:0; }
+.bw-press__link{ margin-top:auto; font-family:var(--ds-font-mono); font-size:11px; font-weight:700; letter-spacing:.06em;
+  text-transform:uppercase; color:var(--ds-accent); display:inline-flex; align-items:center; gap:8px; }
+.bw-press__link span{ transition:transform var(--ds-dur) var(--ds-ease-out); }
+.bw-press__item:hover .bw-press__link span{ transform:translateX(4px); }
+
+/* the founder copy wrapper is a *__copy wrapper — pin its block margins to 0 so the §0
+   cadence stays symmetric (batchworks has no generic [class*="__copy"] rule). */
+.bw-founder__copy{ margin-block:0; }
+
+/* ---- ABOUT STRUCTURES · RESPONSIVE ---------------------------------------------- */
+@media (max-width:1024px){
+  /* founder editorial hero — interleave heading -> portrait -> body (lede + sig) via the
+     display:contents copy wrapper (the §11 split reading-order idiom). */
+  .bw-founder{ grid-template-columns:1fr; gap:clamp(28px,5vw,44px); }
+  .bw-founder__copy{ display:contents; }
+  .bw-founder__copy > *{ margin-block:0; }                  /* the reordered leaves own no edge margin (cadence) */
+  .bw-founder__copy > .bw-founder__kicker,
+  .bw-founder__copy > .bw-founder__h{ order:-1; }
+  .bw-founder__portrait{ order:0; aspect-ratio:16 / 10; max-height:clamp(280px,42vh,420px); }
+  .bw-founder__copy > .bw-founder__lede,
+  .bw-founder__copy > .bw-founder__sig{ order:1; }
+  .bw-team{ grid-template-columns:repeat(2,1fr); }
+}
+@media (max-width:640px){
+  .bw-team, .bw-team--duo{ grid-template-columns:1fr; }
+  .bw-team__member{ grid-template-columns:1fr; }            /* portrait above the bio */
+  .bw-team__portrait{ aspect-ratio:16 / 10; max-height:clamp(200px,40vh,300px); }
+  .bw-manifesto__value{ grid-template-columns:1fr; gap:8px; }
+  .bw-manifesto__idx{ padding-top:0; }
+}
+
+/* ============================================================================
+   T-CONTACT + T-LEGAL COMPOSITION STRUCTURES — the per-TYPE vocabulary the
+   contact (T-CONTACT) and legal (T-LEGAL) pages compose from, VISIBLY DISTINCT
+   from the service (T-FEATURE) row patterns and the about (T-COMPANY) editorial
+   structures above. THREE structures, each a distinct coarse SHAPE:
+     (1) .bw-form   — a tokenized QUOTE-REQUEST form (T-CONTACT): label-above-input
+                      field rows (text / email / textarea / select) + a submit .btn.
+                      STATIC success ONLY — JS preventDefault -> .is-sent flips the
+                      fields out for an inline .bw-form__success confirmation (OR a
+                      mailto: action). NO backend; modelled as a styled form
+                      (DS forms/menu.md:234 — model the form as a styled placeholder,
+                      do not wire a real provider). NO data-filter/search/cart control
+                      is present, so verify-interactive has nothing to require wired
+                      (a plain form returns n/a).
+     (2) .bw-legal  — a readable SINGLE-MEASURE (~760px) prose-document container
+                      (T-LEGAL) that styles RAW flowing <p>/<ul>/<ol>/<h2>/<h3>/<a>
+                      long-form legal prose with legal vertical rhythm. None of the
+                      structures above style raw prose children — this is that gap.
+     (3) .bw-toc    — a small anchored TABLE-OF-CONTENTS (anchor-link list), with an
+                      optional desktop STICKY side-rail variant .bw-toc--rail.
+
+   GRAMMAR (G-DOM): each is an OBJECT that lives inside the forced spine
+   section.bw-flow -> .container--full -> .row -> .col -> OBJECT. The skin lives on
+   the OBJECT (.bw-form / .bw-legal / .bw-toc), never on .container/.row/.col.
+     T-CONTACT form:  <section class="bw-flow"> .container--full > .row > .col--measure > form.bw-form
+     T-LEGAL doc:     <section class="bw-flow"> .container--full > .row > .col--measure > .bw-legal
+     T-LEGAL + rail:  <section class="bw-flow"> .container--full > .row.row--stretch >
+                        .col(aside .bw-toc.bw-toc--rail) + .col--grow(.bw-legal)
+
+   RENDERS-ON-LOAD: every visible part is opacity:1 at load (the only display:none is
+   the .bw-form__success panel, which is the post-submit state, not load content).
+   G-DENSITY-safe: the form is a balanced 2-col field grid, the legal doc is a single
+   text measure, the TOC is a compact list — none force a tall sparse box. Token-pure:
+   EVERY colour resolves through var(--ds-*); the only literals are layout geometry
+   (px/%/ch/em/vh, radii offsets, line-heights). Zero brand hex.
+
+   DESIGN-SYSTEM CITATIONS (resolve under .claude/design-system-unified/):
+     menu    -> sections/forms/menu.md #1 (single-column stacked quote form) · :234 (model as a styled form, no live provider)
+     library -> _MODERN-DESIGN-PATTERN-LIBRARY (single-measure reading column · form field rhythm)
+     library -> _MODERN-WOW-SPEC §6 generous negative-space rhythm (legal vertical rhythm)
+   ============================================================================ */
+
+/* (1) QUOTE-REQUEST FORM (T-CONTACT) — a token-built panel: label-above-input field
+   rows in a balanced 2-col grid, a full-width textarea + actions, and a STATIC
+   inline success state. The .btn submit is the locked chrome button (skin reused). */
+.bw-form{
+  position:relative;
+  background:linear-gradient(180deg, var(--ds-bg-surface-2) 0%, var(--ds-bg-surface) 100%);
+  border:1px solid var(--ds-divider); border-radius:var(--ds-r-surface);
+  box-shadow:var(--ds-shadow-lift), var(--ds-inset-hi);
+  padding:clamp(24px,3vw,44px);
+}
+.bw-form__head{ margin:0 0 clamp(20px,2.6vw,32px); }
+.bw-form__h{
+  font-family:var(--ds-font-display); font-weight:600; text-transform:uppercase;
+  letter-spacing:var(--ds-tracking-disp); line-height:1.08;
+  font-size:clamp(20px,2vw,26px); color:var(--ds-ink); margin:0 0 var(--ds-space-sm);
+}
+.bw-form__h .ac{ color:var(--ds-accent); }
+.bw-form__intro{ font-family:var(--ds-font-body); font-size:15px; line-height:var(--ds-lh-body); color:var(--ds-ink-soft); margin:0; max-width:46em; }
+
+/* GROUPED form (owner trim) - the quote form is trimmed to a small field set split into
+   TWO named groups (e.g. "Your program" + "You"), each a <fieldset class="bw-form__group">
+   with a small <legend class="bw-form__legend"> heading. The UA fieldset/legend chrome is
+   reset to token-pure; a hairline rule separates the second group from the first. */
+.bw-form__group{ border:0; margin:0; padding:0; min-width:0; }
+.bw-form__group + .bw-form__group{ margin-top:clamp(24px,3vw,36px); padding-top:clamp(24px,3vw,36px); border-top:1px solid var(--ds-divider); }
+.bw-form__legend{
+  display:block; width:100%; padding:0; margin:0 0 var(--ds-space-md);
+  font-family:var(--ds-font-mono); font-size:11px; letter-spacing:var(--ds-tracking-label);
+  text-transform:uppercase; color:var(--ds-accent);
+}
+/* the volume cadence - a small ONE-TIME / MONTHLY radio pair styled as segments. The
+   native radios are visually hidden; the checked segment fills with the accent wash. */
+.bw-cadence{ display:inline-flex; flex-wrap:wrap; gap:8px; margin-top:2px; }
+.bw-cadence__opt{ position:relative; display:inline-flex; }
+.bw-cadence__opt input{ position:absolute; opacity:0; width:0; height:0; margin:0; }
+.bw-cadence__opt span{
+  display:inline-flex; align-items:center; cursor:pointer;
+  font-family:var(--ds-font-mono); font-size:12px; letter-spacing:.04em; text-transform:uppercase;
+  color:var(--ds-ink-soft); background:var(--ds-bg-surface-2);
+  border:1px solid var(--ds-line); border-radius:var(--ds-r-control); padding:9px 15px;
+  transition:color var(--ds-dur-fast) var(--ds-ease), border-color var(--ds-dur-fast) var(--ds-ease), background-color var(--ds-dur-fast) var(--ds-ease);
+}
+.bw-cadence__opt input:checked + span{ color:var(--ds-accent); border-color:var(--ds-accent); background:var(--ds-accent-soft); }
+.bw-cadence__opt input:focus-visible + span{ box-shadow:0 0 0 3px var(--ds-accent-soft); }
+
+/* the field grid — 2-up on desktop, 1-up on phone. A field is label-ABOVE-control. */
+.bw-form__grid{ display:grid; grid-template-columns:repeat(2, 1fr); gap:clamp(16px,2vw,24px); }
+.bw-field{ display:flex; flex-direction:column; gap:8px; min-width:0; }
+.bw-field--full{ grid-column:1 / -1; }                 /* the textarea + any wide row spans both columns */
+.bw-field__label{
+  font-family:var(--ds-font-mono); font-size:11px; letter-spacing:var(--ds-tracking-label);
+  text-transform:uppercase; color:var(--ds-ink-soft);
+  display:inline-flex; align-items:center; gap:6px;
+}
+.bw-field__req{ color:var(--ds-accent); }              /* the required-marker asterisk */
+.bw-field__hint{ font-family:var(--ds-font-body); font-size:12px; line-height:1.45; color:var(--ds-ink-soft); margin:0; }
+
+/* the controls — text inputs, email, selects, textareas all share one base. Scoped by
+   .bw-form so a raw <input>/<select>/<textarea> is styled with no class, plus the
+   explicit .bw-input/.bw-select/.bw-textarea hooks for robustness. */
+.bw-form .bw-input,
+.bw-form input[type="text"],
+.bw-form input[type="email"],
+.bw-form input[type="tel"],
+.bw-form input:not([type]),
+.bw-form select,
+.bw-form textarea{
+  width:100%; display:block; min-width:0;
+  font-family:var(--ds-font-body); font-size:15px; line-height:1.5; color:var(--ds-ink);
+  background:var(--ds-bg-surface-2);
+  border:1px solid var(--ds-line); border-radius:var(--ds-r-control);
+  padding:12px 14px;
+  -webkit-appearance:none; -moz-appearance:none; appearance:none;
+  transition:border-color var(--ds-dur-fast) var(--ds-ease), box-shadow var(--ds-dur-fast) var(--ds-ease);
+}
+.bw-form ::placeholder{ color:var(--ds-ink-soft); opacity:.78; }
+.bw-form textarea, .bw-form .bw-textarea{ min-height:128px; resize:vertical; line-height:var(--ds-lh-body); }
+/* focus — accent border + a soft accent halo (keyboard + pointer; the chrome's global
+   :focus-visible ring also applies). Token-pure halo via --ds-accent-soft. */
+.bw-form .bw-input:focus,
+.bw-form input:focus, .bw-form select:focus, .bw-form textarea:focus{
+  outline:none; border-color:var(--ds-accent); box-shadow:0 0 0 3px var(--ds-accent-soft);
+}
+/* invalid (native :invalid after interaction, or a .is-invalid hook) re-skins the border */
+.bw-form .is-invalid,
+.bw-form input:user-invalid, .bw-form select:user-invalid, .bw-form textarea:user-invalid{
+  border-color:var(--ds-accent-strong);
+}
+/* custom select chevron — wrap a <select> in .bw-select so appearance:none gets a
+   token-drawn caret (no SVG/data-uri; a CSS border chevron in --ds-ink-soft). */
+.bw-select{ position:relative; display:block; }
+.bw-select::after{
+  content:""; position:absolute; right:16px; top:50%; width:8px; height:8px;
+  border-right:2px solid var(--ds-ink-soft); border-bottom:2px solid var(--ds-ink-soft);
+  transform:translateY(-65%) rotate(45deg); pointer-events:none;
+}
+.bw-select select{ padding-right:40px; cursor:pointer; }
+
+/* the actions row — the submit .btn + a fine-print confidentiality / quote-only note. */
+.bw-form__actions{ display:flex; flex-wrap:wrap; align-items:center; gap:clamp(14px,2vw,22px); margin-top:clamp(22px,2.6vw,32px); }
+.bw-form__actions .btn{ flex:0 0 auto; }
+.bw-form__note{
+  font-family:var(--ds-font-mono); font-size:11px; letter-spacing:.04em; color:var(--ds-ink-soft);
+  display:inline-flex; align-items:center; gap:9px; margin:0; min-width:0;
+}
+.bw-form__note .dot{ width:7px; height:7px; flex:0 0 auto; border-radius:var(--ds-r-pill); background:var(--ds-accent-bright); box-shadow:var(--ds-glow); }
+
+/* STATIC success — the post-submit confirmation. Hidden until JS adds .is-sent to the
+   form (preventDefault); then the fields swap out for this inline confirmation. The
+   only display:none is this not-yet-shown panel, so the form renders fully on load. */
+.bw-form__success{ display:none; text-align:center; padding:clamp(8px,2vw,20px) 0; }
+.bw-form.is-sent .bw-form__fields{ display:none; }
+.bw-form.is-sent .bw-form__success{ display:block; }
+.bw-form__success-ico{
+  width:54px; height:54px; margin:0 auto var(--ds-space-lg); border-radius:var(--ds-r-pill);
+  background:var(--ds-accent-soft); border:1px solid var(--ds-divider);
+  display:grid; place-items:center; box-shadow:var(--ds-glow);
+}
+.bw-form__success-ico::after{
+  content:""; width:11px; height:20px; margin-top:-5px;
+  border-right:3px solid var(--ds-accent); border-bottom:3px solid var(--ds-accent);
+  transform:rotate(45deg);
+}
+.bw-form__success-h{
+  font-family:var(--ds-font-display); font-weight:600; text-transform:uppercase;
+  letter-spacing:var(--ds-tracking-disp); line-height:1.1;
+  font-size:clamp(20px,2.2vw,28px); color:var(--ds-ink); margin:0 0 var(--ds-space-sm);
+}
+.bw-form__success-d{ font-family:var(--ds-font-body); font-size:15px; line-height:var(--ds-lh-body); color:var(--ds-ink-soft); margin:0 auto; max-width:34em; }
+
+/* (2) LEGAL DOCUMENT (T-LEGAL) — a single ~760px reading measure that styles RAW
+   flowing prose children (no per-node class needed). Legal vertical rhythm: generous
+   paragraph leading, clear heading steps, anchored headings clear the fixed header. */
+.bw-legal{ max-width:760px; }
+.bw-legal > :first-child{ margin-top:0; }
+.bw-legal > :last-child{ margin-bottom:0; }
+.bw-legal p{
+  font-family:var(--ds-font-body); font-size:16px; line-height:1.72; color:var(--ds-ink-soft);
+  margin:0 0 var(--ds-space-lg); max-width:68ch;
+}
+.bw-legal h2{
+  font-family:var(--ds-font-display); font-weight:600; text-transform:uppercase;
+  letter-spacing:var(--ds-tracking-disp); line-height:1.12; font-size:clamp(22px,2.6vw,30px);
+  color:var(--ds-ink); margin:clamp(40px,5vw,64px) 0 var(--ds-space-md);
+  scroll-margin-top:clamp(90px,12vh,120px);            /* anchored TOC jumps clear the fixed header */
+}
+.bw-legal h3{
+  font-family:var(--ds-font-display); font-weight:600; text-transform:uppercase;
+  letter-spacing:.01em; line-height:1.16; font-size:clamp(17px,1.8vw,21px);
+  color:var(--ds-ink); margin:clamp(28px,3.4vw,40px) 0 var(--ds-space-sm);
+  scroll-margin-top:clamp(90px,12vh,120px);
+}
+.bw-legal ul, .bw-legal ol{ margin:0 0 var(--ds-space-lg); padding-left:1.5em; color:var(--ds-ink-soft); }
+.bw-legal li{ font-family:var(--ds-font-body); font-size:16px; line-height:1.72; margin:0 0 var(--ds-space-sm); max-width:663px; }  /* 663px = 66ch in the Poppins body font; A3 gate flags ch on body-font text */
+.bw-legal li::marker{ color:var(--ds-accent); }
+.bw-legal a{
+  color:var(--ds-accent); text-decoration:underline; text-underline-offset:2px; text-decoration-thickness:1px;
+  transition:color var(--ds-dur-fast) var(--ds-ease);
+}
+.bw-legal a:hover{ color:var(--ds-accent-strong); }
+.bw-legal strong, .bw-legal b{ color:var(--ds-ink); font-weight:600; }
+.bw-legal em, .bw-legal i{ color:var(--ds-ink-soft); }
+.bw-legal hr{ border:0; height:1px; background:var(--ds-divider); margin:clamp(32px,4vw,48px) 0; }
+/* the title + effective-date line at the top of the document */
+.bw-legal__effective{ font-family:var(--ds-font-mono); font-size:12px; letter-spacing:.04em; color:var(--ds-ink-soft); margin:0 0 clamp(28px,3.4vw,44px); }
+/* a visible REPRESENTATIVE / not-binding callout banner (honesty fence — never asserts
+   binding legal text). A left-accented note that reads clearly above the prose. */
+.bw-legal__callout{
+  border:1px solid var(--ds-divider); border-left:3px solid var(--ds-accent);
+  border-radius:var(--ds-r-control); background:var(--ds-accent-soft);
+  padding:clamp(14px,2vw,20px) clamp(16px,2.2vw,24px); margin:0 0 clamp(28px,3.4vw,44px);
+  font-family:var(--ds-font-body); font-size:14px; line-height:1.62; color:var(--ds-ink);
+}
+.bw-legal__callout strong{ color:var(--ds-ink); }
+
+/* (3) TABLE OF CONTENTS (T-LEGAL) — a compact anchored-link list. .bw-toc is the
+   default (a bordered card of jump links); .bw-toc--rail makes it a desktop sticky
+   side-rail (the 2-col arrangement itself lives on .row--stretch + cols, not here). */
+.bw-toc{
+  border:1px solid var(--ds-divider); border-radius:var(--ds-r-surface);
+  background:linear-gradient(180deg, var(--ds-bg-surface-2) 0%, var(--ds-bg-surface) 100%);
+  box-shadow:var(--ds-shadow-card);
+  padding:clamp(18px,2vw,26px);
+}
+.bw-toc__title{
+  font-family:var(--ds-font-mono); font-size:11px; letter-spacing:var(--ds-tracking-label);
+  text-transform:uppercase; color:var(--ds-accent); margin:0 0 var(--ds-space-md);
+  display:inline-flex; align-items:center; gap:10px;
+}
+.bw-toc__title::before{ content:""; width:22px; height:1px; background:var(--ds-divider); }
+.bw-toc__list{ list-style:none; margin:0; padding:0; display:grid; gap:2px; counter-reset:bw-toc; }
+.bw-toc__item{ margin:0; min-width:0; }
+.bw-toc__link{
+  display:flex; align-items:baseline; gap:10px; min-width:0;
+  font-family:var(--ds-font-body); font-size:14px; line-height:1.4; color:var(--ds-ink-soft);
+  padding:7px 9px; border-radius:var(--ds-r-control);
+  transition:color var(--ds-dur-fast) var(--ds-ease), background-color var(--ds-dur-fast) var(--ds-ease);
+}
+.bw-toc__link::before{
+  counter-increment:bw-toc; content:counter(bw-toc, decimal-leading-zero);
+  font-family:var(--ds-font-mono); font-size:11px; color:var(--ds-accent);
+  font-variant-numeric:tabular-nums; flex:0 0 auto;
+}
+.bw-toc__link:hover{ color:var(--ds-ink); background:var(--ds-accent-soft); }
+.bw-toc__link.is-active,
+.bw-toc__link[aria-current="true"]{ color:var(--ds-accent); background:var(--ds-accent-soft); }
+/* the desktop STICKY side-rail variant — sticks below the fixed header; unsticks to a
+   normal block once the layout collapses to one column (<=1024). */
+.bw-toc--rail{
+  position:sticky; top:clamp(90px,12vh,120px); align-self:start;
+  max-height:calc(100vh - clamp(108px,15vh,150px)); overflow:auto;
+}
+
+/* ---- T-CONTACT / T-LEGAL STRUCTURES · RESPONSIVE -------------------------------- */
+@media (max-width:1024px){
+  /* the TOC rail stops sticking once the doc collapses to a single column — it becomes
+     a normal block (typically rendered ABOVE the prose in source order). */
+  .bw-toc--rail{ position:static; top:auto; max-height:none; overflow:visible; }
+}
+@media (max-width:640px){
+  .bw-form{ padding:clamp(18px,5vw,28px); }
+  .bw-form__grid{ grid-template-columns:1fr; }         /* fields stack 1-up at phone width */
+  .bw-form__actions{ gap:14px; }
+  .bw-form__actions .btn{ width:100%; justify-content:center; }
+}

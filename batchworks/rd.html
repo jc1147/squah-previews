@@ -1,0 +1,881 @@
+<!-- BATCHWORKS shared chrome shell. build.mjs wraps each pages/<slug>.content.html in
+     this template and fills the per-build slots in the <head> below (title, meta
+     description, noindex, the cache-busted design CSS links, the per-page signature
+     CSS) plus the page content slot in <main>. NOTE: do not repeat any slot token in
+     this comment -- build.mjs fills only the FIRST occurrence of each, so a token named
+     here would steal the real <head> slot's fill (see build.mjs HEADER_MODS note).
+
+     CHROME = LOCKED BLOCK, NOT grammar-governed (2026-06-24, owner decision). The chrome
+     regions -- header, the #mega mega-menu panel, the #mobile-drawer, the pre-footer closing
+     CTA, and the footer -- are sourced VERBATIM from the chrome stage's winner
+     (_design/_tournament/chrome-c/preview.html). They are a LOCKED BLOCK and are NOT wrapped
+     in the section -> div.container -> div.row -> div.col -> OBJECT grammar. The FORCED
+     DOM-STRUCTURE GRAMMAR (G-DOM) governs the <main>/BODY content ONLY; verify-dom-structure
+     SKIPS the chrome regions. The retrofit that wrapped the chrome in .container/.row/.col
+     BROKE it -- it made the mega feature panel a grid CELL (collapsed to ~235px content
+     height) instead of a DIRECT child of the mega inner grid (which stretches it to the
+     column height ~424px). The structure below restores chrome-c's exact DOM: in #mega, the
+     mega feature panel and the mega columns are DIRECT children of the mega inner grid (no
+     .col wrappers). The MANDATORY chrome guard is verify-chrome-parity.mjs -- it RENDERS the
+     built chrome vs the locked chrome reference (chrome-c/preview.html) at header / mega-open /
+     mobile-drawer states and BLOCKS on any divergence (e.g. the 235-vs-424 feature-panel bug).
+     All chrome BEHAVIORS are preserved verbatim (the JS selects #siteHeader / #megaWrap /
+     #megaTrigger / #mega / #hamburger / #mobile-drawer / #drawerScrim / #drawerClose /
+     #accTrigger / #accPanel and the hero / closing-CTA / footer / sticky bar). The the head/content slots
+     below replace chrome-c's hard-coded values; the chrome DOM is otherwise byte-faithful. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>rd | BatchWorks</title>
+<meta name="description" content="">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="design-system/tokens.css?v=e2e311a0">
+  <link rel="stylesheet" href="design-system/chrome.css?v=8190dd34">
+  <link rel="stylesheet" href="design-system/structural.css?v=e246022f">
+
+</head>
+<body class="surface-dark">
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- ═══════════════════════════ HEADER (LOCKED BLOCK · NAV-PATTERNS.md #13) ═══════════════════════════
+     Sourced VERBATIM from chrome-c/preview.html. NOT wrapped in the DOM-structure grammar. -->
+<header class="site-header" id="siteHeader">
+  <div class="container site-header__bar">
+
+    <!-- logo lockup with the PROMINENT dial mark (Concept C) -->
+    <a class="brand" href="index.html" aria-label="BatchWorks home">
+      <svg class="brand__mark" viewBox="0 0 100 100" role="img" aria-label="BatchWorks dial mark">
+        <circle class="ring-o" cx="50" cy="50" r="44"/>
+        <circle class="ring-i" cx="50" cy="50" r="29"/>
+        <line class="cross" x1="50" y1="6" x2="50" y2="94"/>
+        <line class="cross" x1="6" y1="50" x2="94" y2="50"/>
+        <line class="tick" x1="50" y1="6"  x2="50" y2="18"/>
+        <line class="tick" x1="50" y1="82" x2="50" y2="94"/>
+        <line class="tick" x1="6"  y1="50" x2="18" y2="50"/>
+        <line class="tick" x1="82" y1="50" x2="94" y2="50"/>
+        <circle class="node" cx="50" cy="50" r="8"/>
+      </svg>
+      <span class="brand__name">Batch<span class="lo">Works</span></span>
+    </a>
+
+    <!-- #13 signature: an always-visible structural affordance beside the logo (desktop too) -->
+    <div class="nav-rail" aria-hidden="true">
+      <span class="rail-burger" title="Site index"><span></span><span></span><span></span></span>
+    </div>
+
+    <!-- center inline nav (real hrefs from sitemap.yaml) -->
+    <nav class="nav" aria-label="Primary">
+      <a class="nav__link" href="how-it-works.html">How It Works</a>
+
+      <!-- Capabilities = a caret trigger opening the DARK mega-menu panel -->
+      <div class="mega-wrap" id="megaWrap">
+        <button class="nav__link" id="megaTrigger" aria-haspopup="true" aria-expanded="false" aria-controls="mega">
+          Capabilities
+          <svg class="nav__caret" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+
+      <a class="nav__link" href="pricing.html">Pricing</a>
+      <a class="nav__link" href="about.html">About</a>
+    </nav>
+
+    <a class="btn btn--primary header-cta" href="contact.html">Request a Quote</a>
+
+    <!-- canonical mobile-drawer toggle (CVV functional contract: .site-header__hamburger -> #mobile-drawer) -->
+    <button class="site-header__hamburger" id="hamburger"
+            aria-label="Open menu" aria-controls="mobile-drawer" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <!-- ── DARK MEGA-MENU PANEL · Capabilities (groups the 9 feature pages + view-all anchor) ──
+       .mega__feature + .mega__col are DIRECT children of .mega__inner (no .col wrappers) - this is
+       what restores the ~424px feature-panel stretch (the 235-vs-424 bug the retrofit caused). -->
+  <div class="mega" id="mega" role="region" aria-label="Capabilities">
+    <div class="container">
+      <div class="mega__inner surface-dark">
+
+        <!-- featured showcase zone. The chrome supplies .mega__feature VERBATIM; the foundation adds a REAL
+             photo (joints-production.jpg) BEHIND the feature text via the bw-mega-feat scoped wrapper
+             (defined in structural.css, NOT chrome.css) - it rides the OBJECT, the direct-child nesting is intact. -->
+        <div class="mega__feature bw-mega-feat">
+          <img class="bw-mega-feat__img" src="assets/joints-production.jpg" width="640" height="460"
+               alt="Pre-rolled joints being produced by the BatchWorks robotics line">
+          <span class="mega__feat-eyebrow">Flagship · operator to operator</span>
+          <h3 class="mega__feat-h">Pre-roll, <span class="ac">at scale</span></h3>
+          <p class="mega__feat-sub">A per-strain robotics line with a human-QC finish - the proven flagship the whole shop is built around.</p>
+          <a class="mega__feat-link" href="pre-roll.html">See the flagship →</a>
+        </div>
+
+        <!-- PRODUCTS group -->
+        <div class="mega__col">
+          <p class="mega__lbl">Products</p>
+          <div class="mega__list">
+            <a class="mega__item" href="pre-roll.html">
+              <span class="mega__ico"><svg viewBox="0 0 24 24"><path d="M3 14l14-9 4 4-9 14H7l-4-4z"/></svg></span>
+              <span><span class="mega__it-name">Pre-Roll</span><span class="mega__it-desc">Robotics line · flagship</span></span>
+            </a>
+            <a class="mega__item" href="concentrates.html">
+              <span class="mega__ico"><svg viewBox="0 0 24 24"><path d="M7 3h10M9 3v6l-5 9a2 2 0 002 3h12a2 2 0 002-3l-5-9V3"/></svg></span>
+              <span><span class="mega__it-name">Concentrates</span><span class="mega__it-desc">Extraction &amp; refinement</span></span>
+            </a>
+            <a class="mega__item" href="distillate.html">
+              <span class="mega__ico"><svg viewBox="0 0 24 24"><path d="M6 2v6l-3 7a2 2 0 002 3h14a2 2 0 002-3l-3-7V2M6 2h12"/></svg></span>
+              <span><span class="mega__it-name">Distillate</span><span class="mega__it-desc">High-purity oil</span></span>
+            </a>
+            <a class="mega__item" href="edibles.html">
+              <span class="mega__ico"><svg viewBox="0 0 24 24"><path d="M4 13a8 8 0 0116 0M2 13h20M6 17h12"/></svg></span>
+              <span><span class="mega__it-name">Edibles</span><span class="mega__it-desc">Dosed formats</span></span>
+            </a>
+            <a class="mega__item" href="gummies.html">
+              <span class="mega__ico"><svg viewBox="0 0 24 24"><rect x="4" y="8" width="16" height="11" rx="3"/><path d="M8 8V6a4 4 0 018 0v2"/></svg></span>
+              <span><span class="mega__it-name">Gummies</span><span class="mega__it-desc">Pectin &amp; gelatin</span></span>
+            </a>
+            <a class="mega__item" href="vapes-carts.html">
+              <span class="mega__ico"><svg viewBox="0 0 24 24"><rect x="9" y="2" width="6" height="20" rx="2"/><path d="M9 7h6"/></svg></span>
+              <span><span class="mega__it-name">Vapes &amp; Carts</span><span class="mega__it-desc">510 &amp; all-in-one</span></span>
+            </a>
+          </div>
+        </div>
+
+        <!-- SERVICES group -->
+        <div class="mega__col">
+          <p class="mega__lbl">Services</p>
+          <div class="mega__list">
+            <a class="mega__item" href="packaging.html">
+              <span class="mega__ico"><svg viewBox="0 0 24 24"><path d="M3 7l9-4 9 4-9 4-9-4zM3 7v10l9 4 9-4V7M12 11v10"/></svg></span>
+              <span><span class="mega__it-name">Packaging</span><span class="mega__it-desc">Compliant &amp; retail-ready</span></span>
+            </a>
+            <a class="mega__item" href="white-label.html">
+              <span class="mega__ico"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 9h8M8 13h5"/></svg></span>
+              <span><span class="mega__it-name">White-Label <span class="flag">partner</span></span><span class="mega__it-desc">Your brand, our line</span></span>
+            </a>
+            <a class="mega__item" href="rd.html">
+              <span class="mega__ico"><svg viewBox="0 0 24 24"><path d="M9 3v6l-5 9a2 2 0 002 3h12a2 2 0 002-3l-5-9V3M9 3h6M8 16h8"/></svg></span>
+              <span><span class="mega__it-name">R&amp;D</span><span class="mega__it-desc">Idea-to-shelf formulation</span></span>
+            </a>
+          </div>
+
+          <!-- the "view all capabilities" anchor (Concept C requirement) -->
+          <div class="mega__viewall">
+            <span class="mega__viewall-txt">Full-service umbrella - pre-roll flagship.</span>
+            <a href="how-it-works.html">View all capabilities <span aria-hidden="true">→</span></a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════════════════ MOBILE DRAWER (LOCKED BLOCK · accordion · canonical contract) ═══════════════════════════
+     Sourced VERBATIM from chrome-c/preview.html. NOT wrapped in the DOM-structure grammar. The chrome JS contract
+     (#mobile-drawer[aria-hidden] toggled by .site-header__hamburger, + .drawer-scrim) is untouched. -->
+<aside id="mobile-drawer" aria-hidden="true" aria-label="Mobile menu">
+  <div class="drawer__head">
+    <a class="brand" href="index.html" aria-label="BatchWorks home">
+      <svg class="brand__mark" viewBox="0 0 100 100" aria-hidden="true">
+        <circle class="ring-o" cx="50" cy="50" r="44"/><circle class="ring-i" cx="50" cy="50" r="29"/>
+        <line class="tick" x1="50" y1="6" x2="50" y2="18"/><line class="tick" x1="50" y1="82" x2="50" y2="94"/>
+        <line class="tick" x1="6" y1="50" x2="18" y2="50"/><line class="tick" x1="82" y1="50" x2="94" y2="50"/>
+        <circle class="node" cx="50" cy="50" r="8"/>
+      </svg>
+      <span class="brand__name">Batch<span class="lo">Works</span></span>
+    </a>
+    <button class="drawer__close" id="drawerClose" aria-label="Close menu">&times;</button>
+  </div>
+
+  <nav class="drawer__nav" aria-label="Mobile primary">
+    <a class="drawer__link" href="how-it-works.html">How It Works</a>
+
+    <!-- Capabilities as an accordion group (mega-menu collapses to this at mobile) -->
+    <button class="acc__trigger" id="accTrigger" aria-expanded="false" aria-controls="accPanel">
+      Capabilities
+      <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8l8 8 8-8" fill="none" stroke="currentColor" stroke-linecap="round"/></svg>
+    </button>
+    <div class="acc__panel" id="accPanel">
+      <p class="acc__sub-lbl">Products</p>
+      <a class="acc__sub" href="pre-roll.html">Pre-Roll</a>
+      <a class="acc__sub" href="concentrates.html">Concentrates</a>
+      <a class="acc__sub" href="distillate.html">Distillate</a>
+      <a class="acc__sub" href="edibles.html">Edibles</a>
+      <a class="acc__sub" href="gummies.html">Gummies</a>
+      <a class="acc__sub" href="vapes-carts.html">Vapes &amp; Carts</a>
+      <p class="acc__sub-lbl">Services</p>
+      <a class="acc__sub" href="packaging.html">Packaging</a>
+      <a class="acc__sub" href="white-label.html">White-Label <span class="flag">partner</span></a>
+      <a class="acc__sub" href="rd.html">R&amp;D</a>
+      <a class="acc__sub" href="how-it-works.html" style="border-left-color:var(--ds-accent);color:var(--ds-accent);">View all capabilities →</a>
+    </div>
+
+    <a class="drawer__link" href="pricing.html">Pricing</a>
+    <a class="drawer__link" href="about.html">About</a>
+
+    <div class="drawer__cta">
+      <a class="btn btn--primary" href="contact.html">Request a Quote</a>
+    </div>
+  </nav>
+</aside>
+<div class="drawer-scrim" id="drawerScrim"></div>
+
+<!-- ═══════════════════════════ BODY (FOUNDATION FINAL · one continuous dark flow) ═══════════════════════════
+     GRAMMAR per section: section.bw-flow -> .container--full -> .row -> .col(.col--measure) -> [bw-* objects].
+     .col--measure reproduces the old .bw-wide measure EXACTLY (max-width var(--bw-measure) centred + same
+     inline padding); each bw-* layout object keeps its OWN grid/flex inside the .col, so the body renders
+     byte-identically to the pre-grammar layout. -->
+<main id="main" class="bw-body">
+<!-- BatchWorks /rd - T-FEATURE (F2). COMPOSED 2026-06-27 from _copy/rd.md + the locked
+     batchworks-*.css system + the G-DOM grammar. BULK build ON the LOCKED concentrates
+     T-FEATURE template, VARIED to a DISTINCT shape per the variety plan (LCS 0.556 vs
+     concentrates; differs from edibles, the other .bw-demo page, at every non-constant slot).
+     SECTION SEQUENCE (tokens H,MC,MG,DM,PR,SP,CG,ST,QM):
+       §1 hero (.bw-hero, image+measure) · §2 pain MEDIA+COMPARE TABLE (.bw-mediacompare:
+       a bench prototype vs 10,000 consistent units) · §3 pillars MEDIA+2x2 (.bw-media-grid,
+       automation-line - the production line a prototype graduates onto) · §4 capability LIVE
+       PROCESS RAIL (.bw-demo, MEDIA-LESS: ideate -> formulate -> prototype -> test -> deploy
+       at scale, shown running) · §5 proof LIGHT (.bw-proof, cannabis-flower-qc) · §6 replaces
+       SPLIT (.bw-split, full-service-umbrella) · §7 cross-link 3-UP CARDS (.bw-cap__grid) ·
+       §8 faq STEPS (.bw-steps) · §9 pricing QUOTE-MODEL (.bw-qm).
+     A FRONT-LOADED compare -> grid -> running-rail shape: the pain opens as a prototype-vs-scale
+     COMPARE TABLE, the pillars are a media+2x2, and the capability renders the R&D PATH itself as
+     the LIVE PROCESS RAIL (the distinct lever) - the most distinct-from-concentrates ordering.
+     SECTION-PATTERN VARIETY (G-SVAR): no two ADJACENT sections share a shape -
+       §1 image+measure hero · §2 capped-media + compare-table · §3 media + 2x2 card grid ·
+       §4 horizontal live process rail (media-less) · §5 media-left + metrics proof (light band) ·
+       §6 copy-left + portrait-visual split · §7 3-up icon cards · §8 numbered Q-steps · §9 quote-model split.
+     CAPPED MEDIA (G-HSANE / G-MEDIA-TRACK): every real image rides the linked sheet's
+     aspect-ratio / max-height frame + an inline object-fit:cover + object-position cap (a style
+     ATTRIBUTE - shell-pure; object-fit/object-position are LAYOUT literals, not tokenized props).
+     IMAGERY (G-IMG-CAP, per-topic distinct + reuse-cap + orientation-per-pattern):
+       hero rd-formulation (NEW topic, formulation bench / prototype samples - unique to §1, exempt);
+       §2-pain rd-prototype (NEW topic, a bench prototype - the capped compare media); §3 automation-line
+       (GENERIC - the production line a prototype graduates onto, the only generic of 4 non-hero);
+       §5 cannabis-flower-qc (TOPIC - the hand-QC finish, light band); §6 full-service-umbrella (TOPIC -
+       the coordinated facility floor); §4 demo + §7 cap-grid are MEDIA-LESS. 4 distinct non-hero assets,
+       1 generic (minority) -> RULE 3 ok; every non-hero appears once -> RULE 1+2 ok.
+     Grammar per section (G-DOM): section -> div.container--full -> div.row -> div.col(.col--measure)
+       -> bw-* OBJECT. Skin (bw-*) on the OBJECT inside the .col; structure layers carry layout only.
+     FIGURE/GROUND RHYTHM: dark-dominant flow (dark hero + dark pain/replaces/faq bands) with ONE
+       light punctuation band (the proof, .bw-light).
+     HONESTY FENCE (client-rules.json honesty_fence + content-bible): rd is NOT a partner-facilitated
+       vertical - R&D at production scale is REAL on the IN-HOUSE pre-roll line (formulate, prototype,
+       test, deploy on the same line that runs production). The ~95% yield is the real owner record
+       (vs 80-85% manual), carried in §5 behind a VISIBLE "Representative example" badge for the
+       illustrative lot specifics. The wider format menu is full-service / partner-facilitated (§7).
+       Quote-only - no public price. HYPHEN-CLEAN: 0 em/en dashes. -->
+
+<!--META {"title":"Product Development & R&D | BatchWorks","desc":"Take a concept to a shelf-ready SKU without building a lab or a line. Idea-to-shelf R&D at production scale: formulate, prototype, test and deploy on the line that runs your production. Quote-only pricing for licensed Nevada brands.","css":"","darkHero":true}-->
+
+<!-- pick: HERO-COMPOSITIONS.md #5 | considered: #1,#7 | why: a full-bleed formulation-bench image with the headline on a left-weighted scrim makes idea-to-shelf the first thing the visitor reads, more industrial than the literal split #1 and calmer than the floating-stats #7 for a dark R&D opener -->
+<!-- == §1 HERO - image-led, dark. SHAPE: full-bleed image + measure-column hero (unique on the page).
+        IMAGERY: rd-formulation (NEW topic - formulation bench / prototype samples). src: D-POSITION-W5 == -->
+<section class="bw-hero hero surface-dark" aria-label="Product development and R and D at production scale">
+  <div class="container--full">
+    <div class="row">
+      <div class="col">
+        <img class="bw-hero__img" src="assets/rd-formulation.jpg" style="object-fit:cover;object-position:center 42%"
+             alt="A formulation bench lined with labeled prototype samples under raking light, the development bench where a concept becomes a shelf-ready SKU">
+      </div>
+      <div class="col col--measure">
+        <div class="bw-hero__inner">
+          <span class="bw-hero__eyebrow bw-rise">Product development &middot; idea to shelf</span>
+          <h1 class="bw-hero__h bw-rise" style="--i:1">From idea to shelf. <span class="ac">R&D at production scale.</span></h1>
+          <p class="bw-hero__sub bw-rise" style="--i:2">Take a concept all the way to a shelf-ready SKU, without building a lab or standing up a line. This is idea-to-shelf R&D run where it counts: formulate, prototype, test and deploy on the same line that runs your production, so what you prove in development is exactly what ships at volume.</p>
+          <div class="bw-hero__cta bw-rise" style="--i:3">
+            <a class="btn btn--primary" href="contact.html">Request a Quote</a>
+            <a class="btn btn--secondary" href="pricing.html">See pricing</a>
+          </div>
+          <span class="bw-hero__note bw-rise" style="--i:4"><span class="dot"></span>Develop on the line that ships &middot; you own the formula &middot; quote-only</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- pick: SECTION-COMPONENTS.md #15 | considered: #7,#29 | why: the prototype-to-production gap IS a us-versus-them call, so a compare matrix beside a single bench-prototype photo argues the gap harder than a plain problem-framing #7 or a two-photo before/after #29 -->
+<!-- == §2 PAIN-IT-KILLS - the prototype-to-production gap, a DARK band. SHAPE (ROW-PATTERNS): capped
+        media LEFT | the .bw-compare matrix RIGHT, side-by-side (.bw-mediacompare). IMAGERY: rd-prototype
+        (NEW topic - a single bench prototype, the thing that is not yet 10,000 units). src: D-POSITION-W5 == -->
+<section class="bw-flow surface-dark" aria-label="The gap between a prototype and ten thousand consistent units">
+  <div class="container--full">
+    <div class="row">
+      <div class="col col--measure">
+        <div class="bw-head bw-rise">
+          <span class="bw-eyebrow"><span class="bw-idx">01</span>The prototype-to-production gap</span>
+          <h2 class="bw-h2">A great prototype is not <span class="ac">10,000 consistent units.</span></h2>
+          <p class="bw-lede">The hard part of a new product is never the first sample. It is everything between a winning bench prototype and ten thousand finished units that come out identical, lot after lot. Most brands cross that gap by hand: a developer dials a recipe one way, the floor rebuilds it another, and the SKU that ships is not the SKU you approved.</p>
+        </div>
+
+        <div class="bw-mediacompare bw-rise" style="--i:1">
+          <figure class="bw-mediacompare__media">
+            <img src="assets/rd-prototype.jpg" style="object-fit:cover;object-position:center"
+                 alt="A single hand-built cannabis prototype on the development bench, proven on one sample but not yet a production run">
+            <figcaption class="bw-frame__badge"><span class="dot"></span>One bench prototype &middot; not yet a production run</figcaption>
+          </figure>
+          <div class="bw-compare" role="table" aria-label="Developed on the production line versus developed off the line">
+            <div class="bw-compare__row bw-compare__row--head" role="row">
+              <div class="bw-compare__cell" role="columnheader">Crossing the gap</div>
+              <div class="bw-compare__cell bw-compare__cell--us" role="columnheader">Developed on the line</div>
+              <div class="bw-compare__cell" role="columnheader">Developed off the line</div>
+            </div>
+            <div class="bw-compare__row" role="row">
+              <div class="bw-compare__cell bw-compare__cell--label" role="rowheader">Where it is proven</div>
+              <div class="bw-compare__cell bw-compare__cell--us" role="cell"><svg class="bw-mk bw-mk--yes" viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg>On the production line</div>
+              <div class="bw-compare__cell" role="cell"><svg class="bw-mk bw-mk--no" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>On a one-off bench</div>
+            </div>
+            <div class="bw-compare__row" role="row">
+              <div class="bw-compare__cell bw-compare__cell--label" role="rowheader">Unit-to-unit consistency</div>
+              <div class="bw-compare__cell bw-compare__cell--us" role="cell"><svg class="bw-mk bw-mk--yes" viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg>Same fill, burn, potency</div>
+              <div class="bw-compare__cell" role="cell"><svg class="bw-mk bw-mk--no" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>Drifts batch to batch</div>
+            </div>
+            <div class="bw-compare__row" role="row">
+              <div class="bw-compare__cell bw-compare__cell--label" role="rowheader">What ships at volume</div>
+              <div class="bw-compare__cell bw-compare__cell--us" role="cell"><svg class="bw-mk bw-mk--yes" viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg>The SKU you signed off</div>
+              <div class="bw-compare__cell" role="cell"><svg class="bw-mk bw-mk--no" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>A rebuilt approximation</div>
+            </div>
+            <div class="bw-compare__row" role="row">
+              <div class="bw-compare__cell bw-compare__cell--label" role="rowheader">Handoff translation loss</div>
+              <div class="bw-compare__cell bw-compare__cell--us" role="cell"><svg class="bw-mk bw-mk--yes" viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg>None, one line</div>
+              <div class="bw-compare__cell" role="cell"><svg class="bw-mk bw-mk--no" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>Re-interpreted on handoff</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- pick: SECTION-COMPONENTS.md #11 | considered: #13,#9 | why: a media-left frame stretched beside a 2x2 of pillar cards shows the actual production line a prototype graduates onto while the cards carry the four reasons, a stronger pairing than the busy bento #13 or the photo-less services #9 -->
+<!-- == §3 BENEFIT-PILLARS - why develop on the production line. SHAPE (FORMATS-LAW): MEDIA + 2x2 CARD
+        GRID (.bw-media-grid) - the media column STRETCHES to the grid height, the 4 cards form a 2x2
+        on the RIGHT. IMAGERY: automation-line (GENERIC - the production line a prototype graduates
+        onto; the only generic asset on the page). src: D-POSITION-W5 == -->
+<section class="bw-flow" aria-label="Why develop on the production line">
+  <div class="container--full">
+    <div class="row">
+      <div class="col col--measure">
+        <div class="bw-head bw-rise">
+          <span class="bw-eyebrow"><span class="bw-idx">02</span>Why develop where you produce</span>
+          <h2 class="bw-h2">Ideate, formulate, prototype, <span class="ac">on the line that runs production.</span></h2>
+          <p class="bw-lede">Development happens on the exact equipment that fills your runs, so the formula you settle in the lab is the formula the floor already knows how to make. No second build, no re-interpretation, no surprise when the volume order lands.</p>
+        </div>
+
+        <div class="bw-media-grid bw-rise" style="--i:1">
+          <figure class="bw-media-grid__media">
+            <img src="assets/automation-line.jpg" style="object-fit:cover;object-position:center"
+                 alt="The stainless-steel automated production line a proven prototype graduates onto, the same equipment used to develop it">
+            <figcaption class="bw-frame__badge"><span class="dot"></span>The line your prototype graduates onto</figcaption>
+          </figure>
+          <div class="bw-media-grid__cards">
+            <article class="bw-cap bw-cap--spec">
+              <div class="bw-cap__body">
+                <span class="bw-cap__ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 7l9-4 9 4-9 4-9-4zM3 7v10l9 4 9-4V7M12 11v10"/></svg></span>
+                <h3 class="bw-cap__h">One line, <span class="ac">no handoff</span></h3>
+                <p class="bw-cap__d">You ideate, formulate and prototype on the equipment that fills your runs, so nothing gets re-interpreted between the bench and the floor.</p>
+              </div>
+            </article>
+            <article class="bw-cap bw-cap--spec">
+              <div class="bw-cap__body">
+                <span class="bw-cap__ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 7-8M14 7h5v5"/></svg></span>
+                <h3 class="bw-cap__h">Proven at scale</h3>
+                <p class="bw-cap__d">A formula that holds on one hand-built sample can fall apart at volume. Developing at production scale makes the sample a proof of the run, not a hopeful preview of it.</p>
+              </div>
+            </article>
+            <article class="bw-cap bw-cap--spec">
+              <div class="bw-cap__body">
+                <span class="bw-cap__ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4zM9 12l2 2 4-4"/></svg></span>
+                <h3 class="bw-cap__h">No capital <span class="ac">project</span></h3>
+                <p class="bw-cap__d">Because the work shares equipment you already run, you trial new formats and SKUs without buying machines or staffing a separate development crew.</p>
+              </div>
+            </article>
+            <article class="bw-cap bw-cap--spec">
+              <div class="bw-cap__body">
+                <span class="bw-cap__ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg></span>
+                <h3 class="bw-cap__h">What you approve, <span class="ac">ships</span></h3>
+                <p class="bw-cap__d">Sign-off is on the real process: the spec you approve is exactly what reproduces when the volume order turns the line up.</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- pick: LIVE-DEMO-SECTIONS.md #1 | considered: #2,#27 | why: rendering the development path as an auto-running sequenced rail shows the R&D pipeline as a process in motion, a more honest read of ideate-to-deploy than a static numbered list #27 with the live-status header #2 folded into one band -->
+<!-- == §4 CAPABILITY-BREAKDOWN - the full path, shown RUNNING. SHAPE: a horizontal LIVE PROCESS RAIL
+        (.bw-demo) of 5 stage nodes on one connecting line with an auto-running accent sweep + a LIVE
+        pill - the differentiator shown working. MEDIA-LESS (the rail IS the visual). src: D-OFFER-017 == -->
+<section class="bw-flow" aria-label="The full development path, ideate to deploy at scale">
+  <div class="container--full">
+    <div class="row">
+      <div class="col col--measure">
+        <div class="bw-head bw-rise">
+          <span class="bw-eyebrow"><span class="bw-idx">03</span>The full path</span>
+          <h2 class="bw-h2">Ideate, formulate, prototype, test, <span class="ac">deploy at scale.</span></h2>
+          <p class="bw-lede">Idea-to-shelf R&D runs one unbroken path on the real production pipeline: intake and METRC compliance, biomass prep, grind and homogenize, dosing, fill and finish, dual weight checks with rejection QC, then finished-product QC and labeling. Your SKU is graded against real fill and real checks, never a lab approximation, and deploying is the same line turned up.</p>
+        </div>
+
+        <div class="bw-demo bw-rise" style="--i:1">
+          <div class="bw-demo__bar">
+            <span class="bw-demo__live"><span class="dot"></span>Pipeline running</span>
+            <span class="bw-demo__caption">One path, intake to shipped, no handoff between stages</span>
+          </div>
+          <div class="bw-demo__track">
+            <div class="bw-demo__stage" style="--i:0">
+              <div class="bw-demo__dot">1</div>
+              <div class="bw-demo__label">Ideate</div>
+              <div class="bw-demo__note">Your concept, strain and target turned into a buildable spec.</div>
+            </div>
+            <div class="bw-demo__stage" style="--i:1">
+              <div class="bw-demo__dot">2</div>
+              <div class="bw-demo__label">Formulate</div>
+              <div class="bw-demo__note">Dialed on the production equipment, not a benchtop one-off.</div>
+            </div>
+            <div class="bw-demo__stage" style="--i:2">
+              <div class="bw-demo__dot">3</div>
+              <div class="bw-demo__label">Prototype</div>
+              <div class="bw-demo__note">A first run graded on real fill, weight checks and QC.</div>
+            </div>
+            <div class="bw-demo__stage" style="--i:3">
+              <div class="bw-demo__dot">4</div>
+              <div class="bw-demo__label">Test</div>
+              <div class="bw-demo__note">COA, potency and terpene panel confirm the spec holds.</div>
+            </div>
+            <div class="bw-demo__stage" style="--i:4">
+              <div class="bw-demo__dot">5</div>
+              <div class="bw-demo__label">Deploy at scale</div>
+              <div class="bw-demo__note">The same line, turned up, reproduces the approved unit.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- pick: PROOF-SECTIONS.md #4 | considered: #5,#1 | why: a metric-led case card lands the yield economics a prototype is graded against, sharper than a soft image-and-result split #5 or a testimonial grid #1, and it inverts to the light band for the one figure/ground beat -->
+<!-- == §5 PROOF-OR-PRODUCT-UI - representative proof (F2 fabricated-fallback). SHAPE: the ONE light
+        punctuation band (.bw-light) - media-left + metrics-right. IMAGERY: cannabis-flower-qc (TOPIC -
+        the hand-QC finish). HONESTY: VISIBLE "Representative example" badge + disclosure line; the
+        ~95% / 80-85% yield facts trace to the real owner record, never re-attributed. src: D-OFFER-010 == -->
+<section class="bw-flow bw-light" aria-label="Development held to the production line yield discipline">
+  <div class="container--full">
+    <div class="row">
+      <div class="col col--measure">
+        <div class="bw-proof">
+          <figure class="bw-proof__media bw-rise">
+            <img src="assets/cannabis-flower-qc.jpg" style="object-fit:cover;object-position:center"
+                 alt="Cannabis flower under hand inspection on the QC bench, the finish discipline every development lot is held to">
+            <figcaption class="bw-frame__badge"><span class="dot"></span>Representative example, real lot data swaps in</figcaption>
+          </figure>
+          <div class="bw-rise" style="--i:1">
+            <span class="bw-eyebrow"><span class="bw-idx">04</span>What the discipline buys you</span>
+            <p class="bw-proof__q">Graded on the yield <span class="ac">production will actually hit.</span></p>
+            <p class="bw-lede" style="margin-bottom:var(--ds-space-lg)">The line runs at a measurable yield, ~95% average versus 80-85% on a manual operation, so a prototype is costed on the 95% yield numbers the floor really delivers. Its economics are real, not optimistic, and recovered grams are recovered margin.</p>
+            <div class="bw-proof__metrics">
+              <div class="bw-metric"><div class="bw-metric__n">~95<small>%</small></div><div class="bw-metric__l">Yield target vs 80-85% uncontrolled</div></div>
+              <div class="bw-metric"><div class="bw-metric__n">COA</div><div class="bw-metric__l">Per development lot &middot; potency + terpene</div></div>
+              <div class="bw-metric"><div class="bw-metric__n">1</div><div class="bw-metric__l">Per-strain runs, no pooled-batch bleed</div></div>
+            </div>
+            <p class="bw-qm__fine"><span class="dot"></span>Representative example, marked swappable; the yield figures trace to the real owner record, real lot data swaps in when supplied.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- pick: SECTION-COMPONENTS.md #7 | considered: #11,#15 | why: the replaces beat frames the build-a-lab trap as the problem, so a copy-left problem split with a portrait facility visual and a hard headcount stat reads more pointed than the pillar split #11 or another compare matrix #15 -->
+<!-- == §6 REPLACES-BLOCK - what this replaces. SHAPE: copy-left + a PORTRAIT visual (.bw-split, the
+        bw-tex--portrait media fills the column) with a hard headcount stat badge. IMAGERY:
+        full-service-umbrella (TOPIC - the facility floor you develop on instead of building).
+        src: D-INCUMBENT-ROLLROOM == -->
+<section class="bw-flow surface-dark" aria-label="What routing R and D through BatchWorks replaces">
+  <div class="container--full">
+    <div class="row">
+      <div class="col col--measure">
+        <div class="bw-split">
+          <div class="bw-split__copy bw-rise">
+            <span class="bw-eyebrow"><span class="bw-idx">05</span>What this replaces</span>
+            <h2 class="bw-h2">Replaces building a lab <span class="ac">to develop one SKU.</span></h2>
+            <p class="bw-lede">Doing it the conventional way means building the capability before you prove the product: a lab or a new facility, equipment to depreciate, and a development team on payroll. It is the same trap as the in-house roll room, a semi-manual operation that runs on a 6-10 person crew you carry whether or not the launch lands. Route the work through BatchWorks and you develop on a line that already exists, paying for the work, not the building.</p>
+            <ul class="bw-split__list">
+              <li>No lab build-out and no new facility to stand up first.</li>
+              <li>No 10-person development payroll carried before a SKU is proven.</li>
+              <li>You keep the formula, the brand and the SKU; they stay yours.</li>
+            </ul>
+          </div>
+          <div class="bw-split__visual bw-rise" style="--i:1">
+            <div class="bw-tex bw-tex--portrait">
+              <img src="assets/full-service-umbrella.jpg" style="object-fit:cover;object-position:center 40%"
+                   alt="The coordinated full-service facility floor you develop a SKU on instead of building a lab of your own">
+              <div class="bw-tex__badge">
+                <b>6-10</b>
+                <span>person crew a build-it-yourself lab carries</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- pick: CARD-VARIATIONS.md #1 | considered: #4,#3 | why: three dark service tiles with an icon and a view-more link route onward to the flagship, white-label and pricing in one scannable row, cleaner than the arrow-circle card #4 or the minimal icon-top #3 for a cross-link rail -->
+<!-- == §7 CROSS-LINK-RAIL - part of the full-service umbrella. SHAPE: a 3-up icon card grid
+        (.bw-cap__grid), INLINE links only (NOT a closing CTA band - the chrome .precta is the single
+        site-wide closing band). Links: pre-roll, white-label, pricing. src: D-POSITION-W6 == -->
+<section class="bw-flow" aria-label="Part of the full-service umbrella">
+  <div class="container--full">
+    <div class="row">
+      <div class="col col--measure">
+        <div class="bw-head bw-rise">
+          <span class="bw-eyebrow"><span class="bw-idx">06</span>Part of the full-service umbrella</span>
+          <h2 class="bw-h2">One umbrella, <span class="ac">idea to shipped.</span></h2>
+          <p class="bw-lede">R&D sits under a full-service one-stop umbrella; the in-house flagship is pre-roll, and the wider format menu is partner-facilitated. Develop here, then launch through the rest of the program.</p>
+        </div>
+
+        <div class="bw-cap__grid bw-rise" style="--i:1">
+          <article class="bw-cap bw-cap--spec">
+            <div class="bw-cap__body">
+              <span class="bw-cap__ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 14l14-9 4 4-9 14H7l-4-4z"/></svg></span>
+              <h3 class="bw-cap__h">Pre-Roll</h3>
+              <p class="bw-cap__d">The in-house flagship line, the proven core your prototype is developed on.</p>
+              <a class="bw-link" href="pre-roll.html">See the flagship <span aria-hidden="true">&rarr;</span></a>
+            </div>
+          </article>
+          <article class="bw-cap bw-cap--spec">
+            <div class="bw-cap__body">
+              <span class="bw-cap__ico" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 9h8M8 13h5"/></svg></span>
+              <h3 class="bw-cap__h">White-Label</h3>
+              <p class="bw-cap__d">Develop and launch the new SKU under your own brand.</p>
+              <a class="bw-link" href="white-label.html">Launch under your brand <span aria-hidden="true">&rarr;</span></a>
+            </div>
+          </article>
+          <article class="bw-cap bw-cap--spec">
+            <div class="bw-cap__body">
+              <span class="bw-cap__ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg></span>
+              <h3 class="bw-cap__h">Pricing</h3>
+              <p class="bw-cap__d">How the per-unit quote model works for a development program.</p>
+              <a class="bw-link" href="pricing.html">See pricing <span aria-hidden="true">&rarr;</span></a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- pick: FAQ-ACCORDION.md #4 | considered: #1,#3 | why: a numbered no-expansion Q list answers the three real objections (what you bring, who owns the IP, timelines) in one read without hiding answers behind a click like the classic accordion #1 or splitting them two-column #3 -->
+<!-- == §8 FAQ - straight answers (numbered Q steps; a shape used nowhere else on the page).
+        src: D-POSITION-W3 == -->
+<section class="bw-flow surface-dark" aria-label="Product development frequently asked questions">
+  <div class="container--full">
+    <div class="row">
+      <div class="col col--measure">
+        <div class="bw-head bw-rise">
+          <span class="bw-eyebrow"><span class="bw-idx">07</span>Straight answers</span>
+          <h2 class="bw-h2">Development, <span class="ac">answered plainly.</span></h2>
+        </div>
+
+        <div class="bw-steps">
+          <div class="bw-step bw-rise">
+            <div class="bw-step__n">Q</div>
+            <div class="bw-step__b">
+              <h3 class="bw-h3">What do you bring, and what do we?</h3>
+              <p class="bw-step__d">You bring the concept, the strain and the target. We bring the line and the process that turns it into a repeatable, shelf-ready unit.</p>
+            </div>
+          </div>
+          <div class="bw-step bw-rise" style="--i:1">
+            <div class="bw-step__n">Q</div>
+            <div class="bw-step__b">
+              <h3 class="bw-h3">Who owns the formula and the IP?</h3>
+              <p class="bw-step__d">You do. The recipe, the brand and the finished SKU stay yours; we are the line you develop them on, nothing more.</p>
+            </div>
+          </div>
+          <div class="bw-step bw-rise" style="--i:2">
+            <div class="bw-step__n">Q</div>
+            <div class="bw-step__b">
+              <h3 class="bw-h3">Timelines and minimums?</h3>
+              <p class="bw-step__d">A spec can move on a 24-hour scope turn once the target is set. There are no minimums and no 1,000-unit floor, so a pilot and a full launch travel the same path.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- pick: SECTION-COMPONENTS.md #33 | considered: #32,#31 | why: a custom-quote driver conveys the cost MODEL with the action folded inline, the honest move for quote-only work versus publishing a single-product price #32 or a three-tier table #31 the program does not fit -->
+<!-- == §9 PRICING-INFO - how pricing works. SHAPE: a content-rich quote-model split (.bw-qm), CTA folded
+        INLINE (G-CTA1: the chrome .precta is the ONE site-wide closing band; this section adds NO second
+        closing/quote-CTA band). NO public price. src: D-POSITION-W4, D-OFFER-006 == -->
+<section class="bw-flow" aria-label="How product development pricing works">
+  <div class="container--full">
+    <div class="row">
+      <div class="col col--measure">
+        <div class="bw-qm">
+          <div class="bw-rise">
+            <span class="bw-eyebrow"><span class="bw-idx">08</span>How pricing works</span>
+            <h2 class="bw-qm__model">A variable per-unit cost, <span class="ac">quoted to your program.</span></h2>
+            <p class="bw-lede" style="margin-top:var(--ds-space-md)">Development is priced the way the whole shop is: a variable per-unit cost set against your formats, volume and finish. It is quote-only pricing, no public number, because the right rate follows the program, not a sticker.</p>
+          </div>
+          <div class="bw-qm__ask bw-rise" style="--i:1">
+            <h3 class="bw-qm__ask-h">What the quote model gives you.</h3>
+            <p class="bw-qm__ask-d">A fixed development payroll becomes a number you spend only when you produce. With no minimums and no 1,000-unit floor, a pilot and a full launch are costed on the same path, scaled to your volume. Tell us the SKUs and the numbers and the quote follows your mix.</p>
+            <p class="bw-cap__spec"><span>MODEL <b>per-unit</b></span><span>MINIMUMS <b>none</b></span><span>PRICING <b>quote-only</b></span></p>
+            <p class="bw-qm__fine"><span class="dot"></span>Quote-only pricing &middot; you own the IP &middot; <a class="bw-link" href="contact.html">tell us your SKUs and your volume <span aria-hidden="true">&rarr;</span></a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ═══════════════════════════ PRE-FOOTER CLOSING CTA (LOCKED BLOCK · FOOTER-STYLES.md #21) ═══════════════════════════
+     Sourced VERBATIM from chrome-c/preview.html. NOT wrapped in the DOM-structure grammar. It sits OUTSIDE <main>
+     (a top-level locked-block section), exactly like chrome-c. -->
+<section class="precta">
+  <div class="container precta__inner">
+    <div>
+      <p class="precta__eyebrow">Ready when you are</p>
+      <h2 class="precta__h">Tell us your SKUs and your <span class="ac">volume.</span></h2>
+    </div>
+    <div class="precta__side">
+      <span class="precta__guarantee"><span class="dot"></span>COA on file · human-QC finish · no minimums</span>
+      <a class="btn btn--primary" href="contact.html">Request a Quote</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ FOOTER (LOCKED BLOCK · multi-row columns) ═══════════════════════════
+     Sourced VERBATIM from chrome-c/preview.html. NOT wrapped in the DOM-structure grammar. -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer__grid">
+
+      <div class="footer__brand">
+        <a class="brand" href="index.html" aria-label="BatchWorks home">
+          <svg class="brand__mark" viewBox="0 0 100 100" aria-hidden="true">
+            <circle class="ring-o" cx="50" cy="50" r="44"/><circle class="ring-i" cx="50" cy="50" r="29"/>
+            <line class="tick" x1="50" y1="6" x2="50" y2="18"/><line class="tick" x1="50" y1="82" x2="50" y2="94"/>
+            <line class="tick" x1="6" y1="50" x2="18" y2="50"/><line class="tick" x1="82" y1="50" x2="94" y2="50"/>
+            <circle class="node" cx="50" cy="50" r="8"/>
+          </svg>
+          <span class="brand__name">Batch<span class="lo">Works</span></span>
+        </a>
+        <p class="footer__tag">Cannabis manufacturing, operator to operator. Pre-roll flagship, full-service umbrella.</p>
+        <span class="footer__honesty"><span class="dot"></span>Some lines partner-facilitated</span>
+      </div>
+
+      <div class="footer__col">
+        <h4>Capabilities</h4>
+        <ul>
+          <li><a href="pre-roll.html">Pre-Roll</a></li>
+          <li><a href="concentrates.html">Concentrates</a></li>
+          <li><a href="distillate.html">Distillate</a></li>
+          <li><a href="edibles.html">Edibles</a></li>
+          <li><a href="gummies.html">Gummies</a></li>
+          <li><a href="vapes-carts.html">Vapes &amp; Carts</a></li>
+          <li><a href="packaging.html">Packaging</a></li>
+          <li><a href="white-label.html">White-Label</a></li>
+          <li><a href="rd.html">R&amp;D</a></li>
+        </ul>
+      </div>
+
+      <div class="footer__col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="how-it-works.html">How It Works</a></li>
+          <li><a href="pricing.html">Pricing</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Request a Quote</a></li>
+        </ul>
+      </div>
+
+      <div class="footer__col">
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="privacy.html">Privacy</a></li>
+          <li><a href="terms.html">Terms</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="footer__bar">
+      <span class="footer__copy">© 2026 BatchWorks · Cannabis manufacturing</span>
+      <nav class="footer__legal" aria-label="Legal">
+        <a href="privacy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══════════════════════════ STICKY CTA (LOCKED BLOCK · STICKY-CTA-BAR.md #2 dual-button · mobile) ═══════════════════════════
+     A top-level fixed overlay sourced VERBATIM from chrome-c/preview.html. NOT a grammar root. -->
+<div class="sticky-cta" aria-label="Quick actions">
+  <a class="btn btn--primary" href="contact.html">Request a Quote</a>
+  <a class="btn btn--secondary" href="how-it-works.html">See process</a>
+</div>
+
+<script>
+/* ───────────────────────────────────────────────────────────────────────────
+   CHROME SCRIPT - copied VERBATIM from _tournament/chrome-c/preview.html
+   (glass scroll-state · desktop mega hover-intent · canonical mobile drawer +
+   accordion · STICKY-CTA §2.3 two-observer behavior). The chrome is a LOCKED
+   BLOCK; the markup above is un-retrofitted to match chrome-c byte-faithfully, so
+   every id/class the JS selects (#siteHeader, #megaWrap, #megaTrigger, #mega,
+   #hamburger, #mobile-drawer, #drawerScrim, #drawerClose, #accTrigger, #accPanel,
+   .hero, .precta, .site-footer, .sticky-cta) resolves exactly as in chrome-c.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+/* ── glass scroll-state ── */
+(function(){
+  var h = document.getElementById('siteHeader');
+  function onScroll(){ if (window.scrollY > 40) h.classList.add('is-scrolled'); else h.classList.remove('is-scrolled'); }
+  window.addEventListener('scroll', onScroll, { passive:true }); onScroll();
+})();
+
+/* ── desktop mega-menu: hover-intent (group-hover + no-gap bridge + JS close-delay ~240ms) + click + keyboard ── */
+(function(){
+  var wrap = document.getElementById('megaWrap');
+  var trigger = document.getElementById('megaTrigger');
+  var mega = document.getElementById('mega');
+  if(!wrap || !trigger || !mega) return;
+  var closeTimer = null;
+  function open(){ clearTimeout(closeTimer); mega.classList.add('is-open'); trigger.setAttribute('aria-expanded','true'); }
+  function close(){ mega.classList.remove('is-open'); trigger.setAttribute('aria-expanded','false'); }
+  function scheduleClose(){ clearTimeout(closeTimer); closeTimer = setTimeout(close, 240); }
+  trigger.addEventListener('mouseenter', open);
+  trigger.addEventListener('mouseleave', scheduleClose);
+  mega.addEventListener('mouseenter', function(){ clearTimeout(closeTimer); });
+  mega.addEventListener('mouseleave', scheduleClose);
+  trigger.addEventListener('click', function(e){ e.preventDefault(); (mega.classList.contains('is-open') ? close() : open()); });
+  trigger.addEventListener('keydown', function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); open(); } });
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ close(); } });
+  document.addEventListener('click', function(e){ if(!wrap.contains(e.target) && !mega.contains(e.target)) close(); });
+})();
+
+/* ── mobile drawer (canonical contract: .site-header__hamburger -> #mobile-drawer[aria-hidden]) ── */
+(function(){
+  var burger = document.getElementById('hamburger');
+  var drawer = document.getElementById('mobile-drawer');
+  var scrim = document.getElementById('drawerScrim');
+  var closeBtn = document.getElementById('drawerClose');
+  if(!burger || !drawer) return;
+  function openDrawer(){ drawer.setAttribute('aria-hidden','false'); burger.setAttribute('aria-expanded','true');
+    if(scrim) scrim.classList.add('is-open'); document.body.style.overflow='hidden'; }
+  function closeDrawer(){ drawer.setAttribute('aria-hidden','true'); burger.setAttribute('aria-expanded','false');
+    if(scrim) scrim.classList.remove('is-open'); document.body.style.overflow=''; }
+  burger.addEventListener('click', function(){ (drawer.getAttribute('aria-hidden')==='false' ? closeDrawer() : openDrawer()); });
+  if(closeBtn) closeBtn.addEventListener('click', closeDrawer);
+  if(scrim) scrim.addEventListener('click', closeDrawer);
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape' && drawer.getAttribute('aria-hidden')==='false') closeDrawer(); });
+
+  var accT = document.getElementById('accTrigger');
+  var accP = document.getElementById('accPanel');
+  if(accT && accP){
+    accT.addEventListener('click', function(){
+      var open = accP.classList.toggle('is-open');
+      accT.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+  }
+})();
+
+/* ── STICKY-CTA scroll behavior (_SCROLL-STICKY-BEHAVIOR-LIBRARY §2.3) ── */
+(function(){
+  var bar = document.querySelector('.sticky-cta');
+  if(!bar || !('IntersectionObserver' in window)) return;
+  var hero     = (document.querySelector('.hero')||document.querySelector('main>section')||document.querySelector('main>*'));
+  var realCta  = document.querySelector('.precta');
+  var footer   = document.querySelector('.site-footer');
+  if(!hero) return;
+  bar.classList.add('js-sticky');
+  var pastHero = false, atEnd = false;
+  function apply(){ bar.classList.toggle('is-revealed', pastHero && !atEnd); }
+  new IntersectionObserver(function(entries){
+    pastHero = !entries[0].isIntersecting; apply();
+  }, { threshold: 0, rootMargin: '0px 0px -10% 0px' }).observe(hero);
+  var endEls = [realCta, footer].filter(Boolean);
+  if(endEls.length){
+    var seen = new WeakSet();
+    var endObs = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if(e.isIntersecting) seen.add(e.target); else seen.delete(e.target); });
+      atEnd = endEls.some(function(el){ return seen.has(el); });
+      apply();
+    }, { threshold: 0.01 });
+    endEls.forEach(function(el){ endObs.observe(el); });
+  }
+})();
+
+/* ───────────────────────────────────────────────────────────────────────────
+   BODY MOTION - the ROBUST, transform-ONLY reveal + count-up.
+   CRITICAL: content is VISIBLE ON LOAD. .bw-rise is opacity:1 in CSS at all times;
+   this only adds .is-in to LAND the 14px translateY settle. If IO is unsupported or
+   reduced-motion is set, we still add .is-in immediately (no hidden state ever).
+   ─────────────────────────────────────────────────────────────────────────── */
+(function(){
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var riseEls  = [].slice.call(document.querySelectorAll('.bw-rise'));
+  var countEls = [].slice.call(document.querySelectorAll('[data-count]'));
+
+  if(reduce || !('IntersectionObserver' in window)){
+    riseEls.forEach(function(el){ el.classList.add('is-in'); });
+    countEls.forEach(function(el){ paintFinal(el); });
+    return;
+  }
+
+  var revObs = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('is-in'); revObs.unobserve(e.target); } });
+  }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+  riseEls.forEach(function(el){ revObs.observe(el); });
+
+  /* count-up the stat / metric numerals on reveal (rAF ease-out-cubic ~1.4s). The markup already
+     carries the FINAL value as text, so even if this never runs the numbers are correct + visible. */
+  function paintFinal(el){
+    var pre = el.getAttribute('data-prefix') || '';
+    var suf = el.getAttribute('data-suffix') || '';
+    el.innerHTML = pre + (el.getAttribute('data-count') || '0') + (suf ? '<small>' + suf + '</small>' : '');
+  }
+  /* read the count-up duration from the design-system token --ds-dur-data (tokenized; falls back to 1400ms) */
+  function dataDurMs(){
+    var raw = getComputedStyle(document.documentElement).getPropertyValue('--ds-dur-data').trim();
+    if(!raw) return 1400;
+    var n = parseFloat(raw);
+    if(isNaN(n)) return 1400;
+    return /ms\s*$/.test(raw) ? n : (/s\s*$/.test(raw) ? n * 1000 : n);   /* "1400ms" | "1.4s" | bare ms */
+  }
+  function runCount(el){
+    var target = parseFloat(el.getAttribute('data-count')) || 0;
+    var pre = el.getAttribute('data-prefix') || '';
+    var suf = el.getAttribute('data-suffix') || '';
+    var start = null, dur = dataDurMs();
+    function frame(ts){
+      if(start === null) start = ts;
+      var p = Math.min((ts - start) / dur, 1);
+      var eased = 1 - Math.pow(1 - p, 3);
+      var val = Math.round(target * eased);
+      el.innerHTML = pre + val + (suf ? '<small>' + suf + '</small>' : '');
+      if(p < 1) requestAnimationFrame(frame); else el.innerHTML = pre + target + (suf ? '<small>' + suf + '</small>' : '');
+    }
+    requestAnimationFrame(frame);
+  }
+  var cntObs = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){ if(e.isIntersecting){ runCount(e.target); cntObs.unobserve(e.target); } });
+  }, { threshold: 0.3 });
+  countEls.forEach(function(el){ cntObs.observe(el); });
+})();
+</script>
+</body>
+</html>
