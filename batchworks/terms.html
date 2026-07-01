@@ -1,28 +1,4 @@
-<!-- BATCHWORKS shared chrome shell. build.mjs wraps each pages/<slug>.content.html in
-     this template and fills the per-build slots in the <head> below (title, meta
-     description, noindex, the cache-busted design CSS links, the per-page signature
-     CSS) plus the page content slot in <main>. NOTE: do not repeat any slot token in
-     this comment -- build.mjs fills only the FIRST occurrence of each, so a token named
-     here would steal the real <head> slot's fill (see build.mjs HEADER_MODS note).
 
-     CHROME = LOCKED BLOCK, NOT grammar-governed (2026-06-24, owner decision). The chrome
-     regions -- header, the #mega mega-menu panel, the #mobile-drawer, the pre-footer closing
-     CTA, and the footer -- are sourced VERBATIM from the chrome stage's winner
-     (_design/_tournament/chrome-c/preview.html). They are a LOCKED BLOCK and are NOT wrapped
-     in the section -> div.container -> div.row -> div.col -> OBJECT grammar. The FORCED
-     DOM-STRUCTURE GRAMMAR (G-DOM) governs the <main>/BODY content ONLY; verify-dom-structure
-     SKIPS the chrome regions. The retrofit that wrapped the chrome in .container/.row/.col
-     BROKE it -- it made the mega feature panel a grid CELL (collapsed to ~235px content
-     height) instead of a DIRECT child of the mega inner grid (which stretches it to the
-     column height ~424px). The structure below restores chrome-c's exact DOM: in #mega, the
-     mega feature panel and the mega columns are DIRECT children of the mega inner grid (no
-     .col wrappers). The MANDATORY chrome guard is verify-chrome-parity.mjs -- it RENDERS the
-     built chrome vs the locked chrome reference (chrome-c/preview.html) at header / mega-open /
-     mobile-drawer states and BLOCKS on any divergence (e.g. the 235-vs-424 feature-panel bug).
-     All chrome BEHAVIORS are preserved verbatim (the JS selects #siteHeader / #megaWrap /
-     #megaTrigger / #mega / #hamburger / #mobile-drawer / #drawerScrim / #drawerClose /
-     #accTrigger / #accPanel and the hero / closing-CTA / footer / sticky bar). The the head/content slots
-     below replace chrome-c's hard-coded values; the chrome DOM is otherwise byte-faithful. -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -42,12 +18,11 @@
 <body class="surface-dark">
 <a class="skip-link" href="#main">Skip to content</a>
 
-<!-- ═══════════════════════════ HEADER (LOCKED BLOCK · NAV-PATTERNS.md #13) ═══════════════════════════
-     Sourced VERBATIM from chrome-c/preview.html. NOT wrapped in the DOM-structure grammar. -->
+
 <header class="site-header" id="siteHeader">
   <div class="container site-header__bar">
 
-    <!-- logo lockup with the PROMINENT dial mark (Concept C) -->
+    
     <a class="brand" href="index.html" aria-label="BatchWorks home">
       <svg class="brand__mark" viewBox="0 0 100 100" role="img" aria-label="BatchWorks dial mark">
         <circle class="ring-o" cx="50" cy="50" r="44"/>
@@ -63,16 +38,16 @@
       <span class="brand__name">Batch<span class="lo">Works</span></span>
     </a>
 
-    <!-- #13 signature: an always-visible structural affordance beside the logo (desktop too) -->
+    
     <div class="nav-rail" aria-hidden="true">
       <span class="rail-burger" title="Site index"><span></span><span></span><span></span></span>
     </div>
 
-    <!-- center inline nav (real hrefs from sitemap.yaml) -->
+    
     <nav class="nav" aria-label="Primary">
       <a class="nav__link" href="how-it-works.html">How It Works</a>
 
-      <!-- Capabilities = a caret trigger opening the DARK mega-menu panel -->
+      
       <div class="mega-wrap" id="megaWrap">
         <button class="nav__link" id="megaTrigger" aria-haspopup="true" aria-expanded="false" aria-controls="mega">
           Capabilities
@@ -86,23 +61,19 @@
 
     <a class="btn btn--primary header-cta" href="contact.html">Request a Quote</a>
 
-    <!-- canonical mobile-drawer toggle (CVV functional contract: .site-header__hamburger -> #mobile-drawer) -->
+    
     <button class="site-header__hamburger" id="hamburger"
             aria-label="Open menu" aria-controls="mobile-drawer" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
   </div>
 
-  <!-- ── DARK MEGA-MENU PANEL · Capabilities (groups the 9 feature pages + view-all anchor) ──
-       .mega__feature + .mega__col are DIRECT children of .mega__inner (no .col wrappers) - this is
-       what restores the ~424px feature-panel stretch (the 235-vs-424 bug the retrofit caused). -->
+  
   <div class="mega" id="mega" role="region" aria-label="Capabilities">
     <div class="container">
       <div class="mega__inner surface-dark">
 
-        <!-- featured showcase zone. The chrome supplies .mega__feature VERBATIM; the foundation adds a REAL
-             photo (joints-production.jpg) BEHIND the feature text via the bw-mega-feat scoped wrapper
-             (defined in structural.css, NOT chrome.css) - it rides the OBJECT, the direct-child nesting is intact. -->
+        
         <div class="mega__feature bw-mega-feat">
           <img class="bw-mega-feat__img" src="assets/joints-production.jpg" width="640" height="460"
                alt="Pre-rolled joints being produced by the BatchWorks robotics line">
@@ -112,7 +83,7 @@
           <a class="mega__feat-link" href="pre-roll.html">See the flagship →</a>
         </div>
 
-        <!-- PRODUCTS group -->
+        
         <div class="mega__col">
           <p class="mega__lbl">Products</p>
           <div class="mega__list">
@@ -143,7 +114,7 @@
           </div>
         </div>
 
-        <!-- SERVICES group -->
+        
         <div class="mega__col">
           <p class="mega__lbl">Services</p>
           <div class="mega__list">
@@ -161,7 +132,7 @@
             </a>
           </div>
 
-          <!-- the "view all capabilities" anchor (Concept C requirement) -->
+          
           <div class="mega__viewall">
             <span class="mega__viewall-txt">Full-service umbrella - pre-roll flagship.</span>
             <a href="how-it-works.html">View all capabilities <span aria-hidden="true">→</span></a>
@@ -173,9 +144,7 @@
   </div>
 </header>
 
-<!-- ═══════════════════════════ MOBILE DRAWER (LOCKED BLOCK · accordion · canonical contract) ═══════════════════════════
-     Sourced VERBATIM from chrome-c/preview.html. NOT wrapped in the DOM-structure grammar. The chrome JS contract
-     (#mobile-drawer[aria-hidden] toggled by .site-header__hamburger, + .drawer-scrim) is untouched. -->
+
 <aside id="mobile-drawer" aria-hidden="true" aria-label="Mobile menu">
   <div class="drawer__head">
     <a class="brand" href="index.html" aria-label="BatchWorks home">
@@ -193,7 +162,7 @@
   <nav class="drawer__nav" aria-label="Mobile primary">
     <a class="drawer__link" href="how-it-works.html">How It Works</a>
 
-    <!-- Capabilities as an accordion group (mega-menu collapses to this at mobile) -->
+    
     <button class="acc__trigger" id="accTrigger" aria-expanded="false" aria-controls="accPanel">
       Capabilities
       <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8l8 8 8-8" fill="none" stroke="currentColor" stroke-linecap="round"/></svg>
@@ -223,18 +192,9 @@
 </aside>
 <div class="drawer-scrim" id="drawerScrim"></div>
 
-<!-- ═══════════════════════════ BODY (FOUNDATION FINAL · one continuous dark flow) ═══════════════════════════
-     GRAMMAR per section: section.bw-flow -> .container--full -> .row -> .col(.col--measure) -> [bw-* objects].
-     .col--measure reproduces the old .bw-wide measure EXACTLY (max-width var(--bw-measure) centred + same
-     inline padding); each bw-* layout object keeps its OWN grid/flex inside the .col, so the body renders
-     byte-identically to the pre-grammar layout. -->
+
 <main id="main" class="bw-body">
-<!-- BatchWorks /terms - T-LEGAL (concept B sticky-rail TOC, same template as /privacy) ADAPTED to Terms of Service.
-     legal_draft mode (registry_version 1.2): the BODY is a best-effort ToS DRAFT adapted for a B2B contract pre-roll
-     manufacturer, shipped behind a VISIBLE "DRAFT - NEEDS LEGAL REVIEW (not binding, not final)" banner; NO clause is
-     asserted as binding/verified fact. <main> BODY fragment ONLY. Masthead is the page hero (bw-legal-hero,
-     cadence-exempt); the document is ONE .col--measure holding the rail+prose flex object (uniform cadence).
-     G-DOM held; hyphen-clean (G-NODASH). DISTINCT from /privacy in body (ToS clauses + ToS TOC anchors). -->
+
 
 <style>
   /* the document title (h1). .bw-legal styles h2/h3 only, so the masthead title gets its own display treatment here, still token-coloured. */
@@ -262,7 +222,7 @@
   }
 </style>
 
-<!-- pick: HERO-COMPOSITIONS.md #10 | considered: #1,#24 | why: a text-only masthead states the Terms of Service title, the representative effective-date line, and the visible draft-review banner with no decorative hero on a counsel-pending document -->
+
 <section class="bw-flow surface-dark bw-legal-hero" aria-label="Terms of Service">
   <div class="container--full">
     <div class="row">
@@ -279,7 +239,7 @@
   </div>
 </section>
 
-<!-- pick: SECTION-COMPONENTS.md #36 | considered: #34,#50 | why: a sticky-sidebar topic nav pins the ten-clause terms rail beside the agreement prose so the multi-section document stays navigable, where an accordion #34 hides clauses and topic columns #50 drop the pinned rail -->
+
 <section class="bw-flow surface-dark bw-legaldoc" aria-label="Terms of service contents and document">
   <div class="container--full">
     <div class="row">
@@ -347,9 +307,7 @@
 </section>
 </main>
 
-<!-- ═══════════════════════════ PRE-FOOTER CLOSING CTA (LOCKED BLOCK · FOOTER-STYLES.md #21) ═══════════════════════════
-     Sourced VERBATIM from chrome-c/preview.html. NOT wrapped in the DOM-structure grammar. It sits OUTSIDE <main>
-     (a top-level locked-block section), exactly like chrome-c. -->
+
 <section class="precta">
   <div class="container precta__inner">
     <div>
@@ -363,8 +321,7 @@
   </div>
 </section>
 
-<!-- ═══════════════════════════ FOOTER (LOCKED BLOCK · multi-row columns) ═══════════════════════════
-     Sourced VERBATIM from chrome-c/preview.html. NOT wrapped in the DOM-structure grammar. -->
+
 <footer class="site-footer">
   <div class="container">
     <div class="footer__grid">
@@ -430,8 +387,7 @@
   </div>
 </footer>
 
-<!-- ═══════════════════════════ STICKY CTA (LOCKED BLOCK · STICKY-CTA-BAR.md #2 dual-button · mobile) ═══════════════════════════
-     A top-level fixed overlay sourced VERBATIM from chrome-c/preview.html. NOT a grammar root. -->
+
 <div class="sticky-cta" aria-label="Quick actions">
   <a class="btn btn--primary" href="contact.html">Request a Quote</a>
   <a class="btn btn--secondary" href="how-it-works.html">See process</a>

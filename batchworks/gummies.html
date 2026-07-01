@@ -1,28 +1,4 @@
-<!-- BATCHWORKS shared chrome shell. build.mjs wraps each pages/<slug>.content.html in
-     this template and fills the per-build slots in the <head> below (title, meta
-     description, noindex, the cache-busted design CSS links, the per-page signature
-     CSS) plus the page content slot in <main>. NOTE: do not repeat any slot token in
-     this comment -- build.mjs fills only the FIRST occurrence of each, so a token named
-     here would steal the real <head> slot's fill (see build.mjs HEADER_MODS note).
 
-     CHROME = LOCKED BLOCK, NOT grammar-governed (2026-06-24, owner decision). The chrome
-     regions -- header, the #mega mega-menu panel, the #mobile-drawer, the pre-footer closing
-     CTA, and the footer -- are sourced VERBATIM from the chrome stage's winner
-     (_design/_tournament/chrome-c/preview.html). They are a LOCKED BLOCK and are NOT wrapped
-     in the section -> div.container -> div.row -> div.col -> OBJECT grammar. The FORCED
-     DOM-STRUCTURE GRAMMAR (G-DOM) governs the <main>/BODY content ONLY; verify-dom-structure
-     SKIPS the chrome regions. The retrofit that wrapped the chrome in .container/.row/.col
-     BROKE it -- it made the mega feature panel a grid CELL (collapsed to ~235px content
-     height) instead of a DIRECT child of the mega inner grid (which stretches it to the
-     column height ~424px). The structure below restores chrome-c's exact DOM: in #mega, the
-     mega feature panel and the mega columns are DIRECT children of the mega inner grid (no
-     .col wrappers). The MANDATORY chrome guard is verify-chrome-parity.mjs -- it RENDERS the
-     built chrome vs the locked chrome reference (chrome-c/preview.html) at header / mega-open /
-     mobile-drawer states and BLOCKS on any divergence (e.g. the 235-vs-424 feature-panel bug).
-     All chrome BEHAVIORS are preserved verbatim (the JS selects #siteHeader / #megaWrap /
-     #megaTrigger / #mega / #hamburger / #mobile-drawer / #drawerScrim / #drawerClose /
-     #accTrigger / #accPanel and the hero / closing-CTA / footer / sticky bar). The the head/content slots
-     below replace chrome-c's hard-coded values; the chrome DOM is otherwise byte-faithful. -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -42,12 +18,11 @@
 <body class="surface-dark">
 <a class="skip-link" href="#main">Skip to content</a>
 
-<!-- ═══════════════════════════ HEADER (LOCKED BLOCK · NAV-PATTERNS.md #13) ═══════════════════════════
-     Sourced VERBATIM from chrome-c/preview.html. NOT wrapped in the DOM-structure grammar. -->
+
 <header class="site-header" id="siteHeader">
   <div class="container site-header__bar">
 
-    <!-- logo lockup with the PROMINENT dial mark (Concept C) -->
+    
     <a class="brand" href="index.html" aria-label="BatchWorks home">
       <svg class="brand__mark" viewBox="0 0 100 100" role="img" aria-label="BatchWorks dial mark">
         <circle class="ring-o" cx="50" cy="50" r="44"/>
@@ -63,16 +38,16 @@
       <span class="brand__name">Batch<span class="lo">Works</span></span>
     </a>
 
-    <!-- #13 signature: an always-visible structural affordance beside the logo (desktop too) -->
+    
     <div class="nav-rail" aria-hidden="true">
       <span class="rail-burger" title="Site index"><span></span><span></span><span></span></span>
     </div>
 
-    <!-- center inline nav (real hrefs from sitemap.yaml) -->
+    
     <nav class="nav" aria-label="Primary">
       <a class="nav__link" href="how-it-works.html">How It Works</a>
 
-      <!-- Capabilities = a caret trigger opening the DARK mega-menu panel -->
+      
       <div class="mega-wrap" id="megaWrap">
         <button class="nav__link" id="megaTrigger" aria-haspopup="true" aria-expanded="false" aria-controls="mega">
           Capabilities
@@ -86,23 +61,19 @@
 
     <a class="btn btn--primary header-cta" href="contact.html">Request a Quote</a>
 
-    <!-- canonical mobile-drawer toggle (CVV functional contract: .site-header__hamburger -> #mobile-drawer) -->
+    
     <button class="site-header__hamburger" id="hamburger"
             aria-label="Open menu" aria-controls="mobile-drawer" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
   </div>
 
-  <!-- ── DARK MEGA-MENU PANEL · Capabilities (groups the 9 feature pages + view-all anchor) ──
-       .mega__feature + .mega__col are DIRECT children of .mega__inner (no .col wrappers) - this is
-       what restores the ~424px feature-panel stretch (the 235-vs-424 bug the retrofit caused). -->
+  
   <div class="mega" id="mega" role="region" aria-label="Capabilities">
     <div class="container">
       <div class="mega__inner surface-dark">
 
-        <!-- featured showcase zone. The chrome supplies .mega__feature VERBATIM; the foundation adds a REAL
-             photo (joints-production.jpg) BEHIND the feature text via the bw-mega-feat scoped wrapper
-             (defined in structural.css, NOT chrome.css) - it rides the OBJECT, the direct-child nesting is intact. -->
+        
         <div class="mega__feature bw-mega-feat">
           <img class="bw-mega-feat__img" src="assets/joints-production.jpg" width="640" height="460"
                alt="Pre-rolled joints being produced by the BatchWorks robotics line">
@@ -112,7 +83,7 @@
           <a class="mega__feat-link" href="pre-roll.html">See the flagship →</a>
         </div>
 
-        <!-- PRODUCTS group -->
+        
         <div class="mega__col">
           <p class="mega__lbl">Products</p>
           <div class="mega__list">
@@ -143,7 +114,7 @@
           </div>
         </div>
 
-        <!-- SERVICES group -->
+        
         <div class="mega__col">
           <p class="mega__lbl">Services</p>
           <div class="mega__list">
@@ -161,7 +132,7 @@
             </a>
           </div>
 
-          <!-- the "view all capabilities" anchor (Concept C requirement) -->
+          
           <div class="mega__viewall">
             <span class="mega__viewall-txt">Full-service umbrella - pre-roll flagship.</span>
             <a href="how-it-works.html">View all capabilities <span aria-hidden="true">→</span></a>
@@ -173,9 +144,7 @@
   </div>
 </header>
 
-<!-- ═══════════════════════════ MOBILE DRAWER (LOCKED BLOCK · accordion · canonical contract) ═══════════════════════════
-     Sourced VERBATIM from chrome-c/preview.html. NOT wrapped in the DOM-structure grammar. The chrome JS contract
-     (#mobile-drawer[aria-hidden] toggled by .site-header__hamburger, + .drawer-scrim) is untouched. -->
+
 <aside id="mobile-drawer" aria-hidden="true" aria-label="Mobile menu">
   <div class="drawer__head">
     <a class="brand" href="index.html" aria-label="BatchWorks home">
@@ -193,7 +162,7 @@
   <nav class="drawer__nav" aria-label="Mobile primary">
     <a class="drawer__link" href="how-it-works.html">How It Works</a>
 
-    <!-- Capabilities as an accordion group (mega-menu collapses to this at mobile) -->
+    
     <button class="acc__trigger" id="accTrigger" aria-expanded="false" aria-controls="accPanel">
       Capabilities
       <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8l8 8 8-8" fill="none" stroke="currentColor" stroke-linecap="round"/></svg>
@@ -223,49 +192,14 @@
 </aside>
 <div class="drawer-scrim" id="drawerScrim"></div>
 
-<!-- ═══════════════════════════ BODY (FOUNDATION FINAL · one continuous dark flow) ═══════════════════════════
-     GRAMMAR per section: section.bw-flow -> .container--full -> .row -> .col(.col--measure) -> [bw-* objects].
-     .col--measure reproduces the old .bw-wide measure EXACTLY (max-width var(--bw-measure) centred + same
-     inline padding); each bw-* layout object keeps its OWN grid/flex inside the .col, so the body renders
-     byte-identically to the pre-grammar layout. -->
+
 <main id="main" class="bw-body">
-<!-- BatchWorks /gummies - T-FEATURE (F2). COMPOSED 2026-06-27 from _copy/gummies.md + the LOCKED
-     concentrates T-FEATURE template (pages/concentrates.content.html) + the locked batchworks-*.css
-     system + the G-DOM grammar. BULK write ON the locked template - composed, not tournamented.
-     VARIETY vs the sibling concentrates page (G12/G13/G14): this page keeps the shared shapes
-     (hero / split / proof / mediacompare / steps / quote-model) but SWAPS three slots so the body
-     sequence is distinct - vs concentrates LCS 0.667 (under the 0.80 page-distinct bar):
-       §3 is a DARK STAT-ANCHOR (.bw-anchor - dosing precision: mg per piece + per-piece homogeneity)
-          where concentrates ran a 3-up icon spec grid.
-       §4 is a NUMBERED PROCESS RAIL (.bw-process - deposit, infuse, dose, demold, QC) beside a framed
-          gummy-line photo, where concentrates ran a media + 2x2 card grid.
-       §7 is a media-LESS 3-UP CROSS-LINK CARD GRID (.bw-cap__grid) where concentrates banners it.
-     DISTINCT LEVER: the only page combining the .bw-process production-LINE rail (§4) WITH a .bw-anchor
-     dosing STAT-ANCHOR (§3) and dropping the cross-link media banner for a 3-up card grid (§7).
-     PROGRESSIVE CONTENT (G-REPEAT): each fact OWNS one section - "full-service one-stop" lands in §1+§7
-     only, the dosing/per-piece language is owned by §3, the headcount math by §2/§6, the yield proof by §5,
-     the lead-time/minimums by §8, the per-unit cost by §9; no distinctive phrase is re-narrated across 3+ sections.
-     IMAGERY (G-IMG-CAP, per-topic distinct + reuse-cap + orientation-per-pattern):
-       hero gummies-macro (NEW, unique to §1, exempt); §2-trap edibles-gummies (TOPIC, the product);
-       §3 anchor-media precision-calipers (GENERIC, dosing measurement); §4 process rail gummies-line
-       (NEW, deposit/dose/demold); §5 proof cannabis-flower-qc (TOPIC); §6 mediacompare
-       full-service-umbrella (TOPIC, the coordinated floor); §7 media-less. Every non-hero asset appears
-       once; 1 generic (precision-calipers) of 5 distinct non-hero (minority) -> RULE 3 ok; 5/5 distinct -> RULE 1+2 ok.
-     CAPPED MEDIA (G-HSANE): every real image carries an inline object-fit:cover + object-position cap
-     (a style ATTRIBUTE - shell-pure; object-fit/object-position are LAYOUT literals, G-PTS clean).
-     Grammar per section (G-DOM): section -> div.container--full -> div.row -> div.col(.col--measure) -> bw-* OBJECT.
-     FIGURE/GROUND RHYTHM: dark-dominant flow (dark hero + dark stakes/anchor/replaces/faq bands) with ONE
-       light punctuation band (the proof, .bw-light).
-     HONESTY FENCE (client-rules.json honesty_fence + content-bible): gummies is a partner-facilitated
-       vertical - framed full-service / partner-facilitated, NEVER as an operated-in-house operational fact.
-       The pre-roll flagship's real owner numbers (~95% yield) appear ONLY as the flagship reference / the
-       discipline the partners are held to, never re-attributed to a gummy line. The §3 anchor dosing
-       figures and the §5 proof panel are marked REPRESENTATIVE (real batch data swaps in). Quote-only - no public price. -->
 
-<!--META {"title":"Cannabis Gummies, Infused to Spec | BatchWorks","desc":"Add a cannabis gummy SKU without building a confectionery line. Full-service, partner-facilitated gummies dosed and finished to your spec for licensed Nevada brands. COA per batch, quote-only pricing.","css":"","darkHero":true}-->
 
-<!-- pick: HERO-COMPOSITIONS.md #5 | considered: #22, #7 | why: a full-bleed gummies macro under an overlaid measure column opens the page on the dosing close-up itself, a more confident image-led hero than a text-only or statistics opener and the right register for a precision-and-compliance pitch. -->
-<!-- src: D-POSITION-W6 -->
+
+
+
+
 <section class="bw-hero hero surface-dark" aria-label="Cannabis gummies, infused to spec">
   <div class="container--full">
     <div class="row">
@@ -289,8 +223,8 @@
   </div>
 </section>
 
-<!-- pick: SECTION-COMPONENTS.md #11 | considered: #7, #29 | why: a copy-left split with a portrait gummies photo frames the confectionery-line trap beside the product, denser and more grounded than a prose-only problem band and a different treatment from the dark stat anchor that follows. -->
-<!-- src: D-INCUMBENT-ROLLROOM -->
+
+
 <section class="bw-flow surface-dark" aria-label="The cost of building gummy production in-house">
   <div class="container--full">
     <div class="row">
@@ -322,8 +256,8 @@
   </div>
 </section>
 
-<!-- pick: SECTION-COMPONENTS.md #3 | considered: #7, #23 | why: a dark stat-anchor states the dosing-precision headline as oversized per-piece figures beside a calipers photo, the page's one metal-and-glow moment and a sharper benefit beat than a row of icon spec tiles; the lede plus a representative-data footnote keep its skeleton distinct from the compare rows below. -->
-<!-- src: D-POSITION-W6 -->
+
+
 <section class="bw-flow surface-dark" aria-label="Why route gummies through one partner">
   <div class="container--full">
     <div class="row">
@@ -359,8 +293,8 @@
   </div>
 </section>
 
-<!-- pick: SECTION-COMPONENTS.md #27 | considered: #28, #12 | why: numbered deposit-to-QC steps beside a framed gummy-line photo carry the production sequence as a read-in-order rail, distinct from the stat anchor above and from the compare matrix below, and the right shape to make the partner-facilitated coordination concrete. -->
-<!-- src: D-MARKET-SE7EN -->
+
+
 <section class="bw-flow" aria-label="The gummy formats and process we coordinate">
   <div class="container--full">
     <div class="row">
@@ -421,8 +355,8 @@
   </div>
 </section>
 
-<!-- pick: PROOF-SECTIONS.md #4 | considered: #5, #2 | why: a metric-led case band on the page's one light surface carries the yield-discipline beat; the representative panel wears a visible swappable badge so no illustrative figure reads as verified owner data, the honest way to show the flagship standard on a partner-facilitated page. -->
-<!-- src: D-OFFER-010 -->
+
+
 <section class="bw-flow bw-light" aria-label="The yield discipline applied to your batch">
   <div class="container--full">
     <div class="row">
@@ -450,8 +384,8 @@
   </div>
 </section>
 
-<!-- pick: SECTION-COMPONENTS.md #15 | considered: #23, #29 | why: a capped facility photo beside a checkmark comparison matrix is the honest side-by-side against standing up your own gummy line, a distinct shape from the stat anchor and the proof band, and the clearest way to state what routing through the umbrella removes. -->
-<!-- src: D-INCUMBENT-ROLLROOM -->
+
+
 <section class="bw-flow surface-dark" aria-label="What routing gummies through BatchWorks replaces">
   <div class="container--full">
     <div class="row">
@@ -501,8 +435,8 @@
   </div>
 </section>
 
-<!-- pick: CARD-VARIATIONS.md #3 | considered: #4, #1 | why: a media-less three-up card grid routes onward to the flagship, edibles and pricing as a clean spec break, distinct from the media-banner cross-link the sibling concentrates page uses, with the quote action folded inline rather than a second card or CTA band. -->
-<!-- src: D-POSITION-W6 -->
+
+
 <section class="bw-flow" aria-label="Part of the full-service umbrella">
   <div class="container--full">
     <div class="row">
@@ -545,8 +479,8 @@
   </div>
 </section>
 
-<!-- pick: FAQ-ACCORDION.md #1 | considered: #2, #3 | why: a static numbered Q-step list answers the in-house-vs-partner, dosing and lead-time questions in a read-in-order column, the page's plainest-register block and visibly distinct from the process rail's numbered build steps. -->
-<!-- src: D-POSITION-W3 -->
+
+
 <section class="bw-flow surface-dark" aria-label="Gummies frequently asked questions">
   <div class="container--full">
     <div class="row">
@@ -584,8 +518,8 @@
   </div>
 </section>
 
-<!-- pick: SECTION-COMPONENTS.md #33 | considered: #41, #37 | why: a custom-quote driver folds the dual action into a content-rich quote MODEL so the page closes on how the per-unit quote works, not a second bare CTA band on top of the chrome closing band. -->
-<!-- src: D-POSITION-W4 --><!-- src: D-OFFER-006 -->
+
+
 <section class="bw-flow" aria-label="How gummies pricing works">
   <div class="container--full">
     <div class="row">
@@ -609,9 +543,7 @@
 </section>
 </main>
 
-<!-- ═══════════════════════════ PRE-FOOTER CLOSING CTA (LOCKED BLOCK · FOOTER-STYLES.md #21) ═══════════════════════════
-     Sourced VERBATIM from chrome-c/preview.html. NOT wrapped in the DOM-structure grammar. It sits OUTSIDE <main>
-     (a top-level locked-block section), exactly like chrome-c. -->
+
 <section class="precta">
   <div class="container precta__inner">
     <div>
@@ -625,8 +557,7 @@
   </div>
 </section>
 
-<!-- ═══════════════════════════ FOOTER (LOCKED BLOCK · multi-row columns) ═══════════════════════════
-     Sourced VERBATIM from chrome-c/preview.html. NOT wrapped in the DOM-structure grammar. -->
+
 <footer class="site-footer">
   <div class="container">
     <div class="footer__grid">
@@ -692,8 +623,7 @@
   </div>
 </footer>
 
-<!-- ═══════════════════════════ STICKY CTA (LOCKED BLOCK · STICKY-CTA-BAR.md #2 dual-button · mobile) ═══════════════════════════
-     A top-level fixed overlay sourced VERBATIM from chrome-c/preview.html. NOT a grammar root. -->
+
 <div class="sticky-cta" aria-label="Quick actions">
   <a class="btn btn--primary" href="contact.html">Request a Quote</a>
   <a class="btn btn--secondary" href="how-it-works.html">See process</a>
