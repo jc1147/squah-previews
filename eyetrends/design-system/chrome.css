@@ -1,0 +1,405 @@
+/* eyetrends-chrome.css — LOCKED chrome (② CHROME tournament, Concept C "Editorial Split Header"),
+   extracted VERBATIM from _design/_tournament/chrome/concept-c/preview.html (owner-approved).
+   Regions: shell base + buttons/eyebrow + utility strip + split header/nav (amber-underline active +
+   .is-stuck scroll-glass) + editorial two-pane mega panels (content-hugging, aligned 2-line headers) +
+   mobile drawer + .precta pre-footer closing-CTA + editorial footer + responsive + reduced-motion.
+   The chrome JS (scroll .is-stuck + hover-intent mega + drawer) lives in _chrome-block.html, not here.
+
+   Token-pure: every colour is a var(--ds-*) resolved from the LINKED eyetrends-tokens.css (Concept B,
+   "Clean Optical Modern"). ZERO hardcoded brand hex. Neutral rgba(0,0,0) appears only as a mask-image
+   alpha (the .precta::after radial mask), where the colour channel is irrelevant — never a brand colour.
+   EXCLUDED from the locked chrome: the stub <main>/hero, the mobile sticky-CTA bar, and the dev
+   FORCE-OPEN preview controls (all preview-only scaffolding, not part of the chrome contract).
+   The bare source :focus-visible is upgraded to the GLOBAL role-based keyboard ring (WCAG 2.4.7 /
+   G-FOCUS) with the SAME painted look (teal outline, 3px offset) — coverage broadened, look preserved. */
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  font-family:var(--ds-font-body);
+  color:var(--ds-ink);
+  background:var(--ds-bg-surface);
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+h1,h2,h3,h4{font-family:var(--ds-font-display);line-height:1.06;letter-spacing:-.015em;color:var(--ds-ink-heading);margin:0}
+p{margin:0}
+img{max-width:100%;display:block}
+
+/* keyboard-focus ring (WCAG 2.4.7 Focus Visible) — a GLOBAL role-based indicator painted on every
+   interactive surface the chrome exposes. Preserves the source ring look (teal outline, 3px offset,
+   control radius); only the SELECTOR coverage is broadened from the bare universal :focus-visible. */
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,[tabindex]:focus-visible,
+.btn:focus-visible,.nav-link:focus-visible,.u-phone:focus-visible,.hamburger:focus-visible,
+.mcol-head:focus-visible,.mlink:focus-visible,.ecard:focus-visible,
+.drawer-close:focus-visible,.d-link:focus-visible,.d-sub a:focus-visible,
+.fcol a:focus-visible,.foot-legal a:focus-visible,.precta-call:focus-visible{
+  outline:2px solid var(--ds-primary);outline-offset:3px;border-radius:var(--ds-r-control)
+}
+/* modern keyboard-only idiom: a mouse/touch click never shows the ring (allowed alongside the painting rule above). */
+a:focus:not(:focus-visible),button:focus:not(:focus-visible){outline:none}
+
+.container{width:100%;max-width:var(--ds-container-max);margin-inline:auto;padding-inline:clamp(20px,4vw,40px)}
+
+/* page material, ultra-subtle grain (MODERN-WOW section 3) */
+body::before{
+  content:"";position:fixed;inset:0;z-index:var(--ds-z-below);pointer-events:none;
+  background-image:var(--ds-grain);opacity:var(--ds-opacity-faint);
+}
+
+/* ---- buttons ---- */
+.btn{
+  display:inline-flex;align-items:center;gap:var(--ds-space-xs);
+  font-family:var(--ds-font-display);font-weight:600;font-size:.95rem;letter-spacing:-.01em;
+  padding:.72em 1.35em;border-radius:var(--ds-r-control);
+  transition:transform var(--ds-dur-fast) var(--ds-ease),box-shadow var(--ds-dur) var(--ds-ease),background var(--ds-dur) var(--ds-ease);
+  white-space:nowrap;
+}
+.btn .arw{transition:transform var(--ds-dur-fast) var(--ds-ease)}
+.btn:hover .arw{transform:translateX(3px)}
+.btn-primary{
+  background:var(--ds-primary);color:var(--ds-ink-on-dark);
+  box-shadow:var(--ds-shadow-rest),var(--ds-glow);
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:var(--ds-shadow-lift),var(--ds-glow)}
+.btn-ghost{
+  background:transparent;color:var(--ds-primary);
+  border:1.5px solid color-mix(in srgb,var(--ds-primary) 40%,transparent);
+}
+.btn-ghost:hover{background:var(--ds-primary-soft);border-color:var(--ds-primary);transform:translateY(-2px)}
+.btn-onDark{background:var(--ds-bg-surface-2);color:var(--ds-primary-deep);box-shadow:var(--ds-shadow-card)}
+.btn-onDark:hover{transform:translateY(-2px);box-shadow:var(--ds-shadow-lift)}
+.btn-onWarm{background:var(--ds-accent-deep);color:var(--ds-ink-on-dark);box-shadow:var(--ds-shadow-rest)}
+.btn-onWarm:hover{transform:translateY(-2px);box-shadow:var(--ds-shadow-lift)}
+.btn-lg{font-size:1.05rem;padding:.85em 1.6em}
+
+.eyebrow{
+  font-family:var(--ds-font-mono);font-size:.72rem;font-weight:400;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--ds-accent-ink);margin:0 0 var(--ds-space-sm);
+}
+
+/* =====================================================================================
+   HEADER, editorial split: slim utility strip (top tier) + tall main bar (bottom tier)
+   ===================================================================================== */
+.site-header{position:sticky;top:0;z-index:var(--ds-z-sticky)}
+
+/* -- utility strip (dark near-black punctuation band; phone always visible) -- */
+.utility-strip{
+  background:var(--ds-primary-deep);color:var(--ds-ink-on-dark);
+  font-size:.82rem;border-bottom:1px solid var(--ds-glass-border);
+}
+.u-inner{display:flex;align-items:center;justify-content:space-between;gap:var(--ds-space-md);
+  min-height:38px;padding-block:var(--ds-space-2xs)}
+.u-trust{color:color-mix(in srgb,var(--ds-ink-on-dark) 78%,transparent);letter-spacing:.01em}
+.u-actions{display:flex;align-items:center;gap:var(--ds-space-md)}
+.u-hours{color:color-mix(in srgb,var(--ds-ink-on-dark) 62%,transparent)}
+.u-phone{display:inline-flex;align-items:center;gap:.45em;font-weight:600;color:var(--ds-accent-light)}
+.u-phone svg{width:14px;height:14px}
+.u-phone:hover{color:var(--ds-bg-surface-2)}
+.u-dot{width:5px;height:5px;border-radius:var(--ds-r-pill);background:var(--ds-success);box-shadow:0 0 0 3px color-mix(in srgb,var(--ds-success) 25%,transparent)}
+
+/* -- main bar (glass, taller/editorial) -- */
+.header-bar{
+  position:relative;
+  /* GLASS STICKY HEADER (SCROLL-STICKY-BEHAVIOR-LIBRARY TOP-12 #6 / I8) — PERF-TUNED (scroll fix).
+     A light-theme glass read via a SOLID TRANSLUCENT --ds-* fill, with NO backdrop-filter.
+     WHY no live blur: this bar is position:sticky and stays on-screen, so a backdrop blur
+     RE-RASTERS the moving content beneath it on EVERY scroll frame (heavy per-frame paint =
+     the "heavy/glitchy" scroll the owner reported). A high-opacity translucent white fill reads
+     as the same light glass with ZERO per-frame blur recompute. Kept LIGHTER (more see-through)
+     over the very top, stronger once .is-stuck. The dark --ds-glass-bg token would fail WCAG on
+     this near-white header with dark ink, so we mirror the glass idea in a LIGHT surface fill
+     (still zero hardcoded brand hex). transform:translateZ(0) isolates the bar on its own
+     compositor layer so scrolling content composites cheaply under it instead of re-rastering
+     the header texture each frame. */
+  background:color-mix(in srgb,var(--ds-bg-surface-2) 85%,transparent);
+  transform:translateZ(0);
+  border-bottom:1px solid transparent;
+  transition:box-shadow var(--ds-dur) var(--ds-ease),background var(--ds-dur) var(--ds-ease),border-color var(--ds-dur) var(--ds-ease);
+}
+/* JS adds .is-stuck past the ~56px threshold: strengthen the fill, add a hairline + soft shadow,
+   and shrink the bar (see .hb-inner). These three transitioned props are compositor/paint-cheap
+   and fire ONCE at the threshold crossing (not per scroll frame). */
+.site-header.is-stuck .header-bar{
+  background:color-mix(in srgb,var(--ds-bg-surface-2) 96%,transparent);
+  border-bottom-color:var(--ds-hairline);
+  box-shadow:var(--ds-shadow-card);
+}
+/* The stick SHRINK snaps (no transition on min-height/padding-block): animating those LAYOUT props
+   reflowed the whole document mid-scroll every frame for 250ms = the glitch at the stick point.
+   Snapping the height while the background/shadow fade (above) reads as an instant, smooth stick. */
+.hb-inner{display:flex;align-items:center;gap:var(--ds-space-lg);
+  min-height:84px;padding-block:var(--ds-space-sm)}
+.site-header.is-stuck .hb-inner{min-height:64px;padding-block:var(--ds-space-xs)}
+
+/* -- brand lockup -- */
+.brand{display:inline-flex;align-items:center;gap:var(--ds-space-sm);flex:0 0 auto}
+.brand-mark{width:44px;height:44px;flex:0 0 auto;display:grid;place-items:center;
+  border-radius:var(--ds-r-surface);
+  background:var(--ds-grad-brand);box-shadow:var(--ds-shadow-rest),var(--ds-inset-hi)}
+.brand-mark svg{width:26px;height:26px}
+.brand-txt{display:flex;flex-direction:column;line-height:1}
+.brand-name{font-family:var(--ds-font-display);font-weight:700;font-size:1.28rem;letter-spacing:-.02em;color:var(--ds-ink-heading)}
+.brand-sub{font-family:var(--ds-font-mono);font-size:.6rem;letter-spacing:.24em;text-transform:uppercase;
+  color:var(--ds-ink-soft);margin-top:4px}
+
+/* -- primary nav (right-aligned cluster, amber underline active) -- */
+.primary-nav{margin-left:auto}
+.nav-list{display:flex;align-items:center;gap:clamp(var(--ds-space-sm),1.6vw,var(--ds-space-lg));
+  list-style:none;margin:0;padding:0}
+.nav-list>li{position:static}
+.nav-link{
+  position:relative;display:inline-flex;align-items:center;gap:.4em;
+  font-family:var(--ds-font-display);font-weight:500;font-size:.98rem;letter-spacing:-.01em;
+  color:var(--ds-ink);padding-block:var(--ds-space-xs);white-space:nowrap;
+}
+.nav-link .car{width:9px;height:9px;transition:transform var(--ds-dur-fast) var(--ds-ease);opacity:.7}
+/* amber underline, decorative, grows from center */
+.nav-link::after{
+  content:"";position:absolute;left:0;right:0;bottom:-2px;height:2.5px;border-radius:var(--ds-r-pill);
+  background:var(--ds-accent);transform:scaleX(0);transform-origin:center;
+  transition:transform var(--ds-dur) var(--ds-ease-out);
+}
+.nav-link:hover{color:var(--ds-ink-heading)}
+.nav-link:hover::after,.nav-link.active::after{transform:scaleX(1)}
+.nav-link.active{color:var(--ds-ink-heading);font-weight:600}
+.has-mega:hover .nav-link .car,.has-mega.open .nav-link .car{transform:rotate(180deg)}
+
+.hb-actions{display:flex;align-items:center;gap:var(--ds-space-sm);flex:0 0 auto}
+.hamburger{display:none;width:44px;height:44px;border-radius:var(--ds-r-control);
+  align-items:center;justify-content:center;border:1px solid var(--ds-line);color:var(--ds-ink-heading)}
+.hamburger svg{width:22px;height:22px}
+
+/* =====================================================================================
+   MEGA-MENU PANELS, editorial two-pane (featured promo left + link area right)
+   ===================================================================================== */
+.mega{
+  position:absolute;left:0;right:0;top:100%;
+  background:var(--ds-bg-surface-2);
+  border-top:1px solid var(--ds-hairline);
+  border-bottom:1px solid var(--ds-line);
+  box-shadow:var(--ds-shadow-lift);
+  opacity:0;visibility:hidden;transform:translateY(-10px);
+  transition:opacity var(--ds-dur) var(--ds-ease),transform var(--ds-dur) var(--ds-ease-out),visibility 0s linear var(--ds-dur);
+}
+/* JS toggles .is-open on hover-intent (open + keep-open across the trigger->panel traverse). */
+.mega.is-open{
+  opacity:1;visibility:visible;transform:translateY(0);
+  transition-delay:0s;
+}
+/* align-items:stretch is intentional: the shorter promo pane stretches to the height
+   the LINK COLUMNS define, so the columns (not the tall promo) set the panel height and
+   its bottom hugs the tallest column. padding-block lg (not xl) keeps the band tight. */
+.mega-inner{display:grid;gap:var(--ds-space-xl);padding-block:var(--ds-space-lg);align-items:stretch}
+.mega-services .mega-inner{grid-template-columns:.9fr 2.4fr}
+.mega-eyewear  .mega-inner{grid-template-columns:1fr 2fr}
+
+/* featured promo pane */
+.mega-promo{position:relative;overflow:hidden;border-radius:var(--ds-r-surface);
+  padding:var(--ds-space-md);display:flex;flex-direction:column;
+  box-shadow:var(--ds-shadow-card),var(--ds-inset-hi)}
+.mega-promo--teal{background:var(--ds-grad-hero);color:var(--ds-ink-on-dark)}
+.mega-promo--warm{background:linear-gradient(150deg,var(--ds-accent-deep),var(--ds-accent-ink));color:var(--ds-ink-on-dark)}
+.mega-promo::after{content:"";position:absolute;inset:0;background:var(--ds-glow-wash);pointer-events:none}
+.mega-promo .eyebrow{color:var(--ds-accent-light);position:relative;z-index:1}
+.mega-promo h3{font-size:1.5rem;color:var(--ds-ink-on-dark);position:relative;z-index:1;margin-bottom:var(--ds-space-sm)}
+.mega-promo p{font-size:.92rem;color:color-mix(in srgb,var(--ds-ink-on-dark) 82%,transparent);position:relative;z-index:1;margin-bottom:var(--ds-space-md)}
+/* margin-top:auto anchors the CTA at the bottom of the stretched promo (content top, CTA bottom). */
+.mega-promo .btn{align-self:flex-start;position:relative;z-index:1;margin-top:auto}
+/* (decorative .promo-figure removed: it forced the promo ~120px taller than the link
+   columns, which drove the panel tall and left a blank band under the columns.) */
+
+/* services: 5 link columns (children to grandchildren) */
+.mega-cols{display:grid;grid-template-columns:repeat(5,1fr);gap:var(--ds-space-md)}
+.mcol{display:flex;flex-direction:column;gap:2px;min-width:0}
+/* min-height reserves TWO lines for every column header so the 1-line ones (e.g. "Medical
+   Eye Care") occupy the same height as the 2-line ones and every column's first link starts
+   at the same baseline (no ragged 1-vs-2-line mix). */
+.mcol-head{font-family:var(--ds-font-display);font-weight:600;font-size:.92rem;color:var(--ds-ink-heading);
+  padding-bottom:var(--ds-space-2xs);margin-bottom:var(--ds-space-2xs);
+  border-bottom:1px solid var(--ds-line);display:inline-flex;align-items:flex-start;gap:.4em;
+  min-height:3.5em}
+.mcol-head .dotmark{width:6px;height:6px;border-radius:var(--ds-r-pill);background:var(--ds-primary);flex:0 0 auto}
+.mlink{font-size:.86rem;color:var(--ds-ink-soft);padding:5px 6px;margin-inline:-6px;border-radius:6px;
+  transition:color var(--ds-dur-fast) var(--ds-ease),background var(--ds-dur-fast) var(--ds-ease);position:relative}
+.mlink:hover{color:var(--ds-primary);background:var(--ds-primary-soft)}
+
+/* eyewear: 4 editorial cards */
+.mega-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--ds-space-md)}
+.ecard{display:flex;flex-direction:column;gap:var(--ds-space-xs);padding:var(--ds-space-md);
+  border:1px solid var(--ds-line);border-radius:var(--ds-r-surface);background:var(--ds-bg-surface);
+  transition:transform var(--ds-dur) var(--ds-ease),box-shadow var(--ds-dur) var(--ds-ease),border-color var(--ds-dur) var(--ds-ease)}
+.ecard:hover{transform:translateY(-4px);box-shadow:var(--ds-shadow-lift);border-color:color-mix(in srgb,var(--ds-primary) 40%,transparent)}
+.ecard-ico{width:40px;height:40px;border-radius:var(--ds-r-control);display:grid;place-items:center;
+  background:var(--ds-primary-soft);color:var(--ds-primary)}
+.ecard-ico svg{width:22px;height:22px}
+.ecard b{font-family:var(--ds-font-display);font-weight:600;font-size:1rem;color:var(--ds-ink-heading)}
+.ecard small{font-size:.82rem;color:var(--ds-ink-soft);line-height:1.4}
+.ecard .go{margin-top:auto;font-size:.8rem;font-weight:600;color:var(--ds-accent-ink);display:inline-flex;gap:.3em;align-items:center}
+
+/* =====================================================================================
+   .precta, closing CTA band (FOOTER-STYLES #21 pre-footer CTA)
+   ===================================================================================== */
+.precta{position:relative;overflow:hidden;background:var(--ds-primary-deep);color:var(--ds-ink-on-dark);
+  padding-block:clamp(56px,8vw,96px)}
+.precta::before{content:"";position:absolute;inset:0;background:var(--ds-glow-wash);pointer-events:none}
+.precta::after{content:"";position:absolute;inset:0;background-image:var(--ds-grid);background-size:var(--ds-grid-size);
+  opacity:.35;pointer-events:none;
+  -webkit-mask-image:radial-gradient(70% 120% at 80% 0%,rgba(0,0,0,1),transparent 70%);
+  mask-image:radial-gradient(70% 120% at 80% 0%,rgba(0,0,0,1),transparent 70%)}
+.precta-inner{position:relative;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:var(--ds-space-lg)}
+.precta .eyebrow{color:var(--ds-accent-light)}
+.precta h2{font-size:clamp(1.8rem,3.4vw,2.7rem);color:var(--ds-ink-on-dark);max-width:20ch}
+.precta p{color:color-mix(in srgb,var(--ds-ink-on-dark) 80%,transparent);margin-top:var(--ds-space-sm);max-width:44ch}
+.precta-actions{display:flex;flex-direction:column;gap:var(--ds-space-sm);align-items:flex-start}
+.precta-call{display:inline-flex;align-items:center;gap:.5em;font-family:var(--ds-font-display);font-weight:600;
+  font-size:1.15rem;color:var(--ds-accent-light)}
+.precta-call:hover{color:var(--ds-bg-surface-2)}
+.precta-note{font-size:.8rem;color:color-mix(in srgb,var(--ds-ink-on-dark) 60%,transparent)}
+
+/* =====================================================================================
+   FOOTER, editorial masthead style (FOOTER-STYLES #19), brand-led
+   ===================================================================================== */
+.site-footer{background:var(--ds-primary-deep);color:var(--ds-ink-on-dark);
+  border-top:1px solid var(--ds-glass-border)}
+.foot-masthead{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:var(--ds-space-md);
+  padding-block:var(--ds-space-xl);border-bottom:1px solid var(--ds-glass-border)}
+.foot-brand{display:flex;align-items:center;gap:var(--ds-space-sm)}
+.foot-brand .brand-mark{width:52px;height:52px}
+.foot-brand .brand-mark svg{width:30px;height:30px}
+.foot-wordmark{font-family:var(--ds-font-display);font-weight:700;font-size:1.7rem;letter-spacing:-.02em;color:var(--ds-ink-on-dark)}
+.foot-credit{font-size:.86rem;color:color-mix(in srgb,var(--ds-ink-on-dark) 72%,transparent);
+  text-align:right;max-width:44ch;line-height:1.5}
+.foot-credit b{color:var(--ds-accent-light);font-weight:600}
+
+.foot-cols{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--ds-space-lg);padding-block:var(--ds-space-xl)}
+.fcol h4{font-family:var(--ds-font-display);font-size:.78rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ds-accent-light);margin-bottom:var(--ds-space-md)}
+.fcol ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:var(--ds-space-xs)}
+.fcol a{font-size:.9rem;color:color-mix(in srgb,var(--ds-ink-on-dark) 80%,transparent);
+  transition:color var(--ds-dur-fast) var(--ds-ease)}
+.fcol a:hover{color:var(--ds-ink-on-dark)}
+.fcol--visit h4{color:var(--ds-accent-light)}
+.fcol--visit .visit-line{font-size:.88rem;color:color-mix(in srgb,var(--ds-ink-on-dark) 78%,transparent);
+  margin-bottom:var(--ds-space-md);line-height:1.55}
+.fcol--visit .visit-phone{font-family:var(--ds-font-display);font-weight:600;font-size:1.05rem;color:var(--ds-accent-light)}
+
+.foot-legal{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:var(--ds-space-sm);
+  padding-block:var(--ds-space-md);border-top:1px solid var(--ds-glass-border);
+  font-size:.8rem;color:color-mix(in srgb,var(--ds-ink-on-dark) 60%,transparent)}
+.foot-legal nav{display:flex;flex-wrap:wrap;gap:var(--ds-space-md)}
+.foot-legal a:hover{color:var(--ds-ink-on-dark)}
+
+/* =====================================================================================
+   MOBILE DRAWER, clean full-height editorial panel
+   ===================================================================================== */
+.scrim{position:fixed;inset:0;z-index:var(--ds-z-overlay);background:var(--ds-scrim);
+  opacity:0;visibility:hidden;transition:opacity var(--ds-dur) var(--ds-ease),visibility 0s linear var(--ds-dur);
+  -webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px)}
+.drawer{position:fixed;top:0;right:0;bottom:0;z-index:var(--ds-z-drawer);
+  width:min(88vw,380px);display:flex;flex-direction:column;
+  background:var(--ds-bg-surface-2);box-shadow:var(--ds-shadow-lift);
+  transform:translateX(100%);transition:transform var(--ds-dur) var(--ds-ease-out);
+  overflow:hidden}   /* F3 fixed-footer: the DRAWER itself does NOT scroll; the nav region owns the scroll so the CTA/NAP block below can never overlap the nav */
+body.drawer-open .scrim{opacity:1;visibility:visible;transition-delay:0s}
+body.drawer-open .drawer{transform:translateX(0)}
+.drawer-head{display:flex;align-items:center;justify-content:space-between;gap:var(--ds-space-sm);
+  padding:var(--ds-space-md);border-bottom:1px solid var(--ds-line);flex:0 0 auto;background:var(--ds-bg-surface-2);z-index:2}
+.drawer-close{width:42px;height:42px;border-radius:var(--ds-r-control);border:1px solid var(--ds-line);
+  display:grid;place-items:center;color:var(--ds-ink-heading)}
+.drawer-close svg{width:20px;height:20px}
+.drawer-nav{padding:var(--ds-space-sm) var(--ds-space-md);display:flex;flex-direction:column;
+  flex:1 1 auto;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch}   /* the ONLY scroll region: min-height:0 lets it shrink+scroll so the last item (Contact) always scrolls fully clear of the CTA */
+.d-item{border-bottom:1px solid var(--ds-line)}
+.d-link{display:flex;align-items:center;justify-content:space-between;gap:var(--ds-space-sm);
+  width:100%;text-align:left;padding:var(--ds-space-md) 0;
+  font-family:var(--ds-font-display);font-weight:500;font-size:1.12rem;color:var(--ds-ink-heading)}
+.d-link.active{color:var(--ds-primary)}
+.d-link .car{width:12px;height:12px;transition:transform var(--ds-dur-fast) var(--ds-ease);color:var(--ds-ink-soft)}
+.d-item.open .d-link .car{transform:rotate(180deg)}
+.d-sub{display:grid;grid-template-rows:0fr;transition:grid-template-rows var(--ds-dur) var(--ds-ease)}
+.d-item.open > .d-sub{grid-template-rows:1fr}   /* DIRECT child only — so an open Services does NOT force its nested hub .d-subs open */
+.d-sub-inner{overflow:hidden;display:flex;flex-direction:column}
+.d-sub a{padding:.55em 0 .55em var(--ds-space-md);font-size:.95rem;color:var(--ds-ink-soft);
+  border-left:2px solid var(--ds-line);margin-left:2px}
+.d-sub a:hover{color:var(--ds-primary);border-left-color:var(--ds-accent)}
+.d-sub a:last-child{margin-bottom:var(--ds-space-sm)}
+
+/* 3rd-level NESTED accordion — the 5 SERVICE HUBS inside the Services .d-sub, each holding its
+   grandchildren as a 2nd indent level. Reuses the SAME grid-rows open/close transition as .d-sub. */
+.d-item--sub + .d-item--sub{border-top:1px solid var(--ds-line)}   /* a hairline between hubs */
+.d-link--hub{display:flex;align-items:center;justify-content:space-between;gap:var(--ds-space-2xs);
+  padding-left:var(--ds-space-md)}   /* hub row indented one level under Services */
+.d-link--hub .d-hub-link{flex:1 1 auto;min-width:0;padding:var(--ds-space-sm) 0;
+  font-family:var(--ds-font-display);font-weight:500;font-size:1rem;color:var(--ds-ink-heading);
+  border-left:0;margin-left:0}   /* the hub LABEL navigates to its own page (kept reachable) */
+.d-link--hub .d-hub-link:hover{color:var(--ds-primary)}
+.d-caret{flex:0 0 auto;width:44px;height:44px;display:grid;place-items:center;color:var(--ds-ink-soft)}
+.d-caret .car{width:12px;height:12px;transition:transform var(--ds-dur-fast) var(--ds-ease)}
+.d-item--sub.open > .d-link--hub .d-caret .car{transform:rotate(180deg)}
+.d-item--sub.open > .d-sub{grid-template-rows:1fr}   /* toggles INDEPENDENTLY of the parent Services accordion */
+.d-item--sub .d-sub a{margin-left:var(--ds-space-md);padding-left:var(--ds-space-md);font-size:.9rem}  /* grandchildren: deeper indent + smaller type, rail sits under the hub */
+.drawer-foot{flex:0 0 auto;background:var(--ds-bg-surface-2);border-top:1px solid var(--ds-line);
+  padding:var(--ds-space-md);display:flex;flex-direction:column;gap:var(--ds-space-sm)}   /* F3: a non-overlapping flex child at the drawer's end (NOT position:sticky over the scrolling nav, which was the overlap bug) */
+.drawer-foot .btn{justify-content:center;width:100%}
+.drawer-addr{font-size:.78rem;color:var(--ds-ink-soft);text-align:center;line-height:1.5;margin-top:var(--ds-space-2xs)}
+
+/* =====================================================================================
+   RESPONSIVE — NAV COLLAPSE at <=1100; utility-strip + footer collapse at <=768.
+   The desktop bar (brand + 7 nav-links + Book CTA) has an INTRINSIC width of ~1119px, so it
+   must switch to the hamburger BEFORE it can overflow. Collapsing only at <=768 (the old rule)
+   left the whole 769-~1128px band overflowing horizontally (measured: 264px@834 / 203px@900 /
+   95px@1024). The nav-collapse rules therefore fire at <=1100, and a 1101-1199 tightening band
+   lets the desktop nav fit below 1200; true desktop (>=1200) is unchanged.
+   ===================================================================================== */
+/* NAV COLLAPSE (<=1100) — hide the desktop nav + Book CTA + megas and show the hamburger wherever
+   the desktop bar cannot fit. The hamburger + drawer own navigation across this whole band. */
+@media (max-width:1100px){
+  .primary-nav,.hb-actions .btn-primary{display:none}
+  /* with .primary-nav (which carried margin-left:auto) now hidden, nothing pushes the
+     action cluster right; move it to margin-left:auto so the hamburger — the only visible
+     control here (Book CTA is display:none above) — sits at the FAR RIGHT of the header row,
+     brand far-left. */
+  .hb-actions{margin-left:auto}
+  .hamburger{display:inline-flex}
+  .mega{display:none}
+}
+/* TABLET -> SMALL-DESKTOP tightening (1101-1199) — the desktop nav IS shown here but the viewport
+   is still under the ~1119px comfy-fit width, so tighten the inter-cluster (hb-inner) + inter-link
+   (nav-list) gaps just enough that the brand + nav + Book row fits with margin (zero overflow).
+   True desktop (>=1200) keeps the full var(--ds-space-lg) rhythm unchanged. */
+@media (min-width:1101px) and (max-width:1199px){
+  .hb-inner{gap:var(--ds-space-md)}
+  .nav-list{gap:var(--ds-space-sm)}
+}
+@media (max-width:960px){
+  .mega-services .mega-inner{grid-template-columns:1fr;gap:var(--ds-space-lg)}
+  .mega-cols{grid-template-columns:repeat(3,1fr)}
+  .mega-cards{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:768px){
+  .u-trust{display:none}
+  .u-inner{justify-content:center}
+  .u-actions{gap:var(--ds-space-sm)}
+  .u-hours{display:none}
+  .hb-inner{min-height:66px}
+  .foot-cols{grid-template-columns:1fr 1fr;gap:var(--ds-space-lg)}
+  .foot-masthead{flex-direction:column;align-items:flex-start}
+  .foot-credit{text-align:left}
+}
+@media (max-width:440px){
+  .foot-cols{grid-template-columns:1fr}
+  .hb-inner{gap:var(--ds-space-sm)}
+  .brand-sub{display:none}
+}
+
+/* reduced motion, honor the preference (visual-direction section 4) */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition-duration:.001ms !important;animation-duration:.001ms !important;animation-iteration-count:1 !important;scroll-behavior:auto !important}
+  .nav-link::after{transition:none}
+  .btn:hover,.ecard:hover{transform:none}
+}

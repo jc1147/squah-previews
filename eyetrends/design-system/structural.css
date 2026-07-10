@@ -1,0 +1,2263 @@
+/* ============================================================================
+   EYE TRENDS — FOUNDATION TOURNAMENT · CONCEPT C "SHOP-FORWARD BOUTIQUE"
+   BODY structural sheet (the locked body design this specimen proposes).
+   ----------------------------------------------------------------------------
+   The IDENTITY (brand-card Concept B "Clean Optical Modern" -> eyetrends-tokens.css)
+   and the CHROME (Concept C "Editorial Split Header" -> eyetrends-chrome.css) are
+   LOCKED + stamped. This sheet locks ONLY the body between the locked header and
+   the locked .precta + footer.
+
+   ═══ BODY FEEL — "SHOP-FORWARD BOUTIQUE" ════════════════════════════════════
+   An eyewear-boutique read: the visitor meets FRAMES first (a browse band high up
+   with "Add to Selections"), then browses by category, THEN the practice earns the
+   trust (the 42-year, one-doctor story on the single dark punctuation band), then
+   the medical services, then real voices. A shop-fashion energy fused onto a
+   medical spine: warm editorial imagery, sharp-soft cards, more visual lift than a
+   clinic page — but LIGHT, calm and confident (visual-direction C7), never hype.
+   Browse-to-BOOK, never buy: the shop verbs schedule an exam, they never sell.
+
+   ═══ LIGHT CANVAS, ONE DARK PUNCTUATION (C7 §2) ═════════════════════════════
+   The page runs on the light paper canvas (:root). Warm-sand + white-card grounds
+   alternate for figure/ground rhythm. Exactly ONE body band flips to the near-black
+   ground (.surface-dark on the doctor trust band) — dark is punctuation, ~1 band,
+   matching the brand's low dark-ratio. The chrome supplies the other dark beats
+   (utility strip · the .precta closing CTA · footer).
+
+   ═══ FORCED DOM GRAMMAR ═════════════════════════════════════════════════════
+   Every <main> band is  section -> div.container(--full) -> div.row -> div.col ->
+   OBJECT. LAYOUT lives on .container/.row/.col (defined here, token-styled); the
+   component SKIN (et-*) rides the OBJECT inside the .col, never on the structure
+   layers. The chrome (header/mega/drawer/.precta/footer) is a LOCKED BLOCK, not
+   wrapped in this grammar.
+
+   ═══ G8 CONTRACT ════════════════════════════════════════════════════════════
+   ZERO raw brand hex below this banner. EVERY colour resolves through var(--ds-*)
+   from the LINKED eyetrends-tokens.css (:root light + .surface-dark dark flip).
+   The only literals are layout geometry (grid tracks, %, vw, deg, aspect-ratios,
+   line-heights, opacities, blur radii, px offsets) — never colour.
+
+   ═══ DESIGN-SYSTEM CITATIONS (resolve under .claude/design-system-unified/) ═══
+     library     -> _MODERN-WOW-SPEC                (§1 layered shadow + hairline + glass inset ·
+                    §2 scroll-reveal settle + card hover-lift + count-up · §3 grain/glow texture ·
+                    §4 display-scale + oversized numerals · §5 one-accent glow · §6 one bento moment)
+     library     -> _MODERN-DESIGN-PATTERN-LIBRARY   (E masked/framed imagery · F card polish · A one divider family)
+     library     -> _RESPONSIVE-PATTERN-LIBRARY      (G1/G4 grid cascade · Hero1 split->stack@767 · Comp7 icon stack)
+     blueprint   -> composition-medical-health       (V6 spine: services-grid + trust stacked deliberately)
+     composition -> composition-shop-fashion         (V16 emotion-before-info + browse-by-category + product tiles,
+                    fused onto the medical spine — the shop-forward read)
+     menu -> HERO-COMPOSITIONS.md #2   (Split-text-right + media-left mirror — the boutique media-first hero)
+     menu -> SECTION-COMPONENTS.md #44 (Featured collection ecom — the featured-frames browse band)
+     menu -> SECTION-COMPONENTS.md #45 (Category chips / nav — the shop-by-category tiles)
+     menu -> SECTION-COMPONENTS.md #16 (Founder bio split — the 42-yr doctor trust band)
+     menu -> SECTION-COMPONENTS.md #9  (Services 3-col — the medical services overview)
+     menu -> SECTION-COMPONENTS.md #24 (Testimonials grid — the reviews band)
+     menu -> CARD-VARIATIONS.md #12    (Compact ecom product card — the frame cards, price-free)
+     menu -> CARD-VARIATIONS.md #13    (Category image-overlay tile — the category tiles)
+     menu -> CARD-VARIATIONS.md #4     (Circle-icon service card — the services grid)
+     menu -> CARD-VARIATIONS.md #11    (Testimonial w/ avatar + stars — the reviews)
+     menu -> TRUST-STATS-SECTIONS.md #4 (Stats big-number band — the 42/one-doctor/since-1984 cluster)
+     menu -> ECOMMERCE-SECTIONS.md #2  (PDP buybox idiom, softened to "Add to Selections" — books, never buys)
+   ============================================================================ */
+
+/* ----------------------------------------------------------------------------
+   0 · LOCAL RHYTHM TOKENS + FORCED-GRAMMAR PRIMITIVES
+   (--et-* locals are DEFINED here so var-resolution is self-contained; they carry
+   NO colour. The grammar primitives carry LAYOUT ONLY — the et-* skin never lands
+   on them.)
+   ---------------------------------------------------------------------------- */
+:root{
+  --et-flow: clamp(64px, 8.5vw, 116px);   /* the shared vertical section rhythm — generous, airy (C7 §3) */
+  --et-measure: 1200px;                    /* the body measure (matches the chrome container) */
+  --et-gap: clamp(18px, 2.4vw, 30px);      /* the shared card/column gap */
+  --et-i: 0;                               /* stagger index fallback (overridden inline per reveal) */
+}
+
+/* the max-width wrapper for full-bleed bands (the plain .container comes from the chrome sheet) */
+.container--full{ width:100%; max-width:none; margin-inline:0; padding-inline:0; }
+
+/* rows — transparent pass-through by default; modifiers turn on the arrangement (layout on structure) */
+.row{ display:block; }
+.row--split{ display:grid; grid-template-columns: 1.05fr 1fr; align-items:center; gap:clamp(32px,5vw,72px); }
+.row--split-media{ display:grid; grid-template-columns: 1fr 1.05fr; align-items:center; gap:clamp(32px,5vw,72px); }
+.row--frames{ display:grid; grid-template-columns: repeat(4, 1fr); gap:var(--et-gap); }
+.row--tiles{ display:grid; grid-template-columns: repeat(4, 1fr); gap:var(--et-gap); }
+.row--svc{ display:grid; grid-template-columns: repeat(3, 1fr); gap:var(--et-gap); }
+.row--reviews{ display:grid; grid-template-columns: repeat(3, 1fr); gap:var(--et-gap); }
+.row--stats{ display:grid; grid-template-columns: repeat(3, 1fr); gap:clamp(16px,3vw,40px); }
+.row--head{ display:block; }
+.row--flex{ display:flex; align-items:center; gap:clamp(12px,2vw,24px); flex-wrap:wrap; }
+
+/* cols — a leaf cell; never overflows its track (min-width:0). Spans on the split rows. */
+.col{ display:block; min-width:0; }
+.col--full{ display:block; min-width:0; width:100%; }
+[class*="col--span-"]{ display:block; min-width:0; }
+.col--measure{ width:100%; max-width:var(--et-measure); margin-inline:auto; }
+.col--center{ margin-inline:auto; text-align:center; }
+
+/* ----------------------------------------------------------------------------
+   1 · SECTION GROUND SYSTEM — the alternating figure/ground rhythm (light canvas
+   with warm-sand + white-card bands; ONE dark punctuation band flips via
+   .surface-dark on the section, re-skinned by tokens.css).
+   ---------------------------------------------------------------------------- */
+.et-band{ position:relative; padding-block: var(--et-flow); background: var(--ds-bg-surface); color: var(--ds-ink); }
+.et-band--warm{ background: var(--ds-bg-warm); }
+.et-band--paper{ background: var(--ds-bg-surface-2); }
+.et-band--dark{ background: var(--ds-primary-deep); color: var(--ds-ink-on-dark); }   /* rides with .surface-dark on the section */
+
+/* a soft top fade so a warm band arrives on the paper without a hard seam (C7 §3 hairline/minimal) */
+.et-band--seam{ border-top:1px solid var(--ds-line); }
+
+/* the ultra-subtle glow-wash a hero/dark band carries (WOW §5 accent bloom) */
+.et-wash::before{
+  content:""; position:absolute; inset:0; pointer-events:none; z-index:0;
+  background: var(--ds-glow-wash);
+}
+.et-wash > .container,
+.et-wash > .container--full{ position:relative; z-index:1; }
+
+/* ----------------------------------------------------------------------------
+   2 · SHARED ATOMS — eyebrow / display heads / lede / section head / go-link /
+   pills. Display-scale contrast (WOW §4): big grotesk heads against calm body.
+   ---------------------------------------------------------------------------- */
+.et-eyebrow{
+  display:inline-flex; align-items:center; gap:.6em;
+  font-family:var(--ds-font-mono); font-size:.72rem; font-weight:400; letter-spacing:.22em;
+  text-transform:uppercase; color:var(--ds-accent-ink); margin:0 0 var(--ds-space-sm);
+}
+.et-eyebrow::before{ content:""; width:22px; height:2px; border-radius:var(--ds-r-pill); background:var(--ds-accent); }
+.surface-dark .et-eyebrow{ color:var(--ds-accent-light); }
+
+.et-h2{ font-family:var(--ds-font-display); font-weight:700; letter-spacing:-.02em; line-height:1.04;
+  font-size:clamp(1.9rem, 3.6vw, 3rem); color:var(--ds-ink-heading); margin:0; }
+.et-h3{ font-family:var(--ds-font-display); font-weight:600; letter-spacing:-.015em; line-height:1.1;
+  font-size:clamp(1.15rem, 1.7vw, 1.4rem); color:var(--ds-ink-heading); margin:0; }
+.et-ac{ color:var(--ds-primary); }
+.surface-dark .et-ac{ color:var(--ds-accent-light); }
+.et-grad{ background:var(--ds-grad-text); -webkit-background-clip:text; background-clip:text; color:transparent; }
+
+.et-lede{ font-size:clamp(1rem, 1.25vw, 1.14rem); line-height:1.62; color:var(--ds-ink-soft);
+  margin:var(--ds-space-sm) 0 0; max-width:52rem; }
+
+.et-sec-head{ margin:0 0 clamp(32px,4vw,52px); }
+.et-sec-head--center{ text-align:center; margin-inline:auto; max-width:46rem; }
+.et-sec-head--center .et-lede{ margin-inline:auto; }
+.et-sec-head--split{ display:flex; align-items:flex-end; justify-content:space-between; gap:var(--ds-space-lg); flex-wrap:wrap; }
+.et-sec-head--split .et-lede{ max-width:34rem; margin-top:0; }
+
+.et-golink{ display:inline-flex; align-items:center; gap:.4em; font-family:var(--ds-font-display);
+  font-weight:600; font-size:.92rem; color:var(--ds-primary);
+  transition:gap var(--ds-dur-fast) var(--ds-ease), color var(--ds-dur-fast) var(--ds-ease); }
+.et-golink svg{ width:15px; height:15px; }
+.et-golink:hover{ gap:.75em; color:var(--ds-accent-ink); }
+.surface-dark .et-golink{ color:var(--ds-accent-light); }
+
+.et-pill{ display:inline-flex; align-items:center; gap:.5em; font-family:var(--ds-font-mono);
+  font-size:.7rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ds-ink-soft);
+  padding:.5em .85em; border:1px solid var(--ds-line); border-radius:var(--ds-r-pill); background:var(--ds-bg-surface-2); }
+.et-pill .et-dot{ width:6px; height:6px; border-radius:var(--ds-r-pill); background:var(--ds-success);
+  box-shadow:0 0 0 3px color-mix(in srgb, var(--ds-success) 22%, transparent); }
+.surface-dark .et-pill{ color:var(--ds-ink-on-dark); border-color:var(--ds-glass-border);
+  background:color-mix(in srgb, var(--ds-bg-surface-2) 10%, transparent); }
+
+/* the body BUTTONS reuse the chrome .btn family; this only lays the hero cluster out */
+.et-cta-cluster{ display:flex; flex-wrap:wrap; align-items:center; gap:var(--ds-space-sm); margin-top:var(--ds-space-lg); }
+.et-cta-note{ display:inline-flex; align-items:center; gap:.5em; font-size:.82rem; color:var(--ds-ink-soft); }
+.surface-dark .et-cta-note{ color:color-mix(in srgb, var(--ds-ink-on-dark) 70%, transparent); }
+
+/* ----------------------------------------------------------------------------
+   3 · SCROLL-REVEAL (robust — VISIBLE ON LOAD). Starts at opacity:1 with a small
+   translateY settle; JS lands `.is-in`. If JS never fires, nothing is hidden
+   (WOW §2, reduced-motion honored below).
+   ---------------------------------------------------------------------------- */
+.et-reveal{ opacity:1; transform:translateY(14px); transition:transform var(--ds-dur-slow) var(--ds-ease-out);
+  transition-delay:calc(var(--et-i, 0) * 70ms); }
+.et-reveal.is-in{ transform:translateY(0); }
+
+/* ----------------------------------------------------------------------------
+   3.5 · REAL IMAGERY FILL — a cover <img> that fills its rounded/masked media box
+   (hero frame-wall · frame product cards · category tiles · doctor portrait),
+   replacing the representative placeholder fills the specimen shipped with. The
+   parent box keeps its radius / aspect-ratio / shadow / overflow / scrim / glow /
+   badge; this only makes the photo cover it, sitting behind those later siblings
+   in tree order. LAYOUT ONLY — zero colour (G8-safe).
+   ---------------------------------------------------------------------------- */
+.et-media-img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; }
+.et-doctor__portrait .et-media-img{ object-position:50% 22%; }   /* keep the doctor's face in frame */
+
+/* ----------------------------------------------------------------------------
+   4 · HERO — HERO-COMPOSITIONS #2 (media-left mirror split). A warm editorial
+   frame-wall placeholder LEFT + confident copy RIGHT with the dual browse-to-book
+   CTA. A floating trust chip overlaps the media boundary (WOW §6 asymmetry).
+   ---------------------------------------------------------------------------- */
+.et-hero{ position:relative; padding-block: clamp(48px,7vw,88px) var(--et-flow); overflow:hidden; }
+.et-hero__copy{ position:relative; z-index:1; }
+.et-hero__h{ font-family:var(--ds-font-display); font-weight:700; letter-spacing:-.025em; line-height:1.02;
+  font-size:clamp(2.4rem, 5.2vw, 4rem); color:var(--ds-ink-heading); margin:var(--ds-space-md) 0 0; }
+.et-hero__sub{ font-size:clamp(1.05rem, 1.4vw, 1.24rem); line-height:1.58; color:var(--ds-ink-soft);
+  margin:var(--ds-space-md) 0 0; max-width:38rem; }
+.et-hero__proof{ display:flex; flex-wrap:wrap; gap:clamp(20px,3vw,44px); margin-top:var(--ds-space-lg);
+  padding-top:var(--ds-space-lg); border-top:1px solid var(--ds-line); }
+.et-hero__stat{ display:flex; flex-direction:column; gap:2px; }
+.et-hero__k{ font-family:var(--ds-font-display); font-weight:700; letter-spacing:-.02em;
+  font-size:clamp(1.7rem,2.6vw,2.2rem); color:var(--ds-primary); line-height:1; }
+.et-hero__l{ font-size:.82rem; color:var(--ds-ink-soft); }
+
+/* the media stage — a warm framed boutique wall (placeholder fill, per C7 §6 waived imagery). */
+.et-hero__media{ position:relative; width:100%; min-width:0; border-radius:var(--ds-r-surface);
+  overflow:hidden; box-shadow:var(--ds-shadow-card-2stop), var(--ds-inset-hi);
+  aspect-ratio: 5 / 6; max-height:min(74vh, 620px); background:var(--ds-bg-warm); }
+.et-hero__scene{ position:absolute; inset:0; display:grid; grid-template-columns:repeat(3,1fr);
+  grid-template-rows:repeat(3,1fr); gap:2px; padding:2px;
+  background:linear-gradient(150deg, var(--ds-accent-soft), var(--ds-bg-warm) 55%, var(--ds-primary-soft)); }
+.et-hero__pane{ position:relative; border-radius:calc(var(--ds-r-surface) - 6px); overflow:hidden;
+  background:var(--ds-bg-surface-2); display:grid; place-items:center; }
+.et-hero__pane svg{ width:58%; height:58%; opacity:.9; color:var(--ds-primary); }
+.et-hero__pane--a{ background:linear-gradient(135deg, var(--ds-bg-surface-2), var(--ds-primary-soft)); }
+.et-hero__pane--b{ background:linear-gradient(135deg, var(--ds-accent-soft), var(--ds-bg-surface-2)); }
+.et-hero__pane--c{ background:var(--ds-grad-hero); }
+.et-hero__pane--c svg{ color:var(--ds-accent-light); opacity:.95; }
+.et-hero__glow{ position:absolute; inset:0; pointer-events:none; background:var(--ds-glow-wash); mix-blend-mode:screen; }
+/* the floating trust chip that overlaps the media corner */
+.et-hero__chip{ position:absolute; left:calc(-1 * clamp(8px,2vw,26px)); bottom:clamp(18px,4vw,34px); z-index:2;
+  display:flex; align-items:center; gap:.7em; padding:.7em 1.05em; border-radius:var(--ds-r-pill);
+  background:color-mix(in srgb, var(--ds-bg-surface-2) 82%, transparent);
+  -webkit-backdrop-filter:var(--ds-glass-blur); backdrop-filter:var(--ds-glass-blur);
+  border:1px solid var(--ds-hairline); box-shadow:var(--ds-shadow-lift); }
+.et-hero__chip b{ font-family:var(--ds-font-display); font-weight:700; color:var(--ds-ink-heading); font-size:1rem; }
+.et-hero__chip span{ font-size:.76rem; color:var(--ds-ink-soft); display:block; }
+.et-hero__chip .et-ring{ width:34px; height:34px; border-radius:var(--ds-r-pill); flex:0 0 auto; display:grid; place-items:center;
+  background:var(--ds-primary-soft); color:var(--ds-primary); }
+.et-hero__chip .et-ring svg{ width:19px; height:19px; }
+
+/* ----------------------------------------------------------------------------
+   5 · FEATURED-FRAMES BROWSE BAND — CARD-VARIATIONS #12 / SECTION-COMPONENTS #44 /
+   ECOMMERCE-SECTIONS #2. Product-forward frame cards, PRICE-FREE. The action is
+   "Add to Selections" (books an exam, never buys — content-bible). Sharp-soft cards.
+   ---------------------------------------------------------------------------- */
+.et-frame{ position:relative; display:flex; flex-direction:column; background:var(--ds-bg-surface-2);
+  border:1px solid var(--ds-line); border-radius:var(--ds-r-surface); overflow:hidden;
+  box-shadow:var(--ds-shadow-rest); transition:transform var(--ds-dur) var(--ds-ease),
+  box-shadow var(--ds-dur) var(--ds-ease), border-color var(--ds-dur) var(--ds-ease); }
+.et-frame:hover{ transform:translateY(-6px); box-shadow:var(--ds-shadow-lift);
+  border-color:color-mix(in srgb, var(--ds-primary) 34%, transparent); }
+.et-frame__media{ position:relative; width:100%; min-width:0; aspect-ratio:4 / 3; overflow:hidden;
+  display:grid; place-items:center; }
+.et-frame__media--a{ background:linear-gradient(150deg, var(--ds-primary-soft), var(--ds-bg-surface-2)); }
+.et-frame__media--b{ background:linear-gradient(150deg, var(--ds-accent-soft), var(--ds-bg-surface-2)); }
+.et-frame__media--c{ background:linear-gradient(150deg, var(--ds-bg-warm), var(--ds-primary-soft)); }
+.et-frame__media--d{ background:linear-gradient(150deg, var(--ds-primary-soft), var(--ds-accent-soft)); }
+.et-frame__glasses{ width:64%; height:auto; color:var(--ds-primary);
+  filter:drop-shadow(0 8px 18px color-mix(in srgb, var(--ds-primary-deep) 18%, transparent));
+  transition:transform var(--ds-dur-slow) var(--ds-ease-out); }
+.et-frame:hover .et-frame__glasses{ transform:scale(1.05) rotate(-1deg); }
+.et-frame__tag{ position:absolute; top:12px; left:12px; font-family:var(--ds-font-mono);
+  font-size:.62rem; letter-spacing:.14em; text-transform:uppercase; color:var(--ds-ink-on-dark);
+  background:var(--ds-primary); padding:.4em .7em; border-radius:var(--ds-r-control); }
+.et-frame__tag--new{ background:var(--ds-accent-deep); }
+.et-frame__body{ padding:var(--ds-space-md); display:flex; flex-direction:column; gap:6px; flex:1 1 auto; }
+.et-frame__brand{ font-family:var(--ds-font-mono); font-size:.66rem; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--ds-accent-ink); }
+.et-frame__name{ font-family:var(--ds-font-display); font-weight:600; font-size:1.05rem; color:var(--ds-ink-heading); }
+.et-frame__meta{ font-size:.84rem; color:var(--ds-ink-soft); line-height:1.45; }
+.et-frame__foot{ margin-top:var(--ds-space-sm); display:flex; align-items:center; justify-content:space-between; gap:var(--ds-space-sm); }
+.et-frame__add{ display:inline-flex; align-items:center; gap:.45em; font-family:var(--ds-font-display);
+  font-weight:600; font-size:.86rem; color:var(--ds-primary);
+  padding:.5em .75em; border-radius:var(--ds-r-control); border:1.5px solid color-mix(in srgb,var(--ds-primary) 34%,transparent);
+  transition:background var(--ds-dur) var(--ds-ease), border-color var(--ds-dur) var(--ds-ease), color var(--ds-dur) var(--ds-ease); }
+.et-frame__add:hover{ background:var(--ds-primary-soft); border-color:var(--ds-primary); }
+.et-frame__add svg{ width:15px; height:15px; }
+.et-frame__wear{ font-size:.76rem; color:var(--ds-ink-soft); }
+
+/* ----------------------------------------------------------------------------
+   6 · SHOP-BY-CATEGORY TILES — CARD-VARIATIONS #13 / SECTION-COMPONENTS #45.
+   Image-overlay tiles (distinct treatment from the frame cards). Gradient-masked
+   placeholder scene + label + arrow. One tile is a taller feature (asymmetry, WOW §6).
+   ---------------------------------------------------------------------------- */
+.et-cat{ position:relative; display:block; border-radius:var(--ds-r-surface); overflow:hidden;
+  min-height:clamp(200px, 26vw, 300px); box-shadow:var(--ds-shadow-card);
+  transition:transform var(--ds-dur) var(--ds-ease), box-shadow var(--ds-dur) var(--ds-ease); }
+.et-cat:hover{ transform:translateY(-5px); box-shadow:var(--ds-shadow-lift); }
+.et-cat__scene{ position:absolute; inset:0; }
+.et-cat__scene svg{ position:absolute; right:-8%; bottom:-8%; width:62%; height:auto; opacity:.5;
+  color:var(--ds-bg-surface-2); }
+.et-cat--frames .et-cat__scene{ background:var(--ds-grad-hero); }
+.et-cat--sun .et-cat__scene{ background:linear-gradient(150deg, var(--ds-accent-deep), var(--ds-accent-ink)); }
+.et-cat--kids .et-cat__scene{ background:linear-gradient(150deg, var(--ds-primary), var(--ds-accent-2)); }
+.et-cat--contacts .et-cat__scene{ background:linear-gradient(150deg, var(--ds-primary-deep), var(--ds-primary)); }
+.et-cat__scrim{ position:absolute; inset:0; background:linear-gradient(180deg,
+  color-mix(in srgb, var(--ds-primary-deep) 4%, transparent) 30%,
+  color-mix(in srgb, var(--ds-primary-deep) 62%, transparent)); }
+.et-cat__body{ position:absolute; inset:auto 0 0 0; z-index:1; padding:var(--ds-space-md);
+  display:flex; align-items:flex-end; justify-content:space-between; gap:var(--ds-space-sm); }
+.et-cat__eyebrow{ font-family:var(--ds-font-mono); font-size:.64rem; letter-spacing:.18em; text-transform:uppercase;
+  color:var(--ds-accent-light); display:block; margin-bottom:4px; }
+.et-cat__name{ font-family:var(--ds-font-display); font-weight:700; letter-spacing:-.01em;
+  font-size:clamp(1.25rem,1.9vw,1.6rem); color:var(--ds-ink-on-dark); line-height:1.05; }
+.et-cat__arrow{ flex:0 0 auto; width:40px; height:40px; border-radius:var(--ds-r-pill); display:grid; place-items:center;
+  background:color-mix(in srgb, var(--ds-bg-surface-2) 18%, transparent); color:var(--ds-ink-on-dark);
+  border:1px solid var(--ds-glass-border); transition:background var(--ds-dur) var(--ds-ease); }
+.et-cat:hover .et-cat__arrow{ background:var(--ds-accent); color:var(--ds-primary-deep); }
+.et-cat__arrow svg{ width:18px; height:18px; }
+.et-cat--wide{ grid-column: span 2; }
+
+/* ----------------------------------------------------------------------------
+   7 · THE 42-YEAR DOCTOR TRUST BAND — SECTION-COMPONENTS #16 + TRUST-STATS #4.
+   The single DARK punctuation band (.surface-dark on the section). A masked doctor
+   portrait placeholder + the personal one-doctor story + credential chips + a
+   count-up stat cluster. This is where the shop earns the medical trust.
+   ---------------------------------------------------------------------------- */
+.et-doctor{ overflow:hidden; }
+.et-doctor__story{ position:relative; z-index:1; }
+.et-doctor .et-wash::before{ opacity:.9; }
+.et-doctor__media{ position:relative; width:100%; min-width:0; border-radius:var(--ds-r-surface); overflow:hidden;
+  aspect-ratio:4 / 5; max-height:min(70vh, 560px);
+  box-shadow:var(--ds-shadow-lift), var(--ds-inset-hi);
+  background:linear-gradient(160deg, var(--ds-primary), var(--ds-primary-deep) 70%); }
+.et-doctor__portrait{ position:absolute; inset:0; display:grid; place-items:center; }
+.et-doctor__portrait svg{ width:56%; height:auto; color:color-mix(in srgb, var(--ds-accent-light) 88%, transparent);
+  opacity:.9; }
+.et-doctor__portrait::after{ content:""; position:absolute; inset:0; background:var(--ds-glow-wash); mix-blend-mode:screen; }
+.et-doctor__badge{ position:absolute; right:clamp(14px,3vw,22px); top:clamp(14px,3vw,22px); z-index:2;
+  display:flex; flex-direction:column; align-items:flex-end; gap:1px; padding:.7em 1em;
+  border-radius:var(--ds-r-surface); background:color-mix(in srgb, var(--ds-bg-surface-2) 12%, transparent);
+  -webkit-backdrop-filter:var(--ds-glass-blur); backdrop-filter:var(--ds-glass-blur);
+  border:1px solid var(--ds-glass-border); }
+.et-doctor__badge b{ font-family:var(--ds-font-display); font-weight:700; font-size:1.5rem; color:var(--ds-accent-light); line-height:1; }
+.et-doctor__badge span{ font-size:.7rem; letter-spacing:.06em; color:color-mix(in srgb, var(--ds-ink-on-dark) 74%, transparent); }
+.et-doctor__name{ font-family:var(--ds-font-display); font-weight:600; font-size:1.02rem; color:var(--ds-ink-on-dark); margin-top:var(--ds-space-md); }
+.et-doctor__role{ font-size:.86rem; color:color-mix(in srgb, var(--ds-ink-on-dark) 70%, transparent); }
+.et-chips{ display:flex; flex-wrap:wrap; gap:var(--ds-space-xs); margin-top:var(--ds-space-md); }
+.et-doctor__stats{ display:flex; flex-wrap:wrap; gap:clamp(20px,3vw,44px); margin-top:var(--ds-space-lg);
+  padding-top:var(--ds-space-lg); border-top:1px solid var(--ds-glass-border); }
+.et-stat{ display:flex; flex-direction:column; gap:3px; }
+.et-stat__k{ font-family:var(--ds-font-display); font-weight:700; letter-spacing:-.03em; line-height:.95;
+  font-size:clamp(2.4rem, 4.4vw, 3.4rem); color:var(--ds-accent-light); }
+.et-stat__k .et-suf{ font-size:.5em; color:color-mix(in srgb, var(--ds-accent-light) 80%, transparent); margin-left:.06em; }
+.et-stat__l{ font-size:.84rem; line-height:1.4; color:color-mix(in srgb, var(--ds-ink-on-dark) 74%, transparent); max-width:15rem; }
+
+/* ----------------------------------------------------------------------------
+   8 · SERVICES OVERVIEW — SECTION-COMPONENTS #9 + CARD-VARIATIONS #4 circle-icon
+   card. The medical spine, back on the light canvas. Friendly-clinical.
+   ---------------------------------------------------------------------------- */
+.et-svc{ position:relative; display:flex; flex-direction:column; gap:var(--ds-space-sm);
+  padding:clamp(20px,2.4vw,30px); background:var(--ds-bg-surface-2); border:1px solid var(--ds-line);
+  border-radius:var(--ds-r-surface); box-shadow:var(--ds-shadow-rest);
+  transition:transform var(--ds-dur) var(--ds-ease), box-shadow var(--ds-dur) var(--ds-ease), border-color var(--ds-dur) var(--ds-ease); }
+.et-svc:hover{ transform:translateY(-5px); box-shadow:var(--ds-shadow-card); border-color:color-mix(in srgb,var(--ds-primary) 30%,transparent); }
+.et-svc__ico{ width:52px; height:52px; border-radius:var(--ds-r-pill); flex:0 0 auto; display:grid; place-items:center;
+  background:var(--ds-primary-soft); color:var(--ds-primary); box-shadow:var(--ds-inset-hi); }
+.et-svc__ico svg{ width:26px; height:26px; }
+.et-svc--warm .et-svc__ico{ background:var(--ds-accent-soft); color:var(--ds-accent-ink); }
+.et-svc__t{ font-family:var(--ds-font-display); font-weight:600; font-size:1.12rem; color:var(--ds-ink-heading); }
+.et-svc__d{ font-size:.92rem; line-height:1.55; color:var(--ds-ink-soft); }
+.et-svc__foot{ margin-top:auto; padding-top:var(--ds-space-xs); }
+
+/* ----------------------------------------------------------------------------
+   9 · REVIEWS — SECTION-COMPONENTS #24 + CARD-VARIATIONS #11 (avatar + stars).
+   Real voices, warm. Distinct treatment (quote card w/ avatar) from every card above.
+   ---------------------------------------------------------------------------- */
+.et-review{ display:flex; flex-direction:column; gap:var(--ds-space-sm); height:100%;
+  padding:clamp(22px,2.6vw,32px); background:var(--ds-bg-surface-2); border:1px solid var(--ds-line);
+  border-radius:var(--ds-r-surface); box-shadow:var(--ds-shadow-rest); }
+.et-review__stars{ display:inline-flex; gap:2px; color:var(--ds-accent); font-size:1rem; letter-spacing:1px; }
+.et-review__q{ font-size:1rem; line-height:1.6; color:var(--ds-ink); }
+.et-review__q b{ color:var(--ds-ink-heading); font-weight:600; }
+.et-review__by{ display:flex; align-items:center; gap:var(--ds-space-sm); margin-top:auto; padding-top:var(--ds-space-sm);
+  border-top:1px solid var(--ds-line); }
+.et-avatar{ width:42px; height:42px; border-radius:var(--ds-r-pill); flex:0 0 auto; display:grid; place-items:center;
+  font-family:var(--ds-font-display); font-weight:700; font-size:.9rem; color:var(--ds-ink-on-dark);
+  background:var(--ds-grad-brand); box-shadow:var(--ds-inset-hi); }
+.et-review__name{ font-family:var(--ds-font-display); font-weight:600; font-size:.94rem; color:var(--ds-ink-heading); }
+.et-review__meta{ font-size:.78rem; color:var(--ds-ink-soft); }
+
+/* the reviews footer strip — an "insurance accepted" trust line (NOT a CTA band) */
+.et-reviews__foot{ margin-top:clamp(32px,4vw,52px); display:flex; flex-wrap:wrap; align-items:center;
+  justify-content:center; gap:var(--ds-space-sm) var(--ds-space-lg); text-align:center; }
+.et-reviews__foot .et-lede{ margin:0; }
+
+/* ----------------------------------------------------------------------------
+   10 · SHAPE DIVIDER — ONE family (WOW §A), used sparingly as a soft organic seam
+   between the warm frames band and the paper category band. Token-filled.
+   ---------------------------------------------------------------------------- */
+.et-divider{ display:block; width:100%; height:clamp(36px,5vw,64px); margin:0; }
+.et-divider path{ fill:var(--ds-bg-surface); }
+.et-divider--warm path{ fill:var(--ds-bg-warm); }
+.et-divider--paper path{ fill:var(--ds-bg-surface-2); }
+
+/* ----------------------------------------------------------------------------
+   10 · LEGAL / POLICY DOCUMENT — LEGAL-SECTIONS.md #1/#2/#3 (.bw-legal · .bw-toc).
+   A T-LEGAL page reads DOCUMENT: one calm single-measure column of flowing prose
+   with anchored headings + an optional jump-index — NEVER a hero, NEVER a card
+   stack (the eyetrends 2026-07-09 freeball this closes). Token-adapted from the v4
+   build reference impl (batchworks-structural.css .bw-legal/.bw-toc); LIGHT-theme
+   + AA-safe — links/markers/counters use the teal --ds-primary (5.8:1 on paper),
+   dividers use --ds-line, washes use --ds-primary-soft. The .bw-legal container
+   owns the reading measure (720px); children stay token-pure flowing prose.
+   ---------------------------------------------------------------------------- */
+.bw-legal{ max-width:720px; }
+.bw-legal > :first-child{ margin-top:0; }
+.bw-legal > :last-child{ margin-bottom:0; }
+.bw-legal p{ font-family:var(--ds-font-body); font-size:1.0625rem; line-height:1.72;
+  color:var(--ds-ink-soft); margin:0 0 var(--ds-space-lg); }
+.bw-legal h2{ font-family:var(--ds-font-display); font-weight:600; letter-spacing:-.01em;
+  line-height:1.14; font-size:clamp(1.35rem,2.4vw,1.75rem); color:var(--ds-ink-heading);
+  margin:clamp(40px,5vw,60px) 0 var(--ds-space-md); scroll-margin-top:clamp(90px,12vh,120px); }
+.bw-legal h3{ font-family:var(--ds-font-display); font-weight:600; letter-spacing:0;
+  line-height:1.18; font-size:clamp(1.05rem,1.6vw,1.25rem); color:var(--ds-ink-heading);
+  margin:clamp(28px,3.4vw,40px) 0 var(--ds-space-sm); scroll-margin-top:clamp(90px,12vh,120px); }
+.bw-legal ul, .bw-legal ol{ margin:0 0 var(--ds-space-lg); padding-left:1.4em; color:var(--ds-ink-soft); }
+.bw-legal li{ font-family:var(--ds-font-body); font-size:1.0625rem; line-height:1.72;
+  margin:0 0 var(--ds-space-sm); }
+.bw-legal li::marker{ color:var(--ds-primary); }
+.bw-legal a{ color:var(--ds-primary); text-decoration:underline; text-underline-offset:2px;
+  text-decoration-thickness:1px; transition:color var(--ds-dur-fast) var(--ds-ease); }
+.bw-legal a:hover{ color:var(--ds-primary-deep); }
+.bw-legal strong, .bw-legal b{ color:var(--ds-ink); font-weight:600; }
+.bw-legal em, .bw-legal i{ color:var(--ds-ink-soft); }
+.bw-legal hr{ border:0; height:1px; background:var(--ds-line); margin:clamp(32px,4vw,48px) 0; }
+.bw-legal__effective{ font-family:var(--ds-font-mono); font-size:.75rem; letter-spacing:.04em;
+  color:var(--ds-ink-soft); margin:0 0 clamp(24px,3vw,40px); }
+/* §0 legal-HEADER context: when the effective-date caption is the LAST line of the quiet title
+   block (a direct child of .col--measure), it must NOT carry its document-flow bottom margin — that
+   clamp(24px,3vw,40px) = 40px at 1440 is exactly what broke §0 cadence on disclaimer/privacy
+   (trailing dead = section padding + this margin; leading = section padding only). Zeroing it here
+   restores leading == trailing WITHOUT touching the section padding, the in-document
+   .bw-legal__effective spacing, or accessibility (whose §0 ends on .et-lede, no such line). */
+.col--measure > .bw-legal__effective:last-child{ margin-bottom:0; }
+.bw-legal__callout{ border:1px solid var(--ds-line); border-left:3px solid var(--ds-primary);
+  border-radius:var(--ds-r-control); background:var(--ds-primary-soft);
+  padding:clamp(14px,2vw,20px) clamp(16px,2.2vw,24px); margin:0 0 clamp(28px,3.4vw,44px);
+  font-family:var(--ds-font-body); font-size:.95rem; line-height:1.62; color:var(--ds-ink); }
+.bw-legal__callout strong{ color:var(--ds-ink); }
+
+/* jump-index card — .bw-toc inline (#2, capped to the reading measure so the whole document reads as one
+   left-aligned column); .bw-toc--rail = sticky side-rail (#3), where the narrow rail col governs its width. */
+.bw-toc{ max-width:720px; border:1px solid var(--ds-line); border-radius:var(--ds-r-surface);
+  background:var(--ds-bg-surface-2); box-shadow:var(--ds-shadow-card); padding:clamp(18px,2vw,26px);
+  margin-bottom:clamp(28px,4vw,44px); }
+.bw-toc__title{ font-family:var(--ds-font-mono); font-size:.6875rem; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--ds-primary); margin:0 0 var(--ds-space-md);
+  display:inline-flex; align-items:center; gap:10px; }
+.bw-toc__title::before{ content:""; width:22px; height:2px; border-radius:var(--ds-r-pill); background:var(--ds-primary); }
+.bw-toc__list{ list-style:none; margin:0; padding:0; display:grid; gap:2px; counter-reset:bw-toc; }
+.bw-toc__item{ margin:0; min-width:0; }
+.bw-toc__link{ display:flex; align-items:baseline; gap:10px; min-width:0;
+  font-family:var(--ds-font-body); font-size:.9375rem; line-height:1.4; color:var(--ds-ink-soft);
+  padding:8px 10px; border-radius:var(--ds-r-control);
+  transition:color var(--ds-dur-fast) var(--ds-ease), background-color var(--ds-dur-fast) var(--ds-ease); }
+.bw-toc__link::before{ counter-increment:bw-toc; content:counter(bw-toc, decimal-leading-zero);
+  font-family:var(--ds-font-mono); font-size:.6875rem; color:var(--ds-primary);
+  font-variant-numeric:tabular-nums; flex:0 0 auto; }
+.bw-toc__link:hover{ color:var(--ds-ink); background:var(--ds-primary-soft); }
+.bw-toc__link.is-active, .bw-toc__link[aria-current="true"]{ color:var(--ds-primary); background:var(--ds-primary-soft); }
+.bw-toc--rail{ position:sticky; top:clamp(90px,12vh,120px); align-self:start;
+  max-height:calc(100vh - clamp(108px,15vh,150px)); overflow:auto; }
+@media (max-width:1024px){
+  .bw-toc--rail{ position:static; top:auto; max-height:none; overflow:visible; }
+}
+
+/* ----------------------------------------------------------------------------
+   10b · CONTACT FORM (.bw-form family) — the T-CONTACT quote/booking form
+   vocabulary, SINGLE-SOURCED here so the contact concepts compose from it (exactly
+   like the .bw-legal / .bw-toc block above). A T-CONTACT page reads FORM: label-
+   above-input field rows in a balanced 2-col grid, a full-width textarea, a segmented
+   cadence control + a submit .btn, with a STATIC inline .bw-form__success confirmation
+   (JS preventDefault -> .is-sent flips the fields out; NO backend). Token-adapted from
+   the v4 build reference impl (batchworks-structural.css .bw-form family) — batchworks
+   is DARK, eyetrends is LIGHT, so every colour/shadow/border is REMAPPED to the light
+   --ds-* vocabulary, NOT copied verbatim. AA-CRITICAL (the concept-A invisible-CTA
+   lesson): input/label TEXT = --ds-ink on a white (--ds-bg-surface-2) field so text
+   never matches its field; the :focus ring is a VISIBLE 2px --ds-primary outline +
+   offset (never outline:none-only); the cadence CHECKED segment is --ds-ink on a
+   --ds-primary-soft wash (never teal-text-on-teal); the success panel is a
+   --ds-primary-soft card with --ds-ink copy + a teal check. eyetrends has NO
+   --ds-divider / tracking / lh tokens -> --ds-line for dividers + literal
+   letter-spacing/line-height. Token-pure: every colour resolves through var(--ds-*);
+   the only literals are layout geometry. The submit is the locked chrome .btn (skin
+   reused, NOT restyled here). em reading-measures only (no ch on body-font — G8/A3).
+   ---------------------------------------------------------------------------- */
+.bw-form{
+  position:relative;
+  background:var(--ds-bg-surface-2);
+  background:linear-gradient(180deg, var(--ds-bg-surface-2) 0%, var(--ds-bg-surface) 100%);
+  border:1px solid var(--ds-line); border-radius:var(--ds-r-surface);
+  box-shadow:var(--ds-shadow-lift), var(--ds-inset-hi);
+  padding:clamp(24px,3vw,44px);
+}
+.bw-form__head{ margin:0 0 clamp(20px,2.6vw,32px); }
+.bw-form__h{
+  font-family:var(--ds-font-display); font-weight:600; text-transform:uppercase;
+  letter-spacing:-.02em; line-height:1.08;
+  font-size:clamp(20px,2vw,26px); color:var(--ds-ink); margin:0 0 var(--ds-space-sm);
+}
+.bw-form__h .ac{ color:var(--ds-primary); }
+.bw-form__intro{ font-family:var(--ds-font-body); font-size:15px; line-height:1.62; color:var(--ds-ink-soft); margin:0; max-width:46em; }
+
+/* grouped — two named <fieldset class="bw-form__group"> each with a small <legend>.
+   UA fieldset/legend chrome reset; a hairline rule separates the 2nd group. Legend
+   remapped to the display face + --ds-ink (was a mono accent eyebrow on the dark ref). */
+.bw-form__group{ border:0; margin:0; padding:0; min-width:0; }
+.bw-form__group + .bw-form__group{ margin-top:clamp(24px,3vw,36px); padding-top:clamp(24px,3vw,36px); border-top:1px solid var(--ds-line); }
+.bw-form__legend{
+  display:block; width:100%; padding:0; margin:0 0 var(--ds-space-md);
+  font-family:var(--ds-font-display); font-weight:600; font-size:.95rem;
+  letter-spacing:.02em; text-transform:uppercase; color:var(--ds-ink);
+}
+
+/* cadence — a small ONE-TIME / MONTHLY segmented radio pair; native radios hidden,
+   the CHECKED segment fills with the --ds-primary-soft wash + --ds-ink text (AA: never
+   --ds-primary text on a --ds-primary field). */
+.bw-cadence{ display:inline-flex; flex-wrap:wrap; gap:8px; margin-top:2px; }
+.bw-cadence__opt{ position:relative; display:inline-flex; }
+.bw-cadence__opt input{ position:absolute; opacity:0; width:0; height:0; margin:0; }
+.bw-cadence__opt span{
+  display:inline-flex; align-items:center; cursor:pointer;
+  font-family:var(--ds-font-mono); font-size:12px; letter-spacing:.04em; text-transform:uppercase;
+  color:var(--ds-ink-soft); background:var(--ds-bg-surface-2);
+  border:1px solid var(--ds-line); border-radius:var(--ds-r-control); padding:9px 15px;
+  transition:color var(--ds-dur-fast) var(--ds-ease), border-color var(--ds-dur-fast) var(--ds-ease), background-color var(--ds-dur-fast) var(--ds-ease);
+}
+.bw-cadence__opt input:checked + span{ color:var(--ds-ink); border-color:var(--ds-primary); background:var(--ds-primary-soft); }
+.bw-cadence__opt input:focus-visible + span{ outline:2px solid var(--ds-primary); outline-offset:2px; }
+
+/* field grid — 2-up desktop, 1-up phone; a field is label-ABOVE-control. */
+.bw-form__grid{ display:grid; grid-template-columns:repeat(2, 1fr); gap:clamp(16px,2vw,24px); }
+.bw-field{ display:flex; flex-direction:column; gap:8px; min-width:0; }
+.bw-field--full{ grid-column:1 / -1; }
+.bw-field__label{
+  font-family:var(--ds-font-mono); font-size:11px; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--ds-ink);
+  display:inline-flex; align-items:center; gap:6px;
+}
+.bw-field__req{ color:var(--ds-primary); }
+.bw-field__hint{ font-family:var(--ds-font-body); font-size:12px; line-height:1.45; color:var(--ds-ink-soft); margin:0; }
+
+/* controls — text/email/tel/select/textarea share one base. TEXT = --ds-ink on a white
+   field (AA: input colour never equals its background — the invisible-input bug). */
+.bw-form .bw-input,
+.bw-form input[type="text"],
+.bw-form input[type="email"],
+.bw-form input[type="tel"],
+.bw-form input:not([type]),
+.bw-form select,
+.bw-form textarea{
+  width:100%; display:block; min-width:0;
+  font-family:var(--ds-font-body); font-size:15px; line-height:1.5; color:var(--ds-ink);
+  background:var(--ds-bg-surface-2);
+  border:1px solid var(--ds-line); border-radius:var(--ds-r-control);
+  padding:12px 14px;
+  -webkit-appearance:none; -moz-appearance:none; appearance:none;
+  transition:border-color var(--ds-dur-fast) var(--ds-ease), outline-color var(--ds-dur-fast) var(--ds-ease);
+}
+.bw-form ::placeholder{ color:var(--ds-ink-soft); opacity:.8; }
+.bw-form textarea, .bw-form .bw-textarea{ min-height:128px; resize:vertical; line-height:1.62; }
+/* focus — a VISIBLE 2px teal ring (outline + offset, NEVER outline:none-only) + a teal
+   border; paints for keyboard AND pointer so the focused field is never ambiguous. */
+.bw-form .bw-input:focus,
+.bw-form input:focus, .bw-form select:focus, .bw-form textarea:focus{
+  border-color:var(--ds-primary);
+  outline:2px solid var(--ds-primary); outline-offset:2px;
+}
+/* invalid — native :user-invalid or a .is-invalid hook re-skins the border to warning. */
+.bw-form .is-invalid,
+.bw-form input:user-invalid, .bw-form select:user-invalid, .bw-form textarea:user-invalid{
+  border-color:var(--ds-warning);
+}
+/* custom select caret — a token-drawn CSS chevron (no SVG/data-uri) in --ds-ink-soft. */
+.bw-select{ position:relative; display:block; }
+.bw-select::after{
+  content:""; position:absolute; right:16px; top:50%; width:8px; height:8px;
+  border-right:2px solid var(--ds-ink-soft); border-bottom:2px solid var(--ds-ink-soft);
+  transform:translateY(-65%) rotate(45deg); pointer-events:none;
+}
+.bw-select select{ padding-right:40px; cursor:pointer; }
+
+/* actions row — the locked chrome .btn submit + a fine-print note (skin NOT restyled). */
+.bw-form__actions{ display:flex; flex-wrap:wrap; align-items:center; gap:clamp(14px,2vw,22px); margin-top:clamp(22px,2.6vw,32px); }
+.bw-form__actions .btn{ flex:0 0 auto; }
+.bw-form__note{
+  font-family:var(--ds-font-mono); font-size:11px; letter-spacing:.04em; color:var(--ds-ink-soft);
+  display:inline-flex; align-items:center; gap:9px; margin:0; min-width:0;
+}
+.bw-form__note .dot{ width:7px; height:7px; flex:0 0 auto; border-radius:var(--ds-r-pill); background:var(--ds-primary); }
+
+/* STATIC success — a --ds-primary-soft confirmation card (hidden until JS adds .is-sent)
+   with --ds-ink copy + a teal check. The only display:none in the family. */
+.bw-form__success{
+  display:none; text-align:center;
+  background:var(--ds-primary-soft); border:1px solid var(--ds-line);
+  border-radius:var(--ds-r-surface); padding:clamp(24px,4vw,44px) clamp(20px,3vw,32px);
+}
+.bw-form.is-sent .bw-form__fields{ display:none; }
+.bw-form.is-sent .bw-form__success{ display:block; }
+.bw-form__success-ico{
+  width:54px; height:54px; margin:0 auto var(--ds-space-lg); border-radius:var(--ds-r-pill);
+  background:var(--ds-bg-surface-2); border:1px solid var(--ds-line);
+  display:grid; place-items:center; box-shadow:var(--ds-shadow-rest);
+}
+.bw-form__success-ico::after{
+  content:""; width:11px; height:20px; margin-top:-5px;
+  border-right:3px solid var(--ds-primary); border-bottom:3px solid var(--ds-primary);
+  transform:rotate(45deg);
+}
+.bw-form__success-h{
+  font-family:var(--ds-font-display); font-weight:600; text-transform:uppercase;
+  letter-spacing:-.02em; line-height:1.1;
+  font-size:clamp(20px,2.2vw,28px); color:var(--ds-ink); margin:0 0 var(--ds-space-sm);
+}
+.bw-form__success-d{ font-family:var(--ds-font-body); font-size:15px; line-height:1.62; color:var(--ds-ink-soft); margin:0 auto; max-width:34em; }
+
+/* phone — the 2-col field grid stacks 1-up; the submit goes full-width. */
+@media (max-width:767px){
+  .bw-form{ padding:clamp(18px,5vw,28px); }
+  .bw-form__grid{ grid-template-columns:1fr; }
+  .bw-form__actions{ gap:14px; }
+  .bw-form__actions .btn{ width:100%; justify-content:center; }
+}
+
+/* ----------------------------------------------------------------------------
+   10c · COMPANY / ABOUT (.bw-founder/.bw-manifesto/.bw-timeline/.bw-team/.bw-press)
+   — the T-COMPANY editorial vocabulary, SINGLE-SOURCED here so the about / founder-led
+   concepts compose from it (exactly like the .bw-legal §10 + .bw-form §10b blocks). A
+   T-COMPANY page reads EDITORIAL: a signed founder statement, an oversized values creed,
+   a dated origin SPINE, named founder bios with contact, a third-party press strip —
+   NOT a stack of capability tiles or media+card feature rows. FIVE distinct coarse
+   SHAPES (G-SVAR adjacency-safe): (a) .bw-founder editorial hero · (b) .bw-manifesto
+   oversized creed · (c) .bw-timeline single-spine origin arc · (d) .bw-team--duo named-
+   bios grid · (e) .bw-press coverage strip. Token-adapted from the v4 build reference
+   impl (batchworks-structural.css §13) — batchworks is DARK, eyetrends is LIGHT, so
+   every colour/shadow/border is REMAPPED to the light --ds-* vocabulary, NOT copied
+   verbatim. AA-CRITICAL (the concept-A invisible-CTA lesson): the OVERSIZED editorial
+   type (founder headline · manifesto lead+lines · timeline years) = --ds-ink-heading so
+   it reads at max contrast on the paper; the accent atoms (kickers · manifesto indices ·
+   timeline nodes · .ac accent spans · mono roles/links) = --ds-primary teal (5.8:1 on
+   paper — AA even at caption size, so never an invisible teal-on-paper); body / lede /
+   support / bio = --ds-ink-soft; dividers / hairlines / the timeline spine = --ds-line;
+   portrait frames = a --ds-line border + --ds-r-surface radius; the signed-credibility
+   line + mono roles = --ds-font-mono + --ds-ink-soft with the founder NAME in --ds-ink.
+   eyetrends has NO --ds-divider (use --ds-line), NO tracking/caption/lh tokens (use
+   literal letter-spacing / font-size / line-height), NO --ds-accent-bright (use
+   --ds-primary). Token-pure: every colour resolves through var(--ds-*); only layout
+   geometry is literal. KEPT VERBATIM: the media-fits-track anchor (width:100%;min-width:0
+   on every stretched portrait frame) + the *__copy display:contents cadence-neutralizer
+   — they prevent media-track overflow + the split reading-order bug. em reading-measures
+   only (no ch on a body-font element — G8/A3).
+   ---------------------------------------------------------------------------- */
+
+/* (a) FOUNDER / COMPANY EDITORIAL HERO — a type-led mission statement (LEFT) beside a
+   framed founders portrait (RIGHT). The register is a masthead / signed letter, not a
+   full-bleed photo+scrim product hero. */
+.bw-founder{
+  display:grid; grid-template-columns:1.15fr .85fr; gap:clamp(32px,5vw,72px); align-items:center;
+}
+.bw-founder__copy{ max-width:32em; margin-block:0; }
+.bw-founder__kicker{
+  font-family:var(--ds-font-mono); font-size:12px;
+  letter-spacing:.16em; text-transform:uppercase;
+  color:var(--ds-primary); margin:0 0 var(--ds-space-lg);
+  display:inline-flex; align-items:center; gap:12px;
+}
+.bw-founder__kicker::before{ content:""; width:34px; height:1px; background:var(--ds-line); }
+.bw-founder__h{
+  font-family:var(--ds-font-display); font-weight:700; text-transform:uppercase;
+  letter-spacing:-.02em; line-height:1.0;
+  font-size:clamp(34px,5vw,64px); color:var(--ds-ink-heading); margin:0 0 var(--ds-space-lg); max-width:13em;
+}
+.bw-founder__h .ac{ color:var(--ds-primary); }
+.bw-founder__lede{
+  font-family:var(--ds-font-body); font-size:clamp(17px,1.5vw,21px);
+  line-height:1.62; color:var(--ds-ink-soft); margin:0; max-width:34em;
+}
+/* the SIGNED credibility line — the editorial signature ("a founder wrote this"). */
+.bw-founder__sig{
+  margin-top:var(--ds-space-xl); padding-top:var(--ds-space-lg);
+  border-top:1px solid var(--ds-line);
+  display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+}
+.bw-founder__sig-name{ font-family:var(--ds-font-display); font-weight:700; font-size:16px; letter-spacing:.01em; color:var(--ds-ink); }
+.bw-founder__sig-role{ font-family:var(--ds-font-mono); font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--ds-ink-soft); }
+/* the framed founders portrait — a STRETCHED grid-track media frame (media-fits-track anchor). */
+.bw-founder__portrait{
+  position:relative; overflow:hidden; margin:0;
+  align-self:stretch; width:100%; min-width:0; height:100%; min-height:0;   /* width:100% + min-width:0 ANCHOR to the .85fr grid track (media-fits-track) */
+  aspect-ratio:4 / 5; max-height:clamp(360px,52vh,560px);
+  border:1px solid var(--ds-line); border-radius:var(--ds-r-surface);
+  box-shadow:var(--ds-shadow-lift), var(--ds-inset-hi);
+}
+.bw-founder__portrait img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center; }
+.bw-founder__portrait::after{ content:""; position:absolute; inset:0; pointer-events:none;
+  background:linear-gradient(180deg, transparent 0%, var(--ds-scrim) 100%); }
+
+/* (b) MANIFESTO / VALUES CREED — an OVERSIZED editorial type-block: a giant lead creed,
+   then the brand principles as oversized typographic statements separated by hairlines
+   (open type — NOT cards, NOT a spec grid). */
+.bw-manifesto{ max-width:1180px; }
+.bw-manifesto__lead{
+  font-family:var(--ds-font-display); font-weight:600; text-transform:uppercase;
+  letter-spacing:-.02em; line-height:1.12;
+  font-size:clamp(30px,4.4vw,58px); color:var(--ds-ink-heading); margin:0 0 clamp(36px,5vw,64px); max-width:18em;
+}
+.bw-manifesto__lead .ac{ color:var(--ds-primary); }
+.bw-manifesto__values{ display:grid; gap:0; }
+.bw-manifesto__value{
+  display:grid; grid-template-columns:auto 1fr; gap:clamp(18px,3vw,48px);
+  padding:clamp(22px,3vw,38px) 0; border-top:1px solid var(--ds-line);
+}
+.bw-manifesto__value:last-child{ border-bottom:1px solid var(--ds-line); }
+.bw-manifesto__idx{
+  font-family:var(--ds-font-mono); font-size:13px; font-weight:700; letter-spacing:.04em;
+  color:var(--ds-primary); font-variant-numeric:tabular-nums; padding-top:.55em;
+}
+.bw-manifesto__vbody{ min-width:0; }
+.bw-manifesto__line{
+  font-family:var(--ds-font-display); font-weight:600; text-transform:uppercase;
+  letter-spacing:.005em; line-height:1.14; font-size:clamp(22px,2.6vw,36px);
+  color:var(--ds-ink-heading); margin:0;
+}
+.bw-manifesto__line .ac{ color:var(--ds-primary); }
+.bw-manifesto__support{
+  font-family:var(--ds-font-body); font-size:15px; line-height:1.55;
+  color:var(--ds-ink-soft); margin:var(--ds-space-sm) 0 0; max-width:36em;
+}
+
+/* (c) ORIGIN TIMELINE — the story arc on ONE vertical SPINE. A single continuous line
+   runs down the left; each dated entry hangs a node on it. Distinct from a numbered
+   process rail (no media rail, no 2-col split) and from a feature row. */
+.bw-timeline{ --tl-gutter:44px; --tl-spine:12px; --tl-node:14px; position:relative; max-width:780px; }
+.bw-timeline__track{ position:relative; padding-left:var(--tl-gutter); }
+.bw-timeline__track::before{   /* THE SPINE — one continuous vertical line */
+  content:""; position:absolute; left:var(--tl-spine); top:10px; bottom:10px; width:2px; background:var(--ds-line);
+}
+.bw-timeline__entry{ position:relative; padding:clamp(16px,2.4vw,30px) 0; }
+.bw-timeline__entry::before{   /* the node on the spine (centred on the 2px line) */
+  content:""; position:absolute; left:calc(var(--tl-spine) - 6px - var(--tl-gutter));
+  top:calc(clamp(16px,2.4vw,30px) + 10px);
+  width:var(--tl-node); height:var(--tl-node); border-radius:var(--ds-r-pill);
+  background:var(--ds-primary); border:3px solid var(--ds-bg-surface); box-shadow:var(--ds-glow);
+}
+.bw-timeline__year{
+  font-family:var(--ds-font-display); font-weight:700; font-size:clamp(20px,2.2vw,30px);
+  line-height:1; letter-spacing:-.02em; color:var(--ds-ink-heading); font-variant-numeric:tabular-nums; margin:0 0 var(--ds-space-sm);
+}
+.bw-timeline__h{
+  font-family:var(--ds-font-display); font-weight:600; text-transform:uppercase; letter-spacing:.01em;
+  line-height:1.1; font-size:clamp(17px,1.7vw,21px); color:var(--ds-ink); margin:0 0 var(--ds-space-xs);
+}
+.bw-timeline__d{
+  font-family:var(--ds-font-body); font-size:15px; line-height:1.55; color:var(--ds-ink-soft); margin:0; max-width:42em;
+}
+
+/* (d) TEAM — FOUNDER BIOS, NAMED DUO GRID. A balanced 2-up people grid (portrait + name +
+   role + contact). --duo keeps the columns balanced so the tall-stack density heuristic
+   (M3) can never fire. Distinct from the 3-col capability grid. */
+.bw-team{ display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(18px,2.4vw,32px); }
+.bw-team--duo{ grid-template-columns:repeat(2,1fr); gap:clamp(22px,3vw,44px); }
+.bw-team__member{
+  display:grid; grid-template-columns:minmax(0,.6fr) minmax(0,1fr); gap:clamp(18px,2.4vw,30px); align-items:center;
+  background:linear-gradient(180deg, var(--ds-bg-surface-2) 0%, var(--ds-bg-surface) 80%);
+  border:1px solid var(--ds-line); border-radius:var(--ds-r-surface);
+  box-shadow:var(--ds-shadow-card); padding:clamp(18px,2vw,26px);
+}
+.bw-team__portrait{
+  position:relative; overflow:hidden; margin:0;
+  width:100%; min-width:0;                 /* anchor the portrait to its grid track (media-fits-track) */
+  aspect-ratio:4 / 5; max-height:clamp(220px,30vh,320px);
+  border:1px solid var(--ds-line); border-radius:var(--ds-r-control);
+}
+.bw-team__portrait img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center top; }
+.bw-team__body{ min-width:0; }
+.bw-team__name{
+  font-family:var(--ds-font-display); font-weight:700; text-transform:uppercase;
+  letter-spacing:-.02em; line-height:1.04; font-size:clamp(19px,2vw,25px); color:var(--ds-ink); margin:0 0 4px;
+}
+.bw-team__role{ font-family:var(--ds-font-mono); font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--ds-primary); margin:0 0 var(--ds-space-md); }
+.bw-team__bio{ font-family:var(--ds-font-body); font-size:14px; line-height:1.55; color:var(--ds-ink-soft); margin:0 0 var(--ds-space-md); }
+.bw-team__contact{ display:flex; flex-direction:column; gap:7px; }
+.bw-team__contact a{ font-family:var(--ds-font-mono); font-size:12px; letter-spacing:.03em; color:var(--ds-ink); display:inline-flex; align-items:center; gap:8px; }
+.bw-team__contact a:hover{ color:var(--ds-primary); }
+.bw-team__contact .dot{ width:6px; height:6px; border-radius:var(--ds-r-pill); background:var(--ds-primary); flex:0 0 auto; }
+
+/* (e) PRESS — THIRD-PARTY COVERAGE / LOGO STRIP. A compact row of coverage items (an
+   outlet LOGO where available, OR a named-outlet lockup + the coverage line + a verify
+   link). A horizontal strip between hairlines, NOT a media+cards feature row. */
+.bw-press__strip{
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(190px,1fr)); gap:clamp(16px,2.4vw,32px);
+  align-items:stretch; border-top:1px solid var(--ds-line); border-bottom:1px solid var(--ds-line);
+  padding-block:clamp(22px,3vw,38px);
+}
+.bw-press__item{ display:flex; flex-direction:column; gap:10px; min-width:0; }
+.bw-press__logo{ height:28px; width:auto; max-width:150px; object-fit:contain; object-position:left center;
+  opacity:var(--ds-opacity-muted); filter:grayscale(1); transition:opacity var(--ds-dur) var(--ds-ease), filter var(--ds-dur) var(--ds-ease); }
+.bw-press__item:hover .bw-press__logo{ opacity:1; filter:grayscale(0); }
+.bw-press__outlet{ font-family:var(--ds-font-display); font-weight:700; text-transform:uppercase; letter-spacing:.04em; font-size:15px; color:var(--ds-ink); }
+.bw-press__quote{ font-family:var(--ds-font-body); font-size:13.5px; line-height:1.5; color:var(--ds-ink-soft); margin:0; }
+.bw-press__link{ margin-top:auto; font-family:var(--ds-font-mono); font-size:11px; font-weight:700; letter-spacing:.06em;
+  text-transform:uppercase; color:var(--ds-primary); display:inline-flex; align-items:center; gap:8px; }
+.bw-press__link span{ transition:transform var(--ds-dur) var(--ds-ease-out); }
+.bw-press__item:hover .bw-press__link span{ transform:translateX(4px); }
+
+/* ---- ABOUT STRUCTURES · RESPONSIVE ---------------------------------------------- */
+@media (max-width:1024px){
+  /* founder editorial hero — interleave heading -> portrait -> body (lede + sig) via the
+     display:contents copy wrapper (the §11 split reading-order idiom). */
+  .bw-founder{ grid-template-columns:1fr; gap:clamp(28px,5vw,44px); }
+  .bw-founder__copy{ display:contents; }
+  .bw-founder__copy > *{ margin-block:0; }                  /* the reordered leaves own no edge margin (cadence) */
+  .bw-founder__copy > .bw-founder__kicker,
+  .bw-founder__copy > .bw-founder__h{ order:-1; }
+  .bw-founder__portrait{ order:0; aspect-ratio:16 / 10; max-height:clamp(280px,42vh,420px); }
+  .bw-founder__copy > .bw-founder__lede,
+  .bw-founder__copy > .bw-founder__sig{ order:1; }
+  .bw-team{ grid-template-columns:repeat(2,1fr); }
+}
+@media (max-width:640px){
+  .bw-team, .bw-team--duo{ grid-template-columns:1fr; }
+  .bw-team__member{ grid-template-columns:1fr; }            /* portrait above the bio */
+  .bw-team__portrait{ aspect-ratio:16 / 10; max-height:clamp(200px,40vh,300px); }
+  .bw-manifesto__value{ grid-template-columns:1fr; gap:8px; }
+  .bw-manifesto__idx{ padding-top:0; }
+}
+
+/* ----------------------------------------------------------------------------
+   11 · RESPONSIVE LADDER — _RESPONSIVE-PATTERN-LIBRARY (G1/G4 grid cascade ·
+   Hero1 split->stack@767 · Comp7 icon-above-text stack). Full ladder 1200/1024/768/375.
+   ---------------------------------------------------------------------------- */
+@media (max-width: 1024px){
+  .row--split, .row--split-media{ grid-template-columns: 1fr; gap:clamp(28px,5vw,44px); }
+
+  /* ── L1 READING-ORDER (COMPOSITION-LAWS §L1, owner non-negotiable) ─────────────
+     A two-column text|media split that STACKS must read TOP-TO-BOTTOM as
+     HEADING (eyebrow + title) → MEDIA → BODY → CTA — the heading first, never media
+     above it. .row--split is copy-first (.col:first-child = copy) so it already reads
+     heading→media when it stacks — no interleave needed. .row--split-media is the
+     MEDIA-first arrangement (.col:first-child = media, .col:last-child = copy), so on
+     stack the media would paint ABOVE its heading (the §4/§5 defect). FIX = the
+     batchworks §11 reference idiom: lift the copy leaves into the single-column grid
+     via chained display:contents (the .col AND its OBJECT wrapper), then order the
+     leaves heading(-1) → media(0) → body(1). Keyed only on the forced grammar (.col)
+     + the shared heading atoms (.et-eyebrow/.et-h2/.et-h3), so it is concept- and
+     page-neutral — every eyetrends page/concept inherits the correct order. Spacing
+     is owned by ONE tightened grid row-gap (leaf block-margins zeroed, !important to
+     beat any inline margin) → an even, uniform mobile rhythm regardless of concept. */
+  .row--split-media{ gap:clamp(18px,4vw,26px); align-items:start; }
+  .row--split-media > .col:last-child,
+  .row--split-media > .col:last-child > *{ display:contents; }                 /* lift the copy leaves into the grid */
+  .row--split-media > .col:last-child > * > *{ order:1; margin-block:0 !important; }   /* BODY + CTA after the media */
+  .row--split-media > .col:last-child > * > .et-eyebrow,
+  .row--split-media > .col:last-child > * > .et-h2,
+  .row--split-media > .col:last-child > * > .et-h3{ order:-1; }                 /* HEADING first (eyebrow + title) */
+  .row--split-media > .col:first-child{ order:0; margin-block:0 !important; }   /* MEDIA between heading and body */
+
+  .et-hero__media{ aspect-ratio:16 / 11; max-height:460px; order:-1; }
+  .row--frames{ grid-template-columns: repeat(2, 1fr); }
+  .row--tiles{ grid-template-columns: repeat(2, 1fr); }
+  .row--svc{ grid-template-columns: repeat(2, 1fr); }
+  .row--reviews{ grid-template-columns: 1fr; }
+  .et-cat--wide{ grid-column: span 2; }
+}
+@media (max-width: 768px){
+  /* ── T5 MOBILE VERTICAL-PADDING REDUCTION (owner "padding/spacing" ask) ─────────
+     Desktop section rhythm is --et-flow = clamp(64px,8.5vw,116px) → 116px max. On a
+     phone that full desktop gap reads too airy, so drop the shared section rhythm to
+     ~0.6-0.65× desktop (cap ~76px ≈ the owner's ~80 floor, reduced toward 56px on the
+     smallest screens so a 375 phone reads tight, not a 116px desktop gap). Applied
+     SYMMETRICALLY on the one shared token so every .et-band stays on one even cadence. */
+  :root{ --et-flow: clamp(56px, 11vw, 76px); }
+  .row--stats{ grid-template-columns: 1fr 1fr; gap:var(--ds-space-md); }
+  .et-doctor__media{ aspect-ratio:16 / 11; max-height:420px; }
+  .et-sec-head--split{ align-items:flex-start; }
+}
+@media (max-width: 560px){
+  .row--frames{ grid-template-columns: 1fr; }
+  .row--tiles{ grid-template-columns: 1fr; }
+  .row--svc{ grid-template-columns: 1fr; }
+  .row--stats{ grid-template-columns: 1fr; }
+  .et-cat--wide{ grid-column: span 1; }
+  .et-hero__chip{ left:auto; right:clamp(12px,4vw,18px); bottom:12px; }
+  .et-doctor__stats{ gap:var(--ds-space-md); }
+}
+
+/* ----------------------------------------------------------------------------
+   12 · REDUCED MOTION — honor the preference (C7 §4). Land every reveal, kill lifts.
+   ---------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce){
+  .et-reveal{ transform:none; transition:none; }
+  .et-frame:hover, .et-cat:hover, .et-svc:hover{ transform:none; }
+  .et-frame:hover .et-frame__glasses{ transform:none; }
+}
+
+/* ============================================================================
+   13 · T-CONTACT ct-* — page composition layer, SINGLE-SOURCED here.
+   Migrated VERBATIM from the LOCKED tournament winner T-CONTACT/concept-c's page-local
+   <head><style> so the assembled T-CONTACT pages (+ their bulk descendants) carry this CSS from
+   the global sheet — closing the promote page-local-<style> seam (promote extracts only <main>).
+   Rides the LOCKED system exactly like §10b .bw-form / §10c .bw-* above: the ct- namespace is
+   this template's own; any .et-*/.bw-*/.row-- selector here is a SCOPED override, never a
+   redefinition. TOKEN-PURE (G8): every colour resolves through var(--ds-*). Migration change: .ct-hero__h max-width:16ch -> 10.368em (em; measured 1ch=0.648em in Space Grotesk = the identical
+   ~564px measure — ch is banned in the token sheet per G8/A3, which the whole structural sheet honors with em).
+   ============================================================================ */
+/* ============================================================================
+   T-CONTACT TEMPLATE - CONCEPT C "BOOKING-BAR-FORWARD" - page composition layer.
+   Rides the LOCKED system: eyetrends-tokens.css (identity) + eyetrends-chrome.css
+   (carrier) + eyetrends-structural.css (body system incl. the shared .bw-form family).
+   The contact page's job IS the appointment request, so the primary affordance is a
+   compact date / time / reason "request a visit" BAR right under the hero (FORM-LAYOUTS
+   # 8, booking-bar-forward), then the fuller .bw-form contact form beside the NAP / hours
+   / real map. Structurally distinct from a plain stacked inquiry (# 1) or a static 2-col
+   form + map (# 2).
+
+   TOKEN-PURE (G8): every colour resolves through var(--ds-*); the only literals are
+   geometry (grid tracks, %, clamp, aspect-ratios, radii-math, px offsets, opacities) -
+   never a brand colour. ct-* = this template's own namespace (never bw-/kit-, so it never
+   collides with the forced-grammar skin rule; the shared .bw-form / .et-* skins are reused
+   verbatim from the locked structural sheet).
+   ============================================================================ */
+
+/* ---- S1 - hero (HERO-COMPOSITIONS # 2: media-left / copy-right, copy DOM-first so the
+        Call + Book actions stay above the fold on phones; photo goes left on desktop) ---- */
+.ct-hero{ position:relative; overflow:hidden;
+  padding-block:clamp(40px,6vw,84px) var(--et-flow); }
+.ct-hero::before{ content:""; position:absolute; inset:0; z-index:0; pointer-events:none;
+  background:var(--ds-glow-wash); opacity:.55; }
+.ct-hero > .container{ position:relative; z-index:1; }
+.ct-hero__row{ display:grid; gap:clamp(26px,4vw,56px); align-items:center; }
+.ct-hero__copy{ min-width:0; }
+.ct-hero__h{ font-family:var(--ds-font-display); font-weight:700; letter-spacing:-.025em;
+  line-height:1.04; font-size:clamp(2.1rem,4.6vw,3.4rem); color:var(--ds-ink-heading);
+  margin:var(--ds-space-sm) 0 0; max-width:10.368em; }
+.ct-hero__sub{ font-size:clamp(1.04rem,1.4vw,1.24rem); line-height:1.6; color:var(--ds-ink-soft);
+  margin:var(--ds-space-md) 0 0; max-width:40rem; }
+.ct-hero__media{ position:relative; margin:0; width:100%; min-width:0;
+  border-radius:var(--ds-r-surface); overflow:hidden; background:var(--ds-bg-warm);
+  aspect-ratio:5 / 4; max-height:clamp(280px,40vw,440px);
+  box-shadow:var(--ds-shadow-card-2stop), var(--ds-inset-hi); }
+.ct-hero__img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; }
+.ct-hero__media::after{ content:""; position:absolute; left:0; top:0; z-index:2; width:34%; height:5px;
+  background:var(--ds-accent); border-bottom-right-radius:var(--ds-r-control); }
+@media(min-width:900px){
+  .ct-hero__row{ grid-template-columns:1fr 0.9fr; }
+  .ct-hero__mediacol{ order:-1; }   /* photo LEFT on desktop; copy stays DOM-first so phones lead with the heading + CTAs */
+}
+
+/* ---- S2 - the booking bar (FORM-LAYOUTS # 8 primary affordance) ---- */
+.ct-bookbar{ position:relative; display:flex; flex-wrap:wrap; align-items:flex-end;
+  gap:clamp(10px,1.4vw,16px); padding:clamp(14px,1.8vw,20px);
+  background:var(--ds-bg-surface-2);
+  background:linear-gradient(180deg, var(--ds-bg-surface-2) 0%, var(--ds-bg-surface) 100%);
+  border:1px solid var(--ds-line); border-radius:var(--ds-r-surface);
+  box-shadow:var(--ds-shadow-card), var(--ds-inset-hi); }
+.ct-bookbar__field{ display:flex; flex-direction:column; gap:6px; flex:1 1 168px; min-width:0; }
+.ct-bookbar__lab{ font-family:var(--ds-font-mono); font-size:11px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--ds-ink); }
+.ct-bookbar__ctl{ position:relative; }
+.ct-bookbar__ctl select, .ct-bookbar__ctl input{
+  width:100%; display:block; min-width:0;
+  font-family:var(--ds-font-body); font-size:15px; line-height:1.4; color:var(--ds-ink);
+  background:var(--ds-bg-surface-2); border:1px solid var(--ds-line);
+  border-radius:var(--ds-r-pill); padding:11px 16px;
+  -webkit-appearance:none; -moz-appearance:none; appearance:none;
+  transition:border-color var(--ds-dur-fast) var(--ds-ease), outline-color var(--ds-dur-fast) var(--ds-ease); }
+.ct-bookbar__ctl select{ padding-right:38px; cursor:pointer; }
+.ct-bookbar__ctl--sel::after{ content:""; position:absolute; right:16px; top:50%; width:7px; height:7px;
+  border-right:2px solid var(--ds-ink-soft); border-bottom:2px solid var(--ds-ink-soft);
+  transform:translateY(-65%) rotate(45deg); pointer-events:none; }
+.ct-bookbar__ctl select:focus, .ct-bookbar__ctl input:focus{
+  border-color:var(--ds-primary); outline:2px solid var(--ds-primary); outline-offset:2px; }
+.ct-bookbar__submit{ flex:0 0 auto; align-self:stretch; display:flex; align-items:flex-end; }
+.ct-bookbar__submit .btn{ width:100%; justify-content:center; }
+.ct-bookbar__hint{ flex:1 1 100%; order:5; margin:2px 0 0;
+  font-family:var(--ds-font-mono); font-size:11px; letter-spacing:.03em; color:var(--ds-ink-soft);
+  display:inline-flex; align-items:center; gap:8px; }
+.ct-bookbar__hint .dot{ width:7px; height:7px; flex:0 0 auto; border-radius:var(--ds-r-pill); background:var(--ds-primary); }
+@media(max-width:767px){
+  .ct-bookbar{ gap:12px; }
+  .ct-bookbar__field{ flex:1 1 100%; }
+  .ct-bookbar__submit{ flex:1 1 100%; }
+}
+
+/* ---- S2 - the form | info split ----
+   The two columns ride the LOCKED structural .row--split (grid 1.05fr/1fr). That sheet sets
+   align-items:center, which floats the SHORTER card vertically so the two cards end at different
+   heights (uneven bottoms). This page-scoped override (page CSS loads AFTER the linked sheets, and
+   .ct-form .row--split out-specifies the bare .row--split) stretches both cards to the row height so
+   they read as a matched, bottom-aligned pair. Each card carries ONE flex-grow filler so the slack
+   lands somewhere intentional and never as a void: the form -> its message textarea; the info card
+   -> the find-us panel. Desktop-only (>1024): at <=1024 the structural sheet stacks the split to one
+   column, where evening the heights is moot. A comfortable gap sets the booking bar off from the split. */
+.ct-form .row--split{ margin-top:clamp(24px,3.4vw,44px); }
+@media(min-width:1025px){
+  .ct-form .row--split{ align-items:stretch; }
+  .ct-form .row--split > .col{ display:flex; }
+  .ct-form .row--split > .col > .bw-form,
+  .ct-form .row--split > .col > .ct-info{ width:100%; }
+  /* form: fill the column; the message textarea grows so the submit stays level with the info bottom */
+  .ct-form .bw-form{ display:flex; flex-direction:column; }
+  .ct-form .bw-form__fields{ display:flex; flex-direction:column; flex:1 1 auto; }
+  .ct-form .bw-form__grid{ flex:1 1 auto; grid-template-rows:auto auto auto 1fr; }
+  .ct-form .ct-msg-field{ display:flex; flex-direction:column; }
+  .ct-form .ct-msg-field textarea{ flex:1 1 auto; }
+  /* info: fill the column; the find-us panel grows to take the remaining height */
+  .ct-form .ct-info{ height:100%; }
+  .ct-form .ct-map{ flex:1 1 auto; }
+  .ct-form .ct-map__frame{ flex:1 1 auto; aspect-ratio:auto; min-height:210px; }
+}
+
+/* the NAP / hours / map info card */
+.ct-info{ position:relative; display:flex; flex-direction:column; gap:var(--ds-space-md);
+  padding:clamp(20px,2.4vw,30px); background:var(--ds-bg-surface-2); border:1px solid var(--ds-line);
+  border-radius:var(--ds-r-surface); box-shadow:var(--ds-shadow-card); }
+.ct-nap__name{ font-family:var(--ds-font-display); font-weight:700; letter-spacing:-.01em;
+  font-size:1.14rem; color:var(--ds-ink-heading); margin:0; }
+.ct-nap__addr{ font-style:normal; font-size:.95rem; line-height:1.55; color:var(--ds-ink-soft);
+  margin:6px 0 0; }
+.ct-nap__phone{ display:inline-flex; align-items:center; gap:.5em; margin-top:var(--ds-space-sm);
+  font-family:var(--ds-font-display); font-weight:600; font-size:1.12rem; color:var(--ds-primary); }
+.ct-nap__phone svg{ width:17px; height:17px; }
+.ct-nap__phone:hover{ color:var(--ds-accent-ink); }
+.ct-hours{ border-top:1px solid var(--ds-line); padding-top:var(--ds-space-md); }
+.ct-hours__title{ font-family:var(--ds-font-mono); font-size:.68rem; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--ds-accent-ink); margin:0 0 var(--ds-space-sm); }
+.ct-hours__list{ margin:0; display:grid; gap:2px; }
+.ct-hours__row{ display:flex; align-items:baseline; justify-content:space-between; gap:12px;
+  padding:5px 0; border-bottom:1px dashed var(--ds-line); }
+.ct-hours__row:last-child{ border-bottom:0; }
+.ct-hours__row dt{ font-size:.9rem; color:var(--ds-ink); }
+.ct-hours__row dd{ margin:0; font-family:var(--ds-font-mono); font-size:.82rem; color:var(--ds-ink-soft);
+  text-align:right; }
+.ct-hours__row--closed dd{ color:var(--ds-accent-ink); }
+.ct-map{ position:relative; margin:0; display:flex; flex-direction:column;
+  border-top:1px solid var(--ds-line); padding-top:var(--ds-space-md); }
+.ct-map__frame{ position:relative; width:100%; min-width:0; aspect-ratio:16 / 10; overflow:hidden;
+  border-radius:var(--ds-r-control); background-color:var(--ds-primary-soft);
+  background-image:var(--ds-grid); background-size:var(--ds-grid-size); box-shadow:var(--ds-inset-hi); }
+/* find-us: a clean, on-brand tokenized LOCATION PANEL (replaces the raw google-maps screenshot with its
+   baked-in third-party UI). A soft teal wash + the token line-grid "map" texture, stylized teal roads,
+   and a location PIN with a soft ping ring, plus a neighborhood tag. ZERO third-party map chrome. The
+   inline SVG (viewBox 480x300) is real, sized imagery. Token-pure: every colour resolves through
+   currentColor = var(--ds-primary) + the surface / line tokens; no brand hex, no url() screenshot. */
+.ct-find__art{ position:absolute; inset:0; width:100%; height:100%; display:block; color:var(--ds-primary); }
+.ct-find__roads{ stroke-width:12; opacity:.15; }
+.ct-find__road-main{ stroke-width:5; opacity:.32; }
+.ct-find__ping{ fill:var(--ds-primary); opacity:.12; }
+.ct-find__ping--out{ opacity:.06; }
+.ct-find__pin{ fill:var(--ds-primary); }
+.ct-find__dot{ fill:var(--ds-bg-surface-2); }
+.ct-find__tag{ position:absolute; left:12px; bottom:12px; z-index:2; display:inline-flex; align-items:center;
+  font-family:var(--ds-font-mono); font-size:11px; letter-spacing:.05em; color:var(--ds-primary);
+  background:var(--ds-bg-surface-2); border:1px solid var(--ds-line); border-radius:var(--ds-r-pill);
+  padding:5px 12px; box-shadow:var(--ds-shadow-rest); }
+.ct-map__cap{ display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between;
+  gap:8px var(--ds-space-md); margin-top:var(--ds-space-sm); }
+.ct-map__where{ font-size:.82rem; color:var(--ds-ink-soft); margin:0; }
+.ct-map__dir{ display:inline-flex; align-items:center; gap:.4em; font-family:var(--ds-font-display);
+  font-weight:600; font-size:.86rem; color:var(--ds-primary);
+  transition:gap var(--ds-dur-fast) var(--ds-ease), color var(--ds-dur-fast) var(--ds-ease); }
+.ct-map__dir svg{ width:14px; height:14px; }
+.ct-map__dir:hover{ gap:.65em; color:var(--ds-accent-ink); }
+
+/* a small head above the full form (distinct from the section head + booking bar) */
+.ct-formhead{ margin:0 0 clamp(16px,2vw,22px); }
+.ct-formhead__k{ font-family:var(--ds-font-mono); font-size:.68rem; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--ds-accent-ink); margin:0 0 6px; }
+.ct-formhead__t{ font-family:var(--ds-font-display); font-weight:600; letter-spacing:-.01em;
+  font-size:clamp(1.15rem,1.7vw,1.4rem); color:var(--ds-ink-heading); margin:0; }
+
+/* ---- S3 - the three routes (SECTION-COMPONENTS # 9 shape, repurposed as contact routes) ---- */
+.ct-route{ position:relative; display:flex; flex-direction:column; gap:var(--ds-space-sm); height:100%;
+  padding:clamp(20px,2.4vw,30px); background:var(--ds-bg-surface-2); border:1px solid var(--ds-line);
+  border-radius:var(--ds-r-surface); box-shadow:var(--ds-shadow-rest);
+  transition:transform var(--ds-dur) var(--ds-ease), box-shadow var(--ds-dur) var(--ds-ease), border-color var(--ds-dur) var(--ds-ease); }
+.ct-route:hover{ transform:translateY(-5px); box-shadow:var(--ds-shadow-card);
+  border-color:color-mix(in srgb, var(--ds-primary) 30%, transparent); }
+.ct-route__ico{ width:50px; height:50px; border-radius:var(--ds-r-pill); flex:0 0 auto; display:grid; place-items:center;
+  background:var(--ds-primary-soft); color:var(--ds-primary); box-shadow:var(--ds-inset-hi); }
+.ct-route--warm .ct-route__ico{ background:var(--ds-accent-soft); color:var(--ds-accent-ink); }
+.ct-route__ico svg{ width:25px; height:25px; }
+.ct-route__t{ font-family:var(--ds-font-display); font-weight:600; font-size:1.12rem; color:var(--ds-ink-heading); }
+.ct-route__d{ font-size:.92rem; line-height:1.55; color:var(--ds-ink-soft); margin:0; }
+.ct-route__go{ margin-top:auto; padding-top:var(--ds-space-xs); display:inline-flex; align-items:center; gap:.4em;
+  font-family:var(--ds-font-display); font-weight:600; font-size:.9rem; color:var(--ds-primary);
+  transition:gap var(--ds-dur-fast) var(--ds-ease), color var(--ds-dur-fast) var(--ds-ease); }
+.ct-route__go svg{ width:15px; height:15px; }
+.ct-route__go:hover{ gap:.65em; color:var(--ds-accent-ink); }
+
+/* the "bringing frames" hand-off note */
+.ct-frames{ margin-top:clamp(26px,3vw,40px); display:flex; align-items:flex-start; gap:var(--ds-space-md);
+  padding:clamp(18px,2.2vw,26px); border:1px solid var(--ds-line); border-left:3px solid var(--ds-accent);
+  border-radius:var(--ds-r-surface); background:var(--ds-accent-soft); }
+.ct-frames__ico{ flex:0 0 auto; width:40px; height:40px; border-radius:var(--ds-r-pill); display:grid; place-items:center;
+  background:var(--ds-bg-surface-2); color:var(--ds-accent-ink); box-shadow:var(--ds-shadow-rest); }
+.ct-frames__ico svg{ width:20px; height:20px; }
+.ct-frames__b{ margin:0; font-size:.98rem; line-height:1.62; color:var(--ds-ink); }
+.ct-frames__b strong{ color:var(--ds-ink-heading); font-weight:600; }
+
+/* ---- S4 - the trust / response line (SECTION-COMPONENTS # 8, a calm reassurance statement) ---- */
+.ct-close{ position:relative; }
+.ct-close__motif{ display:block; margin:0 auto var(--ds-space-md); width:64px; height:64px;
+  border-radius:var(--ds-r-pill); display:grid; place-items:center;
+  background:var(--ds-primary-soft); color:var(--ds-primary); box-shadow:var(--ds-inset-hi); }
+.ct-close__h{ font-family:var(--ds-font-display); font-weight:700; letter-spacing:-.02em; line-height:1.08;
+  font-size:clamp(1.7rem,3vw,2.4rem); color:var(--ds-ink-heading); margin:0; }
+.ct-close__body{ margin-inline:auto; }
+.ct-close__essentials{ margin:clamp(20px,2.4vw,30px) auto 0; max-width:44rem;
+  display:inline-flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:8px var(--ds-space-md);
+  padding:clamp(14px,1.8vw,20px) clamp(18px,2.4vw,26px);
+  border:1px solid var(--ds-line); border-radius:var(--ds-r-pill); background:var(--ds-bg-surface-2);
+  box-shadow:var(--ds-shadow-rest);
+  font-family:var(--ds-font-mono); font-size:.8rem; letter-spacing:.02em; color:var(--ds-ink-soft); }
+.ct-close__essentials a{ color:var(--ds-primary); font-weight:600; }
+.ct-close__essentials a:hover{ color:var(--ds-accent-ink); }
+
+/* small-phone tightening */
+@media(max-width:520px){
+  .ct-hero__h{ max-width:none; }
+  .ct-close__essentials{ border-radius:var(--ds-r-surface); }
+}
+/* reduced-motion is honored globally by the chrome + structural sheets (.et-reveal lands visible). */
+
+/* ============================================================================
+   14 · T-ARTICLE ia-* — page composition layer, SINGLE-SOURCED here.
+   Migrated VERBATIM from the LOCKED tournament winner T-ARTICLE/concept-c's page-local
+   <head><style> so the assembled T-ARTICLE pages (+ their bulk descendants) carry this CSS from
+   the global sheet — closing the promote page-local-<style> seam (promote extracts only <main>).
+   Rides the LOCKED system exactly like §10b .bw-form / §10c .bw-* above: the ia- namespace is
+   this template's own; any .et-*/.bw-*/.row-- selector here is a SCOPED override, never a
+   redefinition. TOKEN-PURE (G8): every colour resolves through var(--ds-*). Migration change: none (already token-pure + ch-free).
+   ============================================================================ */
+/* ============================================================================
+   T-ARTICLE TEMPLATE - CONCEPT C "SECTIONED EDITORIAL BANDS" - page composition layer.
+   Rides the LOCKED system: eyetrends-tokens.css (identity) + eyetrends-chrome.css
+   (carrier) + eyetrends-structural.css (body system incl. the shared .et-* atoms).
+   The insurance page is a CALM, CONTENT-FORWARD editorial leaf: deliver the plans,
+   the billing model and the 42-year takeaway, then cross-link back into the funnel.
+   Concept C reads as DISTINCT ALTERNATING BANDS, more structured / scannable than a
+   flowing article: hero -> a grouped accepted-plans PANEL band (Vision / Medical /
+   Also-welcome as THREE labelled card-panels of plan pills) -> a billing band (prose
+   + a "coverage depends on your plan" callout, with a photo) -> a WARM 42-year trust
+   band (the takeaway + Dr. Hyder portrait) -> a cross-links close.
+
+   TOKEN-PURE (G8): every colour resolves through var(--ds-*); the only literals are
+   geometry (grid tracks, %, clamp, aspect-ratios, radii-math, px offsets, opacities) -
+   never a brand colour. ia-* = this template's own namespace (never bw-/kit-, so the
+   forced-grammar skin rule never fires on it; the shared .et-* skins are reused verbatim
+   from the locked structural sheet). Kept MINIMAL - the assembled build carries the
+   GLOBAL sheets, so this page-local layer only adds the plan-panels, the billing callout,
+   the warm portrait frame and the cross-link cards.
+
+   DESIGN-SYSTEM CITATIONS (resolve under .claude/design-system-unified/):
+     imagery  -> _design/imagery-system.md (the reviewable treatment + locked photo set)
+     menu -> HERO-COMPOSITIONS.md # 1   (Split-text-left + photo-right - the calm editorial opener)
+     menu -> SECTION-COMPONENTS.md # 9  (Services 3-col - the three labelled plan-group panels)
+     menu -> SECTION-COMPONENTS.md # 12 (Feature row with screenshot - the billing prose + photo split)
+     menu -> TRUST-STATS-SECTIONS.md # 4 (Stats big-number band - the 42-year Dr. Hyder tenure stat cluster)
+     menu -> CTA-PATTERNS.md # 6        (Ghost text-link with arrow - the contextual cross-link cards)
+   ============================================================================ */
+
+/* ---- S1 - hero (HERO-COMPOSITIONS # 1: text-left / photo-right split, copy DOM-first) ---- */
+.ia-hero{ position:relative; overflow:hidden; }
+.ia-hero__media{ position:relative; margin:0; width:100%; min-width:0;
+  border-radius:var(--ds-r-surface); overflow:hidden; background:var(--ds-bg-warm);
+  aspect-ratio:5 / 4; max-height:clamp(300px,42vw,470px);
+  box-shadow:var(--ds-shadow-card-2stop), var(--ds-inset-hi); }
+.ia-hero__img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; }
+.ia-hero__media::after{ content:""; position:absolute; left:0; top:0; z-index:2; width:32%; height:5px;
+  background:var(--ds-accent); border-bottom-right-radius:var(--ds-r-control); }
+
+/* ---- S2 - accepted plans (SECTION-COMPONENTS # 9: three labelled group panels of pills) ---- */
+.ia-panel{ position:relative; display:flex; flex-direction:column; gap:var(--ds-space-md); height:100%;
+  padding:clamp(20px,2.4vw,30px); background:var(--ds-bg-surface-2); border:1px solid var(--ds-line);
+  border-radius:var(--ds-r-surface); box-shadow:var(--ds-shadow-rest);
+  transition:transform var(--ds-dur) var(--ds-ease), box-shadow var(--ds-dur) var(--ds-ease), border-color var(--ds-dur) var(--ds-ease); }
+.ia-panel:hover{ transform:translateY(-4px); box-shadow:var(--ds-shadow-card); border-color:color-mix(in srgb,var(--ds-primary) 26%,transparent); }
+.ia-panel--warm{ background:var(--ds-accent-soft); border-color:color-mix(in srgb,var(--ds-accent) 34%,transparent); }
+.ia-panel__head{ display:flex; align-items:center; gap:var(--ds-space-sm); }
+.ia-panel__ic{ width:42px; height:42px; border-radius:var(--ds-r-pill); flex:0 0 auto; display:grid; place-items:center;
+  background:var(--ds-primary-soft); color:var(--ds-primary); box-shadow:var(--ds-inset-hi); }
+.ia-panel--warm .ia-panel__ic{ background:var(--ds-bg-surface-2); color:var(--ds-accent-ink); }
+.ia-panel__ic svg{ width:22px; height:22px; }
+.ia-panel__label{ font-family:var(--ds-font-display); font-weight:600; font-size:1.12rem; color:var(--ds-ink-heading); }
+.ia-panel__note{ font-size:.86rem; line-height:1.5; color:var(--ds-ink-soft); margin:0; }
+.ia-plans{ display:flex; flex-wrap:wrap; gap:var(--ds-space-xs); margin-top:auto; }
+.ia-plans .et-pill{ text-transform:none; letter-spacing:.01em; font-family:var(--ds-font-body); font-size:.82rem; }
+.ia-heads{ margin-top:clamp(26px,3vw,40px); display:flex; align-items:flex-start; gap:var(--ds-space-md);
+  padding:clamp(18px,2.2vw,26px); border:1px solid var(--ds-line); border-left:3px solid var(--ds-accent);
+  border-radius:var(--ds-r-surface); background:var(--ds-bg-surface-2); box-shadow:var(--ds-shadow-rest); }
+.ia-heads__ic{ flex:0 0 auto; width:40px; height:40px; border-radius:var(--ds-r-pill); display:grid; place-items:center;
+  background:var(--ds-accent-soft); color:var(--ds-accent-ink); box-shadow:var(--ds-shadow-rest); }
+.ia-heads__ic svg{ width:20px; height:20px; }
+.ia-heads__b{ margin:0; font-size:.98rem; line-height:1.62; color:var(--ds-ink); }
+.ia-heads__b strong{ color:var(--ds-ink-heading); font-weight:600; }
+
+/* ---- S3 - billing (SECTION-COMPONENTS # 12: media-beside-prose + a coverage callout) ---- */
+.ia-media{ position:relative; margin:0; width:100%; min-width:0; border-radius:var(--ds-r-surface); overflow:hidden;
+  aspect-ratio:4 / 3; max-height:min(60vh,460px);
+  box-shadow:var(--ds-shadow-card-2stop), var(--ds-inset-hi); background:var(--ds-bg-warm); }
+.ia-media__img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; }
+.ia-callout{ border:1px solid var(--ds-line); border-left:3px solid var(--ds-primary);
+  border-radius:var(--ds-r-control); background:var(--ds-primary-soft);
+  padding:clamp(14px,2vw,20px) clamp(16px,2.2vw,24px); margin:var(--ds-space-md) 0 0;
+  font-family:var(--ds-font-body); font-size:1rem; line-height:1.62; color:var(--ds-ink); }
+.ia-callout__k{ display:inline-flex; align-items:center; gap:.5em; font-family:var(--ds-font-mono);
+  font-size:.68rem; letter-spacing:.16em; text-transform:uppercase; color:var(--ds-primary); margin:0 0 var(--ds-space-xs); }
+.ia-callout__k::before{ content:""; width:18px; height:2px; border-radius:var(--ds-r-pill); background:var(--ds-primary); }
+
+/* ---- S4 - the warm 42-year TRUST-STATS band (TRUST-STATS-SECTIONS # 4: stats big-number band) ----
+   The tenure told as OVERSIZED big-number numerals in a stat cluster BESIDE the real Dr. Hyder
+   portrait - the SAME big-number treatment the locked T-HUB (medical-eye-care) + T-FEATURE (dry-eye)
+   pages ride, here on the WARM ground instead of dark (concept C keeps no dark body band). This is a
+   DISTINCT stat composition, deliberately NOT the heading + prose + one-photo media-split that S3
+   (billing) already is - S4 leads a full-width takeaway head, then a portrait + a 3-unit stat cluster.
+   Numerals resolve to var(--ds-primary) for AA-large contrast on the warm ground (the same primary the
+   hero stat + portrait badge use); labels in var(--ds-ink-soft). Token-pure; geometry-only literals. */
+.ia-portrait{ position:relative; margin:0; width:100%; min-width:0; border-radius:var(--ds-r-surface); overflow:hidden;
+  aspect-ratio:4 / 5; max-height:min(68vh,540px);
+  box-shadow:var(--ds-shadow-lift), var(--ds-inset-hi); background:var(--ds-bg-warm); }
+.ia-portrait__img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:50% 22%; display:block; }
+.ia-portrait__badge{ position:absolute; right:clamp(14px,3vw,20px); top:clamp(14px,3vw,20px); z-index:2;
+  display:flex; flex-direction:column; align-items:flex-end; gap:1px; padding:.6em 1em;
+  border-radius:var(--ds-r-surface); background:color-mix(in srgb, var(--ds-bg-surface-2) 82%, transparent);
+  -webkit-backdrop-filter:var(--ds-glass-blur); backdrop-filter:var(--ds-glass-blur);
+  border:1px solid var(--ds-hairline); box-shadow:var(--ds-shadow-lift); }
+.ia-portrait__badge b{ font-family:var(--ds-font-display); font-weight:700; font-size:1.5rem; color:var(--ds-primary); line-height:1; }
+.ia-portrait__badge span{ font-size:.7rem; letter-spacing:.04em; color:var(--ds-ink-soft); }
+.ia-doc__name{ font-family:var(--ds-font-display); font-weight:600; font-size:1.02rem; color:var(--ds-ink-heading); margin:var(--ds-space-md) 0 0; }
+.ia-doc__role{ font-size:.86rem; color:var(--ds-ink-soft); margin:2px 0 0; }
+
+/* the big-number stat cluster (TRUST-STATS # 4) - oversized primary numerals on the warm ground, each
+   with a short tenure label, on an amber left-rule so the figures sit as a deliberate cluster not prose. */
+.ia-trust__stats{ display:flex; flex-direction:column; gap:clamp(22px,2.8vw,32px); }
+.ia-stats{ list-style:none; margin:0; padding:0; display:grid; grid-template-columns:1fr; gap:clamp(16px,2.2vw,26px); }
+.ia-stat{ display:flex; flex-direction:column; gap:5px; padding-left:clamp(15px,2vw,22px); border-left:3px solid var(--ds-accent); }
+.ia-stat__k{ font-family:var(--ds-font-display); font-weight:700; letter-spacing:-.03em; line-height:.9;
+  font-size:clamp(2.6rem,5.4vw,3.6rem); color:var(--ds-primary); }
+.ia-stat__suf{ font-size:.4em; font-weight:600; letter-spacing:.02em; color:var(--ds-accent-ink); margin-left:.14em; }
+.ia-stat__l{ font-size:.92rem; line-height:1.45; color:var(--ds-ink-soft); max-width:23rem; }
+.ia-trust__stats .et-chips{ margin-top:0; }
+
+/* ---- S5 - cross-links close (CTA-PATTERNS # 6: ghost text-link cards; a contextual rail, NOT a CTA band) ---- */
+.ia-link{ position:relative; display:flex; flex-direction:column; gap:var(--ds-space-sm); height:100%;
+  padding:clamp(20px,2.4vw,30px); background:var(--ds-bg-surface-2); border:1px solid var(--ds-line);
+  border-radius:var(--ds-r-surface); box-shadow:var(--ds-shadow-rest);
+  transition:transform var(--ds-dur) var(--ds-ease), box-shadow var(--ds-dur) var(--ds-ease), border-color var(--ds-dur) var(--ds-ease); }
+.ia-link:hover{ transform:translateY(-5px); box-shadow:var(--ds-shadow-card); border-color:color-mix(in srgb,var(--ds-primary) 30%,transparent); }
+.ia-link__ic{ width:50px; height:50px; border-radius:var(--ds-r-pill); flex:0 0 auto; display:grid; place-items:center;
+  background:var(--ds-primary-soft); color:var(--ds-primary); box-shadow:var(--ds-inset-hi); }
+.ia-link--warm .ia-link__ic{ background:var(--ds-accent-soft); color:var(--ds-accent-ink); }
+.ia-link__ic svg{ width:24px; height:24px; }
+.ia-link__t{ font-family:var(--ds-font-display); font-weight:600; font-size:1.12rem; color:var(--ds-ink-heading); }
+.ia-link__d{ font-size:.92rem; line-height:1.55; color:var(--ds-ink-soft); margin:0; }
+.ia-link__go{ margin-top:auto; padding-top:var(--ds-space-xs); display:inline-flex; align-items:center; gap:.4em;
+  font-family:var(--ds-font-display); font-weight:600; font-size:.9rem; color:var(--ds-primary);
+  transition:gap var(--ds-dur-fast) var(--ds-ease), color var(--ds-dur-fast) var(--ds-ease); }
+.ia-link__go svg{ width:15px; height:15px; }
+.ia-link__go:hover{ gap:.65em; color:var(--ds-accent-ink); }
+
+/* reduced-motion is honored globally by the chrome + structural sheets (.et-reveal lands visible). */
+
+/* ============================================================================
+   15 · T-COMPANY od-* — page composition layer, SINGLE-SOURCED here.
+   Migrated VERBATIM from the LOCKED tournament winner T-COMPANY/concept-b's page-local
+   <head><style> so the assembled T-COMPANY pages (+ their bulk descendants) carry this CSS from
+   the global sheet — closing the promote page-local-<style> seam (promote extracts only <main>).
+   Rides the LOCKED system exactly like §10b .bw-form / §10c .bw-* above: the od- namespace is
+   this template's own; any .et-*/.bw-*/.row-- selector here is a SCOPED override, never a
+   redefinition. TOKEN-PURE (G8): every colour resolves through var(--ds-*). Migration change: none (already token-pure + ch-free).
+   ============================================================================ */
+/* ============================================================================
+   T-COMPANY TEMPLATE - CONCEPT B "CREED-FORWARD" - page composition layer.
+   Rides the LOCKED system: eyetrends-tokens.css (identity) + eyetrends-chrome.css
+   (carrier) + eyetrends-structural.css (body system incl. the shared .et-* atoms
+   AND the §10c about-skin .bw-founder/manifesto/timeline/team).
+
+   THE READ - founder-led, SOLO, and CREED-FORWARD. The PRINCIPLES lead loud: a signed
+   founder editorial hero -> an OVERSIZED MANIFESTO values creed on the near-black ground
+   as the point-of-view centrepiece high up (unhurried / personal / continuity as giant
+   type) -> the dated origin SPINE (the 1984 story) -> the ONE solo bio -> the unhurried
+   "why" as a media split -> the 42-year record -> the anti-chain wedge as a big dark
+   pull-quote -> a light contextual close that hands off to the locked chrome .precta.
+   Distinct from a story-first or bio-first ordering: the creed is pulled UP to #2.
+
+   TOKEN-PURE (G8): every colour resolves through var(--ds-*); the only literals are
+   geometry (grid tracks, %, clamp, aspect-ratios, radii-math, px offsets, opacities) -
+   never a brand colour. od-* = this concept's own namespace; the editorial about-skin
+   (bw-founder/manifesto/timeline/team) + the shared .et-* atoms are reused verbatim
+   from the locked structural sheet, so verify-company-composition sees real about-vocab.
+
+   DESIGN-SYSTEM CITATIONS (resolve under .claude/design-system-unified/):
+     menu -> COMPANY-SECTIONS.md # 1  (Founder / company editorial hero)
+     menu -> COMPANY-SECTIONS.md # 2  (Manifesto / values creed type-block - CREED-FORWARD)
+     menu -> COMPANY-SECTIONS.md # 3  (Origin timeline - single vertical spine)
+     menu -> COMPANY-SECTIONS.md # 4  (Founder bio - one named, solo, NOT --duo)
+     menu -> SECTION-COMPONENTS.md # 12 (Feature row with screenshot - the unhurried "why" split)
+     menu -> PROOF-SECTIONS.md # 5    (Showcase image + result - the 42-year record + photo)
+     menu -> PROOF-SECTIONS.md # 2    (Single big pull-quote - the anti-chain wedge, dark)
+     menu -> CTA-PATTERNS.md # 6      (Ghost text-link with arrow - the contextual close)
+   ============================================================================ */
+
+/* ---- S1 hero - the founder editorial hero carries the held-positioning pull-quote
+   (D-OFFER-014) + the dual browse-to-book CTA. The bw-founder copy is display:contents
+   at <=1024, so the added quote + CTA cluster must take order:1 (like the lede/sig) to
+   keep the mobile reading order HEADING -> PORTRAIT -> BODY -> QUOTE -> CTA. ---- */
+.od-hero__quote{ margin:var(--ds-space-lg) 0 0;
+  padding:var(--ds-space-sm) 0 var(--ds-space-sm) clamp(18px,2.4vw,26px);
+  border-left:3px solid var(--ds-accent);
+  font-family:var(--ds-font-display); font-weight:500; font-style:normal;
+  font-size:clamp(1.05rem,1.7vw,1.35rem); line-height:1.5; color:var(--ds-ink-heading); }
+@media (max-width:1024px){
+  .od-hero .bw-founder__copy > .od-hero__quote,
+  .od-hero .bw-founder__copy > .et-cta-cluster{ order:1; margin-block:0; }
+}
+
+/* ---- S2 manifesto creed - the DARK centrepiece. The about-skin teal accents (.ac) are
+   AA on paper but only ~3.3:1 on the near-black ground, so re-point them to the AA-correct
+   amber-light foreground (--ds-accent-light = 10.1:1 on primary-deep). Token-only. ---- */
+.od-creed .bw-manifesto__lead .ac,
+.od-creed .bw-manifesto__line .ac,
+.od-creed .bw-manifesto__idx{ color:var(--ds-accent-light); }
+
+/* ---- shared real-photo media frame (the "why" split, the record, the close). A cover
+   <img> fills a rounded/scrimmed frame with a layered shadow + an accent corner tick. ---- */
+.od-media{ position:relative; margin:0; width:100%; min-width:0; overflow:hidden;
+  border-radius:var(--ds-r-surface); aspect-ratio:4 / 3; max-height:clamp(300px,44vw,470px);
+  background:var(--ds-bg-warm); box-shadow:var(--ds-shadow-card-2stop), var(--ds-inset-hi); }
+.od-media--tall{ aspect-ratio:5 / 4; }
+.od-media__img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; }
+.od-media::after{ content:""; position:absolute; left:0; top:0; z-index:2; width:32%; height:5px;
+  background:var(--ds-accent); border-bottom-right-radius:var(--ds-r-control); }
+
+/* ---- S4 solo bio - the ONE doctor renders as a SINGLE WIDE balanced member card that SPANS
+   the reading measure and CENTRES in the section (portrait 4/5 beside the body), matching
+   concept-c's solo bio - never a sparse 1-of-3 wall NOR a narrow centred sliver. The outer
+   .bw-team grid collapses to one full-width track; the .bw-team__member keeps a portrait-
+   beside-body 2-col grammar, but the SOLO case PINS the portrait to a fixed 280-340 track
+   (not the shared 3-up .6fr proportional split, which starves the lone portrait to ~227px at
+   tablet widths) so the portrait stays substantial while the body owns the rest (>=480). The
+   §L1 <=640 stack is RE-ASSERTED here because .od-bio .bw-team__member (0,2,0) outranks the
+   shared .bw-team__member (0,1,0) mobile rule, which would otherwise leave it 2-col on phones. */
+.od-bio{ grid-template-columns:1fr; max-width:960px; margin-inline:auto; }
+.od-bio .bw-team__member{ grid-template-columns:minmax(280px,340px) minmax(0,1fr); }
+@media (max-width:640px){ .od-bio .bw-team__member{ grid-template-columns:1fr; } }
+
+/* ---- S6 record - the continuity facts as a tight, un-carded list beside the record. ---- */
+.od-facts{ list-style:none; margin:clamp(18px,2.4vw,28px) 0 0; padding:0; display:grid;
+  gap:var(--ds-space-sm); max-width:44rem; }
+.od-facts li{ position:relative; padding-left:28px; font-size:1rem; line-height:1.55; color:var(--ds-ink); }
+.od-facts li::before{ content:""; position:absolute; left:0; top:.5em; width:12px; height:12px;
+  border-radius:var(--ds-r-pill); background:var(--ds-primary);
+  box-shadow:0 0 0 4px color-mix(in srgb,var(--ds-primary) 16%,transparent); }
+.od-proof__media{ margin-top:clamp(28px,3.6vw,44px); aspect-ratio:16 / 9; max-height:clamp(280px,40vw,440px); }
+
+/* ---- S7 wedge - the anti-chain wedge as an oversized dark pull-quote (PROOF-SECTIONS # 2). ---- */
+.od-quote{ max-width:62rem; }
+.od-quote__q{ position:relative; font-family:var(--ds-font-display); font-weight:500; letter-spacing:-.01em;
+  font-size:clamp(1.5rem,3.4vw,2.5rem); line-height:1.26; color:var(--ds-ink-on-dark); margin:0; }
+.od-quote__q .ac{ color:var(--ds-accent-light); }
+.od-quote__mark{ font-family:var(--ds-font-display); font-weight:700; color:var(--ds-accent-light);
+  margin-right:.1em; }
+.od-quote__cite{ margin:var(--ds-space-lg) 0 0; display:flex; flex-direction:column; gap:3px; }
+.od-quote__name{ font-family:var(--ds-font-display); font-weight:700; font-size:1.05rem; color:var(--ds-ink-on-dark); }
+.od-quote__role{ font-family:var(--ds-font-mono); font-size:.72rem; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--ds-accent-light); }
+.od-quote__after{ margin:var(--ds-space-lg) 0 0; font-size:clamp(1rem,1.25vw,1.12rem); line-height:1.62;
+  color:color-mix(in srgb,var(--ds-ink-on-dark) 82%,transparent); max-width:46rem; }
+
+/* ---- S8 close - a warm, content-rich editorial close. It ROUTES to the chrome .precta
+   (the one site-wide conversion band) with ghost text-links + the no-price insurance facts;
+   it is NOT a second Book/marketing band in <main>. ---- */
+.od-close__info{ margin:var(--ds-space-lg) 0 0; padding:clamp(18px,2.4vw,26px);
+  border:1px solid var(--ds-line); border-left:3px solid var(--ds-primary);
+  border-radius:var(--ds-r-surface); background:var(--ds-bg-surface-2); box-shadow:var(--ds-shadow-rest); }
+.od-close__info p{ margin:0 0 var(--ds-space-sm); font-size:.96rem; line-height:1.6; color:var(--ds-ink); }
+.od-close__info p:last-child{ margin-bottom:0; }
+.od-close__info strong{ color:var(--ds-ink-heading); font-weight:600; }
+.od-close__links{ display:flex; flex-wrap:wrap; gap:clamp(16px,2.4vw,30px); margin:var(--ds-space-lg) 0 0; }
+
+/* ============================================================================
+   16 · T-HOME thb-* — page composition layer, SINGLE-SOURCED here.
+   Migrated from the T-HOME tournament concept-b "SHOP-FORWARD BOUTIQUE" page-local
+   <style> so the assembled homepage (and the concept fragment) carry this CSS from the
+   GLOBAL sheet — closing the promote page-local-<style> seam (promote extracts only <main>,
+   and verify-no-orphan-classes fails a fragment whose classes live only in a concept <style>).
+   Rides the LOCKED SHOP-FORWARD BOUTIQUE system exactly like §10b .bw-form / §13 ct-* / §14 ia-* /
+   §15 od-* above: the thb- namespace is this template's own; any .et-*/.row-- selector here is a
+   SCOPED override, never a redefinition. TOKEN-PURE (G8): every colour resolves through var(--ds-*);
+   the only literals are geometry. Adds ONLY the marquee-specific treatments the shared body system
+   does not carry (the click-to-call lockup, the thin proof strip, the anti-chain pain->fix rows, the
+   pediatric point chips, the medical condition list, the accepted-plan logo wall, the local NAP block,
+   the brand-house rail, and the quiet stance pull-quote). Hero, frame cards, category tiles, the dark
+   doctor band, services and reviews all reuse the LOCKED .et-* atoms.
+   ============================================================================ */
+
+/* click-to-call lockup (hero + bands) - the owner top requirement made dead-obvious */
+.thb-call{ display:inline-flex; align-items:center; gap:.5em; font-family:var(--ds-font-display);
+  font-weight:600; font-size:1rem; color:var(--ds-primary); padding:.5em .2em;
+  transition:color var(--ds-dur-fast) var(--ds-ease); }
+.thb-call svg{ width:18px; height:18px; }
+.thb-call:hover{ color:var(--ds-accent-ink); }
+.surface-dark .thb-call{ color:var(--ds-accent-light); }
+
+/* §2 TRUST STRIP - a thin four-figure count-up proof band (amber left-rules) */
+.thb-proof{ list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(4,1fr);
+  gap:clamp(16px,3vw,40px); }
+.thb-proof__item{ display:flex; flex-direction:column; gap:5px; padding-left:clamp(14px,1.6vw,20px);
+  border-left:3px solid var(--ds-accent); min-width:0; }
+.thb-proof__n{ font-family:var(--ds-font-display); font-weight:700; letter-spacing:-.02em; line-height:1;
+  font-size:clamp(2rem,3.4vw,2.8rem); color:var(--ds-primary); }
+.thb-proof__n .thb-suf{ font-size:.5em; color:var(--ds-accent-ink); margin-left:.08em; }
+.thb-proof__l{ font-size:.86rem; line-height:1.4; color:var(--ds-ink-soft); max-width:13rem; }
+@media(max-width:768px){ .thb-proof{ grid-template-columns:1fr 1fr; gap:var(--ds-space-md); } }
+
+/* §4 SHOP-BY-CATEGORY wayfinding - the designer brand-house rail + subheads + the browse explainer */
+.thb-subhead{ font-family:var(--ds-font-mono); font-size:.7rem; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--ds-accent-ink); margin:0 0 var(--ds-space-sm); }
+.thb-houses{ display:flex; flex-wrap:wrap; gap:var(--ds-space-sm); }
+.thb-house{ display:inline-flex; align-items:center; gap:.55em; font-family:var(--ds-font-display); font-weight:600;
+  font-size:.95rem; color:var(--ds-ink-heading); padding:.6em 1.05em; border-radius:var(--ds-r-pill);
+  border:1px solid var(--ds-line); background:var(--ds-bg-surface-2); box-shadow:var(--ds-shadow-rest);
+  transition:transform var(--ds-dur) var(--ds-ease), border-color var(--ds-dur) var(--ds-ease); }
+.thb-house:hover{ transform:translateY(-2px); border-color:color-mix(in srgb,var(--ds-primary) 42%,transparent); }
+.thb-house__mk{ width:9px; height:9px; border-radius:var(--ds-r-pill); background:var(--ds-grad-brand); flex:0 0 auto; }
+.thb-explain{ display:inline-flex; align-items:flex-start; gap:.55em; margin-top:var(--ds-space-md);
+  font-size:.84rem; line-height:1.55; color:var(--ds-ink-soft); max-width:44rem; }
+.thb-explain svg{ width:16px; height:16px; color:var(--ds-primary); flex:0 0 auto; margin-top:2px; }
+.thb-way__cats{ margin-top:clamp(26px,3vw,40px); }
+.thb-browseall{ margin-top:clamp(26px,3vw,40px); }
+
+/* §6 WHY-US - three anti-chain pain->fix rows (a row-list, distinct from the card grids) */
+.thb-why{ display:grid; gap:0; }
+.thb-why__row{ display:grid; grid-template-columns:auto 1fr 1.05fr; gap:clamp(14px,2.4vw,40px); align-items:start;
+  padding:clamp(20px,2.6vw,32px) 0; border-top:1px solid var(--ds-line); }
+.thb-why__row:last-child{ border-bottom:1px solid var(--ds-line); }
+.thb-why__num{ font-family:var(--ds-font-mono); font-size:.9rem; letter-spacing:.08em; color:var(--ds-accent-ink);
+  padding-top:.35em; }
+.thb-why__side{ min-width:0; }
+.thb-why__k{ display:inline-flex; align-items:center; gap:.5em; font-family:var(--ds-font-mono); font-size:.64rem;
+  letter-spacing:.16em; text-transform:uppercase; margin:0 0 8px; }
+.thb-why__k--pain{ color:var(--ds-ink-soft); }
+.thb-why__k--fix{ color:var(--ds-primary); }
+.thb-why__k::before{ content:""; width:14px; height:2px; border-radius:var(--ds-r-pill); background:currentColor; }
+.thb-why__pain{ font-family:var(--ds-font-body); font-size:1rem; line-height:1.55; color:var(--ds-ink-soft); margin:0; }
+.thb-why__fix{ font-family:var(--ds-font-display); font-weight:600; font-size:1.08rem; line-height:1.42;
+  color:var(--ds-ink-heading); margin:0; }
+.thb-why__fix .thb-ac{ color:var(--ds-primary); }
+@media(max-width:768px){
+  .thb-why__row{ grid-template-columns:1fr; gap:var(--ds-space-md); }
+  .thb-why__num{ padding-top:0; }
+}
+
+/* §8 PEDIATRIC point chips (spans, not a list - keeps the shape distinct from §9's condition list) */
+.thb-points{ display:flex; flex-wrap:wrap; gap:var(--ds-space-sm); margin-top:var(--ds-space-lg); }
+.thb-point{ display:inline-flex; align-items:center; gap:.5em; font-family:var(--ds-font-display); font-weight:500;
+  font-size:.86rem; color:var(--ds-ink-heading); padding:.5em .9em; border-radius:var(--ds-r-control);
+  border:1px solid var(--ds-line); background:var(--ds-bg-surface-2); }
+.thb-point svg{ width:15px; height:15px; color:var(--ds-primary); flex:0 0 auto; }
+
+/* §9 MEDICAL condition list (a two-column checklist beside the exam photo) */
+.thb-cond{ list-style:none; margin:var(--ds-space-lg) 0 0; padding:0; display:grid; grid-template-columns:1fr 1fr;
+  gap:var(--ds-space-sm) var(--ds-space-lg); }
+.thb-cond li{ position:relative; padding-left:26px; font-size:.98rem; line-height:1.5; color:var(--ds-ink); }
+.thb-cond li::before{ content:""; position:absolute; left:0; top:.42em; width:11px; height:11px; border-radius:var(--ds-r-pill);
+  background:var(--ds-primary-soft); box-shadow:0 0 0 3px color-mix(in srgb,var(--ds-primary) 15%,transparent); }
+.thb-cond li b{ color:var(--ds-ink-heading); font-weight:600; }
+@media(max-width:560px){ .thb-cond{ grid-template-columns:1fr; } }
+
+/* §11 INSURANCE - accepted-plan logo wall + welcome pills */
+.thb-plans{ display:flex; flex-wrap:wrap; align-items:center; gap:clamp(18px,2.8vw,44px); margin-top:var(--ds-space-md); }
+.thb-plan{ display:inline-flex; }
+.thb-plan__logo{ height:34px; width:auto; max-width:132px; object-fit:contain; opacity:.92; filter:grayscale(1);
+  transition:opacity var(--ds-dur) var(--ds-ease), filter var(--ds-dur) var(--ds-ease); }
+.thb-plan:hover .thb-plan__logo{ opacity:1; filter:grayscale(0); }
+.thb-insure__foot{ margin-top:var(--ds-space-lg); display:flex; flex-wrap:wrap; gap:var(--ds-space-sm); align-items:center; }
+
+/* §12 LOCAL - NAP block beside the map teaser */
+.thb-nap{ font-style:normal; }
+.thb-nap__name{ font-family:var(--ds-font-display); font-weight:700; letter-spacing:-.01em; font-size:1.16rem;
+  color:var(--ds-ink-heading); margin:0; }
+.thb-nap__addr{ font-size:.98rem; line-height:1.6; color:var(--ds-ink-soft); margin:8px 0 0; }
+.thb-nap__row{ display:flex; flex-wrap:wrap; gap:var(--ds-space-md); margin-top:var(--ds-space-md); align-items:center; }
+.thb-geo{ display:flex; flex-wrap:wrap; gap:var(--ds-space-xs); margin-top:var(--ds-space-md); }
+
+/* §13 STANCE LINE - a quiet full-width pull-quote (content, not a CTA band). Rides ONE dark punctuation
+   ground at the close via .surface-dark on the section (the 2nd deep-tone beat for figure/ground rhythm). */
+.thb-stance__q{ font-family:var(--ds-font-display); font-weight:500; letter-spacing:-.01em;
+  font-size:clamp(1.5rem,3vw,2.35rem); line-height:1.3; color:var(--ds-ink-heading);
+  margin:var(--ds-space-md) 0 0; max-width:24em; }
+.thb-stance__q .thb-ac{ color:var(--ds-primary); }
+.thb-stance__mark{ font-family:var(--ds-font-display); font-weight:700; color:var(--ds-accent); margin-right:.12em; }
+.thb-stance__cite{ margin:var(--ds-space-lg) 0 0; display:flex; align-items:center; gap:.75em; flex-wrap:wrap; }
+.thb-stance__cite b{ font-family:var(--ds-font-display); font-weight:700; font-size:1.02rem; color:var(--ds-ink); }
+.thb-stance__cite span{ font-family:var(--ds-font-mono); font-size:.72rem; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--ds-ink-soft); }
+/* on the dark stance ground the teal accent drops to ~3.3:1, so re-point .thb-ac to the AA-correct
+   amber-light foreground (10.1:1 on primary-deep) - the SAME remap §15 od-creed uses. */
+.surface-dark .thb-ac{ color:var(--ds-accent-light); }
+
+/* section identifier hooks (no-op ground labels; the .et-band* ground + the atoms above do the work,
+   but they must be DEFINED in a linked sheet so a promoted fragment is not flagged as orphan-classed). */
+.thb-hero,.thb-strip,.thb-featured,.thb-shop,.thb-doctor,.thb-whyband,.thb-services,.thb-ped,.thb-ped__copy,
+.thb-medical,.thb-medical__copy,.thb-reviews,.thb-insure,.thb-local,.thb-local__copy,.thb-stanceband{ min-width:0; }
+
+@media(prefers-reduced-motion:reduce){ .thb-house:hover{ transform:none; } }
+
+/* reduced-motion is honored globally by the chrome + structural sheets (.et-reveal lands visible). */
+
+
+/* ============================================================================
+   16 · T-FEATURE dc-* — page composition layer, SINGLE-SOURCED here.
+   Migrated VERBATIM from the INTACT tournament template T-FEATURE/concept-c's page-local <head><style>
+   (_design/_tournament/templates/T-FEATURE/concept-c/preview.html) so the assembled T-FEATURE pages carry
+   this CSS from the GLOBAL sheet — closing the promote page-local-<style> seam (assembly extracts only
+   <main>, dropping the concept <style>). Rides the LOCKED system exactly like §13-§15: the dc- namespace is
+   this template's own; any .et-*/.row-- selector here is a SCOPED override, never a redefinition. TOKEN-PURE
+   (G8): every colour resolves through var(--ds-*); the only literals are geometry (grid tracks, %, vw,
+   aspect-ratios, radii-math, px offsets, opacities, mask alphas).
+   ============================================================================ */
+/* ---- shared: media frame (capped height, width-anchored, cover img) ---- */
+.dc-frame{ position:relative; margin:0; width:100%; min-width:0; border-radius:var(--ds-r-surface);
+  overflow:hidden; background:var(--ds-bg-warm);
+  box-shadow:var(--ds-shadow-card-2stop), var(--ds-inset-hi);
+  aspect-ratio:4 / 3; max-height:clamp(320px, 40vw, 452px); }
+.dc-frame--tall{ aspect-ratio:4 / 5; max-height:min(62vh, 540px); }
+.dc-frame__img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; }
+/* bottom image-fade for depth (blueprint A6 / medical-register transition) + amber edge accent */
+.dc-frame::after{ content:""; position:absolute; inset:0; pointer-events:none;
+  background:linear-gradient(180deg, transparent 52%, color-mix(in srgb, var(--ds-primary-deep) 30%, transparent)); }
+.dc-frame__edge{ position:absolute; left:0; top:0; z-index:2; width:38%; height:5px;
+  background:var(--ds-accent); border-bottom-right-radius:var(--ds-r-control); }
+
+/* the shared "accent edge" motif on the dark bands (echoes the frame edge; a modern,
+   non-organic signature touch - medical mood, per blueprint restraint over dividers) */
+.dc-darkedge::before{ content:""; position:absolute; left:clamp(20px,4vw,40px); top:0; z-index:2;
+  width:clamp(48px,8vw,92px); height:4px; background:var(--ds-accent); border-radius:var(--ds-r-pill); }
+
+/* subtle line-grid material on the dark bands (WOW texture layer, masked to a corner) */
+.dc-gridwash::after{ content:""; position:absolute; inset:0; z-index:0; pointer-events:none;
+  background-image:var(--ds-grid); background-size:var(--ds-grid-size); opacity:.30;
+  -webkit-mask-image:radial-gradient(72% 120% at 84% 0%, rgba(0,0,0,1), transparent 70%);
+  mask-image:radial-gradient(72% 120% at 84% 0%, rgba(0,0,0,1), transparent 70%); }
+.dc-gridwash > .container{ position:relative; z-index:1; }
+
+/* =====================================================================================
+   S1 HERO - editorial split (copy left / framed exam-room media right). Bolder headline,
+   glow-wash + faint grid material, floating glass trust chip, a slim proof row.
+   ===================================================================================== */
+.dc-hero{ position:relative; overflow:hidden;
+  padding-block:clamp(40px,6vw,76px) clamp(56px,8vw,104px);
+  background:linear-gradient(180deg, var(--ds-primary-soft) 0%, var(--ds-bg-surface) 44%); }
+.dc-hero::before{ content:""; position:absolute; inset:0; z-index:0; pointer-events:none; background:var(--ds-glow-wash); }
+.dc-hero::after{ content:""; position:absolute; inset:0; z-index:0; pointer-events:none;
+  background-image:var(--ds-grid); background-size:var(--ds-grid-size); opacity:.36;
+  -webkit-mask-image:radial-gradient(78% 66% at 90% 8%, rgba(0,0,0,1), transparent 72%);
+  mask-image:radial-gradient(78% 66% at 90% 8%, rgba(0,0,0,1), transparent 72%); }
+.dc-hero > .container{ position:relative; z-index:1; }
+.dc-hero__h{ font-family:var(--ds-font-display); font-weight:700; letter-spacing:-.03em; line-height:1.0;
+  font-size:clamp(2.3rem, 4.9vw, 3.7rem); color:var(--ds-ink-heading); margin:var(--ds-space-md) 0 0; }
+.dc-hero__h .dc-hl{ color:var(--ds-primary); }
+.dc-hero__sub{ font-size:clamp(1.06rem, 1.4vw, 1.24rem); line-height:1.58; color:var(--ds-ink-soft);
+  margin:var(--ds-space-md) 0 0; max-width:37rem; }
+.dc-hero__media{ position:relative; }
+.dc-chip{ position:absolute; left:clamp(-10px,-1.6vw,-20px); bottom:clamp(16px,3vw,28px); z-index:3;
+  display:flex; align-items:center; gap:.7em; padding:.62em 1em; border-radius:var(--ds-r-pill);
+  background:color-mix(in srgb, var(--ds-bg-surface-2) 82%, transparent);
+  -webkit-backdrop-filter:var(--ds-glass-blur); backdrop-filter:var(--ds-glass-blur);
+  border:1px solid var(--ds-hairline); box-shadow:var(--ds-shadow-lift); }
+.dc-chip__ic{ width:34px; height:34px; flex:0 0 auto; border-radius:var(--ds-r-pill); display:grid; place-items:center;
+  background:var(--ds-primary-soft); color:var(--ds-primary); }
+.dc-chip__ic svg{ width:19px; height:19px; }
+.dc-chip__k{ font-family:var(--ds-font-display); font-weight:700; font-size:1.1rem; color:var(--ds-ink-heading); line-height:1; }
+.dc-chip__l{ font-size:.72rem; color:var(--ds-ink-soft); display:block; margin-top:2px; }
+.dc-proof{ display:flex; flex-wrap:wrap; gap:clamp(18px,3vw,40px);
+  margin-top:var(--ds-space-lg); padding-top:var(--ds-space-md); border-top:1px solid var(--ds-line); }
+.dc-proof__i{ display:flex; flex-direction:column; gap:2px; }
+.dc-proof__k{ font-family:var(--ds-font-display); font-weight:700; letter-spacing:-.02em; line-height:1;
+  font-size:clamp(1.5rem,2.2vw,1.9rem); color:var(--ds-primary); }
+.dc-proof__l{ font-size:.8rem; color:var(--ds-ink-soft); }
+
+/* =====================================================================================
+   S2 STATUS-QUO - type-led warm band, asymmetric (heading + drop-motif left / prose right).
+   ===================================================================================== */
+.dc-sq__aside{ position:relative; }
+.dc-sq__drop{ width:clamp(52px,7vw,76px); height:auto; color:var(--ds-accent-ink); opacity:.9;
+  margin-bottom:var(--ds-space-md); }
+.dc-prose > p + p{ margin-top:var(--ds-space-md); }
+.dc-prose .dc-lead{ font-size:clamp(1.08rem,1.35vw,1.24rem); line-height:1.6; color:var(--ds-ink); }
+.dc-prose p{ color:var(--ds-ink-soft); line-height:1.66; }
+
+/* =====================================================================================
+   S3 PILLARS - asymmetric: sticky section head (left) + stacked numbered outcome rows (right).
+   ===================================================================================== */
+.dc-pillhead{ position:sticky; top:calc(84px + var(--ds-space-md)); align-self:start; }
+.dc-pilllist{ display:flex; flex-direction:column; }
+.dc-pill{ display:grid; grid-template-columns:auto 1fr; gap:clamp(16px,2.2vw,30px);
+  padding:clamp(22px,2.6vw,32px) 0; border-top:1px solid var(--ds-line); }
+.dc-pill:first-child{ border-top:0; padding-top:0; }
+.dc-pill__badge{ display:flex; flex-direction:column; align-items:center; gap:8px; }
+.dc-pill__n{ font-family:var(--ds-font-mono); font-size:.82rem; letter-spacing:.1em; color:var(--ds-accent-ink); }
+.dc-pill__ic{ width:52px; height:52px; border-radius:var(--ds-r-surface); display:grid; place-items:center;
+  background:var(--ds-primary-soft); color:var(--ds-primary); box-shadow:var(--ds-inset-hi); }
+.dc-pill__ic svg{ width:26px; height:26px; }
+.dc-pill__t{ font-family:var(--ds-font-display); font-weight:600; font-size:clamp(1.14rem,1.6vw,1.32rem);
+  letter-spacing:-.01em; color:var(--ds-ink-heading); }
+.dc-pill__d{ font-size:.96rem; line-height:1.62; color:var(--ds-ink-soft); margin-top:6px; }
+
+/* =====================================================================================
+   STAT BAND (dark #1) - slim big-number proof band woven from the verbatim tenure facts.
+   ===================================================================================== */
+.dc-statband{ position:relative; overflow:hidden; padding-block:clamp(40px,5.5vw,66px); }
+.dc-stat{ display:flex; flex-direction:column; gap:6px; }
+.dc-stat__k{ font-family:var(--ds-font-display); font-weight:700; letter-spacing:-.03em; line-height:.9;
+  font-size:clamp(2.7rem,5.4vw,4.1rem); color:var(--ds-accent-light); }
+.dc-stat__l{ font-size:.92rem; line-height:1.42; max-width:17rem;
+  color:color-mix(in srgb, var(--ds-ink-on-dark) 76%, transparent); }
+
+/* =====================================================================================
+   S4 CAPABILITY - framed clinical media (left) + the workup prose (right). Capped media,
+   width-anchored, paired with PROSE (never a card stack - features LAW respected).
+   ===================================================================================== */
+.dc-cap__list{ display:flex; flex-wrap:wrap; gap:var(--ds-space-xs); margin-top:var(--ds-space-md); }
+
+/* =====================================================================================
+   S5 DOCTOR TRUST (dark #2) - portrait split with the one-doctor continuity story.
+   ===================================================================================== */
+.dc-doctor{ position:relative; overflow:hidden; }
+.dc-doctor__badge{ position:absolute; right:clamp(14px,3vw,20px); top:clamp(14px,3vw,20px); z-index:3;
+  display:flex; flex-direction:column; align-items:flex-end; gap:1px; padding:.6em .9em; border-radius:var(--ds-r-surface);
+  background:color-mix(in srgb, var(--ds-bg-surface-2) 12%, transparent);
+  -webkit-backdrop-filter:var(--ds-glass-blur); backdrop-filter:var(--ds-glass-blur);
+  border:1px solid var(--ds-glass-border); }
+.dc-doctor__badge b{ font-family:var(--ds-font-display); font-weight:700; font-size:1.45rem; color:var(--ds-accent-light); line-height:1; }
+.dc-doctor__badge span{ font-size:.68rem; letter-spacing:.05em; color:color-mix(in srgb, var(--ds-ink-on-dark) 74%, transparent); }
+.dc-doctor__name{ font-family:var(--ds-font-display); font-weight:600; font-size:1.05rem; color:var(--ds-ink-on-dark); margin-top:var(--ds-space-md); }
+.dc-doctor__role{ font-size:.86rem; color:color-mix(in srgb, var(--ds-ink-on-dark) 70%, transparent); }
+
+/* =====================================================================================
+   S6 REPLACES - the chain-counter contrast: copy (left) / framed boutique media (right, mirror).
+   ===================================================================================== */
+/* (uses .row--split-media + .dc-frame; no bespoke rules needed beyond the shared frame) */
+
+/* =====================================================================================
+   S7 RELATED-CARE RAIL - featured parent hub (wide) + 4 sibling condition cards.
+   ===================================================================================== */
+.dc-relhub{ position:relative; overflow:hidden; display:flex; flex-wrap:wrap; align-items:center;
+  justify-content:space-between; gap:var(--ds-space-lg); padding:clamp(24px,3vw,38px);
+  border-radius:var(--ds-r-surface); background:var(--ds-grad-hero); color:var(--ds-ink-on-dark);
+  box-shadow:var(--ds-shadow-card), var(--ds-inset-hi); }
+.dc-relhub::after{ content:""; position:absolute; inset:0; pointer-events:none; background:var(--ds-glow-wash); }
+.dc-relhub__txt{ position:relative; z-index:1; max-width:46rem;
+  display:flex; flex-direction:column; align-items:flex-start; }   /* stack eyebrow → title → desc as flex items so their margins apply (inline spans ignored vertical margin → overlap) */
+.dc-relhub__ey{ font-family:var(--ds-font-mono); font-size:.68rem; letter-spacing:.2em; text-transform:uppercase; color:var(--ds-accent-light); }
+.dc-relhub__t{ font-family:var(--ds-font-display); font-weight:700; letter-spacing:-.02em;
+  font-size:clamp(1.4rem,2.2vw,1.9rem); color:var(--ds-ink-on-dark); margin-top:6px; }
+.dc-relhub__d{ font-size:.95rem; line-height:1.55; margin-top:8px; color:color-mix(in srgb, var(--ds-ink-on-dark) 82%, transparent); }
+.dc-relhub__go{ position:relative; z-index:1; display:inline-flex; align-items:center; gap:.5em; white-space:nowrap;
+  font-family:var(--ds-font-display); font-weight:600; font-size:.95rem; color:var(--ds-primary-deep);
+  background:var(--ds-accent); padding:.7em 1.15em; border-radius:var(--ds-r-control); box-shadow:var(--ds-shadow-rest);
+  transition:transform var(--ds-dur-fast) var(--ds-ease); }
+.dc-relhub__go svg{ width:16px; height:16px; }
+.dc-relhub__go:hover{ transform:translateX(3px); }
+.dc-rel{ display:flex; flex-direction:column; gap:8px; height:100%;
+  padding:clamp(18px,2vw,24px); border-radius:var(--ds-r-surface); background:var(--ds-bg-surface-2);
+  border:1px solid var(--ds-line); box-shadow:var(--ds-shadow-rest);
+  transition:transform var(--ds-dur) var(--ds-ease), box-shadow var(--ds-dur) var(--ds-ease), border-color var(--ds-dur) var(--ds-ease); }
+.dc-rel:hover{ transform:translateY(-4px); box-shadow:var(--ds-shadow-lift); border-color:color-mix(in srgb, var(--ds-primary) 32%, transparent); }
+.dc-rel__ic{ width:40px; height:40px; border-radius:var(--ds-r-control); display:grid; place-items:center;
+  background:var(--ds-primary-soft); color:var(--ds-primary); }
+.dc-rel__ic svg{ width:22px; height:22px; }
+.dc-rel__t{ font-family:var(--ds-font-display); font-weight:600; font-size:1.02rem; color:var(--ds-ink-heading); }
+.dc-rel__d{ font-size:.85rem; line-height:1.48; color:var(--ds-ink-soft); }
+.dc-rel__go{ margin-top:auto; padding-top:var(--ds-space-xs); font-size:.8rem; font-weight:600; color:var(--ds-accent-ink);
+  display:inline-flex; align-items:center; gap:.35em; }
+.dc-rel__go svg{ width:13px; height:13px; }
+
+/* =====================================================================================
+   S8 FAQ - classic expand-rows accordion (native <details>, + rotates to x when open).
+   ===================================================================================== */
+.dc-faq{ width:100%; }
+.dc-faq__item{ border-bottom:1px solid var(--ds-line); }
+.dc-faq__item summary{ list-style:none; cursor:pointer; display:flex; align-items:center; justify-content:space-between;
+  gap:var(--ds-space-md); padding:clamp(18px,2.1vw,26px) 0;
+  font-family:var(--ds-font-display); font-weight:600; font-size:clamp(1.05rem,1.35vw,1.22rem);
+  letter-spacing:-.01em; color:var(--ds-ink-heading); }
+.dc-faq__item summary::-webkit-details-marker{ display:none; }
+.dc-faq__ic{ flex:0 0 auto; width:34px; height:34px; border-radius:var(--ds-r-pill); display:grid; place-items:center;
+  border:1.5px solid color-mix(in srgb, var(--ds-primary) 34%, transparent); color:var(--ds-primary);
+  transition:transform var(--ds-dur) var(--ds-ease), background var(--ds-dur) var(--ds-ease); }
+.dc-faq__ic svg{ width:16px; height:16px; }
+.dc-faq__item[open] .dc-faq__ic{ transform:rotate(45deg); background:var(--ds-primary-soft); }
+.dc-faq__a{ padding:0 clamp(46px,6vw,52px) clamp(20px,2.4vw,28px) 0; margin:0;
+  font-size:.98rem; line-height:1.66; color:var(--ds-ink-soft); max-width:54rem; }
+
+/* =====================================================================================
+   S9 CLOSING - reassurance (left) + Visit / NAP card (right). NOT a CTA band: the single
+   pre-footer conversion CTA is the locked chrome .precta below. Phone is a tel: info link.
+   ===================================================================================== */
+.dc-visit{ padding:clamp(24px,2.8vw,36px); border-radius:var(--ds-r-surface);
+  background:var(--ds-bg-surface-2); border:1px solid var(--ds-line); box-shadow:var(--ds-shadow-card); }
+.dc-visit__name{ font-family:var(--ds-font-display); font-weight:700; font-size:1.14rem; color:var(--ds-ink-heading); }
+.dc-visit__list{ margin-top:var(--ds-space-md); }
+.dc-visit__row{ display:flex; gap:.75em; align-items:flex-start; padding-block:var(--ds-space-sm); border-top:1px solid var(--ds-line); }
+.dc-visit__row:first-child{ border-top:0; padding-top:0; }
+.dc-visit__ic{ flex:0 0 auto; margin-top:2px; color:var(--ds-primary); }
+.dc-visit__ic svg{ width:19px; height:19px; }
+.dc-visit__k{ font-size:.94rem; line-height:1.5; color:var(--ds-ink); }
+.dc-visit__phone{ display:inline-flex; align-items:center; gap:.4em;
+  font-family:var(--ds-font-display); font-weight:700; font-size:1.16rem; color:var(--ds-primary); }
+.dc-visit__phone svg{ width:18px; height:18px; }
+.dc-visit__phone:hover{ color:var(--ds-accent-ink); }
+
+/* =====================================================================================
+   RESPONSIVE - complements the structural ladder (.row--split stacks at 1024).
+   ===================================================================================== */
+@media (max-width:1024px){
+  .dc-pillhead{ position:static; }
+  .dc-relrow{ grid-template-columns:repeat(2,1fr); }
+}
+@media (max-width:768px){
+  .dc-stats3{ grid-template-columns:1fr 1fr; gap:var(--ds-space-lg); }
+  .dc-frame, .dc-frame--tall{ aspect-ratio:16 / 11; max-height:400px; }
+}
+@media (max-width:560px){
+  .dc-stats3{ grid-template-columns:1fr; }
+  .dc-relrow{ grid-template-columns:1fr; }
+  .dc-pill{ grid-template-columns:1fr; gap:var(--ds-space-sm); }
+  .dc-chip{ left:auto; right:clamp(12px,4vw,16px); bottom:12px; }
+}
+
+/* ---- dc-* EXTRAS · classes the assembled T-FEATURE fragments use beyond the concept <style>: the
+   hero copy wrapper, the capability media-col anchor, the plain-language workup/step LISTS inside the
+   .dc-prose column, the in-answer FAQ tel link, and the closing visit-card map + directions link. The
+   list treatment mirrors the §15 .od-facts bullet (a primary node with a soft ring). Token-pure. ---- */
+.dc-hero__copy{ position:relative; z-index:1; }
+.dc-cap__media{ position:relative; min-width:0; }                 /* anchor the media frame to its grid track */
+.dc-steps, .dc-steplist, .dc-cap__steps, .dc-cap__ul, .dc-worries{
+  list-style:none; margin:var(--ds-space-md) 0 0; padding:0; display:grid; gap:var(--ds-space-sm); }
+.dc-steps li, .dc-steplist li, .dc-cap__steps li, .dc-cap__ul li, .dc-worries li{
+  position:relative; padding-left:28px; font-size:.98rem; line-height:1.62; color:var(--ds-ink-soft); }
+.dc-steps li strong, .dc-steplist li strong, .dc-cap__steps li strong, .dc-cap__ul li strong, .dc-worries li strong{
+  color:var(--ds-ink-heading); font-weight:600; }
+.dc-steps li::before, .dc-steplist li::before, .dc-cap__steps li::before, .dc-cap__ul li::before, .dc-worries li::before{
+  content:""; position:absolute; left:0; top:.6em; width:9px; height:9px; border-radius:var(--ds-r-pill);
+  background:var(--ds-primary); box-shadow:0 0 0 4px color-mix(in srgb, var(--ds-primary) 15%, transparent); }
+.dc-faq__tel{ color:var(--ds-primary); font-weight:600; text-decoration:underline; text-underline-offset:2px;
+  text-decoration-thickness:1px; transition:color var(--ds-dur-fast) var(--ds-ease); }
+.dc-faq__tel:hover{ color:var(--ds-accent-ink); }
+.dc-visit__map{ margin-top:var(--ds-space-md); aspect-ratio:16 / 9; max-height:220px; }
+.dc-visit__more{ margin-top:var(--ds-space-md); display:inline-flex; align-items:center; gap:.4em;
+  font-family:var(--ds-font-display); font-weight:600; font-size:.9rem; color:var(--ds-primary);
+  transition:gap var(--ds-dur-fast) var(--ds-ease), color var(--ds-dur-fast) var(--ds-ease); }
+.dc-visit__more svg{ flex:0 0 auto; }
+.dc-visit__more:hover{ gap:.65em; color:var(--ds-accent-ink); }
+
+
+/* ============================================================================
+   17 · T-HUB ha-* — page composition layer, SINGLE-SOURCED here.
+   Migrated VERBATIM from the INTACT tournament template T-HUB/concept-a's page-local <head><style>
+   (_design/_tournament/templates/T-HUB/concept-a/preview.html). Closes the promote page-local-<style>
+   seam. ha- is this template's own namespace. TOKEN-PURE (G8): every colour var(--ds-*); geometry-only literals.
+   ============================================================================ */
+/* ---- S1 . IMAGE-LED OVERVIEW HERO (HERO-COMPOSITIONS #5, full-bleed + overlay) ---- */
+.ha-hero{ position:relative; padding:0; }
+.ha-hero__stage{ position:relative; width:100%; min-height:clamp(460px, 64vh, 640px);
+  display:flex; align-items:center; overflow:hidden; isolation:isolate;
+  background:var(--ds-primary-deep); }  /* solid dark base UNDER the photo: verifiable light-on-dark contrast + robust if the image fails to load */
+.ha-hero__img{ z-index:0; }
+/* REAL SCRIM over the photo (not just the base UNDER it): a strong left-anchored
+   near-black wash keeps the whole text zone (left ~58%) dark enough for AA white
+   text, then fades to ~14% at the right so the boutique photo still reads. A gentle
+   top+bottom vertical wash seats the eyebrow/CTAs. Token-only; opacities are geometry. */
+.ha-hero__scrim{ position:absolute; inset:0; z-index:1; pointer-events:none;
+  background:
+    linear-gradient(90deg,
+      color-mix(in srgb, var(--ds-primary-deep) 93%, transparent) 0%,
+      color-mix(in srgb, var(--ds-primary-deep) 90%, transparent) 38%,
+      color-mix(in srgb, var(--ds-primary-deep) 74%, transparent) 58%,
+      color-mix(in srgb, var(--ds-primary-deep) 40%, transparent) 78%,
+      color-mix(in srgb, var(--ds-primary-deep) 14%, transparent) 100%),
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--ds-primary-deep) 34%, transparent) 0%,
+      transparent 44%,
+      color-mix(in srgb, var(--ds-primary-deep) 46%, transparent) 100%); }
+.ha-hero__inner{ position:relative; z-index:2; width:100%; max-width:var(--ds-container-max);
+  margin-inline:auto; padding-inline:clamp(20px, 5vw, 48px);
+  padding-block:clamp(48px, 8vw, 96px); }
+.ha-hero__copy{ max-width:44rem; }
+.ha-hero__eyebrow{ color:var(--ds-accent-light); }
+.ha-hero__eyebrow::before{ background:var(--ds-accent-light); }
+.ha-hero__h{ font-family:var(--ds-font-display); font-weight:700; letter-spacing:-.025em;
+  line-height:1.03; font-size:clamp(2.2rem, 4.6vw, 3.6rem); color:var(--ds-ink-on-dark);
+  margin:var(--ds-space-md) 0 0; text-wrap:balance; }
+.ha-hero__hl{ color:var(--ds-accent-light); }
+.ha-hero__sub{ font-size:clamp(1.02rem, 1.35vw, 1.2rem); line-height:1.62;
+  color:color-mix(in srgb, var(--ds-ink-on-dark) 88%, transparent);
+  margin:var(--ds-space-md) 0 0; max-width:40rem; }
+.ha-hero__cta{ display:flex; flex-wrap:wrap; align-items:center; gap:var(--ds-space-sm) var(--ds-space-md);
+  margin-top:var(--ds-space-lg); }
+.ha-hero__call{ display:inline-flex; align-items:center; gap:.55em; font-family:var(--ds-font-display);
+  font-weight:600; font-size:.98rem; color:var(--ds-ink-on-dark);
+  padding:.5em .2em; transition:color var(--ds-dur-fast) var(--ds-ease); }
+.ha-hero__call svg{ color:var(--ds-accent-light); }
+.ha-hero__call:hover{ color:var(--ds-accent-light); }
+
+/* ---- S2 . THE CONDITION DIRECTORY (the centerpiece) - clean uniform 2-col index ---- */
+.ha-cards{ display:grid; grid-template-columns:repeat(2, 1fr); gap:clamp(14px, 1.6vw, 22px);
+  margin-top:clamp(28px, 3.4vw, 44px); }
+.ha-cond{ position:relative; display:flex; align-items:flex-start; gap:var(--ds-space-md);
+  height:100%; padding:clamp(18px, 2vw, 26px); background:var(--ds-bg-surface-2);
+  border:1px solid var(--ds-line); border-radius:var(--ds-r-surface);
+  box-shadow:var(--ds-shadow-rest);
+  transition:transform var(--ds-dur) var(--ds-ease), box-shadow var(--ds-dur) var(--ds-ease), border-color var(--ds-dur) var(--ds-ease); }
+.ha-cond:hover{ transform:translateY(-4px); box-shadow:var(--ds-shadow-card);
+  border-color:color-mix(in srgb, var(--ds-primary) 34%, transparent); }
+.ha-cond__ic{ flex:0 0 auto; width:46px; height:46px; border-radius:var(--ds-r-control);
+  display:grid; place-items:center; background:var(--ds-primary-soft); color:var(--ds-primary);
+  box-shadow:var(--ds-inset-hi); }
+.ha-cond__body{ display:flex; flex-direction:column; gap:5px; min-width:0; }
+.ha-cond__t{ font-family:var(--ds-font-display); font-weight:600; font-size:1.08rem;
+  color:var(--ds-ink-heading); line-height:1.2; }
+.ha-cond__d{ font-size:.9rem; line-height:1.55; color:var(--ds-ink-soft); }
+.ha-cond__go{ display:inline-flex; align-items:center; gap:.4em; margin-top:auto;
+  padding-top:var(--ds-space-xs); font-family:var(--ds-font-display); font-weight:600;
+  font-size:.82rem; color:var(--ds-primary);
+  transition:gap var(--ds-dur-fast) var(--ds-ease); }
+.ha-cond:hover .ha-cond__go{ gap:.65em; }
+
+/* ---- S3 . WARM DEPTH SPLIT - the exam-room media frame ---- */
+.ha-media{ position:relative; width:100%; min-width:0; border-radius:var(--ds-r-surface);
+  overflow:hidden; aspect-ratio:4 / 5; max-height:min(66vh, 540px);
+  box-shadow:var(--ds-shadow-card-2stop), var(--ds-inset-hi); background:var(--ds-bg-warm); }
+
+/* ---- S5 . INSURANCE + VISIT card ---- */
+.ha-ins__lead{ font-family:var(--ds-font-mono); font-size:.72rem; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--ds-accent-ink); margin:var(--ds-space-lg) 0 var(--ds-space-sm); }
+.ha-ins{ display:flex; flex-wrap:wrap; gap:var(--ds-space-xs); }
+.ha-fine{ font-size:.86rem; line-height:1.5; color:var(--ds-ink-soft); margin:var(--ds-space-md) 0 0; }
+.ha-nap{ margin-top:var(--ds-space-lg); padding-top:var(--ds-space-md);
+  border-top:1px solid var(--ds-line); display:flex; flex-direction:column; gap:3px; }
+.ha-nap__name{ font-family:var(--ds-font-display); font-weight:700; font-size:1.05rem;
+  color:var(--ds-ink-heading); }
+.ha-nap__row{ font-size:.92rem; line-height:1.5; color:var(--ds-ink-soft); }
+.ha-nap__phone{ display:inline-flex; align-items:center; gap:.45em; margin:2px 0;
+  font-family:var(--ds-font-display); font-weight:600; font-size:1.05rem; color:var(--ds-primary);
+  transition:color var(--ds-dur-fast) var(--ds-ease); }
+.ha-nap__phone:hover{ color:var(--ds-accent-ink); }
+.ha-visit__media{ position:relative; width:100%; min-width:0; border-radius:var(--ds-r-surface);
+  overflow:hidden; aspect-ratio:4 / 5; max-height:min(64vh, 520px);
+  box-shadow:var(--ds-shadow-card-2stop), var(--ds-inset-hi); background:var(--ds-bg-surface); }
+
+/* ---- responsive ladder - full 1200/1024/768/375 ---- */
+@media (max-width: 1024px){
+  .ha-cards{ grid-template-columns:1fr 1fr; }
+  .ha-media, .ha-visit__media{ aspect-ratio:16 / 11; max-height:440px; }
+}
+@media (max-width: 680px){
+  .ha-cards{ grid-template-columns:1fr; }
+  .ha-hero__stage{ min-height:clamp(440px, 82vh, 560px); }
+  /* mobile: copy goes FULL-WIDTH, so a left->right directional scrim under-darkens the
+     right edge of the wrapped sub-paragraph over a bright patch of the photo. Switch to a
+     strong near-uniform VERTICAL wash (still token-only) so every line reads at AA, while
+     the photo stays faintly visible. */
+  .ha-hero__scrim{
+    background:
+      linear-gradient(180deg,
+        color-mix(in srgb, var(--ds-primary-deep) 84%, transparent) 0%,
+        color-mix(in srgb, var(--ds-primary-deep) 72%, transparent) 42%,
+        color-mix(in srgb, var(--ds-primary-deep) 86%, transparent) 100%),
+      linear-gradient(90deg,
+        color-mix(in srgb, var(--ds-primary-deep) 42%, transparent) 0%,
+        color-mix(in srgb, var(--ds-primary-deep) 14%, transparent) 100%); }
+}
+@media (prefers-reduced-motion: reduce){
+  .ha-cond:hover{ transform:none; }
+}
+
+/* ---- ha-* EXTRAS · band + copy identifier hooks the assembled T-HUB fragments carry ON TOP of the
+   shared grammar. Every one rides an .et-band (which owns the section flow / ground / padding) or a
+   .col (which owns the cell) — so the hook carries positioning context ONLY; adding padding here would
+   DOUBLE the band rhythm. ha-routes__list stacks the wayfinding go-links. Token-pure. ---- */
+.ha-directory, .ha-depth, .ha-trust, .ha-visit, .ha-routes{ position:relative; }
+.ha-depth__copy, .ha-visit__copy{ position:relative; z-index:1; }
+.ha-routes__list{ display:grid; gap:var(--ds-space-md); }
+
+
+/* ============================================================================
+   18 · T-INDEX tib-* — page composition layer, SINGLE-SOURCED here.
+   Migrated VERBATIM from the INTACT tournament template T-INDEX/concept-b's page-local <head><style>
+   (_design/_tournament/templates/T-INDEX/concept-b/preview.html). Closes the promote page-local-<style>
+   seam. tib- is this template's own namespace. TOKEN-PURE (G8): every colour var(--ds-*); geometry-only literals.
+   ============================================================================ */
+/* ---- S1 . EDITORIAL BROWSE HERO (media-left mirror split) ---- */
+.tib-hero{ position:relative; padding-block: clamp(40px,6vw,80px) var(--et-flow); overflow:hidden; }
+.tib-hero__grid{ display:grid; grid-template-columns: 1fr 1.02fr; align-items:center; gap:clamp(32px,5vw,72px); }
+.tib-hero__copy{ position:relative; z-index:1; }
+.tib-hero__media{ position:relative; width:100%; min-width:0; border-radius:var(--ds-r-surface); overflow:hidden;
+  aspect-ratio: 5 / 6; max-height:min(72vh, 600px);
+  box-shadow:var(--ds-shadow-card-2stop), var(--ds-inset-hi); background:var(--ds-bg-warm); }
+.tib-hero__chip{ position:absolute; left:clamp(14px,3vw,22px); bottom:clamp(14px,3vw,22px); z-index:2;
+  display:flex; align-items:center; gap:.7em; padding:.65em 1em; border-radius:var(--ds-r-pill);
+  background:color-mix(in srgb, var(--ds-bg-surface-2) 82%, transparent);
+  -webkit-backdrop-filter:var(--ds-glass-blur); backdrop-filter:var(--ds-glass-blur);
+  border:1px solid var(--ds-hairline); box-shadow:var(--ds-shadow-lift); }
+.tib-hero__chip .tib-hero__ring{ width:34px; height:34px; border-radius:var(--ds-r-pill); flex:0 0 auto; display:grid;
+  place-items:center; background:var(--ds-primary-soft); color:var(--ds-primary); }
+.tib-hero__chip .tib-hero__ring svg{ width:18px; height:18px; }
+.tib-hero__chip b{ font-family:var(--ds-font-display); font-weight:700; color:var(--ds-ink-heading); font-size:1rem; line-height:1; }
+.tib-hero__chip span{ font-size:.74rem; color:var(--ds-ink-soft); display:block; line-height:1.2; }
+.tib-hero__h{ font-family:var(--ds-font-display); font-weight:700; letter-spacing:-.025em; line-height:1.03;
+  font-size:clamp(2.2rem, 4.8vw, 3.7rem); color:var(--ds-ink-heading); margin:var(--ds-space-md) 0 0; text-wrap:balance; }
+.tib-hero__sub{ font-size:clamp(1.02rem,1.35vw,1.2rem); line-height:1.6; color:var(--ds-ink-soft);
+  margin:var(--ds-space-md) 0 0; max-width:40rem; }
+
+/* the browse toolbar rendered as a WAYFINDING chip rail (not an inert control) */
+.tib-toolbar{ margin-top:var(--ds-space-lg); padding-top:var(--ds-space-md); border-top:1px solid var(--ds-line); }
+.tib-toolbar__label{ font-family:var(--ds-font-mono); font-size:.68rem; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--ds-ink-soft); margin:0 0 var(--ds-space-sm); }
+.tib-chips{ display:flex; flex-wrap:wrap; gap:var(--ds-space-xs); }
+.tib-chip{ display:inline-flex; align-items:center; gap:.5em; font-family:var(--ds-font-display); font-weight:500;
+  font-size:.86rem; color:var(--ds-ink-heading); padding:.5em .9em; border-radius:var(--ds-r-pill);
+  border:1px solid var(--ds-line); background:var(--ds-bg-surface-2); box-shadow:var(--ds-shadow-rest);
+  transition:border-color var(--ds-dur) var(--ds-ease), color var(--ds-dur) var(--ds-ease), transform var(--ds-dur) var(--ds-ease); }
+.tib-chip .tib-chip__dot{ width:7px; height:7px; border-radius:var(--ds-r-pill); background:var(--ds-accent); }
+.tib-chip:hover{ border-color:color-mix(in srgb,var(--ds-primary) 42%,transparent); color:var(--ds-primary); transform:translateY(-1px); }
+.tib-note{ display:inline-flex; align-items:flex-start; gap:.55em; margin-top:var(--ds-space-md);
+  font-size:.82rem; color:var(--ds-ink-soft); max-width:40rem; }
+.tib-note svg{ width:15px; height:15px; color:var(--ds-primary); flex:0 0 auto; margin-top:2px; }
+.tib-herocall{ display:inline-flex; align-items:center; gap:.5em; font-family:var(--ds-font-display);
+  font-weight:600; font-size:.98rem; color:var(--ds-ink-heading); padding:.5em .2em;
+  transition:color var(--ds-dur-fast) var(--ds-ease); }
+.tib-herocall svg{ width:18px; height:18px; color:var(--ds-primary); }
+.tib-herocall:hover{ color:var(--ds-primary); }
+
+/* ---- S3 . TITLED EDITORIAL COLLECTION ROWS ---- */
+.tib-collection{ margin-top:clamp(26px,3vw,40px); }
+.tib-collection--first{ margin-top:0; }
+.tib-collection__head{ display:flex; align-items:baseline; gap:var(--ds-space-md); flex-wrap:wrap;
+  padding-bottom:var(--ds-space-md); margin-bottom:var(--ds-space-lg); border-bottom:1px solid var(--ds-line); }
+.tib-collection__num{ font-family:var(--ds-font-mono); font-size:.9rem; color:var(--ds-accent-ink); letter-spacing:.1em; }
+.tib-collection__title{ font-family:var(--ds-font-display); font-weight:700; letter-spacing:-.02em;
+  font-size:clamp(1.4rem,2.4vw,1.9rem); color:var(--ds-ink-heading); line-height:1.04; }
+.tib-collection__note{ font-size:.95rem; color:var(--ds-ink-soft); max-width:32rem; margin-left:auto; }
+
+/* ---- S4 . BRAND HOUSES RAIL + subheads (category tiles reuse .et-cat) ---- */
+.tib-subhead{ font-family:var(--ds-font-mono); font-size:.7rem; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--ds-accent-ink); margin:0 0 var(--ds-space-sm); }
+.tib-houses{ display:flex; flex-wrap:wrap; gap:var(--ds-space-sm); }
+.tib-house{ display:inline-flex; align-items:center; gap:.55em; font-family:var(--ds-font-display); font-weight:600;
+  font-size:.95rem; color:var(--ds-ink-heading); padding:.62em 1.05em; border-radius:var(--ds-r-pill);
+  border:1px solid var(--ds-line); background:var(--ds-bg-surface-2); box-shadow:var(--ds-shadow-rest);
+  transition:transform var(--ds-dur) var(--ds-ease), border-color var(--ds-dur) var(--ds-ease), box-shadow var(--ds-dur) var(--ds-ease); }
+.tib-house:hover{ transform:translateY(-2px); border-color:color-mix(in srgb,var(--ds-primary) 42%,transparent); box-shadow:var(--ds-shadow-card); }
+.tib-house .tib-house__mk{ width:9px; height:9px; border-radius:var(--ds-r-pill); background:var(--ds-grad-brand); flex:0 0 auto; }
+.tib-way__cats{ margin-top:clamp(28px,3.4vw,44px); }
+
+/* ---- S5 . WARM FINISH-IN-PERSON SPLIT (copy-left, media-right) ---- */
+.tib-fit__grid{ display:grid; grid-template-columns: 1.05fr 1fr; align-items:center; gap:clamp(32px,5vw,72px); }
+.tib-fit__media{ position:relative; width:100%; min-width:0; border-radius:var(--ds-r-surface); overflow:hidden;
+  aspect-ratio:4 / 5; max-height:min(66vh, 540px); box-shadow:var(--ds-shadow-card-2stop), var(--ds-inset-hi);
+  background:var(--ds-bg-surface); }
+.tib-fit__points{ display:flex; flex-wrap:wrap; gap:var(--ds-space-sm); margin-top:var(--ds-space-lg); }
+.tib-point{ display:inline-flex; align-items:center; gap:.55em; font-family:var(--ds-font-display); font-weight:500;
+  font-size:.86rem; color:var(--ds-ink-heading); padding:.5em .9em; border-radius:var(--ds-r-control);
+  border:1px solid var(--ds-line); background:var(--ds-bg-surface-2); }
+.tib-point svg{ width:16px; height:16px; color:var(--ds-primary); flex:0 0 auto; }
+
+/* ---- S6 . DARK MANIFESTO CREED (the single dark punctuation band) ---- */
+.tib-creed{ overflow:hidden; }
+.tib-creed .et-wash::before{ opacity:.9; }
+.tib-creed__grid{ display:grid; grid-template-columns: 1.35fr .9fr; align-items:center; gap:clamp(32px,5vw,64px); }
+.tib-creed__copy{ position:relative; z-index:1; }
+.tib-creed__q{ font-family:var(--ds-font-display); font-weight:700; letter-spacing:-.02em; line-height:1.14;
+  font-size:clamp(1.5rem,3vw,2.35rem); color:var(--ds-ink-on-dark); margin:var(--ds-space-md) 0 0; text-wrap:balance; }
+.tib-creed__q .tib-creed__ac{ color:var(--ds-accent-light); }
+.tib-creed__chips{ display:flex; flex-wrap:wrap; gap:var(--ds-space-xs); margin-top:var(--ds-space-lg); }
+.tib-creed__nap{ margin-top:var(--ds-space-lg); padding-top:var(--ds-space-md);
+  border-top:1px solid var(--ds-glass-border); display:flex; flex-direction:column; gap:4px;
+  font-size:.9rem; color:color-mix(in srgb, var(--ds-ink-on-dark) 74%, transparent); }
+.tib-creed__nap b{ font-family:var(--ds-font-display); color:var(--ds-ink-on-dark); font-weight:600; font-size:1.02rem; }
+.tib-creed__nap a{ color:var(--ds-accent-light); font-weight:600; }
+.tib-creed__nap a:hover{ color:var(--ds-bg-surface-2); }
+.tib-creed__portrait{ position:relative; width:100%; min-width:0; border-radius:var(--ds-r-surface); overflow:hidden;
+  aspect-ratio:4 / 5; max-height:min(60vh, 480px); box-shadow:var(--ds-shadow-lift), var(--ds-inset-hi);
+  background:linear-gradient(160deg, var(--ds-primary), var(--ds-primary-deep) 70%); }
+.tib-creed__badge{ position:absolute; right:clamp(12px,3vw,20px); top:clamp(12px,3vw,20px); z-index:2;
+  display:flex; flex-direction:column; align-items:flex-end; gap:1px; padding:.6em .9em; border-radius:var(--ds-r-surface);
+  background:color-mix(in srgb, var(--ds-bg-surface-2) 12%, transparent);
+  -webkit-backdrop-filter:var(--ds-glass-blur); backdrop-filter:var(--ds-glass-blur);
+  border:1px solid var(--ds-glass-border); }
+.tib-creed__badge b{ font-family:var(--ds-font-display); font-weight:700; font-size:1.4rem; color:var(--ds-accent-light); line-height:1; }
+.tib-creed__badge span{ font-size:.68rem; letter-spacing:.06em; color:color-mix(in srgb, var(--ds-ink-on-dark) 74%, transparent); }
+.tib-creed__cap{ position:absolute; left:clamp(12px,3vw,18px); bottom:clamp(12px,3vw,18px); z-index:2;
+  font-family:var(--ds-font-display); font-weight:600; font-size:.9rem; color:var(--ds-ink-on-dark);
+  text-shadow:0 1px 10px rgba(0,0,0,.5); }
+
+/* ---- RESPONSIVE LADDER (full 1440 / 1024 / 768 / 375) ---- */
+@media (max-width:1024px){
+  .tib-hero__grid{ grid-template-columns:1fr; gap:clamp(24px,5vw,36px); }
+  .tib-hero__media{ order:2; aspect-ratio:16/11; max-height:440px; }
+  /* L1 READING-ORDER (COMPOSITION-LAWS §L1): the .tib-featured band reuses .tib-fit__grid
+     MEDIA-first (.col:first-child = .tib-fit__media, .col:last-child holds the H2) — on stack
+     the media would paint ABOVE its heading (the §1 defect). Order the featured grid's .col
+     children so the HEADING/copy reads FIRST, media AFTER. Scoped to .tib-featured so the
+     copy-first .tib-fit band (media already last) is untouched; desktop (>1024) unchanged. */
+  .tib-featured .tib-fit__grid > .col:last-child{ order:0; }   /* copy/heading col reads FIRST */
+  .tib-featured .tib-fit__grid > .col:first-child{ order:1; }  /* media col AFTER the heading */
+  .tib-fit__grid{ grid-template-columns:1fr; gap:clamp(22px,5vw,32px); }
+  .tib-fit__media{ aspect-ratio:16/11; max-height:420px; }
+  .tib-creed__grid{ grid-template-columns:1fr; gap:clamp(24px,5vw,36px); }
+  .tib-creed__portrait{ aspect-ratio:16/11; max-height:400px; }
+  .tib-collection__note{ margin-left:0; }
+}
+@media (max-width:560px){
+  .tib-collection__head{ gap:var(--ds-space-xs); }
+  .tib-creed__cap{ font-size:.8rem; }
+}
+@media (prefers-reduced-motion:reduce){
+  .tib-house:hover, .tib-chip:hover{ transform:none; }
+}
+
+/* ---- tib-* EXTRAS · band + copy identifier hooks the assembled T-INDEX fragments carry ON TOP of the
+   shared grammar (each rides an .et-band / the .tib-fit__grid). Positioning context only — the band
+   flow / ground / padding is the .et-band grammar they ride. Token-pure. ---- */
+.tib-featured, .tib-collections, .tib-wayfinding, .tib-fit{ position:relative; }
+.tib-fit__copy{ position:relative; z-index:1; min-width:0; }
+
+
+/* ============================================================================
+   19 · et-* STRAYS — two shared atoms the fragments reference that the §2 atoms set did not carry.
+   .et-h1 = the document/legal HERO H1 scale (used on the legal leaves' quiet title block, eyebrow +
+   H1 + lede on the paper ground — the hero H1 scale, one notch calmer than the marketing .et-hero__h).
+   .et-hero__call = the hero phone affordance beside the primary .btn in the .et-cta-cluster (the light-
+   ground sibling of §17 .ha-hero__call / §18 .tib-herocall). Token-pure.
+   ============================================================================ */
+.et-h1{ font-family:var(--ds-font-display); font-weight:700; letter-spacing:-.025em; line-height:1.04;
+  font-size:clamp(2.2rem, 4.6vw, 3.4rem); color:var(--ds-ink-heading); margin:var(--ds-space-sm) 0 0; }
+.et-hero__call{ display:inline-flex; align-items:center; gap:.55em; font-family:var(--ds-font-display);
+  font-weight:600; font-size:.98rem; color:var(--ds-ink-heading); padding:.5em .2em;
+  transition:color var(--ds-dur-fast) var(--ds-ease); }
+.et-hero__call svg{ flex:0 0 auto; color:var(--ds-primary); }
+.et-hero__call:hover{ color:var(--ds-primary); }
+
+
+/* ============================================================================
+   20 · ct-* / ia-* / od-* LEFTOVER HOOKS — the handful of §13-§15 template classes the Stage-1 migration
+   left orphaned (their concept <style> is gone; reconstructed from fragment usage). Every one is a
+   SECTION-IDENTIFIER band hook riding an .et-band (which owns the section flow / ground / padding) or a
+   COPY wrapper riding a .col — verified in the fragments (contact/book-appointment, insurance/patient-forms,
+   our-doctor): each is used as e.g. "et-band et-band--warm ct-routes", so the hook carries positioning
+   context ONLY. Adding padding/ground here would DOUBLE the band rhythm the .et-band grammar already sets.
+   The two exceptions are real content: .ia-bring (what-to-bring list in an .ia-panel) + .ct-find (a
+   modifier on the already-styled .ct-map__frame). TOKEN-PURE (G8): geometry-only literals.
+   ============================================================================ */
+/* ct-* */
+.ct-find{ position:relative; }                                   /* modifier on .ct-map__frame — the find-us map panel */
+.ct-routes, .ct-trust{ position:relative; }
+/* ia-* */
+.ia-plansband, .ia-billing, .ia-trust, .ia-rail{ position:relative; }
+.ia-billing__copy{ position:relative; z-index:1; }
+.ia-bring{ list-style:none; margin:var(--ds-space-sm) 0 0; padding:0; display:grid; gap:var(--ds-space-xs); }
+.ia-bring li{ position:relative; padding-left:22px; font-size:.9rem; line-height:1.5; color:var(--ds-ink-soft); }
+.ia-bring li::before{ content:""; position:absolute; left:0; top:.5em; width:7px; height:7px;
+  border-radius:var(--ds-r-pill); background:var(--ds-primary); }
+/* od-* */
+.od-story, .od-biosec, .od-why, .od-record, .od-wedge, .od-visit{ position:relative; }
+.od-why__copy, .od-visit__copy{ position:relative; z-index:1; }
+
+
+/* ============================================================================
+   21 · T-HOME ethc-* — page composition layer, SINGLE-SOURCED here.
+   Migrated from the T-HOME tournament concept-c "CARE-COMPREHENSIVE" page-local
+   <style> (the OWNER-PICKED marquee home at checkpoint #2) so the assembled homepage
+   (and the concept fragment) carry this CSS from the GLOBAL sheet — closing the promote
+   page-local-<style> seam (promote extracts only <main>, and verify-no-orphan-classes
+   fails a fragment whose classes live only in a concept <style>). Rides the LOCKED system
+   exactly like §10b .bw-form / §13 ct-* / §14 ia-* / §15 od-* / §16 thb-* above: the ethc-
+   namespace is this template's own (never bw-/kit-/et-, so the forced-grammar skin rule
+   never fires); any .ac/.st/.dot descendant here is scoped to an ethc- parent, never a
+   redefinition. TOKEN-PURE (G8): every colour resolves through var(--ds-*); the only
+   literals are geometry. Adds ONLY the marquee-specific treatments the shared body system
+   does not carry (the 50/50 care-offer hero, the light-band big-stat cluster, the anti-chain
+   pain->fix rows, the pediatric point pills, the brand-house rail + browse->pick->book steps,
+   the accepted-plan wall, the neighborhood map/NAP split, the stance pull-quote, the warm
+   finish CTA). The frame cards, category tiles, services grid, the dark doctor band, reviews,
+   pills, bands, media-fill and reveal all reuse the LOCKED .et-* atoms. Migration change:
+   verbatim from the concept <style>, PLUS the one reconstructed .ethc-close section hook
+   (see the S12 SECTION HOOK note below).
+   ============================================================================ */
+/* ---- S1 . CARE-OFFER HERO (copy-left / media-right 50/50 split) ---- */
+.ethc-hero{ position:relative; padding-block:clamp(44px,6vw,84px) var(--et-flow); overflow:hidden; }
+.ethc-hero__grid{ display:grid; grid-template-columns:1.05fr .95fr; align-items:center; gap:clamp(32px,5vw,72px); }
+.ethc-hero__copy{ position:relative; z-index:1; }
+.ethc-hero__h{ font-family:var(--ds-font-display); font-weight:700; letter-spacing:-.025em; line-height:1.02;
+  font-size:clamp(2.3rem,4.9vw,3.9rem); color:var(--ds-ink-heading); margin:var(--ds-space-md) 0 0; text-wrap:balance; }
+.ethc-hero__h .ac{ color:var(--ds-primary); }
+.ethc-hero__sub{ font-size:clamp(1.05rem,1.4vw,1.24rem); line-height:1.58; color:var(--ds-ink-soft);
+  margin:var(--ds-space-md) 0 0; max-width:40rem; }
+.ethc-menu{ display:flex; flex-wrap:wrap; gap:var(--ds-space-xs); margin-top:var(--ds-space-lg); }
+.ethc-menu__chip{ display:inline-flex; align-items:center; gap:.5em; font-family:var(--ds-font-display); font-weight:500;
+  font-size:.85rem; color:var(--ds-ink-heading); padding:.5em .9em; border-radius:var(--ds-r-pill);
+  border:1px solid var(--ds-line); background:var(--ds-bg-surface-2); box-shadow:var(--ds-shadow-rest); }
+.ethc-menu__chip svg{ width:15px; height:15px; color:var(--ds-primary); flex:0 0 auto; }
+.ethc-hero__proof{ display:flex; flex-wrap:wrap; gap:clamp(20px,3vw,44px); margin-top:var(--ds-space-lg);
+  padding-top:var(--ds-space-lg); border-top:1px solid var(--ds-line); }
+.ethc-hero__stat{ display:flex; flex-direction:column; gap:2px; }
+.ethc-hero__k{ font-family:var(--ds-font-display); font-weight:700; letter-spacing:-.02em;
+  font-size:clamp(1.7rem,2.6vw,2.2rem); color:var(--ds-primary); line-height:1; }
+.ethc-hero__k .st{ color:var(--ds-accent); }
+.ethc-hero__l{ font-size:.82rem; color:var(--ds-ink-soft); }
+.ethc-hero__media{ position:relative; width:100%; min-width:0; border-radius:var(--ds-r-surface); overflow:hidden;
+  aspect-ratio:5/6; max-height:min(72vh,600px); box-shadow:var(--ds-shadow-card-2stop), var(--ds-inset-hi); background:var(--ds-bg-warm); }
+.ethc-hero__badge{ position:absolute; left:clamp(14px,3vw,22px); bottom:clamp(14px,3vw,22px); z-index:2;
+  display:flex; align-items:center; gap:.7em; padding:.7em 1.05em; border-radius:var(--ds-r-pill);
+  background:color-mix(in srgb, var(--ds-bg-surface-2) 84%, transparent);
+  -webkit-backdrop-filter:var(--ds-glass-blur); backdrop-filter:var(--ds-glass-blur);
+  border:1px solid var(--ds-hairline); box-shadow:var(--ds-shadow-lift); }
+.ethc-hero__badge b{ font-family:var(--ds-font-display); font-weight:700; color:var(--ds-ink-heading); font-size:1rem; line-height:1; }
+.ethc-hero__badge span{ font-size:.74rem; color:var(--ds-ink-soft); display:block; line-height:1.2; }
+.ethc-hero__ring{ width:34px; height:34px; border-radius:var(--ds-r-pill); flex:0 0 auto; display:grid; place-items:center;
+  background:var(--ds-primary-soft); color:var(--ds-primary); }
+.ethc-hero__ring svg{ width:19px; height:19px; }
+.ethc-herocall{ display:inline-flex; align-items:center; gap:.5em; font-family:var(--ds-font-display);
+  font-weight:600; font-size:.98rem; color:var(--ds-ink-heading); padding:.5em .2em;
+  transition:color var(--ds-dur-fast) var(--ds-ease); }
+.ethc-herocall svg{ width:18px; height:18px; color:var(--ds-primary); }
+.ethc-herocall:hover{ color:var(--ds-primary); }
+
+/* ---- S2 . TRUST STRIP (light-band big-number cluster + a candid banner photo) ---- */
+.ethc-trust__photo{ position:relative; width:100%; min-width:0; aspect-ratio:24/7; max-height:210px;
+  border-radius:var(--ds-r-surface); overflow:hidden; box-shadow:var(--ds-shadow-card), var(--ds-inset-hi);
+  margin-bottom:clamp(26px,3.4vw,44px); background:var(--ds-bg-warm); }
+.ethc-stats{ display:grid; grid-template-columns:repeat(4,1fr); gap:clamp(18px,3vw,40px); }
+.ethc-stat{ display:flex; flex-direction:column; gap:5px; }
+.ethc-stat__k{ font-family:var(--ds-font-display); font-weight:700; letter-spacing:-.03em; line-height:.95;
+  font-size:clamp(2.3rem,4.2vw,3.3rem); color:var(--ds-primary); }
+.ethc-stat__k .st{ color:var(--ds-accent); font-size:.7em; margin-left:.04em; }
+.ethc-stat__l{ font-size:.86rem; line-height:1.42; color:var(--ds-ink-soft); max-width:14rem; }
+
+/* ---- S5 . WHY-US (three anti-chain pain -> fix rows) ---- */
+.ethc-why{ display:grid; gap:var(--ds-space-md); }
+.ethc-why__row{ display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:clamp(16px,3vw,36px);
+  padding:clamp(20px,2.6vw,30px); background:var(--ds-bg-surface-2); border:1px solid var(--ds-line);
+  border-radius:var(--ds-r-surface); box-shadow:var(--ds-shadow-rest);
+  transition:box-shadow var(--ds-dur) var(--ds-ease), border-color var(--ds-dur) var(--ds-ease); }
+.ethc-why__row:hover{ box-shadow:var(--ds-shadow-card); border-color:color-mix(in srgb,var(--ds-primary) 26%,transparent); }
+.ethc-why__side{ min-width:0; }
+.ethc-why__tag{ font-family:var(--ds-font-mono); font-size:.62rem; letter-spacing:.16em; text-transform:uppercase; margin:0 0 8px; }
+.ethc-why__side--pain .ethc-why__tag{ color:var(--ds-ink-soft); }
+.ethc-why__side--fix .ethc-why__tag{ color:var(--ds-primary); }
+.ethc-why__pain{ font-size:.98rem; line-height:1.5; color:var(--ds-ink-soft); margin:0; }
+.ethc-why__fix{ font-family:var(--ds-font-display); font-weight:600; font-size:1.06rem; line-height:1.32; color:var(--ds-ink-heading); margin:0; }
+.ethc-why__arrow{ width:46px; height:46px; border-radius:var(--ds-r-pill); display:grid; place-items:center; flex:0 0 auto;
+  background:var(--ds-primary-soft); color:var(--ds-primary); box-shadow:var(--ds-inset-hi); }
+.ethc-why__arrow svg{ width:20px; height:20px; }
+
+/* ---- S6 . PEDIATRIC / FAMILY (copy-left, media-right split; point pills) ---- */
+.ethc-points{ display:flex; flex-wrap:wrap; gap:var(--ds-space-sm); margin-top:var(--ds-space-lg); }
+.ethc-point{ display:inline-flex; align-items:center; gap:.55em; font-family:var(--ds-font-display); font-weight:500;
+  font-size:.86rem; color:var(--ds-ink-heading); padding:.55em .95em; border-radius:var(--ds-r-control);
+  border:1px solid var(--ds-line); background:var(--ds-bg-surface-2); }
+.ethc-point svg{ width:16px; height:16px; color:var(--ds-primary); flex:0 0 auto; }
+.ethc-media{ position:relative; width:100%; min-width:0; border-radius:var(--ds-r-surface); overflow:hidden;
+  aspect-ratio:4/5; max-height:min(66vh,540px); box-shadow:var(--ds-shadow-card-2stop), var(--ds-inset-hi); background:var(--ds-bg-warm); }
+
+/* ---- S7 . EYEWEAR SHOP TEASER (designer brand house rail + browse->pick->book steps) ---- */
+.ethc-subhead{ font-family:var(--ds-font-mono); font-size:.7rem; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--ds-accent-ink); margin:clamp(30px,3.6vw,48px) 0 var(--ds-space-sm); }
+.ethc-houses{ display:flex; flex-wrap:wrap; gap:var(--ds-space-sm); }
+.ethc-house{ display:inline-flex; align-items:center; gap:.55em; font-family:var(--ds-font-display); font-weight:600;
+  font-size:.94rem; color:var(--ds-ink-heading); padding:.62em 1.05em; border-radius:var(--ds-r-pill);
+  border:1px solid var(--ds-line); background:var(--ds-bg-surface-2); box-shadow:var(--ds-shadow-rest);
+  transition:transform var(--ds-dur) var(--ds-ease), border-color var(--ds-dur) var(--ds-ease), box-shadow var(--ds-dur) var(--ds-ease); }
+.ethc-house:hover{ transform:translateY(-2px); border-color:color-mix(in srgb,var(--ds-primary) 42%,transparent); box-shadow:var(--ds-shadow-card); }
+.ethc-house .ethc-house__mk{ width:9px; height:9px; border-radius:var(--ds-r-pill); background:var(--ds-grad-brand); flex:0 0 auto; }
+.ethc-steps{ display:grid; grid-template-columns:repeat(3,1fr); gap:var(--et-gap); margin-top:clamp(30px,3.6vw,48px); }
+.ethc-step{ position:relative; padding:clamp(18px,2.2vw,26px); background:var(--ds-bg-surface); border:1px solid var(--ds-line);
+  border-radius:var(--ds-r-surface); box-shadow:var(--ds-shadow-rest); }
+.ethc-step__n{ font-family:var(--ds-font-mono); font-size:.72rem; letter-spacing:.14em; color:var(--ds-accent-ink); }
+.ethc-step__t{ font-family:var(--ds-font-display); font-weight:600; font-size:1.05rem; color:var(--ds-ink-heading); margin:6px 0 4px; }
+.ethc-step__d{ font-size:.9rem; line-height:1.5; color:var(--ds-ink-soft); margin:0; }
+.ethc-tiles{ margin-top:clamp(30px,3.6vw,48px); }
+.ethc-shopnote{ display:inline-flex; align-items:flex-start; gap:.55em; margin-top:var(--ds-space-lg);
+  font-size:.84rem; color:var(--ds-ink-soft); max-width:44rem; }
+.ethc-shopnote svg{ width:15px; height:15px; color:var(--ds-primary); flex:0 0 auto; margin-top:2px; }
+
+/* ---- S8 . INSURANCE (accepted-plan wall; price-free) ---- */
+.ethc-plans{ display:flex; flex-wrap:wrap; gap:var(--ds-space-sm); }
+.ethc-plan{ display:inline-flex; align-items:center; gap:.5em; font-family:var(--ds-font-display); font-weight:600;
+  font-size:.92rem; color:var(--ds-ink-heading); padding:.6em 1.05em; border-radius:var(--ds-r-control);
+  border:1px solid var(--ds-line); background:var(--ds-bg-surface-2); box-shadow:var(--ds-shadow-rest); }
+.ethc-plan__mk{ width:7px; height:7px; border-radius:var(--ds-r-pill); background:var(--ds-primary); flex:0 0 auto; }
+.ethc-plan--pay .ethc-plan__mk{ background:var(--ds-accent-deep); }
+
+/* ---- S10 . NEIGHBORHOOD / LOCAL (map + NAP split) ---- */
+.ethc-local__grid{ display:grid; grid-template-columns:1.02fr 1fr; align-items:center; gap:clamp(32px,5vw,64px); }
+.ethc-local__map{ position:relative; width:100%; min-width:0; border-radius:var(--ds-r-surface); overflow:hidden;
+  aspect-ratio:16/11; max-height:440px; box-shadow:var(--ds-shadow-card-2stop), var(--ds-inset-hi); background:var(--ds-primary-soft); }
+.ethc-local__pin{ position:absolute; left:clamp(12px,3vw,18px); bottom:clamp(12px,3vw,18px); z-index:2;
+  display:inline-flex; align-items:center; gap:.5em; font-family:var(--ds-font-mono); font-size:.72rem;
+  letter-spacing:.05em; color:var(--ds-primary); background:var(--ds-bg-surface-2); border:1px solid var(--ds-line);
+  border-radius:var(--ds-r-pill); padding:6px 13px; box-shadow:var(--ds-shadow-rest); }
+.ethc-local__pin svg{ width:14px; height:14px; }
+.ethc-nap{ margin-top:var(--ds-space-lg); display:flex; flex-direction:column; gap:4px; }
+.ethc-nap__name{ font-family:var(--ds-font-display); font-weight:700; font-size:1.1rem; color:var(--ds-ink-heading); }
+.ethc-nap__line{ font-size:.98rem; line-height:1.55; color:var(--ds-ink-soft); }
+.ethc-nap__phone{ display:inline-flex; align-items:center; gap:.5em; margin-top:6px;
+  font-family:var(--ds-font-display); font-weight:600; font-size:1.1rem; color:var(--ds-primary); }
+.ethc-nap__phone svg{ width:17px; height:17px; }
+.ethc-nap__phone:hover{ color:var(--ds-accent-ink); }
+
+/* ---- S11 . STANCE LINE (full-width belief pull-quote) ---- */
+.ethc-stance{ text-align:center; }
+.ethc-stance__q{ font-family:var(--ds-font-display); font-weight:700; letter-spacing:-.02em; line-height:1.16;
+  font-size:clamp(1.55rem,3.1vw,2.5rem); color:var(--ds-ink-heading); text-wrap:balance; max-width:19em;
+  margin:var(--ds-space-md) auto 0; }
+.ethc-stance__q .ac{ color:var(--ds-primary); }
+.ethc-stance__by{ display:inline-flex; align-items:center; gap:.7em; margin-top:var(--ds-space-lg);
+  font-family:var(--ds-font-mono); font-size:.78rem; letter-spacing:.06em; text-transform:uppercase; color:var(--ds-ink-soft); }
+.ethc-stance__by::before{ content:""; width:26px; height:2px; border-radius:var(--ds-r-pill); background:var(--ds-accent); }
+/* S11 rides the 2nd dark punctuation beat (.surface-dark on the stance section) so the home
+   carries the enforced marquee dark-rhythm (>= 2 dark grounds; verify-not-flat DARK_RHYTHM_MIN).
+   The stance quote/label/eyebrow resolve to light via the .surface-dark token flip (ink-heading /
+   ink-soft / accent -> on-dark); only the quote's optional .ac emphasis points at --ds-primary
+   (teal, ~3.3:1 on near-black), so remap it to the AA-correct amber-light foreground on dark
+   (mirrors §15 od-creed's .ac remap). Guard only; no visible change on the light ground. */
+.surface-dark .ethc-stance__q .ac{ color:var(--ds-accent-light); }
+
+/* ---- S12 . WARM FINISH CTA (content-rich book/call band; copy-left, media-right) ---- */
+.ethc-close__grid{ display:grid; grid-template-columns:1.1fr .9fr; align-items:center; gap:clamp(32px,5vw,64px); }
+.ethc-close__media{ position:relative; width:100%; min-width:0; border-radius:var(--ds-r-surface); overflow:hidden;
+  aspect-ratio:4/5; max-height:min(60vh,480px); box-shadow:var(--ds-shadow-lift), var(--ds-inset-hi); background:var(--ds-bg-surface); }
+.ethc-close__p{ font-size:1rem; line-height:1.62; color:var(--ds-ink-soft); margin:var(--ds-space-md) 0 0; max-width:38rem; }
+.ethc-close__p b{ color:var(--ds-ink-heading); font-weight:600; }
+.ethc-close__note{ display:inline-flex; align-items:center; gap:.5em; margin-top:var(--ds-space-md);
+  font-size:.82rem; color:var(--ds-ink-soft); }
+.ethc-close__note .dot{ width:7px; height:7px; border-radius:var(--ds-r-pill); background:var(--ds-primary); flex:0 0 auto; }
+
+/* ---- S12 SECTION HOOK — .ethc-close is a bare section-identifier used on the close band
+   (<section class="et-band et-band--paper ethc-close">); it carried NO rule in the concept
+   <style> (the .et-band grammar owns the band flow/ground/padding, .ethc-close__grid owns the
+   split), so it is reconstructed here as a positioning-context-only hook — matching the §20
+   leftover-hooks rationale (adding padding/ground would DOUBLE the .et-band rhythm). Without a
+   global definition verify-no-orphan-classes flags it (used-but-undefined after promote strips
+   the concept <style>). ---- */
+.ethc-close{ position:relative; }
+
+/* ---- RESPONSIVE LADDER (full 1440 / 1024 / 768 / 375) ---- */
+@media (max-width:1024px){
+  .ethc-hero__grid{ grid-template-columns:1fr; gap:clamp(24px,5vw,36px); }
+  .ethc-hero__media{ order:-1; aspect-ratio:16/11; max-height:440px; }
+  .ethc-local__grid{ grid-template-columns:1fr; gap:clamp(24px,5vw,34px); }
+  .ethc-local__map{ aspect-ratio:16/10; max-height:380px; }
+  .ethc-close__grid{ grid-template-columns:1fr; gap:clamp(24px,5vw,34px); }
+  .ethc-close__media{ order:-1; aspect-ratio:16/11; max-height:400px; }
+  .ethc-steps{ grid-template-columns:1fr; }
+  .ethc-stats{ grid-template-columns:1fr 1fr; }
+}
+@media (max-width:768px){
+  .ethc-why__row{ grid-template-columns:1fr; text-align:left; gap:var(--ds-space-sm); }
+  .ethc-why__arrow{ transform:rotate(90deg); }
+}
+@media (max-width:420px){
+  .ethc-stats{ grid-template-columns:1fr; }
+}
+@media (prefers-reduced-motion:reduce){
+  .ethc-house:hover, .ethc-why__row:hover{ transform:none; }
+}

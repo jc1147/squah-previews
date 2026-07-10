@@ -1,0 +1,136 @@
+/* Eye Trends Vision & Glasses Center — per-site design tokens.
+   TOURNAMENT ① BRAND-CARD · CONCEPT B "Clean Optical Modern".
+   Brand DNA: bright clean near-white canvas · a confident deep-teal trust accent · a warm-amber
+   secondary for the personal/family energy · crisp geometric grotesk display + neutral sans body ·
+   a near-black cool ground for punctuation. LIGHT theme (visual-direction C7 theme_polarity=light).
+
+   Provenance (cite in the sheet, not here):
+     palette  COLOR-THEORY-PRESETS.md #18 "Coral + Teal"  (teal primary from the Open Color teal ramp,
+              TUNED: deepened to a confident optic-teal; near-black COOL ground instead of teal-9; the
+              coral swapped for a warm honey-amber secondary per C7 §2 "warm secondary" / no loud consumer palette).
+     type     TYPOGRAPHY-PAIRINGS.md #39 "Space Grotesk + Inter"  (grotesk display + neutral sans body).
+
+   Shape single-sourced to .claude/design-system-unified/00-globals/tokens/tokens.css (canonical full --ds-* set)
+   + BRAND-TOKEN-SCHEMA.md. structural.css / the sheet reference ONLY var(--ds-*); brand hex lives ONLY here.
+   ---------------------------------------------------------------------------------------------------- */
+:root {
+  /* ---- COLOR — identity (17 required) ---- */
+  --ds-primary:        #0B7360;  /* Optic Teal — brand accent / CTA surface. white 5.8:1, ink-on-dark 5.2:1 (AA) */
+  --ds-primary-deep:   #0E1C1E;  /* NEAR-BLACK cool ink — the .section--dark + footer band; heading ink; ink-on-dark 15.7:1 */
+  --ds-primary-soft:   #DCEFEA;  /* pale teal tint — eyebrows / soft cards / good-voice fill */
+  --ds-accent:         #E0A44C;  /* Warm Amber — decorative pop / large display / on-dark text (the warm secondary) */
+  --ds-accent-ink:     #8A5A1A;  /* darkened amber — SMALL text on light: 5.56:1 on surface, 5.9:1 on white, 4.84:1 on accent-soft */
+  --ds-accent-soft:    #F6E7CC;  /* amber tint background */
+  --ds-accent-deep:    #7E5216;  /* deepened amber — dark-band CTA surface / small text on light; ink-on-dark on it 6.1:1 */
+  --ds-accent-light:   #EDBE72;  /* lightened amber — accent FOREGROUND on dark: 10.1:1 on primary-deep, 8.7:1 on ink */
+  --ds-bg-surface:     #F7FAFB;  /* clean near-white paper — the page canvas (never pure white) */
+  --ds-bg-surface-2:   #FFFFFF;  /* crisp white — card / elevated surface */
+  --ds-bg-warm:        #F6F1E9;  /* warm sand — the alternate section fill (personal / family energy) */
+  --ds-ink:            #17262B;  /* default body text — cool slate near-black */
+  --ds-ink-heading:    var(--ds-primary-deep);  /* LIGHT brand → heading ink = the near-black ground (theme-polar) */
+  --ds-ink-soft:       #4E626A;  /* secondary text — cool slate (6.0:1 on the paper canvas) */
+  --ds-line:           #DCE4E7;  /* hairline borders / dividers */
+  --ds-ink-on-dark:    #EDF5F3;  /* text on the teal / near-black surfaces — cool near-white */
+  --ds-scrim:          rgba(14,28,30,.55);  /* image-overlay legibility scrim (teal-tinted translucent) */
+
+  /* ---- COLOR — optional roles ---- */
+  --ds-warning:        #D6453D;
+  --ds-warning-soft:   #FBEBE9;
+  --ds-success:        #1E9E74;  /* teal-family confirmation green — valid states / check flourishes */
+  --ds-success-soft:   #DCF3EA;
+
+  /* ---- GRADIENT group (from the master :root, flattened) — teal-forward, cohesive ---- */
+  --ds-accent-2:       #14A58C;  /* bright optic teal — 2nd gradient stop / link accent */
+  --ds-grad-brand:     linear-gradient(135deg, var(--ds-primary), var(--ds-accent-2));
+  --ds-grad-text:      linear-gradient(100deg, var(--ds-accent-2), var(--ds-primary));   /* clipped-text accent fill */
+  --ds-grad-hero:      linear-gradient(135deg, var(--ds-primary-deep), var(--ds-primary) 58%, var(--ds-accent-2));
+  --ds-fade-to-paper:  linear-gradient(180deg, rgba(247,250,251,0) 0%, var(--ds-bg-surface) 65%);
+
+  /* ---- SHADOW — subtle, flat-modern (C7 §3 elevation: quiet lift), extra steps ---- */
+  --ds-shadow-card:    0 1px 2px rgba(14,28,30,.05), 0 10px 30px rgba(14,28,30,.06);
+  --ds-shadow-lift:    0 18px 46px rgba(14,28,30,.14);
+  --ds-shadow-rest:    0 1px 2px rgba(14,28,30,.05);
+  --ds-shadow-card-2stop: 0 4px 20px rgba(14,28,30,.06), 0 12px 40px rgba(14,28,30,.08);
+
+  /* ---- TYPOGRAPHY — grotesk display + neutral sans body + geometric mono ---- */
+  --ds-font-display:   'Space Grotesk', system-ui, sans-serif;
+  --ds-font-body:      'Inter', system-ui, sans-serif;
+  --ds-font-mono:      'Space Mono', ui-monospace, 'SFMono-Regular', Consolas, monospace;
+
+  /* ---- RADIUS — 3 role tokens (CONSTRAINED); crisp-soft optical ---- */
+  --ds-r-control:      6px;    /* buttons / inputs / badges / chips / bullets */
+  --ds-r-surface:      12px;   /* cards / panels / media frames (crisp-soft) */
+  --ds-r-pill:         999px;  /* full-round pills / avatars */
+
+  /* ---- SPACING scale + layout ---- */
+  --ds-space-2xs:      4px;
+  --ds-space-xs:       8px;
+  --ds-space-sm:       14px;
+  --ds-space-md:       24px;
+  --ds-space-lg:       40px;
+  --ds-space-xl:       64px;
+  --ds-space-2xl:      96px;
+  --ds-section-py:     clamp(64px, 9vw, 110px);  /* generous / airy (C7 §3) */
+  --ds-container-max:  1200px;
+
+  /* ---- MOTION — 2 workhorse + the extension set (calm, confident; C7 §4) ---- */
+  --ds-ease:           cubic-bezier(.4, 0, .2, 1);
+  --ds-dur:            .25s;
+  --ds-dur-fast:       .16s;   /* micro-interactions / confident hover */
+  --ds-dur-slow:       .6s;    /* scroll-reveal / entrance */
+  --ds-ease-out:       cubic-bezier(.16, 1, .3, 1);  /* strong expo-out — "arrive" motion */
+  --ds-dur-data:       1.4s;   /* OFF-SCALE — JS count-up (read via getComputedStyle) */
+
+  /* ---- Z-INDEX scale (8 semantic layers, single-sourced from canonical) ---- */
+  --ds-z-below:   -1;
+  --ds-z-base:     0;
+  --ds-z-raised:   1;
+  --ds-z-sticky:   1000;
+  --ds-z-overlay:  1040;
+  --ds-z-drawer:   1050;
+  --ds-z-modal:    1060;
+  --ds-z-toast:    1080;
+
+  /* ---- OPACITY scale (6 semantic steps) ---- */
+  --ds-opacity-muted:    .72;
+  --ds-opacity-disabled: .45;
+  --ds-opacity-faint:    .12;
+  --ds-opacity-scrim:    .55;
+  --ds-opacity-texture:  .40;
+  --ds-opacity-veil:     .85;
+
+  /* ---- GLOBALS overlay — modern-wow (15 tokens = 12 here + dur-fast/dur-slow/ease-out above) ---- */
+  --ds-glass-bg:     rgba(12,24,26,.72);          /* translucent nav / mega-menu glass fill */
+  --ds-glass-blur:   blur(16px) saturate(180%);
+  --ds-glass-border: rgba(255,255,255,.14);       /* hairline on glass surfaces */
+  --ds-hairline:     rgba(14,28,30,.10);          /* 1px low-opacity border color */
+  --ds-inset-hi:     inset 0 1px 0 rgba(255,255,255,.10);  /* inset top highlight */
+  --ds-glow:         0 0 48px rgba(11,115,96,.36);         /* teal bloom on CTA / hero */
+  --ds-glow-wash:    radial-gradient(60% 70% at 72% 14%, rgba(11,115,96,.16), transparent 70%);
+  --ds-grain:        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+  --ds-grid:         linear-gradient(rgba(11,115,96,.08) 1px, transparent 1px), linear-gradient(90deg, rgba(11,115,96,.08) 1px, transparent 1px);  /* teal line-grid material layer */
+  --ds-grid-size:    44px 44px;
+  --ds-divider-h:    80px;
+  --ds-icon-tint:    brightness(0) saturate(100%) invert(34%) sepia(38%) saturate(1100%) hue-rotate(120deg) brightness(94%) contrast(92%);  /* source-icon recolor → teal hue */
+}
+
+/* ====================================================================================================
+   DARK-SURFACE FLIP — drop class="surface-dark" on any band to re-skin every ink/surface for the near-
+   black ground (the masthead, a dark CTA band, the applied vignette overlay). Flips reference tokens
+   (var()/color-mix over the neutral white/black) so no new brand hex is introduced and the light :root
+   stays the source of truth for the contrast gate.
+   ==================================================================================================== */
+.surface-dark {
+  --ds-bg-surface:    var(--ds-primary-deep);
+  --ds-bg-surface-2:  color-mix(in srgb, var(--ds-primary-deep) 84%, #ffffff);  /* lifted dark panel */
+  --ds-bg-warm:       color-mix(in srgb, var(--ds-primary-deep) 92%, var(--ds-primary));
+  --ds-ink:           var(--ds-ink-on-dark);
+  --ds-ink-heading:   var(--ds-ink-on-dark);
+  --ds-ink-soft:      color-mix(in srgb, var(--ds-ink-on-dark) 72%, transparent);
+  --ds-line:          var(--ds-glass-border);
+  --ds-accent:        var(--ds-accent-light);   /* the AA-correct accent foreground on dark */
+  --ds-shadow-card:   0 1px 2px rgba(0,0,0,.30), 0 12px 34px rgba(0,0,0,.34);
+  --ds-shadow-lift:   0 20px 52px rgba(0,0,0,.45);
+  background: var(--ds-primary-deep);
+  color: var(--ds-ink-on-dark);
+}
