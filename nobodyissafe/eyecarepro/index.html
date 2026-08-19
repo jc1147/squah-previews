@@ -46,7 +46,7 @@ h3.subhead{font-family:var(--head);font-weight:900;text-transform:uppercase;font
 section{border-top:3px double var(--ink);padding:clamp(20px,3vw,42px) 0}
 section.thin{border-top:1px solid var(--ink)}
 .byline{font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);display:flex;flex-wrap:wrap;gap:.4em 1.4em;margin:.6em 0}
-.topbar{position:sticky;top:0;z-index:30;background:var(--paper);border-bottom:3px double var(--ink);margin:0 calc(-1*clamp(0px,2.2vw,34px))}
+.topbar{position:sticky;top:var(--nis-hubbar-h,0px);z-index:30;background:var(--paper);border-bottom:3px double var(--ink);margin:0 calc(-1*clamp(0px,2.2vw,34px))}
 .topbar-in{display:flex;align-items:baseline;justify-content:space-between;gap:8px 14px;flex-wrap:wrap;padding:10px clamp(14px,3.4vw,52px);width:calc(min(1380px,100% - 2*clamp(0px,2.2vw,34px)) - 2px);margin:0 auto}
 .brand{font-family:var(--head);font-weight:900;font-size:16px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink);text-decoration:none;white-space:nowrap}
 .brand em{font-style:normal;color:var(--red)}
@@ -459,14 +459,105 @@ html[data-bp=s] .tblwrap tbody tr.sumrow{background:var(--paper2)}
 .bk-cta{position:fixed;left:12px;bottom:12px;z-index:60;background:var(--red);color:var(--paper);font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;padding:12px 14px;box-shadow:0 4px 14px rgba(0,0,0,.4)}
 .bk-cta[hidden]{display:none}
 </style>
+<style id="nis-wave7">
+/* wave 7: hub chrome inside the book. Namespaced nis-* rules; values copied from the hub's nis.css, never linked. */
+.nis-hubbar{position:sticky;top:0;z-index:45;background:#171310;border-bottom:4px solid #c9040f;margin:calc(-1*clamp(0px,2.2vw,34px)) calc(-1*clamp(0px,2.2vw,34px)) 0}
+.nis-hubbar-in{max-width:1520px;margin:0 auto;display:flex;align-items:baseline;justify-content:space-between;gap:8px 16px;flex-wrap:wrap;padding:12px clamp(16px,4vw,64px)}
+.nis-hubbrand{font-family:'Arial Black','Helvetica Neue',Arial,sans-serif;font-weight:900;font-size:clamp(14px,1.3vw,18px);text-transform:uppercase;letter-spacing:.04em;color:#f4eede;text-decoration:none;white-space:nowrap}
+.nis-hubbrand em{font-style:normal;color:#e8212c}
+.nis-hubnav{display:flex;flex-wrap:wrap;gap:2px 18px;align-items:baseline}
+.nis-hubnav a{font-family:Consolas,'Courier New',monospace;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:rgba(244,238,222,.62);text-decoration:none;display:inline-block;padding:11px 1px;border-bottom:2px solid transparent}
+.nis-hubnav a.on{color:#f4eede;border-bottom-color:#e8212c}
+.nis-hubnav a:hover{color:#f4eede;border-bottom-color:rgba(244,238,222,.62)}
+.topbar .nav a{font-weight:900;font-size:13.5px;padding:14px 1px;border-bottom-width:3px}
+#app [id]{scroll-margin-top:calc(var(--nis-hubbar-h,0px) + var(--nis-bookbar-h,52px) + 14px)}
+.nis-cta{position:fixed;bottom:12px;z-index:60;background:var(--red);color:var(--paper);font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;line-height:1.5;padding:12px 14px;box-shadow:0 4px 14px rgba(0,0,0,.4);border:0;cursor:pointer}
+.nis-cta[hidden]{display:none}
+#nis-cta-find{left:12px}
+#nis-cta-book{right:12px}
+@media (max-width:480px){.nis-cta{font-size:11px;letter-spacing:.06em;padding:10px 9px}}
+.nis-hubfoot{background:#c9040f;color:#f4eede;padding:clamp(24px,3vw,44px) 0;font-family:Consolas,'Courier New',monospace;font-size:clamp(10px,.85vw,12px);line-height:1.8;margin:0 calc(-1*clamp(0px,2.2vw,34px)) calc(-1*clamp(0px,2.2vw,34px))}
+.nis-hubfoot-in{max-width:1520px;margin:0 auto;padding-left:clamp(16px,4vw,64px);padding-right:clamp(16px,4vw,64px)}
+.nis-hubfoot-row{display:flex;justify-content:space-between;align-items:baseline;gap:.8em 2em;flex-wrap:wrap;letter-spacing:.12em;text-transform:uppercase}
+.nis-hubfoot-mark{font-family:'Old English Text MT','Blackadder ITC',Georgia,serif;font-size:clamp(1.3rem,2.2vw,2rem);text-transform:none;letter-spacing:0;color:#f4eede;text-decoration:none;white-space:nowrap}
+.nis-hubfoot-nav{display:flex;flex-wrap:wrap;gap:.4em 1.6em}
+.nis-hubfoot-nav a{color:rgba(244,238,222,.85);text-decoration:none;border-bottom:2px solid transparent;padding:2px 0}
+.nis-hubfoot-nav a:hover{color:#fff;border-bottom-color:rgba(244,238,222,.6)}
+.nis-hubfoot-indep{font-family:Georgia,'Times New Roman',Times,serif;font-style:italic;text-transform:none;letter-spacing:0;color:rgba(244,238,222,.8);max-width:96ch;font-size:clamp(.8rem,1.05vw,.92rem);line-height:1.7;margin-top:clamp(14px,1.8vw,22px);border-top:1px solid rgba(244,238,222,.35);padding-top:clamp(12px,1.6vw,20px)}
+.nis-hubfoot-legal{margin-top:.9em;color:rgba(244,238,222,.7)}
+</style>
+<style id="nis-wave8">
+/* wave 8: why-this-phrase trends exhibits. Owner-captured Google Trends AVERAGES only, no time curve. Namespaced tx-/tm- rules on the book's own tokens. */
+#trends .trendx{border:4px double var(--ink);background:var(--paper2);padding:clamp(18px,3vw,36px)}
+#trends .trendx-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:clamp(16px,3vw,40px);align-items:center;margin-top:.5em}
+#trends .trendx-copy p{font-size:clamp(1.02rem,1.6vw,1.24rem);line-height:1.55;max-width:62ch}
+#trends .tx-cap-top{font-family:var(--mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft)}
+#trends .tx-row{margin-top:16px}
+#trends .tx-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+#trends .tx-term{font-family:var(--head);font-weight:900;text-transform:uppercase;letter-spacing:.02em;font-size:clamp(1rem,1.7vw,1.3rem);overflow-wrap:anywhere}
+#trends .tx-val{font-family:var(--head);font-weight:900;font-size:clamp(1.9rem,3.4vw,2.9rem);line-height:1}
+#trends .tx-val.rd{color:var(--red)}
+#trends .tx-bar{height:20px;background:var(--paper);border:1px solid var(--ink);margin-top:6px}
+#trends .tx-bar span{display:block;height:100%;background:var(--ink-soft)}
+#trends .tx-bar span.rd{background:var(--red)}
+#trends .tx-cap{font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);margin-top:5px}
+#trends .tx-src{font-family:var(--mono);font-size:.72rem;letter-spacing:.04em;color:var(--ink-soft);margin-top:16px;border-top:1px dashed var(--ink-faint);padding-top:10px}
+#trends .tx-src a{color:var(--red);font-weight:700}
+html[data-bp=m] #trends .trendx-grid,html[data-bp=s] #trends .trendx-grid{grid-template-columns:minmax(0,1fr)}
+.trendmini{border:1px solid var(--ink-faint);border-left:3px solid var(--red);background:var(--paper);padding:10px 12px;margin:0 0 14px}
+.trendmini .tm-row{margin-top:7px}
+.trendmini .tm-row:first-child{margin-top:0}
+.trendmini .tm-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.trendmini .tm-term{font-family:var(--mono);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink)}
+.trendmini .tm-val{font-family:var(--head);font-weight:900;font-size:.95rem;line-height:1}
+.trendmini .tm-val.rd{color:var(--red)}
+.trendmini .tm-bar{display:block;height:7px;background:var(--paper2);border:1px solid var(--ink-faint);margin-top:3px}
+.trendmini .tm-bar span{display:block;height:100%;background:var(--ink-soft)}
+.trendmini .tm-bar span.rd{background:var(--red)}
+.trendmini .tm-line{font-size:.86rem;line-height:1.5;margin:9px 0 0}
+.trendmini .tm-src{font-family:var(--mono);font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);margin:5px 0 0}
+.trendmini .tm-src a{color:var(--red)}
+</style>
 </head>
-<body><a href="../" style="position:fixed;left:12px;bottom:12px;z-index:99999;background:#c9040f;color:#fff;font-family:Consolas,monospace;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;padding:7px 11px;box-shadow:0 4px 14px rgba(0,0,0,.4)">&larr; Nobody Is Safe</a>
-<script>window.NIS_BASE={listings:"../listings.json",books:"../",contact:"../contact/"};window.NIS_FORMS={endpoint:"",scheduler:""}</script><script src="../book.js" defer></script><a id="bk-cta" class="bk-cta" data-book data-agency="eyecarepro" data-listing="" href="../contact/?agency=eyecarepro#book" hidden>Book a consultation</a>
+<body>
+<div id="nis-hubbar" class="nis-hubbar"><div class="nis-hubbar-in"><a class="nis-hubbrand" href="../" data-nis-hub="">NOBODY<em>IS</em>SAFE</a><nav class="nis-hubnav" aria-label="Nobody Is Safe"><a href="../" data-nis-hub="">Home</a><a class="on" href="../dossiers/" data-nis-hub="dossiers/">The Dossiers</a><a href="../blotter/" data-nis-hub="blotter/">The Blotter</a><a href="../about/" data-nis-hub="about/">About</a><a href="../contact/" data-nis-hub="contact/">Contact</a></nav></div></div>
+<script>window.NIS_BASE={listings:"../listings.json",books:"../",contact:"../contact/"};window.NIS_FORMS={endpoint:"",scheduler:""}</script><script src="../book.js" defer></script><a id="bk-cta" class="bk-cta" data-book data-agency="eyecarepro" data-listing="" href="../contact/?agency=eyecarepro#book" hidden>Book a consultation</a><button id="nis-cta-find" class="nis-cta" type="button" hidden>Find your listing</button><a id="nis-cta-book" class="nis-cta" data-book data-agency="eyecarepro" href="../contact/?agency=eyecarepro#book" hidden>Book a consultation</a>
 <div class="topbar"><div class="topbar-in"><a class="brand" href="#/">EyeCare<em>Pro</em> · Results Dossier</a><nav class="nav"><a id="nav-story" href="#/">The Story</a><a id="nav-dir" href="#/directory">Directory</a></nav></div></div>
 <div class="paper">
 <div class="wrap"><div id="app"></div></div>
 <footer class="pagefoot"><div class="wrap">The Copy‑Paste Chronicle · EyeCarePro client roster dossier · filed 2026-08-07 · 710 practices measured on one phrase, “glasses near me”, 121 map points each.<div class="indep-ft">An independent performance analysis of the EyeCarePro client roster, not published by or affiliated with EyeCarePro.</div></div></footer>
 </div>
+<footer id="nis-hubfoot" class="nis-hubfoot"><div class="nis-hubfoot-in"><div class="nis-hubfoot-row"><a class="nis-hubfoot-mark" href="../" data-nis-hub="">Nobody Is Safe</a><nav class="nis-hubfoot-nav" aria-label="Nobody Is Safe footer"><a href="../" data-nis-hub="">Home</a><a href="../dossiers/" data-nis-hub="dossiers/">The Dossiers</a><a href="../blotter/" data-nis-hub="blotter/">The Blotter</a><a href="../about/" data-nis-hub="about/">About</a><a href="../contact/" data-nis-hub="contact/">Contact</a></nav></div><p class="nis-hubfoot-indep">Independent of every agency it measures: not affiliated with, endorsed by, or compensated by any agency named in these files; operated by a competitor who publishes the receipts. Every published figure can be recomputed from the public method sheet; corrections are made on the record.</p><p class="nis-hubfoot-legal">&copy; 2026 &middot; nobodyissafe.com &middot; Every figure recomputable</p></div></footer>
+<script>
+/* wave 7: derived absolute hub links (same root derivation as wave 4), sticky-stack height vars, find-your-listing scroll+focus */
+(function(){
+'use strict';
+var dir=window.location.pathname.replace(/index\.html?$/,'');
+var root=dir.replace(/(dossiers\/)?[^\/]+\/$/,'');
+var abs=window.location.origin+root;
+var links=document.querySelectorAll('[data-nis-hub]');
+var i;for(i=0;i<links.length;i++){links[i].setAttribute('href',abs+links[i].getAttribute('data-nis-hub'));}
+function nisStackH(){
+ var hb=document.getElementById('nis-hubbar');
+ var tb=document.querySelector('.topbar');
+ if(hb){document.documentElement.style.setProperty('--nis-hubbar-h',hb.offsetHeight+'px');}
+ if(tb){document.documentElement.style.setProperty('--nis-bookbar-h',tb.offsetHeight+'px');}
+}
+nisStackH();
+window.addEventListener('resize',nisStackH);
+window.addEventListener('load',nisStackH);
+document.addEventListener('click',function(e){
+ var t=e.target;
+ var btn=(t&&t.closest)?t.closest('#nis-cta-find'):null;
+ if(!btn){return;}
+ e.preventDefault();
+ var inp=document.getElementById('bf-q')||document.getElementById('q');
+ if(!inp){return;}
+ inp.scrollIntoView();
+ try{inp.focus({preventScroll:true});}catch(nis7Err){inp.focus();}
+});
+})();
+</script>
 <noscript><div class="wrap"><p>This dossier needs JavaScript enabled to render.</p></div></noscript>
 <script>
 (function(){
@@ -643,6 +734,33 @@ function pinBar(c){
  return '<span class="pinbar"><span'+(c.r.p1>0?' class="gd"':'')+' style="width:'+w.toFixed(1)+'%"></span></span>';
 }
 
+/* ---- wave 8: why this phrase, the trends layer. Owner-captured Google Trends AVERAGES (US, past 12 months, web search, captured 2026-08-19); averages only, never a time curve. ---- */
+var TRENDS={a:'glasses near me',av:70,b:'optometrist near me',bv:23,url:'https://trends.google.com/explore?q=glasses%2520near%2520me%2Coptometrist%2520near%2520me&date=today%201-y&geo=US',src:'Google Trends · United States · past 12 months · web search · captured 2026-08-19'};
+function trendsExhibit(){
+ var w=(TRENDS.bv/TRENDS.av*100).toFixed(1);
+ var h='<section id="trends"><div class="trendx">';
+ h+='<p class="kick">Exhibit · Why this phrase</p>';
+ h+='<h2 class="headline">The door we measured.</h2>';
+ h+='<div class="trendx-grid"><div class="trendx-copy">';
+ h+='<p>One phrase runs this file: ‘glasses near me’. Not the professional term. Customers do not search for an optometrist; they search for glasses. A year of Google Trends puts ‘glasses near me’ at three times the search interest of ‘optometrist near me’. We measured the door customers actually walk through, and '+num(A.not3)+' of '+num(A.total)+' practices are not in the top 3 anywhere on it.</p>';
+ h+='</div><div class="trendx-bars">';
+ h+='<div class="tx-cap-top">Average search interest · Google Trends index</div>';
+ h+='<div class="tx-row"><div class="tx-head"><span class="tx-term">'+esc(TRENDS.a)+'</span><span class="tx-val rd">'+TRENDS.av+'</span></div><div class="tx-bar"><span class="rd" style="width:100%"></span></div><div class="tx-cap">the phrase this file measures</div></div>';
+ h+='<div class="tx-row"><div class="tx-head"><span class="tx-term">'+esc(TRENDS.b)+'</span><span class="tx-val">'+TRENDS.bv+'</span></div><div class="tx-bar"><span style="width:'+w+'%"></span></div><div class="tx-cap">the professional term</div></div>';
+ h+='<p class="tx-src">'+TRENDS.src+'<br><a target="_blank" rel="noopener" href="'+esc(TRENDS.url)+'">Run this comparison live →</a></p>';
+ h+='</div></div></div></section>';
+ return h;
+}
+function trendsMini(){
+ var w=(TRENDS.bv/TRENDS.av*100).toFixed(1);
+ var h='<div class="trendmini">';
+ h+='<div class="tm-row"><span class="tm-head"><span class="tm-term">'+esc(TRENDS.a)+'</span><span class="tm-val rd">'+TRENDS.av+'</span></span><span class="tm-bar"><span class="rd" style="width:100%"></span></span></div>';
+ h+='<div class="tm-row"><span class="tm-head"><span class="tm-term">'+esc(TRENDS.b)+'</span><span class="tm-val">'+TRENDS.bv+'</span></span><span class="tm-bar"><span style="width:'+w+'%"></span></span></div>';
+ h+='<p class="tm-line">‘Glasses near me’ carries three times the search interest of ‘optometrist near me’. This file measures the bigger door.</p>';
+ h+='<p class="tm-src">Google Trends · US · 12 mo · <a target="_blank" rel="noopener" href="'+esc(TRENDS.url)+'">live comparison</a></p>';
+ h+='</div>';
+ return h;
+}
 /* ================================================================ SPLASH */
 function splash(){
  var h='',i;
@@ -679,6 +797,7 @@ function splash(){
   ['crossover','The winners who should still leave · '+num(A.dv.hp.n)]
  ];
  h+='<div class="index-box" style="margin-top:clamp(14px,2vw,22px)"><h4>Inside the files</h4><ol>';
+ h+='<li><a href="#trends"><span class="ix-t">Why this phrase · the door we measured</span><span class="ix-n">EX</span></a></li>';
  for(i=0;i<IX.length;i++){h+='<li><a href="#'+IX[i][0]+'"><span class="ix-t">'+IX[i][1]+'</span><span class="ix-n">A'+(i+1)+'</span></a></li>';}
  h+='</ol></div></div></div></section>';
 
@@ -698,6 +817,9 @@ function splash(){
  h+='<div class="controls"><input id="bf-q" class="search" type="search" autocomplete="off" aria-label="Search this file\'s listings"><a class="cta" href="#/directory">View Full Directory</a></div>';
  h+='<div id="bf-rows" aria-live="polite"></div>';
  h+='</section>';
+
+ /* ---- wave 8: why this phrase, the trends exhibit ---- */
+ h+=trendsExhibit();
 
  /* ---- lede + EXHIBIT A (the governing 2x2, the opening exhibit) ---- */
  h+='<section id="lede" class="thin"><div class="lede-grid"><div>';
@@ -1377,8 +1499,8 @@ function mapPanel(c){
   h+='</ul>';
  }
  h+='<div class="linkrow">';
- if(r.su){h+='<a class="cta" target="_blank" rel="noopener" href="'+esc(r.su)+'">See the full pin map \u2192</a>';}
- if(r.cu){h+='<a class="cta2" target="_blank" rel="noopener" href="'+esc(r.cu)+'">Competitor report \u2192</a>';}
+ if(r.cu){h+='<a class="cta" target="_blank" rel="noopener" href="'+esc(r.cu)+'">The competitor report \u2192</a>';}
+ if(r.su){h+='<a class="cta2" target="_blank" rel="noopener" href="'+esc(r.su)+'">The full scan \u2192</a>';}
  h+='</div>';
  h+='<p>Independent scan reports. Every pin is a real result for this listing.</p>';
  h+='</div>';
@@ -1542,6 +1664,7 @@ function evidenceRow(c){
  h+='<div class="evrow">';
  /* the map */
  h+='<div class="evb"><p class="ph">The map \u00b7 '+QP+' \u00b7 all '+r.pn+' points</p>';
+ h+=trendsMini();
  h+='<div class="ev-big '+(r.i3?'':'rd')+'">'+(r.rd?'#'+r.rk+'<span class="of">of '+num(r.cg)+' businesses on its own map</span>':'never found<span class="of">on its own map \u00b7 '+r.pn+' points, '+r.pn+' misses</span>')+'</div>';
  h+=pinGridHTML(c);
  var ml;
@@ -1549,7 +1672,7 @@ function evidenceRow(c){
  else if(r.ls){ml='Black cells are the pack, where a searcher sees this practice without tapping anything. This practice leads its own map.';}
  else{ml='Black cells are the pack, where a searcher sees this practice without tapping anything.'+(r.ld?' The top of this map belongs to '+esc(r.ld.cn)+(r.ld.ch?', a national retail chain':'')+'.':'');}
  h+='<p class="ev-cap">'+ml+'</p>';
- if(r.su){h+='<div class="linkrow"><a class="cta" target="_blank" rel="noopener" href="'+esc(r.su)+'">The full interactive scan \u2192</a>'+(r.cu?'<a class="cta2" target="_blank" rel="noopener" href="'+esc(r.cu)+'">Competitor report \u2192</a>':'')+'</div>';}
+ if(r.su||r.cu){h+='<div class="linkrow">'+(r.cu?'<a class="cta" target="_blank" rel="noopener" href="'+esc(r.cu)+'">The competitor report \u2192</a>':'')+(r.su?'<a class="cta2" target="_blank" rel="noopener" href="'+esc(r.su)+'">The full scan \u2192</a>':'')+'</div>';}
  h+='</div>';
  /* the stopwatch */
  h+='<div class="evb"><p class="ph">The website \u00b7 what a phone actually waits</p>';
@@ -1847,7 +1970,8 @@ document.addEventListener('click',function(e){
 function bkSync(){
  var m=nisListingKey();
  var btn=document.getElementById('bk-cta');
- var pill=document.querySelector('body>a[href="../"]');
+ var ctaFind=document.getElementById('nis-cta-find');
+ var ctaBook=document.getElementById('nis-cta-book');
  if(btn){
   if(m){
    var key=m;
@@ -1858,7 +1982,8 @@ function bkSync(){
    btn.setAttribute('hidden','hidden');
   }
  }
- if(pill){pill.style.display=m?'none':'';}
+ if(ctaFind){if(m){ctaFind.setAttribute('hidden','hidden');}else{ctaFind.removeAttribute('hidden');}}
+ if(ctaBook){if(m){ctaBook.setAttribute('hidden','hidden');}else{ctaBook.removeAttribute('hidden');ctaBook.setAttribute('href',NIS_ROOT+'contact/?agency=eyecarepro#book');}}
 }
 window.addEventListener('hashchange',bkSync);
 bkSync();
