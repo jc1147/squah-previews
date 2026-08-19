@@ -451,6 +451,11 @@ html[data-bp=s] .tblwrap tbody tr.sumrow{background:var(--paper2)}
 #bf-rows{margin-top:6px}
 .bookline{font-style:italic;font-size:clamp(.98rem,1.5vw,1.15rem);margin:14px 0 0;max-width:62ch}
 .bookline a{color:var(--red);font-weight:700;text-underline-offset:2px}
+.shareline{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:12px 0 0}
+.share-btn{background:none;border:2px solid var(--ink);color:var(--ink);font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:8px 12px;cursor:pointer}
+.share-btn:hover{border-color:var(--red);color:var(--red)}
+.share-note{font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--red)}
+.share-url{flex:1 1 240px;min-width:0;font-family:var(--mono);font-size:12px;border:2px solid var(--ink);background:#fff;color:var(--ink);padding:8px 10px}
 .bk-cta{position:fixed;left:12px;bottom:12px;z-index:60;background:var(--red);color:var(--paper);font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;padding:12px 14px;box-shadow:0 4px 14px rgba(0,0,0,.4)}
 .bk-cta[hidden]{display:none}
 </style>
@@ -1587,6 +1592,7 @@ function profile(c){
  h+=verdictPair(c);
  h+='<div class="verdict"><p>'+esc(c.v.cl)+'</p></div>';
  h+='<p class="bookline">This is your business? <a data-book data-agency="eyecarepro" data-listing="'+esc(c.d)+'" href="../contact/?agency=eyecarepro&amp;listing='+encodeURIComponent(c.d)+'#book">Book a consultation</a></p>';
+ h+='<div class="shareline"><button type="button" class="share-btn" data-share-slug="eyecarepro" data-share-key="'+esc(c.d)+'">Share this listing</button><span class="share-note" role="status" aria-live="polite"></span></div>';
  if(c.r.tt){h+='<div class="note"><p style="margin:0"><strong>This grid is flagged as too tight.</strong> One business holds more than 90% of it, which means the scan radius was small enough that the grid may not contain a real contest. Read this practice\u2019s ranking with that caveat, it is flagged here rather than quietly counted.</p></div>';}
  h+='</section>';
  h+=storyECP(c);
@@ -1730,6 +1736,44 @@ window.addEventListener('hashchange',function(e){
  if(oldH==='/directory'&&newH.indexOf('/client/')===0){dirY=window.pageYOffset||document.documentElement.scrollTop||0;}
  else if(newH==='/directory'&&dirY>=0){var y=dirY;setTimeout(function(){window.scrollTo(0,y);},0);}
  else if(newH!=='/directory'&&newH.indexOf('/client/')!==0){dirY=-1;}
+});
+function shareStubURL(slug,key){
+ var p=window.location.pathname.replace(/index\.html?$/,'');
+ var root=p.replace(/(dossiers\/)?[^\/]+\/$/,'');
+ return window.location.origin+root+'l/'+slug+'/'+key+'.html';
+}
+function shareCopied(wrap){
+ var note=wrap.querySelector('.share-note');
+ if(!note){return;}
+ note.textContent='Link copied';
+ if(wrap._shareT){clearTimeout(wrap._shareT);}
+ wrap._shareT=setTimeout(function(){note.textContent='';},2200);
+}
+function shareFallback(wrap,url){
+ var inp=wrap.querySelector('.share-url');
+ if(!inp){
+  inp=document.createElement('input');
+  inp.className='share-url';
+  inp.type='text';
+  inp.readOnly=true;
+  inp.setAttribute('aria-label','Share link for this listing');
+  wrap.appendChild(inp);
+ }
+ inp.value=url;
+ inp.focus();
+ inp.select();
+}
+document.addEventListener('click',function(e){
+ var t=e.target;
+ var btn=(t&&t.closest)?t.closest('.share-btn'):null;
+ if(!btn){return;}
+ var wrap=btn.parentNode;
+ var url=shareStubURL(btn.getAttribute('data-share-slug'),btn.getAttribute('data-share-key'));
+ if(navigator.clipboard&&navigator.clipboard.writeText){
+  navigator.clipboard.writeText(url).then(function(){shareCopied(wrap);},function(){shareFallback(wrap,url);});
+ }else{
+  shareFallback(wrap,url);
+ }
 });
 function bkSync(){
  var m=(window.location.hash||'').match(/^#\/client\/(.+)$/);
