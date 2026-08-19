@@ -27,6 +27,7 @@
   var WKD=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
   var MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   var overlay=null,opener=null,keyHandler=null;
+  var dwEl=null,dwBackdrop=null,dwBurger=null,dwKeyHandler=null,dwCloseTimer=null,dwOpenState=false;
   var DATA=null,dataPromise=null;
   var state={step:1,base:null,picked:null,notFiled:false,scope:null,bizAuto:'',ctxSig:null,reqDate:null,reqSlot:null,reqLbl:''};
 
@@ -155,11 +156,51 @@
     '.bk-slot[aria-pressed="true"]{background:var(--red);border-color:var(--red);color:#fff;font-weight:700}',
     '.bk-tznote{font-family:var(--mono);font-size:clamp(.56rem,.78vw,.66rem);letter-spacing:.14em;text-transform:uppercase;color:rgba(244,238,222,.45);line-height:1.8;margin-top:.4em}'
   ].join('\n');
+  /* wave 9: the mobile hamburger + drawer (nis-burger* / nis-drawer*), <=820px only.
+     The bar link-hiding lives in nis.css (hub) / each book's nis-hubbar style
+     region, keyed on the .nis-mnav class this script stamps on the bar. */
+  var NAVCSS=[
+    '.nis-burger{display:none;background:none;border:0;cursor:pointer;padding:4px 6px;min-width:44px;min-height:44px;align-self:center;flex-direction:column;align-items:center;justify-content:center;gap:3px}',
+    '@media (max-width:820px){.nis-burger{display:inline-flex}}',
+    '.nis-burger-bars{display:block;width:22px;height:17px;position:relative}',
+    '.nis-burger-bars i{display:block;position:absolute;left:0;width:22px;height:3px;background:#f4eede}',
+    '.nis-burger-bars i:nth-child(1){top:0}',
+    '.nis-burger-bars i:nth-child(2){top:7px;background:#e8212c}',
+    '.nis-burger-bars i:nth-child(3){top:14px}',
+    ".nis-burger-lbl{font-family:Consolas,'Courier New',monospace;font-size:9px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:rgba(244,238,222,.72);margin-right:-.24em}",
+    '.nis-burger:hover .nis-burger-lbl{color:#f4eede}',
+    '.nis-drawer-backdrop{position:fixed;inset:0;z-index:74;background:rgba(23,19,16,.55);opacity:0;transition:opacity .25s ease}',
+    '.nis-drawer-backdrop.nis-open{opacity:1}',
+    '.nis-drawer-backdrop[hidden]{display:none}',
+    '.nis-drawer{position:fixed;top:0;right:0;bottom:0;z-index:75;width:86%;max-width:360px;background:#171310;background-image:radial-gradient(rgba(244,238,222,.05) 1px,transparent 1.2px);background-size:6px 6px;border-left:8px solid #c9040f;color:#f4eede;overflow-y:auto;-webkit-overflow-scrolling:touch;display:flex;flex-direction:column;padding:12px 18px 22px;transform:translateX(103%);transition:transform .25s ease;box-shadow:-14px 0 40px rgba(0,0,0,.45)}',
+    '.nis-drawer.nis-open{transform:none}',
+    '.nis-drawer[hidden]{display:none}',
+    '@media (prefers-reduced-motion:reduce){.nis-drawer,.nis-drawer-backdrop{transition:none}}',
+    '@media (min-width:821px){.nis-drawer,.nis-drawer-backdrop{display:none}}',
+    '.nis-drawer-lock{overflow:hidden}',
+    '.nis-drawer-head{display:flex;align-items:center;justify-content:space-between;gap:10px;border-bottom:2px solid rgba(244,238,222,.35);padding:2px 0 10px;flex:none}',
+    ".nis-drawer-brand{font-family:'Arial Black','Helvetica Neue',Arial,sans-serif;font-weight:900;font-size:17px;text-transform:uppercase;letter-spacing:.04em;color:#f4eede;text-decoration:none;white-space:nowrap}",
+    '.nis-drawer-brand em{font-style:normal;color:#e8212c}',
+    ".nis-drawer-close{background:none;border:2px solid rgba(244,238,222,.3);color:#f4eede;font-family:Consolas,'Courier New',monospace;font-size:16px;line-height:1;min-width:44px;min-height:44px;padding:0;cursor:pointer;flex:none}",
+    '.nis-drawer-close:hover{border-color:#e8212c;color:#fff}',
+    '.nis-drawer-nav{display:flex;flex-direction:column;flex:none;margin-top:4px}',
+    ".nis-drawer-link{display:flex;align-items:center;gap:14px;min-height:52px;padding:6px 8px 6px 10px;border-bottom:1px solid rgba(244,238,222,.16);border-left:4px solid transparent;font-family:Consolas,'Courier New',monospace;font-size:16px;letter-spacing:.14em;text-transform:uppercase;color:rgba(244,238,222,.78);text-decoration:none}",
+    ".nis-drawer-link b{font-family:'Arial Black','Helvetica Neue',Arial,sans-serif;font-weight:900;font-size:15px;letter-spacing:.02em;color:#e8212c;flex:none;min-width:1.7em}",
+    '.nis-drawer-link.on{color:#f4eede;border-left-color:#e8212c}',
+    '.nis-drawer-link:hover{color:#f4eede;background:rgba(244,238,222,.05)}',
+    '.nis-drawer-actions{display:flex;flex-direction:column;gap:14px;margin-top:20px;padding-top:18px;border-top:2px solid rgba(244,238,222,.35);flex:none}',
+    ".nis-drawer-act{display:flex;align-items:center;justify-content:center;min-height:52px;background:#c9040f;color:#fff;font-family:'Arial Black','Helvetica Neue',Arial,sans-serif;font-weight:900;text-transform:uppercase;letter-spacing:.05em;font-size:15px;text-decoration:none;border:0;cursor:pointer;box-shadow:4px 4px 0 rgba(244,238,222,.9);padding:.4em 1em;text-align:center}",
+    '.nis-drawer-act:hover{background:#e8212c}',
+    '.nis-drawer-foot{margin-top:auto;padding-top:30px;flex:none;display:flex;flex-direction:column;align-items:flex-start;gap:16px}',
+    ".nis-drawer-stamp{display:inline-block;border:3px solid rgba(244,238,222,.5);color:rgba(244,238,222,.6);font-family:'Arial Black','Helvetica Neue',Arial,sans-serif;font-weight:900;text-transform:uppercase;letter-spacing:.08em;font-size:13px;padding:.3em .7em;transform:rotate(-4deg);margin-left:4px}",
+    ".nis-drawer-site{font-family:Consolas,'Courier New',monospace;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:rgba(244,238,222,.45)}",
+    '.nis-drawer :focus-visible{outline:2px solid #e8212c;outline-offset:2px}'
+  ].join('\n');
   function ensureStyle(){
     if(document.getElementById('bk-style'))return;
     var st=document.createElement('style');
     st.id='bk-style';
-    st.textContent=BKCSS;
+    st.textContent=BKCSS+'\n'+NAVCSS;
     document.head.appendChild(st);
   }
 
@@ -572,9 +613,162 @@
     var el=e.target.closest?e.target.closest('[data-book]'):null;
     if(!el)return;
     e.preventDefault();
-    opener=el;
+    /* a [data-book] row inside the drawer is hidden by the time the popup
+       closes; return focus to the hamburger instead */
+    opener=(dwEl&&dwEl.contains(el)&&dwBurger)?dwBurger:el;
     open({agency:el.getAttribute('data-agency'),listing:el.getAttribute('data-listing')});
   });
+
+  /* ---- wave 9: mobile hamburger + drawer (<=820px) ----
+     Built once here for every hub page and every book. The nav links are
+     cloned from the page's own bar (hub: .topbar .nav; books: #nis-hubbar's
+     .nis-hubnav), so per-tree URLs come free and nothing is hardcoded. */
+  function dwIsBook(){return !!document.getElementById('nis-hubbar')}
+  function dwHubRoot(){return String(CFG.books||'').replace(/dossiers\/$/,'')}
+  function dwSyncBook(){
+    /* books: refresh the Book row from whichever page CTA carries the live
+       context (listing-focused #bk-cta wins over the agency-level CTA) */
+    if(!dwEl||!dwIsBook())return;
+    var act=dwEl.querySelector('#nis-drawer-book');
+    if(!act)return;
+    var src=document.getElementById('bk-cta');
+    if(!src||src.hidden)src=document.getElementById('nis-cta-book');
+    if(!src)return;
+    var ag=src.getAttribute('data-agency'),li=src.getAttribute('data-listing'),hr=src.getAttribute('href');
+    if(ag){act.setAttribute('data-agency',ag)}else{act.removeAttribute('data-agency')}
+    if(li){act.setAttribute('data-listing',li)}else{act.removeAttribute('data-listing')}
+    if(hr){act.setAttribute('href',hr)}
+  }
+  function dwKey(e){
+    if(e.key==='Escape'){e.preventDefault();dwClose(false);return}
+    if(e.key!=='Tab')return;
+    var f=dwEl.querySelectorAll('a[href],button');
+    var vis=[],i;
+    for(i=0;i<f.length;i++){if(!f[i].disabled&&f[i].offsetParent!==null)vis.push(f[i])}
+    if(!vis.length)return;
+    var first=vis[0],last=vis[vis.length-1];
+    if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}
+    else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}
+    else if(!dwEl.contains(document.activeElement)){e.preventDefault();first.focus()}
+  }
+  function dwOpen(){
+    if(!dwEl||dwOpenState)return;
+    dwOpenState=true;
+    if(dwCloseTimer){clearTimeout(dwCloseTimer);dwCloseTimer=null}
+    dwSyncBook();
+    dwBackdrop.hidden=false;
+    dwEl.hidden=false;
+    void dwEl.offsetWidth;
+    dwEl.classList.add('nis-open');
+    dwBackdrop.classList.add('nis-open');
+    dwBurger.setAttribute('aria-expanded','true');
+    document.documentElement.classList.add('nis-drawer-lock');
+    document.body.classList.add('nis-drawer-lock');
+    dwKeyHandler=dwKey;
+    document.addEventListener('keydown',dwKeyHandler,true);
+    var cb=dwEl.querySelector('.nis-drawer-close');
+    if(cb)cb.focus();
+  }
+  function dwClose(instant){
+    if(!dwEl||!dwOpenState)return;
+    dwOpenState=false;
+    dwEl.classList.remove('nis-open');
+    dwBackdrop.classList.remove('nis-open');
+    dwBurger.setAttribute('aria-expanded','false');
+    document.documentElement.classList.remove('nis-drawer-lock');
+    document.body.classList.remove('nis-drawer-lock');
+    if(dwKeyHandler){document.removeEventListener('keydown',dwKeyHandler,true);dwKeyHandler=null}
+    function fin(){dwEl.hidden=true;dwBackdrop.hidden=true;dwCloseTimer=null}
+    if(instant||reduced()){fin()}
+    else{dwCloseTimer=setTimeout(fin,260)}
+    if(dwBurger&&dwBurger.focus)dwBurger.focus();
+  }
+  function initMobileNav(){
+    if(dwEl)return;
+    var barIn=document.querySelector('#nis-hubbar .nis-hubbar-in')||document.querySelector('.topbar .topbar-in');
+    if(!barIn)return;
+    var nav=barIn.querySelector('.nis-hubnav')||barIn.querySelector('.nav');
+    if(!nav)return;
+    var links=nav.querySelectorAll('a[href]');
+    if(!links.length)return;
+    ensureStyle();
+    var barRoot=nav.closest?nav.closest('.nis-hubbar,.topbar'):barIn.parentElement;
+    if(barRoot)barRoot.classList.add('nis-mnav');
+    var rows='',i,onCls;
+    for(i=0;i<links.length;i++){
+      onCls=(' '+links[i].className+' ').indexOf(' on ')>=0;
+      rows+='<a class="nis-drawer-link'+(onCls?' on':'')+'"'+(onCls?' aria-current="page"':'')+' href="'+esc(links[i].getAttribute('href'))+'"><b>'+pad2(i+1)+'</b><span>'+esc(links[i].textContent)+'</span></a>';
+    }
+    var isBook=dwIsBook(),root=dwHubRoot();
+    var findRow=isBook
+      ?'<button type="button" class="nis-drawer-act" id="nis-drawer-find">Find your listing</button>'
+      :'<a class="nis-drawer-act" id="nis-drawer-find" href="'+esc(root+'find/')+'">Find your listing</a>';
+    var bookRow='<a class="nis-drawer-act" id="nis-drawer-book" data-book href="'+esc(root+'contact/#book')+'">Book a consultation</a>';
+    dwEl=document.createElement('aside');
+    dwEl.className='nis-drawer';
+    dwEl.id='nis-drawer';
+    dwEl.setAttribute('role','dialog');
+    dwEl.setAttribute('aria-modal','true');
+    dwEl.setAttribute('aria-label','Site menu');
+    dwEl.hidden=true;
+    dwEl.innerHTML='<nav class="nis-drawer-nav" aria-label="Menu">'+rows+'</nav>'
+      +'<div class="nis-drawer-actions">'+findRow+bookRow+'</div>'
+      +'<div class="nis-drawer-foot"><span class="nis-drawer-stamp">Public record</span><span class="nis-drawer-site">nobodyissafe.com</span></div>';
+    var head=document.createElement('div');
+    head.className='nis-drawer-head';
+    var srcBrand=barIn.querySelector('.brand,.nis-hubbrand');
+    if(srcBrand){
+      var bClone=srcBrand.cloneNode(true);
+      bClone.className='nis-drawer-brand';
+      bClone.removeAttribute('id');
+      head.appendChild(bClone);
+    }
+    var closeBtn=document.createElement('button');
+    closeBtn.type='button';
+    closeBtn.className='nis-drawer-close';
+    closeBtn.setAttribute('aria-label','Close the menu');
+    closeBtn.innerHTML='&#10005;';
+    head.appendChild(closeBtn);
+    dwEl.insertBefore(head,dwEl.firstChild);
+    dwBackdrop=document.createElement('div');
+    dwBackdrop.className='nis-drawer-backdrop';
+    dwBackdrop.hidden=true;
+    document.body.appendChild(dwBackdrop);
+    document.body.appendChild(dwEl);
+    dwBurger=document.createElement('button');
+    dwBurger.type='button';
+    dwBurger.className='nis-burger';
+    dwBurger.setAttribute('aria-label','Open the menu');
+    dwBurger.setAttribute('aria-expanded','false');
+    dwBurger.setAttribute('aria-controls','nis-drawer');
+    dwBurger.setAttribute('aria-haspopup','dialog');
+    dwBurger.innerHTML='<span class="nis-burger-bars" aria-hidden="true"><i></i><i></i><i></i></span><span class="nis-burger-lbl" aria-hidden="true">Menu</span>';
+    barIn.appendChild(dwBurger);
+    dwBurger.addEventListener('click',dwOpen);
+    dwBackdrop.addEventListener('click',function(){dwClose(false)});
+    dwEl.addEventListener('click',function(e){
+      var t=e.target;
+      var act=(t&&t.closest)?t.closest('a[href],button'):null;
+      if(!act)return;
+      if(act.id==='nis-drawer-find'&&isBook){
+        e.preventDefault();
+        dwClose(false);
+        var inp=document.getElementById('bf-q')||document.getElementById('q');
+        if(inp){
+          inp.scrollIntoView();
+          try{inp.focus({preventScroll:true})}catch(dwErr){inp.focus()}
+        }
+        return;
+      }
+      /* every other activation (nav link, hub find link, the Book row, the
+         close button) closes the drawer FIRST; the Book row's popup then
+         opens from the document-level [data-book] delegate */
+      dwClose(false);
+    });
+    window.addEventListener('resize',function(){
+      if(dwOpenState&&(window.innerWidth||document.documentElement.clientWidth||0)>820)dwClose(true);
+    });
+  }
 
   function autoOpen(){
     if(location.hash!=='#book')return;
@@ -586,6 +780,7 @@
     opener=null;
     open({agency:agency,listing:listing});
   }
-  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',autoOpen)}
-  else{autoOpen()}
+  function boot(){autoOpen();initMobileNav()}
+  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',boot)}
+  else{boot()}
 })();

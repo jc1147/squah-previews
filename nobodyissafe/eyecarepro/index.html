@@ -485,6 +485,11 @@ html[data-bp=s] .tblwrap tbody tr.sumrow{background:var(--paper2)}
 .nis-hubfoot-nav a:hover{color:#fff;border-bottom-color:rgba(244,238,222,.6)}
 .nis-hubfoot-indep{font-family:Georgia,'Times New Roman',Times,serif;font-style:italic;text-transform:none;letter-spacing:0;color:rgba(244,238,222,.8);max-width:96ch;font-size:clamp(.8rem,1.05vw,.92rem);line-height:1.7;margin-top:clamp(14px,1.8vw,22px);border-top:1px solid rgba(244,238,222,.35);padding-top:clamp(12px,1.6vw,20px)}
 .nis-hubfoot-legal{margin-top:.9em;color:rgba(244,238,222,.7)}
+/* wave 9: mobile hub bar. book.js stamps .nis-mnav and injects the burger + drawer; the inline links hide only under that stamp (fail-closed). */
+@media (max-width:820px){
+.nis-hubbar.nis-mnav .nis-hubnav{display:none}
+.nis-hubbrand{font-size:16px}
+}
 </style>
 <style id="nis-wave8">
 /* wave 8: why-this-phrase trends exhibits. Owner-captured Google Trends AVERAGES only, no time curve. Namespaced tx-/tm- rules on the book's own tokens. */
@@ -518,11 +523,23 @@ html[data-bp=m] #trends .trendx-grid,html[data-bp=s] #trends .trendx-grid{grid-t
 .trendmini .tm-src{font-family:var(--mono);font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);margin:5px 0 0}
 .trendmini .tm-src a{color:var(--red)}
 </style>
+<style id="nis-wave9">
+/* wave 9: mobile masthead. Row 1 = the book title split at its middle dot, spanning edge to edge; row 2 = THE STORY / DIRECTORY as a 50/50 bordered tab pair, the active tab carrying the red 3px underline. Desktop unchanged. */
+@media (max-width:820px){
+.topbar-in{width:auto;padding:10px 14px}
+.brand{display:flex;flex:1 1 100%;justify-content:space-between;align-items:baseline;gap:10px}
+.brand .brand-sep{display:none}
+.topbar .nav{display:flex;flex:1 1 100%}
+.topbar .nav a{flex:1 1 0;margin-left:0;display:flex;align-items:center;justify-content:center;text-align:center;min-height:48px;padding:6px 4px;font-size:14px;border:2px solid var(--ink)}
+.topbar .nav a+a{border-left:0}
+.topbar .nav a.on{color:var(--ink);box-shadow:inset 0 -3px 0 0 var(--red)}
+}
+</style>
 </head>
 <body>
 <div id="nis-hubbar" class="nis-hubbar"><div class="nis-hubbar-in"><a class="nis-hubbrand" href="../" data-nis-hub="">NOBODY<em>IS</em>SAFE</a><nav class="nis-hubnav" aria-label="Nobody Is Safe"><a href="../" data-nis-hub="">Home</a><a class="on" href="../dossiers/" data-nis-hub="dossiers/">The Dossiers</a><a href="../blotter/" data-nis-hub="blotter/">The Blotter</a><a href="../about/" data-nis-hub="about/">About</a><a href="../contact/" data-nis-hub="contact/">Contact</a></nav></div></div>
 <script>window.NIS_BASE={listings:"../listings.json",books:"../",contact:"../contact/"};window.NIS_FORMS={endpoint:"",scheduler:""}</script><script src="../book.js" defer></script><a id="bk-cta" class="bk-cta" data-book data-agency="eyecarepro" data-listing="" href="../contact/?agency=eyecarepro#book" hidden>Book a consultation</a><button id="nis-cta-find" class="nis-cta" type="button" hidden>Find your listing</button><a id="nis-cta-book" class="nis-cta" data-book data-agency="eyecarepro" href="../contact/?agency=eyecarepro#book" hidden>Book a consultation</a>
-<div class="topbar"><div class="topbar-in"><a class="brand" href="#/">EyeCare<em>Pro</em> · Results Dossier</a><nav class="nav"><a id="nav-story" href="#/">The Story</a><a id="nav-dir" href="#/directory">Directory</a></nav></div></div>
+<div class="topbar"><div class="topbar-in"><a class="brand" href="#/"><span class="brand-l">EyeCare<em>Pro</em></span><span class="brand-sep"> · </span><span class="brand-r">Results Dossier</span></a><nav class="nav"><a id="nav-story" href="#/">The Story</a><a id="nav-dir" href="#/directory">Directory</a></nav></div></div>
 <div class="paper">
 <div class="wrap"><div id="app"></div></div>
 <footer class="pagefoot"><div class="wrap">The Copy‑Paste Chronicle · EyeCarePro client roster dossier · filed 2026-08-07 · 710 practices measured on one phrase, “glasses near me”, 121 map points each.<div class="indep-ft">An independent performance analysis of the EyeCarePro client roster, not published by or affiliated with EyeCarePro.</div></div></footer>
