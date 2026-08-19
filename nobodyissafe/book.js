@@ -19,9 +19,16 @@
   var NOTE_FINAL='The booking desk opens at nobodyissafe.com, the desk\'s permanent address. The files are public now.';
   var NOTE_FAIL='That did not go through. Try again, or come back; the desk is not going anywhere.';
   var NOTE_DONE='On the record. The desk reads every submission.';
+  var NOTE_TIME='Pick a date and a slot. The time is a request, not a confirmation.';
+  var H3_FIX_GENERIC='What are we fixing?';
+  var H3_FIX_CTX='What the file shows.';
+  var LBL_WORDS_GENERIC='In your own words (optional)';
+  var LBL_WORDS_CTX='Any other concerns? (optional)';
+  var WKD=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  var MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   var overlay=null,opener=null,keyHandler=null;
   var DATA=null,dataPromise=null;
-  var state={step:1,base:null,picked:null,notFiled:false,scope:null};
+  var state={step:1,base:null,picked:null,notFiled:false,scope:null,bizAuto:'',ctxSig:null,reqDate:null,reqSlot:null,reqLbl:''};
 
   function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
   function norm(s){return String(s||'').toLowerCase().replace(/[^a-z0-9]+/g,' ').replace(/^ +| +$/g,'')}
@@ -43,7 +50,15 @@
   function agMeta(slug){return (DATA&&DATA.agencies&&DATA.agencies[slug])||null}
   function rowMeta(row){
     var ag=(DATA&&DATA.agencies[row[0]])||{name:'',code:''};
-    return {slug:row[0],code:ag.code,agname:ag.name,name:row[1],loc:row[2]?row[2]+', '+row[3]:row[3],key:row[4]};
+    return {slug:row[0],code:ag.code,agname:ag.name,name:row[1],loc:row[2]?row[2]+', '+row[3]:row[3],key:row[4],f:row[5]||null};
+  }
+  function effListing(){return state.picked||(state.base&&state.base.type==='listing'?state.base.meta:null)}
+  function schedOn(){return typeof NIS_FORMS.scheduler==='string'&&!!NIS_FORMS.scheduler}
+  function pad2(n){return (n<10?'0':'')+n}
+  function tzName(){
+    try{var z=Intl.DateTimeFormat().resolvedOptions().timeZone;if(z)return z}catch(err){}
+    var o=-new Date().getTimezoneOffset(),sg=o<0?'-':'+',a=Math.abs(o);
+    return 'UTC'+sg+Math.floor(a/60)+(a%60?':'+pad2(a%60):'');
   }
   function findRow(slug,key){
     if(!DATA)return null;
@@ -128,7 +143,17 @@
     '.bk-overlay .finder-picked .fx:focus-visible{outline:2px solid var(--red-bright);outline-offset:2px}',
     '.bk-overlay .form-note.bk-hot{color:var(--red-bright)}',
     '.bk-overlay :focus-visible{outline:2px solid var(--red-bright);outline-offset:2px}',
-    '.bk-h3:focus-visible{outline:none}'
+    '.bk-h3:focus-visible{outline:none}',
+    '.bk-ctx{font-family:var(--mono);font-size:clamp(.56rem,.8vw,.68rem);letter-spacing:.16em;text-transform:uppercase;color:rgba(244,238,222,.72);border-left:6px solid var(--red);background:rgba(244,238,222,.06);padding:.6em .8em;margin:-.6em 0 1.2em;overflow-wrap:anywhere}',
+    '.bk-ctx[hidden]{display:none}',
+    '.bk-ctxline{font-style:italic;color:rgba(244,238,222,.85);margin:0 0 .9em;max-width:62ch}',
+    '.bk-ctxline[hidden]{display:none}',
+    '.bk-slotlbl{font-family:var(--mono);font-size:clamp(.56rem,.8vw,.7rem);letter-spacing:.2em;text-transform:uppercase;color:rgba(244,238,222,.72);margin:.9em 0 0}',
+    '.bk-slots{display:flex;flex-wrap:wrap;gap:.5em;margin:.6em 0 .4em}',
+    '.bk-slot{background:rgba(244,238,222,.06);border:2px solid rgba(244,238,222,.3);color:var(--paper);font-family:var(--mono);font-size:clamp(.6rem,.85vw,.72rem);letter-spacing:.12em;text-transform:uppercase;padding:.6em .7em;cursor:pointer}',
+    '.bk-slot:hover{border-color:rgba(244,238,222,.6)}',
+    '.bk-slot[aria-pressed="true"]{background:var(--red);border-color:var(--red);color:#fff;font-weight:700}',
+    '.bk-tznote{font-family:var(--mono);font-size:clamp(.56rem,.78vw,.66rem);letter-spacing:.14em;text-transform:uppercase;color:rgba(244,238,222,.45);line-height:1.8;margin-top:.4em}'
   ].join('\n');
   function ensureStyle(){
     if(document.getElementById('bk-style'))return;
@@ -153,6 +178,7 @@
       '<div class="bk-bar"><span>The booking desk · Intake B-01</span><button type="button" class="bk-close" id="bk-close" aria-label="Close the booking form">Close &#10005;</button></div>',
       '<h2 class="bk-title">Book the consultation.</h2>',
       '<div class="docket bk-steps"><span id="bk-step-label" aria-live="polite">'+esc(STEP_LABELS[0])+'</span></div>',
+      '<div class="bk-ctx" id="bk-ctx" hidden></div>',
       '<div class="bk-step" id="bk-s1"><h3 class="bk-h3" tabindex="-1">Which file is this about?</h3><div id="bk-s1-ctx"></div>',
       '<div class="bk-nav"><button class="cta" type="button" id="bk-next1">Next</button></div></div>',
       '<div class="bk-step" id="bk-s2" hidden><h3 class="bk-h3" tabindex="-1">Who is booking?</h3>',
@@ -164,13 +190,15 @@
       '<p class="finder-note" id="bkp-s2-note" hidden>The desk needs at least a name and an email.</p>',
       '</div>',
       '<div class="bk-nav"><button type="button" class="bk-back" data-back="1">Back</button><button class="cta" type="button" id="bk-next2">Next</button></div></div>',
-      '<div class="bk-step" id="bk-s3" hidden><h3 class="bk-h3" tabindex="-1">What are we fixing?</h3>',
+      '<div class="bk-step" id="bk-s3" hidden><h3 class="bk-h3" tabindex="-1">'+esc(H3_FIX_GENERIC)+'</h3>',
+      '<p class="bk-ctxline" id="bk-ctxline" hidden></p>',
       '<div class="bk-checks" id="bk-checks"></div>',
-      '<div class="nis-form"><div><label for="bkp-words">In your own words (optional)</label><textarea id="bkp-words"></textarea></div></div>',
+      '<div class="nis-form"><div><label for="bkp-words">'+esc(LBL_WORDS_GENERIC)+'</label><textarea id="bkp-words"></textarea></div></div>',
       '<div class="bk-nav"><button type="button" class="bk-back" data-back="2">Back</button><button class="cta" type="button" id="bk-next3">Next</button></div></div>',
-      '<div class="bk-step" id="bk-s4" hidden><div id="bk-s4-main"><h3 class="bk-h3" tabindex="-1">Read it back.</h3>',
+      '<div class="bk-step" id="bk-s4" hidden><div id="bk-s4-main"><h3 class="bk-h3" tabindex="-1">Pick a time.</h3>',
+      '<div id="bk-time"></div>',
+      '<h3 class="bk-h3" tabindex="-1">Read it back.</h3>',
       '<div class="bk-sum" id="bk-sum"></div>',
-      '<div id="bk-sched"></div>',
       '<p class="form-note" id="bkp-final-note">'+esc(NOTE_FINAL)+'</p>',
       '<div class="bk-nav"><button type="button" class="bk-back" data-back="3">Back</button><button class="cta" type="button" id="bk-bookit">Book it</button></div></div>',
       '<div id="bk-result" hidden></div></div>',
@@ -178,12 +206,20 @@
     ].join('');
     document.body.appendChild(el);
     overlay=el;
-    var checks=el.querySelector('#bk-checks');
-    var ch='';
-    for(var i=0;i<FIX_ITEMS.length;i++){
-      ch+='<label class="bk-check"><input type="checkbox" value="'+esc(FIX_ITEMS[i])+'"><span>'+esc(FIX_ITEMS[i])+'</span></label>';
-    }
-    checks.innerHTML=ch;
+    renderChecks();
+    el.querySelector('#bk-time').addEventListener('click',function(e){
+      var b=e.target.closest?e.target.closest('button.bk-slot'):null;
+      if(!b)return;
+      var isDate=!!b.getAttribute('data-date');
+      var sib=overlay.querySelectorAll((isDate?'#bk-dates':'#bk-hours')+' .bk-slot');
+      for(var i=0;i<sib.length;i++){sib[i].setAttribute('aria-pressed','false')}
+      b.setAttribute('aria-pressed','true');
+      if(isDate){state.reqDate=b.getAttribute('data-date');state.reqLbl=b.getAttribute('data-lbl')}
+      else{state.reqSlot=b.getAttribute('data-slot')}
+      var tn=overlay.querySelector('#bk-time-note');
+      if(tn&&state.reqDate&&state.reqSlot)tn.hidden=true;
+      renderSum();
+    });
     el.querySelector('#bk-close').addEventListener('click',close);
     el.querySelector('#bk-next1').addEventListener('click',function(){go(2)});
     el.querySelector('#bk-next2').addEventListener('click',function(){
@@ -200,6 +236,15 @@
     }
     el.querySelector('#bk-bookit').addEventListener('click',function(){
       var note=el.querySelector('#bkp-final-note');
+      if(!schedOn()&&(!state.reqDate||!state.reqSlot)){
+        var tn=el.querySelector('#bk-time-note');
+        if(tn){
+          tn.hidden=false;tn.classList.add('bk-hot');
+          tn.scrollIntoView({behavior:reduced()?'auto':'smooth',block:'center'});
+          setTimeout(function(){tn.classList.remove('bk-hot')},1400);
+        }
+        return;
+      }
       if(typeof NIS_FORMS.endpoint==='string'&&NIS_FORMS.endpoint){
         var btn=this;
         if(btn.disabled)return;
@@ -212,7 +257,11 @@
         fetch(NIS_FORMS.endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
           form:'booking',agency:agency,listing:(eff&&eff.key)||'',
           name:val('bkp-name'),business:val('bkp-business'),email:val('bkp-email'),phone:val('bkp-phone'),
-          fixing:picked,notes:val('bkp-words'),page:location.href
+          fixing:picked,notes:val('bkp-words'),
+          requested_date:schedOn()?'':(state.reqDate||''),
+          requested_slot:schedOn()?'':(state.reqSlot||''),
+          tz:schedOn()?'':tzName(),
+          page:location.href
         })}).then(function(r){
           btn.disabled=false;
           if(r.ok){bkDone()}else{bkFail(note)}
@@ -248,9 +297,106 @@
     state.step=n;
     for(var i=1;i<=4;i++){overlay.querySelector('#bk-s'+i).hidden=(i!==n)}
     overlay.querySelector('#bk-step-label').textContent=STEP_LABELS[n-1];
+    var chip=overlay.querySelector('#bk-ctx');
+    if(chip)chip.hidden=(n<2)||!chip.textContent;
     if(n===4)renderSum();
     var h=overlay.querySelector('#bk-s'+n+' .bk-h3');
     if(h)h.focus();
+  }
+
+  /* The step-1 context carried through: chip on steps 2-4, business-name
+     autofill (never over a user-typed value), and the personalized step 3. */
+  function ctxSig(){
+    var e=effListing();
+    if(e)return 'L:'+e.slug+':'+e.key;
+    if(state.base&&state.base.type==='agency')return 'A:'+state.base.slug;
+    return '';
+  }
+  function syncContext(){
+    var e=effListing();
+    var chip=overlay.querySelector('#bk-ctx');
+    if(e){chip.textContent='RE: CASE '+e.code+' · '+e.name+(e.loc?' · '+e.loc:'')}
+    else if(state.base&&state.base.type==='agency'){chip.textContent='RE: CASE '+state.base.code+' · '+state.base.agname}
+    else{chip.textContent=''}
+    chip.hidden=(state.step<2)||!chip.textContent;
+    var biz=overlay.querySelector('#bkp-business');
+    if(e){
+      if(biz.value===''||biz.value===state.bizAuto){biz.value=e.name;state.bizAuto=e.name}
+    }else{
+      if(state.bizAuto&&biz.value===state.bizAuto){biz.value=''}
+      state.bizAuto='';
+    }
+    var sig=ctxSig();
+    if(sig!==state.ctxSig){state.ctxSig=sig;renderChecks();renderSum()}
+  }
+  function renderChecks(){
+    var box=overlay.querySelector('#bk-checks');
+    var h3=overlay.querySelector('#bk-s3 .bk-h3');
+    var lbl=overlay.querySelector('label[for="bkp-words"]');
+    var frame=overlay.querySelector('#bk-ctxline');
+    var e=effListing();
+    var f=e&&e.f;
+    var items=[],i;
+    if(f&&f.v&&f.v!=='NOT_MEASURED'&&f.p&&f.p.length){
+      h3.textContent=H3_FIX_CTX;
+      lbl.textContent=LBL_WORDS_CTX;
+      frame.hidden=true;frame.textContent='';
+      var hasMap=false,hasSite=false;
+      for(i=0;i<f.p.length;i++){
+        var t=String(f.p[i]);
+        items.push({t:t,on:true});
+        if(/near me|map|grid|the pack/i.test(t))hasMap=true;
+        if(/template|theme|llms|pagespeed|load|schema|copy/i.test(t))hasSite=true;
+      }
+      if(!hasMap)items.push({t:FIX_ITEMS[0],on:false});
+      if(!hasSite)items.push({t:FIX_ITEMS[1],on:false});
+      items.push({t:FIX_ITEMS[2],on:false});
+      items.push({t:FIX_ITEMS[3],on:false});
+    }else{
+      h3.textContent=H3_FIX_GENERIC;
+      lbl.textContent=LBL_WORDS_GENERIC;
+      if(!e&&state.base&&state.base.type==='agency'){
+        frame.textContent='This booking runs against the '+state.base.agname+' file. The desk pulls your listing by hand.';
+        frame.hidden=false;
+      }else{frame.hidden=true;frame.textContent=''}
+      for(i=0;i<FIX_ITEMS.length;i++){items.push({t:FIX_ITEMS[i],on:false})}
+    }
+    var ch='';
+    for(i=0;i<items.length;i++){
+      ch+='<label class="bk-check"><input type="checkbox" value="'+esc(items[i].t)+'"'+(items[i].on?' checked':'')+'><span>'+esc(items[i].t)+'</span></label>';
+    }
+    box.innerHTML=ch;
+  }
+
+  /* Step 4's requested-time block. With a scheduler configured the devs'
+     scheduler wins: the cta link renders instead of the grid and no time
+     selection is required. The picked time is a REQUEST, never a booking
+     confirmation. */
+  function dateISO(d){return d.getFullYear()+'-'+pad2(d.getMonth()+1)+'-'+pad2(d.getDate())}
+  function dateLabel(d){return WKD[d.getDay()]+' '+MON[d.getMonth()]+' '+d.getDate()}
+  function renderTime(){
+    var box=overlay.querySelector('#bk-time');
+    if(schedOn()){
+      box.innerHTML='<a class="cta" target="_blank" rel="noopener" href="'+esc(NIS_FORMS.scheduler)+'">Pick a time</a>';
+      return;
+    }
+    var h='<p class="bk-slotlbl">The date</p><div class="bk-slots" id="bk-dates" role="group" aria-label="Requested date">';
+    var d=new Date(),count=0;
+    while(count<15){
+      d.setDate(d.getDate()+1);
+      var dow=d.getDay();
+      if(dow===0||dow===6)continue;
+      h+='<button type="button" class="bk-slot" data-date="'+dateISO(d)+'" data-lbl="'+esc(dateLabel(d))+'" aria-pressed="false">'+esc(dateLabel(d))+'</button>';
+      count++;
+    }
+    h+='</div><p class="bk-slotlbl">The slot</p><div class="bk-slots" id="bk-hours" role="group" aria-label="Requested time slot">';
+    for(var hr=9;hr<=17;hr++){
+      var s=pad2(hr)+':00';
+      h+='<button type="button" class="bk-slot" data-slot="'+s+'" aria-pressed="false">'+s+'</button>';
+    }
+    h+='</div><p class="bk-tznote">Times in your local clock · '+esc(tzName())+'</p>';
+    h+='<p class="form-note" id="bk-time-note" hidden>'+esc(NOTE_TIME)+'</p>';
+    box.innerHTML=h;
   }
 
   function cardHTML(m,isAgency){
@@ -300,9 +446,11 @@
       state.picked=mm;state.notFiled=false;
       chipTxt.textContent=mm.code+' · '+mm.name+(mm.loc?' · '+mm.loc:'');
       chip.hidden=false;rows.innerHTML='';q.value='';
+      syncContext();
     });
     clearBtn.addEventListener('click',function(){
       state.picked=null;chip.hidden=true;chipTxt.textContent='';q.focus();
+      syncContext();
     });
   }
   function renderStep1(){
@@ -311,7 +459,7 @@
     if(b&&b.type==='listing'){
       box.innerHTML=cardHTML(b.meta,false);
       box.querySelector('#bk-swap').addEventListener('click',function(){
-        state.base=null;state.scope=null;state.picked=null;renderStep1();
+        state.base=null;state.scope=null;state.picked=null;renderStep1();syncContext();
         var q=overlay.querySelector('#bkp-q');if(q)q.focus();
       });
     }else if(b&&b.type==='agency'){
@@ -323,7 +471,7 @@
       box.innerHTML=finderHTML(false)+'<button type="button" class="bk-linkbtn" id="bk-notfiled">My business is not in a file yet.</button>';
       wireFinder(false);
       box.querySelector('#bk-notfiled').addEventListener('click',function(){
-        state.notFiled=true;state.picked=null;go(2);
+        state.notFiled=true;state.picked=null;syncContext();go(2);
       });
     }
   }
@@ -342,25 +490,26 @@
     var cbs=overlay.querySelectorAll('#bk-checks input');
     for(var i=0;i<cbs.length;i++){if(cbs[i].checked)picked.push(cbs[i].value)}
     function row(k,v){return '<div class="bk-sum-row"><span class="k">'+esc(k)+'</span><span class="v">'+esc(v)+'</span></div>'}
-    sumEl.innerHTML=
+    var html=
       row('The file',fileTxt)+
       row('Booking',name+(biz?' · '+biz:''))+
       row('Reach',email+(phone?' · '+phone:''))+
       row('Fixing',picked.length?picked.join(' · '):'Not specified');
-    var sched=overlay.querySelector('#bk-sched');
-    if(sched){
-      sched.innerHTML=(typeof NIS_FORMS.scheduler==='string'&&NIS_FORMS.scheduler)?'<a class="cta" target="_blank" rel="noopener" href="'+esc(NIS_FORMS.scheduler)+'">Pick a time</a>':'';
+    if(!schedOn()){
+      html+=row('Requested',(state.reqDate&&state.reqSlot)?(state.reqLbl+' · '+state.reqSlot+' · '+tzName()):'Not picked yet');
     }
+    sumEl.innerHTML=html;
   }
 
   function open(req){
     NIS_FORMS=window.NIS_FORMS||{endpoint:'',scheduler:''};
     build();
-    state={step:1,base:null,picked:null,notFiled:false,scope:null};
+    state={step:1,base:null,picked:null,notFiled:false,scope:null,bizAuto:'',ctxSig:null,reqDate:null,reqSlot:null,reqLbl:''};
     var ids=['bkp-name','bkp-business','bkp-email','bkp-phone','bkp-words'];
     for(var i=0;i<ids.length;i++){var f=overlay.querySelector('#'+ids[i]);if(f)f.value=''}
-    var cbs=overlay.querySelectorAll('#bk-checks input');
-    for(var j=0;j<cbs.length;j++){cbs[j].checked=false}
+    renderChecks();
+    state.ctxSig='';
+    renderTime();
     overlay.querySelector('#bkp-s2-note').hidden=true;
     overlay.querySelector('#bk-s1-ctx').innerHTML='';
     var s4m=overlay.querySelector('#bk-s4-main');
@@ -401,9 +550,11 @@
           state.base={type:'agency',slug:req.agency,code:ag.code,agname:ag.name};
         }
         if(state.step===1)renderStep1();
+        syncContext();
       });
     }else{
       renderStep1();
+      syncContext();
     }
     overlay.querySelector('#bk-close').focus();
   }

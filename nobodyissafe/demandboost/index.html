@@ -1492,6 +1492,7 @@ function findClient(key){
 function route(){
  var h=location.hash;
  var m=h.match(/^#\/client\/(.+)$/);
+ if(!m&&!window.location.hash&&window.history&&history.state&&history.state.nisClient){m=[null,encodeURIComponent(String(history.state.nisClient))];}
  if(m){
   var c=findClient(decodeURIComponent(m[1]));
   if(c){app.innerHTML=profileV4(c);fitFileMega();setNav('dir');}
@@ -1546,12 +1547,13 @@ var dirY=-1;
 window.addEventListener('hashchange',function(e){
  var oldH=(e.oldURL||'').split('#')[1]||'';
  var newH=(e.newURL||'').split('#')[1]||'';
- if(oldH==='/directory'&&newH.indexOf('/client/')===0){dirY=window.pageYOffset||document.documentElement.scrollTop||0;}
+ var swp=(newH===''&&window.history&&history.state&&history.state.nisClient)?true:false;
+ if(oldH==='/directory'&&(newH.indexOf('/client/')===0||swp)){dirY=window.pageYOffset||document.documentElement.scrollTop||0;}
  else if(newH==='/directory'&&dirY>=0){var y=dirY;setTimeout(function(){window.scrollTo(0,y);},0);}
- else if(newH!=='/directory'&&newH.indexOf('/client/')!==0){dirY=-1;}
+ else if(newH!=='/directory'&&newH.indexOf('/client/')!==0&&!swp){dirY=-1;}
 });
 function shareStubURL(slug,key){
- var p=window.location.pathname.replace(/index\.html?$/,'');
+ var p=NIS_DOC.replace(/index\.html?$/,'');
  var root=p.replace(/(dossiers\/)?[^\/]+\/$/,'');
  return window.location.origin+root+'l/'+slug+'/'+key+'.html';
 }
@@ -1588,16 +1590,71 @@ document.addEventListener('click',function(e){
   shareFallback(wrap,url);
  }
 });
-function bkSync(){
+/* wave 4: while a listing is open, the address bar carries its per-listing share-stub URL.
+   The document stays the book SPA; history.replaceState swaps the visible path so a copied
+   address scrapes the per-listing card. Every render happens at the book path (nisRestore
+   runs before the router), the swap happens after (nisSync runs last). */
+var NIS_DOC=window.location.pathname;
+var NIS_SLUG='demandboost';
+var NIS_DIR=NIS_DOC.replace(/index\.html?$/,'');
+var NIS_ROOT=NIS_DIR.replace(/(dossiers\/)?[^\/]+\/$/,'');
+if(window.history&&'scrollRestoration' in history){try{history.scrollRestoration='manual';}catch(nisErr0){}}
+try{
+ if(window.NIS_BASE){
+  var nisA=document.createElement('a');
+  for(var nisK in window.NIS_BASE){
+   if(typeof window.NIS_BASE[nisK]==='string'&&window.NIS_BASE[nisK]){nisA.href=window.NIS_BASE[nisK];window.NIS_BASE[nisK]=nisA.href;}
+  }
+ }
+}catch(nisErr){}
+function nisListingKey(){
  var m=(window.location.hash||'').match(/^#\/client\/(.+)$/);
+ if(m){return decodeURIComponent(m[1]);}
+ if(!window.location.hash&&window.history&&history.state&&history.state.nisClient){return String(history.state.nisClient);}
+ return null;
+}
+function nisRestore(){
+ if(!window.history||!history.replaceState){return;}
+ if(window.location.pathname===NIS_DOC){return;}
+ try{history.replaceState(history.state,'',NIS_DOC+window.location.search+(window.location.hash||''));}catch(nisErr2){}
+}
+function nisSync(){
+ if(!window.history||!history.replaceState){return;}
+ var key=nisListingKey();
+ var c=key?findClient(key):null;
+ try{
+  if(c){
+   var nisImgs=document.querySelectorAll('img');
+   for(var nisI=0;nisI<nisImgs.length;nisI++){
+    var nisSv=nisImgs[nisI].getAttribute('src');
+    if(nisSv&&!/^(#|\/|[A-Za-z][A-Za-z0-9+.\-]*:)/.test(nisSv)){nisImgs[nisI].setAttribute('src',window.location.origin+NIS_DIR+nisSv);}
+   }
+   var nk=String(c.d||c.key);
+   var stub=shareStubURL(NIS_SLUG,nk);
+   if(window.location.href!==stub){history.replaceState({nisClient:nk},'',stub);}
+  }else{nisRestore();}
+ }catch(nisErr3){}
+}
+window.addEventListener('hashchange',nisRestore);
+document.addEventListener('click',function(e){
+ if(window.location.pathname===NIS_DOC){return;}
+ var t=e.target;
+ var a=(t&&t.closest)?t.closest('a[href]'):null;
+ if(!a){return;}
+ var rel=a.getAttribute('href');
+ if(!rel||/^(#|\/|[A-Za-z][A-Za-z0-9+.\-]*:)/.test(rel)){return;}
+ a.setAttribute('href',window.location.origin+NIS_DIR+rel);
+},true);
+function bkSync(){
+ var m=nisListingKey();
  var btn=document.getElementById('bk-cta');
  var pill=document.querySelector('body>a[href="../"]');
  if(btn){
   if(m){
-   var key=decodeURIComponent(m[1]);
+   var key=m;
    btn.removeAttribute('hidden');
    btn.setAttribute('data-listing',key);
-   btn.setAttribute('href','../contact/?agency=demandboost&listing='+encodeURIComponent(key)+'#book');
+   btn.setAttribute('href',NIS_ROOT+'contact/?agency=demandboost&listing='+encodeURIComponent(key)+'#book');
   }else{
    btn.setAttribute('hidden','hidden');
   }
@@ -1608,6 +1665,32 @@ window.addEventListener('hashchange',bkSync);
 bkSync();
 window.addEventListener('hashchange',route);
 route();
+
+window.addEventListener('hashchange',nisSync);
+var nisURL=window.location.href;
+window.addEventListener('hashchange',function(){nisURL=window.location.href;});
+function nisBase(u){return String(u).split('#')[0];}
+window.addEventListener('popstate',function(){
+ /* same-document traversals that differ only in fragment fire hashchange and
+    are handled there; everything else (any traversal that crosses the swapped
+    stub path) is driven here. */
+ var prev=nisURL,cur=window.location.href;
+ if(prev===cur){return;}
+ if(nisBase(prev)===nisBase(cur)){return;}
+ var oldH=prev.split('#')[1]||'';
+ var nowKey=nisListingKey();
+ var nowDir=(window.location.hash==='#/directory');
+ if(oldH==='/directory'&&nowKey){dirY=window.pageYOffset||document.documentElement.scrollTop||0;}
+ nisRestore();
+ bkSync();
+ route();
+ nisSync();
+ if(nowDir&&dirY>=0){var nisY=dirY;var nisTry=0;var nisScroll=function(){window.scrollTo(0,nisY);if(window.scrollY+10<nisY&&nisTry<30){nisTry++;setTimeout(nisScroll,50);}};setTimeout(nisScroll,0);}
+ else if(!nowDir&&!nowKey){dirY=-1;}
+ nisURL=window.location.href;
+});
+nisSync();
+nisURL=window.location.href;
 })();
 </script>
 </body>
