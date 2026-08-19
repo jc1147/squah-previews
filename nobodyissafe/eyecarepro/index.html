@@ -492,7 +492,7 @@ html[data-bp=s] .tblwrap tbody tr.sumrow{background:var(--paper2)}
 }
 </style>
 <style id="nis-wave8">
-/* wave 8: why-this-phrase trends exhibits. Owner-captured Google Trends AVERAGES only, no time curve. Namespaced tx-/tm- rules on the book's own tokens. */
+/* wave 8: why-this-phrase trends exhibits, namespaced tx- rules on the book's own tokens. The wave-10 line-graph layer and the full-width listing section live in nis-wave10. */
 #trends .trendx{border:4px double var(--ink);background:var(--paper2);padding:clamp(18px,3vw,36px)}
 #trends .trendx-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:clamp(16px,3vw,40px);align-items:center;margin-top:.5em}
 #trends .trendx-copy p{font-size:clamp(1.02rem,1.6vw,1.24rem);line-height:1.55;max-width:62ch}
@@ -509,19 +509,6 @@ html[data-bp=s] .tblwrap tbody tr.sumrow{background:var(--paper2)}
 #trends .tx-src{font-family:var(--mono);font-size:.72rem;letter-spacing:.04em;color:var(--ink-soft);margin-top:16px;border-top:1px dashed var(--ink-faint);padding-top:10px}
 #trends .tx-src a{color:var(--red);font-weight:700}
 html[data-bp=m] #trends .trendx-grid,html[data-bp=s] #trends .trendx-grid{grid-template-columns:minmax(0,1fr)}
-.trendmini{border:1px solid var(--ink-faint);border-left:3px solid var(--red);background:var(--paper);padding:10px 12px;margin:0 0 14px}
-.trendmini .tm-row{margin-top:7px}
-.trendmini .tm-row:first-child{margin-top:0}
-.trendmini .tm-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
-.trendmini .tm-term{font-family:var(--mono);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink)}
-.trendmini .tm-val{font-family:var(--head);font-weight:900;font-size:.95rem;line-height:1}
-.trendmini .tm-val.rd{color:var(--red)}
-.trendmini .tm-bar{display:block;height:7px;background:var(--paper2);border:1px solid var(--ink-faint);margin-top:3px}
-.trendmini .tm-bar span{display:block;height:100%;background:var(--ink-soft)}
-.trendmini .tm-bar span.rd{background:var(--red)}
-.trendmini .tm-line{font-size:.86rem;line-height:1.5;margin:9px 0 0}
-.trendmini .tm-src{font-family:var(--mono);font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);margin:5px 0 0}
-.trendmini .tm-src a{color:var(--red)}
 </style>
 <style id="nis-wave9">
 /* wave 9: mobile masthead. Row 1 = the book title split at its middle dot, spanning edge to edge; row 2 = THE STORY / DIRECTORY as a 50/50 bordered tab pair, the active tab carrying the red 3px underline. Desktop unchanged. */
@@ -534,6 +521,39 @@ html[data-bp=m] #trends .trendx-grid,html[data-bp=s] #trends .trendx-grid{grid-t
 .topbar .nav a+a{border-left:0}
 .topbar .nav a.on{color:var(--ink);box-shadow:inset 0 -3px 0 0 var(--red)}
 }
+</style>
+<style id="nis-wave10">
+/* wave 10: trends v2. One dataset (trends-data.json: Google Trends, US, past 12 months, web search, pulled 2026-08-20) drives the line graph, the averages and the words. Inline SVG, no runtime fetch, no animation. */
+.tgwrap{margin:16px 0 0}
+.tg-chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 8px}
+.tg-chip{font-family:var(--mono);font-size:.64rem;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--ink-faint);background:var(--paper);color:var(--ink-soft);padding:4px 9px}
+.tg-chip.rd{border-color:var(--red);color:var(--red);font-weight:700}
+.tg-box{width:100%}
+.tg-box svg{display:block;max-width:100%}
+.tg-grid{stroke:var(--ink-faint);stroke-width:1;stroke-dasharray:1 4}
+.tg-tick{font-family:var(--mono);font-size:10px;fill:var(--ink-soft);letter-spacing:.05em}
+.tg-a{fill:none;stroke:var(--red);stroke-width:3;stroke-linejoin:round;stroke-linecap:round}
+.tg-b{fill:none;stroke:var(--ink);stroke-opacity:.45;stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.tg-lbl{font-family:var(--mono);font-size:10px;letter-spacing:.07em;text-transform:uppercase;fill:var(--ink)}
+.tg-lbl.rd{fill:var(--red);font-weight:700}
+.tg-srcline{font-family:var(--mono);font-size:.68rem;letter-spacing:.05em;color:var(--ink-soft);margin:14px 0 0;border-top:1px dashed var(--ink-faint);padding-top:9px}
+.nis-tbtns{display:flex;flex-wrap:wrap;gap:12px;margin:18px 0 0}
+.nis-tbtn,.nis-tbtn2{display:inline-flex;align-items:center;justify-content:center;text-align:center;min-height:44px;padding:11px 20px;font-family:var(--head);font-weight:900;font-size:15px;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;cursor:pointer}
+.nis-tbtn{background:var(--red);color:#fff;border:0;box-shadow:3px 3px 0 var(--ink)}
+.nis-tbtn2{border:2px solid var(--ink);color:var(--ink);background:var(--paper)}
+#trends .tx2-head{font-size:clamp(2.2rem,5.6vw,4.8rem)}
+#f-trend .tl-head{font-size:clamp(1.5rem,3vw,2.4rem)}
+#f-trend .tl-pair{max-width:560px;margin-top:16px}
+#f-trend .tl-row{margin-top:12px}
+#f-trend .tl-hd{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+#f-trend .tl-term{font-family:var(--head);font-weight:900;text-transform:uppercase;letter-spacing:.02em;font-size:clamp(.95rem,1.5vw,1.15rem);overflow-wrap:anywhere}
+#f-trend .tl-val{font-family:var(--head);font-weight:900;font-size:clamp(1.5rem,2.6vw,2.1rem);line-height:1}
+#f-trend .tl-val.rd{color:var(--red)}
+#f-trend .tl-bar{height:14px;background:var(--paper2);border:1px solid var(--ink);margin-top:5px}
+#f-trend .tl-bar span{display:block;height:100%;background:var(--ink-soft)}
+#f-trend .tl-bar span.rd{background:var(--red)}
+#f-trend .tl-cap{font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);margin-top:4px}
+#f-trend .tl-line{font-size:clamp(1rem,1.5vw,1.15rem);line-height:1.55;max-width:72ch;margin:16px 0 0}
 </style>
 </head>
 <body>
@@ -751,31 +771,82 @@ function pinBar(c){
  return '<span class="pinbar"><span'+(c.r.p1>0?' class="gd"':'')+' style="width:'+w.toFixed(1)+'%"></span></span>';
 }
 
-/* ---- wave 8: why this phrase, the trends layer. Owner-captured Google Trends AVERAGES (US, past 12 months, web search, captured 2026-08-19); averages only, never a time curve. ---- */
-var TRENDS={a:'glasses near me',av:70,b:'optometrist near me',bv:23,url:'https://trends.google.com/explore?q=glasses%2520near%2520me%2Coptometrist%2520near%2520me&date=today%201-y&geo=US',src:'Google Trends · United States · past 12 months · web search · captured 2026-08-19'};
+/* ---- wave 10: why this phrase, the trends layer. Real 53-point weekly series + recomputed averages, embedded from Marketing/nobodyissafe-hub/trends-data.json (Google Trends, US, past 12 months, web search, pulled 2026-08-20). One dataset drives the graph, the numbers and the words. ---- */
+var TRENDS={a:'glasses near me',av:71,b:'optometrist near me',bv:23,url:'https://trends.google.com/explore?q=glasses%2520near%2520me%2Coptometrist%2520near%2520me&date=today%201-y&geo=US',src:'Google Trends · United States · past 12 months · web search · pulled 2026-08-20',series:[[1755388800,57,17],[1755993600,53,16],[1756598400,49,16],[1757203200,46,17],[1757808000,52,16],[1758412800,49,16],[1759017600,54,16],[1759622400,49,16],[1760227200,52,16],[1760832000,58,18],[1761436800,58,16],[1762041600,53,17],[1762646400,53,18],[1763251200,54,17],[1763856000,56,14],[1764460800,55,15],[1765065600,62,15],[1765670400,70,16],[1766275200,79,20],[1766880000,78,17],[1767484800,62,27],[1768089600,61,26],[1768694400,60,19],[1769299200,59,17],[1769904000,72,30],[1770508800,100,26],[1771113600,97,19],[1771718400,87,32],[1772323200,66,17],[1772928000,79,37],[1773532800,77,33],[1774137600,78,21],[1774742400,80,23],[1775347200,76,28],[1775952000,76,27],[1776556800,79,21],[1777161600,80,20],[1777766400,86,40],[1778371200,85,33],[1778976000,79,32],[1779580800,91,22],[1780185600,87,21],[1780790400,99,41],[1781395200,94,36],[1782000000,98,31],[1782604800,82,23],[1783209600,85,38],[1783814400,73,34],[1784419200,82,26],[1785024000,81,23],[1785628800,67,23],[1786233600,68,23],[1786838400,58,20]]};
+function crFromScan(u){return (typeof u==='string'&&u.indexOf('localrankingtracker.com/scan-report/')>-1)?u.replace('/scan-report/','/competitor-report/'):null;}
+/* ---- wave 10: the line graph component. Inline SVG drawn at render time from the embedded series above (no runtime fetch, no animation); measured term in the book red at 3px, comparison in ink at .45 opacity at 2px, dotted paper grid, mono month and 0/50/100 ticks, series end labels, avg chips. Redrawn on route render (MutationObserver on #app) and on resize. ---- */
+function tgPlace(mode){
+ return '<div class="tgwrap"><div class="tg-chips"><span class="tg-chip rd">'+esc(TRENDS.a)+' · avg '+TRENDS.av+'</span><span class="tg-chip">'+esc(TRENDS.b)+' · avg '+TRENDS.bv+'</span></div><div class="tg-box" data-tg="'+mode+'"></div></div>';
+}
+function tgDraw(box){
+ var W=box.clientWidth;
+ if(!W){return;}
+ var H=box.getAttribute('data-tg')==='story'?220:150;
+ var S=TRENDS.series,n=S.length,i;
+ var padL=34,padR=8,padT=10,padB=24,pw=W-padL-padR,ph=H-padT-padB;
+ function gx(k){return +(padL+(n>1?k/(n-1):0)*pw).toFixed(1);}
+ function gy(v){return +(padT+(100-v)/100*ph).toFixed(1);}
+ var g='',yv=[0,50,100];
+ for(i=0;i<yv.length;i++){var yy=gy(yv[i]);g+='<line class="tg-grid" x1="'+padL+'" y1="'+yy+'" x2="'+(W-padR)+'" y2="'+yy+'"></line><text class="tg-tick" text-anchor="end" x="'+(padL-6)+'" y="'+(yy+3)+'">'+yv[i]+'</text>';}
+ var MO=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],mt=[],pm=-1;
+ for(i=0;i<n;i++){var mm=new Date(S[i][0]*1000).getUTCMonth();if(mm!==pm){mt.push([i,MO[mm]]);pm=mm;}}
+ var step=W<560?2:1;
+ for(i=0;i<mt.length;i++){var tx=gx(mt[i][0]);g+='<line class="tg-grid" x1="'+tx+'" y1="'+padT+'" x2="'+tx+'" y2="'+(padT+ph)+'"></line>';if(i%step===0){g+='<text class="tg-tick" text-anchor="middle" x="'+tx+'" y="'+(H-7)+'">'+mt[i][1]+'</text>';}}
+ function pth(k){var d='',j;for(j=0;j<n;j++){d+=(j?'L':'M')+gx(j)+' '+gy(S[j][k]);}return d;}
+ var ya=gy(S[n-1][1]),yb=gy(S[n-1][2]);
+ var la=Math.max(padT+9,Math.min(ya-7,padT+ph-3)),lb=Math.max(padT+9,Math.min(yb-7,padT+ph-3));
+ if(Math.abs(la-lb)<12){if(ya<=yb){la=lb-12;}else{lb=la-12;}}
+ var aria='Line graph. Google Trends weekly search interest, United States, past 12 months: '+TRENDS.a+' averages '+TRENDS.av+' of 100 against '+TRENDS.b+' at '+TRENDS.bv+' of 100, across '+n+' weekly points.';
+ box.innerHTML='<svg width="'+W+'" height="'+H+'" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="'+esc(aria)+'">'+g+'<path class="tg-b" d="'+pth(2)+'"></path><path class="tg-a" d="'+pth(1)+'"></path><text class="tg-lbl rd" text-anchor="end" x="'+(W-padR-2)+'" y="'+la+'">'+esc(TRENDS.a)+'</text><text class="tg-lbl" text-anchor="end" x="'+(W-padR-2)+'" y="'+lb+'">'+esc(TRENDS.b)+'</text></svg>';
+}
+function tgScan(){var els=document.querySelectorAll('.tg-box[data-tg]'),i;for(i=0;i<els.length;i++){tgDraw(els[i]);}}
+(function(){
+ var ap=document.getElementById('app');
+ if(ap&&window.MutationObserver){new MutationObserver(function(){tgScan();}).observe(ap,{childList:true});}
+ var tgT=null;
+ window.addEventListener('resize',function(){clearTimeout(tgT);tgT=setTimeout(tgScan,150);});
+})();
 function trendsExhibit(){
  var w=(TRENDS.bv/TRENDS.av*100).toFixed(1);
  var h='<section id="trends"><div class="trendx">';
  h+='<p class="kick">Exhibit · Why this phrase</p>';
- h+='<h2 class="headline">The door we measured.</h2>';
+ h+='<h2 class="headline tx2-head">The key phrases that matter most.</h2>';
+ h+='<p class="deck">Where visibility is most impactful: the door customers actually type.</p>';
+ h+=tgPlace('story');
  h+='<div class="trendx-grid"><div class="trendx-copy">';
  h+='<p>One phrase runs this file: ‘glasses near me’. Not the professional term. Customers do not search for an optometrist; they search for glasses. A year of Google Trends puts ‘glasses near me’ at three times the search interest of ‘optometrist near me’. We measured the door customers actually walk through, and '+num(A.not3)+' of '+num(A.total)+' practices are not in the top 3 anywhere on it.</p>';
  h+='</div><div class="trendx-bars">';
- h+='<div class="tx-cap-top">Average search interest · Google Trends index</div>';
+ h+='<div class="tx-cap-top">Average search interest · Google Trends index · this two-term comparison</div>';
  h+='<div class="tx-row"><div class="tx-head"><span class="tx-term">'+esc(TRENDS.a)+'</span><span class="tx-val rd">'+TRENDS.av+'</span></div><div class="tx-bar"><span class="rd" style="width:100%"></span></div><div class="tx-cap">the phrase this file measures</div></div>';
  h+='<div class="tx-row"><div class="tx-head"><span class="tx-term">'+esc(TRENDS.b)+'</span><span class="tx-val">'+TRENDS.bv+'</span></div><div class="tx-bar"><span style="width:'+w+'%"></span></div><div class="tx-cap">the professional term</div></div>';
- h+='<p class="tx-src">'+TRENDS.src+'<br><a target="_blank" rel="noopener" href="'+esc(TRENDS.url)+'">Run this comparison live →</a></p>';
- h+='</div></div></div></section>';
+ h+='</div></div>';
+ h+='<div class="nis-tbtns"><a class="nis-tbtn" target="_blank" rel="noopener" href="'+esc(TRENDS.url)+'">Run this comparison live</a><a class="nis-tbtn2" href="#method">How the file measures it</a></div>';
+ h+='<p class="tg-srcline">'+TRENDS.src+'</p>';
+ h+='</div></section>';
  return h;
 }
-function trendsMini(){
+function trendsListing(c){
  var w=(TRENDS.bv/TRENDS.av*100).toFixed(1);
- var h='<div class="trendmini">';
- h+='<div class="tm-row"><span class="tm-head"><span class="tm-term">'+esc(TRENDS.a)+'</span><span class="tm-val rd">'+TRENDS.av+'</span></span><span class="tm-bar"><span class="rd" style="width:100%"></span></span></div>';
- h+='<div class="tm-row"><span class="tm-head"><span class="tm-term">'+esc(TRENDS.b)+'</span><span class="tm-val">'+TRENDS.bv+'</span></span><span class="tm-bar"><span style="width:'+w+'%"></span></span></div>';
- h+='<p class="tm-line">‘Glasses near me’ carries three times the search interest of ‘optometrist near me’. This file measures the bigger door.</p>';
- h+='<p class="tm-src">Google Trends · US · 12 mo · <a target="_blank" rel="noopener" href="'+esc(TRENDS.url)+'">live comparison</a></p>';
+ var r=c.r;
+ var tie='';
+ if(r){
+  if(!r.rd){tie=' And this practice is never found anywhere on it, not at one of the '+r.pn+' map points around its own address.';}
+  else if(r.ls){tie=' And this practice leads its own map on it.';}
+  else if(r.i3){tie=' And this practice is in the top 3 on it, #'+r.rk+' of '+num(r.cg)+' businesses on its own map.';}
+  else{tie=' And this practice is not in the top 3 anywhere on it, ranking #'+r.rk+' of '+num(r.cg)+' on its own map.';}
+ }
+ var cu=r?(r.cu||crFromScan(r.su)):null;
+ var h='<section id="f-trend"><p class="kick">The phrase · Why it matters</p>';
+ h+='<h2 class="headline tl-head">Why '+QP+' runs this file.</h2>';
+ h+=tgPlace('mini');
+ h+='<div class="tl-pair">';
+ h+='<div class="tl-row"><div class="tl-hd"><span class="tl-term">'+esc(TRENDS.a)+'</span><span class="tl-val rd">'+TRENDS.av+'</span></div><div class="tl-bar"><span class="rd" style="width:100%"></span></div><div class="tl-cap">the phrase this file measures</div></div>';
+ h+='<div class="tl-row"><div class="tl-hd"><span class="tl-term">'+esc(TRENDS.b)+'</span><span class="tl-val">'+TRENDS.bv+'</span></div><div class="tl-bar"><span style="width:'+w+'%"></span></div><div class="tl-cap">the professional term</div></div>';
  h+='</div>';
+ h+='<p class="tl-line">A year of Google Trends puts ‘glasses near me’ at three times the search interest of ‘optometrist near me’; this file measures the bigger door.'+tie+'</p>';
+ h+='<div class="nis-tbtns">'+(cu?'<a class="nis-tbtn" target="_blank" rel="noopener" href="'+esc(cu)+'">See who holds this map</a>':'')+'<a class="nis-tbtn2" target="_blank" rel="noopener" href="'+esc(TRENDS.url)+'">Run the trend comparison live</a></div>';
+ h+='<p class="tg-srcline">'+TRENDS.src+'</p>';
+ h+='</section>';
  return h;
 }
 /* ================================================================ SPLASH */
@@ -1681,7 +1752,6 @@ function evidenceRow(c){
  h+='<div class="evrow">';
  /* the map */
  h+='<div class="evb"><p class="ph">The map \u00b7 '+QP+' \u00b7 all '+r.pn+' points</p>';
- h+=trendsMini();
  h+='<div class="ev-big '+(r.i3?'':'rd')+'">'+(r.rd?'#'+r.rk+'<span class="of">of '+num(r.cg)+' businesses on its own map</span>':'never found<span class="of">on its own map \u00b7 '+r.pn+' points, '+r.pn+' misses</span>')+'</div>';
  h+=pinGridHTML(c);
  var ml;
@@ -1738,6 +1808,7 @@ function profile(c){
  h+=fileIndex(c);
  h+='</div></div>';
  h+='</section>';
+ h+=trendsListing(c);
  h+=evidenceRow(c);
  h+=bandECP(c);
  h+='<section class="thin">';
