@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAALUlEQVR42mP48u4eSYiBHA0nWfiJRINXA+1DSVxYAA1B5LCK49MwrG2gbTwAAFEyzezHzricAAAAAElFTkSuQmCC">
+<title>Not found · Nobody Is Safe</title>
+<meta name="description" content="That address is not part of this file. The dossiers, the index and the finder are all one click away.">
+<meta name="robots" content="noindex,nofollow">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#f4eede;background-image:radial-gradient(rgba(23,19,16,.05) 1.5px,transparent 1.7px);background-size:9px 9px;color:#171310;font-family:Georgia,'Times New Roman',Times,serif;min-height:100vh;display:flex;flex-direction:column}
+.band{flex:none;background:#c9040f;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 24px;flex-wrap:wrap}
+.mark{font-family:"Arial Black",Arial,sans-serif;font-weight:900;font-size:20px;letter-spacing:.01em;text-transform:uppercase;color:#f4eede;text-decoration:none}
+.mark em{font-style:normal;color:#f0a9ad}
+.pubrec{font-family:Consolas,"Courier New",monospace;font-weight:700;font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:#f4eede;border:2px solid rgba(244,238,222,.85);padding:5px 10px 5px 14px}
+main{flex:1 1 auto;display:flex;align-items:center;justify-content:center;padding:40px 24px}
+.card{width:100%;max-width:660px}
+.kicker{font-family:Consolas,"Courier New",monospace;font-weight:700;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:#c9040f}
+.stamp{display:inline-block;margin:18px 0 22px;border:4px solid #c9040f;color:#c9040f;background:rgba(201,4,15,.045);padding:10px 16px;font-family:"Arial Black",Arial,sans-serif;font-weight:900;text-transform:uppercase;font-size:26px;line-height:1.05;letter-spacing:.01em}
+.dom{font-family:Consolas,"Courier New",monospace;font-weight:700;font-size:22px;word-break:break-all;margin-bottom:18px}
+p{font-size:18px;line-height:1.55;margin-bottom:14px;max-width:60ch}
+.links{margin-top:26px;border-top:3px solid #171310;padding-top:18px;font-family:Consolas,"Courier New",monospace;font-size:14px;letter-spacing:.06em;text-transform:uppercase}
+.links a{color:#c9040f;font-weight:700;text-decoration:none;border-bottom:2px solid rgba(201,4,15,.35);margin-right:22px;display:inline-block;margin-bottom:8px}
+.links a:hover{border-bottom-color:#c9040f}
+</style>
+</head>
+<body>
+<header class="band">
+  <a class="mark" id="nf-mark" href="./">NOBODY<em>IS</em>SAFE</a>
+  <span class="pubrec">Public record</span>
+</header>
+<main>
+  <div class="card">
+    <p class="kicker">The file · No such page</p>
+    <p class="stamp">Not found</p>
+    <p>That address is not part of this file. It may have been mistyped, or it may be an older spelling of a page that has since moved.</p>
+    <p>Nothing has been withdrawn and nothing is hidden. Every dossier this file publishes is listed on the index, and the finder will locate any single listing by name or domain.</p>
+    <p class="links">
+      <a id="nf-home" href="./">Home</a>
+      <a id="nf-index" href="dossiers/">All dossiers</a>
+      <a id="nf-find" href="find/">Find your listing</a>
+    </p>
+  </div>
+</main>
+<script>
+(function(){
+  var up = "", tries = 0;
+  function apply(root){
+    var m = {"nf-mark": "", "nf-home": "", "nf-index": "dossiers/", "nf-find": "find/"};
+    for (var id in m) { var a = document.getElementById(id); if (a) { a.setAttribute("href", (root + m[id]) || "./"); } }
+    /* the masthead and footer carry their own links. A 404 is served at whatever depth the
+       missing URL had, so those must be re-pointed too or every nav link stays at the depth
+       this page was written for rather than the one it was served at. */
+    var hub = document.querySelectorAll("[data-nis-hub]"), i;
+    for (i = 0; i < hub.length; i++) { hub[i].setAttribute("href", (root + hub[i].getAttribute("data-nis-hub")) || "./"); }
+  }
+  function probe(){
+    if (tries > 4) { return; }
+    var here = up;
+    var x = new XMLHttpRequest();
+    x.open("HEAD", here + "listings.json", true);
+    x.onload = function(){ if (x.status >= 200 && x.status < 300) { apply(here); } else { next(); } };
+    x.onerror = next;
+    try { x.send(); } catch (e) { next(); }
+  }
+  function next(){ tries++; up = up + "../"; probe(); }
+  probe();
+})();
+</script>
+</body>
+</html>
