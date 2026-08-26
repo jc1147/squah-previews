@@ -558,7 +558,7 @@ html[data-bp=m] #trends .trendx-grid,html[data-bp=s] #trends .trendx-grid{grid-t
 </head>
 <body>
 <div id="nis-hubbar" class="nis-hubbar"><div class="nis-hubbar-in"><a class="nis-hubbrand" href="../" data-nis-hub="">NOBODY<em>IS</em>SAFE</a><nav class="nis-hubnav" aria-label="Nobody Is Safe"><a href="../" data-nis-hub="">Home</a><a class="on" href="../dossiers/" data-nis-hub="dossiers/">The Dossiers</a><a href="../blotter/" data-nis-hub="blotter/">The Blotter</a><a href="../about/" data-nis-hub="about/">About</a><a href="../contact/" data-nis-hub="contact/">Contact</a></nav></div></div>
-<script>window.NIS_BASE={listings:"../listings.json",books:"../",contact:"../contact/"};window.NIS_FORMS={endpoint:"",scheduler:""}</script><script src="../book.js" defer></script><a id="bk-cta" class="bk-cta" data-book data-agency="eyecarepro" data-listing="" href="../contact/?agency=eyecarepro#book" hidden>Book a consultation</a><button id="nis-cta-find" class="nis-cta" type="button" hidden>Find your listing</button><a id="nis-cta-book" class="nis-cta" data-book data-agency="eyecarepro" href="../contact/?agency=eyecarepro#book" hidden>Book a consultation</a>
+<script>window.NIS_BASE={listings:"../listings.json",books:"../",contact:"../contact/"};window.NIS_FORMS={endpoint:"",scheduler:""}</script><script src="../book.js" defer></script><a id="bk-cta" class="bk-cta" data-book data-agency="eyecarepro" data-listing="" href="../contact/?agency=eyecarepro#book" hidden>Book a free audit</a><button id="nis-cta-find" class="nis-cta" type="button" hidden>Find your listing</button><a id="nis-cta-book" class="nis-cta" data-book data-agency="eyecarepro" href="../contact/?agency=eyecarepro#book" hidden>Book a free audit</a>
 <div class="topbar"><div class="topbar-in"><a class="brand" href="#/"><span class="brand-l">EyeCare<em>Pro</em></span><span class="brand-sep"> · </span><span class="brand-r">Results Dossier</span></a><nav class="nav"><a id="nav-story" href="#/">The Story</a><a id="nav-dir" href="#/directory">Directory</a></nav></div></div>
 <div class="paper">
 <div class="wrap"><div id="app"></div></div>
@@ -571,9 +571,13 @@ html[data-bp=m] #trends .trendx-grid,html[data-bp=s] #trends .trendx-grid{grid-t
 'use strict';
 var dir=window.location.pathname.replace(/index\.html?$/,'');
 var root=dir.replace(/(dossiers\/)?[^\/]+\/$/,'');
-var abs=window.location.origin+root;var __nb=document.createElement('base');__nb.setAttribute('href',dir);document.head.appendChild(__nb);
+var abs=window.location.origin+root;var __nb=document.createElement('base');__nb.setAttribute('href',dir);document.head.appendChild(__nb);var __b=document.createElement('base');__b.setAttribute('href',dir);document.head.appendChild(__b);
 var links=document.querySelectorAll('[data-nis-hub]');
 var i;for(i=0;i<links.length;i++){links[i].setAttribute('href',abs+links[i].getAttribute('data-nis-hub'));}
+/* every other ../ hop pinned absolute too: the client view replaceStates the URL two
+   levels deeper, which silently re-resolves any anchor still left relative. */
+var rel=document.querySelectorAll('a[href^="../"]');
+for(i=0;i<rel.length;i++){rel[i].setAttribute('href',abs+rel[i].getAttribute('href').slice(3));}
 function nisStackH(){
  var hb=document.getElementById('nis-hubbar');
  var tb=document.querySelector('.topbar');
@@ -1814,7 +1818,7 @@ function profile(c){
  h+='<section class="thin">';
  h+=verdictPair(c);
  h+='<div class="verdict"><p>'+esc(c.v.cl)+'</p></div>';
- h+='<p class="bookline">This is your business? <a data-book data-agency="eyecarepro" data-listing="'+esc(c.d)+'" href="../contact/?agency=eyecarepro&amp;listing='+encodeURIComponent(c.d)+'#book">Book a consultation</a></p>';
+ h+='<p class="bookline">This is your business? <a data-book data-agency="eyecarepro" data-listing="'+esc(c.d)+'" href="'+NIS_ROOT+'contact/?agency=eyecarepro&amp;listing='+encodeURIComponent(c.d)+'#book">Book a free audit</a>, 15 minutes or a full hour.</p>';
  h+='<div class="shareline"><button type="button" class="share-btn" data-share-slug="eyecarepro" data-share-key="'+esc(c.d)+'">Share this listing</button><span class="share-note" role="status" aria-live="polite"></span></div>';
  if(c.r.tt){h+='<div class="note"><p style="margin:0"><strong>This grid is flagged as too tight.</strong> One business holds more than 90% of it, which means the scan radius was small enough that the grid may not contain a real contest. Read this practice\u2019s ranking with that caveat, it is flagged here rather than quietly counted.</p></div>';}
  h+='</section>';

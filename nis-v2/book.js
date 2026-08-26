@@ -212,12 +212,12 @@
     el.id='bk-overlay';
     el.setAttribute('role','dialog');
     el.setAttribute('aria-modal','true');
-    el.setAttribute('aria-label','Book the consultation');
+    el.setAttribute('aria-label','Book the free audit');
     el.hidden=true;
     el.innerHTML=[
       '<div class="bk-in">',
       '<div class="bk-bar"><span>The booking desk · Intake B-01</span><button type="button" class="bk-close" id="bk-close" aria-label="Close the booking form">Close &#10005;</button></div>',
-      '<h2 class="bk-title">Book the consultation.</h2>',
+      '<h2 class="bk-title">Book the free audit.</h2>',
       '<div class="docket bk-steps"><span id="bk-step-label" aria-live="polite">'+esc(STEP_LABELS[0])+'</span></div>',
       '<div class="bk-ctx" id="bk-ctx" hidden></div>',
       '<div class="bk-step" id="bk-s1"><h3 class="bk-h3" tabindex="-1">Which file is this about?</h3><div id="bk-s1-ctx"></div>',
@@ -444,7 +444,7 @@
     if(isAgency){
       return '<div class="bk-card"><span class="ftag">CASE '+esc(m.code)+'</span><div class="bk-card-name">'+esc(m.agname)+'</div><p class="bk-card-line">The file in focus. Pick your listing inside it (optional):</p></div>';
     }
-    return '<div class="bk-card"><span class="ftag">CASE '+esc(m.code)+'</span><div class="bk-card-name">'+esc(m.name)+'</div><div class="bk-card-loc">'+esc(m.loc)+' · '+esc(m.agname)+'</div><p class="bk-card-line">This consultation is about this listing.</p><button type="button" class="bk-linkbtn" id="bk-swap">Different business? Search the files instead.</button></div>';
+    return '<div class="bk-card"><span class="ftag">CASE '+esc(m.code)+'</span><div class="bk-card-name">'+esc(m.name)+'</div><div class="bk-card-loc">'+esc(m.loc)+' · '+esc(m.agname)+'</div><p class="bk-card-line">This free audit is about this listing.</p><button type="button" class="bk-linkbtn" id="bk-swap">Different business? Search the files instead.</button></div>';
   }
   function finderHTML(scoped){
     return [
@@ -703,7 +703,7 @@
     var findRow=isBook
       ?'<button type="button" class="nis-drawer-act" id="nis-drawer-find">Find your listing</button>'
       :'<a class="nis-drawer-act" id="nis-drawer-find" href="'+esc(root+'find/')+'">Find your listing</a>';
-    var bookRow='<a class="nis-drawer-act" id="nis-drawer-book" data-book href="'+esc(root+'contact/#book')+'">Book a consultation</a>';
+    var bookRow='<a class="nis-drawer-act" id="nis-drawer-book" data-book href="'+esc(root+'contact/#book')+'">Book a free audit</a>';
     dwEl=document.createElement('aside');
     dwEl.className='nis-drawer';
     dwEl.id='nis-drawer';
