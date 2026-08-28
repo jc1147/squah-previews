@@ -101,6 +101,15 @@ a{color:inherit}
 .locker.sm{margin:0;padding:clamp(10px,1.4vw,18px)}
 .locker.sm .film-play{width:clamp(50px,5.2vw,68px)}
 .locker.sm .film-tag{font-size:clamp(.75rem,1.1vw,1rem)}
+/* the transcript accordion under the Item 001 locker: the spoken words, on the page, in the locker's own ink */
+.film-transcript{margin:0 2px;border-top:1px solid rgba(244,238,222,.18);color:rgba(244,238,222,.82)}
+.film-transcript summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:.8em;font-family:var(--mono);font-size:clamp(.58rem,.82vw,.7rem);letter-spacing:.2em;text-transform:uppercase;font-weight:700;color:var(--red-bright);padding:clamp(12px,1.5vw,18px) 0}
+.film-transcript summary::-webkit-details-marker{display:none}
+.film-transcript summary::before{content:'+';font-family:var(--fat);font-weight:900;font-size:1.4em;line-height:1;width:1em;text-align:center}
+.film-transcript[open] summary::before{content:'-'}
+.film-transcript summary:hover{color:var(--paper)}
+.film-transcript p{font-size:clamp(.95rem,1.2vw,1.08rem);line-height:1.65;max-width:74ch;margin:0 0 1em}
+.film-transcript p:last-child{margin-bottom:clamp(16px,2vw,24px)}
 a.filmlink{text-decoration:none;display:block}
 a.filmlink:hover .locker{box-shadow:0 26px 70px rgba(0,0,0,.4),0 0 0 3px var(--red)}
 
@@ -188,6 +197,13 @@ h2.headline .rd{color:var(--red)}
   .drawer.pending{padding-top:clamp(64px,16vw,84px)}
   .drawer .pending-stamp{top:clamp(18px,4.5vw,34px);left:50%;right:auto;transform:translateX(-50%) rotate(-6deg)}
 }
+
+/* ---------- the Passed drawer (dossiers index): the bar, and every measured book against it ---------- */
+.passed-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(14px,2vw,28px);margin-top:clamp(24px,3vw,44px);max-width:1220px}
+@media (max-width:1000px){.passed-grid{grid-template-columns:minmax(0,1fr)}}
+.passed-grid .sheet{margin-bottom:0;border:2px solid var(--ink)}
+.passed-note{font-family:var(--mono);font-size:clamp(.6rem,.85vw,.74rem);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);line-height:1.9;max-width:1220px;margin-top:clamp(16px,2vw,26px)}
+section[id="passed"]{scroll-margin-top:72px}
 
 /* ---------- about page prose ---------- */
 .about-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:clamp(22px,3.4vw,60px);align-items:start;margin-top:clamp(18px,2.4vw,34px)}
