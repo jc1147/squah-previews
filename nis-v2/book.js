@@ -713,7 +713,7 @@
     dwEl.hidden=true;
     dwEl.innerHTML='<nav class="nis-drawer-nav" aria-label="Menu">'+rows+'</nav>'
       +'<div class="nis-drawer-actions">'+findRow+bookRow+'</div>'
-      +'<div class="nis-drawer-foot"><span class="nis-drawer-stamp">Public record</span><span class="nis-drawer-site">nobodyissafe.com</span></div>';
+      +'<div class="nis-drawer-foot"><span class="nis-drawer-stamp">Published file</span><span class="nis-drawer-site">nobodyissafe.com</span></div>';
     var head=document.createElement('div');
     head.className='nis-drawer-head';
     var srcBrand=barIn.querySelector('.brand,.nis-hubbrand');
