@@ -13,7 +13,7 @@
     'My monthly report does not match this file.',
     'Walk me through my listing, row by row.'
   ];
-  var NOTE_ALL='Type at least two letters. 906 listings on file across three agencies.';
+  var NOTE_ALL='Type at least two letters. 1,644 listings on file across three agencies.';
   var NOTE_SCOPED='Type at least two letters.';
   var NOHIT='No match on that. Try fewer words, just the city, or the website address.';
   var NOTE_FINAL='The booking desk opens at nobodyissafe.com, the desk\'s permanent address. The files are public now.';

@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<title>Locked</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html{color-scheme:light}
+body{background:#f4eede;background-image:radial-gradient(rgba(23,19,16,.05) 1.5px,transparent 1.7px);background-size:9px 9px;color:#171310;font-family:Georgia,'Times New Roman',Times,serif;min-height:100vh;display:flex;flex-direction:column}
+.band{flex:none;background:#c9040f;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 24px;flex-wrap:wrap}
+.mark{font-family:"Arial Black",Arial,sans-serif;font-weight:900;font-size:20px;letter-spacing:.01em;text-transform:uppercase;color:#f4eede}
+.mark em{font-style:normal;color:#f0a9ad}
+.pubrec{font-family:Consolas,"Courier New",monospace;font-weight:700;font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:#f4eede;border:2px solid rgba(244,238,222,.85);padding:5px 10px 5px 14px}
+main{flex:1 1 auto;display:flex;align-items:center;justify-content:center;padding:40px 24px}
+.card{width:100%;max-width:560px}
+.kicker{font-family:Consolas,"Courier New",monospace;font-weight:700;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:#c9040f}
+.stamp{display:inline-block;margin:18px 0 22px;border:4px solid #c9040f;color:#c9040f;background:rgba(201,4,15,.045);padding:10px 16px;font-family:"Arial Black",Arial,sans-serif;font-weight:900;text-transform:uppercase;font-size:26px;line-height:1.05;letter-spacing:.01em}
+p{font-size:17px;line-height:1.55;margin-bottom:14px;max-width:60ch}
+label{display:block;font-family:Consolas,"Courier New",monospace;font-weight:700;font-size:12px;letter-spacing:.18em;text-transform:uppercase;margin:22px 0 8px}
+input{width:100%;font:inherit;font-size:18px;padding:12px 14px;border:3px solid #171310;background:#fff;color:#171310;outline:none}
+input:focus{border-color:#c9040f}
+button{margin-top:14px;font-family:"Arial Black",Arial,sans-serif;font-weight:900;text-transform:uppercase;letter-spacing:.04em;font-size:16px;padding:12px 26px;border:3px solid #171310;background:#171310;color:#f4eede;cursor:pointer}
+button:hover{background:#c9040f;border-color:#c9040f}
+button[disabled]{opacity:.6;cursor:wait}
+.err{color:#c9040f;font-family:Consolas,"Courier New",monospace;font-weight:700;font-size:13px;letter-spacing:.06em;margin-top:12px}
+.note{font-size:14px;color:rgba(23,19,16,.72);margin-top:22px}
+[hidden]{display:none !important}
+</style>
+</head>
+<body>
+<header class="band">
+  <span class="mark">NOBODY<em>IS</em>SAFE</span>
+  <span class="pubrec">Private file</span>
+</header>
+<main>
+  <form id="nis-lock-form" class="card" hidden>
+    <p class="kicker">The file &middot; Restricted</p>
+    <p class="stamp">THIS FILE IS LOCKED</p>
+    <p>Enter the passphrase you were given to open this page. Nothing on this site renders without it, and the passphrase never leaves this browser.</p>
+    <label for="nis-lock-pass">Passphrase</label>
+    <input id="nis-lock-pass" name="passphrase" type="password" autocomplete="current-password" autocapitalize="off" spellcheck="false" required>
+    <button id="nis-lock-btn" type="submit">Unlock</button>
+    <p id="nis-lock-err" class="err" hidden>Wrong passphrase.</p>
+    <p id="nis-lock-note" class="note" hidden></p>
+  </form>
+</main>
+<script>
+(function(){
+'use strict';
+var PAYLOAD='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';
+var SALT='cZ3klzIsLDUgKl54zPb5wA==';
+var KEY_NAME='nisv2.k';
+var ITER=600000;
+var DATA_RE=/(^|\/)(rrh\.json|eyecarepro\.json|totals\.json|listings\.json|nis-data\.js)$|\.vtt$/;
+var TYPES={json:'application/json; charset=utf-8',js:'text/javascript; charset=utf-8',vtt:'text/vtt; charset=utf-8'};
+var subtle=(window.crypto&&window.crypto.subtle)||null;
+function $(id){return document.getElementById(id)}
+var form=$('nis-lock-form'),field=$('nis-lock-pass'),err=$('nis-lock-err'),btn=$('nis-lock-btn'),note=$('nis-lock-note');
+function b64ToBytes(s){var bin=atob(String(s).replace(/\s+/g,'')),n=bin.length,out=new Uint8Array(n),i;for(i=0;i<n;i++)out[i]=bin.charCodeAt(i);return out}
+function bytesToB64(bytes){var s='',i;for(i=0;i<bytes.length;i++)s+=String.fromCharCode(bytes[i]);return btoa(s)}
+function utf8(str){return new TextEncoder().encode(str)}
+function decode(bytes){return new TextDecoder('utf-8').decode(bytes)}
+function lsGet(){try{return localStorage.getItem(KEY_NAME)}catch(e){return null}}
+function lsSet(v){try{localStorage.setItem(KEY_NAME,v)}catch(e){}}
+function lsDel(){try{localStorage.removeItem(KEY_NAME)}catch(e){}}
+function deriveKey(pass){
+  return subtle.importKey('raw',utf8(pass),'PBKDF2',false,['deriveKey']).then(function(base){
+    return subtle.deriveKey({name:'PBKDF2',salt:b64ToBytes(SALT),iterations:ITER,hash:'SHA-256'},base,{name:'AES-GCM',length:256},true,['encrypt','decrypt']);
+  });
+}
+function importKey(rawB64){return subtle.importKey('raw',b64ToBytes(rawB64),{name:'AES-GCM'},false,['encrypt','decrypt'])}
+function decryptB64(key,payload){
+  var all=b64ToBytes(payload);
+  return subtle.decrypt({name:'AES-GCM',iv:all.subarray(0,12)},key,all.subarray(12)).then(function(buf){return new Uint8Array(buf)});
+}
+function showForm(msg,wrong){
+  form.hidden=false;
+  err.hidden=!wrong;
+  note.hidden=!msg;
+  note.textContent=msg||'';
+  btn.disabled=false;
+  btn.textContent='Unlock';
+  try{field.focus()}catch(e){}
+}
+/* THE FETCH SHIM. Any request whose resolved URL ends with one of the four data files, or with
+   .vtt (a caption track), fetches <url>.enc instead, decrypts it and answers with a Response of
+   the right content type. A <track src> is not a fetch and cannot pass through here: a <video>
+   attaches captions by fetching the .vtt through this shim and giving <track> a blob URL. A
+   missing .enc passes the original (non-ok) Response through so a caller's own fallback ladder
+   keeps working. Installed on window so it survives the document swap below. */
+function installShim(key){
+  if(window.__nisv2Shim)return;
+  var orig=window.fetch;
+  window.fetch=function(input,init){
+    var u=(typeof input==='string')?input:((input&&typeof input.url==='string')?input.url:String(input));
+    var abs;
+    try{abs=new URL(u,document.baseURI).href}catch(e){return orig.apply(window,arguments)}
+    var bare=abs.replace(/[?#][\s\S]*$/,'');
+    if(!DATA_RE.test(bare))return orig.apply(window,arguments);
+    var ext=bare.slice(bare.lastIndexOf('.')+1);
+    return orig.call(window,bare+'.enc',{credentials:'same-origin',cache:'no-cache'}).then(function(r){
+      if(!r.ok)return r;
+      return r.text().then(function(b){return decryptB64(key,b)}).then(function(bytes){
+        return new Response(bytes,{status:200,statusText:'OK',headers:{'Content-Type':TYPES[ext]||'application/octet-stream'}});
+      });
+    });
+  };
+  window.__nisv2Shim=true;
+}
+/* PREPARE THE DECRYPTED PAGE FOR THE SWAP.
+   1. <base href> = this document's directory, only when the page carries no <base> of its own.
+   2. The page's <script src=".../nis-data.js"> cannot load (only nis-data.js.enc is published),
+      so it is replaced by an inline copy of the decrypted file. nis-data.js derives the site root
+      from document.currentScript.src, which an inline script does not have, so the inline copy
+      shadows document.currentScript with {src: <the URL the original tag would have resolved
+      to>} for exactly the duration of the script. nis-data.js's own text is not changed. */
+function prepare(html){
+  var dir=location.href.replace(/[#?][\s\S]*$/,'').replace(/[^\/]*$/,'');
+  if(!/<base\b/i.test(html)){html=html.replace(/<head\b[^>]*>/i,function(m){return m+'<base href="'+dir+'">'})}
+  var re=/<script\b[^>]*\bsrc=(["'])([^"']*nis-data\.js)\1[^>]*>\s*<\/script>/i;
+  var m=html.match(re);
+  if(!m)return Promise.resolve(html);
+  var src=new URL(m[2],dir).href;
+  return window.fetch(src).then(function(r){
+    if(!r.ok)throw new Error('nis-data.js.enc answered HTTP '+r.status);
+    return r.text();
+  }).then(function(js){
+    if(/<\/script/i.test(js))throw new Error('nis-data.js cannot be inlined');
+    var inline='<script>(function(){var d=document,s={src:'+JSON.stringify(src)+'};'
+      +'try{Object.defineProperty(d,"currentScript",{value:s,configurable:true})}catch(e){}'
+      +'try{\n'+js+'\n}finally{try{delete d.currentScript}catch(e){}}})();<\/script>';
+    return html.replace(re,function(){return inline});
+  });
+}
+/* THE SWAP WAITS FOR THIS GATE DOCUMENT TO FINISH LOADING. Measured in Chromium: a gate page
+   carrying a large payload (the desk, the sim, the books) is parsed in chunks, and a cached-key
+   unlock can resolve while the network parser is still mid-page; document.open() is then a no-op
+   and document.write() APPENDS the decrypted page under the lock screen (two <title>s, the form
+   still attached, title still "Locked"). Small pages never hit it, so it passed on the home and
+   the finder and failed on the desk. readyState "complete" is the condition, not "interactive". */
+function render(html){
+  function swap(){document.open();document.write(html);document.close()}
+  if(document.readyState==='complete'){swap()}
+  else{window.addEventListener('load',swap)}
+}
+function unlockWith(key){
+  return decryptB64(key,PAYLOAD).then(function(bytes){
+    installShim(key);
+    return prepare(decode(bytes));
+  }).then(render);
+}
+function onSubmit(e){
+  e.preventDefault();
+  var pass=field.value;
+  if(!pass)return;
+  btn.disabled=true;
+  btn.textContent='Checking';
+  err.hidden=true;
+  var key=null;
+  deriveKey(pass).then(function(k){
+    key=k;
+    return decryptB64(k,PAYLOAD);
+  }).then(function(bytes){
+    return subtle.exportKey('raw',key).then(function(raw){
+      lsSet(bytesToB64(new Uint8Array(raw)));
+      installShim(key);
+      return prepare(decode(bytes));
+    });
+  }).then(render).catch(function(){
+    field.value='';
+    showForm('',true);
+  });
+}
+form.addEventListener('submit',onSubmit);
+if(!subtle){
+  showForm('This page needs a browser with Web Crypto over https.',false);
+  return;
+}
+if(/(^|[?&])lock(=|&|$)/.test(location.search)){
+  lsDel();
+  try{history.replaceState(history.state,'',location.pathname+location.hash)}catch(e){}
+  showForm('',false);
+  return;
+}
+var cached=lsGet();
+if(cached){
+  importKey(cached).then(unlockWith).catch(function(){lsDel();showForm('',false)});
+}else{
+  showForm('',false);
+}
+})();
+</script>
+</body>
+</html>
