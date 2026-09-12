@@ -1,0 +1,602 @@
+<title>The State Hub Play</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+
+<style>
+  :root {
+    --paper:        #F4F5F2;
+    --surface:      #FFFFFF;
+    --surface-2:    #EBEDE8;
+    --ink:          #15191C;
+    --ink-2:        #434B47;
+    --ink-3:        #6E7872;
+    --rule:         #D8DCD5;
+    --rule-strong:  #B9C0B7;
+    --accent:       #1F5C42;
+    --accent-soft:  #DDE8E1;
+    --good:         #2F7D5C;
+    --warn:         #A8551B;
+    --warn-soft:    #F3E4D6;
+    --bar-track:    #E2E5DF;
+
+    --f-display: "Fraunces", Georgia, "Times New Roman", serif;
+    --f-body:    "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --f-mono:    "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper:       #0E1211;
+      --surface:     #161B19;
+      --surface-2:   #1D2321;
+      --ink:         #EDEFEB;
+      --ink-2:       #B4BDB7;
+      --ink-3:       #838D87;
+      --rule:        #272E2B;
+      --rule-strong: #3A433E;
+      --accent:      #6FBF95;
+      --accent-soft: #1A2A22;
+      --good:        #6FBF95;
+      --warn:        #E0965A;
+      --warn-soft:   #2B2018;
+      --bar-track:   #242B28;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper:       #0E1211;
+    --surface:     #161B19;
+    --surface-2:   #1D2321;
+    --ink:         #EDEFEB;
+    --ink-2:       #B4BDB7;
+    --ink-3:       #838D87;
+    --rule:        #272E2B;
+    --rule-strong: #3A433E;
+    --accent:      #6FBF95;
+    --accent-soft: #1A2A22;
+    --good:        #6FBF95;
+    --warn:        #E0965A;
+    --warn-soft:   #2B2018;
+    --bar-track:   #242B28;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--f-body);
+    font-size: 17px;
+    line-height: 1.6;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  .wrap { max-width: 40rem; margin: 0 auto; padding: 0 20px 72px; }
+
+  .mast { padding: 40px 0 28px; border-bottom: 2px solid var(--ink); }
+  .kicker {
+    font-family: var(--f-mono); font-size: 11.5px; font-weight: 500;
+    letter-spacing: 0.13em; text-transform: uppercase;
+    color: var(--accent); margin: 0 0 18px;
+  }
+  h1 {
+    font-family: var(--f-display); font-weight: 600;
+    font-size: clamp(2.1rem, 9vw, 3.1rem); line-height: 1.04;
+    letter-spacing: -0.02em; text-wrap: balance; margin: 0 0 16px;
+  }
+  .standfirst { font-size: 1.06rem; color: var(--ink-2); margin: 0; text-wrap: pretty; }
+  .meta {
+    display: flex; flex-wrap: wrap; gap: 6px 14px;
+    font-family: var(--f-mono); font-size: 11.5px; color: var(--ink-3); margin-top: 22px;
+  }
+
+  .verdict {
+    background: var(--surface); border: 1px solid var(--rule-strong);
+    border-left: 4px solid var(--accent); padding: 22px 20px; margin: 28px 0 0;
+  }
+  .verdict h2 {
+    font-family: var(--f-mono); font-size: 11.5px; font-weight: 600;
+    letter-spacing: 0.13em; text-transform: uppercase; color: var(--accent); margin: 0 0 12px;
+  }
+  .verdict p { margin: 0 0 12px; font-size: 1.08rem; line-height: 1.5; }
+  .verdict p:last-child { margin-bottom: 0; }
+
+  .ruled-out { display: grid; gap: 10px; margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--rule); }
+  .ruled-out div {
+    display: grid; grid-template-columns: auto 1fr; gap: 10px;
+    align-items: start; font-size: 0.93rem; color: var(--ink-2);
+  }
+  .x { font-family: var(--f-mono); color: var(--warn); font-weight: 600; line-height: 1.55; }
+
+  section { margin-top: 46px; }
+  .eyebrow {
+    font-family: var(--f-mono); font-size: 11px; font-weight: 500;
+    letter-spacing: 0.13em; text-transform: uppercase; color: var(--ink-3);
+    padding-bottom: 8px; border-bottom: 1px solid var(--rule); margin: 0 0 20px;
+  }
+  h2.head {
+    font-family: var(--f-display); font-weight: 600;
+    font-size: clamp(1.5rem, 6.2vw, 1.95rem); line-height: 1.14;
+    letter-spacing: -0.015em; text-wrap: balance; margin: 0 0 14px;
+  }
+  h3 { font-family: var(--f-body); font-weight: 600; font-size: 1.02rem; margin: 26px 0 10px; }
+  p { margin: 0 0 14px; text-wrap: pretty; }
+  p:last-child { margin-bottom: 0; }
+  .mono { font-family: var(--f-mono); font-size: 0.88em; }
+
+  /* head-to-head hero stat */
+  .duel {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1px;
+    background: var(--rule); border: 1px solid var(--rule); margin: 24px 0;
+  }
+  .duel > div { background: var(--surface); padding: 18px 16px; }
+  .duel-who {
+    font-family: var(--f-mono); font-size: 10.5px; font-weight: 600;
+    letter-spacing: 0.1em; text-transform: uppercase; margin: 0 0 12px;
+  }
+  .duel .them .duel-who { color: var(--ink-3); }
+  .duel .us .duel-who { color: var(--warn); }
+  .duel dl { margin: 0; display: grid; gap: 10px; }
+  .duel dt {
+    font-size: 0.78rem; color: var(--ink-3); margin: 0;
+    text-transform: uppercase; letter-spacing: 0.04em;
+  }
+  .duel dd {
+    margin: 2px 0 0; font-family: var(--f-mono); font-size: 1.02rem;
+    font-weight: 600; font-variant-numeric: tabular-nums; line-height: 1.2;
+  }
+  .duel .us dd.hero { color: var(--warn); }
+  .duel .them dd.hero { color: var(--accent); }
+
+  /* matched-pair comparison rows */
+  .pair-head {
+    display: grid; grid-template-columns: 1fr auto auto; gap: 8px 12px;
+    padding: 0 0 8px; font-family: var(--f-mono); font-size: 10.5px;
+    letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3);
+  }
+  .pair-head span:nth-child(2), .pair-head span:nth-child(3) { text-align: right; min-width: 4.2rem; }
+  .pairs { display: grid; gap: 0; margin: 0 0 20px; border-top: 1px solid var(--rule); }
+  .pair {
+    display: grid; grid-template-columns: 1fr auto auto; gap: 8px 12px;
+    align-items: baseline; padding: 13px 0; border-bottom: 1px solid var(--rule);
+  }
+  .pair-label { font-size: 0.92rem; color: var(--ink-2); }
+  .pair-a, .pair-b {
+    font-family: var(--f-mono); font-size: 0.98rem; font-weight: 600;
+    font-variant-numeric: tabular-nums; white-space: nowrap;
+    text-align: right; min-width: 4.2rem;
+  }
+  .pair-a { color: var(--accent); }
+  .pair-b { color: var(--warn); }
+
+  .chart { margin: 22px 0 8px; display: grid; gap: 14px; }
+  .row-label { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 5px; }
+  .tname { font-family: var(--f-mono); font-size: 12.5px; font-weight: 500; color: var(--ink); }
+  .tpages { font-family: var(--f-mono); font-size: 11px; color: var(--ink-3); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .track { position: relative; height: 26px; background: var(--bar-track); }
+  .fill { position: absolute; inset: 0 auto 0 0; background: var(--accent); }
+  .fill.dim { background: var(--rule-strong); }
+  .pct {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    font-family: var(--f-mono); font-size: 12px; font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+  .pct.inside { left: 10px; color: var(--surface); }
+  :root[data-theme="dark"] .pct.inside { color: #0E1211; }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .pct.inside { color: #0E1211; }
+  }
+  .pct.outside { color: var(--ink-2); }
+  .chart-note { font-size: 0.86rem; color: var(--ink-3); margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--rule); }
+
+  .callout {
+    background: var(--accent-soft); padding: 18px; margin: 22px 0;
+    border-left: 3px solid var(--accent);
+  }
+  .callout p { font-size: 0.98rem; }
+  .callout.risk { background: var(--warn-soft); border-left-color: var(--warn); }
+
+  .split { display: grid; gap: 18px; margin: 20px 0; }
+  .col { background: var(--surface); border: 1px solid var(--rule); padding: 18px; }
+  .col h4 {
+    font-family: var(--f-mono); font-size: 11px; font-weight: 600;
+    letter-spacing: 0.1em; text-transform: uppercase; margin: 0 0 14px;
+  }
+  .col.yes h4 { color: var(--good); }
+  .col.no  h4 { color: var(--warn); }
+  .col ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 11px; }
+  .col li { font-size: 0.91rem; line-height: 1.5; color: var(--ink-2); padding-left: 16px; position: relative; }
+  .col li::before {
+    content: ""; position: absolute; left: 0; top: 0.6em;
+    width: 6px; height: 6px; background: currentColor; opacity: 0.45;
+  }
+
+  /* deployment queue */
+  .queue { display: grid; gap: 2px; margin: 22px 0; }
+  .cell {
+    background: var(--surface); border: 1px solid var(--rule); padding: 16px 18px;
+  }
+  .cell-top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 8px; }
+  .cell-name { font-weight: 600; font-size: 1rem; }
+  .cell-rank {
+    font-family: var(--f-mono); font-size: 11px; color: var(--ink-3);
+    font-variant-numeric: tabular-nums; white-space: nowrap;
+  }
+  .cell-stats {
+    display: flex; flex-wrap: wrap; gap: 4px 16px; margin-bottom: 9px;
+    font-family: var(--f-mono); font-size: 11.5px; color: var(--ink-3);
+    font-variant-numeric: tabular-nums;
+  }
+  .cell-stats b { color: var(--ink-2); font-weight: 600; }
+  .cell p { font-size: 0.9rem; color: var(--ink-2); margin: 0; }
+  .tag {
+    display: inline-block; font-family: var(--f-mono); font-size: 10px;
+    font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+    padding: 2px 7px; margin-left: 6px; vertical-align: 1px;
+  }
+  .tag.open { background: var(--accent-soft); color: var(--accent); }
+  .tag.cap  { background: var(--warn-soft); color: var(--warn); }
+
+  .tiers { display: grid; gap: 2px; margin: 22px 0; }
+  .tier { background: var(--surface); border: 1px solid var(--rule); padding: 17px 18px; }
+  .tier h4 { margin: 0 0 4px; font-size: 1rem; font-weight: 600; }
+  .tier .who { font-family: var(--f-mono); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin: 0 0 9px; }
+  .tier p { font-size: 0.9rem; color: var(--ink-2); margin: 0; }
+
+  .steps { display: grid; gap: 2px; margin: 22px 0; }
+  .step {
+    background: var(--surface); border: 1px solid var(--rule); padding: 18px;
+    display: grid; grid-template-columns: auto 1fr; gap: 16px; align-items: start;
+  }
+  .step-n {
+    font-family: var(--f-display); font-size: 1.6rem; font-weight: 600;
+    line-height: 1; color: var(--accent); font-variant-numeric: tabular-nums;
+  }
+  .step-body h4 { margin: 0 0 7px; font-size: 1rem; font-weight: 600; line-height: 1.3; }
+  .step-body p { font-size: 0.91rem; color: var(--ink-2); margin: 0; }
+  .step-why { font-family: var(--f-mono); font-size: 11.5px; color: var(--ink-3); margin-top: 9px; display: block; }
+
+  .open { display: grid; gap: 14px; margin-top: 18px; }
+  .open div { padding: 15px 16px; background: var(--surface-2); font-size: 0.92rem; color: var(--ink-2); }
+  .open strong { color: var(--ink); font-weight: 600; }
+
+  footer {
+    margin-top: 52px; padding-top: 20px; border-top: 2px solid var(--ink);
+    font-family: var(--f-mono); font-size: 11.5px; color: var(--ink-3); line-height: 1.7;
+  }
+
+  @media (min-width: 700px) {
+    body { font-size: 18px; }
+    .split { grid-template-columns: 1fr 1fr; }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .fill { animation: grow 0.7s cubic-bezier(0.22, 1, 0.36, 1) both; }
+    @keyframes grow { from { transform: scaleX(0.04); transform-origin: left; } }
+  }
+</style>
+
+<div class="wrap">
+
+  <header class="mast">
+    <p class="kicker">Liquor License Agents &middot; Direction Read</p>
+    <h1>It was never the auction.</h1>
+    <p class="standfirst">Eight pages carry more than half of Liquor License Auctioneers' search traffic. Their 1,227 listings carry 1.8%. Your client already owns a longer New Jersey page than theirs and earns nothing from it, because theirs has licences on it and his has none.</p>
+    <div class="meta">
+      <span>12 Sep 2026</span>
+      <span>Census, not sample</span>
+      <span>US / en snapshot</span>
+      <span>$5.11 of $20 spent</span>
+    </div>
+  </header>
+
+  <div class="verdict">
+    <h2>The call</h2>
+    <p><strong>Put Clint's inventory on state hub pages he already owns.</strong> Not a new site, not a rebuild. The pages exist and rank for nothing. The missing ingredient is stock on the page.</p>
+    <p>Start with <strong>New Jersey</strong>. It is the rival's single best page, its weakest SERP, and the one place your client already has a 3,474-word page sitting idle.</p>
+    <div class="ruled-out">
+      <div><span class="x">A</span><span><strong>Converting the site</strong> would trade 244 ranking keywords for a format earning the rival 1.8% of its traffic.</span></div>
+      <div><span class="x">C</span><span><strong>usaliquorlicense.com</strong> starts from 14 keywords and 38 referring domains. No equity to build on.</span></div>
+    </div>
+  </div>
+
+  <section>
+    <p class="eyebrow">The finding &middot; A natural experiment</p>
+    <h2 class="head">He already ran the test</h2>
+    <p>Your client has a New Jersey page. It is in the sitemap, it is self-canonical, it returns 200, and it is <strong>three times longer than the rival's</strong>. It ranks for zero keywords.</p>
+
+    <div class="duel">
+      <div class="us">
+        <p class="duel-who">His page</p>
+        <dl>
+          <dt>Words on page</dt><dd>3,474</dd>
+          <dt>Licences shown</dt><dd class="hero">0</dd>
+          <dt>Ranking keywords</dt><dd class="hero">0</dd>
+        </dl>
+      </div>
+      <div class="them">
+        <p class="duel-who">Their page</p>
+        <dl>
+          <dt>Words on page</dt><dd>1,760</dd>
+          <dt>Licences shown</dt><dd class="hero">52</dd>
+          <dt>Modelled traffic</dt><dd class="hero">2,019</dd>
+        </dl>
+      </div>
+    </div>
+
+    <p>That rival page alone earns 37% of their entire search presence. Same market, same queries, and your client wrote twice the words.</p>
+
+    <h3>And it is not one page. It is eight against eight.</h3>
+    <p>Both sites publish exactly eight state hub pages. That is the whole comparison, matched on count:</p>
+
+    <div class="pair-head"><span>State hubs</span><span>Rival</span><span>Client</span></div>
+    <div class="pairs">
+      <div class="pair"><span class="pair-label">Pages published</span><span class="pair-a">8</span><span class="pair-b">8</span></div>
+      <div class="pair"><span class="pair-label">Pages that rank at all</span><span class="pair-a">8</span><span class="pair-b">3</span></div>
+      <div class="pair"><span class="pair-label">Ranking keywords</span><span class="pair-a">190</span><span class="pair-b">30</span></div>
+      <div class="pair"><span class="pair-label">Top-ten placements</span><span class="pair-a">88</span><span class="pair-b">0</span></div>
+      <div class="pair"><span class="pair-label">Modelled traffic</span><span class="pair-a">3,120</span><span class="pair-b">16.5</span></div>
+    </div>
+
+    <p>Eight pages each. One side earns 3,120 and the other 16.5, with not a single top-ten placement. Five of your client's eight rank for nothing whatsoever.</p>
+    <p>This is as close to a controlled test as the open web gives you. Content length is not the variable. <strong>Inventory rendered on the page is.</strong> I cannot prove causation from observational data, and other differences exist, but the direction of the evidence is hard to miss.</p>
+    <div class="callout">
+      <p>The same pattern holds on Pennsylvania (3,707 words, best rank 46), Ohio (3,468 words, best rank 10) and Florida (2,768 words, best rank 10). Four finished state pages, no stock on any of them.</p>
+    </div>
+  </section>
+
+  <section>
+    <p class="eyebrow">Evidence 01 &middot; Where their traffic lands</p>
+    <h2 class="head">Their listings are scenery</h2>
+    <p>Every keyword each domain ranks for, with every ranking URL matched to its page template. The rival's index returned 713 keywords and the API total matched, so this is a complete count.</p>
+
+    <div class="chart">
+      <div>
+        <div class="row-label"><span class="tname">state hub</span><span class="tpages">8 pages</span></div>
+        <div class="track"><div class="fill" style="width:57.0%"><span class="pct inside">57.0%</span></div></div>
+      </div>
+      <div>
+        <div class="row-label"><span class="tname">state &times; type</span><span class="tpages">19 pages</span></div>
+        <div class="track"><div class="fill" style="width:16.6%"><span class="pct inside">16.6%</span></div></div>
+      </div>
+      <div>
+        <div class="row-label"><span class="tname">type index</span><span class="tpages">7 pages</span></div>
+        <div class="track"><div class="fill" style="width:9.1%"></div><span class="pct outside" style="left:calc(9.1% + 10px)">9.1%</span></div>
+      </div>
+      <div>
+        <div class="row-label"><span class="tname">blog</span><span class="tpages">8 pages</span></div>
+        <div class="track"><div class="fill" style="width:8.5%"></div><span class="pct outside" style="left:calc(8.5% + 10px)">8.5%</span></div>
+      </div>
+      <div>
+        <div class="row-label"><span class="tname">county</span><span class="tpages">32 pages</span></div>
+        <div class="track"><div class="fill dim" style="width:4.2%"></div><span class="pct outside" style="left:calc(4.2% + 10px)">4.2%</span></div>
+      </div>
+      <div>
+        <div class="row-label"><span class="tname">auction listing</span><span class="tpages">4 of 1,227</span></div>
+        <div class="track"><div class="fill dim" style="width:1.8%"></div><span class="pct outside" style="left:calc(1.8% + 10px)">1.8%</span></div>
+      </div>
+      <div>
+        <div class="row-label"><span class="tname">county &times; type</span><span class="tpages">5 of 2,132</span></div>
+        <div class="track"><div class="fill dim" style="width:0.1%"></div><span class="pct outside" style="left:calc(0.1% + 10px)">0.1%</span></div>
+      </div>
+    </div>
+    <p class="chart-note">Share of the rival's modelled organic traffic by the template holding each ranking. 27 pages hold 73.6%.</p>
+
+    <p>Listings are not competing for rankings. They are the substance that makes a hub worth ranking. You need inventory <em>displayed</em>, not inventory <em>indexed</em>.</p>
+  </section>
+
+  <section>
+    <p class="eyebrow">Evidence 02 &middot; Authority</p>
+    <h2 class="head">You are not outgunned</h2>
+    <p>I expected this to go the other way. A decade-long link lead would mean architecture could not close the gap. There isn't one.</p>
+    <p>Your client holds <strong>166 referring domains against their 95</strong>, on effectively identical backlink counts, from a domain registered in 2014 against their 2011. And it converts that into a ninth of the traffic. The gap is structural, and structure moves on a schedule.</p>
+  </section>
+
+  <section>
+    <p class="eyebrow">Evidence 03 &middot; The second search engine</p>
+    <h2 class="head">They are winning the AI answer too</h2>
+    <p>An AI overview sits on top of <strong>179 of the 197 queries</strong> I measured, and people-also-ask on 189 of them. No featured snippets at all, and a local pack on only 24. Both AI figures are floors, because asynchronously loaded overviews were not purchased.</p>
+    <p>I mined the citations out of those 179 overviews. They were already in the data, so this cost nothing extra:</p>
+
+    <div class="chart">
+      <div>
+        <div class="row-label"><span class="tname">liquorlicenseauctioneers</span><span class="tpages">123 citations</span></div>
+        <div class="track"><div class="fill" style="width:100%"><span class="pct inside">rival</span></div></div>
+      </div>
+      <div>
+        <div class="row-label"><span class="tname">abc.ca.gov</span><span class="tpages">108 citations</span></div>
+        <div class="track"><div class="fill dim" style="width:87.8%"><span class="pct inside">regulator</span></div></div>
+      </div>
+      <div>
+        <div class="row-label"><span class="tname">youtube.com</span><span class="tpages">105 citations</span></div>
+        <div class="track"><div class="fill dim" style="width:85.4%"><span class="pct inside">video</span></div></div>
+      </div>
+      <div>
+        <div class="row-label"><span class="tname">liquorlicenseagents</span><span class="tpages">11 citations</span></div>
+        <div class="track"><div class="fill dim" style="width:8.9%"></div><span class="pct outside" style="left:calc(8.9% + 10px)">client</span></div>
+      </div>
+    </div>
+    <p class="chart-note">Distinct cited hosts across 179 AI overviews, www-normalised. 100 hosts cited in total.</p>
+
+    <p>The rival is the most-cited commercial domain in the category, at <strong>123 citations against your client's 11</strong>. That is an 11-fold gap, almost exactly matching the organic traffic gap.</p>
+    <p>Which pages get cited settles the thesis twice over. Their most-cited URLs are <span class="mono">/new-jersey</span>, <span class="mono">/california/types/type-47</span>, <span class="mono">/michigan/types/class-c</span> and <span class="mono">/michigan</span>. The same state hubs and state-by-type pages that carry their organic traffic also carry their AI citations.</p>
+    <div class="callout">
+      <p><strong>Their robots.txt names GPTBot, ChatGPT-User, OAI-SearchBot and ClaudeBot and allows each one explicitly.</strong> That was a deliberate decision, and on this evidence it is working. It costs nothing to match.</p>
+    </div>
+    <p>One detail worth pausing on: your client's most-cited page is <span class="mono">/california/type-42-liquor-license/</span>, the orphaned one. It is missing from the sitemap, linked from nowhere, and it is still his best-performing asset in AI answers and worth 60 in modelled traffic. That is what the architecture is leaving on the floor.</p>
+  </section>
+
+  <section>
+    <p class="eyebrow">Evidence 04 &middot; The architecture question</p>
+    <h2 class="head">Publish the content, gate the deal</h2>
+    <p>Private listings look like a problem: publish them and they stop being private, hide them and they cannot rank. The rival has already solved this, and the solution is measurable.</p>
+    <p>All 1,227 of their offer buttons resolve to a login. Yet every listing renders its asking price, county, licence type and description to an anonymous visitor. Across all 3,868 URLs there are <strong>zero noindex tags, zero robots blocks</strong>. The gate is a form, never an index barrier.</p>
+
+    <div class="tiers">
+      <div class="tier">
+        <p class="who">Tier 1 &middot; public, indexed</p>
+        <h4>State and county hubs</h4>
+        <p>Live inventory rows inline with count, price, county and type, plus original guidance on the same URL. Floor is 1,099 total words and 528 unique, the measured median of the template carrying 57% of their traffic.</p>
+      </div>
+      <div class="tier">
+        <p class="who">Tier 2 &middot; public item pages</p>
+        <h4>Individual listings</h4>
+        <p>Built for conversion and trust, not rankings. They earn 1.8% for the rival, so do not over-invest, but they make the hub credible.</p>
+      </div>
+      <div class="tier">
+        <p class="who">Tier 3 &middot; teased, gated</p>
+        <h4>The private book</h4>
+        <p>Publish the honest aggregate: a real count, a real price band, a real county and type. Withhold the identifying detail behind a qualification form. The page keeps genuine substance and the listing stays private.</p>
+      </div>
+      <div class="tier">
+        <p class="who">Tier 4 &middot; never rendered</p>
+        <h4>Confidential stock</h4>
+        <p>Not published in any form, not counted, not teased.</p>
+      </div>
+    </div>
+    <p>One hard rule: never show a crawler something a visitor cannot see. That is cloaking and it is not on the table.</p>
+  </section>
+
+  <section>
+    <p class="eyebrow">Evidence 05 &middot; Deployment order</p>
+    <h2 class="head">Where the stock goes first</h2>
+    <p>317 cells scored against demand, rival coverage, existing client rankings and who actually holds the top ten. The top of the queue:</p>
+
+    <div class="queue">
+      <div class="cell">
+        <div class="cell-top"><span class="cell-name">New Jersey<span class="tag open">page exists</span></span><span class="cell-rank">#1</span></div>
+        <div class="cell-stats"><span><b>94</b> keywords</span><span><b>6,520</b>/mo</span><span>rival <b>131</b> listings</span><span>gov top-3 <b>0.47</b></span></div>
+        <p>Their best page and their weakest SERP. Median asking price $255,000, and their 131 listings run on just 4 distinct description texts. Not one has ever taken a bid.</p>
+      </div>
+      <div class="cell">
+        <div class="cell-top"><span class="cell-name">Florida<span class="tag open">page exists</span></span><span class="cell-rank">#2</span></div>
+        <div class="cell-stats"><span><b>149</b> keywords</span><span><b>7,150</b>/mo</span><span>rival <b>102</b> listings</span><span>gov top-3 <b>0.67</b></span></div>
+        <p>Highest keyword count of any cell and the highest median price at $310,000. Client page already ranks tenth. Also 4 description texts across 102 listings.</p>
+      </div>
+      <div class="cell">
+        <div class="cell-top"><span class="cell-name">Philadelphia County</span><span class="cell-rank">#3</span></div>
+        <div class="cell-stats"><span><b>12</b> keywords</span><span><b>500</b>/mo</span><span>rival <b>14</b> listings</span><span>gov top-3 <b>0.30</b></span></div>
+        <p>The cleanest SERP in the whole matrix. Only 30% of queries have a government domain in the top three. Needs a new page and about 15 listings.</p>
+      </div>
+      <div class="cell">
+        <div class="cell-top"><span class="cell-name">Pennsylvania<span class="tag open">page exists</span></span><span class="cell-rank">#7</span></div>
+        <div class="cell-stats"><span><b>96</b> keywords</span><span><b>4,560</b>/mo</span><span>rival <b>113</b> listings</span><span>gov top-3 <b>0.75</b></span></div>
+        <p>A 3,707-word page currently ranking 46th. The largest single upgrade available from an existing asset.</p>
+      </div>
+      <div class="cell">
+        <div class="cell-top"><span class="cell-name">California<span class="tag cap">capped</span></span><span class="cell-rank">#5</span></div>
+        <div class="cell-stats"><span><b>290</b> keywords</span><span><b>16,560</b>/mo</span><span>rival <b>734</b> listings</span><span>gov top-3 <b>0.94</b></span></div>
+        <p>By far the biggest demand pool, and the hardest. A government domain holds a top-three slot on 94% of its queries, and the rival's 734 listings are its deepest stock. Do not start here.</p>
+      </div>
+    </div>
+
+    <div class="callout risk">
+      <p><strong>The ceiling, stated plainly.</strong> A government or regulator domain occupies a top-three slot on 160 of 197 queries measured, which is 77% of volume-weighted demand. That caps what any commercial page can win in most cells. It is why New Jersey and Philadelphia rank first here and California does not.</p>
+    </div>
+  </section>
+
+  <section>
+    <p class="eyebrow">Evidence 06 &middot; The wedge</p>
+    <h2 class="head">What they cannot answer</h2>
+    <p>I fetched all 1,227 listings rather than sampling. The blanket "fake listings" claim is <strong>contradicted</strong>: prices are coherent and varied, stock genuinely turns over, and their seller intake demands an ABC licence number. But the specific failures are where Clint wins.</p>
+
+    <div class="split">
+      <div class="col no">
+        <h4>Their weakness</h4>
+        <ul>
+          <li>Not one of 1,227 listings publishes a licence number, licensee or premise address. Nothing is verifiable by a buyer.</li>
+          <li>No listing carries any date. Zero of 1,227 declare one, so a licence posted last week looks identical to one from 2020.</li>
+          <li>132 description texts cover 1,198 listings. New Jersey's 131 share four. Michigan's 19 share two.</li>
+          <li>The view counter is fabricated: bounded 0 to 36, every integer present, no correlation with listing age.</li>
+          <li>28 listings of 1,227 have ever taken a bid.</li>
+        </ul>
+      </div>
+      <div class="col yes">
+        <h4>His answer</h4>
+        <ul>
+          <li>A real brokerage can publish verifiable provenance on what it lists, within what confidentiality allows.</li>
+          <li>Genuine posted and updated dates, and a visible "added this week" surface. First access only shows if the date is on the page.</li>
+          <li>Per-licence description written once per asset, not once per state.</li>
+          <li>Honest activity or none at all. Do not copy an invented counter.</li>
+          <li>More stock, earlier, plus a private book they structurally cannot match.</li>
+        </ul>
+      </div>
+    </div>
+    <p>A free gift while you build: all 1,227 of their titles currently render <span class="mono">$0k</span>. Archived pages show real prices in titles as recently as June 2026, so this is a fresh regression on their highest-value template.</p>
+  </section>
+
+  <section>
+    <p class="eyebrow">Evidence 07 &middot; Fix regardless</p>
+    <h2 class="head">90% of the site points away from itself</h2>
+    <p>Of 1,006 live client pages, <strong>908 carry a canonical tag pointing at a different URL</strong>, and not one of those 908 targets is in the sitemap. I probed 40 of them: all returned 200, and all 40 served an identical title and word count to their sitemap twin.</p>
+    <p>So the same page sits at two live URLs, and the sitemap submits the one the site itself disowns. This is why 114 of the client's 244 ranking keywords land on URLs absent from the sitemap. Google is following the canonicals correctly. The sitemap is simply pointed at the wrong set.</p>
+    <p>It is a configuration fix, not a content project, and it should happen whatever else you decide.</p>
+  </section>
+
+  <section>
+    <p class="eyebrow">The build</p>
+    <h2 class="head">In this order</h2>
+    <div class="steps">
+      <div class="step">
+        <span class="step-n">1</span>
+        <div class="step-body">
+          <h4>Put New Jersey stock on the New Jersey page</h4>
+          <p>The page is written and indexed. Add live inventory rows, reframe the title from "Services" toward buying intent, and link it properly. One page, real stock.</p>
+          <span class="step-why">Their equivalent page earns 2,019 with 52 listings and 4 descriptions</span>
+        </div>
+      </div>
+      <div class="step">
+        <span class="step-n">2</span>
+        <div class="step-body">
+          <h4>Repoint the sitemap at the canonical URLs</h4>
+          <p>908 pages currently submit a URL the site disowns. Config change, no content work.</p>
+          <span class="step-why">90.3% of the client's live pages</span>
+        </div>
+      </div>
+      <div class="step">
+        <span class="step-n">3</span>
+        <div class="step-body">
+          <h4>Repeat on Florida, Pennsylvania, Ohio</h4>
+          <p>Three finished pages, currently ranking 10th, 46th and 10th. Same treatment, no new writing required.</p>
+          <span class="step-why">2,768 to 3,707 words already on the page</span>
+        </div>
+      </div>
+      <div class="step">
+        <span class="step-n">4</span>
+        <div class="step-body">
+          <h4>Build the private tier and its gate</h4>
+          <p>Honest public aggregate, qualification form at the boundary. This is the asset the rival cannot copy, and it is where the enquiries come from.</p>
+          <span class="step-why">Their gate is a login on every one of 1,227 listings</span>
+        </div>
+      </div>
+      <div class="step">
+        <span class="step-n">5</span>
+        <div class="step-body">
+          <h4>Then California and the type pages</h4>
+          <p>Biggest pool, hardest SERP, deepest rival stock. Attack it once the template is proven elsewhere. Type 41 and Type 42 are the soft entries: the rival holds 29 listings in one and none at all in the other.</p>
+          <span class="step-why">Client already ranks 4th on type 41 with no inventory</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <p class="eyebrow">Before you commit</p>
+    <h2 class="head">What this does not settle</h2>
+    <div class="open">
+      <div><strong>He publishes nothing today.</strong> Measured live: the only commerce URL on the site returns "No products found" in server-rendered HTML while sitting in the sitemap at priority 0.95. The inventory exists in the business, not on the website. Everything here depends on closing that gap.</div>
+      <div><strong>First access is a conversion edge, not a ranking one.</strong> Getting stock early wins trust and deals. On the search side it only counts if listings carry visible dates and get crawled quickly, and the rival shows no dates at all.</div>
+      <div><strong>Compliance needs a lawyer, not me.</strong> Advertising licence transfers carries state regulatory exposure, and a gated private tier may carry disclosure obligations of its own. Flagging, not ruling.</div>
+      <div><strong>Volumes and traffic are modelled.</strong> DataForSEO estimates, not Google Ads or analytics. Both sides measured identically, so ratios hold and absolute digits do not.</div>
+      <div><strong>Positions are one snapshot.</strong> United States, English, 12 September 2026. A single reading cannot show volatility.</div>
+    </div>
+  </section>
+
+  <footer>
+    Full census: 1,227 rival listings, 1,007 client pages, every ranked keyword on three domains, 197 SERPs, 317 scored cells.<br>
+    Ten paid stages, 3 adversarial refuters per finding, $5.11 of a $20 hard cap.<br>
+    Working data: Sales/liquor-license/data/
+  </footer>
+
+</div>
