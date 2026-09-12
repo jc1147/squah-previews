@@ -1,0 +1,1643 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>San Francisco, End To End — the worked geo page</title>
+<meta name="description" content="One city taken end to end as the template for every geo page on liquorlicenseagents.com: what thirteen San Francisco pages are today, what five become, and the exact URL, canonical, meta, copy and linking changes that get from one to the other.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   TOKENS — complete light palette on bare :root
+   ============================================================ */
+:root{
+  --bg:              #f7f6f3;
+  --bg-raised:       #ffffff;
+  --bg-sunk:         #efece6;
+  --bg-code:         #f1efe9;
+  --ink:             #1b1a17;
+  --ink-2:           #3f3c37;
+  --ink-3:           #6b665e;
+  --ink-inv:         #fbfaf8;
+  --rule:            #dcd7cd;
+  --rule-strong:     #b9b2a5;
+
+  --accent:          #1f5f8b;
+  --accent-soft:     #e3edf4;
+  --accent-ink:      #16455f;
+
+  --bad:             #a32a1e;
+  --bad-soft:        #fbe8e5;
+  --bad-ink:         #7d2118;
+
+  --warn:            #8a5a05;
+  --warn-soft:       #fbf1dc;
+  --warn-ink:        #6b4604;
+
+  --good:            #1f6b45;
+  --good-soft:       #e3f1e9;
+  --good-ink:        #175234;
+
+  --rival:           #9a4318;
+  --rival-soft:      #f7e9e0;
+
+  --shadow: 0 1px 2px rgba(27,26,23,.06), 0 6px 20px rgba(27,26,23,.05);
+  --focus:  #0b6bb0;
+
+  --font-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-display: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+}
+
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:            #16171a;
+    --bg-raised:     #1e2024;
+    --bg-sunk:       #121316;
+    --bg-code:       #23262b;
+    --ink:           #f0eeea;
+    --ink-2:         #cdc9c2;
+    --ink-3:         #9b968e;
+    --ink-inv:       #16171a;
+    --rule:          #33363c;
+    --rule-strong:   #4e535b;
+
+    --accent:        #7bbde4;
+    --accent-soft:   #1b2c38;
+    --accent-ink:    #a9d6f0;
+
+    --bad:           #f08a7c;
+    --bad-soft:      #331a17;
+    --bad-ink:       #f5aca1;
+
+    --warn:          #e0ab4d;
+    --warn-soft:     #2f2413;
+    --warn-ink:      #eec277;
+
+    --good:          #6dc396;
+    --good-soft:     #142a1f;
+    --good-ink:      #95d6b4;
+
+    --rival:         #e09468;
+    --rival-soft:    #2e1d13;
+
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 6px 20px rgba(0,0,0,.35);
+    --focus:  #79c0ff;
+  }
+}
+
+:root[data-theme="dark"]{
+  --bg:            #16171a;
+  --bg-raised:     #1e2024;
+  --bg-sunk:       #121316;
+  --bg-code:       #23262b;
+  --ink:           #f0eeea;
+  --ink-2:         #cdc9c2;
+  --ink-3:         #9b968e;
+  --ink-inv:       #16171a;
+  --rule:          #33363c;
+  --rule-strong:   #4e535b;
+
+  --accent:        #7bbde4;
+  --accent-soft:   #1b2c38;
+  --accent-ink:    #a9d6f0;
+
+  --bad:           #f08a7c;
+  --bad-soft:      #331a17;
+  --bad-ink:       #f5aca1;
+
+  --warn:          #e0ab4d;
+  --warn-soft:     #2f2413;
+  --warn-ink:      #eec277;
+
+  --good:          #6dc396;
+  --good-soft:     #142a1f;
+  --good-ink:      #95d6b4;
+
+  --rival:         #e09468;
+  --rival-soft:    #2e1d13;
+
+  --shadow: 0 1px 2px rgba(0,0,0,.4), 0 6px 20px rgba(0,0,0,.35);
+  --focus:  #79c0ff;
+}
+
+/* ============================================================
+   BASE — mobile first (390px)
+   ============================================================ */
+*,*::before,*::after{ box-sizing:border-box; }
+
+html{ -webkit-text-size-adjust:100%; }
+
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:var(--font-body);
+  font-size:16px;
+  line-height:1.6;
+  overflow-wrap:break-word;
+}
+
+a{ color:var(--accent); text-decoration:underline; text-underline-offset:2px; }
+a:hover{ color:var(--accent-ink); }
+a:focus-visible,
+button:focus-visible{
+  outline:3px solid var(--focus);
+  outline-offset:2px;
+  border-radius:3px;
+}
+
+h1,h2,h3,h4{ font-family:var(--font-display); line-height:1.22; margin:0 0 .5em; font-weight:600; }
+h1{ font-size:1.95rem; letter-spacing:-.01em; }
+h2{ font-size:1.5rem; margin-top:0; }
+h3{ font-size:1.16rem; font-family:var(--font-body); font-weight:700; letter-spacing:-.005em; }
+h4{ font-size:1rem; font-family:var(--font-body); font-weight:700; }
+p{ margin:0 0 1em; }
+ul,ol{ margin:0 0 1em; padding-left:1.35em; }
+li{ margin-bottom:.45em; }
+strong{ font-weight:600; }
+small{ font-size:.86rem; }
+
+.wrap{ width:100%; max-width:1100px; margin:0 auto; padding:0 18px; }
+
+/* ---------- skip link ---------- */
+.skip{
+  position:absolute; left:-9999px; top:0;
+  background:var(--accent); color:var(--ink-inv);
+  padding:12px 16px; z-index:20; border-radius:0 0 6px 0;
+  min-height:44px; display:inline-flex; align-items:center;
+}
+.skip:focus{ left:0; }
+
+/* ---------- site header ---------- */
+.topbar{
+  background:var(--bg-raised);
+  border-bottom:1px solid var(--rule);
+  position:sticky; top:0; z-index:10;
+}
+.topbar-in{
+  display:flex; flex-wrap:wrap; align-items:center; gap:6px 14px;
+  padding:8px 18px;
+  max-width:1100px; margin:0 auto;
+}
+.home-link{
+  display:inline-flex; align-items:center; gap:8px;
+  min-height:44px; padding:4px 2px;
+  font-weight:600; font-size:.92rem;
+  text-decoration:none; color:var(--ink-2);
+}
+.home-link:hover{ color:var(--accent); text-decoration:underline; }
+.home-link .arrow{ color:var(--accent); font-size:1.05rem; line-height:1; }
+.crumb{
+  font-size:.8rem; letter-spacing:.07em; text-transform:uppercase;
+  color:var(--ink-3); font-weight:600;
+}
+.crumb-sep{ color:var(--rule-strong); }
+.theme-btn{
+  margin-left:auto;
+  min-height:44px; min-width:44px;
+  padding:8px 14px;
+  border:1px solid var(--rule-strong);
+  border-radius:999px;
+  background:var(--bg-sunk); color:var(--ink-2);
+  font:inherit; font-size:.83rem; font-weight:600;
+  cursor:pointer;
+}
+.theme-btn:hover{ border-color:var(--accent); color:var(--accent); }
+
+/* ---------- hero ---------- */
+.hero{ padding:30px 0 8px; }
+.eyebrow{
+  font-size:.75rem; letter-spacing:.13em; text-transform:uppercase;
+  color:var(--accent); font-weight:700; margin:0 0 .7em;
+}
+.hero h1{ margin-bottom:.45em; }
+.standfirst{ font-size:1.09rem; color:var(--ink-2); max-width:62ch; }
+.hero-meta{
+  margin-top:18px; padding-top:14px;
+  border-top:1px solid var(--rule);
+  font-size:.86rem; color:var(--ink-3);
+  display:flex; flex-direction:column; gap:4px;
+}
+
+/* ---------- the headline scoreboard ---------- */
+.score{
+  margin:26px 0 8px;
+  display:flex; flex-direction:column; gap:0;
+  border:1px solid var(--rule-strong);
+  border-radius:9px;
+  overflow:hidden;
+  box-shadow:var(--shadow);
+}
+.score-side{ padding:18px 17px; background:var(--bg-raised); }
+.score-side + .score-side{ border-top:1px solid var(--rule-strong); }
+.score-side.is-them{ background:var(--rival-soft); }
+.score-lab{
+  display:block; font-size:.75rem; letter-spacing:.11em; text-transform:uppercase;
+  font-weight:700; color:var(--ink-3); margin-bottom:.6em;
+}
+.score-fig{
+  display:block; font-family:var(--font-display); font-weight:700;
+  font-size:2.6rem; line-height:1; letter-spacing:-.025em;
+  font-variant-numeric:tabular-nums; color:var(--bad);
+}
+.score-side.is-them .score-fig{ color:var(--rival); }
+.score-unit{ display:block; margin-top:.4em; font-weight:600; font-size:.98rem; }
+.score-sub{ display:block; margin-top:.5em; font-size:.86rem; color:var(--ink-3); }
+.score-verdict{
+  background:var(--bg-sunk);
+  border-top:1px solid var(--rule-strong);
+  padding:15px 17px;
+  font-size:.95rem;
+}
+.score-verdict p{ margin:0; }
+
+/* ---------- stat tiles ---------- */
+.tiles{ display:flex; flex-direction:column; gap:12px; margin:26px 0 6px; padding:0; list-style:none; }
+.tile{
+  background:var(--bg-raised); border:1px solid var(--rule);
+  border-radius:8px; padding:15px 16px; box-shadow:var(--shadow);
+}
+.tile .fig{
+  font-family:var(--font-display); font-size:2rem; font-weight:700;
+  line-height:1.05; font-variant-numeric:tabular-nums; letter-spacing:-.02em;
+  display:block; margin-bottom:.15em;
+}
+.tile .lab{ display:block; font-weight:600; font-size:.95rem; margin-bottom:.25em; }
+.tile .sub{ display:block; font-size:.82rem; color:var(--ink-3); }
+.tile.is-bad .fig{ color:var(--bad); }
+.tile.is-good .fig{ color:var(--good); }
+.tile.is-warn .fig{ color:var(--warn); }
+.tile.is-plain .fig{ color:var(--ink); }
+
+/* ---------- sections ---------- */
+.sec{ padding:34px 0 10px; border-top:1px solid var(--rule); margin-top:30px; scroll-margin-top:70px; }
+.sec:first-of-type{ border-top:0; margin-top:0; }
+.sec-num{
+  font-family:var(--font-mono); font-size:.78rem; color:var(--ink-3);
+  letter-spacing:.1em; display:block; margin-bottom:.5em;
+}
+.lede{ font-size:1.03rem; color:var(--ink-2); max-width:62ch; }
+.body-col{ max-width:70ch; }
+
+/* ---------- contents ---------- */
+.toc{ list-style:none; margin:18px 0 6px; padding:0; }
+.toc li{ margin:0; border-bottom:1px solid var(--rule); }
+.toc a{
+  display:flex; gap:12px; align-items:baseline;
+  min-height:44px; padding:9px 2px;
+  text-decoration:none; color:var(--ink);
+}
+.toc a:hover{ color:var(--accent); text-decoration:underline; }
+.toc-n{ font-family:var(--font-mono); font-size:.8rem; color:var(--ink-3); flex:0 0 2.2em; }
+
+/* ---------- callouts ---------- */
+.note{
+  border:1px solid var(--rule); border-left:4px solid var(--rule-strong);
+  background:var(--bg-raised);
+  border-radius:6px; padding:14px 15px; margin:18px 0;
+  font-size:.94rem;
+}
+.note p:last-child{ margin-bottom:0; }
+.note h4{ margin-bottom:.4em; }
+.note.is-bad{ border-left-color:var(--bad); background:var(--bad-soft); }
+.note.is-warn{ border-left-color:var(--warn); background:var(--warn-soft); }
+.note.is-good{ border-left-color:var(--good); background:var(--good-soft); }
+.note.is-accent{ border-left-color:var(--accent); background:var(--accent-soft); }
+
+/* ---------- defect markers ---------- */
+.dflag{
+  display:inline-block;
+  font-family:var(--font-mono); font-size:.72rem; font-weight:500;
+  background:var(--bad); color:#ffffff;
+  padding:1px 6px; border-radius:3px;
+  white-space:nowrap; vertical-align:middle;
+}
+.dflag.is-warn{ background:var(--warn); color:#ffffff; }
+.dflag.is-hold{ background:var(--accent); color:#ffffff; }
+
+/* ---------- URL pair ---------- */
+.pair{ margin:20px 0; display:flex; flex-direction:column; gap:0; }
+.pair-row{
+  background:var(--bg-raised); border:1px solid var(--rule);
+  padding:13px 14px;
+}
+.pair-row:first-child{ border-radius:7px 7px 0 0; border-bottom:0; }
+.pair-row:last-child{ border-radius:0 0 7px 7px; }
+.pair-row.is-wrong{ border-left:4px solid var(--bad); }
+.pair-row.is-right{ border-left:4px solid var(--good); }
+.pair-lab{
+  display:block; font-size:.76rem; letter-spacing:.08em; text-transform:uppercase;
+  font-weight:700; color:var(--ink-3); margin-bottom:.45em;
+}
+.pair-url{
+  font-family:var(--font-mono); font-size:.95rem; line-height:1.5;
+  display:block; word-break:break-all;
+}
+.seg-drop{
+  background:var(--bad-soft); color:var(--bad-ink);
+  border-bottom:2px solid var(--bad);
+  padding:1px 2px; border-radius:2px; font-weight:500;
+}
+.seg-keep{
+  background:var(--good-soft); color:var(--good-ink);
+  border-bottom:2px solid var(--good);
+  padding:1px 2px; border-radius:2px; font-weight:500;
+}
+.pair-say{ display:block; margin-top:.5em; font-size:.86rem; color:var(--ink-3); }
+
+/* ---------- code / inline mono ---------- */
+code{
+  font-family:var(--font-mono); font-size:.88em;
+  background:var(--bg-code); padding:1px 5px; border-radius:3px;
+  border:1px solid var(--rule);
+}
+.rule-box{
+  background:var(--bg-code); border:1px solid var(--rule-strong);
+  border-radius:6px; padding:14px 15px; margin:18px 0;
+  font-family:var(--font-mono); font-size:.86rem; line-height:1.7;
+  overflow-x:auto;
+}
+.rule-box b{ color:var(--accent-ink); font-weight:500; }
+
+/* ---------- tables ---------- */
+.tfig{ margin:18px 0 8px; }
+.tcap{
+  font-size:.86rem; color:var(--ink-3); line-height:1.5;
+  background:var(--bg-raised);
+  border:1px solid var(--rule); border-bottom:0;
+  border-radius:7px 7px 0 0;
+  padding:12px 14px 11px;
+}
+.tcap b{ color:var(--ink-2); }
+.tfig .tscroll{ margin:0; border-radius:0 0 7px 7px; }
+.tscroll{
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+  border:1px solid var(--rule); border-radius:7px;
+  background:var(--bg-raised);
+  margin:18px 0 8px;
+}
+table{ border-collapse:collapse; width:100%; min-width:0; font-size:.9rem; }
+th,td{ padding:9px 12px; text-align:left; border-bottom:1px solid var(--rule); vertical-align:top; }
+thead th{
+  background:var(--bg-sunk); font-size:.78rem; letter-spacing:.04em;
+  text-transform:uppercase; color:var(--ink-2); white-space:nowrap;
+}
+tbody tr:last-child td{ border-bottom:0; }
+td.num,th.num{ text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap; }
+td.mono{ font-family:var(--font-mono); font-size:.82rem; word-break:break-all; min-width:16ch; }
+tr.is-total td{ font-weight:700; background:var(--bg-sunk); }
+tr.is-flagged td{ background:var(--bad-soft); }
+tr.is-held td{ background:var(--accent-soft); }
+.c-bad{ color:var(--bad); font-weight:600; }
+.c-good{ color:var(--good); font-weight:600; }
+.c-warn{ color:var(--warn); font-weight:600; }
+.c-mute{ color:var(--ink-3); }
+.tnote{ font-size:.84rem; color:var(--ink-3); margin:8px 2px 0; max-width:78ch; }
+.t-wide td:first-child{ line-height:1.35; }
+
+/* ---------- head-to-head bars ---------- */
+.h2h{ list-style:none; margin:18px 0 8px; padding:0; }
+.h2h li{
+  border:1px solid var(--rule); border-radius:7px;
+  background:var(--bg-raised);
+  padding:13px 14px; margin-bottom:10px;
+}
+.h2h-kw{ display:block; font-weight:700; font-size:.97rem; margin-bottom:.2em; }
+.h2h-vol{ display:block; font-size:.8rem; color:var(--ink-3); margin-bottom:.7em; }
+.h2h-row{ display:flex; align-items:center; gap:10px; margin-bottom:6px; }
+.h2h-row:last-child{ margin-bottom:0; }
+.h2h-who{ flex:0 0 7.5em; font-size:.82rem; font-weight:600; }
+.h2h-track{
+  flex:1 1 auto; height:16px; background:var(--bg-sunk);
+  border-radius:4px; overflow:hidden; min-width:60px;
+}
+.h2h-fill{ display:block; height:100%; border-radius:4px; }
+.h2h-fill.f-us{ background:var(--bad); }
+.h2h-fill.f-them{ background:var(--rival); }
+.h2h-pos{
+  flex:0 0 5.6em; text-align:right; font-size:.82rem; font-weight:700;
+  font-variant-numeric:tabular-nums;
+}
+
+/* ---------- copy specimen ---------- */
+.spec{
+  border:1px solid var(--rule-strong); border-radius:8px;
+  background:var(--bg-raised); margin:20px 0; overflow:hidden;
+  box-shadow:var(--shadow);
+}
+.spec-head{
+  background:var(--bg-sunk); border-bottom:1px solid var(--rule-strong);
+  padding:11px 15px;
+  font-family:var(--font-mono); font-size:.82rem; color:var(--ink-2);
+  word-break:break-all;
+}
+.spec-body{ padding:15px; }
+.spec-field{ margin-bottom:17px; }
+.spec-field:last-child{ margin-bottom:0; }
+.spec-lab{
+  display:block; font-size:.73rem; letter-spacing:.09em; text-transform:uppercase;
+  font-weight:700; color:var(--ink-3); margin-bottom:.45em;
+}
+.spec-val{
+  display:block; background:var(--bg-code);
+  border:1px solid var(--rule); border-radius:5px;
+  padding:10px 12px; font-size:.95rem; line-height:1.55;
+}
+.spec-val.is-h1{ font-family:var(--font-display); font-size:1.18rem; font-weight:700; line-height:1.3; }
+.spec-val p{ margin:0 0 .8em; }
+.spec-val p:last-child{ margin-bottom:0; }
+.spec-count{
+  display:inline-block; margin-left:.5em;
+  font-family:var(--font-mono); font-size:.74rem; font-weight:500;
+  color:var(--good-ink); background:var(--good-soft);
+  border:1px solid var(--good); border-radius:3px; padding:0 5px;
+  white-space:nowrap;
+}
+
+/* ---------- section stack ---------- */
+.stack{ list-style:none; margin:16px 0; padding:0; }
+.stack li{
+  border-left:3px solid var(--accent); background:var(--bg-raised);
+  border-top:1px solid var(--rule); border-right:1px solid var(--rule);
+  border-bottom:1px solid var(--rule);
+  border-radius:0 6px 6px 0;
+  padding:11px 13px; margin-bottom:9px;
+}
+.stack b{ display:block; font-size:.95rem; margin-bottom:.2em; }
+.stack span{ display:block; font-size:.88rem; color:var(--ink-2); }
+
+/* ---------- link rules ---------- */
+.lrules{ list-style:none; margin:16px 0; padding:0; }
+.lrules li{
+  display:flex; gap:10px; align-items:flex-start;
+  padding:11px 0; border-bottom:1px solid var(--rule); margin:0;
+}
+.lrules li:last-child{ border-bottom:0; }
+.lr-n{
+  flex:0 0 auto; font-family:var(--font-mono); font-size:.78rem; font-weight:500;
+  color:var(--ink-inv); background:var(--accent);
+  border-radius:3px; padding:2px 6px; margin-top:2px;
+}
+.lrules b{ display:block; }
+.lrules span{ font-size:.9rem; color:var(--ink-2); }
+
+/* ---------- checks ---------- */
+.checks{ list-style:none; margin:16px 0; padding:0; }
+.checks li{
+  display:flex; gap:10px; align-items:flex-start;
+  padding:11px 0; border-bottom:1px solid var(--rule); margin:0;
+}
+.checks li:last-child{ border-bottom:0; }
+.tickmark{ flex:0 0 auto; font-weight:700; font-size:1.05rem; line-height:1.35; color:var(--good); }
+.tickmark.x{ color:var(--bad); }
+.checks b{ display:block; }
+.checks span{ font-size:.9rem; color:var(--ink-2); }
+
+/* ---------- unresolved ---------- */
+.unres{ list-style:none; margin:16px 0; padding:0; }
+.unres li{
+  border:1px solid var(--rule); border-left:4px solid var(--warn);
+  background:var(--bg-raised);
+  border-radius:6px; padding:13px 14px; margin-bottom:11px;
+}
+.unres b{ display:block; margin-bottom:.25em; }
+.unres span{ font-size:.9rem; color:var(--ink-2); display:block; }
+
+/* ---------- footer ---------- */
+.foot{
+  margin-top:44px; border-top:2px solid var(--rule-strong);
+  background:var(--bg-sunk);
+  padding:26px 0 34px;
+}
+.foot h2{ font-size:1.08rem; font-family:var(--font-body); font-weight:700; }
+.foot p, .foot li{ font-size:.87rem; color:var(--ink-2); }
+.foot .fine{ font-size:.8rem; color:var(--ink-3); }
+.foot-back{ display:inline-flex; align-items:center; min-height:44px; font-weight:600; }
+
+/* ============================================================
+   >= 768px
+   ============================================================ */
+@media (min-width:768px){
+  body{ font-size:17px; }
+  .wrap{ padding:0 28px; }
+  .topbar-in{ padding:8px 28px; }
+  h1{ font-size:2.6rem; }
+  h2{ font-size:1.8rem; }
+  h3{ font-size:1.25rem; }
+  .hero{ padding:44px 0 10px; }
+  .standfirst{ font-size:1.18rem; }
+  .hero-meta{ flex-direction:row; gap:22px; flex-wrap:wrap; }
+  .score{ flex-direction:row; flex-wrap:wrap; }
+  .score-side{ flex:1 1 46%; }
+  .score-side + .score-side{ border-top:0; border-left:1px solid var(--rule-strong); }
+  .score-verdict{ flex:1 1 100%; }
+  .score-fig{ font-size:3.2rem; }
+  .tiles{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
+  .tile .fig{ font-size:2.25rem; }
+  .pair-row{ padding:15px 17px; }
+  .pair-url{ font-size:1.02rem; word-break:normal; }
+  .sec{ padding:44px 0 10px; }
+  table{ font-size:.93rem; }
+  .t-wide th:first-child, .t-wide td:first-child{ min-width:22ch; }
+  .toc{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:0 26px; }
+  .spec-body{ padding:18px; }
+  .h2h-who{ flex:0 0 9em; }
+}
+
+/* ============================================================
+   >= 1200px
+   ============================================================ */
+@media (min-width:1200px){
+  .wrap{ padding:0 36px; }
+  .topbar-in{ padding:10px 36px; }
+  h1{ font-size:3rem; }
+  .tiles{ grid-template-columns:repeat(3,minmax(0,1fr)); }
+  .hero{ padding:56px 0 12px; }
+  .score-fig{ font-size:3.6rem; }
+}
+
+@media (prefers-reduced-motion:reduce){
+  *{ transition:none !important; animation:none !important; }
+}
+</style>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to the report</a>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <a class="home-link" href="index.html"><span class="arrow" aria-hidden="true">&#8592;</span> Research bundle</a>
+    <span class="crumb"><span class="crumb-sep" aria-hidden="true">/</span> San Francisco, end to end</span>
+    <button class="theme-btn" type="button" id="themeBtn" hidden>Dark / light</button>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap">
+
+  <div class="hero">
+    <p class="eyebrow">The worked example</p>
+    <h1>San Francisco, end to end</h1>
+    <p class="standfirst">One city, taken all the way through, as the template for the rest. Thirteen San Francisco pages exist today across two competing address trees. Five should exist. This is every URL, canonical tag, title, description, heading, paragraph and internal link that changes &mdash; written out, not described.</p>
+    <div class="hero-meta">
+      <span>Census pulled 12 September 2026. All thirteen pages re-fetched live 13 September 2026.</span>
+      <span>Every figure re-verified against the source files before it was printed here.</span>
+    </div>
+  </div>
+
+<section class="sec" id="s1">
+  <span class="sec-num">01</span>
+  <h2>The headline</h2>
+
+  <div class="score">
+    <div class="score-side">
+      <span class="score-lab">liquorlicenseagents.com &mdash; San&nbsp;Francisco</span>
+      <span class="score-fig">4.2</span>
+      <span class="score-unit">modelled visits a month</span>
+      <span class="score-sub">From <strong>13 pages</strong> carrying <strong>16,727 words</strong>. Nine ranked search terms. Best position on the page: 10th.</span>
+    </div>
+    <div class="score-side is-them">
+      <span class="score-lab">liquorlicenseauctioneers.com &mdash; San&nbsp;Francisco</span>
+      <span class="score-fig">22.2</span>
+      <span class="score-unit">modelled visits a month</span>
+      <span class="score-sub">From <strong>1 page</strong>. Four ranked search terms, at positions 3, 3, 4 and 10.</span>
+    </div>
+    <div class="score-verdict">
+      <p><strong>One page beats thirteen by 5.3&times; on modelled traffic. Per page, the gap is 69&times;.</strong> The thirteen pages are not thin, badly written or missing. They out-write the page that beats them, on the same measuring instrument, by 2.6&times;. They lose because they are thirteen pages answering one question, and the rival is one page answering it with prices on it.</p>
+    </div>
+  </div>
+
+  <p class="tnote">&ldquo;Modelled visits&rdquo; is a DataForSEO estimate calculated from ranking position and search volume. It is not measured sessions, and no analytics or Search Console data from either site entered this research. Read it as a scale for comparing pages against each other, never as a visitor count. The position and keyword counts are exact &mdash; they are a census of what the supplier&rsquo;s index holds for each domain. All of this is observational: it shows which kind of page sits in the positions that earn clicks, not that the page shape put it there.</p>
+
+  <ul class="tiles">
+    <li class="tile is-bad">
+      <span class="fig">6 of 9</span>
+      <span class="lab">ranked terms answered by the Type 48 bars page</span>
+      <span class="sub">Including the generic query &ldquo;liquor license san francisco&rdquo;. The narrowest page in the set fields the broadest queries.</span>
+    </li>
+    <li class="tile is-bad">
+      <span class="fig">0 of 13</span>
+      <span class="lab">sitemap addresses that rank for anything</span>
+      <span class="sub">All three ranking addresses are canonical targets &mdash; and not one of the 908 canonical targets appears in any sitemap the site submits.</span>
+    </li>
+    <li class="tile is-warn">
+      <span class="fig">2 of 13</span>
+      <span class="lab">San Francisco pages sit in the 49-page hold list</span>
+      <span class="sub">Type&nbsp;21 and Type&nbsp;48 on the /cities/ path. A bulk canonical repoint would put both into a redirect loop. Re-confirmed live today.</span>
+    </li>
+    <li class="tile is-good">
+      <span class="fig">2.6&times;</span>
+      <span class="lab">more of its own words than the page beating it</span>
+      <span class="sub">Client city-type template median 895.5 own words; the rival county template that wins San Francisco, 339. Same instrument, same run.</span>
+    </li>
+    <li class="tile is-plain">
+      <span class="fig">30</span>
+      <span class="lab">San Francisco County licences on the rival&rsquo;s shelf</span>
+      <span class="sub">Type 47 &times;18, Type 21 &times;10, Type 48 &times;1, Type 20 &times;1. $15,000 to $350,000, median $205,000.</span>
+    </li>
+    <li class="tile is-plain">
+      <span class="fig">0</span>
+      <span class="lab">priced licences on any of the thirteen client pages</span>
+      <span class="sub">The client&rsquo;s San Francisco pages describe licence types. They never offer a licence.</span>
+    </li>
+  </ul>
+
+  <div class="note is-accent">
+    <h4>What this document is for</h4>
+    <p>San Francisco is the pattern, not a special case. The same duplication, the same canonical defect and the same folder bug run through the geo pages across the site. Work this city, then run the resulting rules over the rest &mdash; section&nbsp;10 gives the counts. The technical work order for the canonical fix is in <a href="sitemap-plan.html">the sitemap plan</a>; what the destination looks like once built is the <a href="https://jc1147.github.io/squah-previews/liquor-license/">New Jersey preview</a>.</p>
+  </div>
+
+  <ol class="toc">
+    <li><a href="#s2"><span class="toc-n">02</span><span>What exists today &mdash; all thirteen pages</span></a></li>
+    <li><a href="#s3"><span class="toc-n">03</span><span>Why it fails</span></a></li>
+    <li><a href="#s4"><span class="toc-n">04</span><span>What it becomes &mdash; five pages</span></a></li>
+    <li><a href="#s5"><span class="toc-n">05</span><span>The migration table</span></a></li>
+    <li><a href="#s6"><span class="toc-n">06</span><span>Canonicals and sitemap</span></a></li>
+    <li><a href="#s7"><span class="toc-n">07</span><span>Titles and descriptions, written</span></a></li>
+    <li><a href="#s8"><span class="toc-n">08</span><span>Page text, written</span></a></li>
+    <li><a href="#s9"><span class="toc-n">09</span><span>Internal linking</span></a></li>
+    <li><a href="#s10"><span class="toc-n">10</span><span>The same rule at scale</span></a></li>
+  </ol>
+</section>
+
+<section class="sec" id="s2">
+  <span class="sec-num">02</span>
+  <h2>What exists today</h2>
+  <p class="lede">Thirteen pages: six on the <code>/cities/</code> path, seven on the <code>/counties/</code> path. All thirteen returned HTTP 200 with no redirect when re-fetched live on 13 September 2026. Every title, description, heading and canonical below was read from that live HTML and matched the 12 September census exactly &mdash; with one exception, flagged in the defects that follow.</p>
+
+  <div class="tfig">
+    <div class="tcap"><b>All thirteen San Francisco addresses.</b> &ldquo;Canonical it declares&rdquo; is the address the page tells Google is its real home. Word counts are from the 12 September census; &ldquo;own words&rdquo; strips the text shared by 80% or more of the pages on the same template, so it is a labelled estimate rather than a raw count. Ranking data is a census of the supplier&rsquo;s index for this domain. Positions are absolute SERP positions.</div>
+    <div class="tscroll">
+      <table class="t-wide">
+        <thead>
+          <tr>
+            <th scope="col">Address</th>
+            <th scope="col">Canonical it declares</th>
+            <th scope="col">Template</th>
+            <th scope="col" class="num">Words</th>
+            <th scope="col" class="num">Own</th>
+            <th scope="col">Title, with character count</th>
+            <th scope="col">What it ranks for</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="mono">/cities/san-francisco/san-francisco-liquor-licenses-for-restaurants-bars-and-retailers/</td>
+            <td class="mono">/cities/san-francisco-liquor-licenses-for-restaurants-bars-and-retailers/</td>
+            <td>city-detail</td>
+            <td class="num">1,332</td>
+            <td class="num">852</td>
+            <td>San Francisco Liquor License | Buy, Sell, Transfer <span class="c-good">50</span></td>
+            <td class="c-mute">Nothing</td>
+          </tr>
+          <tr>
+            <td class="mono">/cities/san-francisco/san-francisco-type-20-liquor-license-for-beer-and-wine-off-sale/</td>
+            <td class="mono">/cities/san-francisco-type-20-liquor-license-for-beer-and-wine-off-sale/</td>
+            <td>city-detail</td>
+            <td class="num">1,286</td>
+            <td class="num">806</td>
+            <td>San Francisco Type 20 Liquor License: Off-Sale Beer &amp; Wine <span class="c-good">58</span></td>
+            <td class="c-mute">Nothing</td>
+          </tr>
+          <tr class="is-held">
+            <td class="mono">/cities/san-francisco/san-francisco-type-21-full-liquor-license-for-liquor-stores/ <span class="dflag is-hold">IN THE HOLD LIST</span></td>
+            <td class="mono">/cities/san-francisco-type-21-full-liquor-license-for-liquor-stores/ <span class="c-bad">301s straight back to this page</span></td>
+            <td>city-detail</td>
+            <td class="num">1,269</td>
+            <td class="num">789</td>
+            <td>San Francisco Type 21 Liquor License: Off-Sale General <span class="c-good">54</span></td>
+            <td class="c-mute">Nothing</td>
+          </tr>
+          <tr>
+            <td class="mono">/cities/san-francisco/san-francisco-type-41-beer-and-wine-license-for-restaurants/</td>
+            <td class="mono">/cities/san-francisco-type-41-beer-and-wine-license-for-restaurants/</td>
+            <td>city-detail</td>
+            <td class="num">1,363</td>
+            <td class="num">883</td>
+            <td>San Francisco Type 41 Liquor License: Beer &amp; Wine for Restaurants <span class="c-warn">65</span></td>
+            <td class="c-mute">Nothing</td>
+          </tr>
+          <tr>
+            <td class="mono">/cities/san-francisco/san-francisco-type-47-full-liquor-license-for-restaurants/</td>
+            <td class="mono">/cities/san-francisco-type-47-full-liquor-license-for-restaurants/</td>
+            <td>city-detail</td>
+            <td class="num">1,297</td>
+            <td class="num">817</td>
+            <td>San Francisco Type 47 Liquor License: Essential Guide <span class="c-good">53</span></td>
+            <td>Its canonical ranks: &ldquo;liquor license 47&rdquo; <strong>10th</strong>, &ldquo;47 liquor license&rdquo; 20th</td>
+          </tr>
+          <tr class="is-held">
+            <td class="mono">/cities/san-francisco/san-francisco-type-48-full-liquor-license-for-bars-and-nightclubs/ <span class="dflag is-hold">IN THE HOLD LIST</span></td>
+            <td class="mono">/cities/san-francisco-type-48-full-liquor-license-for-bars-and-nightclubs/ <span class="c-bad">301s straight back to this page</span></td>
+            <td>city-detail</td>
+            <td class="num">1,327</td>
+            <td class="num">847</td>
+            <td>San Francisco Type 48 Liquor License: Essential Guide <span class="c-good">53</span></td>
+            <td>Its canonical ranks for <strong>six</strong> terms, including &ldquo;liquor license san francisco&rdquo; 13th and &ldquo;sf liquor license&rdquo; 21st</td>
+          </tr>
+          <tr class="is-flagged">
+            <td class="mono">/counties/san-francisco-county <span class="dflag">NO H1 AT ALL</span> <span class="dflag">NO DESCRIPTION</span></td>
+            <td class="mono">/counties/san-francisco-county <span class="c-good">points at itself</span></td>
+            <td>county-category</td>
+            <td class="num">700</td>
+            <td class="num">228</td>
+            <td>San Francisco County | Counties - Liquor License Agents <span class="c-good">55</span></td>
+            <td class="c-mute">Nothing</td>
+          </tr>
+          <tr class="is-flagged">
+            <td class="mono">/counties/san-francisco-county/san-francisco-county-liquor-licenses/ <span class="dflag">DOUBLED H1</span> <span class="dflag is-warn">220-CHAR DESCRIPTION</span></td>
+            <td class="mono">/counties/san-francisco-county-liquor-licenses/</td>
+            <td>county-detail</td>
+            <td class="num">1,494</td>
+            <td class="num">1,014</td>
+            <td>San Francisco County Liquor Licenses for Restaurants, Bars, and Retailers <span class="c-bad">73</span></td>
+            <td class="c-mute">Nothing</td>
+          </tr>
+          <tr>
+            <td class="mono">/counties/san-francisco-county/san-francisco-county-type-20/</td>
+            <td class="mono">/counties/san-francisco-county-type-20/</td>
+            <td>county-detail</td>
+            <td class="num">1,339</td>
+            <td class="num">859</td>
+            <td>San Francisco County Type 20 Liquor License for Beer and Wine Off Sale <span class="c-bad">70</span></td>
+            <td class="c-mute">Nothing</td>
+          </tr>
+          <tr>
+            <td class="mono">/counties/san-francisco-county/san-francisco-county-type-21/</td>
+            <td class="mono">/counties/san-francisco-county-type-21/</td>
+            <td>county-detail</td>
+            <td class="num">1,322</td>
+            <td class="num">842</td>
+            <td>San Francisco County Type 21 Full Liquor License for Liquor Stores <span class="c-bad">66</span></td>
+            <td>Its canonical ranks: &ldquo;type 21 liquor license&rdquo; 15th</td>
+          </tr>
+          <tr>
+            <td class="mono">/counties/san-francisco-county/san-francisco-county-type-41/</td>
+            <td class="mono">/counties/san-francisco-county-type-41/</td>
+            <td>county-detail</td>
+            <td class="num">1,330</td>
+            <td class="num">850</td>
+            <td>San Francisco County Type 41 Beer and Wine License for Restaurants <span class="c-bad">66</span></td>
+            <td class="c-mute">Nothing</td>
+          </tr>
+          <tr>
+            <td class="mono">/counties/san-francisco-county/san-francisco-county-type-48/</td>
+            <td class="mono">/counties/san-francisco-county-type-48/</td>
+            <td>county-detail</td>
+            <td class="num">1,335</td>
+            <td class="num">855</td>
+            <td>San Francisco County Type 48 Full Liquor License for Bars and Nightclubs <span class="c-bad">72</span></td>
+            <td class="c-mute">Nothing</td>
+          </tr>
+          <tr class="is-flagged">
+            <td class="mono">/counties/<strong>los-angeles-county</strong>/san-francisco-county-type-47/ <span class="dflag">WRONG FOLDER</span></td>
+            <td class="mono">/counties/san-francisco-county-type-47/ <span class="c-good">this one is correct</span></td>
+            <td>county-detail</td>
+            <td class="num">1,333</td>
+            <td class="num">853</td>
+            <td>San Francisco County Type 47 Full Liquor License for Restaurants <span class="c-bad">64</span></td>
+            <td class="c-mute">Nothing</td>
+          </tr>
+          <tr class="is-total">
+            <td>13 pages, all live at 200</td>
+            <td>12 point elsewhere, 1 points at itself</td>
+            <td>3 templates</td>
+            <td class="num">16,727</td>
+            <td class="num">10,495</td>
+            <td>7 of 13 run past 60 characters</td>
+            <td>3 addresses rank &mdash; none of them a sitemap address</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h3>Defect one &mdash; the wrong-folder bug</h3>
+  <p class="body-col">San Francisco County Type 47 is filed inside the <strong>Los Angeles County</strong> folder. The canonical tag on it is right; the address it lives at is wrong.</p>
+
+  <div class="pair">
+    <div class="pair-row is-wrong">
+      <span class="pair-lab">The address in the sitemap</span>
+      <span class="pair-url">/counties/<span class="seg-drop">los-angeles-county</span>/san-francisco-county-type-47/</span>
+      <span class="pair-say">Live HTTP 200, 13 September 2026. Indexable, in the sitemap, and inside another county&rsquo;s folder.</span>
+    </div>
+    <div class="pair-row is-right">
+      <span class="pair-lab">The canonical it declares</span>
+      <span class="pair-url">/counties/<span class="seg-keep">san-francisco-county-type-47</span>/</span>
+      <span class="pair-say">Live HTTP 200, 13 September 2026. Correct, and not in any sitemap.</span>
+    </div>
+  </div>
+
+  <div class="note is-warn">
+    <h4>How far this reaches, measured &mdash; and a correction</h4>
+    <p>Searching the census for every two-level geo address whose slug does not match its folder returns <strong>84</strong> pages. That number is misleading and should not be reported as the bug count. Eighty-two of the 84 sit in <code>/counties/arizona-county/</code> (15) and <code>/counties/florida-county/</code> (67) &mdash; folders named after a <em>state</em>, holding that state&rsquo;s counties. Neither folder has a page of its own, and every slug inside them names a county of that state. That is an inconsistent naming convention, not a misfiling.</p>
+    <p>Filter to folders proven real by their own sibling pages, and the genuine cross-jurisdiction misfiles across the whole site are <strong>two</strong>: this San Francisco Type 47 page under Los Angeles County, and <code>/cities/la-mirada/laguna-woods-type-61-license/</code> &mdash; a Laguna Woods page inside the La Mirada folder. A third address, <code>/counties/pinellas-county/liquor-license-agents-supports-2cop/</code>, is an article with no geography in its slug sitting in a county folder: a stray, not a misfile.</p>
+  </div>
+
+  <h3>Defect two &mdash; the doubled H1</h3>
+  <p class="body-col">On <code>/counties/san-francisco-county/san-francisco-county-liquor-licenses/</code> the heading text is printed twice inside a single H1 element. Verbatim from the live HTML, 13 September 2026:</p>
+  <div class="rule-box">&lt;h1 class="h1 article-title sg-mb-5"&gt;San Francisco County Liquor Licenses for Restaurants, Bars, and Retailers<b>San Francisco County Liquor Licenses for Restaurants, Bars, and Retailers</b>&lt;/h1&gt;</div>
+  <p class="body-col">One element, 146 characters, the sentence repeated with no separator. The census recorded it, and the live page still serves it.</p>
+
+  <h3>Defect three &mdash; the truncated description, which is not a page defect</h3>
+  <div class="note is-bad">
+    <h4>The data overruled the brief here</h4>
+    <p>The census records the description on that same page as 41 characters, cut mid-sentence: <code>San Francisco County is one of California</code>. The live page does not serve that. It serves the complete sentence, 220 characters:</p>
+    <p><em>&ldquo;San Francisco County is one of California&rsquo;s most active hospitality and retail markets, with liquor licensing needs that range from neighborhood restaurants to high volume nightlife districts, hotels, and package stores.&rdquo;</em></p>
+    <p>The 41-character value is an <strong>instrument artefact</strong>. The census parser terminated the <code>content</code> attribute at the first apostrophe &mdash; the one in <code>California&rsquo;s</code> &mdash; and 41 characters is exactly the text up to that point. The same page&rsquo;s Type 20 sibling is recorded at 20 characters, <code>San Francisco County</code>, which is exactly the text before the apostrophe in <code>County&rsquo;s</code>; its real description is 146 characters and perfectly fine.</p>
+    <p><strong>Control test.</strong> The census records <code>/cities/beverly-hills/beverly-hills-type-20-license/</code> at 13 characters, <code>Beverly Hills</code>. Fetched live, that page serves a 197-character description beginning <code>Beverly Hills&rsquo;s grocery stores</code>. The artefact reproduces. <strong>85 of the 1,007 census rows</strong> carry a description under 100 characters, and every single one of them ends without terminal punctuation on a word that would be followed by an apostrophe &mdash; a place name, or <code>California</code>, <code>County</code>, <code>Florida</code>, <code>Arizona</code>. Treat all 85 recorded lengths as unreliable and re-measure them from live HTML before acting.</p>
+    <p><strong>There is still a real defect on that page.</strong> Its description is 220 characters, roughly 60 past the point Google truncates. So is Type 21 at 243, Type 48 at 211 and Type 47 at 186. Seven of the thirteen exceed 160 characters, and the county hub has no description at all.</p>
+  </div>
+
+  <h3>Defect four &mdash; the county hub is empty</h3>
+  <p class="body-col"><code>/counties/san-francisco-county</code> is the page that should be the front door for the whole county. It carries <strong>no H1 element at all</strong>, an <strong>empty description</strong>, 700 total words and 228 of its own &mdash; the weakest page of the thirteen by both measures, and the only one below the rival hub template&rsquo;s median on either. It is also the only one of the thirteen whose canonical points at itself.</p>
+
+  <h3>Defect five &mdash; titles and descriptions past the limits</h3>
+  <p class="body-col">Seven of the thirteen titles run past the roughly 60 characters Google will display: 73, 72, 70, 66, 66, 65 and 64. All seven are on the <code>/counties/</code> set, except the 65-character Type 41 city page. Seven descriptions exceed 160 characters &mdash; 243, 220, 211, 186, 171, 169, 168 &mdash; and one is empty. The six <code>/cities/</code> titles are all inside the limit; the shape that fails is the county naming pattern, which prefixes every heading with the words &ldquo;San Francisco County&rdquo; and then spells the licence out in full.</p>
+</section>
+
+
+<section class="sec" id="s3">
+  <span class="sec-num">03</span>
+  <h2>Why it fails</h2>
+
+  <h3>San Francisco is one jurisdiction, and the site built two</h3>
+  <p class="body-col">San Francisco is a consolidated city and county. The City and County of San Francisco is a single government covering a single 47-square-mile territory, and one California ABC district licenses all of it. There is no San Francisco city licence that differs from a San Francisco county licence. They are the same licence, issued by the same authority, for the same ground.</p>
+  <p class="body-col">So the <code>/cities/san-francisco/</code> set and the <code>/counties/san-francisco-county/</code> set are not complementary coverage of two places. They are two page sets built for the same place, answering the same questions, for the same searchers. <strong>This is the root architectural error.</strong> Every other defect on this page is downstream of it or independent of it; this one is the reason thirteen pages exist where five will do.</p>
+  <p class="body-col">The duplication is total and deliberate-looking. Both sets cover the same five licence types &mdash; 20, 21, 41, 47 and 48 &mdash; plus an overview page each. Both sets are built from the same template family. Both sit in the sitemap. The only structural difference is which of the two folders they live in.</p>
+
+  <h3>The cannibalisation is visible in which page wins</h3>
+  <p class="body-col">When two pages answer the same query, a search engine picks one. Here it picks badly, and the pattern is legible. The generic city query &mdash; the most valuable term in the set &mdash; is not answered by the San Francisco overview page, nor by the county hub. It is answered by the page about bars and nightclubs.</p>
+
+  <div class="tfig">
+    <div class="tcap"><b>All nine ranked terms for San Francisco on liquorlicenseagents.com.</b> Census of the supplier&rsquo;s index, 12 September 2026. Every ranking address is a canonical target, not a sitemap address. Positions are absolute SERP positions. Modelled visits are estimates.</div>
+    <div class="tscroll">
+      <table class="t-wide">
+        <thead>
+          <tr>
+            <th scope="col">Search term</th>
+            <th scope="col" class="num">Volume/mo</th>
+            <th scope="col" class="num">Position</th>
+            <th scope="col" class="num">Modelled visits</th>
+            <th scope="col">Page that answers it</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>liquor license 47</td>
+            <td class="num">70</td>
+            <td class="num">10</td>
+            <td class="num">1.05</td>
+            <td class="mono">/cities/san-francisco-type-47-&hellip;-restaurants/</td>
+          </tr>
+          <tr class="is-flagged">
+            <td><strong>liquor license san francisco</strong></td>
+            <td class="num">70</td>
+            <td class="num">13</td>
+            <td class="num">0.79</td>
+            <td class="mono"><strong>/cities/san-francisco-type-48-&hellip;-bars-and-nightclubs/</strong></td>
+          </tr>
+          <tr>
+            <td>type 21 liquor license</td>
+            <td class="num">90</td>
+            <td class="num">15</td>
+            <td class="num">0.82</td>
+            <td class="mono">/counties/san-francisco-county-type-21/</td>
+          </tr>
+          <tr class="is-flagged">
+            <td><strong>san francisco liquor license</strong></td>
+            <td class="num">70</td>
+            <td class="num">18</td>
+            <td class="num">0.39</td>
+            <td class="mono"><strong>/cities/san-francisco-type-48-&hellip;-bars-and-nightclubs/</strong></td>
+          </tr>
+          <tr>
+            <td>type 48</td>
+            <td class="num">40</td>
+            <td class="num">18</td>
+            <td class="num">0.22</td>
+            <td class="mono">/cities/san-francisco-type-48-&hellip;-bars-and-nightclubs/</td>
+          </tr>
+          <tr>
+            <td>47 liquor license</td>
+            <td class="num">70</td>
+            <td class="num">20</td>
+            <td class="num">0.30</td>
+            <td class="mono">/cities/san-francisco-type-47-&hellip;-restaurants/</td>
+          </tr>
+          <tr class="is-flagged">
+            <td><strong>sf liquor license</strong></td>
+            <td class="num">70</td>
+            <td class="num">21</td>
+            <td class="num">0.30</td>
+            <td class="mono"><strong>/cities/san-francisco-type-48-&hellip;-bars-and-nightclubs/</strong></td>
+          </tr>
+          <tr>
+            <td>liquor license 48</td>
+            <td class="num">40</td>
+            <td class="num">21</td>
+            <td class="num">0.17</td>
+            <td class="mono">/cities/san-francisco-type-48-&hellip;-bars-and-nightclubs/</td>
+          </tr>
+          <tr>
+            <td>48 liquor license</td>
+            <td class="num">40</td>
+            <td class="num">24</td>
+            <td class="num">0.11</td>
+            <td class="mono">/cities/san-francisco-type-48-&hellip;-bars-and-nightclubs/</td>
+          </tr>
+          <tr class="is-total">
+            <td>9 terms</td>
+            <td class="num">560</td>
+            <td class="num">best 10</td>
+            <td class="num">4.16</td>
+            <td>3 distinct addresses, 6 of 9 on the Type 48 page</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <p class="body-col">Three of those nine rows are the generic San Francisco query in its three common phrasings &mdash; &ldquo;liquor license san francisco&rdquo;, &ldquo;san francisco liquor license&rdquo;, &ldquo;sf liquor license&rdquo;. All three are answered by the Type 48 bars and nightclubs page: the narrowest, most specific page in the whole set, fielding the broadest question a searcher can ask. The San Francisco overview page, which exists and is 1,332 words long and was written for exactly that query, ranks for nothing at all. So does the county hub. So does the county overview page. Ten of the thirteen rank for nothing.</p>
+
+  <h3>The same three queries, against the rival</h3>
+
+  <ul class="h2h">
+    <li>
+      <span class="h2h-kw">liquor license san francisco</span>
+      <span class="h2h-vol">70 searches a month &middot; modelled 0.79 against 6.81</span>
+      <div class="h2h-row">
+        <span class="h2h-who">Client</span>
+        <span class="h2h-track"><span class="h2h-fill f-us" style="width:12%"></span></span>
+        <span class="h2h-pos">13th</span>
+      </div>
+      <div class="h2h-row">
+        <span class="h2h-who">Rival</span>
+        <span class="h2h-track"><span class="h2h-fill f-them" style="width:100%"></span></span>
+        <span class="h2h-pos">3rd</span>
+      </div>
+    </li>
+    <li>
+      <span class="h2h-kw">san francisco liquor license</span>
+      <span class="h2h-vol">70 searches a month &middot; modelled 0.39 against 6.81</span>
+      <div class="h2h-row">
+        <span class="h2h-who">Client</span>
+        <span class="h2h-track"><span class="h2h-fill f-us" style="width:6%"></span></span>
+        <span class="h2h-pos">18th</span>
+      </div>
+      <div class="h2h-row">
+        <span class="h2h-who">Rival</span>
+        <span class="h2h-track"><span class="h2h-fill f-them" style="width:100%"></span></span>
+        <span class="h2h-pos">4th</span>
+      </div>
+    </li>
+    <li>
+      <span class="h2h-kw">sf liquor license</span>
+      <span class="h2h-vol">70 searches a month &middot; modelled 0.30 against 1.79</span>
+      <div class="h2h-row">
+        <span class="h2h-who">Client</span>
+        <span class="h2h-track"><span class="h2h-fill f-us" style="width:17%"></span></span>
+        <span class="h2h-pos">21st</span>
+      </div>
+      <div class="h2h-row">
+        <span class="h2h-who">Rival</span>
+        <span class="h2h-track"><span class="h2h-fill f-them" style="width:100%"></span></span>
+        <span class="h2h-pos">10th</span>
+      </div>
+    </li>
+    <li>
+      <span class="h2h-kw">liquor license in san francisco</span>
+      <span class="h2h-vol">70 searches a month &middot; modelled 0.00 against 6.81</span>
+      <div class="h2h-row">
+        <span class="h2h-who">Client</span>
+        <span class="h2h-track"><span class="h2h-fill f-us" style="width:0%"></span></span>
+        <span class="h2h-pos">absent</span>
+      </div>
+      <div class="h2h-row">
+        <span class="h2h-who">Rival</span>
+        <span class="h2h-track"><span class="h2h-fill f-them" style="width:100%"></span></span>
+        <span class="h2h-pos">3rd</span>
+      </div>
+    </li>
+  </ul>
+  <p class="tnote">Bar length is drawn from modelled visits, which are estimates; positions beside each bar are exact. The rival answers all four with the same single address, <code>liquorlicenseauctioneers.com/california/counties/san-francisco</code>.</p>
+
+  <h3>It is not the writing</h3>
+  <p class="body-col">The obvious explanation &mdash; that the losing pages are thin or poorly written &mdash; is false, and the same measuring instrument run over both sites says so. Across the templates involved:</p>
+
+  <div class="tfig">
+    <div class="tcap"><b>Own-word medians by template, both domains, same instrument and same run.</b> &ldquo;Own words&rdquo; strips text shared by 80% or more of that template&rsquo;s sampled pages, so site chrome and boilerplate are removed on both sides. Sampled, not a census: 103 client pages and 119 rival pages selected by a fixed every-Nth rule.</div>
+    <div class="tscroll">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Template</th>
+            <th scope="col">Whose</th>
+            <th scope="col" class="num">Median words</th>
+            <th scope="col" class="num">Median own words</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>city-type &mdash; e.g. the SF Type 47 and Type 48 pages</td>
+            <td>Client</td>
+            <td class="num">1,355.5</td>
+            <td class="num"><span class="c-good">895.5</span></td>
+          </tr>
+          <tr>
+            <td>county-type &mdash; e.g. the SF County Type pages</td>
+            <td>Client</td>
+            <td class="num">1,309</td>
+            <td class="num"><span class="c-good">849</span></td>
+          </tr>
+          <tr>
+            <td>county &mdash; the template that wins San Francisco</td>
+            <td>Rival</td>
+            <td class="num">724</td>
+            <td class="num"><span class="c-bad">339</span></td>
+          </tr>
+          <tr>
+            <td>county-type</td>
+            <td>Rival</td>
+            <td class="num">633</td>
+            <td class="num"><span class="c-bad">174.5</span></td>
+          </tr>
+          <tr>
+            <td>state-hub</td>
+            <td>Rival</td>
+            <td class="num">1,099</td>
+            <td class="num">528</td>
+          </tr>
+          <tr>
+            <td>state-hub</td>
+            <td>Client</td>
+            <td class="num">494</td>
+            <td class="num"><span class="c-bad">38</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <p class="body-col">The client&rsquo;s city-type pages carry <strong>2.6&times;</strong> the own words of the rival county template that outranks them, and its county-type pages 2.5&times;. Every one of the twelve San Francisco detail pages clears 528 own words &mdash; the lowest is 789 &mdash; and eleven of the twelve clear 1,099 total words. The writing is the strongest asset in this set, and none of it should be thrown away. What it needs is to be on fewer addresses, with stock attached.</p>
+
+  <div class="note is-warn">
+    <h4>A qualification on the &ldquo;substance floor&rdquo;</h4>
+    <p>The figure of 1,099 total words and 528 own words is the <em>median</em> of a census of eight rival state hubs. Four of those eight fall below 1,099 words and four below 528 own words, which is what a median of eight does by construction. It is a useful reference point and it is not a floor, and the reviewers&rsquo; own note on the file says so: &ldquo;A floor that half the reference population fails is not a floor.&rdquo; It also belongs to the <em>state hub</em> template. San Francisco&rsquo;s destination is a <em>county</em> page, whose rival median is 724 words and 339 own words. Both numbers are already cleared several times over by the pages being consolidated, so substance is not the binding constraint in San Francisco. Do not spend the budget there.</p>
+  </div>
+
+  <h3>What the rival has that the client does not</h3>
+  <p class="body-col">Fetched live on 13 September 2026, the rival&rsquo;s single San Francisco page carries a 51-character title, a 154-character description, one H1 &mdash; &ldquo;San Francisco Liquor Licenses for Sale&rdquo; &mdash; four H2 sections, a county filter, a licence-type filter, and a table headed <strong>Auction / Asking Price / Action</strong> with three priced rows on it and a &ldquo;Make An Offer&rdquo; button on each.</p>
+  <p class="body-col">Behind that page, the listing census counted <strong>30 San Francisco County licences</strong> on the rival&rsquo;s shelf: Type 47 &times;18, Type 21 &times;10, Type 48 &times;1, Type 20 &times;1. Prices run from $15,000 to $350,000 with a median of $205,000. Within Type 47, eighteen licences from $150,000 to $350,000, median $235,000. Within Type 21, ten from $15,000 to $240,000, median $27,000. All three listings shown on the county page today are among those thirty.</p>
+  <p class="body-col">Note what that means for the build: the page beating thirteen client pages by 5.3&times; shows <strong>three</strong> rows, not thirty. The lever is not volume of stock on the page. It is that the page has a price on it at all.</p>
+
+  <div class="note is-good">
+    <h4>Confidentiality holds on both sides of this comparison</h4>
+    <p>Across all 30 San Francisco listings the rival publishes county, licence type, price and availability, and nothing else. Zero publish a licence number, a licensee name or a premises address; all 30 display the brokerage as the seller rather than a person. The target architecture in section 4 keeps that rule and is not loosened by anything in this document. One difference worth knowing: the rival publishes <strong>no date of any kind</strong> on any of the 30 &mdash; no listed date, no days on market. Publishing days on market, as the New Jersey preview does, is a point of difference, not a copy.</p>
+  </div>
+</section>
+
+
+<section class="sec" id="s4">
+  <span class="sec-num">04</span>
+  <h2>What it becomes</h2>
+  <p class="lede">Thirteen addresses become <strong>five</strong>. One San Francisco hub, and four licence-type pages beneath it &mdash; one for each licence type that has actual San Francisco stock behind it. They hang off the <code>/california</code> state hub the site already owns, which is already self-canonical and needs no change to receive them.</p>
+
+  <div class="rule-box">/california/                                          <b>state hub &mdash; exists, unchanged</b>
+  &#9492;&#9472; /california/counties/san-francisco/                 <b>NEW &mdash; the San Francisco hub</b>
+       &#9500;&#9472; /california/counties/san-francisco/type-47/    <b>NEW &mdash; 18 licences on the market</b>
+       &#9500;&#9472; /california/counties/san-francisco/type-21/    <b>NEW &mdash; 10 licences on the market</b>
+       &#9500;&#9472; /california/counties/san-francisco/type-48/    <b>NEW &mdash; 1 licence, 6 ranked terms today</b>
+       &#9492;&#9472; /california/counties/san-francisco/type-20/    <b>NEW &mdash; 1 licence on the market</b></div>
+
+  <div class="tfig">
+    <div class="tcap"><b>The five surviving pages, and why each one exists.</b> Licence counts are San Francisco County listings in the rival&rsquo;s shelf census, 12 September 2026 &mdash; used here as the measure of how much stock this market actually trades in each type, not as the client&rsquo;s own book.</div>
+    <div class="tscroll">
+      <table class="t-wide">
+        <thead>
+          <tr>
+            <th scope="col">Address</th>
+            <th scope="col">What it is for</th>
+            <th scope="col" class="num">Market stock</th>
+            <th scope="col">Evidence it earns a page</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="mono">/california/counties/san-francisco/</td>
+            <td>The one answer to &ldquo;liquor license san francisco&rdquo; and its variants. Priced stock across all types, plus the buying and selling guidance. States in its first line that city and county are one jurisdiction.</td>
+            <td class="num">30</td>
+            <td>Four generic city queries, 280 searches a month between them, currently answered at 13th, 18th, 21st and not at all. The rival answers all four with one page at 3rd, 3rd, 4th and 10th.</td>
+          </tr>
+          <tr>
+            <td class="mono">/california/counties/san-francisco/type-47/</td>
+            <td>Full bar for a restaurant. On-Sale General Eating Place.</td>
+            <td class="num">18</td>
+            <td>The deepest San Francisco market by far &mdash; $150,000 to $350,000, median $235,000. The client&rsquo;s existing Type 47 page already ranks 10th and 20th.</td>
+          </tr>
+          <tr>
+            <td class="mono">/california/counties/san-francisco/type-21/</td>
+            <td>Full off-sale for a liquor or package store.</td>
+            <td class="num">10</td>
+            <td>Second-deepest market &mdash; $15,000 to $240,000, median $27,000. The client&rsquo;s county Type 21 page already ranks 15th for &ldquo;type 21 liquor license&rdquo;, 90 searches a month.</td>
+          </tr>
+          <tr>
+            <td class="mono">/california/counties/san-francisco/type-48/</td>
+            <td>Full bar for a bar, tavern or nightclub &mdash; public premises, no food requirement.</td>
+            <td class="num">1</td>
+            <td>The single most-ranked page in the current set: six terms. Keeping it is how those six survive the migration. Retargeting it is how it stops eating the generic city query.</td>
+          </tr>
+          <tr>
+            <td class="mono">/california/counties/san-francisco/type-20/</td>
+            <td>Off-sale beer and wine for a market, deli or convenience store.</td>
+            <td class="num">1</td>
+            <td>Thin stock, but it is the entry price point in the market and the first rung for a small retailer. Both existing Type 20 pages rank for nothing, so nothing is risked.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="note is-accent">
+    <h4>Type 41 does not get a page</h4>
+    <p>Both existing Type 41 pages &mdash; city and county &mdash; rank for nothing. There is not a single Type 41 licence in the 30-strong San Francisco market census. There is no stock to put on it and no demand reaching it. Its 883 and 850 own words are good writing, so they are not deleted: they become the <strong>Type 41</strong> block inside the hub&rsquo;s licence-type section, at <code>/california/counties/san-francisco/#type-41</code>, and both old addresses redirect there. If San Francisco Type 41 stock appears later, promote the block to its own page at <code>/california/counties/san-francisco/type-41/</code> using the rule this document sets: <strong>a licence type earns its own address when there is stock to put on it.</strong></p>
+  </div>
+
+  <p class="body-col">What the destination looks like once built is the <a href="https://jc1147.github.io/squah-previews/liquor-license/">New Jersey preview</a> &mdash; a state hub carrying priced rows on the page itself, with the listing pages beneath it. Every licence, price and date in that preview is invented sample data published so the layout could be reviewed. San Francisco takes the same shape one level down, at county rather than state, because in California the county is where an ABC licence actually transfers.</p>
+</section>
+
+<section class="sec" id="s5">
+  <span class="sec-num">05</span>
+  <h2>The migration table</h2>
+  <p class="lede">Every one of the thirteen current addresses, with its destination and its action. No address is unaccounted for. All redirects are permanent 301s; none of the thirteen is deleted without a redirect, and none of the writing is thrown away.</p>
+
+  <div class="tfig">
+    <div class="tcap"><b>Thirteen addresses in, five out.</b> &ldquo;Text&rdquo; says where that page&rsquo;s own words go. Every redirect is a single hop &mdash; no chains. Two rows carry a hold warning that changes the order of work, not the destination.</div>
+    <div class="tscroll">
+      <table class="t-wide">
+        <thead>
+          <tr>
+            <th scope="col">Current address</th>
+            <th scope="col">Action</th>
+            <th scope="col">Destination</th>
+            <th scope="col">Text</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="mono">/cities/san-francisco/san-francisco-liquor-licenses-for-restaurants-bars-and-retailers/</td>
+            <td><strong>Consolidate</strong> into the hub</td>
+            <td class="mono">/california/counties/san-francisco/</td>
+            <td>852 own words become the hub&rsquo;s &ldquo;How a San Francisco transfer works&rdquo; section.</td>
+          </tr>
+          <tr>
+            <td class="mono">/cities/san-francisco/san-francisco-type-20-liquor-license-for-beer-and-wine-off-sale/</td>
+            <td><strong>Consolidate</strong> into the Type 20 page</td>
+            <td class="mono">/california/counties/san-francisco/type-20/</td>
+            <td>806 own words merge with the county Type 20 page&rsquo;s 859; keep the stronger of each duplicated passage.</td>
+          </tr>
+          <tr class="is-held">
+            <td class="mono">/cities/san-francisco/san-francisco-type-21-full-liquor-license-for-liquor-stores/ <span class="dflag is-hold">HOLD LIST</span></td>
+            <td><strong>Consolidate</strong> into the Type 21 page. Remove from the bulk canonical batch first.</td>
+            <td class="mono">/california/counties/san-francisco/type-21/</td>
+            <td>789 own words merge with the county Type 21 page&rsquo;s 842.</td>
+          </tr>
+          <tr>
+            <td class="mono">/cities/san-francisco/san-francisco-type-41-beer-and-wine-license-for-restaurants/</td>
+            <td><strong>Redirect</strong> to the hub&rsquo;s Type 41 block</td>
+            <td class="mono">/california/counties/san-francisco/#type-41</td>
+            <td>883 own words become the hub&rsquo;s Type 41 block &mdash; the better of the two Type 41 pages, so it leads.</td>
+          </tr>
+          <tr>
+            <td class="mono">/cities/san-francisco/san-francisco-type-47-full-liquor-license-for-restaurants/</td>
+            <td><strong>Consolidate</strong> into the Type 47 page</td>
+            <td class="mono">/california/counties/san-francisco/type-47/</td>
+            <td>817 own words merge with the county Type 47 page&rsquo;s 853. Carries two live rankings &mdash; redirect the canonical too, see below.</td>
+          </tr>
+          <tr class="is-held">
+            <td class="mono">/cities/san-francisco/san-francisco-type-48-full-liquor-license-for-bars-and-nightclubs/ <span class="dflag is-hold">HOLD LIST</span></td>
+            <td><strong>Consolidate</strong> into the Type 48 page. Remove from the bulk canonical batch first.</td>
+            <td class="mono">/california/counties/san-francisco/type-48/</td>
+            <td>847 own words merge with the county Type 48 page&rsquo;s 855. Carries six live rankings &mdash; the highest-risk redirect in the set.</td>
+          </tr>
+          <tr>
+            <td class="mono">/counties/san-francisco-county</td>
+            <td><strong>Redirect</strong> to the hub</td>
+            <td class="mono">/california/counties/san-francisco/</td>
+            <td>228 own words, the weakest page of the thirteen. Nothing to carry over; the hub replaces it outright.</td>
+          </tr>
+          <tr>
+            <td class="mono">/counties/san-francisco-county/san-francisco-county-liquor-licenses/</td>
+            <td><strong>Consolidate</strong> into the hub &mdash; this is the base text</td>
+            <td class="mono">/california/counties/san-francisco/</td>
+            <td>1,014 own words, the most substantial page of the thirteen. It becomes the hub&rsquo;s main body. Fix the doubled H1 and the 220-character description in the move.</td>
+          </tr>
+          <tr>
+            <td class="mono">/counties/san-francisco-county/san-francisco-county-type-20/</td>
+            <td><strong>Consolidate</strong> into the Type 20 page</td>
+            <td class="mono">/california/counties/san-francisco/type-20/</td>
+            <td>859 own words, the base text for Type 20.</td>
+          </tr>
+          <tr>
+            <td class="mono">/counties/san-francisco-county/san-francisco-county-type-21/</td>
+            <td><strong>Consolidate</strong> into the Type 21 page</td>
+            <td class="mono">/california/counties/san-francisco/type-21/</td>
+            <td>842 own words, the base text for Type 21. Carries one live ranking &mdash; redirect the canonical too.</td>
+          </tr>
+          <tr>
+            <td class="mono">/counties/san-francisco-county/san-francisco-county-type-41/</td>
+            <td><strong>Redirect</strong> to the hub&rsquo;s Type 41 block</td>
+            <td class="mono">/california/counties/san-francisco/#type-41</td>
+            <td>850 own words. Merge anything the city Type 41 page does not already cover; discard the rest.</td>
+          </tr>
+          <tr>
+            <td class="mono">/counties/san-francisco-county/san-francisco-county-type-48/</td>
+            <td><strong>Consolidate</strong> into the Type 48 page</td>
+            <td class="mono">/california/counties/san-francisco/type-48/</td>
+            <td>855 own words, the base text for Type 48.</td>
+          </tr>
+          <tr class="is-flagged">
+            <td class="mono">/counties/los-angeles-county/san-francisco-county-type-47/ <span class="dflag">WRONG FOLDER</span></td>
+            <td><strong>Fix the folder by retiring the address.</strong> Do not move it to <code>/counties/san-francisco-county/</code> &mdash; that folder is being retired too. Redirect straight to the destination.</td>
+            <td class="mono">/california/counties/san-francisco/type-47/</td>
+            <td>853 own words, the base text for Type 47.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="note is-bad">
+    <h4>The addresses that hold the rankings are not in this table, and they must be redirected too</h4>
+    <p>Every San Francisco ranking sits on a <em>canonical target</em> &mdash; the flat address each nested page names as its real home. Those flat addresses are live, indexable, and absent from every sitemap the site submits. Redirecting only the thirteen sitemap addresses would leave all 4.2 modelled visits pointing at addresses that still resolve to the old content. Redirect both shapes to the same destination, in the same release.</p>
+  </div>
+
+  <div class="tfig">
+    <div class="tcap"><b>The twelve canonical targets, probed live 13 September 2026 with redirect-following switched off.</b> Ten return 200 and are safe to redirect. Two return a 301 that loops straight back to their own nested page &mdash; these are the two San Francisco entries in the site-wide hold list.</div>
+    <div class="tscroll">
+      <table class="t-wide">
+        <thead>
+          <tr>
+            <th scope="col">Canonical target address</th>
+            <th scope="col" class="num">Live status</th>
+            <th scope="col">Action</th>
+            <th scope="col">Destination</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="mono">/cities/san-francisco-liquor-licenses-for-restaurants-bars-and-retailers/</td><td class="num"><span class="c-good">200</span></td><td>301</td><td class="mono">/california/counties/san-francisco/</td></tr>
+          <tr><td class="mono">/cities/san-francisco-type-20-liquor-license-for-beer-and-wine-off-sale/</td><td class="num"><span class="c-good">200</span></td><td>301</td><td class="mono">&hellip;/san-francisco/type-20/</td></tr>
+          <tr class="is-held"><td class="mono">/cities/san-francisco-type-21-full-liquor-license-for-liquor-stores/</td><td class="num"><span class="c-bad">301</span></td><td>Replace the existing loop with a 301 to the destination. Never point the nested page&rsquo;s canonical here first.</td><td class="mono">&hellip;/san-francisco/type-21/</td></tr>
+          <tr><td class="mono">/cities/san-francisco-type-41-beer-and-wine-license-for-restaurants/</td><td class="num"><span class="c-good">200</span></td><td>301</td><td class="mono">&hellip;/san-francisco/#type-41</td></tr>
+          <tr><td class="mono">/cities/san-francisco-type-47-full-liquor-license-for-restaurants/</td><td class="num"><span class="c-good">200</span></td><td>301 &mdash; <strong>holds 2 rankings</strong></td><td class="mono">&hellip;/san-francisco/type-47/</td></tr>
+          <tr class="is-held"><td class="mono">/cities/san-francisco-type-48-full-liquor-license-for-bars-and-nightclubs/</td><td class="num"><span class="c-bad">301</span></td><td>Replace the existing loop with a 301 to the destination. <strong>Holds 6 rankings &mdash; the single most valuable address in San Francisco.</strong></td><td class="mono">&hellip;/san-francisco/type-48/</td></tr>
+          <tr><td class="mono">/counties/san-francisco-county-liquor-licenses/</td><td class="num"><span class="c-good">200</span></td><td>301</td><td class="mono">/california/counties/san-francisco/</td></tr>
+          <tr><td class="mono">/counties/san-francisco-county-type-20/</td><td class="num"><span class="c-good">200</span></td><td>301</td><td class="mono">&hellip;/san-francisco/type-20/</td></tr>
+          <tr><td class="mono">/counties/san-francisco-county-type-21/</td><td class="num"><span class="c-good">200</span></td><td>301 &mdash; <strong>holds 1 ranking</strong></td><td class="mono">&hellip;/san-francisco/type-21/</td></tr>
+          <tr><td class="mono">/counties/san-francisco-county-type-41/</td><td class="num"><span class="c-good">200</span></td><td>301</td><td class="mono">&hellip;/san-francisco/#type-41</td></tr>
+          <tr><td class="mono">/counties/san-francisco-county-type-47/</td><td class="num"><span class="c-good">200</span></td><td>301</td><td class="mono">&hellip;/san-francisco/type-47/</td></tr>
+          <tr><td class="mono">/counties/san-francisco-county-type-48/</td><td class="num"><span class="c-good">200</span></td><td>301</td><td class="mono">&hellip;/san-francisco/type-48/</td></tr>
+          <tr class="is-total"><td>12 targets</td><td class="num">10 clean, 2 looping</td><td>25 redirects in total across both tables</td><td>5 destinations</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <p class="tnote">Twenty-five redirects: thirteen sitemap addresses plus twelve canonical targets. The county hub is the only one of the thirteen with no separate canonical target, because it is the only page in the set whose canonical points at itself.</p>
+</section>
+
+<section class="sec" id="s6">
+  <span class="sec-num">06</span>
+  <h2>Canonicals and sitemap</h2>
+
+  <h3>Is any San Francisco address in the 49-page hold list? Yes &mdash; two.</h3>
+  <div class="note is-bad">
+    <h4>The answer, with the evidence</h4>
+    <p>The site-wide canonical rule is <code>/{cities|counties}/{folder}/{slug}/ &rarr; /{cities|counties}/{slug}/</code> &mdash; drop the middle folder segment, keep the trailing slash. Re-derived against the census, it reproduces on <strong>all 908 affected pairs with zero exceptions</strong>. Of the 908 destinations probed, 859 return 200 and are safe; <strong>49 return a 3xx and must be held</strong> (41 of them loop back to their own nested address, 8 go elsewhere).</p>
+    <p><strong>Two of the thirteen San Francisco pages are in that 49.</strong> Both are on the <code>/cities/</code> path, and both loop:</p>
+    <ul>
+      <li><code>/cities/san-francisco/san-francisco-type-21-full-liquor-license-for-liquor-stores/</code></li>
+      <li><code>/cities/san-francisco/san-francisco-type-48-full-liquor-license-for-bars-and-nightclubs/</code></li>
+    </ul>
+    <p>Probed live on 13 September 2026 with redirect-following off, each one&rsquo;s canonical target returns <code>301</code> with a <code>Location</code> header pointing straight back at the nested page it came from. The other ten targets returned 200. The hold list reproduces exactly, one day on.</p>
+    <p><strong>Why it matters here.</strong> The Type 48 page is the most valuable address in San Francisco &mdash; six of the nine ranked terms, including all three phrasings of the generic city query. A bulk canonical repoint applied without the hold filter would put the site&rsquo;s best-performing San Francisco address into a redirect loop.</p>
+  </div>
+
+  <h3>The instruction</h3>
+  <ol class="body-col">
+    <li><strong>Take all thirteen San Francisco addresses out of the bulk canonical repoint batch entirely.</strong> They are being rebuilt, and repointing a canonical this week at an address that gets redirected next week is churn that costs a re-crawl for nothing. The remaining 895 pairs proceed as the <a href="sitemap-plan.html">sitemap plan</a> specifies.</li>
+    <li><strong>On each of the five new pages, set a self-referencing canonical</strong> to its own address with the trailing slash, on the <code>https://www.liquorlicenseagents.com</code> host. Five pages, five canonicals, each pointing at itself. No page in the new San Francisco tree names any other page as its home.</li>
+    <li><strong>Remove all thirteen old addresses from the sitemap</strong> in the same release as the redirects go live. A 301 that stays in a sitemap tells Google the address is still a destination.</li>
+    <li><strong>Add the five new addresses to the sitemap.</strong> This is the first time in San Francisco that the address the site submits, the address the canonical names and the address that ranks will all be the same string. Today they are three different strings, and the one that ranks is in no sitemap at all.</li>
+    <li><strong>Do not add the twelve canonical targets to the sitemap.</strong> They are being redirected, not kept.</li>
+    <li><strong>Retire the folders.</strong> Once the redirects are live, <code>/cities/san-francisco/</code> and <code>/counties/san-francisco-county/</code> hold nothing. The wrong-folder Type 47 page is resolved by this and needs no separate fix &mdash; it is redirected off the Los Angeles folder along with everything else.</li>
+  </ol>
+
+  <div class="note is-warn">
+    <h4>One thing to verify before release, not assume</h4>
+    <p>The site serves at least 1,915 distinct addresses across the two shapes, and the earlier audit found the slash-less forms also serve identical pages. Confirm that each of the 25 redirects fires on both the trailing-slash and the slash-less form of its source, and that none of the 25 produces a chain longer than one hop. A redirect map that passes its own test while leaving the slash-less duplicates live has not fixed anything.</p>
+  </div>
+</section>
+
+
+<section class="sec" id="s7">
+  <span class="sec-num">07</span>
+  <h2>Titles and descriptions, written</h2>
+  <p class="lede">These are the finished strings, not a specification for them. Every title is under 60 characters and every description under 160, counted. Set them as written; if a word has to change, re-count before shipping.</p>
+
+  <div class="tfig">
+    <div class="tcap"><b>The five new titles and descriptions.</b> Character counts are exact, counted on the strings in this table. Compare against what they replace: seven of the current thirteen titles run 64 to 73 characters, seven descriptions run 168 to 243, and one page has no description at all.</div>
+    <div class="tscroll">
+      <table class="t-wide">
+        <thead>
+          <tr>
+            <th scope="col">Page</th>
+            <th scope="col">Title</th>
+            <th scope="col" class="num">Chars</th>
+            <th scope="col">Meta description</th>
+            <th scope="col" class="num">Chars</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="mono">/california/counties/san-francisco/</td>
+            <td>San Francisco Liquor Licenses For Sale | Prices &amp; Types</td>
+            <td class="num"><span class="c-good">55</span></td>
+            <td>Priced San Francisco liquor licenses for sale. Compare Type 47, 21, 48 and 20 asking prices, then make an offer. City and county are one jurisdiction.</td>
+            <td class="num"><span class="c-good">150</span></td>
+          </tr>
+          <tr>
+            <td class="mono">&hellip;/san-francisco/type-47/</td>
+            <td>San Francisco Type 47 Liquor License For Sale | Prices</td>
+            <td class="num"><span class="c-good">54</span></td>
+            <td>Type 47 On-Sale General licenses for sale in San Francisco, priced. What a Type 47 allows, what transfers cost, and how long an ABC transfer takes.</td>
+            <td class="num"><span class="c-good">147</span></td>
+          </tr>
+          <tr>
+            <td class="mono">&hellip;/san-francisco/type-21/</td>
+            <td>San Francisco Type 21 Liquor License For Sale | Prices</td>
+            <td class="num"><span class="c-good">54</span></td>
+            <td>Type 21 Off-Sale General licenses for sale in San Francisco, priced. What a Type 21 lets a liquor store sell, and how the ABC transfer works.</td>
+            <td class="num"><span class="c-good">141</span></td>
+          </tr>
+          <tr>
+            <td class="mono">&hellip;/san-francisco/type-48/</td>
+            <td>San Francisco Type 48 Liquor License For Sale | Prices</td>
+            <td class="num"><span class="c-good">54</span></td>
+            <td>Type 48 On-Sale General Public Premises licenses for sale in San Francisco, priced. What a bar can and cannot do on a Type 48, and how to transfer one.</td>
+            <td class="num"><span class="c-good">151</span></td>
+          </tr>
+          <tr>
+            <td class="mono">&hellip;/san-francisco/type-20/</td>
+            <td>San Francisco Type 20 Liquor License For Sale | Prices</td>
+            <td class="num"><span class="c-good">54</span></td>
+            <td>Type 20 Off-Sale Beer and Wine licenses for sale in San Francisco, priced. What a market or convenience store may sell, and what an ABC transfer involves.</td>
+            <td class="num"><span class="c-good">154</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="note is-accent">
+    <h4>Three deliberate choices in these strings</h4>
+    <p><strong>&ldquo;For Sale&rdquo;, not &ldquo;Essential Guide&rdquo;.</strong> Two of the current titles end &ldquo;Essential Guide&rdquo;, which promises an article. The searcher typing &ldquo;liquor license san francisco&rdquo; is trying to get one, and the rival&rsquo;s winning title is &ldquo;Buy San Francisco Liquor Licenses Online 24/7&rdquo;. Match the intent.</p>
+    <p><strong>No &ldquo;County&rdquo; in any title.</strong> The word costs seven characters, pushes every current county title past 60, and describes a distinction that does not exist in San Francisco. Nobody searches for &ldquo;san francisco county liquor license&rdquo;; the three ranked phrasings are &ldquo;liquor license san francisco&rdquo;, &ldquo;san francisco liquor license&rdquo; and &ldquo;sf liquor license&rdquo;.</p>
+    <p><strong>&ldquo;Prices&rdquo; in every title.</strong> It is the one thing on the new pages that is not on the old ones, and it is the difference between the two sites.</p>
+  </div>
+</section>
+
+<section class="sec" id="s8">
+  <span class="sec-num">08</span>
+  <h2>Page text, written</h2>
+  <p class="lede">The H1, the opening paragraph and the section stack for the hub, and the same for Type 47 &mdash; the type with eighteen San Francisco licences behind it. These are the actual sentences to publish, not a brief for someone to write from.</p>
+
+  <h3>The San Francisco hub</h3>
+
+  <div class="spec">
+    <div class="spec-head">/california/counties/san-francisco/</div>
+    <div class="spec-body">
+      <div class="spec-field">
+        <span class="spec-lab">H1 &mdash; one element, printed once<span class="spec-count">38 chars</span></span>
+        <span class="spec-val is-h1">San Francisco Liquor Licenses For Sale</span>
+      </div>
+      <div class="spec-field">
+        <span class="spec-lab">Opening paragraph, above the listing table<span class="spec-count">168 words</span></span>
+        <span class="spec-val">
+          <p>San Francisco is a consolidated city and county, so there is no separate city licence and county licence to choose between &mdash; one jurisdiction covers all 47 square miles of it, and every licence below is transferable anywhere inside that boundary. The table shows what is currently available: the licence type, the asking price, how long it has been on the market, and whether it is still open. Prices in San Francisco currently run from $15,000 for entry-level off-sale stock to $350,000 for a full on-sale licence in a prime trading district.</p>
+          <p>What the table does not show is the licence number, the licensee, or the premises address. Those are released to a qualified buyer under a non-disclosure agreement, once we have established that a purchase is real &mdash; because a licence in transfer is a live business, and publishing which one it is costs the seller money. If a row looks right, make an offer on it and we will take you through what sits behind it.</p>
+        </span>
+      </div>
+      <div class="spec-field">
+        <span class="spec-lab">Section stack, in order down the page</span>
+        <ol class="stack">
+          <li><b>Available now in San Francisco</b><span>The priced table, above the fold. Columns: licence type, asking price, days on market, status, and an action. Filterable by type. This is the first thing on the page because it is the only thing the competing site has that this one does not.</span></li>
+          <li><b>What each licence type does, in San Francisco</b><span>Five blocks, one per type, each 120 to 180 words, each ending in a link to its own page &mdash; except Type 41, which has no page and lives here in full at <code>#type-41</code>. Built from the existing city and county pages&rsquo; own words.</span></li>
+          <li><b>What a San Francisco licence costs, and why</b><span>The real price bands by type, stated as ranges with a median, and the two or three things that move a price inside a band &mdash; district, condition of the licence, whether the transfer is person-to-person or premises-to-premises. Written from the current book, restated whenever the book changes.</span></li>
+          <li><b>How a San Francisco transfer works</b><span>The step sequence from accepted offer to issued licence: application, the 30-day posting period, protests, escrow, ABC issue. The 852 own words on the existing San Francisco overview page are the source text for this section.</span></li>
+          <li><b>Selling a San Francisco licence</b><span>The other half of the market, and the reason a seller lands on this page at all. What we need from a seller, what it costs them, how long it takes, and what stays confidential until a buyer qualifies.</span></li>
+          <li><b>San Francisco questions we are actually asked</b><span>Six to eight real questions with direct answers &mdash; whether a Type 47 can be used as a Type 48, what the moratorium means for new issues, whether a licence can move between neighbourhoods. Marked up so each answer can stand alone in a search result.</span></li>
+          <li><b>Elsewhere in California</b><span>Links out to the neighbouring county pages and up to the California hub. Not a link dump; the counties a San Francisco buyer would genuinely also consider.</span></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <h3>The Type 47 page</h3>
+  <p class="body-col">Chosen because it is the deepest San Francisco market by a distance: eighteen of the thirty licences on the market, $150,000 to $350,000, median $235,000. The client&rsquo;s existing Type 47 page already ranks 10th and 20th with no stock on it at all.</p>
+
+  <div class="spec">
+    <div class="spec-head">/california/counties/san-francisco/type-47/</div>
+    <div class="spec-body">
+      <div class="spec-field">
+        <span class="spec-lab">H1 &mdash; one element, printed once<span class="spec-count">46 chars</span></span>
+        <span class="spec-val is-h1">San Francisco Type 47 Liquor Licenses For Sale</span>
+      </div>
+      <div class="spec-field">
+        <span class="spec-lab">Opening paragraph, above the listing table<span class="spec-count">178 words</span></span>
+        <span class="spec-val">
+          <p>A Type 47 is the licence a San Francisco restaurant needs to pour spirits as well as beer and wine. Formally it is an On-Sale General Eating Place licence, and the &ldquo;eating place&rdquo; half is the part that catches people out: the kitchen has to stay open and serving whenever alcohol is served, and food has to be a real part of the business rather than a bowl of crisps at the bar. Get that wrong and the licence is at risk, which is why a Type 47 and a Type 48 are not interchangeable even though both allow spirits.</p>
+          <p>It is also the deepest part of the San Francisco market. Type 47 licences here trade between $150,000 and $350,000, and the spread inside that band is mostly location and condition rather than anything about the licence itself. The table below shows what is available now, with the asking price and how long each has been on the market. The licence number, the licensee and the premises address are released to a qualified buyer under NDA, not published.</p>
+        </span>
+      </div>
+      <div class="spec-field">
+        <span class="spec-lab">Section stack, in order down the page</span>
+        <ol class="stack">
+          <li><b>Type 47 licences available in San Francisco</b><span>The priced table, filtered to Type 47, above the fold. Same columns as the hub. If the count is low, say the count rather than hiding it &mdash; the page that beats this one today shows three rows.</span></li>
+          <li><b>What a Type 47 lets you do &mdash; and what it does not</b><span>Beer, wine and distilled spirits for consumption on the premises, with meals. The bona fide eating place requirement, in plain terms. Why it is not a Type 48, and what happens if a Type 47 premises drifts into operating as a bar.</span></li>
+          <li><b>What a San Francisco Type 47 costs</b><span>The $150,000 to $350,000 band with the $235,000 midpoint, and what moves a price within it. Restated from the live book, with the date it was last checked printed on the page.</span></li>
+          <li><b>Transferring a Type 47 in San Francisco</b><span>Person-to-person versus premises-to-premises, the 30-day posting period, what a protest means and how often one actually stops a transfer, escrow, and a realistic timeline. The 853 own words on the current county Type 47 page are the source text.</span></li>
+          <li><b>Selling a San Francisco Type 47</b><span>What a seller should expect: pricing against the current band, what we need to list it, what stays confidential, and how an offer reaches them.</span></li>
+          <li><b>Type 47 questions we are actually asked</b><span>Can I run it as a bar after the kitchen closes. Can I move it to another San Francisco address. What happens to the licence if the restaurant closes first. Direct answers, each able to stand alone.</span></li>
+          <li><b>Other San Francisco licence types</b><span>Links to Type 21, 48 and 20, and up to the San Francisco hub. Type 48 gets the most prominent link, because it is the type most people who land here are actually choosing between.</span></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="note is-good">
+    <h4>The confidentiality rule, as it constrains this copy</h4>
+    <p>Both opening paragraphs above state the rule explicitly rather than staying silent about it, because a buyer who cannot see an address wants to know why. A listing row on any of the five pages publishes <strong>county, municipality, licence type, price, availability and days on market, and nothing else</strong>. It never publishes the licence number, the licensee, the premises address or the record detail; those are released to a qualified buyer under NDA. Any price band quoted in body copy must be derived from the client&rsquo;s own current book and carry the date it was last checked. The bands printed above are taken from the competitor listing census of 12 September 2026 and are here to show the shape of the sentence &mdash; replace the figures with the client&rsquo;s own before publishing.</p>
+  </div>
+</section>
+
+<section class="sec" id="s9">
+  <span class="sec-num">09</span>
+  <h2>Internal linking</h2>
+  <p class="lede">The current link graph is the cannibalisation wired into the navigation. Every one of the thirteen pages was parsed for its outbound internal links on 13 September 2026, and the pattern is one-directional in exactly the wrong direction.</p>
+
+  <div class="tfig">
+    <div class="tcap"><b>What the thirteen pages actually link to today.</b> Counted from the live HTML of each page. &ldquo;Own flat address&rdquo; is the page&rsquo;s own canonical target &mdash; the address that is not in any sitemap, and the one that ranks.</div>
+    <div class="tscroll">
+      <table class="t-wide">
+        <thead>
+          <tr>
+            <th scope="col">Page</th>
+            <th scope="col" class="num">Links to the 6 /cities/ SF pages</th>
+            <th scope="col" class="num">Links to the 5 /counties/ SF pages</th>
+            <th scope="col">Links to the county hub</th>
+            <th scope="col">Links to its own flat address</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>All six /cities/ San Francisco pages</td><td class="num">6</td><td class="num"><span class="c-bad">0</span></td><td>No</td><td>Yes</td></tr>
+          <tr><td>The county hub</td><td class="num">6</td><td class="num">5</td><td>Itself</td><td class="c-mute">Has none</td></tr>
+          <tr><td>All six /counties/ detail pages, including the misfiled Type 47</td><td class="num">6</td><td class="num"><span class="c-bad">0</span></td><td>No</td><td>Yes</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <p class="body-col">Read that table twice. <strong>Every one of the thirteen pages links to all six <code>/cities/</code> San Francisco pages.</strong> The county pages push into the city set; the city set never pushes back. Only the county hub links to the county detail pages at all, so the six county pages are fed by one address and feed the competing set with every link they have. That is a measurable reason the winning San Francisco page is a <code>/cities/</code> page, and it is a defect in its own right regardless of the consolidation.</p>
+  <p class="body-col">The misfiled Type 47 page shows the folder bug&rsquo;s second cost. Because the sibling navigation block is built from the folder it sits in, and it sits in the Los Angeles folder, it links to <strong>none</strong> of its own county&rsquo;s pages. It is cut off from its own set by its address.</p>
+
+  <h3>The rules for the new tree</h3>
+  <ol class="lrules">
+    <li><span class="lr-n">R1</span><span><b>Down: the hub links to all four type pages, in the same block, on every page view.</b> Not a sidebar that appears on some templates. One block, in the licence-type section, with the same four links in the same order, each on the descriptive anchor &mdash; &ldquo;San Francisco Type 47 licences&rdquo;, not &ldquo;read more&rdquo;.</span></li>
+    <li><span class="lr-n">R2</span><span><b>Up: every type page links back to the hub, from two places.</b> Once in the breadcrumb, once in a closing block. The breadcrumb is <code>California &rsaquo; San Francisco &rsaquo; Type 47</code>, and each segment is a real link to a real page.</span></li>
+    <li><span class="lr-n">R3</span><span><b>Sideways: each type page links to the other three type pages, and to nothing else in San Francisco.</b> Four pages, each carrying three sibling links. Type 47 and Type 48 link to each other prominently, because that is the choice buyers are genuinely making.</span></li>
+    <li><span class="lr-n">R4</span><span><b>No page in the San Francisco tree links to any retired address.</b> All thirteen old addresses and all twelve canonical targets are gone from the navigation in the same release as the redirects. A 301 in a navigation block is a link to a redirect, and it will still be crawled as one.</span></li>
+    <li><span class="lr-n">R5</span><span><b>Up again: the California hub links to the San Francisco hub, and only to the hub.</b> Not to the four type pages. The state hub&rsquo;s job is to route to counties; the county&rsquo;s job is to route to types. One link per level.</span></li>
+    <li><span class="lr-n">R6</span><span><b>Across: the hub links to neighbouring county hubs, and type pages never do.</b> A Type 47 page linking to another county&rsquo;s pages is how a set of pages loses its own subject. Cross-county routing happens once, at hub level.</span></li>
+    <li><span class="lr-n">R7</span><span><b>Every listing row links to its own listing page, and every listing page links back to the type page and the hub.</b> This is the path that carries a buyer from a search result to an offer, and it is the only reason the tree exists.</span></li>
+    <li><span class="lr-n">R8</span><span><b>The fixed cross-links to Los Angeles, San Diego, Orange and Ventura come off these pages.</b> They appear on all thirteen pages today, irrespective of relevance, and they are the largest single block of outbound internal links on a San Francisco page. Replace them with rule R6&rsquo;s neighbouring counties on the hub only.</span></li>
+  </ol>
+</section>
+
+
+<section class="sec" id="s10">
+  <span class="sec-num">10</span>
+  <h2>The same rule at scale</h2>
+  <p class="lede">San Francisco is 13 of the 1,007 addresses the site submits, and 4.2 of its 491.4 modelled monthly visits &mdash; 0.8%. It is worth working end to end because of what it is a template for, not because of what it is worth on its own.</p>
+
+  <ul class="tiles">
+    <li class="tile is-plain">
+      <span class="fig">971</span>
+      <span class="lab">geo pages in the sitemap census</span>
+      <span class="sub">Every address under /cities/ or /counties/: 507 city-detail, 404 county-detail, 36 county-category, 24 city-category.</span>
+    </li>
+    <li class="tile is-bad">
+      <span class="fig">908</span>
+      <span class="lab">name a different address as their real home</span>
+      <span class="sub">The drop-the-middle-folder rule reproduces on all 908 with zero exceptions. 0 of the 908 destinations appear in any sitemap.</span>
+    </li>
+    <li class="tile is-warn">
+      <span class="fig">49</span>
+      <span class="lab">destinations that already redirect, and must be held</span>
+      <span class="sub">41 loop back to their own nested address, 8 go elsewhere. 34 on city-detail, 15 on county-detail. Two of them are San Francisco.</span>
+    </li>
+    <li class="tile is-bad">
+      <span class="fig">7 places</span>
+      <span class="lab">carry both a /cities/ set and a /counties/ set</span>
+      <span class="sub">111 pages between them. San Francisco is the only one where the city and the county are legally the same jurisdiction.</span>
+    </li>
+    <li class="tile is-warn">
+      <span class="fig">523</span>
+      <span class="lab">titles longer than 60 characters</span>
+      <span class="sub">Plus 669 descriptions over 160 characters and 149 pages with no description at all, out of 1,007.</span>
+    </li>
+    <li class="tile is-plain">
+      <span class="fig">2</span>
+      <span class="lab">genuine cross-jurisdiction folder misfiles site-wide</span>
+      <span class="sub">San Francisco Type 47 under Los Angeles County, and a Laguna Woods page under La Mirada. Not 84 &mdash; see the correction below.</span>
+    </li>
+  </ul>
+
+  <h3>What transfers from San Francisco to everywhere else</h3>
+  <ul class="checks">
+    <li><span class="tickmark" aria-hidden="true">&#10003;</span><span><b>The canonical rule, unchanged.</b> <code>/{cities|counties}/{folder}/{slug}/ &rarr; /{cities|counties}/{slug}/</code>, minus the 49 held pairs. It reproduces on all 908 with no exceptions, so it can be applied mechanically. San Francisco&rsquo;s thirteen come out of that batch because they are being rebuilt instead; the other 895 pairs proceed as the <a href="sitemap-plan.html">sitemap plan</a> sets out.</span></li>
+    <li><span class="tickmark" aria-hidden="true">&#10003;</span><span><b>Redirect the address that ranks, not only the address in the sitemap.</b> In San Francisco all nine rankings sit on canonical targets that appear in no sitemap. That will be true everywhere the same pattern holds, which is all 908. Any migration that moves only the sitemap addresses will leave the ranking addresses serving the old page.</span></li>
+    <li><span class="tickmark" aria-hidden="true">&#10003;</span><span><b>Where a city and a county are the same jurisdiction, build one page.</b> San Francisco is the clean case. The other six overlapping places &mdash; Alameda, Fresno, Los Angeles, Orange, San Diego and Santa Barbara &mdash; are genuinely different city and county territories, so their duplication is partial and each needs deciding on its own facts rather than by this rule. 111 pages are in scope for that review; only 13 of them collapse automatically.</span></li>
+    <li><span class="tickmark" aria-hidden="true">&#10003;</span><span><b>A licence type earns its own address when there is stock to put on it.</b> In San Francisco that keeps four types and folds Type 41 into the hub. Run the same test per county against the client&rsquo;s own book: the type pages that survive are the ones with something to sell.</span></li>
+    <li><span class="tickmark" aria-hidden="true">&#10003;</span><span><b>Keep the writing.</b> Across the 970 city and county family pages, 133 fall below 528 own words &mdash; 13.7%. The other 86.3% are already substantial, and in San Francisco all twelve detail pages clear it comfortably. Consolidation merges text; it does not commission new text. That is what makes the work affordable at 908 pages.</span></li>
+    <li><span class="tickmark x" aria-hidden="true">&#10007;</span><span><b>Do not apply the substance floor as a floor.</b> 1,099 words and 528 own words is the median of an eight-page census, four of which fall below it, and it belongs to the state hub template rather than the county template. It is a reference point for a state hub with nothing on it, not a target to write up to on pages that already clear it twice over.</span></li>
+  </ul>
+
+  <h3>Corrections to the brief this work started from</h3>
+  <div class="note is-warn">
+    <h4>Where the data disagreed, the data won</h4>
+    <p><strong>The 41-character truncated description is not a page defect.</strong> It is a census parser artefact &mdash; the extractor terminated the attribute at an apostrophe. The live page serves the full 220-character sentence. 85 census rows are affected and their recorded description lengths should not be used. The real defect on that page is a description 60 characters too long.</p>
+    <p><strong>The wrong-folder pattern is 2 pages site-wide, not 84.</strong> The raw mismatch count is 84, but 82 of those are county pages inside state-named bucket folders &mdash; <code>/counties/arizona-county/</code> and <code>/counties/florida-county/</code> &mdash; which is an inconsistent convention rather than a misfiling. Filtered to folders proven real by their own siblings, the genuine misfiles are two.</p>
+    <p><strong>&ldquo;913 geo pages&rdquo; does not reproduce from the census.</strong> The defensible counts are 971 pages under <code>/cities/</code> or <code>/counties/</code>; 911 of them on the two detail templates that carry the duplication; 909 two-level geo addresses; and 908 carrying the canonical defect. 913 is 911 plus the two California landing pages, which is arithmetic rather than a definition. Use whichever of the four is meant and name it, because the four are not interchangeable in a work order.</p>
+    <p><strong>The rival&rsquo;s median San Francisco price is $205,000, not $210,000.</strong> Thirty priced listings, median of the sorted set. The $15,000 to $350,000 range and the type split &mdash; 47&times;18, 21&times;10, 48&times;1, 20&times;1 &mdash; both reproduce exactly.</p>
+    <p><strong>The county hub is template <code>county-category</code>, not <code>county-detail</code>.</strong> It also has no H1 element and no description, neither of which was in the brief, and it is the weakest of the thirteen pages by every measure taken.</p>
+    <p><strong>The rival&rsquo;s page shows 3 listings, not 30.</strong> Thirty San Francisco County listings exist on its shelf; its county page surfaced three of them when fetched on 13 September 2026, and all three are among the thirty. The page beating thirteen client pages does so with three priced rows on it.</p>
+  </div>
+
+  <h3>What this work cannot settle</h3>
+  <ul class="unres">
+    <li><b>Whether consolidation will move the positions.</b><span>The evidence is observational. It shows that one page with prices on it holds positions 3, 3, 4 and 10 while thirteen pages without them hold 10 through 24. It does not show that the page shape caused the positions, and nothing here claims it did. Treat the modelled figures as a scale for comparison, never as a forecast of traffic after the change.</span></li>
+    <li><b>What the client&rsquo;s own San Francisco book actually contains.</b><span>Every stock figure and price band on this page is measured from the competitor&rsquo;s published listings. None of it is the client&rsquo;s inventory, and the new pages cannot ship until the client&rsquo;s own rows exist. If there are no San Francisco rows to publish, the five pages are still the right architecture, but the lever that separates the two sites is not yet pulled.</span></li>
+    <li><b>Whether the two held pages will redirect cleanly.</b><span>Their canonical targets currently 301 back to them. Whatever rule produces that loop is in the platform and has not been read. Find and remove the rule before shipping the redirects, or the replacement 301s will be overwritten by it &mdash; and the page carrying six of San Francisco&rsquo;s nine rankings is one of the two.</span></li>
+    <li><b>Whether the slash-less address forms are fully covered.</b><span>The site serves at least 1,915 distinct addresses across trailing-slash and slash-less shapes. Twenty-five redirects are specified here against the shapes that were probed. Both forms of each must be tested before release.</span></li>
+  </ul>
+</section>
+
+
+</div>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <h2>Method, and how to read the numbers</h2>
+    <p><strong>What was a census.</strong> All 1,007 addresses in the site&rsquo;s ten sitemap files were fetched and classified on 12 September 2026 &mdash; status, redirect chain, canonical tag, title, description, headings, word count, links and structured data. All 908 canonical destinations were probed separately with redirect-following switched off: 859 returned 200, 49 returned a 3xx. All 244 ranked keywords recorded for the client domain and all 713 for the rival were pulled and each matched to its address. All 1,227 of the rival&rsquo;s listing pages were fetched and parsed, which is where the 30 San Francisco County listings and their prices come from. These counts are exact for what was fetched; the keyword counts are a complete pull of what DataForSEO&rsquo;s index holds for each domain in the United States, in English, for standard organic results, which is not the same as everything Google has ever ranked.</p>
+    <p><strong>What was checked live for this document.</strong> On 13 September 2026 all thirteen San Francisco addresses were re-fetched with a real desktop User-Agent at under two requests a second, and their titles, descriptions, canonicals, headings and internal links re-parsed. All twelve canonical targets were probed with redirect-following off. One control page outside San Francisco was fetched to test the description-length artefact. The rival&rsquo;s San Francisco page was fetched and parsed by the same method. Every live result either reproduced the census or is reported above as a disagreement.</p>
+    <p><strong>What was sampled.</strong> The own-word medians by template come from 103 client pages and 119 rival pages selected by a fixed every-Nth rule over each template&rsquo;s sorted address list, so a re-run selects the same pages. They compare templates, not matched place-for-place pairs. &ldquo;Own words&rdquo; strips text appearing on 80% or more of that template&rsquo;s sampled pages, which makes it a labelled estimate rather than a raw count.</p>
+    <p><strong>What is modelled.</strong> Every traffic figure here &mdash; 4.2, 22.2, 6.81, 0.79 and the rest &mdash; is a DataForSEO estimate calculated from ranking position and search volume. It is not measured sessions and not a Google Ads figure. No analytics or Search Console data from either site entered this research. Search volumes are estimates built on Google Ads data, not Google Ads figures. Positions and keyword counts are exact.</p>
+    <p><strong>Association, not cause.</strong> This is observation of public search results and public pages throughout. It shows which kinds of page sit in the positions that earn the clicks. It does not establish that any page property causes any ranking, and no recommendation above is presented as a guaranteed outcome. The list of what this cannot settle is in section 10 and is part of the deliverable.</p>
+    <p><strong>Measurement dates:</strong> census 12 September 2026; live re-verification 13 September 2026. No paid search API was called for this document. Figures will drift as the site and the search results change &mdash; re-run before acting on any count more than a few weeks old.</p>
+    <p class="fine">Prepared for the owner of www.liquorlicenseagents.com. No licence number, licensee name, premises address or other licence-identifying detail appears anywhere in this document, and no confidential term of any mandate is reproduced. The price bands quoted in the specimen copy in section 8 are measured from the competitor&rsquo;s published listings and are illustrative of sentence shape; replace them with the client&rsquo;s own book before publishing any of that text.</p>
+    <p><a class="foot-back" href="index.html">&#8592; Back to the research bundle index</a></p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var btn = document.getElementById('themeBtn');
+  if (!btn) return;
+  var stored = null;
+  try { stored = window.localStorage.getItem('lla-theme'); } catch (e) { stored = null; }
+  if (stored === 'dark' || stored === 'light') {
+    document.documentElement.setAttribute('data-theme', stored);
+  }
+  btn.hidden = false;
+  btn.addEventListener('click', function(){
+    var root = document.documentElement;
+    var current = root.getAttribute('data-theme');
+    var isDark;
+    if (current === 'dark') { isDark = true; }
+    else if (current === 'light') { isDark = false; }
+    else { isDark = window.matchMedia('(prefers-color-scheme: dark)').matches; }
+    var next = isDark ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { window.localStorage.setItem('lla-theme', next); } catch (e) { /* storage unavailable */ }
+  });
+})();
+</script>
+
+</body>
+</html>
