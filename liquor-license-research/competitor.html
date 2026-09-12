@@ -1,0 +1,1119 @@
+<title>Competitor Teardown</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ---------- tokens: complete light palette on bare :root ---------- */
+:root{
+  --bg:#f7f6f3;
+  --surface:#ffffff;
+  --surface-2:#f0eee9;
+  --surface-3:#e7e4dd;
+  --border:#d9d5cc;
+  --border-strong:#b9b3a6;
+  --ink:#1b1a17;
+  --ink-2:#4a463f;
+  --ink-3:#6d685e;
+  --accent:#1f5f5b;
+  --accent-ink:#123b38;
+  --accent-soft:#dfeceb;
+  --tone-a:#2a5d8f;        /* points away from the blanket claim */
+  --tone-a-soft:#e2ecf6;
+  --tone-b:#8a5212;        /* criticisms that hold */
+  --tone-b-soft:#f6ead9;
+  --tone-c:#5b5a57;        /* unresolved */
+  --tone-c-soft:#ecebe7;
+  --bar-1:#1f5f5b;
+  --bar-2:#2a5d8f;
+  --bar-3:#8a5212;
+  --bar-4:#6d685e;
+  --focus:#0b64b8;
+  --shadow:0 1px 2px rgba(27,26,23,.06), 0 8px 24px rgba(27,26,23,.05);
+  --serif:"Source Serif 4", Georgia, "Times New Roman", serif;
+  --sans:"Inter", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#14150f;
+    --surface:#1c1e17;
+    --surface-2:#23261e;
+    --surface-3:#2c3028;
+    --border:#3a3e34;
+    --border-strong:#585d50;
+    --ink:#f2f1ea;
+    --ink-2:#cfcdc2;
+    --ink-3:#a8a59a;
+    --accent:#7fd0c8;
+    --accent-ink:#b7e6e1;
+    --accent-soft:#1d3330;
+    --tone-a:#8fbde8;
+    --tone-a-soft:#1a2937;
+    --tone-b:#e0ab63;
+    --tone-b-soft:#33270f;
+    --tone-c:#b0aea6;
+    --tone-c-soft:#282a24;
+    --bar-1:#5fbdb4;
+    --bar-2:#7aa9d8;
+    --bar-3:#d09a52;
+    --bar-4:#8d8a80;
+    --focus:#8ec5ff;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.3);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#14150f;
+  --surface:#1c1e17;
+  --surface-2:#23261e;
+  --surface-3:#2c3028;
+  --border:#3a3e34;
+  --border-strong:#585d50;
+  --ink:#f2f1ea;
+  --ink-2:#cfcdc2;
+  --ink-3:#a8a59a;
+  --accent:#7fd0c8;
+  --accent-ink:#b7e6e1;
+  --accent-soft:#1d3330;
+  --tone-a:#8fbde8;
+  --tone-a-soft:#1a2937;
+  --tone-b:#e0ab63;
+  --tone-b-soft:#33270f;
+  --tone-c:#b0aea6;
+  --tone-c-soft:#282a24;
+  --bar-1:#5fbdb4;
+  --bar-2:#7aa9d8;
+  --bar-3:#d09a52;
+  --bar-4:#8d8a80;
+  --focus:#8ec5ff;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.3);
+}
+
+/* ---------- base: mobile first, 390px ---------- */
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:var(--sans);
+  font-size:16px;
+  line-height:1.58;
+  margin:0;
+  overflow-x:hidden;
+}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px;border-radius:3px}
+
+.wrap{width:100%;max-width:100%;padding:0 18px;margin:0 auto}
+
+/* header */
+.site-head{
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+  position:relative;
+}
+.head-inner{
+  display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;
+  padding:12px 0;
+}
+.brand{
+  font-family:var(--serif);
+  font-size:1.02rem;font-weight:600;letter-spacing:.01em;
+  color:var(--ink);margin:0;
+  display:flex;align-items:center;gap:9px;min-height:44px;
+}
+.brand-mark{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:26px;height:26px;flex:0 0 26px;border-radius:6px;
+  background:var(--accent);color:var(--bg);
+  font-family:var(--sans);font-size:.72rem;font-weight:700;letter-spacing:.02em;
+}
+.head-nav{display:flex;align-items:center;gap:6px;margin-left:auto}
+.head-link{
+  display:inline-flex;align-items:center;min-height:44px;
+  padding:0 12px;border-radius:8px;
+  color:var(--ink-2);text-decoration:none;
+  font-size:.86rem;font-weight:600;
+  border:1px solid var(--border);
+  background:var(--surface-2);
+}
+.head-link:hover{color:var(--ink);border-color:var(--border-strong)}
+.theme-btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-height:44px;min-width:44px;padding:0 12px;
+  border-radius:8px;border:1px solid var(--border);
+  background:var(--surface-2);color:var(--ink-2);
+  font-family:var(--sans);font-size:.86rem;font-weight:600;cursor:pointer;
+}
+.theme-btn:hover{color:var(--ink);border-color:var(--border-strong)}
+
+/* hero */
+.hero{padding:26px 0 6px}
+.eyebrow{
+  font-size:.72rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--accent-ink);margin:0 0 10px;
+}
+h1{
+  font-family:var(--serif);font-weight:600;
+  font-size:2rem;line-height:1.14;letter-spacing:-.01em;
+  margin:0 0 14px;color:var(--ink);
+}
+.lede{font-size:1.06rem;line-height:1.55;color:var(--ink-2);margin:0 0 14px}
+.lede strong{color:var(--ink);font-weight:600}
+.meta-line{
+  font-size:.82rem;color:var(--ink-3);margin:0 0 4px;
+  padding-top:12px;border-top:1px solid var(--border);
+}
+
+/* headline figure strip */
+.figs{
+  display:grid;grid-template-columns:1fr;gap:10px;
+  margin:22px 0 4px;padding:0;list-style:none;
+}
+.fig{
+  background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:13px 14px;box-shadow:var(--shadow);
+}
+.fig-n{
+  font-family:var(--serif);font-weight:600;
+  font-size:1.72rem;line-height:1.05;letter-spacing:-.01em;
+  color:var(--ink);display:block;
+  font-variant-numeric:tabular-nums;
+}
+.fig-lab{display:block;font-size:.88rem;color:var(--ink-2);margin-top:4px}
+.fig-src{display:block;font-size:.72rem;color:var(--ink-3);margin-top:6px}
+
+/* sections */
+.section{padding:30px 0 4px;border-top:1px solid var(--border);margin-top:30px}
+.section:first-of-type{border-top:0;margin-top:0}
+.sec-num{
+  font-size:.72rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--ink-3);display:block;margin-bottom:8px;
+}
+h2{
+  font-family:var(--serif);font-weight:600;
+  font-size:1.5rem;line-height:1.2;margin:0 0 12px;color:var(--ink);
+}
+h3{
+  font-family:var(--sans);font-weight:700;
+  font-size:1rem;line-height:1.35;margin:26px 0 8px;color:var(--ink);
+}
+h4{
+  font-family:var(--sans);font-weight:700;
+  font-size:.82rem;letter-spacing:.06em;text-transform:uppercase;
+  margin:0 0 8px;color:var(--ink-2);
+}
+p{margin:0 0 14px;color:var(--ink-2)}
+p strong{color:var(--ink);font-weight:600}
+a{color:var(--accent-ink);text-decoration-thickness:1px;text-underline-offset:2px}
+ul,ol{margin:0 0 16px;padding-left:20px;color:var(--ink-2)}
+li{margin-bottom:7px}
+li strong{color:var(--ink);font-weight:600}
+
+/* labels */
+.tag{
+  display:inline-block;vertical-align:baseline;
+  font-size:.66rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;
+  padding:2px 7px;border-radius:999px;border:1px solid var(--border-strong);
+  color:var(--ink-2);background:var(--surface-2);
+  white-space:nowrap;
+}
+.tag-census{border-color:var(--accent);color:var(--accent-ink);background:var(--accent-soft)}
+.tag-sample{border-color:var(--tone-a);color:var(--tone-a);background:var(--tone-a-soft)}
+.tag-model{border-color:var(--tone-b);color:var(--tone-b);background:var(--tone-b-soft)}
+.tag-open{border-color:var(--tone-c);color:var(--tone-c);background:var(--tone-c-soft)}
+
+/* panels */
+.quiet{
+  background:var(--surface-2);border:1px solid var(--border);border-radius:10px;
+  padding:14px;margin:18px 0;font-size:.92rem;
+}
+.quiet > :last-child{margin-bottom:0}
+.quiet p{color:var(--ink-2)}
+
+/* verdict */
+.verdict{
+  border:2px solid var(--accent);border-radius:12px;
+  background:var(--accent-soft);padding:16px;margin:18px 0;
+}
+.verdict-head{
+  display:flex;flex-wrap:wrap;align-items:baseline;gap:8px;margin-bottom:10px;
+}
+.verdict-word{
+  font-family:var(--serif);font-size:1.3rem;font-weight:600;
+  color:var(--accent-ink);line-height:1.15;
+}
+.verdict p{color:var(--accent-ink);margin-bottom:10px}
+.verdict > :last-child{margin-bottom:0}
+
+/* two-tone evidence columns */
+.tones{display:grid;grid-template-columns:1fr;gap:14px;margin:18px 0}
+.tone{border:1px solid var(--border);border-radius:12px;padding:15px;background:var(--surface)}
+.tone-a{border-left:5px solid var(--tone-a)}
+.tone-b{border-left:5px solid var(--tone-b)}
+.tone h4{color:var(--ink)}
+.tone ul{margin-bottom:0;padding-left:18px;font-size:.94rem}
+
+/* tables */
+.table-scroll{
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+  border:1px solid var(--border);border-radius:10px;
+  background:var(--surface);margin:16px 0;
+}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:.9rem}
+caption{
+  text-align:left;font-size:.8rem;color:var(--ink-3);
+  padding:10px 12px;border-bottom:1px solid var(--border);
+}
+th,td{
+  text-align:left;padding:9px 12px;
+  border-bottom:1px solid var(--border);color:var(--ink-2);
+  vertical-align:top;
+}
+th{
+  font-size:.76rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
+  color:var(--ink-3);background:var(--surface-2);white-space:nowrap;
+}
+tbody tr:last-child td{border-bottom:0}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+td.strong{color:var(--ink);font-weight:600}
+
+/* charts: CSS bars */
+.chart{margin:18px 0}
+.chart-title{
+  font-family:var(--sans);font-weight:700;font-size:.95rem;
+  color:var(--ink);margin:0 0 3px;
+}
+.chart-sub{font-size:.8rem;color:var(--ink-3);margin:0 0 12px}
+.chart-note{font-size:.78rem;color:var(--ink-3);margin:10px 0 0}
+.bars{list-style:none;margin:0;padding:0}
+.bar-row{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:2px;margin-bottom:11px;
+}
+.bar-lab{
+  font-size:.82rem;color:var(--ink-2);
+  display:flex;justify-content:space-between;gap:10px;align-items:baseline;
+}
+.bar-val{font-variant-numeric:tabular-nums;color:var(--ink);font-weight:600}
+.bar-track{
+  background:var(--surface-3);border-radius:4px;height:14px;overflow:hidden;
+}
+.bar-fill{display:block;height:100%;border-radius:4px;background:var(--bar-1)}
+.bar-fill.b2{background:var(--bar-2)}
+.bar-fill.b3{background:var(--bar-3)}
+.bar-fill.b4{background:var(--bar-4)}
+.axis{
+  display:flex;justify-content:space-between;
+  font-size:.74rem;color:var(--ink-3);
+  font-variant-numeric:tabular-nums;
+  border-top:1px solid var(--border);padding-top:5px;margin-top:2px;
+}
+
+/* timeline */
+.tl{list-style:none;margin:0;padding:0}
+.tl-row{margin-bottom:13px}
+.tl-lab{
+  font-size:.82rem;color:var(--ink-2);
+  display:flex;justify-content:space-between;gap:10px;align-items:baseline;
+  margin-bottom:3px;
+}
+.tl-date{font-variant-numeric:tabular-nums;color:var(--ink);font-weight:600;white-space:nowrap}
+.tl-track{
+  position:relative;height:14px;
+  background:var(--surface-3);border-radius:4px;
+}
+.tl-bar{
+  position:absolute;top:0;height:100%;border-radius:4px;
+  background:var(--bar-1);
+}
+.tl-dot{
+  position:absolute;top:1px;width:12px;height:12px;margin-left:-6px;
+  border-radius:50%;background:var(--bar-3);
+  border:2px solid var(--surface);
+}
+.tl-axis{
+  position:relative;height:20px;margin-top:2px;
+  border-top:1px solid var(--border);
+  font-size:.74rem;color:var(--ink-3);
+  font-variant-numeric:tabular-nums;
+}
+.tl-tick{position:absolute;top:5px;transform:translateX(-50%);white-space:nowrap}
+.tl-tick-start{position:absolute;top:5px;left:0;white-space:nowrap}
+.tl-tick-end{position:absolute;top:5px;right:0;white-space:nowrap}
+
+/* svg chart */
+.svg-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.svg-chart{display:block;width:100%;min-width:320px;height:auto}
+.svg-col{fill:var(--bar-2)}
+.svg-col-hi{fill:var(--bar-3)}
+.svg-axis{stroke:var(--border-strong);stroke-width:1}
+.svg-grid{stroke:var(--border);stroke-width:1;stroke-dasharray:2 3}
+.svg-lab{fill:var(--ink-3);font-family:var(--sans);font-size:9px}
+.svg-lab-y{fill:var(--ink-3);font-family:var(--sans);font-size:9px;text-anchor:end}
+.svg-lab-end{fill:var(--ink-3);font-family:var(--sans);font-size:9px;text-anchor:end}
+.svg-annot{fill:var(--ink-2);font-family:var(--sans);font-size:9px;font-weight:600}
+
+/* definition list */
+.defs{margin:16px 0;padding:0}
+.defs dt{font-weight:700;color:var(--ink);font-size:.92rem;margin-top:12px}
+.defs dd{margin:3px 0 0;padding:0;color:var(--ink-2);font-size:.92rem}
+
+/* footer */
+.site-foot{
+  margin-top:36px;border-top:1px solid var(--border);
+  background:var(--surface);padding:26px 0 34px;
+}
+.foot-title{
+  font-family:var(--serif);font-size:1.15rem;font-weight:600;
+  color:var(--ink);margin:0 0 12px;
+}
+.foot-grid{display:grid;grid-template-columns:1fr;gap:16px;margin-bottom:18px}
+.foot-note{font-size:.84rem;color:var(--ink-3);margin:0}
+.foot-block h4{margin-bottom:6px}
+.foot-block p{font-size:.88rem;margin-bottom:0}
+.foot-block ul{font-size:.88rem;margin-bottom:0}
+
+/* ---------- 768 ---------- */
+@media (min-width:768px){
+  .wrap{padding:0 32px}
+  h1{font-size:2.6rem}
+  .lede{font-size:1.16rem}
+  .hero{padding:40px 0 8px}
+  .section{padding:40px 0 4px;margin-top:40px}
+  h2{font-size:1.85rem}
+  .figs{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .tones{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .bar-row{grid-template-columns:1fr;gap:3px}
+  .foot-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}
+  .verdict{padding:22px}
+  .svg-lab,.svg-lab-y,.svg-lab-end,.svg-annot{font-size:8px}
+}
+
+/* ---------- 1200 ---------- */
+@media (min-width:1200px){
+  .wrap{max-width:1120px;padding:0 40px}
+  h1{font-size:3rem}
+  .figs{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .hero{padding:52px 0 8px}
+  .lede{max-width:62ch}
+  p,li{font-size:1rem}
+  .prose-wide{max-width:74ch}
+  .foot-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+</style>
+
+<header class="site-head">
+  <div class="wrap head-inner">
+    <p class="brand"><span class="brand-mark">LL</span> Liquor-licence research bundle</p>
+    <nav class="head-nav"><a class="head-link" href="index.html">All reports</a></nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="hero">
+    <p class="eyebrow">Report 04 &middot; Competitor teardown</p>
+    <h1>What the competitor actually is</h1>
+    <p class="lede">This is the most-quoted evidence in the whole engagement, so here it is with its working shown. We fetched and parsed <strong>every one of the 1,227 listing pages</strong> on liquorlicenseauctioneers.com &mdash; not a sample of them &mdash; plus their sitemap, their robots file, their seller intake forms and fourteen years of their archived pages. Everything below is a measurement of public web pages. Nothing below is an accusation.</p>
+    <p class="meta-line">Measurements taken 12 September 2026. Published 13 September 2026. Every figure is re-derived from a named data file; the method is stated at the foot of the page.</p>
+  </div>
+
+  <ul class="figs">
+    <li class="fig">
+      <span class="fig-n">1,227</span>
+      <span class="fig-lab">Listing pages on the competitor&rsquo;s site. All 1,227 fetched, all returned HTTP 200, none failed.</span>
+      <span class="fig-src">Census &middot; listing-reality.json</span>
+    </li>
+    <li class="fig">
+      <span class="fig-n">0</span>
+      <span class="fig-lab">Listings publishing a licence number, a licensee name or a premises address. Zero of 1,227.</span>
+      <span class="fig-src">Census &middot; listing-reality.json</span>
+    </li>
+    <li class="fig">
+      <span class="fig-n">132</span>
+      <span class="fig-lab">Distinct description texts covering 1,198 of the listings. The largest identical block covers 185 listings.</span>
+      <span class="fig-src">Census &middot; listing-reality.json</span>
+    </li>
+    <li class="fig">
+      <span class="fig-n">6</span>
+      <span class="fig-lab">Distinct images serving all 1,227 listing pages &mdash; five state banners and a logo.</span>
+      <span class="fig-src">Census &middot; listing-reality.json</span>
+    </li>
+    <li class="fig">
+      <span class="fig-n">$75,000</span>
+      <span class="fig-lab">Median asking price across the 1,202 listings inside a plausible range (quarter points $25,000 and $175,000).</span>
+      <span class="fig-src">Census &middot; listing-reality.json</span>
+    </li>
+    <li class="fig">
+      <span class="fig-n">1,223</span>
+      <span class="fig-lab">Of the 1,227 listing pages rank for no search term at all. Four of them rank for something.</span>
+      <span class="fig-src">Ranked-keyword census &middot; ranked.json via gating-architecture.json</span>
+    </li>
+  </ul>
+
+  <!-- ============ 1. INVENTORY ============ -->
+  <section class="section">
+    <span class="sec-num">Section 1</span>
+    <h2>What their inventory is</h2>
+
+    <p class="prose-wide">Their sitemap &mdash; the index file a site gives search engines listing every page it wants found &mdash; holds <strong>3,868 URLs</strong>. Of those, <strong>1,227 are individual licence listings</strong>. We fetched every one of them at no more than two requests a second, and parsed each with a single extractor built against the real page structure. All 1,227 returned HTTP 200. That makes the numbers in this section a <span class="tag tag-census">census</span> &mdash; a complete count of the population, not an estimate drawn from a sample.</p>
+
+    <h3>Eight states, 191 named counties</h3>
+    <p>The inventory spans eight states. California is more than half of it.</p>
+
+    <div class="chart">
+      <p class="chart-title">Listings by state</p>
+      <p class="chart-sub">Census of all 1,227 listings. Bars scaled to California&rsquo;s 734.</p>
+      <ul class="bars">
+        <li class="bar-row"><span class="bar-lab">California <span class="bar-val">734</span></span><span class="bar-track"><span class="bar-fill" style="width:100%"></span></span></li>
+        <li class="bar-row"><span class="bar-lab">New Jersey <span class="bar-val">131</span></span><span class="bar-track"><span class="bar-fill" style="width:17.8%"></span></span></li>
+        <li class="bar-row"><span class="bar-lab">Pennsylvania <span class="bar-val">113</span></span><span class="bar-track"><span class="bar-fill" style="width:15.4%"></span></span></li>
+        <li class="bar-row"><span class="bar-lab">Florida <span class="bar-val">102</span></span><span class="bar-track"><span class="bar-fill" style="width:13.9%"></span></span></li>
+        <li class="bar-row"><span class="bar-lab">Arizona <span class="bar-val">63</span></span><span class="bar-track"><span class="bar-fill" style="width:8.6%"></span></span></li>
+        <li class="bar-row"><span class="bar-lab">Ohio <span class="bar-val">59</span></span><span class="bar-track"><span class="bar-fill" style="width:8%"></span></span></li>
+        <li class="bar-row"><span class="bar-lab">Michigan <span class="bar-val">19</span></span><span class="bar-track"><span class="bar-fill" style="width:2.6%"></span></span></li>
+        <li class="bar-row"><span class="bar-lab">New Mexico <span class="bar-val">6</span></span><span class="bar-track"><span class="bar-fill" style="width:0.8%"></span></span></li>
+      </ul>
+      <div class="axis"><span>0</span><span>734 listings</span></div>
+      <p class="chart-note">Source: listing-reality.json, per-listing census. The eight state counts sum to exactly 1,227.</p>
+    </div>
+
+    <p>Underneath the states sit <strong>191 named counties</strong>. Three further buckets have an empty county field (19 California listings, one in New Jersey, one in Pennsylvania), which is why the source file&rsquo;s own summary line says &ldquo;194 counties&rdquo;. We recounted from the raw records: 191 are real county names, three are blanks. The distribution is heavily concentrated rather than spread evenly &mdash; the shape a real market makes, where big metros carry the volume.</p>
+
+    <div class="chart">
+      <p class="chart-title">The ten biggest counties</p>
+      <p class="chart-sub">Census. The top five counties together hold 21.8% of all listings; 62 counties hold exactly one.</p>
+      <ul class="bars">
+        <li class="bar-row"><span class="bar-lab">Los Angeles, CA <span class="bar-val">105</span></span><span class="bar-track"><span class="bar-fill" style="width:100%"></span></span></li>
+        <li class="bar-row"><span class="bar-lab">San Diego, CA <span class="bar-val">46</span></span><span class="bar-track"><span class="bar-fill" style="width:43.8%"></span></span></li>
+        <li class="bar-row"><span class="bar-lab">Orange, CA <span class="bar-val">43</span></span><span class="bar-track"><span class="bar-fill" style="width:41%"></span></span></li>
+        <li class="bar-row"><span class="bar-lab">Alameda, CA <span class="bar-val">37</span></span><span class="bar-track"><span class="bar-fill" style="width:35.2%"></span></span></li>
+        <li class="bar-row"><span class="bar-lab">Santa Clara, CA <span class="bar-val">36</span></span><span class="bar-track"><span class="bar-fill" style="width:34.3%"></span></span></li>
+        <li class="bar-row"><span class="bar-lab">Riverside, CA <span class="bar-val">32</span></span><span class="bar-track"><span class="bar-fill" style="width:30.5%"></span></span></li>
+        <li class="bar-row"><span class="bar-lab">San Francisco, CA <span class="bar-val">30</span></span><span class="bar-track"><span class="bar-fill" style="width:28.6%"></span></span></li>
+        <li class="bar-row"><span class="bar-lab">Sacramento, CA <span class="bar-val">27</span></span><span class="bar-track"><span class="bar-fill" style="width:25.7%"></span></span></li>
+        <li class="bar-row"><span class="bar-lab">Bergen, NJ <span class="bar-val">26</span></span><span class="bar-track"><span class="bar-fill" style="width:24.8%"></span></span></li>
+        <li class="bar-row"><span class="bar-lab">San Mateo, CA <span class="bar-val">24</span></span><span class="bar-track"><span class="bar-fill" style="width:22.9%"></span></span></li>
+      </ul>
+      <div class="axis"><span>0</span><span>105 listings</span></div>
+      <p class="chart-note">Concentration measured at a Gini coefficient of 0.6105 &mdash; a standard 0-to-1 measure of inequality where 0 means every county holds the same number and 1 means one county holds everything. Computed across the 194 county buckets, blanks included.</p>
+    </div>
+
+    <h3>Prices</h3>
+    <p>Every one of the 1,227 listings carries a numeric price, in US dollars, and none is zero or missing. The median is <strong>$75,000</strong>. Twenty-five records sit outside any plausible range for a licence transfer, and we treat them separately below; with those excluded the middle half of the book runs <strong>$25,000 to $175,000</strong> across 1,202 listings.</p>
+
+    <div class="chart">
+      <p class="chart-title">Asking prices, by band</p>
+      <p class="chart-sub">Census of all 1,227 priced listings. These are the seven bands the competitor&rsquo;s own site uses.</p>
+      <ul class="bars">
+        <li class="bar-row"><span class="bar-lab">Under $1,000 <span class="bar-val">17</span></span><span class="bar-track"><span class="bar-fill b3" style="width:4.5%"></span></span></li>
+        <li class="bar-row"><span class="bar-lab">$1k&ndash;$10k <span class="bar-val">111</span></span><span class="bar-track"><span class="bar-fill" style="width:29.4%"></span></span></li>
+        <li class="bar-row"><span class="bar-lab">$10k&ndash;$50k <span class="bar-val">355</span></span><span class="bar-track"><span class="bar-fill" style="width:93.9%"></span></span></li>
+        <li class="bar-row"><span class="bar-lab">$50k&ndash;$150k <span class="bar-val">378</span></span><span class="bar-track"><span class="bar-fill" style="width:100%"></span></span></li>
+        <li class="bar-row"><span class="bar-lab">$150k&ndash;$500k <span class="bar-val">302</span></span><span class="bar-track"><span class="bar-fill" style="width:79.9%"></span></span></li>
+        <li class="bar-row"><span class="bar-lab">$500k&ndash;$1m <span class="bar-val">49</span></span><span class="bar-track"><span class="bar-fill" style="width:13%"></span></span></li>
+        <li class="bar-row"><span class="bar-lab">Over $1m <span class="bar-val">15</span></span><span class="bar-track"><span class="bar-fill" style="width:4%"></span></span></li>
+      </ul>
+      <div class="axis"><span>0</span><span>378 listings</span></div>
+      <p class="chart-note">The 17 sub-$1,000 rows are shown in a different colour because most of them are placeholder data rather than offers &mdash; see Section 2.</p>
+    </div>
+
+    <p>Price levels differ sharply by state, which is what you would expect: a New Jersey plenary retail licence and a California off-sale beer-and-wine licence are not the same asset.</p>
+
+    <div class="table-scroll">
+      <table>
+        <caption>Asking price by state. Census, n = 1,227. p25 and p75 are the quarter points &mdash; a quarter of listings sit below p25, a quarter above p75.</caption>
+        <thead>
+          <tr><th scope="col">State</th><th scope="col" class="n">Listings</th><th scope="col" class="n">Lowest</th><th scope="col" class="n">p25</th><th scope="col" class="n">Median</th><th scope="col" class="n">p75</th><th scope="col" class="n">Highest</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="strong">California</td><td class="n">734</td><td class="n">$4</td><td class="n">$10,500</td><td class="n">$40,000</td><td class="n">$90,000</td><td class="n">$99,999,999</td></tr>
+          <tr><td class="strong">New Jersey</td><td class="n">131</td><td class="n">$5</td><td class="n">$147,500</td><td class="n">$255,000</td><td class="n">$440,000</td><td class="n">$1,980,000</td></tr>
+          <tr><td class="strong">Pennsylvania</td><td class="n">113</td><td class="n">$300</td><td class="n">$80,000</td><td class="n">$130,000</td><td class="n">$209,000</td><td class="n">$9,500,000</td></tr>
+          <tr><td class="strong">Florida</td><td class="n">102</td><td class="n">$250</td><td class="n">$215,000</td><td class="n">$310,000</td><td class="n">$483,750</td><td class="n">$1,150,000</td></tr>
+          <tr><td class="strong">Arizona</td><td class="n">63</td><td class="n">$10,000</td><td class="n">$35,750</td><td class="n">$65,000</td><td class="n">$143,750</td><td class="n">$275,000</td></tr>
+          <tr><td class="strong">Ohio</td><td class="n">59</td><td class="n">$5,000</td><td class="n">$21,000</td><td class="n">$30,000</td><td class="n">$50,000</td><td class="n">$1,570,000</td></tr>
+          <tr><td class="strong">Michigan</td><td class="n">19</td><td class="n">$15,000</td><td class="n">$50,000</td><td class="n">$60,500</td><td class="n">$85,000</td><td class="n">$140,000</td></tr>
+          <tr><td class="strong">New Mexico</td><td class="n">6</td><td class="n">$350,000</td><td class="n">$637,500</td><td class="n">$775,000</td><td class="n">$75,199,999</td><td class="n">$99,999,999</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="foot-note">The extreme highs in the California, Pennsylvania and New Mexico rows are placeholder records, not offers. With only six New Mexico listings, two placeholder rows drag that state&rsquo;s upper quarter point to an absurd number; read that row with care.</p>
+
+    <h3>Licence type mix</h3>
+    <p>Twenty-seven distinct values appear in the licence-type field. Twenty-six are real licence classes; one, the generic string &ldquo;Liquor&rdquo;, appears on 29 records and carries no class information at all.</p>
+
+    <div class="table-scroll">
+      <table>
+        <caption>Licence types with 18 or more listings. Census, n = 1,227. Medians are of the asking price.</caption>
+        <thead>
+          <tr><th scope="col">Licence type</th><th scope="col">State it belongs to</th><th scope="col" class="n">Listings</th><th scope="col" class="n">Median price</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="strong">Type 47</td><td>California &mdash; on-sale general, restaurant</td><td class="n">292</td><td class="n">$80,000</td></tr>
+          <tr><td class="strong">Type 20</td><td>California &mdash; off-sale beer &amp; wine</td><td class="n">185</td><td class="n">$10,000</td></tr>
+          <tr><td class="strong">Type 21</td><td>California &mdash; off-sale general</td><td class="n">166</td><td class="n">$40,000</td></tr>
+          <tr><td class="strong">Type 33</td><td>New Jersey</td><td class="n">108</td><td class="n">$250,000</td></tr>
+          <tr><td class="strong">4COP/3PS</td><td>Florida &mdash; quota licence</td><td class="n">100</td><td class="n">$310,000</td></tr>
+          <tr><td class="strong">Type R</td><td>Pennsylvania &mdash; restaurant</td><td class="n">91</td><td class="n">$120,000</td></tr>
+          <tr><td class="strong">Type 48</td><td>California &mdash; on-sale general, public premises</td><td class="n">33</td><td class="n">$85,000</td></tr>
+          <tr><td class="strong">D-5</td><td>Ohio</td><td class="n">31</td><td class="n">$35,000</td></tr>
+          <tr><td class="strong">Series 6</td><td>Arizona &mdash; bar</td><td class="n">30</td><td class="n">$118,750</td></tr>
+          <tr><td class="strong">Type 41</td><td>California &mdash; on-sale beer &amp; wine, restaurant</td><td class="n">29</td><td class="n">$8,500</td></tr>
+          <tr><td class="strong">&ldquo;Liquor&rdquo; (no class given)</td><td>Mostly California</td><td class="n">29</td><td class="n">$100,000</td></tr>
+          <tr><td class="strong">Series 7</td><td>Arizona &mdash; beer &amp; wine bar</td><td class="n">28</td><td class="n">$31,500</td></tr>
+          <tr><td class="strong">Type 44</td><td>New Jersey</td><td class="n">20</td><td class="n">$300,000</td></tr>
+          <tr><td class="strong">Class C</td><td>Michigan</td><td class="n">18</td><td class="n">$65,250</td></tr>
+          <tr><td>13 further types</td><td>Various</td><td class="n">67</td><td class="n">&mdash;</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="foot-note">The plain-English glosses on licence classes are ours, added for readability; the counts and medians are from the census. The &ldquo;Liquor&rdquo; row is a data-quality artefact, not a licence class.</p>
+  </section>
+
+  <!-- ============ 2. THE FAKE LISTINGS QUESTION ============ -->
+  <section class="section">
+    <span class="sec-num">Section 2</span>
+    <h2>The &ldquo;fake listings&rdquo; question</h2>
+
+    <p class="prose-wide">This engagement began with a claim worth testing properly: that the competitor&rsquo;s inventory is fabricated. We ran ten separate tests across the full census to find out. The answer has two halves, and the second half matters as much as the first.</p>
+
+    <div class="verdict">
+      <div class="verdict-head">
+        <span class="verdict-word">The blanket claim is contradicted.</span>
+        <span class="tag tag-census">census, n = 1,227</span>
+      </div>
+      <p>Measured across all 1,227 listing pages, the claim that the inventory as a whole is fake does not survive. Four independent measurements point away from it.</p>
+      <p><strong>Three narrower criticisms do hold, and they travel with the verdict:</strong> a measurable minority of the records are junk; the displayed &ldquo;Views&rdquo; counter is not a real measurement; and the authenticity of any single listing is undetermined, because no listing publishes a key anyone could check against a public register.</p>
+    </div>
+
+    <div class="tones">
+      <div class="tone tone-a">
+        <h4>What points away from fabrication</h4>
+        <ul>
+          <li><strong>The stock turns over.</strong> Of 385 listing URLs the web archive recorded as live and that have since left the sitemap, 220 now return &ldquo;not found&rdquo;. A matched control of 40 URLs still in the sitemap, fetched the same way, all returned normally. Pages get deleted &mdash; which a site built purely to attract search traffic has no reason to do.</li>
+          <li><strong>The prices are not a generated default.</strong> 271 distinct price values across 1,227 listings; 165 of them are not round thousands. A machine-filled field usually shows a small value set or a fixed step.</li>
+          <li><strong>The central price distribution is economically coherent.</strong> Excluding 25 impossible rows: n = 1,202, quarter points $25,000 and $175,000, median $75,000.</li>
+          <li><strong>Every page is backed by its own database record.</strong> The internal product code equals &ldquo;auction-&lt;id&gt;&rdquo; on 1,227 of 1,227 pages, with no duplicates.</li>
+          <li><strong>The seller intake is serious.</strong> Their &ldquo;sell your licence&rdquo; form has 17 required fields, including a state licence number, the licensee name exactly as it appears on the licence, and the premises address.</li>
+          <li><strong>The county spread is market-shaped.</strong> Heavily concentrated in large metros (Gini 0.6105), with 62 counties holding exactly one listing &mdash; not the flat count a per-county generator would produce.</li>
+        </ul>
+      </div>
+      <div class="tone tone-b">
+        <h4>What is genuinely wrong with it</h4>
+        <ul>
+          <li><strong>63 records are placeholders or junk.</strong> 25 carry prices that cannot be a licence transfer &mdash; three at an all-nines maximum value, others at $4, $5, $10 &mdash; and 42 carry an empty or malformed county or licence type. Four records fall into both groups, so the distinct total is 63. All of them are live, marked available, and listed in the sitemap given to search engines.</li>
+          <li><strong>The &ldquo;Views&rdquo; counter is not a measurement.</strong> It is bounded to 0&ndash;36 with every integer in that range present, near-flat in frequency, and carries no relationship to listing age. One listing reports more bids than views, which is impossible for a real counter. Archived pages show the same counter falling over time and once reaching 96 &mdash; a cumulative count cannot decrease.</li>
+          <li><strong>37 pairs of consecutive listing IDs hold identical records.</strong> Same state, county, type and price, 3.02% of listings &mdash; the signature of rows inserted together rather than sellers arriving separately.</li>
+          <li><strong>Nothing is externally checkable.</strong> Zero of 1,227 listings publish a licence number, licensee name or premises address, so no buyer or competitor can verify a single one against the state register.</li>
+          <li><strong>The order book is nearly empty.</strong> 1,199 of 1,227 listings show zero bids. Twenty-eight have ever taken one; the maximum is seven.</li>
+          <li><strong>Two template defects sit on every page.</strong> All 1,227 page titles render &ldquo;$0k&rdquo; while the page body shows the true price, and all 1,227 leak raw server code into their structured data, which makes that markup unreadable to search engines.</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>How the ten tests came out</h3>
+    <div class="table-scroll">
+      <table>
+        <caption>The ten duplicate-and-integrity tests run over the full census, with what each one is and is not able to show.</caption>
+        <thead>
+          <tr><th scope="col">Test</th><th scope="col">Result</th><th scope="col">What it cannot show</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="strong">Repeated prices inside one county and type</td><td>355 county-and-type groups; 85 contain a repeated price; most repeats in one group, 6</td><td>Nothing about fabrication. Round-number clustering is normal seller behaviour in an illiquid market.</td></tr>
+          <tr><td class="strong">Identical description text across listings</td><td>132 distinct texts cover 1,198 listings; largest identical block 185; no text crosses a state or type boundary</td><td>That the inventory is fake. A real brokerage can publish boilerplate per licence class.</td></tr>
+          <tr><td class="strong">Duplicated state + county + type + price</td><td>348 listings (28.4%) share all four with a sibling and are indistinguishable on the page</td><td>Duplication of the underlying asset. Two real licences in one county at one round price is ordinary.</td></tr>
+          <tr><td class="strong">Price uniformity</td><td>271 distinct prices; 165 not divisible by 1,000; top ten prices cover 27.1% of listings</td><td>Authenticity either way on its own.</td></tr>
+          <tr><td class="strong">Listings per county</td><td>194 county buckets, median 3, maximum 105, Gini 0.6105, 62 with exactly one</td><td>Any link to population. No population source was used, so only the distribution shape is measured.</td></tr>
+          <tr><td class="strong">Bid and view counters</td><td>1,199 of 1,227 with zero bids; views vary 0&ndash;36</td><td>That variation proves real activity &mdash; the views test below shows why that reading has to be withdrawn.</td></tr>
+          <tr><td class="strong">Record integrity and template defects</td><td>Unique product code on 1,227 of 1,227; &ldquo;$0k&rdquo; title on 1,227; broken structured data on 1,227; 0 dates in markup</td><td>That a database row corresponds to a real, currently transferable licence. A row is a row.</td></tr>
+          <tr><td class="strong">Placeholder and junk records</td><td>25 impossible prices (2.04%) plus 42 malformed county or type rows, all live and in the sitemap</td><td>That the remaining majority is fabricated. These are the tail, not the body.</td></tr>
+          <tr><td class="strong">Adjacent-ID identical records</td><td>37 consecutive-ID pairs identical on state, county, type and price (3.02%)</td><td>Fabrication. A broker taking two licences from one seller would also produce adjacent IDs.</td></tr>
+          <tr><td class="strong">Activity-counter integrity</td><td>Views bounded 0&ndash;36, every integer present, near-flat, no correlation with age, one listing with more bids than views</td><td>That the underlying licence is fabricated. A decorative or rolling-window counter on a real listing is an alternative explanation.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Why the view counter reads as generated</h3>
+    <p>This is the sharpest single finding in the census, so here is the actual shape. A real lifetime view count is unbounded, heavily skewed &mdash; a few pages get a lot, most get very few &mdash; and grows with age. The measured counter does none of that.</p>
+
+    <div class="chart">
+      <p class="chart-title">How many listings show each view count</p>
+      <p class="chart-sub">Census, all 1,227 listings. Every whole number from 0 to 36 appears; nothing appears above 36.</p>
+      <div class="svg-wrap">
+        <svg class="svg-chart" viewBox="0 0 400 150" role="img" aria-label="Column chart of the number of listings at each view count from 0 to 36. Counts stay between 19 and 67 across the whole range with no long tail.">
+          <line class="svg-grid" x1="34" y1="18" x2="392" y2="18"></line>
+          <line class="svg-grid" x1="34" y1="71.2" x2="392" y2="71.2"></line>
+          <line class="svg-grid" x1="34" y1="98.6" x2="392" y2="98.6"></line>
+          <text class="svg-lab-y" x="30" y="21">67</text>
+          <text class="svg-lab-y" x="30" y="74.2">34</text>
+          <text class="svg-lab-y" x="30" y="101.6">17</text>
+          <text class="svg-lab-y" x="30" y="130">0</text>
+          <line class="svg-axis" x1="34" y1="126" x2="392" y2="126"></line>
+          <g>
+            <rect class="svg-col-hi" x="35" y="18" width="7.7" height="108"></rect>
+            <rect class="svg-col" x="44.7" y="85.7" width="7.7" height="40.3"></rect>
+            <rect class="svg-col" x="54.4" y="47" width="7.7" height="79"></rect>
+            <rect class="svg-col" x="64" y="68" width="7.7" height="58"></rect>
+            <rect class="svg-col" x="73.7" y="61.5" width="7.7" height="64.5"></rect>
+            <rect class="svg-col" x="83.4" y="56.7" width="7.7" height="69.3"></rect>
+            <rect class="svg-col" x="93.1" y="74.4" width="7.7" height="51.6"></rect>
+            <rect class="svg-col" x="102.7" y="58.3" width="7.7" height="67.7"></rect>
+            <rect class="svg-col" x="112.4" y="82.5" width="7.7" height="43.5"></rect>
+            <rect class="svg-col" x="122.1" y="77.6" width="7.7" height="48.4"></rect>
+            <rect class="svg-col" x="131.8" y="72.8" width="7.7" height="53.2"></rect>
+            <rect class="svg-col" x="141.4" y="87.3" width="7.7" height="38.7"></rect>
+            <rect class="svg-col" x="151.1" y="85.7" width="7.7" height="40.3"></rect>
+            <rect class="svg-col" x="160.8" y="90.5" width="7.7" height="35.5"></rect>
+            <rect class="svg-col" x="170.5" y="72.8" width="7.7" height="53.2"></rect>
+            <rect class="svg-col" x="180.1" y="71.2" width="7.7" height="54.8"></rect>
+            <rect class="svg-col" x="189.8" y="71.2" width="7.7" height="54.8"></rect>
+            <rect class="svg-col" x="199.5" y="82.5" width="7.7" height="43.5"></rect>
+            <rect class="svg-col" x="209.2" y="90.5" width="7.7" height="35.5"></rect>
+            <rect class="svg-col" x="218.8" y="80.9" width="7.7" height="45.1"></rect>
+            <rect class="svg-col" x="228.5" y="82.5" width="7.7" height="43.5"></rect>
+            <rect class="svg-col" x="238.2" y="77.6" width="7.7" height="48.4"></rect>
+            <rect class="svg-col" x="247.9" y="92.1" width="7.7" height="33.9"></rect>
+            <rect class="svg-col" x="257.5" y="80.9" width="7.7" height="45.1"></rect>
+            <rect class="svg-col" x="267.2" y="95.4" width="7.7" height="30.6"></rect>
+            <rect class="svg-col" x="276.9" y="74.4" width="7.7" height="51.6"></rect>
+            <rect class="svg-col" x="286.6" y="82.5" width="7.7" height="43.5"></rect>
+            <rect class="svg-col" x="296.2" y="74.4" width="7.7" height="51.6"></rect>
+            <rect class="svg-col" x="305.9" y="85.7" width="7.7" height="40.3"></rect>
+            <rect class="svg-col" x="315.6" y="56.7" width="7.7" height="69.3"></rect>
+            <rect class="svg-col" x="325.3" y="34.1" width="7.7" height="91.9"></rect>
+            <rect class="svg-col" x="334.9" y="66.4" width="7.7" height="59.6"></rect>
+            <rect class="svg-col" x="344.6" y="53.5" width="7.7" height="72.5"></rect>
+            <rect class="svg-col" x="354.3" y="69.6" width="7.7" height="56.4"></rect>
+            <rect class="svg-col" x="364" y="43.8" width="7.7" height="82.2"></rect>
+            <rect class="svg-col" x="373.6" y="58.3" width="7.7" height="67.7"></rect>
+            <rect class="svg-col-hi" x="383.3" y="121.2" width="7.7" height="4.8"></rect>
+          </g>
+          <text class="svg-lab" x="35" y="137">0 views</text>
+          <text class="svg-lab" x="207" y="137">18</text>
+          <text class="svg-lab-end" x="391" y="137">36 views</text>
+          <text class="svg-annot" x="49" y="15">67 listings show 0 views</text>
+        </svg>
+      </div>
+      <p class="chart-note">Source: listing-reality.json, test T10. Two supporting statistics: the coefficient of variation &mdash; how much the bar heights vary relative to their average &mdash; is 0.346, where organic web traffic would be well above 1. And the correlation between listing ID and view count is 0.021, essentially none, where an older listing should have accumulated more views and therefore show a negative relationship. Highlighted columns mark the two ends of the range.</p>
+    </div>
+
+    <div class="quiet">
+      <h4>Stated fairly</h4>
+      <p>A decorative or periodically reset counter on a genuine listing is an alternative explanation for a bounded number, and the data cannot rule it out. What the data does establish is narrower and still important: <strong>the counter cannot be read as a record of real traffic</strong>, and therefore no argument about the inventory being real or fake can rest on those counters varying &mdash; including an earlier argument in this engagement that did, which has been withdrawn.</p>
+    </div>
+
+    <h3>What cannot be settled from outside</h3>
+    <p>Authenticity of any <em>individual</em> listing is undetermined for 100% of the census, and that is a limitation of what the competitor publishes rather than a finding about them. The California register is searchable by licence number, licensee name or premises address. None of those three appears on any listing page, so ten individual cross-check attempts all returned &ldquo;undetermined for lack of a key&rdquo; &mdash; not &ldquo;no match found&rdquo;.</p>
+    <p>One aggregate test was attempted and is reported as <span class="tag tag-open">inconclusive</span> rather than as evidence: whether their California off-sale beer-and-wine listings sit in counties where the state has frozen new issuance of that class. They measured 41.6% in frozen counties &mdash; but the freeze applies mostly to small rural counties while listings concentrate in big metros, so both a real and a generated inventory would produce the same answer. The test has no power to distinguish them and was discarded. The authoritative per-county licence-count report that would have fixed this sits behind a path the state&rsquo;s own robots file asks crawlers not to fetch, so it was not fetched.</p>
+  </section>
+
+  <!-- ============ 3. CONTENT POSITION ============ -->
+  <section class="section">
+    <span class="sec-num">Section 3</span>
+    <h2>Their measured content position</h2>
+
+    <p class="prose-wide">This is the section that sizes the opportunity. The question is not whether their pages exist &mdash; they plainly do, 3,868 of them &mdash; but how much distinct, per-asset writing sits on them.</p>
+
+    <ul class="figs">
+      <li class="fig">
+        <span class="fig-n">78 words</span>
+        <span class="fig-lab">Median length of the listing-specific description on a listing page. A quarter run to 41 words or fewer; the longest is 108.</span>
+        <span class="fig-src">Census, n = 1,198 &middot; listing-reality.json</span>
+      </li>
+      <li class="fig">
+        <span class="fig-n">132 texts</span>
+        <span class="fig-lab">Cover 1,198 listings. 29 listings carry no description block at all.</span>
+        <span class="fig-src">Census &middot; listing-reality.json</span>
+      </li>
+      <li class="fig">
+        <span class="fig-n">185</span>
+        <span class="fig-lab">Listings sharing one identical description, the largest such block. Four blocks each cover 91 or more.</span>
+        <span class="fig-src">Census &middot; listing-reality.json</span>
+      </li>
+    </ul>
+
+    <div class="chart">
+      <p class="chart-title">The eight largest identical-description blocks</p>
+      <p class="chart-sub">Census. Each bar is one description text and the number of listings it appears on, word for word.</p>
+      <ul class="bars">
+        <li class="bar-row"><span class="bar-lab">Largest block <span class="bar-val">185 listings</span></span><span class="bar-track"><span class="bar-fill" style="width:100%"></span></span></li>
+        <li class="bar-row"><span class="bar-lab">2nd <span class="bar-val">108</span></span><span class="bar-track"><span class="bar-fill" style="width:58.4%"></span></span></li>
+        <li class="bar-row"><span class="bar-lab">3rd <span class="bar-val">99</span></span><span class="bar-track"><span class="bar-fill" style="width:53.5%"></span></span></li>
+        <li class="bar-row"><span class="bar-lab">4th <span class="bar-val">91</span></span><span class="bar-track"><span class="bar-fill" style="width:49.2%"></span></span></li>
+        <li class="bar-row"><span class="bar-lab">5th <span class="bar-val">46</span></span><span class="bar-track"><span class="bar-fill" style="width:24.9%"></span></span></li>
+        <li class="bar-row"><span class="bar-lab">6th <span class="bar-val">31</span></span><span class="bar-track"><span class="bar-fill" style="width:16.8%"></span></span></li>
+        <li class="bar-row"><span class="bar-lab">7th <span class="bar-val">30</span></span><span class="bar-track"><span class="bar-fill" style="width:16.2%"></span></span></li>
+        <li class="bar-row"><span class="bar-lab">8th <span class="bar-val">28</span></span><span class="bar-track"><span class="bar-fill" style="width:15.1%"></span></span></li>
+        <li class="bar-row"><span class="bar-lab">124 remaining texts, combined <span class="bar-val">580</span></span><span class="bar-track"><span class="bar-fill b4" style="width:100%"></span></span></li>
+      </ul>
+      <div class="axis"><span>0</span><span>185 listings on one text</span></div>
+      <p class="chart-note">The last bar aggregates the remaining 124 texts and is drawn to the same scale end, so read it as a total rather than as one block. Source: listing-reality.json, test T2.</p>
+    </div>
+
+    <p>The descriptions are keyed to state and licence class, not to the asset. No description text crosses a state or type boundary anywhere in the census, and of the 25 state-by-type groupings that carry a description, <strong>20 run on a single description text for the whole group</strong>. Every California off-sale beer-and-wine listing &mdash; 185 of them &mdash; shares one paragraph. So do all 108 New Jersey Type 33s, all 99 described Florida quota licences and all 91 Pennsylvania restaurant licences.</p>
+
+    <div class="table-scroll">
+      <table>
+        <caption>Description variety inside the largest state-and-type groups. Census.</caption>
+        <thead>
+          <tr><th scope="col">State and licence type</th><th scope="col" class="n">Listings</th><th scope="col" class="n">Distinct descriptions</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="strong">California &middot; Type 47</td><td class="n">292</td><td class="n">42</td></tr>
+          <tr><td class="strong">California &middot; Type 20</td><td class="n">185</td><td class="n">1</td></tr>
+          <tr><td class="strong">California &middot; Type 21</td><td class="n">166</td><td class="n">33</td></tr>
+          <tr><td class="strong">New Jersey &middot; Type 33</td><td class="n">108</td><td class="n">1</td></tr>
+          <tr><td class="strong">Florida &middot; 4COP/3PS</td><td class="n">99</td><td class="n">1</td></tr>
+          <tr><td class="strong">Pennsylvania &middot; Type R</td><td class="n">91</td><td class="n">1</td></tr>
+          <tr><td class="strong">California &middot; Type 48</td><td class="n">33</td><td class="n">20</td></tr>
+          <tr><td class="strong">Ohio &middot; D-5</td><td class="n">31</td><td class="n">1</td></tr>
+          <tr><td class="strong">Arizona &middot; Series 6</td><td class="n">30</td><td class="n">1</td></tr>
+          <tr><td class="strong">California &middot; Type 41</td><td class="n">29</td><td class="n">13</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Six images for 1,227 pages</h3>
+    <p>Across the entire listing census there are <strong>six distinct images</strong>: five state banners (California on 734 pages, New Jersey 131, Florida 102, Arizona 63, Michigan 19) and one email-campaign logo on the remaining 178. A separate 16-page sample of listing pages found that <strong>none of the sixteen carried a single image unique to that page</strong>. There is no photograph of a premises, no document, no map anywhere in the listing inventory.</p>
+
+    <h3>How much of a listing page is actually about the listing</h3>
+    <p>A 16-page sample measured the split between boilerplate and unique text. <span class="tag tag-sample">sample, n = 16</span> A median listing page ran 1,097.5 words, of which 675.5 were outside the site&rsquo;s repeated furniture &mdash; navigation, footer and the standard fee tables. But &ldquo;outside the furniture&rdquo; is not the same as &ldquo;about this licence&rdquo;: the census puts the licence-specific description at 78 words. The remainder is county and state guidance shared with every sibling listing in the same group.</p>
+    <p>The same sample measured text overlap between pairs of listing pages using an 8-word-run comparison &mdash; the standard way to detect near-duplicate writing. The result is split in two: of 120 page pairs, 74 share almost nothing, while 46 overlap heavily and 11 of those are effectively identical. That is exactly what a template keyed to state and type produces: pages in different groups look different, pages in the same group are near copies.</p>
+
+    <div class="quiet">
+      <h4>One measurement disagreement, stated rather than smoothed over</h4>
+      <p>Two runs measured whole-page word count with different text extractors and disagree: the census reports a median of 1,374 words per listing page (n = 1,227), the page-anatomy run 1,097.5 (n = 16). The anatomy run documents why &mdash; a naive tag-stripper leaks embedded script attributes into the text and inflated one of these very pages by about 25% in testing &mdash; so the lower figure is probably the better one. Neither figure changes the finding that matters, which is the 78-word licence-specific description measured on the full census.</p>
+    </div>
+
+    <h3>Where their search traffic actually comes from</h3>
+    <p>This is the number that explains why per-listing content thinness matters less to them than you might expect &mdash; and where the opening is. Their eight state landing pages carry the overwhelming majority of their search visibility; their 1,227 listing pages carry almost none.</p>
+
+    <div class="chart">
+      <p class="chart-title">Share of modelled organic traffic, by page type</p>
+      <p class="chart-sub">Modelled estimate, not measured sessions. Total across the domain: 5,471 estimated monthly visits.</p>
+      <ul class="bars">
+        <li class="bar-row"><span class="bar-lab">8 state landing pages <span class="bar-val">57.0%</span></span><span class="bar-track"><span class="bar-fill" style="width:100%"></span></span></li>
+        <li class="bar-row"><span class="bar-lab">30 state-by-type pages <span class="bar-val">16.6%</span></span><span class="bar-track"><span class="bar-fill" style="width:29.1%"></span></span></li>
+        <li class="bar-row"><span class="bar-lab">8 type-index pages <span class="bar-val">9.1%</span></span><span class="bar-track"><span class="bar-fill" style="width:16%"></span></span></li>
+        <li class="bar-row"><span class="bar-lab">36 blog posts <span class="bar-val">8.5%</span></span><span class="bar-track"><span class="bar-fill" style="width:14.9%"></span></span></li>
+        <li class="bar-row"><span class="bar-lab">432 county pages <span class="bar-val">4.2%</span></span><span class="bar-track"><span class="bar-fill" style="width:7.4%"></span></span></li>
+        <li class="bar-row"><span class="bar-lab">1,227 listing pages <span class="bar-val">1.8%</span></span><span class="bar-track"><span class="bar-fill b3" style="width:3.2%"></span></span></li>
+        <li class="bar-row"><span class="bar-lab">402 FAQ pages <span class="bar-val">0.9%</span></span><span class="bar-track"><span class="bar-fill" style="width:1.6%"></span></span></li>
+        <li class="bar-row"><span class="bar-lab">1,692 county-by-type pages <span class="bar-val">0.1%</span></span><span class="bar-track"><span class="bar-fill b3" style="width:0.2%"></span></span></li>
+      </ul>
+      <div class="axis"><span>0%</span><span>57.0% of domain traffic</span></div>
+      <p class="chart-note">Source: ranked.json, a full ranked-keyword census per domain, re-derived in gating-architecture.json. The traffic figures are <strong>modelled estimates</strong> from a third-party SEO data provider, not measured visits from the competitor&rsquo;s analytics, which nobody outside their business can see. The page counts are exact. All 8 state pages rank for something; 1,223 of the 1,227 listing pages and 1,687 of the 1,692 county-by-type pages rank for nothing at all. This is an observational association between page shape and visibility, not a demonstration that one causes the other.</p>
+    </div>
+
+    <p>Their single most visible page is their New Jersey landing page, which the same modelled source puts at 2,019 of those 5,471 estimated monthly visits &mdash; 37% of the domain on one URL. <span class="tag tag-model">modelled</span></p>
+  </section>
+
+  <!-- ============ 4. PUBLISH VS WITHHOLD ============ -->
+  <section class="section">
+    <span class="sec-num">Section 4</span>
+    <h2>What they publish, and what they hold back</h2>
+
+    <p class="prose-wide">Read as a list this looks damning, and it should not. <strong>Most of what they withhold is what a broker is supposed to withhold.</strong> A premises street address or a licensee&rsquo;s legal name identifies the business to its own staff, customers and competitors before a sale closes, and not publishing it is the ordinary convention of business brokerage rather than a defect. We separate the two kinds of omission below.</p>
+
+    <div class="tones">
+      <div class="tone tone-a">
+        <h4>Public on every listing page</h4>
+        <ul>
+          <li>Asking price &mdash; 1,227 of 1,227 (100%)</li>
+          <li>State &mdash; 1,227 (100%)</li>
+          <li>Licence type &mdash; 1,227 (100%)</li>
+          <li>County &mdash; 1,206 (98.3%)</li>
+          <li>A description &mdash; 1,198 (97.6%)</li>
+          <li>An image &mdash; 1,227 (100%), drawn from six files</li>
+          <li>An availability status of &ldquo;in stock&rdquo; &mdash; 1,227 (100%)</li>
+          <li>Bid count and view count &mdash; 1,227 (100%)</li>
+          <li>A full, itemised fee schedule &mdash; auction fee, escrow fee, state filing fees, with the escrow company and its regulator named. Escrow is discussed on 878 listings (71.6%).</li>
+        </ul>
+      </div>
+      <div class="tone tone-b">
+        <h4>Never published on any listing page</h4>
+        <ul>
+          <li>Licence number &mdash; 0 of 1,227</li>
+          <li>Licensee or individual seller name &mdash; 0 of 1,227. The only seller named in the page markup is the marketplace itself, on all 1,227.</li>
+          <li>Premises address, or even a city &mdash; 0 on the listing page. A city does appear on their index rows.</li>
+          <li>Any date &mdash; 0 in the page markup; 19 visible, and those are one statutory date inside licence copy, not listing dates.</li>
+          <li>Any status other than available &mdash; nothing is ever shown as sold, pending or in escrow.</li>
+          <li>Licence conditions or transfer history &mdash; no field for it exists on any page.</li>
+          <li>A way to ask a question without an account &mdash; every offer and bid button on all 1,227 pages resolves to a single login URL, and their registration form has 19 required fields.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="quiet">
+      <h4>Is the missing licence number deliberate?</h4>
+      <p>Unknown, and we will not guess. The measurement is that no listing carries one. A deliberate confidentiality policy and a database that never had the field are equally consistent with what we can see from outside, and <strong>this should not be described as concealment</strong>. It is worth noting the two facts side by side: their seller intake form <em>requires</em> a state licence number, the licensee name exactly as it appears on the licence, and the premises address &mdash; 17 required fields in all &mdash; so the data reaches them. None of those three is then published.</p>
+    </div>
+
+    <h3>The transaction is gated; the content is not</h3>
+    <p>This distinction is worth being precise about, because it is the design decision underneath their whole site. Price, county, type, description, bid count and view count all render to an anonymous visitor who is not logged in &mdash; no wall, no email capture, nothing hidden. What is gated is <em>acting</em>: all 1,227 offer and bid buttons point to the same login page. Their sell, register and login pages are themselves fully open to search engines with no exclusion tags, and their robots file &mdash; the file that tells crawlers where they may go &mdash; blocks nothing at all: zero of their 3,868 sitemap URLs are disallowed to a general crawler, and 17 named AI crawlers are each explicitly allowed the whole site.</p>
+  </section>
+
+  <!-- ============ 5. DATES ============ -->
+  <section class="section">
+    <span class="sec-num">Section 5</span>
+    <h2>Their dates, and the absence of them</h2>
+
+    <p class="prose-wide">Across the full census, <strong>no listing declares or displays a listing date</strong>. Not a posted date, not an updated date, not days-on-market, not &ldquo;new&rdquo; or &ldquo;price reduced&rdquo;. In the page markup, zero of 1,227 carry a publish date, a modified date or a price-valid-until date. Nineteen listings show a visible date and all nineteen are the same string &mdash; a statutory cut-off date of 1 April 1988 sitting inside Michigan licence copy. It is not a listing date and we do not count it as one.</p>
+    <p>A buyer on any of those 1,227 pages therefore cannot tell a licence posted last week from one posted in 2020. That is a conversion and trust finding. It is <em>not</em> evidence that the inventory never moves &mdash; movement is separately proven by the 220 removed URLs described in Section 2. Stock does move; it moves invisibly.</p>
+
+    <h3>What their sitemap claims about freshness</h3>
+    <p>Every one of their 3,868 URLs carries a &ldquo;last modified&rdquo; date. For the listing pages, all 1,227 of those dates fall inside the five days before our pull, with near-unique timestamps, marked &ldquo;changes daily&rdquo;. Read literally, that claims the entire inventory changed that week. Nothing in the census corroborates it: of the 26 listings whose price could be recovered from an archived copy, none differed from the live price (one had changed between two archived snapshots), 132 description texts still cover 1,198 listings, and the touches run through all 24 hours of the clock including overnight. This associates with an automated row-touch &mdash; a scheduled job stamping records &mdash; rather than with editorial change. Stated as an association; the cause is not measured.</p>
+    <p>The contrast with their content pages is stark, and to their credit it runs the honest way round: the pages that carry their traffic carry old, unrestamped dates.</p>
+
+    <div class="chart">
+      <p class="chart-title">Declared &ldquo;last modified&rdquo; age, by page type</p>
+      <p class="chart-sub">Census of the live sitemap, median days before 12 September 2026.</p>
+      <ul class="bars">
+        <li class="bar-row"><span class="bar-lab">402 FAQ pages <span class="bar-val">2,489 days</span></span><span class="bar-track"><span class="bar-fill b2" style="width:100%"></span></span></li>
+        <li class="bar-row"><span class="bar-lab">30 state-by-type pages <span class="bar-val">2,058</span></span><span class="bar-track"><span class="bar-fill b2" style="width:82.7%"></span></span></li>
+        <li class="bar-row"><span class="bar-lab">432 county pages <span class="bar-val">1,900</span></span><span class="bar-track"><span class="bar-fill b2" style="width:76.3%"></span></span></li>
+        <li class="bar-row"><span class="bar-lab">1,692 county-by-type pages <span class="bar-val">1,858</span></span><span class="bar-track"><span class="bar-fill b2" style="width:74.6%"></span></span></li>
+        <li class="bar-row"><span class="bar-lab">24 index pages <span class="bar-val">1,833</span></span><span class="bar-track"><span class="bar-fill b2" style="width:73.6%"></span></span></li>
+        <li class="bar-row"><span class="bar-lab">15 state landing and static pages <span class="bar-val">1,585</span></span><span class="bar-track"><span class="bar-fill b2" style="width:63.7%"></span></span></li>
+        <li class="bar-row"><span class="bar-lab">37 blog posts <span class="bar-val">502</span></span><span class="bar-track"><span class="bar-fill b2" style="width:20.2%"></span></span></li>
+        <li class="bar-row"><span class="bar-lab">1,227 listing pages <span class="bar-val">1 day</span></span><span class="bar-track"><span class="bar-fill b3" style="width:0.5%"></span></span></li>
+      </ul>
+      <div class="axis"><span>0 days</span><span>2,489 days (6.8 years)</span></div>
+      <p class="chart-note">Source: freshness.json, census of both live sitemaps pulled 12 September 2026. Their New Jersey landing page &mdash; the single most visible page on the domain &mdash; declares a last-modified date of 4 September 2021, 1,833 days or 5.02 years before the pull. Across their eight page types, declared freshness shows no helpful relationship with modelled traffic (rank correlation &minus;0.17, n = 8 page types, one domain, one modelled traffic source &mdash; far too little to generalise from).</p>
+    </div>
+
+    <h3>How long the live stock has been sitting there</h3>
+    <p>Two figures, with very different confidence levels, and we give both.</p>
+    <div class="table-scroll">
+      <table>
+        <caption>Age of currently live listings. Two methods, two confidence levels.</caption>
+        <thead>
+          <tr><th scope="col">Method</th><th scope="col" class="n">Covers</th><th scope="col">Result</th><th scope="col">Confidence</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="strong">Direct: earliest web-archive capture of each live listing</td>
+            <td class="n">479 of 1,227 (39%)</td>
+            <td>Median at least 881 days live (2.41 years). None under 90 days. 83.5% at least a year.</td>
+            <td>Measured, but a <strong>lower bound</strong> &mdash; a capture proves a listing already existed then, never when it started.</td>
+          </tr>
+          <tr>
+            <td class="strong">Interpolated: estimating the uncovered 61% from listing-ID order</td>
+            <td class="n">All 1,227</td>
+            <td>Bimodal, so read the groups rather than a median: 209 listings under a year old, 260 one to two years, 30 two to four, 554 four to six, 174 over six.</td>
+            <td><span class="tag tag-open">inferred</span> An interpolation over a partly covered archive index, not a measurement. The direction is robust because every anchor understates age; the exact percentages are not.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Both things are true at once, and neither cancels the other: stock does leave the site, and what remains has largely been sitting a long time. The 57% removal rate quoted in Section 2 was measured on listings that had <em>already</em> left the sitemap &mdash; it is a removal rate among departures, not a churn rate over the live table.</p>
+    <p>One thing that looks computable here is not. &ldquo;How long after a listing appears does it get discovered&rdquo; needs a trustworthy creation date to subtract from, and the competitor publishes none. That question is reported as blocked rather than estimated.</p>
+  </section>
+
+  <!-- ============ 6. HISTORY ============ -->
+  <section class="section">
+    <span class="sec-num">Section 6</span>
+    <h2>Their history</h2>
+
+    <p class="prose-wide">Everything in this section comes from the Internet Archive&rsquo;s index of captured pages, cross-checked against their live sitemap. One caveat governs all of it: <strong>the archive crawls opportunistically and never enumerates a site</strong>, so a first-capture date is the first time the archive <em>saw</em> a URL, which is on or after the day it actually went live. Every date below is an upper bound on launch, and absence from the archive is never evidence a page did not exist.</p>
+
+    <ul class="figs">
+      <li class="fig">
+        <span class="fig-n">14.1 years</span>
+        <span class="fig-lab">Since the first archived capture of the domain, on 31 July 2012. The most recent capture in our pull is 4 September 2026.</span>
+        <span class="fig-src">Archive index &middot; wayback.json</span>
+      </li>
+      <li class="fig">
+        <span class="fig-n">4,253</span>
+        <span class="fig-lab">Distinct URLs the archive has ever captured on the domain, against 3,868 in the live sitemap today.</span>
+        <span class="fig-src">Archive index &middot; wayback.json</span>
+      </li>
+      <li class="fig">
+        <span class="fig-n">2019</span>
+        <span class="fig-lab">First year an individual licence listing page appears in the archive &mdash; seven years after the homepage.</span>
+        <span class="fig-src">Archive index &middot; wayback.json</span>
+      </li>
+    </ul>
+
+    <h3>When each page type first appears</h3>
+    <div class="chart">
+      <p class="chart-title">First archived capture of each page type</p>
+      <p class="chart-sub">Dots mark the first capture. Bars run from that point to the present, showing how long each type has existed.</p>
+      <ul class="tl">
+        <li class="tl-row">
+          <span class="tl-lab">Homepage <span class="tl-date">Jul 2012</span></span>
+          <span class="tl-track"><span class="tl-bar" style="left:0%;right:0%"></span><span class="tl-dot" style="left:0.4%"></span></span>
+        </li>
+        <li class="tl-row">
+          <span class="tl-lab">Static pages (1,002 ever captured) <span class="tl-date">Aug 2012</span></span>
+          <span class="tl-track"><span class="tl-bar" style="left:0.6%;right:0%"></span><span class="tl-dot" style="left:0.6%"></span></span>
+        </li>
+        <li class="tl-row">
+          <span class="tl-lab">Listing pages (867 ever captured) <span class="tl-date">Dec 2019</span></span>
+          <span class="tl-track"><span class="tl-bar" style="left:52.4%;right:0%"></span><span class="tl-dot" style="left:52.4%"></span></span>
+        </li>
+        <li class="tl-row">
+          <span class="tl-lab">Blog <span class="tl-date">Aug 2020</span></span>
+          <span class="tl-track"><span class="tl-bar" style="left:57.1%;right:0%"></span><span class="tl-dot" style="left:57.1%"></span></span>
+        </li>
+        <li class="tl-row">
+          <span class="tl-lab">State landing pages (8) <span class="tl-date">Sep 2020</span></span>
+          <span class="tl-track"><span class="tl-bar" style="left:57.6%;right:0%"></span><span class="tl-dot" style="left:57.6%"></span></span>
+        </li>
+        <li class="tl-row">
+          <span class="tl-lab">County pages (432) <span class="tl-date">Nov 2020</span></span>
+          <span class="tl-track"><span class="tl-bar" style="left:58.8%;right:0%"></span><span class="tl-dot" style="left:58.8%"></span></span>
+        </li>
+        <li class="tl-row">
+          <span class="tl-lab">State-by-type pages (30) <span class="tl-date">Nov 2020</span></span>
+          <span class="tl-track"><span class="tl-bar" style="left:58.8%;right:0%"></span><span class="tl-dot" style="left:58.8%"></span></span>
+        </li>
+        <li class="tl-row">
+          <span class="tl-lab">County-by-type pages (1,691) <span class="tl-date">Jan 2021</span></span>
+          <span class="tl-track"><span class="tl-bar" style="left:60%;right:0%"></span><span class="tl-dot" style="left:60%"></span></span>
+        </li>
+        <li class="tl-row">
+          <span class="tl-lab">FAQ answer pages (402 live) <span class="tl-date">Jul 2025</span></span>
+          <span class="tl-track"><span class="tl-bar" style="left:91.8%;right:0%"></span><span class="tl-dot" style="left:91.8%"></span></span>
+        </li>
+      </ul>
+      <div class="tl-axis">
+        <span class="tl-tick-start">Jul 2012</span>
+        <span class="tl-tick" style="left:24.7%">2016</span>
+        <span class="tl-tick" style="left:52.9%">2020</span>
+        <span class="tl-tick" style="left:81.2%">2024</span>
+        <span class="tl-tick-end">Sep 2026</span>
+      </div>
+      <p class="chart-note">Source: wayback.json, template classification derived from the live sitemap path structure, not assumed. The FAQ row carries an unresolved conflict: all 402 of those pages declare a last-modified date between 2019 and 2021, years before the archive first saw any of them in July 2025. Either the pages existed and the archive never crawled them, or the declared date is a content-system default rather than a real publish date. Settling it needs a source we do not have.</p>
+    </div>
+
+    <p>The shape is clear enough: a marketplace homepage from 2012, individual listing pages from late 2019, and then a burst of programmatic location pages built across late 2020 and 2021 &mdash; 432 county pages, 30 state-by-type pages and eventually 1,691 county-by-type pages. Their county-by-type set kept growing after that: the archive first saw 24 of them in 2021, 63 in 2022, 137 in 2023, 298 in 2024 and 1,166 in 2025.</p>
+
+    <div class="chart">
+      <p class="chart-title">Listing pages first seen by the archive, by year</p>
+      <p class="chart-sub">New listing IDs the archive captured for the first time in each year. An archive-coverage figure, not a count of listings created.</p>
+      <ul class="bars">
+        <li class="bar-row"><span class="bar-lab">2019 <span class="bar-val">2</span></span><span class="bar-track"><span class="bar-fill b4" style="width:0.7%"></span></span></li>
+        <li class="bar-row"><span class="bar-lab">2020 <span class="bar-val">269</span></span><span class="bar-track"><span class="bar-fill b4" style="width:98.5%"></span></span></li>
+        <li class="bar-row"><span class="bar-lab">2021 <span class="bar-val">160</span></span><span class="bar-track"><span class="bar-fill b4" style="width:58.6%"></span></span></li>
+        <li class="bar-row"><span class="bar-lab">2022 <span class="bar-val">107</span></span><span class="bar-track"><span class="bar-fill b4" style="width:39.2%"></span></span></li>
+        <li class="bar-row"><span class="bar-lab">2023 <span class="bar-val">13</span></span><span class="bar-track"><span class="bar-fill b4" style="width:4.8%"></span></span></li>
+        <li class="bar-row"><span class="bar-lab">2024 <span class="bar-val">17</span></span><span class="bar-track"><span class="bar-fill b4" style="width:6.2%"></span></span></li>
+        <li class="bar-row"><span class="bar-lab">2025 <span class="bar-val">273</span></span><span class="bar-track"><span class="bar-fill b4" style="width:100%"></span></span></li>
+        <li class="bar-row"><span class="bar-lab">2026 (to September) <span class="bar-val">23</span></span><span class="bar-track"><span class="bar-fill b4" style="width:8.4%"></span></span></li>
+      </ul>
+      <div class="axis"><span>0</span><span>273 listing IDs</span></div>
+      <p class="chart-note">Source: wayback.json. Of the 1,227 listings live today, 479 appear somewhere in the archive and 748 have never been captured &mdash; which reflects what the archive crawled, not how new those listings are. Their oldest still-live listing was first captured on 27 December 2019.</p>
+    </div>
+
+    <h3>What their pages used to look like</h3>
+    <p>Fourteen years of archived homepages tell a consistent story: this has been presented as a marketplace throughout. The 2012 homepage already showed 30 real prices on the page and led with the name; by 2018 the headline was &ldquo;Make an offer to any seller or buy it now&rdquo;; by 2020 it was &ldquo;The Largest Inventory of Liquor Licenses&rdquo;; and from 2021 to the latest capture in 2026 it has read &ldquo;Liquor Licenses for Sale&rdquo; with no prices on the homepage itself. Marketplace vocabulary outweighs service vocabulary in every year we could probe. Two years, 2016 and 2017, could not be probed at all because every capture in them is a redirect record with no page body.</p>
+
+    <div class="quiet">
+      <h4>The &ldquo;$0k&rdquo; title defect is recent</h4>
+      <p>We dated it rather than assumed it. Across 104 archived listing pages sampled two per month over 55 months, <strong>101 showed a real price in the page title</strong> &mdash; &ldquo;Orange CA, Type 47 Liquor License: $45k&rdquo; and so on &mdash; including both snapshots sampled in June 2026, the most recent month available. Only three showed &ldquo;$0k&rdquo;, in April and May 2025. Yet the live census on 12 September 2026 found &ldquo;$0k&rdquo; on <strong>1,227 of 1,227</strong> titles. So this is a new regression, most likely introduced between mid-June and mid-September 2026, with a brief earlier appearance in spring 2025. <span class="tag tag-sample">sample, 2 pages per month</span></p>
+      <p>A related history note: none of those 104 archived listing pages carried any structured-data markup at all, while the live pages do carry product-and-offer markup today (with the broken context key described in Section 2). Either it was added after the last archived capture, or it is injected by JavaScript that the archive does not run. We cannot tell which from the archive alone.</p>
+    </div>
+  </section>
+
+  <!-- ============ 7. UNRESOLVED ============ -->
+  <section class="section">
+    <span class="sec-num">Section 7</span>
+    <h2>What this report does not settle</h2>
+
+    <p class="prose-wide">The list below is part of the deliverable. Anyone quoting the findings above should know where the evidence stops.</p>
+
+    <dl class="defs">
+      <dt>Whether any individual listing is real</dt>
+      <dd>Undetermined for 100% of the census, and not determinable from outside while no listing publishes a licence number, licensee name or premises address. Settling it needs one of: the competitor publishing a register key; permission to query the state&rsquo;s per-county licence-count form, which its own robots file asks crawlers not to fetch; a bulk licence extract; or a public-records request for transfer records.</dd>
+
+      <dt>Whether the missing licence number is policy or a missing database field</dt>
+      <dd>Both explanations fit the measurement equally well. Not resolvable from public pages.</dd>
+
+      <dt>Whether the junk records are the whole of the junk</dt>
+      <dd>We found 63 distinct placeholder or malformed records using stated thresholds &mdash; below $1,000 or above $2,000,000 for a US retail licence. Those thresholds are a <strong>stated judgement, not a measurement</strong>. A different threshold gives a different count.</dd>
+
+      <dt>Whether their listing index is capped, curated or windowed</dt>
+      <dd>Their California index row list stops at 150 rows and New Jersey at 52, with no pagination links observed. Whether that is a fixed limit, a selection or a recency window is not determined.</dd>
+
+      <dt>What the &ldquo;Views&rdquo; counter actually is</dt>
+      <dd>Established: it is not a faithful record of traffic. Not established: what it is instead. A rolling-window or decorative counter on genuine listings is consistent with boundedness, though it would not explain the near-flat shape. One listing read 11 views in one run and 12 in the next, which is consistent with the counter incrementing on our own fetch &mdash; a single observation, not a finding.</dd>
+
+      <dt>Anything about causation</dt>
+      <dd>Every visibility figure here is observational. Page shape <em>associates</em> with search visibility in this data. Nothing in it shows that any page type, page count or launch date <em>causes</em> a ranking, and the traffic figures are modelled estimates from a third-party provider rather than measured sessions.</dd>
+
+      <dt>Anything requiring JavaScript to appear</dt>
+      <dd>The page-anatomy measurements read raw HTML only, with no JavaScript executed &mdash; deliberately, because that is what a text-only crawler sees. A surface added purely by client-side script after load would be counted as absent. The listing pages carried their main content in raw HTML on all 16 sampled pages, so this risk is low there.</dd>
+
+      <dt>Two figures in the source files that we corrected</dt>
+      <dd>The census summary line states 67 junk records; adding 25 impossible prices to 42 malformed records double-counts four records that are both, so the distinct total is <strong>63</strong>. The same file&rsquo;s summary says 194 counties; three of those buckets are an empty county field, so the number of <strong>named</strong> counties is 191. We re-derived both from the raw records.</dd>
+    </dl>
+  </section>
+
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <p class="foot-title">Method</p>
+    <div class="foot-grid">
+      <div class="foot-block">
+        <h4>What was a census</h4>
+        <p>All 1,227 listing pages, fetched and parsed individually: prices, counties, licence types, descriptions, images, counters, seller strings, dates, offer mechanisms. Both live sitemaps in full (3,868 competitor URLs). The competitor&rsquo;s robots file. Their seller-intake, registration and login forms. A census is a complete count of the population, so these figures carry no sampling error.</p>
+      </div>
+      <div class="foot-block">
+        <h4>What was sampled</h4>
+        <p>Page-anatomy figures &mdash; word counts, boilerplate split, text-overlap, images per page &mdash; come from 16 listing pages and similar per-type samples, selected deterministically (sorted URLs, every Nth), never at random; the sample size is stated wherever such a figure appears. The archived-title check sampled two pages per month over 55 months. Archive age figures cover the 39% of live listings the archive has captured.</p>
+      </div>
+      <div class="foot-block">
+        <h4>What is modelled</h4>
+        <p>Every traffic and visibility figure is a <strong>modelled estimate</strong> from a third-party SEO data provider, derived from ranking positions and estimated search volumes. They are not measured visits, and nobody outside the competitor&rsquo;s business can see those. Search volumes from such providers are estimates, not Google Ads figures. Treat them as relative scale, never as a count of visits.</p>
+      </div>
+      <div class="foot-block">
+        <h4>What is inferred</h4>
+        <p>One figure is explicitly an inference and labelled as such: the age of the 61% of live listings the archive never captured, interpolated from listing-ID order. Its direction is robust; its exact percentages are not.</p>
+      </div>
+      <div class="foot-block">
+        <h4>Language</h4>
+        <p>This is observational data about public web pages. Throughout, features <em>associate</em> with outcomes; nothing here demonstrates cause. Every statement about the competitor is a measurement with its method attached, not a characterisation of their business or their intent.</p>
+      </div>
+      <div class="foot-block">
+        <h4>Dates and sources</h4>
+        <p>Live pages, sitemaps and forms read 12 September 2026. Archive index queried the same day, spanning 31 July 2012 to 4 September 2026. Page published 13 September 2026. Source files: listing-reality.json, anatomy.json, gating-architecture.json, conversion-wedge.json, freshness.json, wayback.json, with visibility figures re-derived from ranked.json.</p>
+      </div>
+    </div>
+    <p class="foot-note">No licence-identifying data, no seller identity and no client-confidential information appears on this page. All measurements are of publicly reachable web pages. <a href="index.html">Back to all reports</a></p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  try {
+    var head = document.querySelector('.head-nav');
+    if (!head) return;
+    var KEY = 'llrb-theme';
+    var root = document.documentElement;
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'theme-btn';
+    var stored = null;
+    try { stored = window.localStorage.getItem(KEY); } catch (e) { stored = null; }
+    function apply(mode) {
+      if (mode === 'dark' || mode === 'light') { root.setAttribute('data-theme', mode); }
+      else { root.removeAttribute('data-theme'); }
+      var isDark = mode === 'dark' || (mode !== 'light' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      btn.textContent = isDark ? 'Light' : 'Dark';
+      btn.setAttribute('aria-label', isDark ? 'Switch to light theme' : 'Switch to dark theme');
+    }
+    apply(stored);
+    btn.addEventListener('click', function () {
+      var cur = root.getAttribute('data-theme');
+      var isDark = cur === 'dark' || (!cur && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      var next = isDark ? 'light' : 'dark';
+      try { window.localStorage.setItem(KEY, next); } catch (e) {}
+      apply(next);
+    });
+    head.appendChild(btn);
+  } catch (e) {}
+})();
+</script>

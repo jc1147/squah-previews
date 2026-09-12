@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Liquor licence search research — the bundle</title>
+<meta name="description" content="Contents page for the liquor licence search research bundle: four reports measuring two competing websites, all data pulled 12 September 2026.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============ TOKENS: complete light palette on bare :root ============ */
+:root{
+  color-scheme: light;
+  --bg:            #f7f6f3;
+  --bg-raised:     #ffffff;
+  --bg-sunken:     #efede8;
+  --bg-accent:     #f0f4fa;
+  --ink:           #1c1d21;
+  --ink-soft:      #4a4d55;
+  --ink-faint:     #6d7179;
+  --rule:          #dcd9d2;
+  --rule-strong:   #bfbbb2;
+  --brand:         #1f4f82;
+  --brand-ink:     #16385c;
+  --brand-soft:    #dce6f2;
+  --rival:         #b4471f;
+  --client:        #1f6f60;
+  --govt:          #6b4f9c;
+  --warn-bg:       #fdf6e3;
+  --warn-rule:     #e0cd93;
+  --warn-ink:      #6b551a;
+  --focus:         #0a5bd3;
+  --shadow:        0 1px 2px rgba(28,29,33,.06), 0 6px 18px rgba(28,29,33,.05);
+  --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --serif: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --maxw: 74rem;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme: dark;
+    --bg:            #15161a;
+    --bg-raised:     #1e2026;
+    --bg-sunken:     #101114;
+    --bg-accent:     #1a2430;
+    --ink:           #eceded;
+    --ink-soft:      #b9bcc4;
+    --ink-faint:     #8d9199;
+    --rule:          #32353d;
+    --rule-strong:   #4a4e58;
+    --brand:         #7fb3e8;
+    --brand-ink:     #a9cdf3;
+    --brand-soft:    #22323f;
+    --rival:         #eb8a5f;
+    --client:        #5cc4ab;
+    --govt:          #b79ae8;
+    --warn-bg:       #2a2415;
+    --warn-rule:     #5d5024;
+    --warn-ink:      #e6d49a;
+    --focus:         #7fb3e8;
+    --shadow:        0 1px 2px rgba(0,0,0,.4), 0 6px 18px rgba(0,0,0,.3);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --bg:            #15161a;
+  --bg-raised:     #1e2026;
+  --bg-sunken:     #101114;
+  --bg-accent:     #1a2430;
+  --ink:           #eceded;
+  --ink-soft:      #b9bcc4;
+  --ink-faint:     #8d9199;
+  --rule:          #32353d;
+  --rule-strong:   #4a4e58;
+  --brand:         #7fb3e8;
+  --brand-ink:     #a9cdf3;
+  --brand-soft:    #22323f;
+  --rival:         #eb8a5f;
+  --client:        #5cc4ab;
+  --govt:          #b79ae8;
+  --warn-bg:       #2a2415;
+  --warn-rule:     #5d5024;
+  --warn-ink:      #e6d49a;
+  --focus:         #7fb3e8;
+  --shadow:        0 1px 2px rgba(0,0,0,.4), 0 6px 18px rgba(0,0,0,.3);
+}
+
+*,*::before,*::after{ box-sizing:border-box; }
+html{ -webkit-text-size-adjust:100%; }
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:var(--sans);
+  font-size:1rem;
+  line-height:1.6;
+}
+.num{ font-variant-numeric:tabular-nums lining-nums; font-feature-settings:"tnum" 1,"lnum" 1; }
+
+a{ color:var(--brand-ink); }
+a:focus-visible,button:focus-visible{
+  outline:3px solid var(--focus);
+  outline-offset:2px;
+  border-radius:4px;
+}
+
+.skip{
+  position:absolute; left:-9999px; top:0;
+  background:var(--bg-raised); color:var(--ink);
+  padding:.75rem 1rem; z-index:20; border:1px solid var(--rule-strong);
+}
+.skip:focus{ left:.5rem; top:.5rem; }
+
+/* ---------- top bar ---------- */
+.topbar{
+  background:var(--bg-raised);
+  border-bottom:1px solid var(--rule);
+  position:sticky; top:0; z-index:10;
+}
+.topbar-in{
+  max-width:var(--maxw); margin:0 auto;
+  padding:.4rem .9rem;
+  display:flex; flex-wrap:wrap; align-items:center; gap:.5rem;
+}
+.home{
+  display:flex; align-items:center; gap:.5rem;
+  min-height:44px; padding:.25rem .35rem;
+  font-weight:600; font-size:.9rem; color:var(--ink);
+  text-decoration:none;
+}
+.home:hover{ color:var(--brand-ink); }
+.home-mark{
+  display:inline-flex; align-items:center; justify-content:center;
+  width:26px; height:26px; flex:0 0 26px;
+  border-radius:5px; background:var(--brand); color:#ffffff;
+  font-size:.68rem; font-weight:700; letter-spacing:.02em;
+}
+.crumb{ color:var(--ink-faint); font-size:.85rem; display:flex; align-items:center; gap:.4rem; }
+.crumb-sep{ color:var(--rule-strong); }
+.themebtn{
+  margin-left:auto; min-height:44px; padding:.4rem .8rem;
+  background:var(--bg-sunken); color:var(--ink-soft);
+  border:1px solid var(--rule); border-radius:6px;
+  font:inherit; font-size:.82rem; cursor:pointer;
+}
+.themebtn:hover{ border-color:var(--rule-strong); color:var(--ink); }
+
+/* ---------- layout ---------- */
+.wrap{ max-width:var(--maxw); margin:0 auto; padding:0 .9rem 3rem; }
+
+.hero{ padding:2rem 0 1.25rem; border-bottom:1px solid var(--rule); }
+.eyebrow{
+  margin:0 0 .5rem; font-size:.72rem; letter-spacing:.12em;
+  text-transform:uppercase; color:var(--ink-faint); font-weight:600;
+}
+h1{
+  font-family:var(--serif); font-weight:600;
+  font-size:2rem; line-height:1.15; margin:0 0 .75rem;
+  letter-spacing:-.01em;
+}
+.standfirst{ margin:0 0 .9rem; font-size:1.06rem; color:var(--ink-soft); max-width:60ch; }
+.dateline{ margin:0; font-size:.85rem; color:var(--ink-faint); max-width:60ch; }
+
+h2{
+  font-family:var(--serif); font-weight:600;
+  font-size:1.25rem; line-height:1.25; margin:0;
+  letter-spacing:-.005em;
+}
+h2 a{
+  color:var(--ink); text-decoration:none;
+  display:inline-flex; align-items:center;
+  min-height:44px; /* tap target */
+}
+h2 a:hover{ color:var(--brand-ink); text-decoration:underline; }
+
+.sectionhead{
+  font-family:var(--sans); font-size:.72rem; font-weight:600;
+  letter-spacing:.12em; text-transform:uppercase; color:var(--ink-faint);
+  margin:2.25rem 0 .9rem;
+}
+
+/* ---------- report cards ---------- */
+.cards{ list-style:none; margin:0; padding:0; }
+.card{
+  background:var(--bg-raised);
+  border:1px solid var(--rule);
+  border-radius:10px;
+  box-shadow:var(--shadow);
+  padding:1.1rem 1rem 1rem;
+  margin:0 0 1rem;
+}
+.card-top{ display:flex; align-items:center; gap:.6rem; margin-bottom:.1rem; }
+.card-no{
+  font-size:.72rem; font-weight:700; letter-spacing:.08em;
+  color:var(--ink-faint); flex:0 0 auto;
+}
+.card-desc{ margin:.35rem 0 .9rem; color:var(--ink-soft); font-size:.95rem; max-width:62ch; }
+
+.figs{ list-style:none; margin:0 0 1rem; padding:0; border-top:1px solid var(--rule); }
+.fig{ padding:.7rem 0 .6rem; border-bottom:1px solid var(--rule); }
+.fig-n{
+  display:block; font-family:var(--serif); font-weight:600;
+  font-size:1.4rem; line-height:1.15; letter-spacing:-.01em;
+}
+.is-rival .fig-n{ color:var(--rival); }
+.is-client .fig-n{ color:var(--client); }
+.is-govt .fig-n{ color:var(--govt); }
+.is-brand .fig-n{ color:var(--brand-ink); }
+.fig-t{ display:block; font-size:.88rem; color:var(--ink-soft); margin-top:.2rem; }
+.fig-k{
+  display:block; font-size:.72rem; color:var(--ink-faint);
+  margin-top:.3rem; letter-spacing:.01em;
+}
+
+.go{
+  display:inline-flex; align-items:center; gap:.45rem;
+  min-height:44px; padding:.5rem 1rem;
+  background:var(--brand-soft); color:var(--brand-ink);
+  border:1px solid var(--rule); border-radius:7px;
+  font-size:.9rem; font-weight:600; text-decoration:none;
+}
+.go:hover{ border-color:var(--brand); }
+.go-arrow{ font-size:1rem; line-height:1; }
+
+/* ---------- preview panel ---------- */
+.preview{
+  background:var(--bg-accent);
+  border:1px solid var(--rule);
+  border-radius:10px;
+  padding:1.1rem 1rem 1rem;
+  margin:0 0 1rem;
+}
+.preview h2{ margin-bottom:.1rem; }
+.preview p{ margin:.35rem 0 .9rem; color:var(--ink-soft); font-size:.95rem; max-width:62ch; }
+.flag{
+  background:var(--warn-bg); border:1px solid var(--warn-rule);
+  color:var(--warn-ink); border-radius:7px;
+  padding:.7rem .85rem; font-size:.88rem; margin:.5rem 0 .9rem;
+  max-width:62ch;
+}
+.flag b{ font-weight:700; }
+
+/* ---------- method ---------- */
+.method{
+  border-top:1px solid var(--rule);
+  margin-top:2.25rem; padding-top:1.25rem;
+  color:var(--ink-soft); font-size:.9rem;
+}
+.method h2{ font-size:1.1rem; margin-bottom:.75rem; color:var(--ink); }
+.method dl{ margin:0; }
+.method dt{
+  font-weight:700; color:var(--ink); font-size:.82rem;
+  letter-spacing:.03em; text-transform:uppercase; margin-top:1rem;
+}
+.method dd{ margin:.3rem 0 0; max-width:68ch; }
+.footnote{
+  margin:1.5rem 0 0; padding-top:1rem; border-top:1px solid var(--rule);
+  font-size:.82rem; color:var(--ink-faint); max-width:68ch;
+}
+
+/* ---------- 768 ---------- */
+@media (min-width:768px){
+  .wrap{ padding:0 1.5rem 4rem; }
+  .topbar-in{ padding:.4rem 1.5rem; }
+  h1{ font-size:2.6rem; }
+  .standfirst{ font-size:1.15rem; }
+  .hero{ padding:2.75rem 0 1.5rem; }
+  .card,.preview{ padding:1.4rem 1.35rem 1.25rem; }
+  h2{ font-size:1.45rem; }
+  .figs{
+    display:grid; grid-template-columns:1fr 1fr;
+    column-gap:1.5rem;
+  }
+  .fig-n{ font-size:1.5rem; }
+  .method dl{ display:grid; grid-template-columns:11rem 1fr; column-gap:1.5rem; }
+  .method dt{ grid-column:1; }
+  .method dd{ grid-column:2; margin-top:1rem; }
+}
+
+/* ---------- 1200 ---------- */
+@media (min-width:1200px){
+  h1{ font-size:3rem; }
+  .figs{ grid-template-columns:repeat(4,1fr); column-gap:1.25rem; }
+  .fig-n{ font-size:1.55rem; }
+  .card-desc,.preview p{ font-size:1rem; }
+}
+</style>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to the contents</a>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <a class="home" href="index.html"><span class="home-mark" aria-hidden="true">LL</span>Liquor licence search research</a>
+    <span class="crumb"><span class="crumb-sep" aria-hidden="true">/</span>Contents</span>
+    <button class="themebtn" type="button" id="themebtn" hidden>Switch theme</button>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap">
+
+  <div class="hero">
+    <p class="eyebrow">The research bundle</p>
+    <h1>Four reports, one question</h1>
+    <p class="standfirst">Two companies sell liquor licences into the same eight American states, and one of them takes roughly eleven times the search traffic of the other. We measured both sites in full on 12 September 2026 &mdash; every address either one submits to Google, every search term either one ranks for, all 1,227 of the rival&rsquo;s listing pages, and 197 live searches &mdash; to find out why.</p>
+    <p class="standfirst">The answer is not page count, keyword choice, state coverage or links: each of those was tested and each failed to explain the gap. What separates the two sites is that eight plain state-level pages on the rival&rsquo;s domain hold 49 top-three positions and carry 57.0% of its modelled traffic, while the client&rsquo;s eight equivalent pages hold none &mdash; and the client&rsquo;s own writing, page for page, measures better than the rival&rsquo;s.</p>
+    <p class="dateline">All data pulled 12 September 2026; reports written 13 September 2026. Every figure below is quoted from the report it sits under. Read that report&rsquo;s own method note before quoting a number onward.</p>
+  </div>
+
+  <p class="sectionhead">The four reports</p>
+
+  <ul class="cards">
+
+    <li class="card">
+      <div class="card-top">
+        <span class="card-no num">01</span>
+        <h2><a href="findings.html">What we found</a></h2>
+      </div>
+      <p class="card-desc">The main report. Where the rival&rsquo;s search traffic actually sits, why the four obvious explanations for the gap do not survive testing, and the two hard ceilings &mdash; government pages and AI answers &mdash; that bound anything either site builds.</p>
+      <ul class="figs">
+        <li class="fig is-rival">
+          <span class="fig-n num">57.0%</span>
+          <span class="fig-t">of the rival&rsquo;s modelled search traffic comes from just 8 pages, one per state</span>
+          <span class="fig-k">Census of its 713 ranked keywords</span>
+        </li>
+        <li class="fig is-rival">
+          <span class="fig-n num">1.8%</span>
+          <span class="fig-t">comes from its 1,227 individual licence-for-sale listing pages</span>
+          <span class="fig-k">Same census</span>
+        </li>
+        <li class="fig is-client">
+          <span class="fig-n num">166 vs 95</span>
+          <span class="fig-t">referring websites &mdash; the client has more links than the rival, not fewer</span>
+          <span class="fig-k">Census of the supplier&rsquo;s link index</span>
+        </li>
+        <li class="fig is-govt">
+          <span class="fig-n num">81.2%</span>
+          <span class="fig-t">of the searches tested put a government page in the top three results</span>
+          <span class="fig-k">Sample, 197 live searches</span>
+        </li>
+      </ul>
+      <a class="go" href="findings.html">Read the findings <span class="go-arrow" aria-hidden="true">&rarr;</span></a>
+    </li>
+
+    <li class="card">
+      <div class="card-top">
+        <span class="card-no num">02</span>
+        <h2><a href="competitor.html">What the competitor actually is</a></h2>
+      </div>
+      <p class="card-desc">Every one of the rival&rsquo;s 1,227 licence listing pages fetched and parsed, plus its sitemap, its seller forms and fourteen years of its archived pages. What is genuinely on its shelf, what it holds back behind a form, and how far the &ldquo;are these listings real?&rdquo; question can honestly be taken from outside.</p>
+      <ul class="figs">
+        <li class="fig is-rival">
+          <span class="fig-n num">1,227</span>
+          <span class="fig-t">listing pages fetched &mdash; every one returned a working page, none failed</span>
+          <span class="fig-k">Census</span>
+        </li>
+        <li class="fig is-rival">
+          <span class="fig-n num">0</span>
+          <span class="fig-t">of them publish a licence number, a licensee name or a premises address</span>
+          <span class="fig-k">Census</span>
+        </li>
+        <li class="fig is-rival">
+          <span class="fig-n num">132</span>
+          <span class="fig-t">distinct description texts cover 1,198 of the listings; one block covers 185 of them</span>
+          <span class="fig-k">Census</span>
+        </li>
+        <li class="fig is-rival">
+          <span class="fig-n num">1,223</span>
+          <span class="fig-t">of the 1,227 rank for no search term at all. Four rank for something.</span>
+          <span class="fig-k">Ranked-keyword census</span>
+        </li>
+      </ul>
+      <a class="go" href="competitor.html">Read the teardown <span class="go-arrow" aria-hidden="true">&rarr;</span></a>
+    </li>
+
+    <li class="card">
+      <div class="card-top">
+        <span class="card-no num">03</span>
+        <h2><a href="site-audit.html">Your site, measured</a></h2>
+      </div>
+      <p class="card-desc">All 1,007 addresses the client&rsquo;s sitemap submits to Google, fetched and read one by one. The writing on those pages is the strongest thing the site owns &mdash; but 908 of them tell Google their real home is a different address, and not one of those addresses appears in any sitemap the site submits.</p>
+      <ul class="figs">
+        <li class="fig is-client">
+          <span class="fig-n num">1,006</span>
+          <span class="fig-t">of 1,007 sitemap addresses returned a real, indexable page</span>
+          <span class="fig-k">Census</span>
+        </li>
+        <li class="fig is-rival">
+          <span class="fig-n num">908</span>
+          <span class="fig-t">pages &mdash; 90.3% of the working ones &mdash; name a different address as their real home</span>
+          <span class="fig-k">Census</span>
+        </li>
+        <li class="fig is-client">
+          <span class="fig-n num">66.1% vs 27.6%</span>
+          <span class="fig-t">share of a page that is its own writing: the client&rsquo;s best template against the rival&rsquo;s largest</span>
+          <span class="fig-k">Sample, 12&ndash;16 pages per template</span>
+        </li>
+        <li class="fig is-brand">
+          <span class="fig-n num">49</span>
+          <span class="fig-t">of the 908 address pairs that a bulk redirect would take offline, so they need hand work</span>
+          <span class="fig-k">Census, each probed individually</span>
+        </li>
+      </ul>
+      <a class="go" href="site-audit.html">Read the site audit <span class="go-arrow" aria-hidden="true">&rarr;</span></a>
+    </li>
+
+    <li class="card">
+      <div class="card-top">
+        <span class="card-no num">04</span>
+        <h2><a href="plan.html">What to do next</a></h2>
+      </div>
+      <p class="card-desc">The recommendation &mdash; put real, priced inventory onto the state pages the client already owns, starting with New Jersey &mdash; with the deployment order argued from the scoring, and the ten-task technical work order in the corrected form it took after independent reviewers attacked it.</p>
+      <ul class="figs">
+        <li class="fig is-brand">
+          <span class="fig-n num">317</span>
+          <span class="fig-t">deployment cells scored; 25 recommended for immediate work, New Jersey first</span>
+          <span class="fig-k">Scored on demand estimates, not measured sessions</span>
+        </li>
+        <li class="fig is-brand">
+          <span class="fig-n num">53</span>
+          <span class="fig-t">real priced rows is the measured floor for a credible New Jersey page. The rival shows 52.</span>
+          <span class="fig-k">Live count of all 8 rival state pages</span>
+        </li>
+        <li class="fig is-rival">
+          <span class="fig-n num">0 of 8</span>
+          <span class="fig-t">work-order tasks survived independent review. Twenty-four reviewers, three per task.</span>
+          <span class="fig-k">Recorded verdicts</span>
+        </li>
+        <li class="fig is-rival">
+          <span class="fig-n num">129</span>
+          <span class="fig-t">claims in the work order that nobody has checked, listed openly in the report</span>
+          <span class="fig-k">Recorded verdicts</span>
+        </li>
+      </ul>
+      <a class="go" href="plan.html">Read the plan <span class="go-arrow" aria-hidden="true">&rarr;</span></a>
+    </li>
+
+  </ul>
+
+  <p class="sectionhead">Alongside the reports</p>
+
+  <div class="preview">
+    <h2><a href="../liquor-license/">The design preview</a></h2>
+    <p>Working page designs for what the plan recommends: a state hub that carries priced inventory as rows on the page itself, and the listing pages beneath it. It sits next to this bundle at the same address.</p>
+    <div class="flag">
+      <b>Every licence, price and date in the design preview is invented.</b> It is sample data published so the layout can be reviewed &mdash; not live inventory, not anyone&rsquo;s book, and not an offer. Nothing in it is a measurement. All the real measurements are in the four reports above.
+    </div>
+    <a class="go" href="../liquor-license/">Open the design preview <span class="go-arrow" aria-hidden="true">&rarr;</span></a>
+  </div>
+
+  <section class="method">
+    <h2>How this was measured</h2>
+    <dl>
+      <dt>Dates</dt>
+      <dd>Every measurement was taken on 12 September 2026, including all live page fetches. The reports were written on 13 September 2026. Anything described as live state &mdash; the rival&rsquo;s on-page stock counts, the 49 held addresses &mdash; will have drifted since, and each report says where.</dd>
+
+      <dt>What was a census</dt>
+      <dd>A census counts every item, so the figure is exact. All 1,007 of the client&rsquo;s sitemap addresses. All 1,227 of the rival&rsquo;s listing pages, and all 3,868 addresses in its sitemap. All 713 search terms the rival ranks for and all 244 the client ranks for, the 549-term gap between them, the 71-month history of both, and the link counts. All 908 duplicate address pairs, with each target address probed one at a time: 859 came back clean, 49 held. A census is complete for the supplier&rsquo;s index or for the site fetched &mdash; which is not the same as complete for the web.</dd>
+
+      <dt>What was sampled</dt>
+      <dd>A sample checks part of the whole, so it carries uncertainty. The 197 live searches were chosen by a published priority rule rather than at random, which tilts them towards terms one of these two sites already touches. Also sampled: the live check on the 50 highest-volume gap terms, the page-anatomy and content-overlap measurements at 12&ndash;16 pages per template, and the 38 live page fetches behind the work order&rsquo;s premise checks.</dd>
+
+      <dt>What is estimated</dt>
+      <dd>&ldquo;Modelled traffic&rdquo; is a calculation from ranking position and search volume, not measured sessions. No analytics and no Search Console data from any site entered this research, on either side. Monthly search volumes, click costs and difficulty scores are DataForSEO estimates built on Google Ads data &mdash; they are not Google Ads figures. Treat all of these as a scale for comparing pages and markets against each other, never as a count of visitors or a forecast.</dd>
+
+      <dt>Association, not cause</dt>
+      <dd>This is observational search data throughout. The reports can show which kinds of page sit in the positions that earn the clicks. They cannot show that the page design put them there, and they do not claim it. Each report carries its own list of what its evidence does not settle, and those lists are part of the deliverable rather than an admission.</dd>
+
+      <dt>What it cost</dt>
+      <dd>$5.11 of search-data API spend across 364 billed calls, against the $20 ceiling set for this engagement &mdash; summed from the cost figure each response returned, not estimated.</dd>
+    </dl>
+    <p class="footnote">No licence numbers, licensee names, premises addresses or any other licence-identifying detail appears anywhere in this bundle, and no confidential term of any mandate is reproduced. Where a figure is a calculation of ours rather than a field published by the data supplier, the report carrying it says so and names the file it came from.</p>
+  </section>
+
+</div>
+</main>
+
+<script>
+(function(){
+  var btn = document.getElementById('themebtn');
+  if(!btn) return;
+  btn.hidden = false;
+  function current(){
+    var set = document.documentElement.getAttribute('data-theme');
+    if(set) return set;
+    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+  function apply(t){
+    document.documentElement.setAttribute('data-theme', t);
+    btn.setAttribute('aria-label', 'Switch to ' + (t === 'dark' ? 'light' : 'dark') + ' theme');
+    try { localStorage.setItem('llr-theme', t); } catch(e){}
+  }
+  try {
+    var saved = localStorage.getItem('llr-theme');
+    if(saved === 'dark' || saved === 'light'){ apply(saved); }
+  } catch(e){}
+  btn.addEventListener('click', function(){ apply(current() === 'dark' ? 'light' : 'dark'); });
+})();
+</script>
+
+</body>
+</html>

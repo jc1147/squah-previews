@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What we found — liquor licence search research</title>
+<meta name="description" content="Why liquorlicenseauctioneers.com outranks liquorlicenseagents.com, and what actually wins in liquor licence search. Measured 12 September 2026.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============ TOKENS: complete light palette on bare :root ============ */
+:root{
+  color-scheme: light;
+  --bg:            #f7f6f3;
+  --bg-raised:     #ffffff;
+  --bg-sunken:     #efede8;
+  --bg-accent:     #f0f4fa;
+  --ink:           #1c1d21;
+  --ink-soft:      #4a4d55;
+  --ink-faint:     #6d7179;
+  --rule:          #dcd9d2;
+  --rule-strong:   #bfbbb2;
+  --brand:         #1f4f82;
+  --brand-ink:     #16385c;
+  --brand-soft:    #dce6f2;
+  --rival:         #b4471f;
+  --rival-soft:    #f6e2d8;
+  --client:        #1f6f60;
+  --client-soft:   #d9ebe6;
+  --govt:          #6b4f9c;
+  --govt-soft:     #e7dff5;
+  --warn-bg:       #fdf6e3;
+  --warn-rule:     #e0cd93;
+  --warn-ink:      #6b551a;
+  --focus:         #0a5bd3;
+  --shadow:        0 1px 2px rgba(28,29,33,.06), 0 6px 18px rgba(28,29,33,.05);
+  --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --serif: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --maxw: 74rem;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme: dark;
+    --bg:            #15161a;
+    --bg-raised:     #1e2026;
+    --bg-sunken:     #101114;
+    --bg-accent:     #1a2430;
+    --ink:           #eceded;
+    --ink-soft:      #b9bcc4;
+    --ink-faint:     #8d9199;
+    --rule:          #32353d;
+    --rule-strong:   #4a4e58;
+    --brand:         #7fb3e8;
+    --brand-ink:     #a9cdf3;
+    --brand-soft:    #22323f;
+    --rival:         #eb8a5f;
+    --rival-soft:    #3a251c;
+    --client:        #5cc4ab;
+    --client-soft:   #16302b;
+    --govt:          #b69ae8;
+    --govt-soft:     #2a2340;
+    --warn-bg:       #2b2617;
+    --warn-rule:     #5c4f28;
+    --warn-ink:      #e3d39a;
+    --focus:         #74a9f5;
+    --shadow:        0 1px 2px rgba(0,0,0,.4), 0 6px 18px rgba(0,0,0,.3);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --bg:            #15161a;
+  --bg-raised:     #1e2026;
+  --bg-sunken:     #101114;
+  --bg-accent:     #1a2430;
+  --ink:           #eceded;
+  --ink-soft:      #b9bcc4;
+  --ink-faint:     #8d9199;
+  --rule:          #32353d;
+  --rule-strong:   #4a4e58;
+  --brand:         #7fb3e8;
+  --brand-ink:     #a9cdf3;
+  --brand-soft:    #22323f;
+  --rival:         #eb8a5f;
+  --rival-soft:    #3a251c;
+  --client:        #5cc4ab;
+  --client-soft:   #16302b;
+  --govt:          #b69ae8;
+  --govt-soft:     #2a2340;
+  --warn-bg:       #2b2617;
+  --warn-rule:     #5c4f28;
+  --warn-ink:      #e3d39a;
+  --focus:         #74a9f5;
+  --shadow:        0 1px 2px rgba(0,0,0,.4), 0 6px 18px rgba(0,0,0,.3);
+}
+
+/* ============ BASE (mobile first, 390px) ============ */
+*,*::before,*::after{ box-sizing: border-box; }
+html{ -webkit-text-size-adjust: 100%; }
+body{
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 1rem;
+  line-height: 1.62;
+  overflow-wrap: break-word;
+}
+:focus-visible{ outline: 3px solid var(--focus); outline-offset: 2px; border-radius: 3px; }
+
+.wrap{ width: 100%; max-width: var(--maxw); margin: 0 auto; padding: 0 1rem; }
+
+/* ---- header ---- */
+.topbar{
+  background: var(--bg-raised);
+  border-bottom: 1px solid var(--rule);
+  position: sticky; top: 0; z-index: 20;
+}
+.topbar-in{
+  display: flex; flex-wrap: wrap; align-items: center; gap: .5rem .9rem;
+  padding: .5rem 1rem;
+  max-width: var(--maxw); margin: 0 auto;
+}
+.home{
+  display: inline-flex; align-items: center; gap: .45rem;
+  min-height: 44px; padding: .4rem .1rem;
+  color: var(--ink); text-decoration: none;
+  font-weight: 600; font-size: .9rem; letter-spacing: .01em;
+}
+.home:hover{ color: var(--brand); }
+.home-mark{
+  display: inline-grid; place-items: center;
+  width: 26px; height: 26px; border-radius: 6px;
+  background: var(--brand-soft); color: var(--brand-ink);
+  font-weight: 700; font-size: .72rem; font-family: var(--serif);
+}
+.crumb{ color: var(--ink-faint); font-size: .82rem; margin-right: auto; }
+.crumb-sep{ padding: 0 .35rem; }
+.themebtn{
+  min-height: 44px; min-width: 44px;
+  padding: .35rem .75rem;
+  border: 1px solid var(--rule-strong); border-radius: 8px;
+  background: var(--bg-sunken); color: var(--ink-soft);
+  font: inherit; font-size: .8rem; cursor: pointer;
+}
+.themebtn:hover{ color: var(--ink); border-color: var(--brand); }
+
+/* ---- hero ---- */
+.hero{ padding: 2rem 0 1.25rem; }
+.eyebrow{
+  font-size: .72rem; font-weight: 700; letter-spacing: .11em; text-transform: uppercase;
+  color: var(--brand); margin: 0 0 .7rem;
+}
+h1{
+  font-family: var(--serif); font-weight: 600;
+  font-size: 2.05rem; line-height: 1.12; letter-spacing: -.015em;
+  margin: 0 0 .85rem;
+}
+.standfirst{ font-size: 1.09rem; line-height: 1.55; color: var(--ink-soft); margin: 0 0 1rem; max-width: 46rem; }
+.dateline{ font-size: .82rem; color: var(--ink-faint); margin: 0; }
+
+/* ---- key figures ---- */
+.tiles{ display: grid; grid-template-columns: 1fr; gap: .75rem; margin: 1.5rem 0 0; padding: 0; list-style: none; }
+.tile{
+  background: var(--bg-raised); border: 1px solid var(--rule); border-radius: 12px;
+  padding: .95rem 1rem; box-shadow: var(--shadow);
+}
+.tile-fig{
+  font-family: var(--serif); font-weight: 600;
+  font-size: 1.95rem; line-height: 1.05; letter-spacing: -.02em;
+  font-variant-numeric: tabular-nums; display: block; margin-bottom: .3rem;
+}
+.tile-fig.is-rival{ color: var(--rival); }
+.tile-fig.is-client{ color: var(--client); }
+.tile-fig.is-govt{ color: var(--govt); }
+.tile-lab{ font-size: .9rem; line-height: 1.45; color: var(--ink-soft); display: block; }
+.tile-src{ font-size: .72rem; color: var(--ink-faint); display: block; margin-top: .45rem; }
+
+/* ---- sections ---- */
+main{ padding-bottom: 1rem; }
+section{ padding: 2rem 0 .5rem; border-top: 1px solid var(--rule); margin-top: 2rem; }
+section:first-of-type{ border-top: none; margin-top: 0; }
+h2{
+  font-family: var(--serif); font-weight: 600;
+  font-size: 1.5rem; line-height: 1.2; letter-spacing: -.01em;
+  margin: 0 0 .3rem;
+}
+.h2num{ color: var(--ink-faint); font-family: var(--sans); font-size: .8rem; font-weight: 700; letter-spacing: .1em; display: block; margin-bottom: .5rem; text-transform: uppercase; }
+h3{ font-size: 1.02rem; font-weight: 700; margin: 1.6rem 0 .4rem; letter-spacing: -.005em; }
+.deck{ color: var(--ink-soft); font-size: 1.02rem; margin: 0 0 1.1rem; max-width: 44rem; }
+p{ margin: 0 0 1rem; max-width: 44rem; }
+strong{ font-weight: 700; }
+.num{ font-variant-numeric: tabular-nums; }
+a{ color: var(--brand); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+
+/* ---- callouts ---- */
+.pull{
+  border-left: 4px solid var(--brand); background: var(--bg-accent);
+  padding: .9rem 1rem; border-radius: 0 10px 10px 0; margin: 1.25rem 0;
+  font-size: 1.02rem; color: var(--ink);
+}
+.pull p:last-child{ margin-bottom: 0; }
+.caveat{
+  background: var(--warn-bg); border: 1px solid var(--warn-rule); color: var(--warn-ink);
+  border-radius: 10px; padding: .85rem 1rem; margin: 1.25rem 0; font-size: .92rem;
+}
+.caveat p{ margin: 0 0 .55rem; max-width: none; }
+.caveat p:last-child{ margin-bottom: 0; }
+.caveat-t{ font-weight: 700; letter-spacing: .01em; }
+
+/* ---- tables ---- */
+figure{ margin: 1.4rem 0 1.6rem; }
+.scroller{
+  overflow-x: auto; -webkit-overflow-scrolling: touch;
+  border: 1px solid var(--rule); border-radius: 12px; background: var(--bg-raised);
+}
+table{ border-collapse: collapse; width: 100%; min-width: 40rem; font-size: .86rem; }
+caption{ text-align: left; font-size: .88rem; color: var(--ink-soft); padding: 0 0 .55rem; }
+thead th{
+  text-align: left; font-size: .72rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase;
+  color: var(--ink-faint); background: var(--bg-sunken);
+  padding: .6rem .7rem; border-bottom: 1px solid var(--rule-strong); white-space: nowrap;
+  position: relative;
+}
+tbody th{ text-align: left; font-weight: 600; padding: .55rem .7rem; border-bottom: 1px solid var(--rule); white-space: nowrap; }
+tbody td{ padding: .55rem .7rem; border-bottom: 1px solid var(--rule); font-variant-numeric: tabular-nums; white-space: nowrap; }
+tbody tr:last-child th, tbody tr:last-child td{ border-bottom: none; }
+.t-num{ text-align: right; }
+.t-total th, .t-total td{ font-weight: 700; background: var(--bg-sunken); }
+.t-hi th, .t-hi td{ background: var(--rival-soft); }
+.t-hi2 th, .t-hi2 td{ background: var(--client-soft); }
+.t-dim td{ color: var(--ink-faint); }
+.t-rival{ color: var(--rival); font-weight: 600; }
+.t-client{ color: var(--client); font-weight: 600; }
+figcaption{ font-size: .78rem; color: var(--ink-faint); margin-top: .55rem; line-height: 1.5; }
+.scrollhint{ font-size: .74rem; color: var(--ink-faint); margin: .4rem 0 0; }
+
+/* ---- CSS bar chart ---- */
+.barchart{ list-style: none; margin: 0; padding: 0; }
+.barrow{ padding: .5rem 0; border-bottom: 1px solid var(--rule); }
+.barrow:last-child{ border-bottom: none; }
+.barhead{ display: flex; justify-content: space-between; align-items: baseline; gap: .6rem; margin-bottom: .3rem; }
+.barname{ font-size: .88rem; font-weight: 600; }
+.barsub{ font-size: .76rem; color: var(--ink-faint); font-weight: 400; }
+.barval{ font-size: .88rem; font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.bartrack{ height: 14px; background: var(--bg-sunken); border-radius: 7px; overflow: hidden; }
+.barfill{ height: 100%; border-radius: 7px; display: block; background: var(--rival); min-width: 2px; }
+.barfill.is-alt{ background: var(--brand); }
+.barfill.is-govt{ background: var(--govt); }
+.barfill.is-client{ background: var(--client); }
+.barscale{ display: flex; justify-content: space-between; font-size: .72rem; color: var(--ink-faint); font-variant-numeric: tabular-nums; margin-top: .5rem; padding-top: .4rem; border-top: 1px solid var(--rule); }
+.chartbox{ background: var(--bg-raised); border: 1px solid var(--rule); border-radius: 12px; padding: .9rem 1rem; box-shadow: var(--shadow); }
+
+/* ---- SVG line chart ---- */
+.chart-scroll{ overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.chart-wide{ min-width: 37.5rem; }
+.linechart{ display: block; width: 100%; height: auto; }
+.ax-line{ stroke: var(--rule-strong); stroke-width: 1; fill: none; }
+.ax-grid{ stroke: var(--rule); stroke-width: 1; fill: none; stroke-dasharray: 2 3; }
+.ax-text{ fill: var(--ink-faint); font-family: var(--sans); font-size: 11px; }
+.ax-text-em{ fill: var(--ink-soft); font-family: var(--sans); font-size: 11px; font-weight: 600; }
+.ln-rival{ fill: none; stroke: var(--rival); stroke-width: 2.2; stroke-linejoin: round; stroke-linecap: round; }
+.ln-client{ fill: none; stroke: var(--client); stroke-width: 2.2; stroke-linejoin: round; stroke-linecap: round; }
+.dot-rival{ fill: var(--rival); }
+.dot-client{ fill: var(--client); }
+.lbl-rival{ fill: var(--rival); font-family: var(--sans); font-size: 11px; font-weight: 700; }
+.lbl-client{ fill: var(--client); font-family: var(--sans); font-size: 11px; font-weight: 700; }
+.legend{ display: flex; flex-wrap: wrap; gap: .5rem 1.1rem; margin: .7rem 0 0; padding: 0; list-style: none; font-size: .8rem; color: var(--ink-soft); }
+.legend li{ display: flex; align-items: center; gap: .4rem; }
+.swatch{ width: 14px; height: 4px; border-radius: 2px; display: inline-block; background: var(--rival); }
+.swatch.is-client{ background: var(--client); }
+
+/* ---- lists ---- */
+.plain{ padding-left: 1.1rem; margin: 0 0 1rem; max-width: 44rem; }
+.plain li{ margin-bottom: .55rem; }
+.qa{ margin: 0 0 1rem; max-width: 44rem; }
+.qa dt{ font-weight: 700; margin-top: 1rem; }
+.qa dd{ margin: .25rem 0 0; color: var(--ink-soft); }
+
+/* ---- footer ---- */
+footer{
+  background: var(--bg-sunken); border-top: 1px solid var(--rule);
+  margin-top: 2.5rem; padding: 2rem 0 2.5rem;
+  font-size: .84rem; color: var(--ink-soft);
+}
+footer h2{ font-size: 1.05rem; margin-bottom: .8rem; }
+footer p{ max-width: 52rem; }
+.method-grid{ display: grid; grid-template-columns: 1fr; gap: 1rem; margin: 1rem 0 0; }
+.method-card{ background: var(--bg-raised); border: 1px solid var(--rule); border-radius: 10px; padding: .85rem 1rem; }
+.method-card h3{ font-size: .82rem; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-faint); margin: 0 0 .4rem; }
+.method-card p{ margin: 0; font-size: .82rem; }
+.filelist{ list-style: none; padding: 0; margin: .5rem 0 0; display: flex; flex-wrap: wrap; gap: .35rem; }
+.filelist li{
+  font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  font-size: .72rem; background: var(--bg-sunken); border: 1px solid var(--rule);
+  border-radius: 5px; padding: .15rem .4rem; color: var(--ink-soft);
+}
+.footlinks{ margin-top: 1.4rem; padding-top: 1rem; border-top: 1px solid var(--rule-strong); }
+.footlinks a{ display: inline-flex; align-items: center; min-height: 44px; font-weight: 600; }
+.backtop{ margin-top: .5rem; }
+
+/* ============ 768px ============ */
+@media (min-width: 768px){
+  .wrap{ padding: 0 1.75rem; }
+  .topbar-in{ padding: .5rem 1.75rem; }
+  h1{ font-size: 2.6rem; }
+  .standfirst{ font-size: 1.16rem; }
+  .hero{ padding: 2.75rem 0 1.5rem; }
+  .tiles{ grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+  h2{ font-size: 1.78rem; }
+  section{ padding: 2.5rem 0 .5rem; }
+  .method-grid{ grid-template-columns: repeat(2, 1fr); }
+  table{ font-size: .88rem; }
+  .chart-wide{ min-width: 0; }
+}
+
+/* ============ 1200px ============ */
+@media (min-width: 1200px){
+  h1{ font-size: 3rem; }
+  .tiles{ grid-template-columns: repeat(4, 1fr); }
+  h2{ font-size: 1.95rem; }
+  .deck{ font-size: 1.07rem; }
+  .method-grid{ grid-template-columns: repeat(4, 1fr); }
+  .crumb{ font-size: .86rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <a class="home" href="index.html"><span class="home-mark" aria-hidden="true">LL</span>Liquor licence search research</a>
+    <span class="crumb"><span class="crumb-sep" aria-hidden="true">/</span>What we found</span>
+    <button class="themebtn" type="button" id="themebtn" hidden>Switch theme</button>
+  </div>
+</header>
+
+<main>
+<div class="wrap">
+
+  <div class="hero">
+    <p class="eyebrow">The main report</p>
+    <h1>What we found</h1>
+    <p class="standfirst">Two websites sell into the same market. One of them gets roughly eleven times the search traffic of the other. This report explains where that traffic actually sits, why the obvious explanations do not hold up, and what the evidence says works here — including the two hard ceilings on anything either site builds.</p>
+    <p class="dateline">All figures measured 12 September 2026 unless stated. Read the method note at the foot of the page before quoting any number.</p>
+  </div>
+
+  <ul class="tiles">
+    <li class="tile">
+      <span class="tile-fig is-rival num">57.0%</span>
+      <span class="tile-lab">of the rival's search traffic comes from just <strong>8 pages</strong> — one per state.</span>
+      <span class="tile-src">Census · ranked.json</span>
+    </li>
+    <li class="tile">
+      <span class="tile-fig is-rival num">1.8%</span>
+      <span class="tile-lab">comes from its <strong>1,227</strong> individual licence-for-sale listing pages.</span>
+      <span class="tile-src">Census · ranked.json</span>
+    </li>
+    <li class="tile">
+      <span class="tile-fig is-client num">166 vs 95</span>
+      <span class="tile-lab">referring websites. The <strong>client has more</strong> than the rival, not fewer.</span>
+      <span class="tile-src">Index census · authority.json</span>
+    </li>
+    <li class="tile">
+      <span class="tile-fig is-govt num">81.2%</span>
+      <span class="tile-lab">of the searches we tested put a <strong>government page</strong> in the top three.</span>
+      <span class="tile-src">Sample, n=197 · serp.json</span>
+    </li>
+  </ul>
+
+  <!-- ============================================================ -->
+  <section id="reading">
+    <span class="h2num">Before the numbers</span>
+    <h2>Three words you need, and one warning</h2>
+    <p class="deck">Everything below rests on three ideas. They are worth ninety seconds.</p>
+    <dl class="qa">
+      <dt>A page template</dt>
+      <dd>A repeated page design that gets filled with different data. "One page per state" is a template; so is "one page per licence for sale". A site with 3,868 pages might have only twelve templates. Grouping pages by template is how you see which <em>kind</em> of page earns its keep.</dd>
+      <dt>Modelled traffic (also called estimated traffic)</dt>
+      <dd>Not visitors. It is a calculation: for every search a page ranks for, take the estimated monthly search volume, multiply by the share of clicks a page in that position typically gets, and add it all up. It is the best available comparison when you cannot see either site's analytics — but it is a model, and we label it as one every time.</dd>
+      <dt>A census versus a sample</dt>
+      <dd>A census counts everything. A sample counts some things and lets you infer the rest. We say which one every figure is. The ranked-keyword data is a census of the supplier's index; the 197 live searches are a sample.</dd>
+    </dl>
+    <div class="caveat">
+      <p class="caveat-t">The warning, and it applies to every finding on this page.</p>
+      <p>This is observational search data. We can show that a certain kind of page <strong>is sitting in</strong> the positions that get the clicks. We cannot show that the page design <strong>caused</strong> it to get there. Other explanations we could not hold constant include domain age, link authority, internal linking, how much text each page carries, how quickly each site gets indexed, and brand recognition. Several of those we measured separately and report below; none is fully ruled out. Read every finding as "associates with", never "causes".</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <section id="where-traffic-sits">
+    <span class="h2num">Finding 1</span>
+    <h2>The rival's traffic sits on eight pages, not on its 3,868</h2>
+    <p class="deck">The rival, liquorlicenseauctioneers.com, publishes 3,868 pages in its sitemap. We pulled every search term its pages rank for — 713 of them, a complete census of the supplier's index for that site, not a sample — grouped every ranking page by its template, and added up the modelled traffic per template.</p>
+
+    <p>The result is lopsided in a way that changes what this market looks like. Eight pages — one per state, at addresses as plain as <span class="num">/new-jersey</span> and <span class="num">/california</span> — carry <strong>57.0%</strong> of the site's modelled search traffic. The 1,227 pages that each advertise one licence for sale, the actual inventory, carry <strong>1.8%</strong>. Another 1,692 pages combining a county with a licence type carry <strong>0.1%</strong>.</p>
+
+    <figure>
+      <div class="chartbox">
+        <ul class="barchart">
+          <li class="barrow">
+            <div class="barhead"><span class="barname">State hub <span class="barsub">8 pages</span></span><span class="barval">57.0%</span></div>
+            <div class="bartrack"><span class="barfill" style="width:100%"></span></div>
+          </li>
+          <li class="barrow">
+            <div class="barhead"><span class="barname">State + licence type <span class="barsub">30 pages</span></span><span class="barval">16.6%</span></div>
+            <div class="bartrack"><span class="barfill" style="width:29.1%"></span></div>
+          </li>
+          <li class="barrow">
+            <div class="barhead"><span class="barname">Index of a state's licence types <span class="barsub">8 pages</span></span><span class="barval">9.1%</span></div>
+            <div class="bartrack"><span class="barfill" style="width:16.0%"></span></div>
+          </li>
+          <li class="barrow">
+            <div class="barhead"><span class="barname">Blog articles <span class="barsub">36 pages</span></span><span class="barval">8.5%</span></div>
+            <div class="bartrack"><span class="barfill" style="width:14.9%"></span></div>
+          </li>
+          <li class="barrow">
+            <div class="barhead"><span class="barname">County hub <span class="barsub">432 pages</span></span><span class="barval">4.2%</span></div>
+            <div class="bartrack"><span class="barfill" style="width:7.4%"></span></div>
+          </li>
+          <li class="barrow">
+            <div class="barhead"><span class="barname">Licence-for-sale listings <span class="barsub">1,227 pages</span></span><span class="barval">1.8%</span></div>
+            <div class="bartrack"><span class="barfill is-alt" style="width:3.2%"></span></div>
+          </li>
+          <li class="barrow">
+            <div class="barhead"><span class="barname">Static pages (about, terms) <span class="barsub">9 pages</span></span><span class="barval">1.6%</span></div>
+            <div class="bartrack"><span class="barfill" style="width:2.8%"></span></div>
+          </li>
+          <li class="barrow">
+            <div class="barhead"><span class="barname">Programmatic FAQ pages <span class="barsub">402 pages</span></span><span class="barval">0.9%</span></div>
+            <div class="bartrack"><span class="barfill" style="width:1.6%"></span></div>
+          </li>
+          <li class="barrow">
+            <div class="barhead"><span class="barname">Index of cities <span class="barsub">8 pages</span></span><span class="barval">0.3%</span></div>
+            <div class="bartrack"><span class="barfill" style="width:0.5%"></span></div>
+          </li>
+          <li class="barrow">
+            <div class="barhead"><span class="barname">County + licence type <span class="barsub">1,692 pages</span></span><span class="barval">0.1%</span></div>
+            <div class="bartrack"><span class="barfill is-alt" style="width:0.2%"></span></div>
+          </li>
+          <li class="barrow">
+            <div class="barhead"><span class="barname">Index of FAQs <span class="barsub">8 pages</span></span><span class="barval">0.0%</span></div>
+            <div class="bartrack"><span class="barfill" style="width:0.1%"></span></div>
+          </li>
+          <li class="barrow">
+            <div class="barhead"><span class="barname">Index of counties <span class="barsub">8 pages</span></span><span class="barval">0.0%</span></div>
+            <div class="bartrack"><span class="barfill" style="width:0.1%"></span></div>
+          </li>
+        </ul>
+        <div class="barscale"><span>0%</span><span>share of the rival's modelled search traffic</span><span>57.0%</span></div>
+      </div>
+      <figcaption>Bar length is each template's share of the rival's 5,471 monthly modelled visits; the longest bar is the 57.0% state hub row. Blue bars mark the two templates built by combining data records — listings and county-by-type. Bars below 0.5% are drawn at a visible minimum width, so read the printed figure, not the bar. Source: ranked.json, template_yield_consolidated. Census of the supplier's index (713 of 713 ranked keywords retrieved).</figcaption>
+    </figure>
+
+    <p>The same table with the underlying counts, because the share alone hides how thoroughly some of these templates fail. "Pages that rank" means pages appearing in the search results for at least one term. "Top-3 placements" counts every instance of a page from that template sitting in the first three organic results.</p>
+
+    <figure>
+      <div class="scroller">
+        <table>
+          <caption>Every page template on liquorlicenseauctioneers.com, by what it earns</caption>
+          <thead>
+            <tr>
+              <th scope="col">Template</th>
+              <th scope="col" class="t-num">Pages published</th>
+              <th scope="col" class="t-num">Pages that rank</th>
+              <th scope="col" class="t-num">% of pages ranking</th>
+              <th scope="col" class="t-num">Search terms</th>
+              <th scope="col" class="t-num">Top-3 placements</th>
+              <th scope="col" class="t-num">Top-10 placements</th>
+              <th scope="col" class="t-num">Modelled visits / mo</th>
+              <th scope="col" class="t-num">Share of traffic</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="t-hi"><th scope="row">State hub</th><td class="t-num">8</td><td class="t-num">8</td><td class="t-num">100%</td><td class="t-num">190</td><td class="t-num">49</td><td class="t-num">88</td><td class="t-num">3,120.2</td><td class="t-num">57.0%</td></tr>
+            <tr><th scope="row">State + licence type</th><td class="t-num">30</td><td class="t-num">19</td><td class="t-num">63.3%</td><td class="t-num">120</td><td class="t-num">53</td><td class="t-num">87</td><td class="t-num">906.6</td><td class="t-num">16.6%</td></tr>
+            <tr><th scope="row">Index of a state's types</th><td class="t-num">8</td><td class="t-num">7</td><td class="t-num">87.5%</td><td class="t-num">46</td><td class="t-num">9</td><td class="t-num">28</td><td class="t-num">495.4</td><td class="t-num">9.1%</td></tr>
+            <tr><th scope="row">Blog article</th><td class="t-num">36</td><td class="t-num">8</td><td class="t-num">22.2%</td><td class="t-num">105</td><td class="t-num">1</td><td class="t-num">25</td><td class="t-num">464.2</td><td class="t-num">8.5%</td></tr>
+            <tr><th scope="row">County hub</th><td class="t-num">432</td><td class="t-num">32</td><td class="t-num">7.4%</td><td class="t-num">75</td><td class="t-num">21</td><td class="t-num">36</td><td class="t-num">232.5</td><td class="t-num">4.2%</td></tr>
+            <tr class="t-hi2"><th scope="row">Licence-for-sale listing</th><td class="t-num">1,227</td><td class="t-num">4</td><td class="t-num">0.3%</td><td class="t-num">17</td><td class="t-num">11</td><td class="t-num">15</td><td class="t-num">96.6</td><td class="t-num">1.8%</td></tr>
+            <tr><th scope="row">Static page</th><td class="t-num">9</td><td class="t-num">2</td><td class="t-num">22.2%</td><td class="t-num">9</td><td class="t-num">1</td><td class="t-num">1</td><td class="t-num">85.5</td><td class="t-num">1.6%</td></tr>
+            <tr><th scope="row">Programmatic FAQ</th><td class="t-num">402</td><td class="t-num">24</td><td class="t-num">6.0%</td><td class="t-num">135</td><td class="t-num">0</td><td class="t-num">8</td><td class="t-num">48.8</td><td class="t-num">0.9%</td></tr>
+            <tr><th scope="row">Index of cities</th><td class="t-num">8</td><td class="t-num">1</td><td class="t-num">12.5%</td><td class="t-num">7</td><td class="t-num">0</td><td class="t-num">1</td><td class="t-num">14.9</td><td class="t-num">0.3%</td></tr>
+            <tr class="t-hi2"><th scope="row">County + licence type</th><td class="t-num">1,692</td><td class="t-num">5</td><td class="t-num">0.3%</td><td class="t-num">7</td><td class="t-num">0</td><td class="t-num">3</td><td class="t-num">6.4</td><td class="t-num">0.1%</td></tr>
+            <tr class="t-dim"><th scope="row">Index of FAQs</th><td class="t-num">8</td><td class="t-num">2</td><td class="t-num">25.0%</td><td class="t-num">2</td><td class="t-num">0</td><td class="t-num">0</td><td class="t-num">0.1</td><td class="t-num">0.0%</td></tr>
+            <tr class="t-dim"><th scope="row">Index of counties</th><td class="t-num">8</td><td class="t-num">0</td><td class="t-num">0%</td><td class="t-num">0</td><td class="t-num">0</td><td class="t-num">0</td><td class="t-num">0</td><td class="t-num">0.0%</td></tr>
+            <tr class="t-total"><th scope="row">All templates</th><td class="t-num">3,868</td><td class="t-num">112</td><td class="t-num">2.9%</td><td class="t-num">713</td><td class="t-num">145</td><td class="t-num">292</td><td class="t-num">5,471.1</td><td class="t-num">100%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="scrollhint">This table scrolls sideways on a narrow screen.</p>
+      <figcaption>Source: ranked.json — template_yield_consolidated for the per-template rows, per_domain summary for the totals. "Pages published" is the live sitemap count captured the same day, so it counts pages the site advertises, not a crawl. "Pages that rank" is measured across all 112 distinct addresses that appeared in results, which is why the totals row is 112 and not the sum of the column. Search volumes and modelled visits are DataForSEO estimates, not Google Ads figures and not measured sessions. Row shading is ours: orange marks the top template, green the two record-driven templates.</figcaption>
+    </figure>
+
+    <p>Two details sharpen it. First, the concentration is tighter than "eight pages": a single page, <span class="num">/new-jersey</span>, carries <strong>1,970 of the site's 5,471</strong> modelled monthly visits — <strong>36.0%</strong> of the whole site from one address. Eleven pages account for 80% of it. Second, the 17 search terms the listing pages do rank for are almost all place-and-cost queries rather than inventory queries: eleven of them are variations on "liquor license miami", "miami liquor license cost", "how much is a liquor license in miami dade county". The listing pages are not winning because they are listings. They are winning a handful of Miami-area searches.</p>
+
+    <div class="pull">
+      <p>The rival's page count is not the asset. Its state hubs are. Of 3,868 published pages, only <strong>112</strong> appear in search results at all — <strong>2.9%</strong>. The other 3,756 are, on this measurement, invisible.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <section id="matched">
+    <span class="h2num">Finding 2</span>
+    <h2>Both sites publish exactly eight state hub pages. One set wins 49 top-three spots. The other wins none.</h2>
+    <p class="deck">This is the strongest single piece of evidence in the engagement, because it removes the usual objection. You cannot say "the rival wins because it has more pages" when, on the page type that carries most of its traffic, the two sites publish the same number.</p>
+
+    <p>The client, liquorlicenseagents.com, publishes 1,007 pages. Eight of them are state-level hubs. The rival publishes 3,868 pages, and eight of them are state-level hubs. Same template count, same day, same measurement method, both read from the same supplier endpoint. Here is what those sixteen pages do.</p>
+
+    <figure>
+      <div class="scroller">
+        <table>
+          <caption>Eight state hubs against eight state hubs</caption>
+          <thead>
+            <tr>
+              <th scope="col">Measure</th>
+              <th scope="col" class="t-num">liquorlicenseauctioneers.com<br>(the rival)</th>
+              <th scope="col" class="t-num">liquorlicenseagents.com<br>(the client)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">State hub pages published</th><td class="t-num t-rival">8</td><td class="t-num t-client">8</td></tr>
+            <tr><th scope="row">Of those, pages appearing in search results</th><td class="t-num t-rival">8 (100%)</td><td class="t-num t-client">3 (37.5%)</td></tr>
+            <tr><th scope="row">Search terms they rank for</th><td class="t-num t-rival">190</td><td class="t-num t-client">30</td></tr>
+            <tr><th scope="row">Search terms per published page</th><td class="t-num t-rival">23.75</td><td class="t-num t-client">3.75</td></tr>
+            <tr class="t-hi"><th scope="row">Placements in the top 3 results</th><td class="t-num t-rival">49</td><td class="t-num t-client">0</td></tr>
+            <tr class="t-hi"><th scope="row">Placements in the top 10 results</th><td class="t-num t-rival">88</td><td class="t-num t-client">0</td></tr>
+            <tr><th scope="row">Combined monthly searches reached</th><td class="t-num t-rival">48,480</td><td class="t-num t-client">7,890</td></tr>
+            <tr><th scope="row">Modelled visits per month</th><td class="t-num t-rival">3,120.2</td><td class="t-num t-client">16.5</td></tr>
+            <tr><th scope="row">Share of the site's own top-3 placements</th><td class="t-num t-rival">33.8%</td><td class="t-num t-client">0%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="scrollhint">This table scrolls sideways on a narrow screen.</p>
+      <figcaption>Source: ranked.json, head_to_head.concepts.state_hub. The rival's eight are the template the file calls state-root; the client's eight are the templates it calls state (six pages) and state-generic (two pages), rolled up by the file's own definition of the concept "one page per state, the state-level hub". Both sides are a census of the supplier's index for that domain on 12 September 2026, pulled with identical parameters. Modelled visits are estimates, not measured sessions.</figcaption>
+    </figure>
+
+    <p>Zero is an unusual number in this kind of research, so it is worth being precise about it. The client's eight state hubs are not absent from search — three of them rank for thirty terms between them. Not one of those thirty rankings falls inside the top ten results. The best of them, <span class="num">/california/liquor-license/</span>, reaches seventeen search terms worth 4,540 monthly searches and converts them into <strong>9.5</strong> modelled visits, because every one of those seventeen positions sits below tenth place.</p>
+
+    <p>The rival's equivalents, page by page:</p>
+
+    <figure>
+      <div class="scroller">
+        <table>
+          <caption>The rival's eight state hubs, individually</caption>
+          <thead>
+            <tr>
+              <th scope="col">Page</th>
+              <th scope="col" class="t-num">Search terms</th>
+              <th scope="col" class="t-num">Top-3</th>
+              <th scope="col" class="t-num">Top-10</th>
+              <th scope="col" class="t-num">Monthly searches reached</th>
+              <th scope="col" class="t-num">Modelled visits / mo</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="t-hi"><th scope="row">/new-jersey</th><td class="t-num">44</td><td class="t-num">18</td><td class="t-num">21</td><td class="t-num">13,800</td><td class="t-num">1,970.2</td></tr>
+            <tr><th scope="row">/california</th><td class="t-num">26</td><td class="t-num">11</td><td class="t-num">17</td><td class="t-num">6,700</td><td class="t-num">537.0</td></tr>
+            <tr><th scope="row">/florida</th><td class="t-num">43</td><td class="t-num">5</td><td class="t-num">9</td><td class="t-num">15,340</td><td class="t-num">196.5</td></tr>
+            <tr><th scope="row">/new-mexico</th><td class="t-num">18</td><td class="t-num">4</td><td class="t-num">11</td><td class="t-num">3,380</td><td class="t-num">118.5</td></tr>
+            <tr><th scope="row">/michigan</th><td class="t-num">15</td><td class="t-num">4</td><td class="t-num">7</td><td class="t-num">2,260</td><td class="t-num">99.6</td></tr>
+            <tr><th scope="row">/arizona</th><td class="t-num">23</td><td class="t-num">3</td><td class="t-num">11</td><td class="t-num">3,840</td><td class="t-num">80.0</td></tr>
+            <tr><th scope="row">/pennsylvania</th><td class="t-num">12</td><td class="t-num">3</td><td class="t-num">6</td><td class="t-num">1,490</td><td class="t-num">65.2</td></tr>
+            <tr><th scope="row">/ohio</th><td class="t-num">9</td><td class="t-num">1</td><td class="t-num">6</td><td class="t-num">1,670</td><td class="t-num">53.1</td></tr>
+            <tr class="t-total"><th scope="row">All eight</th><td class="t-num">190</td><td class="t-num">49</td><td class="t-num">88</td><td class="t-num">48,480</td><td class="t-num">3,120.2</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="scrollhint">This table scrolls sideways on a narrow screen.</p>
+      <figcaption>Computed by us from ranked-rows.json, grouping the rival's 190 state-hub rows by ranking address; the eight-page totals reconcile to ranked.json's own state-root figures. Census of the supplier's index. Florida is the instructive row: it reaches more monthly searches than New Jersey (15,340 against 13,800) but converts a tenth of the traffic, because its positions are lower. Reach is not the same as placement.</figcaption>
+    </figure>
+
+    <h3>One honest difference in the eight-versus-eight comparison</h3>
+    <p>The page counts match; the coverage does not. The rival's eight hubs cover eight distinct states, one page each. The client's eight cover six states, with three of the eight pointed at California (<span class="num">/california</span>, <span class="num">/california/california-liquor-license/</span> and <span class="num">/california/liquor-license/</span>). So the comparison is fair on page count and on method, but the two sets are not identically shaped. We read that as part of the finding rather than a flaw in it: three competing pages on one state is a structural choice, and the state where the client has three hub pages is the state where it has zero top-ten placements.</p>
+
+    <h3>The same comparison run a second way, on identical search terms</h3>
+    <p>A different objection is that the two sites simply chase different search terms, so their totals cannot be compared. That objection is testable. From the same data pull, 164 search terms have <strong>both</strong> sites appearing in the results. On those 164 — identical searches, identical results pages, no difference in keyword selection possible — the rival ranks higher on <strong>138</strong> of them and the client on <strong>26</strong>. That is <strong>84.1%</strong> to the rival, with a median gap of <strong>22 places</strong>.</p>
+
+    <p>Nor is it about geographic spread. The rival covers eight states and the client is concentrated in California, so the obvious read is that the rival simply plays a bigger board. It does not hold: California is the rival's <em>strongest</em> state, carrying <strong>56 of its 132</strong> state-level top-3 placements — <strong>42.4%</strong>. On the highest-volume California terms the pattern is stark. For "liquor license california" (1,000 monthly searches) the rival's state hub sits at position 3 while the client's nearest page sits at 43. For "how much is a liquor license in california" (880 searches) the rival's blog article sits at 3 and the client's California hub at 41.</p>
+
+    <div class="caveat">
+      <p class="caveat-t">What this comparison establishes, and where it stops.</p>
+      <p>It establishes that the gap is not explained by page count, keyword selection or geographic coverage — the three easiest explanations — because each was held constant in turn and the gap survived. It does not establish that the hub template is the cause. A page's design, its text, its internal links and the authority of the domain it sits on all travel together, and this measurement cannot separate them.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <section id="authority">
+    <span class="h2num">Finding 3</span>
+    <h2>It is not links. On links, the client is ahead.</h2>
+    <p class="deck">The standard explanation for a gap this size is authority: the other site has more links from more websites, so it wins. We measured it, on identical endpoints, on the same day, for both domains. The explanation does not survive contact with the data, and the direction of the numbers is the reason.</p>
+
+    <figure>
+      <div class="scroller">
+        <table>
+          <caption>Link authority and domain age, measured the same day with identical settings</caption>
+          <thead>
+            <tr>
+              <th scope="col">Measure</th>
+              <th scope="col" class="t-num">Rival</th>
+              <th scope="col" class="t-num">Client</th>
+              <th scope="col">Who leads</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="t-hi2"><th scope="row">Referring websites (distinct domains linking in)</th><td class="t-num t-rival">95</td><td class="t-num t-client">166</td><td>Client, by 1.75&times;</td></tr>
+            <tr class="t-hi2"><th scope="row">Referring websites, root domains only</th><td class="t-num t-rival">91</td><td class="t-num t-client">142</td><td>Client, by 1.56&times;</td></tr>
+            <tr><th scope="row">Total inbound links</th><td class="t-num t-rival">409</td><td class="t-num t-client">397</td><td>Level (1.03&times; to the rival)</td></tr>
+            <tr class="t-hi2"><th scope="row">Supplier's backlink strength score (0&ndash;1,000)</th><td class="t-num t-rival">123</td><td class="t-num t-client">152</td><td>Client, by 29 points</td></tr>
+            <tr><th scope="row">Share of inbound links that pass authority</th><td class="t-num t-rival">39.1%</td><td class="t-num t-client">77.8%</td><td>Client</td></tr>
+            <tr><th scope="row">Largest single source country of links</th><td class="t-num t-rival">.ru, 46.9%</td><td class="t-num t-client">.com, 87.5%</td><td>Client (cleaner profile)</td></tr>
+            <tr><th scope="row">Domain registered</th><td class="t-num t-rival">22 Sep 2011</td><td class="t-num t-client">17 Oct 2014</td><td>Rival, by ~3.1 years</td></tr>
+            <tr class="t-hi"><th scope="row">Modelled monthly search traffic</th><td class="t-num t-rival">5,471</td><td class="t-num t-client">491</td><td>Rival, by 11.1&times;</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="scrollhint">This table scrolls sideways on a narrow screen.</p>
+      <figcaption>Source: authority.json — per_domain.summary, ratios_vs_rival and interpretation. Both domains hit the same endpoints with the same parameters on 12 September 2026. These counts are a census of what the supplier's link index holds for each domain on that date, which is not a census of the web: a link its crawler has not found does not appear here, and coverage can differ between a large frequently-crawled site and a small one. The 0&ndash;1,000 score is DataForSEO's own backlink rank, not Moz Domain Authority or Ahrefs Domain Rating. Registration dates are WHOIS records; a registration date is not proof of continuous operation.</figcaption>
+    </figure>
+
+    <p>Read the table as a whole and the shape is unusual. The client has <strong>1.75 times</strong> as many referring websites, a near-identical total link count, a <strong>higher</strong> backlink strength score, and a distinctly cleaner link profile — 77.8% of its links pass authority against the rival's 39.1%, and its links come overwhelmingly from .com addresses while <strong>46.9% of the rival's come from .ru domains</strong>. And it receives roughly a ninth of the search traffic.</p>
+
+    <div class="pull">
+      <p>A gap that runs in the <em>opposite direction</em> to the link counts cannot be explained by those link counts. Whatever separates these two sites, this measurement did not find it in domain-level link authority.</p>
+    </div>
+
+    <p>We did not stop at the pair. Across the seven liquor-licence sites we measured, we tested every possible ordered pairing — 42 of them — and asked how often the <em>less</em>-linked site has the <em>more</em> search traffic. Seven pairings out of 42 (<strong>16.7%</strong>) run backwards. Among those seven: the rival beats the client on traffic with 1.75&times; fewer referring websites; gloverlaw.net beats the client on traffic by 6.8&times; with 1.41&times; fewer referring websites; the rival beats gloverlaw.net with 1.24&times; fewer. Rank the seven niche sites by referring websites and by traffic and the two orders agree only weakly — a rank correlation of <strong>0.46</strong>. Add three national giants (reddit.com, ca.gov, myfloridalicense.com) and the correlation jumps to 0.82, but that is arithmetic about sites three to six orders of magnitude larger, not information about this market.</p>
+
+    <div class="caveat">
+      <p class="caveat-t">What the authority finding proves, and three things it does not.</p>
+      <p><strong>It proves</strong> that "the rival just has more links" is false as stated, on this measurement, for this pair. It also proves that the barrier is small in absolute terms: both sides sit in double- and low-triple-digit referring domains. Neither holds a link moat.</p>
+      <p><strong>It does not prove</strong> that links do not matter. It is a single-day snapshot, and ranking well earns links, so the rival's links are as plausibly a consequence of ranking as a cause of it.</p>
+      <p><strong>It does not tell us where the links point.</strong> Domain-level counts cannot distinguish "the marketplace design attracts links to listing pages" from "an older domain has a well-linked homepage". Settling that needs a page-level link pull, which was not bought.</p>
+      <p><strong>It does not rule out age.</strong> The rival's domain is about 3.1 years older. That is a real head start, though not the decade-scale asymmetry that would make the gap structural on age alone — and within the window the supplier can see (from February 2019), only 1.1% of the rival's current referring domains were already in place at the start, so most of its measurable link profile was built recently rather than compounded over a decade.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <section id="history">
+    <span class="h2num">Finding 4</span>
+    <h2>It was not always this way — and the rival is now shrinking</h2>
+    <p class="deck">We pulled 71 consecutive months of visibility for both domains, October 2020 to August 2026, from the same endpoint with the same settings. Two things in that series matter commercially.</p>
+
+    <p>The first: <strong>in October 2020 the client was ahead.</strong> It appeared in the top ten results for 102 search terms against the rival's 70, and its modelled traffic was 844 a month against the rival's 782. The rival overtook it on modelled traffic in <strong>November 2020</strong> and on top-ten placements in <strong>March 2021</strong>. What exists today is the result of roughly five years of divergence, not a permanent feature of the market.</p>
+
+    <p>The second: <strong>both curves are currently falling, and the rival's is falling faster in absolute terms.</strong> Over the trailing twelve months the rival's total ranked terms went from 1,227 to 749, a slope of about &minus;41 terms a month. Over twenty-four months, 2,544 to 749. The client's fell from 391 to 225 over twelve months. Neither site is compounding right now.</p>
+
+    <figure>
+      <div class="chartbox">
+        <div class="chart-scroll">
+          <div class="chart-wide">
+            <svg class="linechart" viewBox="0 0 600 320" role="img" aria-labelledby="ct-t ct-d" preserveAspectRatio="xMidYMid meet">
+              <title id="ct-t">Search terms in the top ten results per month, October 2020 to August 2026</title>
+              <desc id="ct-d">Two lines. The client starts at 102 in October 2020 and declines to 31 by August 2026. The rival starts at 70, rises to a peak of 462 in December 2021, and settles at 301 by August 2026. The lines cross in March 2021.</desc>
+
+              <line class="ax-grid" x1="52" y1="220.2" x2="586" y2="220.2"></line>
+              <line class="ax-grid" x1="52" y1="164.3" x2="586" y2="164.3"></line>
+              <line class="ax-grid" x1="52" y1="108.5" x2="586" y2="108.5"></line>
+              <line class="ax-grid" x1="52" y1="52.6" x2="586" y2="52.6"></line>
+              <line class="ax-grid" x1="52" y1="18" x2="586" y2="18"></line>
+              <text class="ax-text" x="46" y="224" text-anchor="end">100</text>
+              <text class="ax-text" x="46" y="168" text-anchor="end">200</text>
+              <text class="ax-text" x="46" y="112" text-anchor="end">300</text>
+              <text class="ax-text" x="46" y="56.6" text-anchor="end">400</text>
+              <text class="ax-text-em" x="46" y="22" text-anchor="end">462</text>
+
+              <line class="ax-line" x1="52" y1="276" x2="586" y2="276"></line>
+              <text class="ax-text" x="52" y="293" text-anchor="start">Oct 2020</text>
+              <text class="ax-text" x="166.4" y="293" text-anchor="middle">Jan 2022</text>
+              <text class="ax-text" x="349.5" y="293" text-anchor="middle">Jan 2024</text>
+              <text class="ax-text" x="586" y="293" text-anchor="end">Aug 2026</text>
+              <text class="ax-text" x="319" y="312" text-anchor="middle">search terms ranking in the top ten results, per month</text>
+
+              <path class="ln-client" d="M52 219 L59.6 211.8 L67.3 219.6 L74.9 209 L82.5 201.7 L90.1 210.1 L97.8 206.2 L105.4 209 L113 215.1 L120.7 210.7 L128.3 206.8 L135.9 210.7 L143.5 207.9 L151.2 204.5 L158.8 202.3 L166.4 202.8 L174.1 204.5 L181.7 210.1 L189.3 212.9 L196.9 224.6 L204.6 224.6 L212.2 225.7 L219.8 224.1 L227.5 226.9 L235.1 223.5 L242.7 222.4 L250.3 218.5 L258 226.3 L265.6 227.4 L273.2 231.9 L280.9 233.6 L288.5 244.2 L296.1 244.2 L303.7 247 L311.4 247.5 L319 246.4 L326.6 248.6 L334.3 244.7 L341.9 248.1 L349.5 248.6 L357.1 248.6 L364.8 249.8 L372.4 251.4 L380 249.8 L387.7 251.4 L395.3 256.5 L402.9 258.1 L410.5 248.6 L418.2 238.6 L425.8 252 L433.4 242.5 L441.1 245.8 L448.7 247.5 L456.3 248.1 L463.9 247.5 L471.6 247 L479.2 247 L486.8 248.1 L494.5 249.2 L502.1 252.5 L509.7 254.2 L517.3 257 L525 257.6 L532.6 259.8 L540.2 262 L547.9 263.7 L555.5 262 L563.1 260.9 L570.7 258.1 L578.4 259.2 L586 258.7"></path>
+              <path class="ln-rival" d="M52 236.9 L59.6 233.6 L67.3 224.1 L74.9 221.8 L82.5 204.5 L90.1 183.3 L97.8 151.5 L105.4 116.8 L113 81.1 L120.7 61.6 L128.3 60.4 L135.9 32.5 L143.5 32 L151.2 19.7 L158.8 18 L166.4 18.6 L174.1 29.2 L181.7 39.2 L189.3 49.3 L196.9 64.4 L204.6 63.2 L212.2 59.3 L219.8 56 L227.5 60.4 L235.1 48.7 L242.7 53.7 L250.3 38.1 L258 48.7 L265.6 54.3 L273.2 62.7 L280.9 75 L288.5 79.4 L296.1 82.2 L303.7 91.2 L311.4 104 L319 118 L326.6 110.7 L334.3 108.5 L341.9 119.1 L349.5 109 L357.1 107.4 L364.8 110.1 L372.4 108.5 L380 103.4 L387.7 106.2 L395.3 96.2 L402.9 94.5 L410.5 87.2 L418.2 24.1 L425.8 120.2 L433.4 33.1 L441.1 58.2 L448.7 93.4 L456.3 98.4 L463.9 100.6 L471.6 102.9 L479.2 95.1 L486.8 104 L494.5 98.4 L502.1 93.4 L509.7 93.4 L517.3 91.2 L525 80 L532.6 78.3 L540.2 91.7 L547.9 78.9 L555.5 84.5 L563.1 78.9 L570.7 80 L578.4 102.9 L586 107.9"></path>
+
+              <circle class="dot-client" cx="52" cy="219" r="3.4"></circle>
+              <circle class="dot-rival" cx="52" cy="236.9" r="3.4"></circle>
+              <text class="lbl-client" x="58" y="206">102</text>
+              <text class="lbl-rival" x="58" y="251">70</text>
+
+              <circle class="dot-rival" cx="586" cy="107.9" r="3.4"></circle>
+              <circle class="dot-client" cx="586" cy="258.7" r="3.4"></circle>
+              <text class="lbl-rival" x="578" y="95" text-anchor="end">301</text>
+              <text class="lbl-client" x="580" y="272" text-anchor="end">31</text>
+
+              <line class="ax-grid" x1="90.1" y1="18" x2="90.1" y2="276"></line>
+              <text class="ax-text-em" x="96" y="34" text-anchor="start">Mar 2021: the lines cross</text>
+            </svg>
+          </div>
+        </div>
+        <ul class="legend">
+          <li><span class="swatch" aria-hidden="true"></span>liquorlicenseauctioneers.com (the rival)</li>
+          <li><span class="swatch is-client" aria-hidden="true"></span>liquorlicenseagents.com (the client)</li>
+        </ul>
+      </div>
+      <figcaption>Source: history.json, rival_vs_client_curve.primary_rank_overview.side_by_side_monthly — 71 monthly points per site, a census of the months the supplier holds for both domains in this window, pulled from one endpoint with identical settings. The count is search terms whose results page contained the domain in DataForSEO's index, a third-party estimate rather than Search Console truth. Coverage begins October 2020, so nothing here can distinguish "appeared in October 2020" from "already existed before it" — both sites pre-date the window. The chart scrolls sideways on a narrow screen.</figcaption>
+    </figure>
+
+    <p>One nuance that keeps the decline honest. The rival's <em>total</em> ranked terms are falling sharply, but its top-ten placements have held roughly flat between about 300 and 350 since early 2022 — it finished August 2026 at 301, against a December 2021 peak of 462. Its losses are concentrated in the long tail of positions nobody clicks, not in the positions that earn traffic. Its modelled traffic in August 2026, 6,357 a month, is higher than it was in most of 2022. So "the rival is shrinking" is true of its keyword footprint and not yet true of its commercial visibility.</p>
+
+    <div class="caveat">
+      <p class="caveat-t">A note on two numbers that disagree slightly.</p>
+      <p>This section says the rival ranks for 749 terms; Finding 1 says 713. They come from different endpoints at the same supplier — a monthly historical series against a live ranked-keyword pull — and neither is corrected against the other. A few percent of disagreement between two views of the same index is normal and we report both rather than averaging them.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <section id="demand">
+    <span class="h2num">Finding 5</span>
+    <h2>The words a broker would choose are the smallest pool of demand in the market</h2>
+    <p class="deck">Separately from who ranks, we sized the demand itself: what people actually type. We pulled the keyword universe from twenty seed phrases, screened out the searches that are about alcohol but not about licensing, and sorted what remained into intent families by an explicit, reproducible rule.</p>
+
+    <p>The screening step matters and we want it visible. The first pull was dominated by searches that contain the word "alcohol" but have nothing to do with premises licences — drink-driving limits, blood-alcohol levels, court-ordered testing, drinking age. Removing them cut <strong>56.1% of the pulled search volume</strong>, leaving <strong>3,964 in-scope search terms</strong> worth <strong>195,610 monthly searches</strong>. Everything below is drawn from that screened set.</p>
+
+    <figure>
+      <div class="chartbox">
+        <ul class="barchart">
+          <li class="barrow">
+            <div class="barhead"><span class="barname">Generic or place-only searches <span class="barsub">1,979 terms &mdash; e.g. "indiana liquor license"</span></span><span class="barval">101,320/mo</span></div>
+            <div class="bartrack"><span class="barfill is-alt" style="width:100%"></span></div>
+          </li>
+          <li class="barrow">
+            <div class="barhead"><span class="barname">Rules and how-to <span class="barsub">1,211 terms</span></span><span class="barval">46,410/mo</span></div>
+            <div class="bartrack"><span class="barfill is-alt" style="width:45.8%"></span></div>
+          </li>
+          <li class="barrow">
+            <div class="barhead"><span class="barname">Personal bar-staff credentials <span class="barsub">121 terms &mdash; a different product entirely</span></span><span class="barval">16,880/mo</span></div>
+            <div class="bartrack"><span class="barfill" style="width:16.7%"></span></div>
+          </li>
+          <li class="barrow">
+            <div class="barhead"><span class="barname">Cost and price <span class="barsub">292 terms</span></span><span class="barval">14,310/mo</span></div>
+            <div class="bartrack"><span class="barfill is-alt" style="width:14.1%"></span></div>
+          </li>
+          <li class="barrow">
+            <div class="barhead"><span class="barname">Buying a licence <span class="barsub">229 terms</span></span><span class="barval">11,290/mo</span></div>
+            <div class="bartrack"><span class="barfill" style="width:11.1%"></span></div>
+          </li>
+          <li class="barrow">
+            <div class="barhead"><span class="barname">Broker / consultant / agent <span class="barsub">35 terms</span></span><span class="barval">3,210/mo</span></div>
+            <div class="bartrack"><span class="barfill is-client" style="width:3.2%"></span></div>
+          </li>
+          <li class="barrow">
+            <div class="barhead"><span class="barname">Transferring a licence <span class="barsub">60 terms</span></span><span class="barval">740/mo</span></div>
+            <div class="bartrack"><span class="barfill" style="width:0.7%"></span></div>
+          </li>
+          <li class="barrow">
+            <div class="barhead"><span class="barname">Selling a licence <span class="barsub">19 terms</span></span><span class="barval">470/mo</span></div>
+            <div class="bartrack"><span class="barfill" style="width:0.5%"></span></div>
+          </li>
+        </ul>
+        <div class="barscale"><span>0</span><span>estimated monthly US searches per intent family</span><span>101,320</span></div>
+      </div>
+      <figcaption>Bar length is estimated monthly search volume; the longest bar is the 101,320-a-month generic/place-only pool. Source: universe.json — pools, pools_headline and the JOB-OTHER subsplit for the two rows drawn out of it. Green marks the broker-language pool. A SAMPLE, not a census, in both directions: the universe is what the supplier's keyword database returns for these twenty seeds under these filters, and a different seed set returns a different universe. Volumes are DataForSEO estimates built on Google Ads data, not Google Ads figures themselves. Families are assigned by an ordered rule, first match wins, published in full in universe.json.</figcaption>
+    </figure>
+
+    <p>Three things follow, and they cut in different directions.</p>
+
+    <p><strong>Broker language is the smallest commercial pool in the market.</strong> Searches naming a broker, agent or consultant total <strong>35 terms and 3,210 monthly searches</strong> — 1.64% of in-scope demand. Buying-side searches alone are 3.5 times larger by volume (11,290 a month across 229 terms); buying and selling together are <strong>3.66 times</strong> larger (11,760 a month across 248 terms). Selling on its own is the smallest family in the market, at 470 a month across 19 terms. If a business describes itself the way its customers do not search, its best-written pages compete for a pool this size.</p>
+
+    <p><strong>But that small pool is the most valuable per search, and it is where the client is closest to winning.</strong> Broker-language searches carry the highest advertiser cost-per-click in the set — a median of <strong>$7.65</strong> against $3.57 for buying-side searches — which is the market's own signal that these searches convert. And on the live results we pulled, the twenty-one service-intent searches are the only intent family of any size where the client is ahead of the rival: the client appears in the top ten on <strong>28.6%</strong> of them against the rival's <strong>23.8%</strong>. For comparison, on the forty buying-intent searches the rival appears in the top ten on 97.5% and the client on 2.5%; on the thirty cost searches, 100% against 0%. Its single best-performing page is its homepage, at position 1 for "liquor license broker california" and "liquor license brokers california" and position 1 for "liquor license agent".</p>
+
+    <p><strong>The money is in the generic middle, and nobody owns it.</strong> The largest pool by far is neither buying nor selling nor broking: 1,979 terms and 101,320 monthly searches that are simply a place plus the words "liquor license" — "indiana liquor license", "nyc liquor license", "liquor license texas". Both page types compete for these, and this is exactly the pool the rival's eight state hubs are built to answer.</p>
+
+    <p>The keyword-gap data says the same thing from the other side. Of the <strong>549 search terms the rival ranks for and the client does not</strong> — a census of that endpoint's index — the largest slice by modelled traffic is programmatic geography-and-type pages at <strong>91.0%</strong> of the gap's traffic value. Broker-service language accounts for <strong>8 terms and 610 monthly searches</strong>: the smallest family in the gap. The gap is not that the client has failed to write about being a broker. It is that the client is not present on place-plus-licence searches.</p>
+  </section>
+
+  <!-- ============================================================ -->
+  <section id="ai">
+    <span class="h2num">Finding 6, the first ceiling</span>
+    <h2>Nine in ten of these searches now show an AI answer, and the rival is cited in most of them</h2>
+    <p class="deck">We ran 197 live searches and recorded what Google actually displayed. An AI overview — the generated answer box above the ordinary results — appeared on <strong>179 of 197</strong> searches, <strong>90.9%</strong>.</p>
+
+    <div class="caveat">
+      <p class="caveat-t">That 90.9% is a floor, not a measurement.</p>
+      <p>Google loads some AI overviews after the page first renders. Capturing those costs extra per search and was not purchased, so overviews that load late are <strong>undercounted</strong>. The true prevalence is 90.9% <em>or higher</em>. Anyone quoting this figure should quote it as a floor.</p>
+    </div>
+
+    <p>The citation counts carry a second, larger caveat, and it is worth stating plainly because it halves the usable sample. Of the 179 searches showing an overview, only <strong>102</strong> returned a readable list of the sources the overview cited. The other <strong>77</strong> were flagged as late-loading and returned no sources at all. So the citation figures below are computed on 102 searches, not 197 and not 179.</p>
+
+    <figure>
+      <div class="scroller">
+        <table>
+          <caption>Who the AI overviews cite, across the 102 searches whose sources were readable</caption>
+          <thead>
+            <tr>
+              <th scope="col">Source cited</th>
+              <th scope="col" class="t-num">Searches citing it</th>
+              <th scope="col" class="t-num">Share of the 102</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="t-hi"><th scope="row">liquorlicenseauctioneers.com (the rival)</th><td class="t-num">70</td><td class="t-num">68.6%</td></tr>
+            <tr><th scope="row">abc.ca.gov (California regulator)</th><td class="t-num">43</td><td class="t-num">42.2%</td></tr>
+            <tr><th scope="row">youtube.com</th><td class="t-num">37</td><td class="t-num">36.3%</td></tr>
+            <tr><th scope="row">reddit.com</th><td class="t-num">20</td><td class="t-num">19.6%</td></tr>
+            <tr><th scope="row">nextinsurance.com</th><td class="t-num">16</td><td class="t-num">15.7%</td></tr>
+            <tr><th scope="row">licenselocators.com</th><td class="t-num">15</td><td class="t-num">14.7%</td></tr>
+            <tr><th scope="row">bizbuysell.com</th><td class="t-num">12</td><td class="t-num">11.8%</td></tr>
+            <tr class="t-hi2"><th scope="row">liquorlicenseagents.com (the client, both spellings)</th><td class="t-num">10</td><td class="t-num">9.8%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="scrollhint">This table scrolls sideways on a narrow screen.</p>
+      <figcaption>Computed by us from serp.json, per_query.ai_overview_reference_domains, counting distinct searches rather than repeated mentions; the ordering reconciles to serp.json's own ai_overview_reference_domains_top table. The client figure combines both host spellings (www.liquorlicenseagents.com on 7 searches, liquorlicenseagents.com on 4, with one search citing both). A SAMPLE of 197 searches chosen by an explicit priority rule, not a random sample and not a census of the market. 77 further searches showed an overview whose sources could not be read.</figcaption>
+    </figure>
+
+    <p>On the readable subset, the rival is cited seven times as often as the client. That is worth stating carefully: an AI citation is a mention, not a click, and we did not measure whether any of it produces business. What it does mean is that on a market where nine in ten searches show a generated answer first, one of these two businesses is the answer's most-quoted commercial source and the other is barely present.</p>
+
+    <p>Two features that <em>are</em> absent are worth recording, because their absence is also information. Across all 197 searches, Google served a <strong>featured snippet on zero</strong> of them and <strong>paid ads on zero</strong> of them. A local map pack appeared on 24 (12.2%) and a "people also ask" block on 189 (95.9%).</p>
+  </section>
+
+  <!-- ============================================================ -->
+  <section id="government">
+    <span class="h2num">Finding 7, the second ceiling</span>
+    <h2>Government pages take the top of these results, and no commercial page can change that</h2>
+    <p class="deck">Anyone planning what to build in this market needs to know how much of the first page is already spoken for. We classified every one of the 1,970 top-ten results across our 197 searches by the kind of business that owns the domain. Government regulators are the largest holder of the positions that matter.</p>
+
+    <p>Across all 197 searches, government domains hold <strong>535 of 1,970</strong> top-ten slots (27.2%) — and <strong>261 of 591</strong> top-three slots (<strong>44.2%</strong>). A government page appears in the top three on <strong>160 of 197</strong> searches, <strong>81.2%</strong>. Marketplace-type businesses hold 16.2% of top-ten slots and 28.8% of top-three. Service businesses hold the most slots overall, 31.6%, but only 16.8% of the top three, at a mean position of 6.3.</p>
+
+    <div class="pull">
+      <p>On an average search here, 1.3 of the three most-clicked results are already a regulator's own page. The commercial contest is for what is left.</p>
+    </div>
+
+    <p>That ceiling is not uniform, and where it is lower is where commercial pages do best. We grouped the 131 place-specific searches that name somewhere inside one of the eight states in play, and counted.</p>
+
+    <figure>
+      <div class="scroller">
+        <table>
+          <caption>The government ceiling, state by state &mdash; and who takes what is left</caption>
+          <thead>
+            <tr>
+              <th scope="col">State</th>
+              <th scope="col" class="t-num">Searches measured</th>
+              <th scope="col" class="t-num">Govt share of top 10</th>
+              <th scope="col" class="t-num">Govt share of top 3</th>
+              <th scope="col" class="t-num">Searches where govt holds #1</th>
+              <th scope="col" class="t-num">Rival top-10 slots</th>
+              <th scope="col" class="t-num">Rival top-3 slots</th>
+              <th scope="col" class="t-num">Client top-10 slots</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="t-hi"><th scope="row">Arizona</th><td class="t-num">12</td><td class="t-num">40.8%</td><td class="t-num">63.9%</td><td class="t-num">11 of 12</td><td class="t-num">15</td><td class="t-num">8</td><td class="t-num">0</td></tr>
+            <tr><th scope="row">California</th><td class="t-num">58</td><td class="t-num">29.0%</td><td class="t-num">57.5%</td><td class="t-num">54 of 58</td><td class="t-num">53</td><td class="t-num">29</td><td class="t-num">10</td></tr>
+            <tr><th scope="row">Ohio</th><td class="t-num">9</td><td class="t-num">22.2%</td><td class="t-num">33.3%</td><td class="t-num">6 of 9</td><td class="t-num">10</td><td class="t-num">8</td><td class="t-num">0</td></tr>
+            <tr><th scope="row">Michigan</th><td class="t-num">9</td><td class="t-num">21.1%</td><td class="t-num">33.3%</td><td class="t-num">5 of 9</td><td class="t-num">10</td><td class="t-num">7</td><td class="t-num">0</td></tr>
+            <tr><th scope="row">New Mexico</th><td class="t-num">3</td><td class="t-num">20.0%</td><td class="t-num">33.3%</td><td class="t-num">0 of 3</td><td class="t-num">3</td><td class="t-num">3</td><td class="t-num">0</td></tr>
+            <tr><th scope="row">Pennsylvania</th><td class="t-num">5</td><td class="t-num">16.0%</td><td class="t-num">40.0%</td><td class="t-num">2 of 5</td><td class="t-num">5</td><td class="t-num">3</td><td class="t-num">0</td></tr>
+            <tr class="t-hi2"><th scope="row">New Jersey</th><td class="t-num">19</td><td class="t-num">14.7%</td><td class="t-num">17.5%</td><td class="t-num">5 of 19</td><td class="t-num">19</td><td class="t-num">18</td><td class="t-num">0</td></tr>
+            <tr class="t-hi2"><th scope="row">Florida</th><td class="t-num">16</td><td class="t-num">13.1%</td><td class="t-num">25.0%</td><td class="t-num">7 of 16</td><td class="t-num">13</td><td class="t-num">11</td><td class="t-num">1</td></tr>
+            <tr class="t-total"><th scope="row">All eight states</th><td class="t-num">131</td><td class="t-num">24.4%</td><td class="t-num">43.8%</td><td class="t-num">90 of 131</td><td class="t-num">128</td><td class="t-num">87</td><td class="t-num">11</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="scrollhint">This table scrolls sideways on a narrow screen.</p>
+      <figcaption>Computed by us from serp.json's per-query results. We grouped the 131 of 197 searches that name a place inside one of these eight states (one further place-specific search, "liquor license for sale near me", names no state and is excluded; 65 searches are national). Government means a .gov hostname plus the eleven municipal and state hosts that serp.json's own domain map types as a government regulator. That definition is narrower than the one serp.json uses for its published totals: applied to all 197 searches ours puts a government page in the top three on 152 (77.2%) against the file's 160 (81.2%), so the per-state shares here read slightly low rather than slightly high. A SAMPLE, and small in the four right-hand states &mdash; three searches cannot characterise New Mexico.</figcaption>
+    </figure>
+
+    <p>The pattern across the eight is legible. <strong>New Jersey and Florida have the weakest government ceilings</strong> — a regulator holds the top three on 17.5% and 25.0% of slots against Arizona's 63.9% — and they are where the rival is most completely dominant. Of New Jersey's 57 measured top-three slots the rival takes 18 and the regulator 10; of Florida's 48, the rival takes 11 and the regulator 12. New Jersey is also the rival's single most valuable page. The relationship runs the way commercial logic suggests: where the regulator publishes less, a commercial page takes the space.</p>
+
+    <p>California is the opposite case and it is the client's own market. A government page holds the number-one result on <strong>54 of 58</strong> California searches we measured. The rival still takes 29 top-three slots there; the client takes 2. So the ceiling is real but it is not the client's binding constraint — the rival is operating under the same ceiling and clearing far more of what sits beneath it.</p>
+
+    <p>A final confirmation from a different measurement. We took the 50 highest-volume searches the rival ranks for and the client does not, and read a live results page for each. A government domain held a top-three slot on <strong>36 of the 50</strong>. A marketplace-type page held top-three on <strong>2</strong>. On the highest-value searches in the gap, the first page is mostly regulators.</p>
+  </section>
+
+  <!-- ============================================================ -->
+  <section id="unresolved">
+    <span class="h2num">Finding 8</span>
+    <h2>What this evidence does not settle</h2>
+    <p class="deck">This list is part of the deliverable. Anyone who reads the findings above and not this section will over-read them.</p>
+
+    <ol class="plain">
+      <li><strong>Whether the hub template causes the rankings.</strong> All of this is observational. We held page count, keyword selection and geographic coverage constant and the gap survived each. We did not and could not hold constant per-page text depth, internal linking, indexation speed, brand recognition, or how completely the supplier's index covers each domain. The hub template is strongly <em>associated</em> with the positions that earn traffic. It is not proven to cause them.</li>
+
+      <li><strong>Whether links matter here.</strong> We can say "the rival just has more links" is false for this pair on this measurement. We cannot say links are irrelevant. Ranking well earns links, so the direction of causation between the rival's links and its rankings is untested, and a page-level link pull — which would show whether the rival's links point at its hubs or its homepage — was not bought.</li>
+
+      <li><strong>What a duplicate-address problem is costing the client.</strong> A large finding sits half-finished. <strong>46.7% of the client's ranked search terms — 114 of 244 — rank on a web address that is absent from its own sitemap.</strong> The site serves the same page at two live addresses, a nested one it declares (/cities/agoura-hills/agoura-hills-liquor-licenses…) and a flat one it does not (/cities/agoura-hills-liquor-licenses…), and the supplier recorded the flat one as the ranking address. The rival shows nothing equivalent: zero such rows. What we did <em>not</em> test is whether both addresses return a page, whether either declares the other as the preferred version, and which one Google treats as canonical. Until that is tested we cannot say whether this is costing the client anything. It is the cheapest unresolved question on the list.</li>
+
+      <li><strong>The true prevalence of AI answers, and of AI citations.</strong> 90.9% is a floor. Citation shares rest on 102 searches, not 197, because 77 overviews loaded too late to read. Buying the asynchronous capture would settle both.</li>
+
+      <li><strong>Whether a top-ten position we recorded is still a top-ten position.</strong> Two clocks run through this research. The ranked-keyword, gap and history data come from a weekly-refreshed index; the 197 SERP pulls and the 50-keyword gap check are live reads. Where we could compare the two on the same terms, 18 of 23 agreed within two places — but on <strong>27</strong> of the 50 top gap keywords the rival was absent from the live top ten despite the index recording a ranking. Treat index positions as approximately right, not exactly right.</li>
+
+      <li><strong>Anything about revenue, leads or conversion.</strong> Every traffic figure on this page is modelled, not measured. No analytics, no Search Console, no call or form data from either site entered this research. Modelled traffic is a defensible way to compare two sites you cannot see inside; it is not a forecast of anyone's sessions, and it says nothing about what converts.</li>
+
+      <li><strong>Whether the market is growing or shrinking.</strong> Both curves are falling over the trailing twelve and twenty-four months. We did not measure total category demand over time, so we cannot say whether that is two sites losing ground or a market contracting around them.</li>
+
+      <li><strong>How much of this generalises past our sample.</strong> The 197 searches were chosen by an explicit priority rule — seeded head terms first, then terms the rival ranks 1&ndash;3 for, then terms the client ranks 1&ndash;20 for — and not at random. That rule is reproducible and published, but it tilts the sample towards terms at least one of these two sites already touches. Small state cells (New Mexico at three searches, Pennsylvania at five) cannot support a state-level conclusion on their own.</li>
+
+      <li><strong>The third domain.</strong> usaliquorlicense.com was measured and is effectively invisible: 20 published pages, 14 ranked terms, none in the top twenty, 38 referring websites, and roughly <strong>2 modelled visits a month</strong>. It is recorded here for completeness, not analysed.</li>
+    </ol>
+  </section>
+
+  <!-- ============================================================ -->
+  <section id="summary">
+    <span class="h2num">In one paragraph</span>
+    <h2>What the evidence adds up to</h2>
+    <p>The rival does not outrank the client because it publishes more pages, because it chases different search terms, because it covers more states, or because it has more links — each of those was tested and each failed. What separates the two sites, on this evidence, is that eight plain state-level pages on the rival's domain occupy 49 top-three positions and carry 57.0% of its search traffic, while the client's eight equivalent pages occupy none. The market's largest pool of demand is neither buying nor broking but 101,320 monthly searches that are simply a place plus the words "liquor license" — the exact question a state hub answers. Two ceilings bound anything built against it: a regulator's own page sits in the top three on roughly four in five of these searches, and nine in ten now open with a generated AI answer in which the rival is the most-cited commercial source and the client is cited on one search in ten. None of this is proof of cause, and the list above says exactly where it stops.</p>
+  </section>
+
+</div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <h2>How this was measured</h2>
+    <p>All data was pulled on <strong>12 September 2026</strong> from DataForSEO, for the United States (location code 2840) in English. Every domain was pulled from the same endpoints with the same parameters on the same day, so no site was measured more deeply than another. Where a figure is our own calculation rather than a published field, the caption says so and names the file.</p>
+
+    <div class="method-grid">
+      <div class="method-card">
+        <h3>What is a census</h3>
+        <p>The ranked-keyword data for all three domains (713, 244 and 14 terms), the keyword-gap sets (549, 164 and 80 terms), the 71-month history for both domains, and the link counts. Each retrieved every row the supplier's index holds — complete for that index, which is not the same as complete for the web.</p>
+      </div>
+      <div class="method-card">
+        <h3>What is a sample</h3>
+        <p>The 197 live searches (chosen by a published priority rule, not at random), the 50-keyword live check on the top gap terms, and the keyword universe (3,964 in-scope terms from twenty seed phrases — a different seed set returns a different universe).</p>
+      </div>
+      <div class="method-card">
+        <h3>Which numbers are estimates</h3>
+        <p>Every search volume, cost-per-click and difficulty score is a DataForSEO estimate built on Google Ads data — not a Google Ads figure. Every "modelled visits" figure is a calculation from position and volume, <strong>not measured sessions</strong>. No analytics or Search Console data from any site was used.</p>
+      </div>
+      <div class="method-card">
+        <h3>Association, not cause</h3>
+        <p>This is observational search data throughout. Findings say a page type <em>is associated with</em> a position. Nothing here shows that a page type <em>caused</em> a position, and the competing explanations we could not hold constant are listed in Finding 8.</p>
+      </div>
+    </div>
+
+    <p class="backtop">Evidence files read for this page:</p>
+    <ul class="filelist">
+      <li>ranked.json</li>
+      <li>ranked-rows.json</li>
+      <li>serp.json</li>
+      <li>authority.json</li>
+      <li>history.json</li>
+      <li>gap.json</li>
+      <li>universe.json</li>
+      <li>raw/ranked-sitemaps/all-sitemap-urls.json</li>
+    </ul>
+
+    <div class="footlinks">
+      <a href="index.html">&larr; Back to the research index</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var btn = document.getElementById('themebtn');
+  if(!btn) return;
+  btn.hidden = false;
+  function current(){
+    var set = document.documentElement.getAttribute('data-theme');
+    if(set) return set;
+    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+  function apply(t){
+    document.documentElement.setAttribute('data-theme', t);
+    btn.setAttribute('aria-label', 'Switch to ' + (t === 'dark' ? 'light' : 'dark') + ' theme');
+    try { localStorage.setItem('llr-theme', t); } catch(e){}
+  }
+  try {
+    var saved = localStorage.getItem('llr-theme');
+    if(saved === 'dark' || saved === 'light'){ apply(saved); }
+  } catch(e){}
+  btn.addEventListener('click', function(){ apply(current() === 'dark' ? 'light' : 'dark'); });
+})();
+</script>
+
+</body>
+</html>

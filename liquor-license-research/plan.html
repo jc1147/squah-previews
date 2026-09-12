@@ -1,0 +1,928 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What To Do Next</title>
+<meta name="description" content="The recommended direction, the deployment order and the technical work order, in the order it should happen.">
+<meta name="color-scheme" content="light dark">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#f6f4ef;
+  --surface:#fffdf9;
+  --surface-2:#efece4;
+  --surface-3:#e6e2d8;
+  --ink:#1c1a16;
+  --ink-2:#45413a;
+  --ink-3:#6d685e;
+  --line:#dcd7cb;
+  --line-strong:#c2bcac;
+  --accent:#7b4a12;
+  --accent-ink:#ffffff;
+  --good:#2d6640;
+  --good-soft:#e2eee5;
+  --warn:#7d5406;
+  --warn-soft:#f7ecd6;
+  --bad:#8f2f27;
+  --bad-soft:#f7e3e0;
+  --focus:#1d5fbf;
+  --c1:#7b4a12;
+  --c2:#b4823a;
+  --c3:#4f6f5a;
+  --c4:#8f2f27;
+  --grid:#d6d1c4;
+  --shadow:0 1px 2px rgba(28,26,22,.06),0 6px 18px rgba(28,26,22,.05);
+  --radius:10px;
+  --sans:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --serif:"Source Serif 4",Georgia,"Times New Roman",Times,serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#151410;
+    --surface:#1d1c17;
+    --surface-2:#252319;
+    --surface-3:#2e2b20;
+    --ink:#f2efe7;
+    --ink-2:#d2ccbe;
+    --ink-3:#a39d8f;
+    --line:#38352b;
+    --line-strong:#4d4839;
+    --accent:#e0a85c;
+    --accent-ink:#1c1a16;
+    --good:#8fd0a3;
+    --good-soft:#1f2c23;
+    --warn:#e5bd6b;
+    --warn-soft:#312814;
+    --bad:#f0a49b;
+    --bad-soft:#33211e;
+    --focus:#8cb6ff;
+    --c1:#e0a85c;
+    --c2:#a9793a;
+    --c3:#8fb79c;
+    --c4:#f0a49b;
+    --grid:#3b382d;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 6px 18px rgba(0,0,0,.3);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#151410;
+  --surface:#1d1c17;
+  --surface-2:#252319;
+  --surface-3:#2e2b20;
+  --ink:#f2efe7;
+  --ink-2:#d2ccbe;
+  --ink-3:#a39d8f;
+  --line:#38352b;
+  --line-strong:#4d4839;
+  --accent:#e0a85c;
+  --accent-ink:#1c1a16;
+  --good:#8fd0a3;
+  --good-soft:#1f2c23;
+  --warn:#e5bd6b;
+  --warn-soft:#312814;
+  --bad:#f0a49b;
+  --bad-soft:#33211e;
+  --focus:#8cb6ff;
+  --c1:#e0a85c;
+  --c2:#a9793a;
+  --c3:#8fb79c;
+  --c4:#f0a49b;
+  --grid:#3b382d;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 6px 18px rgba(0,0,0,.3);
+}
+*{box-sizing:border-box}
+html{color-scheme:light dark}
+img,svg{max-width:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6;-webkit-text-size-adjust:100%}
+h1,h2,h3,h4{font-family:var(--serif);line-height:1.2;margin:0}
+h1{font-size:2rem;font-weight:700;letter-spacing:-.01em}
+h2{font-size:1.45rem;font-weight:700}
+h3{font-size:1.1rem;font-weight:600;margin-bottom:6px}
+h4{font-size:1rem;font-weight:600}
+p{margin:0 0 1rem}
+a{color:var(--accent);text-decoration-thickness:1px;text-underline-offset:2px}
+a:hover{text-decoration-thickness:2px}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px;border-radius:3px}
+strong{font-weight:600;color:var(--ink)}
+em{font-style:italic}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1;font-size:.95em}
+
+.skip{position:absolute;left:0;top:0;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:6px;z-index:20}
+.skip:focus{left:8px;top:8px;width:auto;height:auto;min-height:44px;display:inline-flex;align-items:center;padding:0 16px;overflow:visible;clip-path:none}
+
+.topbar{position:sticky;top:0;z-index:10;background:var(--surface);border-bottom:1px solid var(--line)}
+.topbar-in{max-width:1180px;margin:0 auto;padding:0 16px;display:flex;flex-wrap:wrap;align-items:center;gap:0 12px;min-height:56px}
+.backlink{display:inline-flex;align-items:center;min-height:44px;font-size:.82rem;font-weight:500;text-decoration:none;color:var(--ink-2)}
+.backlink:hover{color:var(--accent);text-decoration:underline}
+.crumb{font-size:.82rem;color:var(--ink-3);border-left:1px solid var(--line);padding-left:12px;display:inline-flex;align-items:center;min-height:44px}
+.themebtn{margin-left:auto;min-height:44px;min-width:44px;padding:0 14px;background:var(--surface-2);color:var(--ink-2);border:1px solid var(--line);border-radius:999px;font:inherit;font-size:.78rem;cursor:pointer}
+.themebtn:hover{border-color:var(--line-strong);color:var(--ink)}
+
+.wrap{max-width:1180px;margin:0 auto;padding:24px 16px 8px}
+.hero{border-bottom:1px solid var(--line);padding-bottom:24px}
+.kicker{font-size:.74rem;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);font-weight:600;margin:0 0 10px}
+.lede{font-family:var(--serif);font-size:1.12rem;color:var(--ink-2);max-width:66ch;margin:14px 0 0}
+.body{max-width:70ch}
+
+.sect{padding:28px 0;border-top:1px solid var(--line)}
+.sect-h{display:flex;align-items:baseline;gap:10px;margin-bottom:14px}
+.sect-n{font-family:var(--mono);font-size:.78rem;color:var(--accent);border:1px solid var(--line-strong);border-radius:5px;padding:2px 7px;flex:0 0 auto}
+
+.callout{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:var(--radius);padding:16px;margin:0 0 20px;box-shadow:var(--shadow)}
+.callout p:last-child{margin-bottom:0}
+.callout-h{font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);font-weight:600;margin:0 0 8px}
+.flag{background:var(--warn-soft);border:1px solid var(--line);border-left:4px solid var(--warn);border-radius:var(--radius);padding:14px 16px;margin:0 0 20px}
+.flag p:last-child{margin-bottom:0}
+.flag-h{font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;color:var(--warn);font-weight:600;margin:0 0 6px}
+.danger{background:var(--bad-soft);border:1px solid var(--line);border-left:4px solid var(--bad);border-radius:var(--radius);padding:14px 16px;margin:0 0 16px}
+.danger p:last-child{margin-bottom:0}
+.danger-h{font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;color:var(--bad);font-weight:600;margin:0 0 6px}
+
+.stats{list-style:none;margin:0 0 20px;padding:0;display:grid;grid-template-columns:1fr;gap:10px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px}
+.statn{display:block;font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:1.5rem;font-weight:500;color:var(--ink);line-height:1.1}
+.statl{display:block;font-size:.84rem;color:var(--ink-2);margin-top:6px}
+.statk{display:block;font-size:.68rem;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);margin-top:8px}
+
+.pillars{list-style:none;margin:0 0 20px;padding:0;display:grid;grid-template-columns:1fr;gap:12px}
+.pillar{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px}
+.pillar p{font-size:.92rem;color:var(--ink-2);margin-bottom:0}
+.pillar p+p{margin-top:8px}
+
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:700px;font-size:.86rem}
+caption{text-align:left;font-size:.86rem;color:var(--ink-2);padding:12px 12px 4px;caption-side:top}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+thead th{font-size:.68rem;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-3);font-weight:600;background:var(--surface-2)}
+tbody tr:last-child td{border-bottom:0}
+td.n,th.n{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+th.n{font-family:var(--sans)}
+td.cell{font-weight:500}
+.rank{font-family:var(--mono);color:var(--ink-3)}
+.src{font-size:.74rem;color:var(--ink-3);margin:8px 0 20px;line-height:1.55;max-width:90ch}
+
+.fig{margin:0 0 20px}
+.fig figcaption{font-size:.95rem;font-weight:600;color:var(--ink);margin-bottom:2px;font-family:var(--serif)}
+.fig-sub{font-size:.8rem;color:var(--ink-3);margin:0 0 10px;max-width:80ch}
+.chartbox{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);padding:12px;margin-bottom:12px}
+.chart{display:block;width:100%;min-width:460px;height:auto}
+.ct{font-family:var(--sans);font-size:11px;fill:var(--ink-2)}
+.ct-s{font-family:var(--sans);font-size:9.5px;fill:var(--ink-3)}
+.cv{font-family:var(--mono);font-size:10px;fill:var(--ink-2)}
+.cv-in{font-family:var(--mono);font-size:10px;fill:var(--accent-ink)}
+.cax{stroke:var(--grid);stroke-width:1}
+.b1{fill:var(--c1)}
+.b2{fill:var(--c2)}
+.b3{fill:var(--c3)}
+.b4{fill:var(--c4)}
+.bmute{fill:var(--surface-3)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;margin:0 0 8px;padding:0;list-style:none;font-size:.78rem;color:var(--ink-2)}
+.legend li{display:flex;align-items:center;gap:6px}
+.sw{width:12px;height:12px;border-radius:3px;flex:0 0 auto}
+.sw-1{background:var(--c1)}
+.sw-2{background:var(--c2)}
+
+.tasks{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr;gap:14px}
+.task{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow)}
+.task-h{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:8px}
+.step{font-family:var(--mono);font-size:.74rem;font-weight:500;background:var(--accent);color:var(--accent-ink);border-radius:5px;padding:3px 7px;flex:0 0 auto}
+.tid{font-family:var(--mono);font-size:.74rem;color:var(--ink-3);border:1px solid var(--line);border-radius:5px;padding:2px 6px}
+.task h3{flex:1 1 100%;margin-bottom:0}
+.task p{font-size:.92rem;color:var(--ink-2)}
+.task p:last-child{margin-bottom:0}
+.badge{font-size:.66rem;letter-spacing:.06em;text-transform:uppercase;font-weight:600;border-radius:999px;padding:3px 9px;border:1px solid var(--line)}
+.b-fix{background:var(--good-soft);color:var(--good)}
+.b-dan{background:var(--bad-soft);color:var(--bad)}
+.b-un{background:var(--surface-2);color:var(--ink-3)}
+.meta{margin:12px 0 0;padding:10px 0 0;border-top:1px solid var(--line);display:grid;grid-template-columns:1fr;gap:2px 14px;font-size:.84rem}
+.meta dt{font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);font-weight:600;padding-top:2px}
+.meta dd{margin:0 0 8px;color:var(--ink-2)}
+
+.list{padding-left:1.1rem;margin:0 0 1rem}
+.list li{margin-bottom:10px;color:var(--ink-2)}
+
+.qa{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr;gap:12px}
+.qa-item{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+.qa-item p{font-size:.9rem;color:var(--ink-2);margin-bottom:0}
+.qa-item p+p{margin-top:8px}
+.who{display:inline-block;font-size:.66rem;letter-spacing:.06em;text-transform:uppercase;font-weight:600;color:var(--ink-3);border:1px solid var(--line);border-radius:999px;padding:2px 9px;margin-bottom:8px}
+
+.foot{border-top:1px solid var(--line);background:var(--surface);margin-top:24px}
+.foot-in{max-width:1180px;margin:0 auto;padding:24px 16px 40px;font-size:.8rem;color:var(--ink-3)}
+.foot-in h2{font-size:1.05rem;margin-bottom:10px;color:var(--ink)}
+.foot-in p{margin-bottom:10px;max-width:86ch}
+.foot-in dl{margin:0 0 12px;max-width:86ch}
+.foot-in dt{font-weight:600;color:var(--ink-2);margin-top:10px;font-size:.78rem}
+.foot-in dd{margin:2px 0 0}
+.footlink{display:inline-flex;align-items:center;min-height:44px;font-weight:500}
+
+@media (min-width:768px){
+  body{font-size:17px}
+  h1{font-size:2.6rem}
+  h2{font-size:1.75rem}
+  .wrap{padding:32px 24px 8px}
+  .topbar-in{padding:0 24px}
+  .sect{padding:36px 0}
+  .stats{grid-template-columns:repeat(2,1fr);gap:12px}
+  .pillars{grid-template-columns:repeat(2,1fr)}
+  .meta{grid-template-columns:9rem 1fr}
+  .meta dt{text-align:right}
+  .qa{grid-template-columns:repeat(2,1fr)}
+  .foot-in{padding:32px 24px 48px}
+  .lede{font-size:1.24rem}
+  .callout{padding:20px}
+}
+@media (min-width:1200px){
+  .stats{grid-template-columns:repeat(4,1fr)}
+  .chart{min-width:0}
+  h1{font-size:3rem}
+}
+:root[data-theme="dark"]{color-scheme:dark}
+:root[data-theme="light"]{color-scheme:light}
+</style>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <a class="backlink" href="index.html">&#8592; Research bundle</a>
+    <span class="crumb">What to do next</span>
+    <button class="themebtn" id="themebtn" type="button" aria-pressed="false" hidden>Dark mode</button>
+  </div>
+</header>
+
+<main id="main" class="wrap">
+
+  <div class="hero">
+    <p class="kicker">Liquor licence search study &middot; the plan</p>
+    <h1>What to do next</h1>
+    <p class="lede">The recommendation, the order to deploy real inventory in, and the technical work order &mdash; each step argued from the measurements rather than asserted. Every figure here comes from a data file produced in this study. Where the evidence runs out, the page says so.</p>
+  </div>
+
+  <section class="sect">
+    <div class="sect-h"><span class="sect-n">01</span><h2>The recommendation, in short</h2></div>
+    <div class="body">
+      <div class="callout">
+        <p class="callout-h">The direction</p>
+        <p>Put your real inventory &mdash; actual licences, with actual asking prices, rendered as rows on the page itself &mdash; onto the <strong>state pages you already own</strong>, and start with <strong>New Jersey</strong>. Do not start by building a page per licence. Fix the site's plumbing alongside it, in the corrected sequence in section 04 &mdash; because the two largest technical items in that sequence would have broken things if shipped as they were first written.</p>
+      </div>
+      <p>Three measurements make this a recommendation rather than a preference. First, the rival's own results say hub pages carry the traffic and per-licence pages do not: <span class="num">8</span> state hub pages carry <span class="num">57.03%</span> of its modelled traffic and all eight rank for something, while <span class="num">1,223</span> of its <span class="num">1,227</span> individual listing pages rank for nothing at all. Second, your site has spent almost its entire page budget in the opposite place: <span class="num">971</span> city and county pages are about <span class="num">96%</span> of the site and return about <span class="num">5%</span> of its modelled traffic. Third, when your own pages were fetched live, they showed <span class="num">0</span> priced licences &mdash; the shelf is empty, so a visitor who arrives has nothing to respond to.</p>
+      <p>New Jersey goes first because it is the one large cell in this market where the top of Google is <em>not</em> dominated by a government website, and because the shelf you would have to match there is small: the rival holds <span class="num">131</span> New Jersey licences and shows only <span class="num">52</span> of them on its New Jersey page.</p>
+    </div>
+
+    <ul class="stats">
+      <li class="stat"><span class="statn">57.03%</span><span class="statl">of the rival's modelled traffic sits on its 8 state hub pages, and all 8 rank for something.</span><span class="statk">Census of its ranking pages</span></li>
+      <li class="stat"><span class="statn">1.77%</span><span class="statl">sits on its 1,227 per-licence pages. Exactly 4 of them rank for anything.</span><span class="statk">Census of its ranking pages</span></li>
+      <li class="stat"><span class="statn">0</span><span class="statl">priced licences were visible on the three pages of yours fetched live. The rival's New Jersey page shows 52.</span><span class="statk">Live probe, 3 client pages</span></li>
+      <li class="stat"><span class="statn">53</span><span class="statl">real priced rows is what a credible New Jersey shelf needs &mdash; one more than the rival shows there.</span><span class="statk">Measured shelf floor</span></li>
+    </ul>
+    <p class="src">Sources: <span class="num">data/gating-architecture.json</span> (traffic yield by page template, re-derived from the full ranked-keyword census; <span class="num">3,868</span> rival URLs classified with no unclassified remainder); <span class="num">data/opportunity-matrix.json</span> (live probe of all <span class="num">8</span> rival state pages and <span class="num">3</span> of your pages, <span class="num">2026-09-12</span>). &ldquo;Modelled traffic&rdquo; is a third-party estimate of monthly organic visits, not measured sessions &mdash; see the method note at the foot of this page.</p>
+  </section>
+
+  <section class="sect">
+    <div class="sect-h"><span class="sect-n">02</span><h2>Why inventory on state pages, and not more pages</h2></div>
+    <div class="body">
+      <p>The instinct in this market is to build one page per licence and let volume do the work. That approach has already been run at full scale by the rival, and the result is measurable. Here is what each strand of evidence says, independently of the others.</p>
+    </div>
+
+    <ul class="pillars">
+      <li class="pillar">
+        <h3>1. Their page types are not equal</h3>
+        <p>Across a census of its ranking pages: <span class="num">8</span> state hubs give <span class="num">57.03%</span> of modelled traffic; <span class="num">30</span> state-by-licence-type pages give <span class="num">16.57%</span>; <span class="num">1,227</span> per-licence pages give <span class="num">1.77%</span>; <span class="num">1,692</span> county-by-type pages give <span class="num">0.12%</span>.</p>
+        <p>Page count and payoff run in opposite directions. Building the big per-item surface is the thing that measurably did not work for them.</p>
+      </li>
+      <li class="pillar">
+        <h3>2. The keywords you are missing sit on hubs</h3>
+        <p>Of the <span class="num">549</span> keywords where the rival appears in Google and you do not, its state hub template accounts for <span class="num">36.2%</span> of the search volume and <span class="num">65.3%</span> of the modelled traffic. Its per-licence pages account for <span class="num">0.6%</span> of volume and <span class="num">2.4%</span> of traffic, from <span class="num">16</span> keywords.</p>
+        <p>Two-thirds of what you are losing, you are losing to one page shape.</p>
+      </li>
+      <li class="pillar">
+        <h3>3. Demand is at state level, not county level</h3>
+        <p>Inside the eight states either party operates in, measured demand runs roughly <span class="num">15.2</span> to <span class="num">1</span> in favour of state-level phrasing over county-level. Only <span class="num">46</span> of the rival's <span class="num">191</span> county cells carry any measured demand at all; of the <span class="num">60</span> counties where it holds exactly one licence, only <span class="num">5</span> carry any.</p>
+        <p>Its thin county coverage therefore reads as a correct assessment of the market, not an opening. Putting stock into single-listing counties would be putting it where nobody is searching.</p>
+      </li>
+      <li class="pillar">
+        <h3>4. Your own site already proves it</h3>
+        <p><span class="num">971</span> city and county pages hold <span class="num">113</span> ranking keywords and <span class="num">26.2</span> of your <span class="num">491.4</span> modelled monthly visits &mdash; <span class="num">5.3%</span>. A handful of static and state pages carry the rest, including one orphaned page carrying <span class="num">60</span> on its own.</p>
+        <p>Same conclusion, reached from the opposite direction, on your data rather than theirs.</p>
+      </li>
+      <li class="pillar">
+        <h3>5. Your state pages are the thinnest thing you own</h3>
+        <p>Your <span class="num">3</span> measured state hubs carry a median of <span class="num">32</span> unique words of body text. The rival's state hub template carries a median of <span class="num">1,099</span> total words and <span class="num">528</span> unique &mdash; about <span class="num">16.5</span> times more.</p>
+        <p>Your city and county pages are <em>not</em> the problem: their medians are <span class="num">868.5</span> and <span class="num">842</span> unique words. They need inventory rows, not more prose.</p>
+      </li>
+      <li class="pillar">
+        <h3>6. Their shelf is real, but shallow and undated</h3>
+        <p>Their New Jersey page renders <span class="num">52</span> genuine prices inline, verified one-to-one against <span class="num">52</span> distinct listing links. But across all <span class="num">1,227</span> listings there are only <span class="num">132</span> distinct description texts, <span class="num">0</span> carry any date, <span class="num">0</span> publish a licence number, and <span class="num">6</span> images serve the whole book.</p>
+        <p>The shelf is matchable. The substance behind it is not defended.</p>
+      </li>
+    </ul>
+    <p class="src">Sources: <span class="num">data/gating-architecture.json</span>; <span class="num">data/gap.json</span> (keyword gap: <span class="num">549</span> keywords, <span class="num">115,820</span> monthly searches summed; one API endpoint with identical settings for both domains, <span class="num">2026-09-12</span>); <span class="num">data/opportunity-matrix.json</span>; <span class="num">data/listing-content-model.json</span> (full census of all <span class="num">1,227</span> rival listing pages). Search volumes and modelled traffic are third-party estimates. Page shape <em>associates</em> with traffic here; nothing in this data shows that changing a page's shape causes a ranking to move.</p>
+
+    <figure class="fig">
+      <figcaption>The rival's traffic is concentrated in a handful of hub pages</figcaption>
+      <p class="fig-sub">Share of its total modelled monthly traffic by page template, with the number of pages of that type in brackets. Census of its ranking pages, 2026-09-12.</p>
+      <div class="chartbox">
+        <svg class="chart" viewBox="0 0 700 348" role="img" aria-label="Bar chart. State hub pages, 8 of them, hold 57.03 per cent of the rival's modelled traffic; state-by-licence-type 16.57 per cent from 30 pages; licence-type index 9.05 per cent from 8 pages; blog 8.48 per cent from 36; county 4.25 per cent from 432; per-licence listings 1.77 per cent from 1,227; static 1.56 per cent from 9; FAQ 0.89 per cent from 402; county-by-type 0.12 per cent from 1,692.">
+          <text class="ct-s" x="0" y="14">share of the rival's modelled monthly traffic</text>
+          <line class="cax" x1="215" y1="34" x2="215" y2="306"></line>
+          <line class="cax" x1="355.3" y1="34" x2="355.3" y2="306"></line>
+          <line class="cax" x1="495.6" y1="34" x2="495.6" y2="306"></line>
+          <line class="cax" x1="615" y1="34" x2="615" y2="306"></line>
+          <text class="ct-s" x="215" y="28" text-anchor="middle">0%</text>
+          <text class="ct-s" x="355.3" y="28" text-anchor="middle">20%</text>
+          <text class="ct-s" x="495.6" y="28" text-anchor="middle">40%</text>
+          <text class="ct-s" x="615" y="28" text-anchor="middle">57.03%</text>
+
+          <rect class="b1" x="215" y="40" width="400" height="20"></rect>
+          <text class="ct" x="205" y="55" text-anchor="end">State hub (8)</text>
+          <text class="cv" x="621" y="55">57.03%</text>
+
+          <rect class="b2" x="215" y="70" width="116.2" height="20"></rect>
+          <text class="ct" x="205" y="85" text-anchor="end">State-by-licence-type (30)</text>
+          <text class="cv" x="621" y="85">16.57%</text>
+
+          <rect class="b2" x="215" y="100" width="63.5" height="20"></rect>
+          <text class="ct" x="205" y="115" text-anchor="end">Licence-type index (8)</text>
+          <text class="cv" x="621" y="115">9.05%</text>
+
+          <rect class="b3" x="215" y="130" width="59.5" height="20"></rect>
+          <text class="ct" x="205" y="145" text-anchor="end">Blog (36)</text>
+          <text class="cv" x="621" y="145">8.48%</text>
+
+          <rect class="b3" x="215" y="160" width="29.8" height="20"></rect>
+          <text class="ct" x="205" y="175" text-anchor="end">County (432)</text>
+          <text class="cv" x="621" y="175">4.25%</text>
+
+          <rect class="b4" x="215" y="190" width="12.4" height="20"></rect>
+          <text class="ct" x="205" y="205" text-anchor="end">Per-licence listing (1,227)</text>
+          <text class="cv" x="621" y="205">1.77%</text>
+
+          <rect class="bmute" x="215" y="220" width="10.9" height="20"></rect>
+          <text class="ct" x="205" y="235" text-anchor="end">Static (9)</text>
+          <text class="cv" x="621" y="235">1.56%</text>
+
+          <rect class="bmute" x="215" y="250" width="6.2" height="20"></rect>
+          <text class="ct" x="205" y="265" text-anchor="end">FAQ (402)</text>
+          <text class="cv" x="621" y="265">0.89%</text>
+
+          <rect class="b4" x="215" y="280" width="0.8" height="20"></rect>
+          <text class="ct" x="205" y="295" text-anchor="end">County-by-type (1,692)</text>
+          <text class="cv" x="621" y="295">0.12%</text>
+
+          <text class="ct-s" x="0" y="332">The two red bars are the per-item templates: 2,919 pages between them, 1.89% of the traffic.</text>
+        </svg>
+      </div>
+      <p class="src">Source: <span class="num">data/gating-architecture.json</span>, re-derived from the full ranked-keyword census. Shares are of <span class="num">5,471.2</span> modelled monthly visits &mdash; a third-party estimate, not measured sessions. Three of the twelve page types are omitted from the chart: two returning <span class="num">0.00%</span> and one returning <span class="num">0.27%</span>.</p>
+    </figure>
+
+    <figure class="fig">
+      <figcaption>Your page budget and your traffic are in different places</figcaption>
+      <p class="fig-sub">The 971 city and county pages, as a share of all 1,007 pages on the site, and as a share of the site's modelled traffic.</p>
+      <div class="chartbox">
+        <svg class="chart" viewBox="0 0 700 186" role="img" aria-label="Bar chart. The 971 city and county pages are 96.4 per cent of the site's 1,007 pages, but only 5.3 per cent of its modelled traffic.">
+          <text class="ct" x="0" y="20">971 city and county pages, as a share of all 1,007 pages</text>
+          <rect class="b1" x="0" y="28" width="680" height="24"></rect>
+          <text class="cv-in" x="10" y="45">96.4%</text>
+
+          <text class="ct" x="0" y="86">the same 971 pages, as a share of the site's modelled traffic</text>
+          <rect class="b4" x="0" y="94" width="37.4" height="24"></rect>
+          <text class="cv" x="47" y="111">5.3%</text>
+
+          <line class="cax" x1="0" y1="136" x2="680" y2="136"></line>
+          <line class="cax" x1="0" y1="136" x2="0" y2="143"></line>
+          <line class="cax" x1="352.7" y1="136" x2="352.7" y2="143"></line>
+          <line class="cax" x1="680" y1="136" x2="680" y2="143"></line>
+          <text class="ct-s" x="0" y="157">0%</text>
+          <text class="ct-s" x="352.7" y="157" text-anchor="middle">50%</text>
+          <text class="ct-s" x="680" y="157" text-anchor="end">96.4%</text>
+          <text class="ct-s" x="0" y="178">113 ranking keywords and 26.2 of the site's 491.4 modelled monthly visits sit on those 971 pages.</text>
+        </svg>
+      </div>
+      <p class="src">Source: <span class="num">data/opportunity-matrix.json</span>, built on a census of all <span class="num">1,007</span> of your sitemap URLs and a census of the <span class="num">244</span> keywords the site ranks for. The file's own page breakdown accounts for <span class="num">1,004</span> of the <span class="num">1,007</span> pages &mdash; three are unclassified there, and the <span class="num">96.4%</span> figure is <span class="num">971</span> of <span class="num">1,007</span>. Modelled traffic is an estimate.</p>
+    </figure>
+
+    <div class="flag">
+      <p class="flag-h">Where two of our own files disagree</p>
+      <p>An earlier file in this study, produced six minutes before the scoring matrix, recommended <strong>California first</strong> &mdash; on the grounds that your California hub is your single biggest structural gap against the rival's highest-yield template. The later scoring matrix puts <strong>New Jersey first</strong>, because it prices two things the earlier file did not: how much of the top of Google is already held by a government site, and how many licences you would have to put on the page to match what a visitor actually sees. We recommend the later file's order, and the arithmetic is in the next section. The disagreement is real and is recorded here rather than smoothed over.</p>
+    </div>
+  </section>
+
+  <section class="sect">
+    <div class="sect-h"><span class="sect-n">03</span><h2>The deployment order</h2></div>
+    <div class="body">
+      <p>The study scored <span class="num">317</span> candidate places to put inventory &mdash; combinations of state, licence type and county. <span class="num">159</span> have any measured search demand; <span class="num">97</span> sit inside the eight states where either party is measurably present, and <span class="num">62</span> are held back because neither party is. The score multiplies four measured things: the demand in the cell, how thinly the rival stocks it, how much room is left at the top of Google once government sites have taken their slots, and whether you already rank there at all. Demand is square-root dampened, so a cell ten times larger scores about three times higher rather than ten &mdash; one page captures a smaller share of a big search term than of a small one.</p>
+      <p>The column to read alongside demand is the <strong>government ceiling</strong>: the share of that cell's measured demand where a government website already holds a top-three position. That figure explains the running order more than demand does. A state regulator's own licence-types page is not something a broker outranks; where the ceiling is high, the commercial slots simply start further down the page.</p>
+    </div>
+
+    <div class="scroll">
+      <table>
+        <caption>The top 12 of the 25 scored cells recommended for immediate deployment, in score order.</caption>
+        <thead>
+          <tr>
+            <th class="n">Rank</th>
+            <th>Cell</th>
+            <th class="n">Weighted demand<br>searches/mo</th>
+            <th class="n">Government<br>ceiling</th>
+            <th class="n">Rival<br>holds</th>
+            <th class="n">Rival<br>shows</th>
+            <th class="n">Rows you<br>need</th>
+            <th>Your page today</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="n">1</td><td class="cell">New Jersey &mdash; state hub</td><td class="n">5,392</td><td class="n">47.4%</td><td class="n">131</td><td class="n">52</td><td class="n">53</td><td>Exists, ranks for nothing in this cell</td></tr>
+          <tr><td class="n">2</td><td class="cell">Florida &mdash; state hub</td><td class="n">4,552</td><td class="n">66.7%</td><td class="n">102</td><td class="n">18</td><td class="n">25</td><td>Ranks <span class="rank">#10</span>, from a county page</td></tr>
+          <tr><td class="n">3</td><td class="cell">Philadelphia County, Pennsylvania</td><td class="n">398</td><td class="n">30.2%</td><td class="n">14</td><td class="n">&mdash;</td><td class="n">15</td><td>No page yet</td></tr>
+          <tr><td class="n">4</td><td class="cell">New Mexico &mdash; state hub</td><td class="n">714</td><td class="n">100%</td><td class="n">6</td><td class="n">3</td><td class="n">25</td><td>No page yet</td></tr>
+          <tr><td class="n">5</td><td class="cell">California &mdash; state hub</td><td class="n">9,345</td><td class="n">94.4%</td><td class="n">734</td><td class="n">150</td><td class="n">151</td><td>Ranks <span class="rank">#1</span>, from the homepage</td></tr>
+          <tr><td class="n">6</td><td class="cell">Michigan &mdash; state hub</td><td class="n">1,343</td><td class="n">83.9%</td><td class="n">19</td><td class="n">11</td><td class="n">25</td><td>No page yet</td></tr>
+          <tr><td class="n">7</td><td class="cell">Pennsylvania &mdash; state hub</td><td class="n">3,318</td><td class="n">75.4%</td><td class="n">113</td><td class="n">20</td><td class="n">25</td><td>Ranks <span class="rank">#46</span></td></tr>
+          <tr><td class="n">8</td><td class="cell">Ohio &mdash; state hub</td><td class="n">2,122</td><td class="n">93.8%</td><td class="n">59</td><td class="n">30</td><td class="n">31</td><td>Ranks <span class="rank">#10</span></td></tr>
+          <tr><td class="n">9</td><td class="cell">New Jersey &mdash; licence-type index</td><td class="n">70</td><td class="n">64.9%</td><td class="n">0</td><td class="n">&mdash;</td><td class="n">11</td><td>No page yet</td></tr>
+          <tr><td class="n">10</td><td class="cell">Florida &mdash; licence-type index</td><td class="n">70</td><td class="n">66.7%</td><td class="n">0</td><td class="n">&mdash;</td><td class="n">11</td><td>No page yet</td></tr>
+          <tr><td class="n">11</td><td class="cell">Pennsylvania &mdash; licence-type index</td><td class="n">110</td><td class="n">75.4%</td><td class="n">0</td><td class="n">&mdash;</td><td class="n">11</td><td>No page yet</td></tr>
+          <tr><td class="n">12</td><td class="cell">California &mdash; licence-type index</td><td class="n">273</td><td class="n">99.0%</td><td class="n">0</td><td class="n">&mdash;</td><td class="n">11</td><td>Ranks <span class="rank">#4</span>, from another page</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="src"><strong>How to read this.</strong> <em>Weighted demand</em> is monthly searches in the cell after down-weighting phrases that do not indicate wanting to buy or sell a licence &mdash; a &ldquo;how do I apply&rdquo; search counts at <span class="num">0.3</span> of a &ldquo;licence for sale&rdquo; search. <em>Government ceiling</em> is the share of that demand where a <span class="num">.gov</span> site holds a top-three position, volume-weighted over the SERP sample and smoothed toward the state average where few queries attached to the cell. <em>Rival holds</em> is its full stock in that cell, from a census of all <span class="num">1,227</span> of its listings; <em>rival shows</em> is how many priced licences its page actually renders, counted live on <span class="num">2026-09-12</span> &mdash; a dash means no page was probed for that cell. <em>Rows you need</em> is the file's credible-shelf figure: enough to beat what a visitor sees, or the rival's own median for that page type, whichever applies. Source: <span class="num">data/opportunity-matrix.json</span>. Volumes are third-party estimates. A high score <em>associates</em> with an opening; nothing here demonstrates that deploying stock causes a ranking to change.</p>
+
+    <figure class="fig">
+      <figcaption>Demand, and the government ceiling, side by side</figcaption>
+      <p class="fig-sub">The same eight state cells in both charts, in the same order. The first chart is the prize; the second is how much of the top of the page is already gone.</p>
+      <div class="chartbox">
+        <svg class="chart" viewBox="0 0 700 302" role="img" aria-label="Bar chart of weighted monthly demand per state hub cell: California 9,345; New Jersey 5,392; Florida 4,552; Pennsylvania 3,318; Ohio 2,122; Michigan 1,343; Arizona 1,092; New Mexico 714.">
+          <text class="ct-s" x="0" y="14">weighted monthly searches in the cell</text>
+          <line class="cax" x1="155" y1="26" x2="155" y2="256"></line>
+          <line class="cax" x1="326.2" y1="26" x2="326.2" y2="256"></line>
+          <line class="cax" x1="497.4" y1="26" x2="497.4" y2="256"></line>
+          <line class="cax" x1="555" y1="26" x2="555" y2="256"></line>
+          <text class="ct-s" x="155" y="272" text-anchor="middle">0</text>
+          <text class="ct-s" x="326.2" y="272" text-anchor="middle">4,000</text>
+          <text class="ct-s" x="497.4" y="272" text-anchor="middle">8,000</text>
+          <text class="ct-s" x="561" y="272" text-anchor="end">9,345</text>
+
+          <rect class="b2" x="155" y="32" width="400" height="20"></rect>
+          <text class="ct" x="145" y="47" text-anchor="end">California</text>
+          <text class="cv" x="561" y="47">9,345</text>
+
+          <rect class="b1" x="155" y="60" width="230.8" height="20"></rect>
+          <text class="ct" x="145" y="75" text-anchor="end">New Jersey</text>
+          <text class="cv" x="561" y="75">5,392</text>
+
+          <rect class="b2" x="155" y="88" width="194.9" height="20"></rect>
+          <text class="ct" x="145" y="103" text-anchor="end">Florida</text>
+          <text class="cv" x="561" y="103">4,552</text>
+
+          <rect class="b2" x="155" y="116" width="142" height="20"></rect>
+          <text class="ct" x="145" y="131" text-anchor="end">Pennsylvania</text>
+          <text class="cv" x="561" y="131">3,318</text>
+
+          <rect class="b2" x="155" y="144" width="90.8" height="20"></rect>
+          <text class="ct" x="145" y="159" text-anchor="end">Ohio</text>
+          <text class="cv" x="561" y="159">2,122</text>
+
+          <rect class="b2" x="155" y="172" width="57.5" height="20"></rect>
+          <text class="ct" x="145" y="187" text-anchor="end">Michigan</text>
+          <text class="cv" x="561" y="187">1,343</text>
+
+          <rect class="b2" x="155" y="200" width="46.7" height="20"></rect>
+          <text class="ct" x="145" y="215" text-anchor="end">Arizona</text>
+          <text class="cv" x="561" y="215">1,092</text>
+
+          <rect class="b2" x="155" y="228" width="30.6" height="20"></rect>
+          <text class="ct" x="145" y="243" text-anchor="end">New Mexico</text>
+          <text class="cv" x="561" y="243">714</text>
+
+          <text class="ct-s" x="0" y="292">New Jersey, highlighted, is second on demand and first on score.</text>
+        </svg>
+      </div>
+      <div class="chartbox">
+        <svg class="chart" viewBox="0 0 700 302" role="img" aria-label="Bar chart of the government top-three share per state hub cell: California 94.4 per cent; New Jersey 47.4 per cent; Florida 66.7 per cent; Pennsylvania 75.4 per cent; Ohio 93.8 per cent; Michigan 83.9 per cent; Arizona 100 per cent; New Mexico 100 per cent.">
+          <text class="ct-s" x="0" y="14">share of the cell's demand where a government site holds a top-three slot</text>
+          <line class="cax" x1="155" y1="26" x2="155" y2="256"></line>
+          <line class="cax" x1="355" y1="26" x2="355" y2="256"></line>
+          <line class="cax" x1="555" y1="26" x2="555" y2="256"></line>
+          <text class="ct-s" x="155" y="272" text-anchor="middle">0%</text>
+          <text class="ct-s" x="355" y="272" text-anchor="middle">50%</text>
+          <text class="ct-s" x="555" y="272" text-anchor="middle">100%</text>
+
+          <rect class="b4" x="155" y="32" width="377.6" height="20"></rect>
+          <text class="ct" x="145" y="47" text-anchor="end">California</text>
+          <text class="cv" x="561" y="47">94.4%</text>
+
+          <rect class="b3" x="155" y="60" width="189.6" height="20"></rect>
+          <text class="ct" x="145" y="75" text-anchor="end">New Jersey</text>
+          <text class="cv" x="561" y="75">47.4%</text>
+
+          <rect class="b4" x="155" y="88" width="266.8" height="20"></rect>
+          <text class="ct" x="145" y="103" text-anchor="end">Florida</text>
+          <text class="cv" x="561" y="103">66.7%</text>
+
+          <rect class="b4" x="155" y="116" width="301.6" height="20"></rect>
+          <text class="ct" x="145" y="131" text-anchor="end">Pennsylvania</text>
+          <text class="cv" x="561" y="131">75.4%</text>
+
+          <rect class="b4" x="155" y="144" width="375.2" height="20"></rect>
+          <text class="ct" x="145" y="159" text-anchor="end">Ohio</text>
+          <text class="cv" x="561" y="159">93.8%</text>
+
+          <rect class="b4" x="155" y="172" width="335.6" height="20"></rect>
+          <text class="ct" x="145" y="187" text-anchor="end">Michigan</text>
+          <text class="cv" x="561" y="187">83.9%</text>
+
+          <rect class="b4" x="155" y="200" width="400" height="20"></rect>
+          <text class="ct" x="145" y="215" text-anchor="end">Arizona</text>
+          <text class="cv" x="561" y="215">100%</text>
+
+          <rect class="b4" x="155" y="228" width="400" height="20"></rect>
+          <text class="ct" x="145" y="243" text-anchor="end">New Mexico</text>
+          <text class="cv" x="561" y="243">100%</text>
+
+          <text class="ct-s" x="0" y="292">New Jersey is the only one of the eight where more than half the top-three slots are commercially held.</text>
+        </svg>
+      </div>
+      <p class="src">Source: <span class="num">data/opportunity-matrix.json</span>. Demand is a weighted monthly search estimate. The government share is volume-weighted over a SERP <strong>sample</strong> of <span class="num">197</span> queries and smoothed toward the state average where few queries attached to a cell; the number of queries measured per cell ranges from <span class="num">3</span> (New Mexico) to <span class="num">80</span> (California), so the thinner cells carry materially more uncertainty. Across all <span class="num">197</span> queries a government site held a top-three slot on <span class="num">160</span> of them, <span class="num">77%</span> volume-weighted.</p>
+    </figure>
+
+    <h3>Why the biggest demand pool is not first</h3>
+    <div class="body">
+      <p>California is the largest pool by a distance: <span class="num">290</span> in-scope keywords, <span class="num">16,560</span> raw monthly searches, <span class="num">9,345</span> after weighting &mdash; about <span class="num">1.7</span> times New Jersey. It still comes fifth, for two measured reasons that pull the same way.</p>
+      <ul class="list">
+        <li><strong>The top of the page is already taken.</strong> A government site holds a top-three slot on <span class="num">94.4%</span> of California's measured demand, and the number-one slot on <span class="num">93.2%</span>. In New Jersey those figures are <span class="num">47.4%</span> and <span class="num">46.5%</span>. In the scoring model that becomes a headroom multiplier of <span class="num">0.20</span> for California against <span class="num">0.60</span> for New Jersey &mdash; a three-fold difference that more than cancels California's demand advantage once demand is square-root dampened.</li>
+        <li><strong>The shelf costs three times as much to match.</strong> The rival holds <span class="num">734</span> California licences and shows <span class="num">150</span> of them on its California page. Matching that visible shelf means <span class="num">151</span> priced California rows. New Jersey needs <span class="num">53</span>.</li>
+      </ul>
+      <p>California is not being dropped &mdash; it is second wave, and it carries an advantage nowhere else has: you already rank <span class="num">#1</span> for a California head term, from your homepage. Inventory added to a California hub inherits an existing position instead of starting from nothing. The judgement in the order is only that New Jersey converts effort into visible position more cheaply, and it is a judgement about an association between these factors and rankings, not a forecast.</p>
+      <p>There is a second, larger &ldquo;biggest pool&rdquo; worth naming, because it is deliberately excluded. Scored purely on open field, the highest-scoring cells in the entire matrix are states where the rival holds nothing at all: Indiana (score <span class="num">29.07</span>, <span class="num">10,650</span> raw monthly searches), New York (<span class="num">22.96</span>, <span class="num">7,080</span>), Tennessee (<span class="num">20.05</span>, <span class="num">5,030</span>) and Texas (<span class="num">17.57</span>, <span class="num">6,930</span>). All are <strong>held out</strong> of the ranked list. Liquor licensing is state-by-state, and an empty cell in a state where neither party is measurably present is not an opening &mdash; it is a different business. If your stock actually reaches those states, those <span class="num">62</span> held-out cells become live and the list should be re-scored. That is a question for you, not for the data: nothing measured here says which states your licences sit in.</p>
+    </div>
+
+    <figure class="fig">
+      <figcaption>What the rival holds, and what it actually puts on the page</figcaption>
+      <p class="fig-sub">Licences held in each state, from a census of all 1,227, against priced licences rendered inline on that state's page, counted live on 2026-09-12. The lower bar in each pair is the shelf you have to match.</p>
+      <div class="chartbox">
+        <ul class="legend">
+          <li><span class="sw sw-2"></span>held in the state (census)</li>
+          <li><span class="sw sw-1"></span>shown on the state page (live count)</li>
+        </ul>
+        <svg class="chart" viewBox="0 0 700 372" role="img" aria-label="Paired bar chart. California 734 held against 150 shown; New Jersey 131 against 52; Pennsylvania 113 against 20; Florida 102 against 18; Arizona 63 against 39; Ohio 59 against 30; Michigan 19 against 11; New Mexico 6 against 3.">
+          <text class="ct-s" x="0" y="14">licences</text>
+          <line class="cax" x1="155" y1="34" x2="155" y2="340"></line>
+          <line class="cax" x1="373" y1="34" x2="373" y2="340"></line>
+          <line class="cax" x1="555" y1="34" x2="555" y2="340"></line>
+          <text class="ct-s" x="155" y="28" text-anchor="middle">0</text>
+          <text class="ct-s" x="373" y="28" text-anchor="middle">400</text>
+          <text class="ct-s" x="555" y="28" text-anchor="middle">734</text>
+
+          <rect class="b2" x="155" y="40" width="400" height="12"></rect>
+          <rect class="b1" x="155" y="55" width="81.8" height="12"></rect>
+          <text class="ct" x="145" y="56" text-anchor="end">California</text>
+          <text class="cv" x="561" y="50">734</text>
+          <text class="cv" x="243" y="65">150</text>
+
+          <rect class="b2" x="155" y="78" width="71.4" height="12"></rect>
+          <rect class="b1" x="155" y="93" width="28.3" height="12"></rect>
+          <text class="ct" x="145" y="94" text-anchor="end">New Jersey</text>
+          <text class="cv" x="233" y="88">131</text>
+          <text class="cv" x="190" y="103">52</text>
+
+          <rect class="b2" x="155" y="116" width="61.6" height="12"></rect>
+          <rect class="b1" x="155" y="131" width="10.9" height="12"></rect>
+          <text class="ct" x="145" y="132" text-anchor="end">Pennsylvania</text>
+          <text class="cv" x="223" y="126">113</text>
+          <text class="cv" x="172" y="141">20</text>
+
+          <rect class="b2" x="155" y="154" width="55.6" height="12"></rect>
+          <rect class="b1" x="155" y="169" width="9.8" height="12"></rect>
+          <text class="ct" x="145" y="170" text-anchor="end">Florida</text>
+          <text class="cv" x="217" y="164">102</text>
+          <text class="cv" x="171" y="179">18</text>
+
+          <rect class="b2" x="155" y="192" width="34.3" height="12"></rect>
+          <rect class="b1" x="155" y="207" width="21.3" height="12"></rect>
+          <text class="ct" x="145" y="208" text-anchor="end">Arizona</text>
+          <text class="cv" x="196" y="202">63</text>
+          <text class="cv" x="183" y="217">39</text>
+
+          <rect class="b2" x="155" y="230" width="32.2" height="12"></rect>
+          <rect class="b1" x="155" y="245" width="16.4" height="12"></rect>
+          <text class="ct" x="145" y="246" text-anchor="end">Ohio</text>
+          <text class="cv" x="194" y="240">59</text>
+          <text class="cv" x="178" y="255">30</text>
+
+          <rect class="b2" x="155" y="268" width="10.4" height="12"></rect>
+          <rect class="b1" x="155" y="283" width="6" height="12"></rect>
+          <text class="ct" x="145" y="284" text-anchor="end">Michigan</text>
+          <text class="cv" x="172" y="278">19</text>
+          <text class="cv" x="168" y="293">11</text>
+
+          <rect class="b2" x="155" y="306" width="3.3" height="12"></rect>
+          <rect class="b1" x="155" y="321" width="1.6" height="12"></rect>
+          <text class="ct" x="145" y="322" text-anchor="end">New Mexico</text>
+          <text class="cv" x="165" y="316">6</text>
+          <text class="cv" x="163" y="331">3</text>
+
+          <text class="ct-s" x="0" y="362">These eight states account for all 1,227 of the rival's listings.</text>
+        </svg>
+      </div>
+      <p class="src">Source: <span class="num">data/opportunity-matrix.json</span> &mdash; stock counts from a census of all <span class="num">1,227</span> rival listings; the inline shelf counted from live fetches of all eight rival state pages on <span class="num">2026-09-12</span>, at roughly <span class="num">1.6</span> requests per second, public pages only. On the New Jersey page the count was verified one-to-one: <span class="num">52</span> distinct listing links against <span class="num">52</span> price figures in visible text.</p>
+    </figure>
+
+    <div class="flag">
+      <p class="flag-h">The one thing this order depends on and cannot verify</p>
+      <p>Every &ldquo;rows you need&rdquo; figure assumes you can put that many real, currently available licences on a page at a real asking price. That you hold more stock than the rival, obtained earlier, some of it off-market, is <strong>taken as given from you and is verified nowhere in this study</strong>. Check each target against the actual book before committing to it. If New Jersey cannot field <span class="num">53</span> priced rows, the first cell changes, and the order should be re-read off the table rather than off this paragraph.</p>
+    </div>
+  </section>
+
+  <section class="sect">
+    <div class="sect-h"><span class="sect-n">04</span><h2>The technical work order</h2></div>
+    <div class="body">
+      <p>Separate from inventory, the site has a structural problem that limits what any new content can do. Of your <span class="num">1,007</span> pages, <span class="num">908</span> tell Google &ldquo;the real version of me lives at a different address&rdquo; &mdash; and not one of those <span class="num">908</span> real addresses appears in any sitemap. The sitemap is advertising the copy the site itself disowns. Google has already resolved it in the site's favour: <span class="num">99</span> of your <span class="num">244</span> ranking keywords sit on the real addresses and only <span class="num">12</span> on the advertised ones. So the fix is to point the sitemap at the addresses Google already prefers and leave each page's own declaration alone. The alternative &mdash; flipping <span class="num">908</span> declarations to match the sitemap &mdash; would ask Google to move <span class="num">99</span> working keywords onto addresses it has already declined. It was considered and rejected.</p>
+      <div class="danger">
+        <p class="danger-h">Read this before the task list</p>
+        <p>An earlier version of this work order was attacked by <strong>24 independent reviewers</strong> &mdash; three each against eight of the ten tasks, each instructed to break the task from a different angle and to test every claim against the live site. <strong>Every one of the eight tasks was refuted. None survived.</strong> Twenty-three of the twenty-four individual reviews returned a refutation. Most were verification failures: the goal was right, but the test the task proposed for &ldquo;did this work&rdquo; could not have caught a bad outcome. <strong>Two would have caused real damage if shipped as written.</strong> What follows is the corrected version, and both are named in full.</p>
+      </div>
+      <div class="danger">
+        <p class="danger-h">Damage case 1 &mdash; a redirect that would have closed an infinite loop on 41 pages</p>
+        <p>The original final task said: once the sitemap change is confirmed, redirect all <span class="num">908</span> old addresses to their real ones. An <span class="num">11</span>-page sample had found the real addresses all returned a normal page, so the task was written as though all <span class="num">908</span> did. A reviewer insisted on probing all <span class="num">908</span>. Of them, <span class="num">859</span> are fine &mdash; but <span class="num">49</span> already redirect somewhere, and <span class="num">41</span> of those redirect <em>back to the very address the new redirect would have pointed away from</em>. Shipping it would have closed a loop on <span class="num">41</span> pages: a browser or crawler bouncing between two addresses until it gave up. Six of the <span class="num">41</span> currently rank for <span class="num">16</span> keywords between them, and five are linked from <span class="num">1,046</span> pages of your own site. A further <span class="num">8</span> redirect to a <em>different</em> page altogether, which would have produced a three-hop chain onto content you did not intend to advertise. Worse, the task's own success test &mdash; &ldquo;each old address returns exactly one redirect to its target&rdquo; &mdash; would have reported all <span class="num">41</span> loops as a pass. Corrected: scope drops from <span class="num">908</span> to at most <span class="num">859</span>, the <span class="num">49</span> become a separate exception register to be fixed first, and the test now has to detect a loop as a loop.</p>
+      </div>
+      <div class="danger">
+        <p class="danger-h">Damage case 2 &mdash; a robots.txt change that would have exempted AI crawlers from your own access rules</p>
+        <p>The original task said: add lines to <span class="num">robots.txt</span> naming six AI crawlers and allowing them, because an AI answer box appears on <span class="num">90.9%</span> of the queries measured and the rival is cited far more often than you are. The problem is how the robots standard works. Your file today has a single rule block covering all crawlers: allow everything, except <span class="num">/register</span>, <span class="num">/login</span> and <span class="num">/sg-admin/</span>. Under the standard, a crawler that finds a block naming <em>itself</em> obeys only that block and inherits nothing from the general one. Writing &ldquo;GPTBot: allow everything&rdquo; as its own block would therefore have handed those six crawlers access to your login, registration and admin paths &mdash; the three places the site deliberately keeps crawlers out of. Two further corrections came from the same review: the six crawlers are <strong>already allowed today</strong> under the general rule, so the change makes an existing yes explicit rather than granting anything new; and the original success test (byte-compare the general block) could not have detected the failure, because the general block stays unchanged while the new blocks override it. Corrected: either add the six names to the existing block, or repeat all four rules inside every new block &mdash; and test by running a real robots parser over the result, seven crawler identities against five paths, <span class="num">35</span> assertions.</p>
+      </div>
+      <p>The sequence below is the corrected order. Two things moved. The duplicate-title task went from fourth to last, because until the old addresses are redirected each of those clusters is four live addresses rather than two, and a fix issued earlier would fight the redirect task for the same URLs. And the orphaned-page task turned out to be a navigation fix rather than a sitemap fix, because the address it named is itself a redirect whose destination is already in the sitemap.</p>
+    </div>
+
+    <ol class="tasks">
+      <li class="task">
+        <div class="task-h"><span class="step">Step 1</span><span class="tid">T1</span><span class="badge b-fix">Corrected</span><h3>Take a snapshot you can actually roll back to</h3></div>
+        <p>Archive every sitemap file, and export, for all <span class="num">1,006</span> live pages, which address each one declares as its real self. This is the rollback asset for everything that follows, and it has to exist before anything changes.</p>
+        <p><strong>What the reviewers changed.</strong> The original test was &ldquo;the archive matches the live files byte for byte&rdquo;. That is already impossible: two of the ten sitemap files carry a server-generated timestamp that moved by <span class="num">4</span> hours <span class="num">52</span> minutes between two captures while nobody touched the site. Compare the address lists instead and treat the timestamp as expected to drift. The other half failed the opposite way: a standard export tool follows redirects, which would have produced <span class="num">1,007</span> rows all looking valid &mdash; one of them recording a 404 page's own declaration &mdash; and the stated check could not see either fault. Add explicit checks for both. Also add <span class="num">robots.txt</span> and the current status of all <span class="num">908</span> target addresses to the snapshot; neither was in scope, and both are needed to undo later steps.</p>
+        <dl class="meta">
+          <dt>Scope</dt><dd>Ten sitemap files, robots.txt, a 1,006-row export, and the status of 908 target addresses.</dd>
+          <dt>Risk</dt><dd>None. Read-only.</dd>
+          <dt>Blocking</dt><dd>Yes. Nothing else starts until this exists.</dd>
+        </dl>
+      </li>
+
+      <li class="task">
+        <div class="task-h"><span class="step">Step 2</span><span class="tid">T2</span><span class="badge b-fix">Corrected</span><h3>Point the city and county sitemaps at the real addresses</h3></div>
+        <p>In the two large sitemaps, replace each nested address with the flat one the page itself declares &mdash; drop the middle folder segment, keep the trailing slash. The exact pairs are listed in the data file and should be used verbatim rather than re-derived in code.</p>
+        <p><strong>What the reviewers changed.</strong> Scope drops from <span class="num">908</span> pairs to the <span class="num">859</span> whose target address returns a normal page when checked without following redirects. The other <span class="num">49</span> (<span class="num">34</span> city pages, <span class="num">15</span> county) are held back as an exception register and raised as a separate routing defect, because eight of them currently resolve to content you did not intend to advertise. The test changed too: confirming a new address &ldquo;returns a page&rdquo; is not enough, because a mis-typed slash on this site still returns a page. The check has to compare the written addresses against the supplied pair list as text, then confirm each page declares itself as its own real version.</p>
+        <dl class="meta">
+          <dt>Scope</dt><dd>859 address replacements across two sitemap files, plus a 49-address exception register.</dd>
+          <dt>Risk</dt><dd>A wrong slash or a dropped segment puts a dead address in the sitemap, which is worse than today. Use the supplied pairs and verify before submitting.</dd>
+          <dt>Rollback</dt><dd>Revert the change that generated the new addresses, then re-fetch and compare against the step-1 archive. The sitemaps are generated by the site software, so uploading the archived file is not a restore.</dd>
+        </dl>
+      </li>
+
+      <li class="task">
+        <div class="task-h"><span class="step">Step 3</span><span class="tid">T3</span><span class="badge b-fix">Corrected</span><h3>Get the orphaned licence-type page into the navigation</h3></div>
+        <p>One page on your site ranks for <span class="num">15</span> keywords, carries <span class="num">60</span> of your <span class="num">491.4</span> modelled monthly visits, and is the page most often cited when Google writes an AI answer about you &mdash; <span class="num">3</span> of your <span class="num">11</span> total citations. It receives nothing in return: it sits in no sitemap and no navigation.</p>
+        <p><strong>What the reviewers changed.</strong> The address the original task named is itself a redirect, and its destination is already correctly in the sitemap. Adding a redirecting address to a sitemap creates an error report in Search Console, so the sitemap half of this task is already done and must not be repeated. What is actually missing is navigational: the site-wide licence-type menu lists five California types and omits this one &mdash; along with four others that are live and in the sitemap. Point the California hub's three existing links at the destination instead of through the redirect, and add the destination to the menu. Because the menu is a global template carried on <span class="num">1,046</span> pages, ship it in its own release, not alongside step 2.</p>
+        <dl class="meta">
+          <dt>Scope</dt><dd>One global navigation template, three links on the California hub.</dd>
+          <dt>Risk</dt><dd>Low, but it is a site-wide template change. Do not un-redirect the old address to make a test pass &mdash; that manufactures a new duplicate on an address Google currently credits.</dd>
+        </dl>
+      </li>
+
+      <li class="task">
+        <div class="task-h"><span class="step">Step 4</span><span class="tid">T5</span><span class="badge b-un">Never reviewed</span><h3>Write the 149 missing page descriptions</h3></div>
+        <p><span class="num">149</span> live pages have no description tag, so Google writes its own snippet from the page body every time one of them appears in results. Author one per page, templated by page type but with the city, county and licence type filled in so that no two read the same.</p>
+        <p><strong>Caveat.</strong> No reviewer attacked this task, so unlike the other eight it carries no independent verification. Treat its stated scope and test as unconfirmed. The risk worth stating up front: a template that produces near-identical descriptions across hundreds of pages is barely better than none.</p>
+        <dl class="meta">
+          <dt>Scope</dt><dd>149 pages. The full list is in the data file.</dd>
+          <dt>Test</dt><dd>No page with an empty description, and no description repeated more than twice site-wide.</dd>
+        </dl>
+      </li>
+
+      <li class="task">
+        <div class="task-h"><span class="step">Step 5</span><span class="tid">T6</span><span class="badge b-un">Never reviewed</span><h3>Trim the 523 over-length titles</h3></div>
+        <p><span class="num">523</span> page titles run past <span class="num">60</span> characters and get cut off in results &mdash; and on a city or county page the part that gets cut is usually the part that distinguishes it from its <span class="num">900</span> siblings. Rewrite each to lead with the city or county, then the licence type, keeping the brand only where it fits.</p>
+        <p><strong>Caveat.</strong> Also never attacked. Ship in batches by page type and watch how each batch performs, so a bad pattern shows up on <span class="num">50</span> pages rather than <span class="num">523</span>. Titles are a live ranking and click surface; of everything in this set, this is the task most likely to move numbers in either direction.</p>
+        <dl class="meta">
+          <dt>Scope</dt><dd>523 pages. Counted but not scheduled: 669 over-length descriptions and 85 pages with no main heading.</dd>
+          <dt>Rollback</dt><dd>Restore the titles from the step-1 export.</dd>
+        </dl>
+      </li>
+
+      <li class="task">
+        <div class="task-h"><span class="step">Step 6</span><span class="tid">T7</span><span class="badge b-fix">Corrected</span><h3>Make the homepage's self-declaration absolute</h3></div>
+        <p>The homepage is the one page whose &ldquo;this is my real address&rdquo; tag is written as a relative path rather than a full address. Relative is legal, but it resolves against whatever address the visitor arrived on, so it misbehaves under an unexpected host or protocol.</p>
+        <p><strong>What the reviewers changed.</strong> The original test &mdash; &ldquo;reads as a full address on the right host over HTTPS&rdquo; &mdash; would also pass if the tag pointed at some other page entirely, which would hand the site's most valuable page away. The test now pins the exact string, checks it is identical when the page is reached through each of the three entrances the site's own redirects produce, and confirms the target itself returns a normal page. The same stored value is also printed as the page's social-sharing address, currently the same relative path, so fix the stored field rather than one tag. Risk is upgraded from &ldquo;negligible&rdquo;: this page carries <span class="num">26</span> of your <span class="num">244</span> ranking keywords and <span class="num">287.6</span> of your <span class="num">491.4</span> modelled visits &mdash; <span class="num">58.5%</span> of the site's modelled traffic.</p>
+        <dl class="meta">
+          <dt>Scope</dt><dd>One stored field on one page, affecting two tags.</dd>
+          <dt>Rollback</dt><dd>Restore the previous raw value, which is the single character <span class="num">/</span>. Record it in the ticket &mdash; the original plan did not.</dd>
+        </dl>
+      </li>
+
+      <li class="task">
+        <div class="task-h"><span class="step">Step 7</span><span class="tid">T8</span><span class="badge b-fix">Corrected</span><h3>Fix or de-list the empty store page</h3></div>
+        <p>Your only shop address returns a page saying &ldquo;No products found&rdquo;, while sitting alone in a sitemap at the second-highest priority on the site. Either put real inventory on it or take it out of the sitemap until it has some. It is also the exact surface the inventory plan needs, so the strong preference is to populate rather than delete.</p>
+        <p><strong>What the reviewers changed.</strong> It is not one problem but three on one surface, and they have to be handled together. The sitemap submits the address with a trailing slash while the page declares itself without one &mdash; the same split this whole work order exists to fix, on a page that is not among the <span class="num">908</span>. And the site's only link to the store, the &ldquo;Browse products&rdquo; button in the basket panel rendered on effectively every page, points at a third address that returns a 404 &mdash; so the store page has no working internal link at all, and the sitemap is its only route to being found. Effort was re-rated: the de-list branch is small; the populate branch is the <span class="num">46</span>-field content model in section 05 and is not.</p>
+        <dl class="meta">
+          <dt>Scope</dt><dd>One page, one sitemap entry, one hard-coded link in a global template.</dd>
+          <dt>Note</dt><dd>If de-listing, remove the now-empty child sitemap from the sitemap index in the same change, and log a trigger to re-add it on the first real listing.</dd>
+        </dl>
+      </li>
+
+      <li class="task">
+        <div class="task-h"><span class="step">Step 8</span><span class="tid">T9</span><span class="badge b-dan">Would have caused damage</span><h3>Name the AI crawlers in robots.txt &mdash; without losing your own rules</h3></div>
+        <p>An AI answer box appeared on <span class="num">179</span> of the <span class="num">197</span> queries measured (<span class="num">90.9%</span>, a floor) and no featured snippet appeared on any of them. The rival is the most-cited commercial site in this category, at <span class="num">123</span> citations against your <span class="num">11</span> &mdash; a reviewer recounting the same records made it <span class="num">122</span> reference items across <span class="num">70</span> of the <span class="num">197</span> queries, so treat the ratio rather than the exact figure as the finding &mdash; and it names and permits these crawlers explicitly. Making your own permission explicit is a cheap parity move.</p>
+        <p><strong>What the reviewers changed.</strong> See damage case 2 above. In short, a block naming a crawler replaces the general block rather than adding to it, so the change as written would have exempted six crawlers from your <span class="num">/register</span>, <span class="num">/login</span> and <span class="num">/sg-admin/</span> rules. Two framing corrections matter for the decision itself: the crawlers are already allowed today, so this is a declaration and not a grant; and while the citation gap is real, it tracks the rival's overall visibility &mdash; it appears in the top ten on <span class="num">159</span> of <span class="num">197</span> queries against your <span class="num">22</span> &mdash; so crawler permission is not isolated as the cause of it. Note too that the citation data measures Google's AI answers only; five of the six crawlers serve products this study did not measure at all.</p>
+        <dl class="meta">
+          <dt>Scope</dt><dd>One robots.txt. It is served by the site software rather than as a file, so locate its source of truth first.</dd>
+          <dt>Owner decision</dt><dd>Yes &mdash; but framed correctly, the decision is &ldquo;make our existing yes explicit&rdquo;, not &ldquo;start permitting AI crawlers&rdquo;.</dd>
+          <dt>Test</dt><dd>Run a real robots parser: seven crawler identities across five paths, 35 assertions, plus the sitemap line still present.</dd>
+        </dl>
+      </li>
+
+      <li class="task">
+        <div class="task-h"><span class="step">Step 9</span><span class="tid">T10</span><span class="badge b-dan">Would have caused damage</span><h3>Redirect the old duplicate addresses &mdash; only after step 2 is confirmed</h3></div>
+        <p>Once Google is demonstrably using the new addresses, redirect the old nested ones to them, keeping the trailing slash exactly. This removes the duplicate rather than merely un-advertising it. It is deliberately held back so that if anything moves after step 2 the cause is unambiguous &mdash; two signals about the same pair of addresses in one release make attribution impossible.</p>
+        <p><strong>What the reviewers changed.</strong> See damage case 1 above: scope drops to at most <span class="num">859</span>, the <span class="num">49</span> exceptions must be fixed in the site's routing first, and the test must detect a loop. Three more corrections. The rule governs more addresses than the plan counted &mdash; each old path is live both with and without a trailing slash, so it is <span class="num">1,816</span> source addresses, not <span class="num">908</span>, and at least two of the slash-less copies are already in Google. The gate &ldquo;Search Console shows the sitemaps processed&rdquo; is not falsifiable as written; replace it with re-fetching both sitemaps to confirm the new addresses are present, plus a spot-check of <span class="num">20</span> addresses through URL Inspection to confirm Google has selected the new one. And roughly <span class="num">25</span> links per page across the site still point at the old form, so either rewrite them or state plainly that the navigation runs through redirects. Effort re-rated from medium to large.</p>
+        <dl class="meta">
+          <dt>Scope</dt><dd>At most 859 pairs, 1,816 source addresses, plus internal links.</dd>
+          <dt>Risk</dt><dd>Highest in the set. Do not ship in the same release as step 2.</dd>
+          <dt>Blocked by</dt><dd>Step 2 confirmed, and the 49-address exception register resolved.</dd>
+        </dl>
+      </li>
+
+      <li class="task">
+        <div class="task-h"><span class="step">Step 10</span><span class="tid">T4</span><span class="badge b-fix">Corrected and moved</span><h3>Resolve the duplicated page titles</h3></div>
+        <p><span class="num">14</span> clusters of pages share an identical title, and <span class="num">13</span> of them involve one address carrying a <span class="num">-1</span> suffix on an otherwise identical slug &mdash; the signature of a record created twice in the content system. Decide per cluster whether the suffixed one is an accident or a genuine second page, give a genuine one its own title, and redirect an accidental one.</p>
+        <p><strong>What the reviewers changed.</strong> Moved from fourth to last. Until step 9 ships, each cluster is <em>four</em> live addresses sharing one title rather than two &mdash; the nested and flat forms of both the plain and the suffixed slug &mdash; and any redirect issued here would share source addresses with step 9's frozen rule, silently discarding one of the two intentions. After step 9 each cluster is two addresses and the decision is clean. A pre-flight is now mandatory: three of the flat addresses already redirect in the <em>opposite</em> direction to the plan's assumption, so where a redirect already exists the live direction wins over the &ldquo;suffix means accident&rdquo; rule. And never delete &mdash; the nested and flat copies are one record on two routes, so deleting breaks both, and one of these addresses holds a live ranking.</p>
+        <dl class="meta">
+          <dt>Scope</dt><dd>13 suffix clusters within 14 duplicate-title clusters; 26 flat addresses once step 9 has shipped.</dd>
+          <dt>Risk</dt><dd>Deleting a page that holds a ranking or a link. Check each record's ranked keywords and links across all four address forms, not just the two named in the file.</dd>
+        </dl>
+      </li>
+    </ol>
+    <p class="src">Sources: <span class="num">data/canonical-fix-plan.json</span> (the work order, built on a census of all <span class="num">1,007</span> pages and all <span class="num">244</span> ranking keywords; the address-transformation rule reproduced on <span class="num">908</span> of <span class="num">908</span> pairs with no exceptions); <span class="num">data/target-status-census.json</span> (all <span class="num">908</span> target addresses probed without following redirects, <span class="num">2026-09-12</span>: <span class="num">859</span> clean, <span class="num">49</span> held, <span class="num">41</span> of those looping back to their own nested address); <span class="num">data/fixplan-refuter-verdicts.json</span> (<span class="num">8</span> tasks, <span class="num">3</span> reviewers each, <span class="num">0</span> survived, <span class="num">129</span> claims recorded as still unchecked). The <span class="num">49</span> held addresses are live state, not a constant &mdash; re-measure them immediately before shipping step 2.</p>
+  </section>
+
+  <section class="sect">
+    <div class="sect-h"><span class="sect-n">05</span><h2>What a listing page should carry</h2></div>
+    <div class="body">
+      <p>Once inventory is on the hubs, some licences will earn a page of their own. The model below defines what such a page holds, field by field &mdash; <span class="num">46</span> fields, each with a real source and a publish decision. The rival carries <span class="num">22</span> of the <span class="num">46</span> and lacks <span class="num">24</span>, and the shape of the opportunity is in that gap: not more pages, but pages containing checkable facts.</p>
+    </div>
+
+    <ul class="stats">
+      <li class="stat"><span class="statn">33</span><span class="statl">fields published openly on the page.</span><span class="statk">Public</span></li>
+      <li class="stat"><span class="statn">4</span><span class="statl">fields published only as an aggregate &mdash; a count or a price band over three or more licences, never one.</span><span class="statk">Aggregate only</span></li>
+      <li class="stat"><span class="statn">1</span><span class="statl">field released to an identified, qualified buyer at diligence: the register licence number.</span><span class="statk">Gated</span></li>
+      <li class="stat"><span class="statn">8</span><span class="statl">fields never rendered anywhere a visitor or a crawler can reach.</span><span class="statk">Never public</span></li>
+    </ul>
+
+    <div class="scroll">
+      <table>
+        <caption>Where the 46 fields come from, and how much of each source is publishable.</caption>
+        <thead>
+          <tr><th>Source</th><th class="n">Fields</th><th>What it is</th><th>Publish decision</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="cell">Your broker record</td><td class="n">22</td><td>The book itself &mdash; state, county, municipality, licence type, asking price, dates, availability, and what you know about the seller.</td><td>12 public, 2 aggregate-only, 1 gated, 7 never</td></tr>
+          <tr><td class="cell">Written once per licence type</td><td class="n">13</td><td>Licence-class rules, transfer scope, process, fees, timelines, buyer qualification, documents, escrow, local permits, risks. Written once, published on its own address, excerpted onto listings.</td><td>13 public</td></tr>
+          <tr><td class="cell">The state public register</td><td class="n">4</td><td>Licence status, recorded operating conditions, county moratorium status, and how many licences of that type are active in the county.</td><td>4 public</td></tr>
+          <tr><td class="cell">Your own closed transactions</td><td class="n">3</td><td>Where an asking price sits within its own county-and-type band, what comparable licences actually sold for, and time on market.</td><td>1 public, 1 aggregate-only, 1 never</td></tr>
+          <tr><td class="cell">You, directly</td><td class="n">4</td><td>The named agent handling the licence, the brokerage of record, illustrative imagery, and a truthful &ldquo;new this month&rdquo; count.</td><td>3 public, 1 aggregate-only</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="src">Source: <span class="num">data/listing-content-model.json</span>, built on a full census of all <span class="num">1,227</span> rival listing pages plus five live page fetches. Of the <span class="num">46</span> fields, <span class="num">29</span> are obtainable now, <span class="num">9</span> need work, and <span class="num">8</span> need a decision from you before anyone can act on them.</p>
+
+    <h3>What stays private until a buyer qualifies</h3>
+    <div class="body">
+      <p>The pattern the rival uses, and the one worth keeping: the page is fully public, the <em>deal</em> is gated. Nothing on its side is hidden from Google &mdash; its gate is a form, not an index barrier. The line to draw is not between &ldquo;page&rdquo; and &ldquo;no page&rdquo;. It is between facts a buyer needs to evaluate a licence and facts that identify a seller.</p>
+      <ul class="list">
+        <li><strong>The register licence number &mdash; gated, and the sharpest open question in the model.</strong> In California the register is itself public and keyed by this number, so the number is not secret information. But publishing it against a &ldquo;for sale&rdquo; claim additionally discloses that an identifiable business is selling, which is a different act from the register's own publication. The recommendation is to release it to an identified, qualified buyer at diligence under the listing agreement's confidentiality terms &mdash; never on a public page, and never for off-market stock. <em>We do not assert that a rule exists here.</em> It plausibly turns on the individual seller mandate and on state advertising rules for licence transfers. This one goes to your attorney. Worth noting: the rival's own seller form requires this number, and it publishes it on <span class="num">0</span> of <span class="num">1,227</span> listings.</li>
+        <li><strong>Never public: the licensee's legal name, the premises street address, the seller's contact details, their reason for selling, your commission and mandate terms, time on market, and any view or bid counter.</strong> The first three identify the business outright; combined with &ldquo;for sale&rdquo; that is the disclosure a seller is least likely to have authorised. Publish the municipality instead for public stock, and only the county for private stock. Time on market is a negotiating signal against your own principal. The counters are dealt with below.</li>
+        <li><strong>Aggregate only: what comparable licences sold for, how many off-market licences sit in a cell, their price band, and the &ldquo;new this month&rdquo; count.</strong> Each is publishable as a number over three or more licences and suppressed below that, because a single transaction plus a month plus a price band can identify the deal. A band must span at least two price buckets or <span class="num">&plusmn;15%</span> around the cell median, whichever is wider &mdash; at one licence, a band <em>is</em> the price. Publish one band per cell per refresh and keep no running history, or a determined observer can back out individual prices from the changes over time.</li>
+        <li><strong>Generated, never hand-written.</strong> Every aggregate is an assertion of fact about your book and has to be defensible if challenged. A stale &ldquo;<span class="num">7</span> added since August&rdquo; is a false statement about the book. At zero, render nothing at all &mdash; not &ldquo;0 available&rdquo;. The rival's <span class="num">1,692</span> mostly-empty county-by-type pages return <span class="num">0.12%</span> of its traffic.</li>
+        <li><strong>Nothing in the markup that is not on the page.</strong> No licence number, name, address or exact off-market price in structured data, hidden elements, meta tags or data attributes while the visible page shows only a teaser. And no special treatment for search engines: the crawler sees exactly what an anonymous visitor sees.</li>
+      </ul>
+      <p>Two fields the rival publishes should not be copied. Its view counter reads as manufactured: bounded between <span class="num">0</span> and <span class="num">36</span> with every value in that range present, no correlation with listing age, one listing showing a bid against zero views &mdash; and the counter on one page moved from <span class="num">2</span> to <span class="num">5</span> between the census and a single later fetch. A number any visitor can move is not evidence of anything. Its bid counter reads &ldquo;Bids 0&rdquo; on <span class="num">1,199</span> of <span class="num">1,227</span> pages, advertising its own illiquidity on every listing.</p>
+    </div>
+
+    <h3>The write-once rule, and why it is the whole content model</h3>
+    <div class="body">
+      <p>The rival's <span class="num">1,227</span> listing pages contain <span class="num">8,353</span> words of distinct writing, served as <span class="num">78,848</span> &mdash; a <span class="num">9.4</span>-fold duplication multiple. One California Type 20 description serves all <span class="num">185</span> of its California Type 20 listings, and <span class="num">96%</span> of the <span class="num">1,198</span> listings that carry a description share that text with a sibling (<span class="num">29</span> carry none at all). Its genuinely substantive material &mdash; the New Jersey transfer walkthrough, the real fee schedules &mdash; is repeated verbatim on all <span class="num">131</span> New Jersey listings, so <span class="num">131</span> pages compete with each other for the same searches instead of one page winning them.</p>
+      <p>The fix is structural: <span class="num">12</span> blocks of substantive content each live on exactly one address &mdash; the licence-class definition and transfer scope on a state-by-type page; the transfer walkthrough, fee schedule, timeline, qualification rules, document checklist, escrow mechanics, local permits, verification how-to and risk factors on one guide page per state &mdash; and listings carry a short excerpt plus a link, never the full block. This is also what puts one page in front of the two largest demand pools in this market: process and how-to searches at <span class="num">46,410</span> a month, and cost searches at <span class="num">14,310</span>, both larger than the &ldquo;for sale&rdquo; pool at <span class="num">11,290</span>.</p>
+      <div class="callout">
+        <p class="callout-h">The gate that stops the rival's mistake being repeated</p>
+        <p>A licence gets its own page <strong>only if it can fill <span class="num">150</span> words that appear nowhere else on your site</strong>, measured after stripping the shared blocks. Those <span class="num">150</span> words come from five things that genuinely vary per licence: where it sits and what it covers, where its price falls within its own cell, its specific transfer conditions, what a buyer must already have in place for that cell, and its status and expected timeline. If a licence cannot fill all five with true statements, it renders as a row on the hub and gets no page of its own. Overlap between any two listings in the same cell is capped, the shared excerpt is capped at <span class="num">200</span> words, and the unique block must be at least <span class="num">35%</span> of the substantive text. These are build-blocking checks, not style guidance. For calibration: your existing city and county templates already achieve overlap scores roughly <span class="num">10</span> times better than the cap, so this is comfortably inside what your site already does.</p>
+      </div>
+      <p>Word budgets follow from the same logic. A state hub carrying inventory needs at least <span class="num">1,099</span> total and <span class="num">528</span> unique words &mdash; the measured median of the rival template that carries <span class="num">57%</span> of its traffic &mdash; against your current median of <span class="num">32</span>. A public listing page needs <span class="num">350</span> to <span class="num">500</span> words: deliberately <em>fewer</em> in total than the rival's median listing page, which measures <span class="num">1,097.5</span> words on a <span class="num">16</span>-page sample and <span class="num">1,374</span> across the full <span class="num">1,227</span>-page census &mdash; and about twice as many of them unique to that licence.</p>
+      <p>One more field deserves naming, because it is the clearest single content opening measured: <strong>the moratorium</strong>. Where a county has frozen new issuance of a licence type, a transfer is the only route to one &mdash; which is the entire reason your stock has value. A state report already in hand covers <span class="num">58</span> counties, <span class="num">40</span> of them under a moratorium for one California licence type. <span class="num">0</span> of the rival's <span class="num">1,198</span> descriptions mention it, while it holds <span class="num">185</span> listings of exactly that type. The report in hand is from <span class="num">2023</span> and must be re-pulled before anything is published from it.</p>
+    </div>
+  </section>
+
+  <section class="sect">
+    <div class="sect-h"><span class="sect-n">06</span><h2>Unresolved &mdash; what needs you, or a lawyer</h2></div>
+    <div class="body">
+      <p>This list is part of the deliverable, not an omission from it. Each item is something the measurements cannot settle, and several of them gate work described above.</p>
+    </div>
+    <ul class="qa">
+      <li class="qa-item">
+        <span class="who">For your attorney</span>
+        <h3>Advertising a licence transfer is regulated, and this study does not rule on it</h3>
+        <p>Advertising the transfer of an alcoholic-beverage licence carries state regulatory exposure. California's regulator governs how transfers are advertised and escrowed, and several states restrict who may broker a licence and how an offer may be presented. A gated private tier may carry its own disclosure duties &mdash; what a prospective buyer must be told, and when. Publishing a real count and a real price band of off-market stock is an assertion of fact about your book and must be defensible if challenged.</p>
+        <p>Whether the register licence number may be published for public-tier stock is the sharpest open question in the content model. <strong>We recommend gating it and we assert no rule.</strong> None of this is legal advice; no opinion is offered on whether any element is permissible in any state; and nothing here is clearance to publish.</p>
+      </li>
+      <li class="qa-item">
+        <span class="who">For your attorney</span>
+        <h3>Using the rival's pages as a source, and reproducing regulator text</h3>
+        <p>Its robots file permits crawling across all <span class="num">3,868</span> of its addresses &mdash; that is measured. <strong>It is not permission.</strong> A robots file is a crawling convention, not a copyright licence and not terms of service. Three constraints apply and only the first is settled: robots (open, measured), terms of service (unread and unassessed here), and copyright &mdash; its <span class="num">132</span> description texts are short, but they are original expression. The recommendation is to take facts from regulators and write the sentences fresh, and never to copy or closely paraphrase its text.</p>
+        <p>Separately: US federal government works are generally outside copyright, but state government works are not uniformly so and vary by state. Verify per state before reproducing any regulator text verbatim, and prefer paraphrase plus a citation and a link in every case.</p>
+      </li>
+      <li class="qa-item">
+        <span class="who">Owner decision</span>
+        <h3>Where your stock actually sits</h3>
+        <p>The order in section 03 is confined to eight states, because those are the only states where either party is measurably present. That you hold more licences than the rival, obtained earlier, some off-market, is taken as a given and is verified nowhere in this study. Nothing measured says which states those licences are in.</p>
+        <p>If the book reaches beyond the eight, the <span class="num">62</span> held-out cells become live and the whole matrix should be re-scored &mdash; Indiana, New York, Tennessee and Texas all score higher on open field than anything inside the current footprint. Eight of the <span class="num">46</span> content-model fields also need your decision before anyone can build with them.</p>
+      </li>
+      <li class="qa-item">
+        <span class="who">Owner decision</span>
+        <h3>Three things the work order is waiting on</h3>
+        <p><strong>Search Console access</strong> for the site. Nothing in the work order can confirm that a sitemap change was processed, or that a title batch helped, without it &mdash; and step 9 is explicitly gated on that confirmation.</p>
+        <p><strong>The routing configuration</strong> that generates both address shapes &mdash; needed to stop new duplicates being created after the cleanup, and to fix the <span class="num">49</span> held addresses.</p>
+        <p><strong>Sign-off on the robots change</strong> in step 8, framed as making an existing permission explicit rather than granting a new one.</p>
+      </li>
+      <li class="qa-item">
+        <span class="who">Measurement limit</span>
+        <h3>What the numbers on this page cannot support</h3>
+        <p>All of it is observational. A high score <em>associates</em> with an opening; nothing here demonstrates that deploying stock, or changing a sitemap, <em>causes</em> a ranking to change. No traffic or revenue forecast is offered anywhere in this study.</p>
+        <p>The government-ceiling figures come from a <strong>sample</strong> of <span class="num">197</span> queries, not a census, and cells with few matching queries were smoothed toward their state average &mdash; several county and licence-type cells in the table inherited their figure rather than having it measured directly, and are flagged as such in the source file. The absence of county-level keywords is measured absence from a <span class="num">6,224</span>-keyword pull, not proof that no county demand exists anywhere; the pull's seed coverage limits that claim. Your own page-return figures are independent of that limit and point the same way.</p>
+      </li>
+      <li class="qa-item">
+        <span class="who">Measurement limit</span>
+        <h3>129 claims in the work order that nobody has checked</h3>
+        <p>The reviewers recorded <span class="num">129</span> things they could not settle. The ones that matter most: whether all <span class="num">1,006</span> pages still behave as sampled today (<span class="num">38</span> were fetched, at <span class="num">100%</span> conformance &mdash; a full re-crawl is free and would settle it); whether the site software permits restoring a sitemap at all, which two rollback plans assume; and anything at all about Search Console processing, which nobody in this study could see.</p>
+        <p>Two tasks &mdash; the <span class="num">149</span> descriptions and the <span class="num">523</span> titles &mdash; were never attacked, so their scopes and tests carry none of the independent verification the other eight now have. Treat them as the least-verified items in the work order, not the safest.</p>
+      </li>
+    </ul>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <div class="foot-in">
+    <h2>Method, and how to read the numbers</h2>
+    <p>Every figure on this page was read from a data file produced in this study. Nothing is restated from memory, and no figure is rounded without saying so. This page draws on six files &mdash; <span class="num">opportunity-matrix.json</span>, <span class="num">canonical-fix-plan.json</span>, <span class="num">target-status-census.json</span>, <span class="num">fixplan-refuter-verdicts.json</span>, <span class="num">listing-content-model.json</span> and <span class="num">gap.json</span> &mdash; with supporting figures from <span class="num">gating-architecture.json</span>.</p>
+    <dl>
+      <dt>What was a census &mdash; complete, every record counted</dt>
+      <dd>All <span class="num">1,227</span> of the rival's listing pages. All <span class="num">1,007</span> of your sitemap addresses. All <span class="num">244</span> keywords your site ranks for, and all <span class="num">713</span> the rival ranks for. All <span class="num">908</span> duplicate address pairs, and all <span class="num">908</span> target addresses probed individually. The keyword universe: <span class="num">6,224</span> deduplicated keywords, <span class="num">3,964</span> of them in scope. The <span class="num">549</span>-keyword gap between the two sites. The inline shelf count on all eight rival state pages.</dd>
+      <dt>What was a sample &mdash; part of the whole, so it carries uncertainty</dt>
+      <dd>Search-results composition: <span class="num">197</span> queries and <span class="num">1,970</span> top-ten positions classified by page type. The live check on the <span class="num">50</span> highest-volume gap keywords. Page anatomy and content-overlap measurement on a sampled subset of pages. The <span class="num">38</span> live page fetches behind the work order's premise checks. Where a cell's government-ceiling figure had few or no matching queries it was inherited from the state average, and the source file flags it.</dd>
+      <dt>What is modelled &mdash; an estimate, not a measurement</dt>
+      <dd>&ldquo;Modelled traffic&rdquo; is a third-party estimate of monthly organic visits, derived from ranking position and search volume. It is not measured sessions and it is not analytics data. Monthly search volumes are DataForSEO estimates, not Google Ads figures. Both are used here to compare page types and cells against each other, which they support far better than they support absolute prediction. Ranking positions come from a weekly-refreshed index except where noted as a live read, and the two can disagree.</dd>
+      <dt>Causality</dt>
+      <dd>This is observational search data throughout. Everything on this page <em>associates</em>; nothing <em>causes</em>. No forecast is offered.</dd>
+      <dt>Dates</dt>
+      <dd>All measurements were taken on <span class="num">2026-09-12</span>, including every live page fetch. The <span class="num">49</span> held addresses and the rival's inline shelf counts are live state and will drift &mdash; re-measure before acting on them. This page was written on <span class="num">2026-09-13</span>.</dd>
+      <dt>Not on this page</dt>
+      <dd>No licence numbers, licensee names, premises addresses or any other licence-identifying detail appears anywhere in this bundle, and no confidential term of any mandate is reproduced.</dd>
+    </dl>
+    <p><a class="footlink" href="index.html">&#8592; Back to the research bundle index</a></p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var b=document.getElementById('themebtn');
+  if(!b){return;}
+  var r=document.documentElement;
+  function read(){try{return localStorage.getItem('llplan-theme');}catch(e){return null;}}
+  function save(v){try{localStorage.setItem('llplan-theme',v);}catch(e){}}
+  function isDark(){
+    var t=r.getAttribute('data-theme');
+    if(t==='dark'){return true;}
+    if(t==='light'){return false;}
+    return !!(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches);
+  }
+  function paint(){
+    var d=isDark();
+    b.setAttribute('aria-pressed',d?'true':'false');
+    b.textContent=d?'Light mode':'Dark mode';
+  }
+  var stored=read();
+  if(stored==='dark'||stored==='light'){r.setAttribute('data-theme',stored);}
+  b.hidden=false;
+  paint();
+  b.addEventListener('click',function(){
+    var next=isDark()?'light':'dark';
+    r.setAttribute('data-theme',next);
+    save(next);
+    paint();
+  });
+})();
+</script>
+
+</body>
+</html>
