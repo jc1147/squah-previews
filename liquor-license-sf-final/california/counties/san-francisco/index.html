@@ -974,15 +974,56 @@ html{scroll-padding-top:78px}
   .crosslinks{flex-direction:row;flex-wrap:wrap}
   .crosslinks .btn{flex:1 1 auto}
 }
+/* fix-tables: caption sizing + cost-table stacking */
+.tablewrap{container-type:inline-size}
+.tablewrap > table > caption{
+  width:100cqi;box-sizing:border-box;
+  position:sticky;left:0;
+  overflow-wrap:break-word;word-break:normal;hyphens:none;
+}
+.tablewrap-cost > table{min-width:0;display:block;width:100%}
+.tablewrap-cost{overflow-x:visible}
+.tablewrap-cost thead{display:none}
+.tablewrap-cost tbody,.tablewrap-cost tfoot{display:block}
+.tablewrap-cost tbody tr,.tablewrap-cost tfoot tr{
+  display:block;padding:12px 14px;border-bottom:1px solid var(--line);
+}
+.tablewrap-cost tbody tr:last-child{border-bottom:0}
+.tablewrap-cost th,.tablewrap-cost td{
+  display:block;padding:0;border:0;min-width:0;white-space:normal;
+  overflow-wrap:break-word;word-break:normal;hyphens:none;
+}
+.tablewrap-cost tbody th,.tablewrap-cost tfoot th{
+  font-size:.6875rem;font-weight:800;letter-spacing:.07em;text-transform:uppercase;
+  color:var(--muted);margin:0 0 4px;
+}
+.tablewrap-cost td{font-size:.875rem;color:var(--text)}
+.scrollhint:has(+ .tablewrap-cost){display:none}
+@media (min-width:768px){
+  .tablewrap-cost{overflow-x:auto}
+  .tablewrap-cost > table{display:table;min-width:560px}
+  .tablewrap-cost thead{display:table-header-group}
+  .tablewrap-cost tbody{display:table-row-group}
+  .tablewrap-cost tfoot{display:table-footer-group}
+  .tablewrap-cost tbody tr,.tablewrap-cost tfoot tr{display:table-row;padding:0;border-bottom:0}
+  .tablewrap-cost th,.tablewrap-cost td{
+    display:table-cell;padding:10px 14px;border-bottom:1px solid var(--line);margin:0;
+  }
+  .tablewrap-cost tbody th,.tablewrap-cost tfoot th{
+    font-size:.875rem;font-weight:700;letter-spacing:0;text-transform:none;
+    color:var(--text);min-width:224px;
+  }
+  .scrollhint:has(+ .tablewrap-cost){display:flex}
+}
 </style>
 </head>
 <body>
 
-<a class="skip" href="#main">Skip to the inventory</a>
+<a class="skip" href="#main">Skip to the main content</a>
 
 <header class="topbar">
   <div class="topbar-in">
-    <a class="brand" href="./" aria-label="Liquor License Agents, San Francisco liquor licences home">
+    <a class="brand" href="./" aria-current="page" aria-label="Liquor License Agents, San Francisco liquor licences home">
       <span class="brand-mark" aria-hidden="true">LLA</span>
       <span class="brand-text">
         <span class="brand-name">Liquor License Agents</span>
@@ -1130,7 +1171,7 @@ html{scroll-padding-top:78px}
           <p class="lcard-price">$350,000</p>
           <p class="lcard-meta">San Francisco County &middot; listed 10 September 2026, 3 days &middot; licence only</p>
           <div class="lcard-foot">
-            <a class="lcard-link" href="type-47/">See the Type 47 licences</a>
+            <a class="lcard-link" href="type-47/#stock">See the Type 47 licences priced</a>
             <span class="lcard-ref">SF-1001</span>
           </div>
         </div>
@@ -1152,7 +1193,7 @@ html{scroll-padding-top:78px}
           <p class="lcard-price">$300,000</p>
           <p class="lcard-meta">San Francisco County &middot; listed 6 September 2026, 7 days &middot; licence only</p>
           <div class="lcard-foot">
-            <a class="lcard-link" href="type-47/">See the Type 47 licences</a>
+            <a class="lcard-link" href="type-47/#stock">See the Type 47 licences priced</a>
             <span class="lcard-ref">SF-1004</span>
           </div>
         </div>
@@ -1174,7 +1215,7 @@ html{scroll-padding-top:78px}
           <p class="lcard-price">$250,000</p>
           <p class="lcard-meta">San Francisco County &middot; listed 3 August 2026, 41 days &middot; licence only</p>
           <div class="lcard-foot">
-            <a class="lcard-link" href="type-47/">See the Type 47 licences</a>
+            <a class="lcard-link" href="type-47/#stock">See the Type 47 licences priced</a>
             <span class="lcard-ref">SF-1008</span>
           </div>
         </div>
@@ -1196,7 +1237,7 @@ html{scroll-padding-top:78px}
           <p class="lcard-price">$240,000</p>
           <p class="lcard-meta">San Francisco County &middot; listed 8 September 2026, 5 days &middot; licence only</p>
           <div class="lcard-foot">
-            <a class="lcard-link" href="type-47/">See the Type 47 licences</a>
+            <a class="lcard-link" href="type-47/#stock">See the Type 47 licences priced</a>
             <span class="lcard-ref">SF-1009</span>
           </div>
         </div>
@@ -1218,7 +1259,7 @@ html{scroll-padding-top:78px}
           <p class="lcard-price">$175,000</p>
           <p class="lcard-meta">San Francisco County &middot; listed 4 September 2026, 9 days &middot; licence only</p>
           <div class="lcard-foot">
-            <a class="lcard-link" href="type-47/">See the Type 47 licences</a>
+            <a class="lcard-link" href="type-47/#stock">See the Type 47 licences priced</a>
             <span class="lcard-ref">SF-1015</span>
           </div>
         </div>
@@ -1240,7 +1281,7 @@ html{scroll-padding-top:78px}
           <p class="lcard-price">$135,000</p>
           <p class="lcard-meta">San Francisco County &middot; listed 19 June 2026, 86 days &middot; licence only</p>
           <div class="lcard-foot">
-            <a class="lcard-link" href="type-47/">See the Type 47 licences</a>
+            <a class="lcard-link" href="type-47/#stock">See the Type 47 licences priced</a>
             <span class="lcard-ref">SF-1018</span>
           </div>
         </div>
@@ -1262,7 +1303,7 @@ html{scroll-padding-top:78px}
           <p class="lcard-price">$275,000</p>
           <p class="lcard-meta">San Francisco County &middot; listed 30 August 2026, 14 days &middot; licence only</p>
           <div class="lcard-foot">
-            <a class="lcard-link" href="type-21/">See the Type 21 licences</a>
+            <a class="lcard-link" href="type-21/#stock">See the Type 21 licences priced</a>
             <span class="lcard-ref">SF-2001</span>
           </div>
         </div>
@@ -1284,7 +1325,7 @@ html{scroll-padding-top:78px}
           <p class="lcard-price">$225,000</p>
           <p class="lcard-meta">San Francisco County &middot; listed 7 September 2026, 6 days &middot; licence only</p>
           <div class="lcard-foot">
-            <a class="lcard-link" href="type-21/">See the Type 21 licences</a>
+            <a class="lcard-link" href="type-21/#stock">See the Type 21 licences priced</a>
             <span class="lcard-ref">SF-2003</span>
           </div>
         </div>
@@ -1306,7 +1347,7 @@ html{scroll-padding-top:78px}
           <p class="lcard-price">$165,000</p>
           <p class="lcard-meta">San Francisco County &middot; listed 25 August 2026, 19 days &middot; licence only</p>
           <div class="lcard-foot">
-            <a class="lcard-link" href="type-21/">See the Type 21 licences</a>
+            <a class="lcard-link" href="type-21/#stock">See the Type 21 licences priced</a>
             <span class="lcard-ref">SF-2006</span>
           </div>
         </div>
@@ -1328,7 +1369,7 @@ html{scroll-padding-top:78px}
           <p class="lcard-price">$78,000</p>
           <p class="lcard-meta">San Francisco County &middot; listed 18 August 2026, 26 days &middot; licence only</p>
           <div class="lcard-foot">
-            <a class="lcard-link" href="type-21/">See the Type 21 licences</a>
+            <a class="lcard-link" href="type-21/#stock">See the Type 21 licences priced</a>
             <span class="lcard-ref">SF-2010</span>
           </div>
         </div>
@@ -1350,7 +1391,7 @@ html{scroll-padding-top:78px}
           <p class="lcard-price">$260,000</p>
           <p class="lcard-meta">San Francisco County &middot; listed 10 August 2026, 34 days &middot; licence only</p>
           <div class="lcard-foot">
-            <a class="lcard-link" href="type-48/">See the Type 48 licences</a>
+            <a class="lcard-link" href="type-48/#stock">See the Type 48 licences priced</a>
             <span class="lcard-ref">SF-3001</span>
           </div>
         </div>
@@ -1372,7 +1413,7 @@ html{scroll-padding-top:78px}
           <p class="lcard-price">$15,000</p>
           <p class="lcard-meta">San Francisco County &middot; listed 5 September 2026, 8 days &middot; licence only</p>
           <div class="lcard-foot">
-            <a class="lcard-link" href="type-20/">See the Type 20 licences</a>
+            <a class="lcard-link" href="type-20/#stock">See the Type 20 licences priced</a>
             <span class="lcard-ref">SF-4001</span>
           </div>
         </div>
@@ -1725,7 +1766,7 @@ html{scroll-padding-top:78px}
             <li><span class="k">Median ask</span><span class="v">$232,500</span></li>
             <li><span class="k">Range</span><span class="v">$135,000&ndash;$350,000</span></li>
           </ul>
-          <a class="btn btn-secondary btn-block" href="type-47/">San Francisco Type 47 licences</a>
+          <a class="btn btn-secondary btn-block" href="type-47/#stock">See the San Francisco Type 47 licences</a>
         </div>
       </li>
       <li class="classcard">
@@ -1744,7 +1785,7 @@ html{scroll-padding-top:78px}
             <li><span class="k">Median ask</span><span class="v">$175,000</span></li>
             <li><span class="k">Range</span><span class="v">$78,000&ndash;$275,000</span></li>
           </ul>
-          <a class="btn btn-secondary btn-block" href="type-21/">San Francisco Type 21 licences</a>
+          <a class="btn btn-secondary btn-block" href="type-21/#stock">See the San Francisco Type 21 licences</a>
         </div>
       </li>
       <li class="classcard">
@@ -1763,7 +1804,7 @@ html{scroll-padding-top:78px}
             <li><span class="k">Asking price</span><span class="v">$260,000</span></li>
             <li><span class="k">Range</span><span class="v">$260,000</span></li>
           </ul>
-          <a class="btn btn-secondary btn-block" href="type-48/">San Francisco Type 48 licences</a>
+          <a class="btn btn-secondary btn-block" href="type-48/#stock">See the San Francisco Type 48 licences</a>
         </div>
       </li>
       <li class="classcard">
@@ -1782,7 +1823,7 @@ html{scroll-padding-top:78px}
             <li><span class="k">Asking price</span><span class="v">$15,000</span></li>
             <li><span class="k">Range</span><span class="v">$15,000</span></li>
           </ul>
-          <a class="btn btn-secondary btn-block" href="type-20/">San Francisco Type 20 licences</a>
+          <a class="btn btn-secondary btn-block" href="type-20/#stock">See the San Francisco Type 20 licences</a>
         </div>
       </li>
     </ul>
@@ -2211,10 +2252,10 @@ html{scroll-padding-top:78px}
         <h4>San Francisco inventory</h4>
         <ul>
           <li><a href="#inventory">All 30 San Francisco licences</a></li>
-          <li><a href="type-47/">San Francisco Type 47 licences &mdash; On-Sale General, Eating Place</a></li>
-          <li><a href="type-21/">San Francisco Type 21 licences &mdash; Off-Sale General</a></li>
-          <li><a href="type-48/">San Francisco Type 48 licences &mdash; On-Sale General, Public Premises</a></li>
-          <li><a href="type-20/">San Francisco Type 20 licences &mdash; Off-Sale Beer and Wine</a></li>
+          <li><a href="type-47/">San Francisco Type 47 &mdash; On-Sale General, Eating Place</a></li>
+          <li><a href="type-21/">San Francisco Type 21 &mdash; Off-Sale General</a></li>
+          <li><a href="type-48/">San Francisco Type 48 &mdash; On-Sale General, Public Premises</a></li>
+          <li><a href="type-20/">San Francisco Type 20 &mdash; Off-Sale Beer and Wine</a></li>
         </ul>
       </div>
       <div>

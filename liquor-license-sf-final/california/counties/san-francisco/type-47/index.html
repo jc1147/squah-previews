@@ -973,11 +973,52 @@ html{scroll-padding-top:78px}
   .crosslinks{flex-direction:row;flex-wrap:wrap}
   .crosslinks .btn{flex:1 1 auto}
 }
+/* fix-tables: caption sizing + cost-table stacking */
+.tablewrap{container-type:inline-size}
+.tablewrap > table > caption{
+  width:100cqi;box-sizing:border-box;
+  position:sticky;left:0;
+  overflow-wrap:break-word;word-break:normal;hyphens:none;
+}
+.tablewrap-cost > table{min-width:0;display:block;width:100%}
+.tablewrap-cost{overflow-x:visible}
+.tablewrap-cost thead{display:none}
+.tablewrap-cost tbody,.tablewrap-cost tfoot{display:block}
+.tablewrap-cost tbody tr,.tablewrap-cost tfoot tr{
+  display:block;padding:12px 14px;border-bottom:1px solid var(--line);
+}
+.tablewrap-cost tbody tr:last-child{border-bottom:0}
+.tablewrap-cost th,.tablewrap-cost td{
+  display:block;padding:0;border:0;min-width:0;white-space:normal;
+  overflow-wrap:break-word;word-break:normal;hyphens:none;
+}
+.tablewrap-cost tbody th,.tablewrap-cost tfoot th{
+  font-size:.6875rem;font-weight:800;letter-spacing:.07em;text-transform:uppercase;
+  color:var(--muted);margin:0 0 4px;
+}
+.tablewrap-cost td{font-size:.875rem;color:var(--text)}
+.scrollhint:has(+ .tablewrap-cost){display:none}
+@media (min-width:768px){
+  .tablewrap-cost{overflow-x:auto}
+  .tablewrap-cost > table{display:table;min-width:560px}
+  .tablewrap-cost thead{display:table-header-group}
+  .tablewrap-cost tbody{display:table-row-group}
+  .tablewrap-cost tfoot{display:table-footer-group}
+  .tablewrap-cost tbody tr,.tablewrap-cost tfoot tr{display:table-row;padding:0;border-bottom:0}
+  .tablewrap-cost th,.tablewrap-cost td{
+    display:table-cell;padding:10px 14px;border-bottom:1px solid var(--line);margin:0;
+  }
+  .tablewrap-cost tbody th,.tablewrap-cost tfoot th{
+    font-size:.875rem;font-weight:700;letter-spacing:0;text-transform:none;
+    color:var(--text);min-width:224px;
+  }
+  .scrollhint:has(+ .tablewrap-cost){display:flex}
+}
 </style>
 </head>
 <body class="has-actionbar">
 
-<a class="skip" href="#main">Skip to the Type 47 detail</a>
+<a class="skip" href="#main">Skip to the main content</a>
 
 <header class="topbar">
   <div class="topbar-in">
@@ -1537,27 +1578,27 @@ html{scroll-padding-top:78px}
       <p class="formnote">Six fields. We reply <strong>inside one business day</strong>, from a named person, with the next step and nothing else. No newsletter, no drip sequence, no call centre.</p>
 
       <div class="enquire-anchor" id="enquire">
-      <form id="47-form" novalidate>
-        <input type="hidden" name="listing_ref" id="47-q-ref" value="">
-        <p class="ref-readout" id="47-q-refline" hidden>About licence <strong></strong></p>
-        <div class="field" id="47-f-name">
-          <label for="47-q-name">Your name <span class="req" aria-hidden="true">*</span><span class="vh">(required)</span></label>
-          <input type="text" id="47-q-name" name="name" autocomplete="name" required aria-describedby="47-e-name">
-          <span class="err" id="47-e-name" hidden></span>
+      <form id="t47-form" novalidate>
+        <input type="hidden" name="listing_ref" id="t47-q-ref" value="">
+        <p class="ref-readout" id="t47-q-refline" hidden>About licence <strong></strong></p>
+        <div class="field" id="t47-f-name">
+          <label for="t47-q-name">Your name <span class="req" aria-hidden="true">*</span><span class="vh">(required)</span></label>
+          <input type="text" id="t47-q-name" name="name" autocomplete="name" required aria-describedby="t47-e-name">
+          <span class="err" id="t47-e-name" hidden></span>
         </div>
-        <div class="field" id="47-f-phone">
-          <label for="47-q-phone">Telephone <span class="req" aria-hidden="true">*</span><span class="vh">(required)</span></label>
-          <input type="tel" id="47-q-phone" name="phone" autocomplete="tel" inputmode="tel" required aria-describedby="47-e-phone">
-          <span class="err" id="47-e-phone" hidden></span>
+        <div class="field" id="t47-f-phone">
+          <label for="t47-q-phone">Telephone <span class="req" aria-hidden="true">*</span><span class="vh">(required)</span></label>
+          <input type="tel" id="t47-q-phone" name="phone" autocomplete="tel" inputmode="tel" required aria-describedby="t47-e-phone">
+          <span class="err" id="t47-e-phone" hidden></span>
         </div>
-        <div class="field" id="47-f-email">
-          <label for="47-q-email">Email <span class="req" aria-hidden="true">*</span><span class="vh">(required)</span></label>
-          <input type="email" id="47-q-email" name="email" autocomplete="email" inputmode="email" required aria-describedby="47-e-email">
-          <span class="err" id="47-e-email" hidden></span>
+        <div class="field" id="t47-f-email">
+          <label for="t47-q-email">Email <span class="req" aria-hidden="true">*</span><span class="vh">(required)</span></label>
+          <input type="email" id="t47-q-email" name="email" autocomplete="email" inputmode="email" required aria-describedby="t47-e-email">
+          <span class="err" id="t47-e-email" hidden></span>
         </div>
-        <div class="field" id="47-f-use">
-          <label for="47-q-use">What are you opening? <span class="req" aria-hidden="true">*</span><span class="vh">(required)</span></label>
-          <select id="47-q-use" name="use" required aria-describedby="47-h-use 47-e-use">
+        <div class="field" id="t47-f-use">
+          <label for="t47-q-use">What are you opening? <span class="req" aria-hidden="true">*</span><span class="vh">(required)</span></label>
+          <select id="t47-q-use" name="use" required aria-describedby="t47-h-use t47-e-use">
             <option value="">Choose one&hellip;</option>
             <option>A restaurant with a full bar</option>
             <option>A bar or nightclub, no kitchen</option>
@@ -1566,12 +1607,12 @@ html{scroll-padding-top:78px}
             <option>A hotel, venue or members&rsquo; club</option>
             <option>Adding a licence to a site I already trade from</option>
           </select>
-          <p class="hint" id="47-h-use">This is the question that picks the class. Tell us the venue and we will tell you the licence, rather than the other way round.</p>
-          <span class="err" id="47-e-use" hidden></span>
+          <p class="hint" id="t47-h-use">This is the question that picks the class. Tell us the venue and we will tell you the licence, rather than the other way round.</p>
+          <span class="err" id="t47-e-use" hidden></span>
         </div>
-        <div class="field" id="47-f-budget">
-          <label for="47-q-budget">Budget for the licence <span class="req" aria-hidden="true">*</span><span class="vh">(required)</span></label>
-          <select id="47-q-budget" name="budget" required aria-describedby="47-h-budget 47-e-budget">
+        <div class="field" id="t47-f-budget">
+          <label for="t47-q-budget">Budget for the licence <span class="req" aria-hidden="true">*</span><span class="vh">(required)</span></label>
+          <select id="t47-q-budget" name="budget" required aria-describedby="t47-h-budget t47-e-budget">
             <option value="">Choose one&hellip;</option>
             <option>Under $100,000</option>
             <option>$100,000 to $200,000</option>
@@ -1579,39 +1620,39 @@ html{scroll-padding-top:78px}
             <option>$300,000 and above</option>
             <option>Not sure yet</option>
           </select>
-          <p class="hint" id="47-h-budget">For orientation: the San Francisco median ask is $205,000, and completing costs about $8,045 on top.</p>
-          <span class="err" id="47-e-budget" hidden></span>
+          <p class="hint" id="t47-h-budget">For orientation: the San Francisco median ask is $205,000, and completing costs about $8,045 on top.</p>
+          <span class="err" id="t47-e-budget" hidden></span>
         </div>
-        <div class="field" id="47-f-site">
-          <label for="47-q-site">Do you have a site? <span class="req" aria-hidden="true">*</span><span class="vh">(required)</span></label>
-          <select id="47-q-site" name="site" required aria-describedby="47-h-site 47-e-site">
+        <div class="field" id="t47-f-site">
+          <label for="t47-q-site">Do you have a site? <span class="req" aria-hidden="true">*</span><span class="vh">(required)</span></label>
+          <select id="t47-q-site" name="site" required aria-describedby="t47-h-site t47-e-site">
             <option value="">Choose one&hellip;</option>
             <option>Signed lease, ready to go</option>
             <option>In negotiation on a specific address</option>
             <option>Looking, nothing signed</option>
             <option>Already trading there</option>
           </select>
-          <p class="hint" id="47-h-site">It matters more here than elsewhere. The San Francisco Planning district your address sits in decides whether you need a conditional use, and that is usually the longest pole in the tent.</p>
-          <span class="err" id="47-e-site" hidden></span>
+          <p class="hint" id="t47-h-site">It matters more here than elsewhere. The San Francisco Planning district your address sits in decides whether you need a conditional use, and that is usually the longest pole in the tent.</p>
+          <span class="err" id="t47-e-site" hidden></span>
         </div>
-        <div class="field" id="47-f-msg">
-          <label for="47-q-msg">Anything else?</label>
-          <textarea id="47-q-msg" name="message" rows="3" aria-describedby="47-h-msg" placeholder="The kind of room you have in mind, your timescale, whether you have done this before&hellip;"></textarea>
-          <p class="hint" id="47-h-msg">Optional.</p>
+        <div class="field" id="t47-f-msg">
+          <label for="t47-q-msg">Anything else?</label>
+          <textarea id="t47-q-msg" name="message" rows="3" aria-describedby="t47-h-msg" placeholder="The kind of room you have in mind, your timescale, whether you have done this before&hellip;"></textarea>
+          <p class="hint" id="t47-h-msg">Optional.</p>
         </div>
-        <div class="field" id="47-f-ack">
-          <label class="check" for="47-q-ack">
-            <input type="checkbox" id="47-q-ack" name="ack" required aria-describedby="47-e-ack">
+        <div class="field" id="t47-f-ack">
+          <label class="check" for="t47-q-ack">
+            <input type="checkbox" id="t47-q-ack" name="ack" required aria-describedby="t47-e-ack">
             <span>I understand that the licence number, the licensee and the premises address are released after qualification and a mutual NDA, and are not published here. <span class="req" aria-hidden="true">*</span><span class="vh">(required)</span></span>
           </label>
-          <span class="err" id="47-e-ack" hidden></span>
+          <span class="err" id="t47-e-ack" hidden></span>
         </div>
-        <p class="err" id="47-e-form" role="alert" hidden></p>
+        <p class="err" id="t47-e-form" role="alert" hidden></p>
         <button class="btn btn-primary btn-block" type="submit">Send it over</button>
         <p class="hint mt-10">Or call the desk on <a href="tel:+18007999081">(800) 799-9081</a>, or email <a href="mailto:desk@liquorlicenseagents.com?subject=San%20Francisco%20licence%20enquiry">desk@liquorlicenseagents.com</a>. Ask for Dana Whitfield.</p>
       </form>
 
-      <div class="success" id="47-success" role="status" hidden>
+      <div class="success" id="t47-success" role="status" hidden>
         <h3>Enquiry received</h3>
         <p><strong>What happens next.</strong> Dana Whitfield replies inside one business day &mdash; a real reply from a named person, not an autoresponder. She will confirm what is still available in this class, send the qualification pack, and offer two call slots. If a different class would serve the room you described better, she will say so before anything else.</p>
         <p>If you want the off-market book too, she will send the qualification pack. Signed NDA in, complete files out within one business day.</p>
@@ -1739,7 +1780,7 @@ html{scroll-padding-top:78px}
             <li><span class="k">On our San Francisco book</span><span class="v">1</span></li>
             <li><span class="k">Asking price</span><span class="v">$260,000</span></li>
           </ul>
-          <a class="btn btn-secondary btn-block" href="../type-48/">San Francisco Type 48 licences</a>
+          <a class="btn btn-secondary btn-block" href="../type-48/#stock">See the San Francisco Type 48 licences</a>
         </div>
       </li>
       <li class="classcard">
@@ -1756,7 +1797,7 @@ html{scroll-padding-top:78px}
             <li><span class="k">On our San Francisco book</span><span class="v">10</span></li>
             <li><span class="k">Median ask</span><span class="v">$175,000</span></li>
           </ul>
-          <a class="btn btn-secondary btn-block" href="../type-21/">San Francisco Type 21 licences</a>
+          <a class="btn btn-secondary btn-block" href="../type-21/#stock">See the San Francisco Type 21 licences</a>
         </div>
       </li>
       <li class="classcard">
@@ -1773,7 +1814,7 @@ html{scroll-padding-top:78px}
             <li><span class="k">On our San Francisco book</span><span class="v">1</span></li>
             <li><span class="k">Asking price</span><span class="v">$15,000</span></li>
           </ul>
-          <a class="btn btn-secondary btn-block" href="../type-20/">San Francisco Type 20 licences</a>
+          <a class="btn btn-secondary btn-block" href="../type-20/#stock">See the San Francisco Type 20 licences</a>
         </div>
       </li>
     </ul>
@@ -1854,9 +1895,9 @@ html{scroll-padding-top:78px}
         <h4>San Francisco inventory</h4>
         <ul>
           <li><a href="../#inventory">All 30 San Francisco licences</a></li>
-          <li><a href="../type-21/">San Francisco Type 21 licences &mdash; Off-Sale General</a></li>
-          <li><a href="../type-48/">San Francisco Type 48 licences &mdash; On-Sale General, Public Premises</a></li>
-          <li><a href="../type-20/">San Francisco Type 20 licences &mdash; Off-Sale Beer and Wine</a></li>
+          <li><a href="../type-21/">San Francisco Type 21 &mdash; Off-Sale General</a></li>
+          <li><a href="../type-48/">San Francisco Type 48 &mdash; On-Sale General, Public Premises</a></li>
+          <li><a href="../type-20/">San Francisco Type 20 &mdash; Off-Sale Beer and Wine</a></li>
         </ul>
       </div>
       <div>
@@ -1962,7 +2003,7 @@ html{scroll-padding-top:78px}
   if (boxes.length) recount();
 
   /* --- enquiry form --- */
-  var P = '47-';
+  var P = 't47-';
   var RULES = [
     { id: P+'q-name',   f: P+'f-name',   e: P+'e-name',   test: function (v) { return v.trim().length >= 2; }, msg: 'Please give us a name we can use.' },
     { id: P+'q-phone',  f: P+'f-phone',  e: P+'e-phone',  test: function (v) { return v.replace(/[^0-9]/g, '').length >= 7; }, msg: 'Please give a telephone number with at least 7 digits.' },
