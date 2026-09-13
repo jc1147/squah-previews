@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>San Francisco Type 40 License Applications</title>
+<meta name="description" content="No Type 40 on our San Francisco book. We prepare and run the ABC application for a beer-only bar, tavern or taproom, and broker a purchase if that fits.">
+<link rel="canonical" href="https://www.liquorlicenseagents.com/california/san-francisco/type-40/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2317120f'/%3E%3Cpath d='M10.1 5.6h2.9v3.1l1.5 2.4v13.1a1 1 0 0 1-1 1h-3.9a1 1 0 0 1-1-1V11.1l1.5-2.4z' fill='%23e69c4e'/%3E%3Cpath d='M17.4 11.3h9.2l-3.5 5.2v5.4h2.4v2.1h-7v-2.1h2.4v-5.4z' fill='%23e69c4e'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="../../../assets/apple-touch-icon.png">
+<link rel="preload" href="../../../assets/fonts/ff-8ca9c2a4.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../../../assets/fonts/ff-c52e5cbb.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../../assets/fonts.css">
+<link rel="stylesheet" href="../../../design-system/tokens.css">
+<link rel="stylesheet" href="../../../design-system/structural.css">
+<script src="../../../design-system/site.js" defer></script>
+<style>
+/* [sf-v5 shell] 1 of 2 — the sticky bar stands down over the footer (FIX 1).
+   Same shape as the library's own drawer suppression at structural.css:14904. */
+body.sf-at-footer .mm-sticky-cta { transform: translateY(110%); pointer-events: none; }
+
+/* [sf-v5 shell] 2 of 2 — breadcrumb: the library ships no breadcrumb component.
+   Link colour/underline are owned by the site's prose-link relight at
+   structural.css:4847 — see the note above. */
+.sf-crumb { margin: 0 0 var(--ds-space-md); }
+.sf-crumb ol { display: flex; flex-wrap: wrap; align-items: center; gap: var(--ds-space-2xs) var(--ds-space-xs); list-style: none; margin: 0; padding: 0; font-family: var(--ds-font-body); font-size: 13px; line-height: 1.5; color: var(--ds-ink-soft); }
+.sf-crumb li { display: inline-flex; align-items: center; gap: var(--ds-space-xs); min-width: 0; }
+.sf-crumb li + li::before { content: "\203A"; color: var(--ds-line); }
+.sf-crumb a:focus-visible { outline: 3px solid var(--ds-accent); outline-offset: 2px; border-radius: var(--ds-r-sm); }
+.sf-crumb [aria-current="page"] { color: var(--ds-ink-soft); }
+
+/* ---- page-level ---- */
+/* 1. CRUMB BAND. .sf-crumb (shell) has no band of its own, and the crumb's
+      links must sit inside a .section for the site's prose-link relight
+      (structural.css:4847) to reach them — outside one they fall through to UA
+      blue, the documented defect at structural.css:15648. .section's own
+      padding-block (clamp 48-76px) is far too much for a crumb, so only the
+      padding is re-stated here. */
+.sf-crumb-band { padding-block: var(--ds-space-md) 0; }
+
+/* 2. NATIVE <select>. The library styles .form input and .form textarea but
+      NEVER an unscoped select: every select rule it has is scoped to
+      .hero-finder, #inventory, .qz or #quote. Three of this page's fields are
+      selects, so without this they render as UA controls on a dark form. Shape,
+      chevron and focus ring are copied from the library's own select pattern at
+      structural.css:4581-4614 and re-pointed at .form. */
+.sf-control { position: relative; }
+.sf-control::after {
+  content: ""; position: absolute; right: var(--ds-space-md); top: 50%;
+  width: var(--ds-space-xs); height: var(--ds-space-xs);
+  border-right: 2px solid var(--ds-accent); border-bottom: 2px solid var(--ds-accent);
+  transform: translateY(-70%) rotate(45deg); pointer-events: none;
+}
+.form select {
+  -webkit-appearance: none; appearance: none; width: 100%;
+  font-family: var(--ds-font-body); font-size: 15px;
+  padding: var(--ds-space-sm) var(--ds-space-xl) var(--ds-space-sm) var(--ds-space-md);
+  border: 1px solid var(--ds-line); border-radius: var(--ds-r-md);
+  background: var(--ds-bg-surface); color: var(--ds-ink); cursor: pointer;
+}
+.form select:hover { border-color: var(--ds-accent); }
+.form select:focus-visible { outline: 3px solid var(--ds-accent); outline-offset: 2px; border-color: var(--ds-accent); }
+.form option { background: var(--ds-bg-surface-2); color: var(--ds-ink); }
+.form .hint { margin-top: var(--ds-space-2xs); font-size: 13px; line-height: 1.45; color: var(--ds-ink-soft); }
+
+/* 3. THE TWO-COLUMN SPEC LIST: A REAL LABEL COLUMN, AND IT STACKS ON A PHONE.
+      .specs__row (structural.css:238) is a flex row with space-between, built
+      for a short product value ("14 in"). These values are sentences, and
+      MEASURED at 1200 that flex row shrank the labels to min-content and broke
+      them over three lines: "The food test" 64px/3 lines, "Local approval"
+      64px/3 lines, "What you pour" 70px/2. A grid with a real label track fixes
+      the rag; below 860 (the library's own single-column collapse point, used
+      by .cta-form__layout at structural.css:170) label sits over value, which
+      is the "two-column spec tables stack below 768px" rule.
+      dd drops to weight 400 because 600 on a 20-word sentence reads as shouting
+      — the library's 600 is for two-word values.
+      .specs__list also ships margin-inline:auto for a centered band; these bands
+      are left-aligned, so the centering is dropped exactly as the library drops
+      it for its own type pages (#faqs .faq__list, structural.css:16353). */
+.sf-spec { margin-inline: 0; max-width: 760px; }
+.sf-spec .specs__row { display: grid; grid-template-columns: minmax(0, 14em) minmax(0, 1fr); gap: var(--ds-space-lg); align-items: start; }
+.sf-spec .specs__row dd { font-weight: 400; color: var(--ds-ink); }
+@media (max-width: 860px) {
+  .sf-spec .specs__row { grid-template-columns: 1fr; gap: var(--ds-space-2xs); }
+}
+
+/* 4. A <caption> INSIDE A HORIZONTAL SCROLLER IS SIZED TO THE WRAPPER, NOT THE
+      TABLE. .lm-table carries min-width:620px, so a caption in normal flow is
+      as wide as the TABLE and gets clipped mid-sentence at 390.
+      The wrapper is made an inline-size container and the caption's INNER SPAN
+      takes 100cqw — the wrapper's width — and sticks to its left edge while the
+      table scrolls under it.
+      WHY AN INNER SPAN AND NOT THE CAPTION ITSELF: display:block on a
+      <caption> takes it out of its table-caption role and triggers CSS table
+      fixup. MEASURED, first attempt: the table grew from 620px to 1416px at
+      1440 and every <td> was pushed beyond the wrapper's visible edge — the
+      comparison rendered as row labels above empty space. Found by LOOKING at
+      the render, not by a gate. The caption keeps display:table-caption; only
+      the span inside it is sized and stuck, so table layout is untouched.
+      Where container queries are unsupported the span falls back to the
+      caption's width, which is the pre-existing behavior, not a new defect. */
+.sf-scroller { container-type: inline-size; }
+.sf-cmp caption { text-align: left; padding: 0 0 var(--ds-space-sm); }
+.sf-cmp caption > span {
+  display: block; position: sticky; left: 0; width: 100cqw; box-sizing: border-box;
+  font-family: var(--ds-font-body); font-size: 14px; line-height: 1.5; color: var(--ds-ink-soft);
+}
+
+/* 5. THE STICKY BAR'S BUTTON MAY WRAP ON A NARROW PHONE. The library gives
+      .mm-sticky-cta .btn { flex: none; white-space: nowrap } (structural.css
+      :748), which is right for a 3-word label. This page type's enforced label
+      is "Start a Type 41 application with us" — MEASURED at 390px it takes
+      262px of a 364px bar, leaving 92px for the copy line. Allowing the button
+      to shrink and wrap to two lines is the same fix the library itself applied
+      to the copy line at :15121 for the same reason, in the same regime. */
+@media (max-width: 480px) {
+  .mm-sticky-cta .btn { flex: 0 1 auto; white-space: normal; text-align: center; line-height: 1.2; }
+  .mm-sticky-cta__copy { flex: 1 1 34%; }
+}
+
+/* 6. THE FOOTER'S CLOSING CTA IS CUT OFF BY 48px ON A 390px PHONE. Found by
+      measuring, not by reading. MEASURED at 390, before this rule:
+        .mm-footer__lead-actions .btn is white-space:nowrap (structural.css:772)
+        and this page type's ENFORCED label is 35 characters, so the button's
+        min-content width is 332px;
+        at <=768 .mm-footer__lead collapses to ONE grid column (:823), and a
+        grid track cannot shrink below its item's min-content, so the whole copy
+        column became 332px inside a content box of 390 - 48 (container) - 56
+        (the lead's own clamp(28px,7vw,40px) padding) = 284px;
+        .mm-footer__lead sets overflow:hidden (:762), so the extra 48px of
+        button — measured right edge 385 against a content edge of 337 — was
+        silently CLIPPED, along with every line of the copy beside it.
+      Letting the button wrap on a narrow phone drops the track's min-content to
+      the longest word and the column fits. Same fix, same cause and the same
+      media regime as rule 5. The 32ch cap on the sub-line is released with it:
+      32ch = 288px is still wider than the 284px column.
+      FLAGGED for the shell: any page whose CTA label is long inherits this, not
+      only these two. */
+@media (max-width: 480px) {
+  .mm-footer__lead-actions .btn { white-space: normal; }
+  .mm-footer__lead-sub { max-width: 100%; }
+}
+/* fix-tables: caption sizing + cost-table stacking */
+.tablewrap{container-type:inline-size}
+.tablewrap > table > caption{
+  width:100cqi;box-sizing:border-box;
+  position:sticky;left:0;
+  overflow-wrap:break-word;word-break:normal;hyphens:none;
+}
+.tablewrap-cost > table{min-width:0;display:block;width:100%}
+.tablewrap-cost{overflow-x:visible}
+.tablewrap-cost thead{display:none}
+.tablewrap-cost tbody,.tablewrap-cost tfoot{display:block}
+.tablewrap-cost tbody tr,.tablewrap-cost tfoot tr{
+  display:block;padding:12px 14px;border-bottom:1px solid var(--line);
+}
+.tablewrap-cost tbody tr:last-child{border-bottom:0}
+.tablewrap-cost th,.tablewrap-cost td{
+  display:block;padding:0;border:0;min-width:0;white-space:normal;
+  overflow-wrap:break-word;word-break:normal;hyphens:none;
+}
+.tablewrap-cost tbody th,.tablewrap-cost tfoot th{
+  font-size:.6875rem;font-weight:800;letter-spacing:.07em;text-transform:uppercase;
+  color:var(--muted);margin:0 0 4px;
+}
+.tablewrap-cost td{font-size:.875rem;color:var(--text)}
+.scrollhint:has(+ .tablewrap-cost){display:none}
+@media (min-width:768px){
+  .tablewrap-cost{overflow-x:auto}
+  .tablewrap-cost > table{display:table;min-width:560px}
+  .tablewrap-cost thead{display:table-header-group}
+  .tablewrap-cost tbody{display:table-row-group}
+  .tablewrap-cost tfoot{display:table-footer-group}
+  .tablewrap-cost tbody tr,.tablewrap-cost tfoot tr{display:table-row;padding:0;border-bottom:0}
+  .tablewrap-cost th,.tablewrap-cost td{
+    display:table-cell;padding:10px 14px;border-bottom:1px solid var(--line);margin:0;
+  }
+  .tablewrap-cost tbody th,.tablewrap-cost tfoot th{
+    font-size:.875rem;font-weight:700;letter-spacing:0;text-transform:none;
+    color:var(--text);min-width:224px;
+  }
+  .scrollhint:has(+ .tablewrap-cost){display:flex}
+}
+/* fix-tables: caption sizing + cost-table stacking (v2: covers .lm-table-wrap) */
+.tablewrap,.lm-table-wrap{container-type:inline-size}
+.tablewrap > table > caption,
+.lm-table-wrap > table > caption,
+.tablewrap table caption,
+.lm-table-wrap table caption{
+  width:100cqi;box-sizing:border-box;
+  position:sticky;left:0;
+  overflow-wrap:break-word;word-break:normal;hyphens:none;
+}
+.lm-table-wrap > table > caption > span,
+.lm-table-wrap table caption > span{display:block;max-width:100%}
+.tablewrap-cost > table{min-width:0;display:block;width:100%}
+.tablewrap-cost{overflow-x:visible}
+.tablewrap-cost thead{display:none}
+.tablewrap-cost tbody,.tablewrap-cost tfoot{display:block}
+.tablewrap-cost tbody tr,.tablewrap-cost tfoot tr{
+  display:block;padding:12px 14px;border-bottom:1px solid var(--line);
+}
+.tablewrap-cost tbody tr:last-child{border-bottom:0}
+.tablewrap-cost th,.tablewrap-cost td{
+  display:block;padding:0;border:0;min-width:0;white-space:normal;
+  overflow-wrap:break-word;word-break:normal;hyphens:none;
+}
+.tablewrap-cost tbody th,.tablewrap-cost tfoot th{
+  font-size:.6875rem;font-weight:800;letter-spacing:.07em;text-transform:uppercase;
+  color:var(--muted);margin:0 0 4px;
+}
+.tablewrap-cost td{font-size:.875rem;color:var(--text)}
+.scrollhint:has(+ .tablewrap-cost){display:none}
+@media (min-width:768px){
+  .tablewrap-cost{overflow-x:auto}
+  .tablewrap-cost > table{display:table;min-width:560px}
+  .tablewrap-cost thead{display:table-header-group}
+  .tablewrap-cost tbody{display:table-row-group}
+  .tablewrap-cost tfoot{display:table-footer-group}
+  .tablewrap-cost tbody tr,.tablewrap-cost tfoot tr{display:table-row;padding:0;border-bottom:0}
+  .tablewrap-cost th,.tablewrap-cost td{
+    display:table-cell;padding:10px 14px;border-bottom:1px solid var(--line);margin:0;
+  }
+  .tablewrap-cost tbody th,.tablewrap-cost tfoot th{
+    font-size:.875rem;font-weight:700;letter-spacing:0;text-transform:none;
+    color:var(--text);min-width:224px;
+  }
+  .scrollhint:has(+ .tablewrap-cost){display:flex}
+}
+</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"California","item":"https://www.liquorlicenseagents.com/california/"},{"@type":"ListItem","position":2,"name":"San Francisco","item":"https://www.liquorlicenseagents.com/california/san-francisco/"},{"@type":"ListItem","position":3,"name":"Type 40","item":"https://www.liquorlicenseagents.com/california/san-francisco/type-40/"}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Do you have a San Francisco Type 40 for sale?","acceptedAnswer":{"@type":"Answer","text":"Not today. There is no Type 40 on our San Francisco book. What we run on this class is the application, and if one comes to us for resale it goes on the book priced, like every other license here."}},{"@type":"Question","name":"Do I have to serve food on a Type 40?","acceptedAnswer":{"@type":"Answer","text":"You do not need a full restaurant, but the ABC expects food to be available. Sandwiches, pizza or packaged snacks are the register of it, and we will tell you what your district expects to see."}},{"@type":"Question","name":"Can I serve wine or cocktails too?","acceptedAnswer":{"@type":"Answer","text":"No. Wine and distilled spirits are not permitted on this class. A beer and wine room is a Type 41; a full bar is a Type 47 or a Type 48, depending on whether the kitchen carries the business."}},{"@type":"Question","name":"Are minors allowed in?","acceptedAnswer":{"@type":"Answer","text":"Generally yes, provided they do not buy or drink alcohol and your local rules and your own house policy allow it."}},{"@type":"Question","name":"Can I put a band on?","acceptedAnswer":{"@type":"Answer","text":"The license governs alcohol service, not entertainment. Live music, noise and occupancy run on local permits and conditions, and we coordinate the license with them rather than leaving you to find out they were separate."}},{"@type":"Question","name":"How long does a Type 40 take?","acceptedAnswer":{"@type":"Answer","text":"Typically several months from filing to issuance, depending on district workload, background checks, and any local hearing or protest. A transfer runs on a different clock: a median of 78 days across our 64 closed California files."}},{"@type":"Question","name":"Should I apply, or buy a license instead?","acceptedAnswer":{"@type":"Answer","text":"Tell us what you are opening and we will tell you. If beer is the whole point of the room, applying is usually the conversation; if you need wine or spirits as well, one of the classes with stock is, and we handle either."}}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Service","name":"Type 40 liquor license applications in San Francisco","serviceType":"Type 40 liquor license application service","description":"No Type 40 on our San Francisco book. We prepare and run the ABC application for a beer-only bar, tavern or taproom, and broker a purchase if that fits.","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-40/","areaServed":{"@type":"AdministrativeArea","name":"City and County of San Francisco, California"},"provider":{"@type":"Organization","name":"Liquor License Agents","url":"https://www.liquorlicenseagents.com/","telephone":"+1-800-799-9081","email":"desk@liquorlicenseagents.com"}}</script>
+</head>
+<body>
+<a class="mm-skip" href="#main">Skip to content</a>
+
+<header class="site-header wow-glass" id="site-header">
+  <div class="container site-header__bar">
+    <a class="brand" href="../../../california/san-francisco/">
+      <span class="brand__mark"><svg viewBox="0 0 32 32" width="19" height="19" fill="currentColor" aria-hidden="true"><path d="M10.1 5.6h2.9v3.1l1.5 2.4v13.1a1 1 0 0 1-1 1h-3.9a1 1 0 0 1-1-1V11.1l1.5-2.4z"/><path d="M17.4 11.3h9.2l-3.5 5.2v5.4h2.4v2.1h-7v-2.1h2.4v-5.4z"/></svg></span>
+      Liquor License Agents
+    </a>
+
+    <ul class="site-nav" role="list" aria-label="Primary">
+      <li class="mm-has-panel" data-disclosure="classes">
+        <button class="mm-trigger" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="mm-dd-classes">
+          License classes
+          <svg class="mm-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="mm-panel mm-dropdown" id="mm-dd-classes" role="menu" aria-label="License classes">
+          <span class="mm-panel__bloom" aria-hidden="true"></span>
+          <ul role="list">
+        <li><a role="menuitem" href="../../../california/san-francisco/type-47/"><span class="t">Type 47</span><span class="d">On-Sale General, Eating Place</span></a></li>
+        <li><a role="menuitem" href="../../../california/san-francisco/type-21/"><span class="t">Type 21</span><span class="d">Off-Sale General</span></a></li>
+        <li><a role="menuitem" href="../../../california/san-francisco/type-48/"><span class="t">Type 48</span><span class="d">On-Sale General, Public Premises</span></a></li>
+        <li><a role="menuitem" href="../../../california/san-francisco/type-20/"><span class="t">Type 20</span><span class="d">Off-Sale Beer and Wine</span></a></li>
+        <li><a role="menuitem" href="../../../california/san-francisco/type-41/"><span class="t">Type 41</span><span class="d">On-Sale Beer and Wine, Eating Place</span></a></li>
+        <li><a role="menuitem" href="../../../california/san-francisco/type-40/" aria-current="page"><span class="t">Type 40</span><span class="d">On-Sale Beer</span></a></li>
+          </ul>
+        </div>
+      </li>
+      <li><a class="mm-navlink" href="../../../california/san-francisco/">San Francisco</a></li>
+      <li class="mm-cta-desktop"><a class="btn btn-primary wow-glow" href="#inquire">Start a Type 40 application with us</a></li>
+    </ul>
+
+    <button class="site-header__hamburger mm-burger" id="mm-burger" type="button"
+            aria-label="Open menu" aria-expanded="false" aria-controls="mobile-drawer">
+      <span class="bars" aria-hidden="true"><span></span><span></span><span></span></span>
+    </button>
+  </div>
+</header>
+
+<div class="site-drawer-backdrop mm-overlay" id="mm-overlay" data-open="false" tabindex="-1"></div>
+<nav id="mobile-drawer" class="site-drawer" aria-hidden="true" aria-label="Mobile">
+  <div class="mm-drawer__head">
+    <a class="brand" href="../../../california/san-francisco/"><span class="brand__mark"><svg viewBox="0 0 32 32" width="19" height="19" fill="currentColor" aria-hidden="true"><path d="M10.1 5.6h2.9v3.1l1.5 2.4v13.1a1 1 0 0 1-1 1h-3.9a1 1 0 0 1-1-1V11.1l1.5-2.4z"/><path d="M17.4 11.3h9.2l-3.5 5.2v5.4h2.4v2.1h-7v-2.1h2.4v-5.4z"/></svg></span>Liquor License Agents</a>
+    <button class="site-drawer__close" id="mm-drawer-close" type="button" aria-label="Close menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+
+  <div class="mm-drawer__nav">
+    <div class="mm-acc">
+      <button class="mm-acc__btn" type="button" aria-expanded="false" aria-controls="mm-acc-classes">
+        License classes
+        <svg class="mm-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="mm-acc__panel" id="mm-acc-classes">
+        <div class="mm-acc__inner">
+          <a href="../../../california/san-francisco/type-47/">Type 47 &mdash; On-Sale General, Eating Place</a>
+          <a href="../../../california/san-francisco/type-21/">Type 21 &mdash; Off-Sale General</a>
+          <a href="../../../california/san-francisco/type-48/">Type 48 &mdash; On-Sale General, Public Premises</a>
+          <a href="../../../california/san-francisco/type-20/">Type 20 &mdash; Off-Sale Beer and Wine</a>
+          <a href="../../../california/san-francisco/type-41/">Type 41 &mdash; On-Sale Beer and Wine, Eating Place</a>
+          <a href="../../../california/san-francisco/type-40/" aria-current="page">Type 40 &mdash; On-Sale Beer</a>
+        </div>
+      </div>
+    </div>
+    <a class="mm-drawer__link" href="../../../california/san-francisco/">San Francisco</a>
+  </div>
+
+  <div class="mm-drawer__cta">
+    <a class="btn btn-primary wow-glow" href="#inquire">Start a Type 40 application with us</a>
+  </div>
+</nav>
+
+<main id="main">
+
+  <div class="section sf-crumb-band">
+    <div class="container">
+      <nav class="sf-crumb" aria-label="Breadcrumb">
+        <ol>
+          <li><a href="https://www.liquorlicenseagents.com/california/">California</a></li>
+          <li><a href="../../../california/san-francisco/">San Francisco</a></li>
+          <li><span aria-current="page">Type 40</span></li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+
+  <section class="hero hero--photo wow-bloom wow-grain">
+    <div class="hero__media">
+      <img src="../../../assets/img/venue-fe617ff8.jpg" alt="A dark bar room with a long counter and a row of stools, pendant lights overhead and buttoned leather booths along the back wall." width="720" height="405" fetchpriority="high">
+    </div>
+    <div class="hero__scrim" aria-hidden="true"></div>
+    <div class="hero__smoke" aria-hidden="true"></div>
+    <div class="container">
+      <div class="hero__inner">
+        <p class="eyebrow">San Francisco &middot; On-Sale Beer</p>
+        <h1>San Francisco Type 40 <span class="accent">applications</span></h1>
+        <p class="lede">The beer-only class: a tavern, a beer bar, a taproom. We hold no Type 40 for resale in San Francisco. What we run on this class is the application with the ABC &mdash; and we will say plainly if a different class, or a purchase, is the better route for the room you are describing.</p>
+        <ul class="cross-link-rail__rail" role="list">
+        <li class="chip">San Francisco County</li>
+        <li class="chip">Type 40 &middot; On-Sale Beer</li>
+        <li class="chip">Applications, not resale stock</li>
+        </ul>
+        <div class="cta-row">
+          <a class="btn btn-primary wow-glow" href="#inquire">Start a Type 40 application with us</a>
+          <a class="btn btn-secondary" href="../../../california/san-francisco/#listings">See the 30 licenses on the book</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="stock">
+    <div class="container">
+      <p class="eyebrow">On the book</p>
+      <h2>Type 40 on the book right now: none</h2>
+      <div class="lm-empty">
+        <div class="tp-body">
+        <p>There is no San Francisco Type 40 license for sale on this desk today.</p>
+        <p>Obtaining one can involve quota, local approval and ABC review. Which of those three bear on your address is established with the Department, and with San Francisco, for the specific premises &mdash; it is not something to guess at from a page.</p>
+        <p>Tell us what you are opening and we will tell you whether to apply or to buy, then handle whichever it is. That is the same offer we make on every class here; it is simply the whole offer on this one.</p>
+          <p class="lm-deep"><a href="#inquire">Tell us what you are opening</a></p>
+        </div>
+      </div>
+      <p class="lm-note">Every other class in this directory shows you the count and the price range before you ask for anything. This one shows you a zero, for the same reason.</p>
+    </div>
+  </section>
+
+  <section class="section section--warm" id="covers">
+    <div class="container">
+      <p class="eyebrow">The class</p>
+      <h2>What a Type 40 covers</h2>
+      <p class="lede">The beer-only class, with the hedges the ABC position actually carries.</p>
+      <p class="tp-caveat">Class rules, quota position and local approval are confirmed with the ABC, and with San Francisco, for your specific premises during qualification. Nothing on this page is legal advice, and nothing here is a promise that a license will be issued.</p>
+      <dl class="specs__list sf-spec">
+        <div class="specs__row"><dt>Class</dt><dd>Type 40 &mdash; On-Sale Beer</dd></div>
+        <div class="specs__row"><dt>What you pour</dt><dd>Beer, for drinking on the premises. A draft list, cans and bottles &mdash; a room built around beer rather than around a bar program.</dd></div>
+        <div class="specs__row"><dt>What you cannot pour</dt><dd>Wine and distilled spirits are not permitted on this class.</dd></div>
+        <div class="specs__row"><dt>Food</dt><dd>No full restaurant is required, but the ABC expects food to be available &mdash; sandwiches, pizza, packaged snacks are the register of it.</dd></div>
+        <div class="specs__row"><dt>Packaged beer to take away</dt><dd>Generally within reach on this class, in packaged form and within the ABC&rsquo;s rules. We confirm the position for your premises rather than promise it here.</dd></div>
+        <div class="specs__row"><dt>Minors</dt><dd>Generally permitted to enter and remain, provided they do not buy or drink alcohol and your local rules and house policy allow it.</dd></div>
+        <div class="specs__row"><dt>Live music and events</dt><dd>Not governed by the license. Entertainment, noise and occupancy sit with local permits and conditions, and we coordinate the two.</dd></div>
+        <div class="specs__row"><dt>Adding wine or spirits later</dt><dd>A different license type and ABC approval, which is not guaranteed. Choose on the room you intend to run, not only the one you are opening.</dd></div>
+        <div class="specs__row"><dt>What you are buying here</dt><dd>Our work on the application. There is no license price on this page because there is no license on the book to price.</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="section" id="apply-or-buy">
+    <div class="container">
+      <p class="eyebrow">The decision</p>
+      <h2>Apply, or buy one on the book</h2>
+      <p class="lede">Both routes are ours. This is how we tell them apart for a beer room.</p>
+      <div class="lm-table-wrap sf-scroller" tabindex="0" role="region" aria-label="Applying for a new Type 40 compared with buying a license on the book">
+        <table class="lm-table sf-cmp">
+          <caption><span>Applying for a new Type 40 and buying a license on the book, side by side. On a narrow screen the table scrolls sideways.</span></caption>
+          <thead>
+            <tr>
+              <th scope="col">What you are deciding</th>
+              <th scope="col">Apply to the ABC</th>
+              <th scope="col">Buy one on the book</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">What you end up with</th><td>A new Type 40 issued to you for your premises, if the ABC approves it.</td><td>An existing license transferred into your name, on the terms in the confidential file.</td></tr>
+            <tr><th scope="row">What decides it</th><td>Whether the concept and the address qualify, and what the district asks of you.</td><td>What is on the book, and at what price.</td></tr>
+            <tr><th scope="row">What we do</th><td>Prepare and run the application, and handle the ABC through review.</td><td>Broker the purchase and run it through a licensed escrow holder. The money is never held by us, at any point, on any file.</td></tr>
+            <tr><th scope="row">What it costs you</th><td>Our fee for the application work, quoted in writing before we start.</td><td>4% of the accepted price, paid by the seller at closing. No buyer-side fee.</td></tr>
+            <tr><th scope="row">How long</th><td>Typically several months from filing to issuance, depending on district workload, background checks, and any local hearing or protest.</td><td>A median of 78 days from accepted offer to license issued, across our 64 closed California files.</td></tr>
+            <tr><th scope="row">Which one we will tell you to do</th><td>When beer is the whole point of the room and you are opening new.</td><td>When you need wine or spirits as well, or your opening date will not wait.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="lm-note">Commission, escrow and the 78-day median are our own terms and our own closed files. The ABC&rsquo;s fees and calendar are the Department&rsquo;s, and we confirm those against your file rather than publish them here.</p>
+    </div>
+  </section>
+
+  <section class="section tp-split" id="how">
+    <div class="container">
+      <div class="tp-split__copy">
+        <p class="eyebrow">The service</p>
+        <h2>What we actually do on a Type 40</h2>
+        <p class="lede">The application with the ABC, and the local permits that sit beside it.</p>
+      </div>
+      <!-- .tp-split__list WRAPS the list rather than doubling on it: the
+           library's own rule is .tp-split__list .sv-list with one column
+           (structural.css:17493), a DESCENDANT selector written because the
+           owner rejected .sv-list's auto-fit splitting the checklist into two
+           ragged sub-columns inside this band. With both classes on one element
+           that rule cannot match — MEASURED: two sub-columns, which is the
+           layout the rule exists to prevent. -->
+      <div class="tp-split__list">
+        <ul class="sv-list" role="list">
+          <li>Read the concept first: a beer bar, a tavern or a taproom, and whether Type 40 carries it now and in three years.</li>
+          <li>Read the address: the San Francisco Planning district, the zoning, and any conditional use or local condition.</li>
+          <li>Say plainly whether to apply for a new license or to buy and transfer an existing one.</li>
+          <li>Prepare the application and the new-issue paperwork, and handle the ABC through review.</li>
+          <li>Coordinate the entertainment, noise and occupancy permits that sit beside the license rather than inside it.</li>
+          <li>Coordinate with your landlord, your counsel and escrow so nothing falls out of step.</li>
+        </ul>
+      </div>
+      <figure class="tp-split__media">
+        <img src="../../../assets/img/venue-8ec1c325.jpg" alt="A tavern interior with a long polished timber bar, bottles on the back-bar shelving, exposed brick walls and buttoned leather booths." width="720" height="405" loading="lazy">
+      </figure>
+    </div>
+  </section>
+
+  <section class="section section--warm" id="classes">
+    <div class="container">
+      <p class="eyebrow">Classes with San Francisco stock</p>
+      <h2>Licenses you can buy here today</h2>
+      <p class="lede">Four classes change hands in San Francisco often enough to have a market, and every one of them is priced on its own page.</p>
+      <div class="cross-link-rail__rail">
+        <a class="cross-link" href="../../../california/san-francisco/type-47/">Type 47 &middot; 18 licenses on the book</a>
+        <a class="cross-link" href="../../../california/san-francisco/type-21/">Type 21 &middot; 10 licenses on the book</a>
+        <a class="cross-link" href="../../../california/san-francisco/type-48/">Type 48 &middot; 1 license on the book</a>
+        <a class="cross-link" href="../../../california/san-francisco/type-20/">Type 20 &middot; 1 license on the book</a>
+        <a class="cross-link" href="../../../california/san-francisco/type-41/">Type 41 &middot; applications</a>
+        <a class="cross-link" href="../../../california/san-francisco/#listings">All 30 San Francisco licenses</a>
+      </div>
+      <p class="lm-note">Identifying detail &mdash; license number, licensee, premises address, terms &mdash; is not published for any license on this site. It goes to a qualified buyer under a mutual NDA, and that is a reason to inquire rather than a reason to wonder.</p>
+    </div>
+  </section>
+
+  <section class="section" id="faqs">
+    <div class="container">
+      <p class="eyebrow">Type 40 questions</p>
+      <h2>What operators ask us first</h2>
+      <div class="faq__list">
+      <details class="faq-item">
+        <summary class="faq-item__q">Do you have a San Francisco Type 40 for sale?</summary>
+        <div class="faq-item__a"><p>Not today. There is no Type 40 on our San Francisco book. What we run on this class is the application, and if one comes to us for resale it goes on the book priced, like every other license here.</p></div>
+      </details>
+      <details class="faq-item">
+        <summary class="faq-item__q">Do I have to serve food on a Type 40?</summary>
+        <div class="faq-item__a"><p>You do not need a full restaurant, but the ABC expects food to be available. Sandwiches, pizza or packaged snacks are the register of it, and we will tell you what your district expects to see.</p></div>
+      </details>
+      <details class="faq-item">
+        <summary class="faq-item__q">Can I serve wine or cocktails too?</summary>
+        <div class="faq-item__a"><p>No. Wine and distilled spirits are not permitted on this class. A beer and wine room is a Type 41; a full bar is a Type 47 or a Type 48, depending on whether the kitchen carries the business.</p></div>
+      </details>
+      <details class="faq-item">
+        <summary class="faq-item__q">Are minors allowed in?</summary>
+        <div class="faq-item__a"><p>Generally yes, provided they do not buy or drink alcohol and your local rules and your own house policy allow it.</p></div>
+      </details>
+      <details class="faq-item">
+        <summary class="faq-item__q">Can I put a band on?</summary>
+        <div class="faq-item__a"><p>The license governs alcohol service, not entertainment. Live music, noise and occupancy run on local permits and conditions, and we coordinate the license with them rather than leaving you to find out they were separate.</p></div>
+      </details>
+      <details class="faq-item">
+        <summary class="faq-item__q">How long does a Type 40 take?</summary>
+        <div class="faq-item__a"><p>Typically several months from filing to issuance, depending on district workload, background checks, and any local hearing or protest. A transfer runs on a different clock: a median of 78 days across our 64 closed California files.</p></div>
+      </details>
+      <details class="faq-item">
+        <summary class="faq-item__q">Should I apply, or buy a license instead?</summary>
+        <div class="faq-item__a"><p>Tell us what you are opening and we will tell you. If beer is the whole point of the room, applying is usually the conversation; if you need wine or spirits as well, one of the classes with stock is, and we handle either.</p></div>
+      </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--dark">
+    <div class="container">
+      <div class="cta-form__layout">
+        <div class="cta-form__pitch">
+          <p class="eyebrow">Start here</p>
+          <h2>Tell us what you are opening</h2>
+          <p class="lede">One reply from the desk, inside one business day: whether to apply for a Type 40 or buy a license on the book, what your address does to the timetable, and what the work costs. No newsletter, no drip sequence.</p>
+          <p>Or talk to the desk now: <a href="tel:+18007999081">(800) 799-9081</a></p>
+          <p>Email the desk: <a href="mailto:desk@liquorlicenseagents.com">desk@liquorlicenseagents.com</a></p>
+        </div>
+
+        <form class="form" id="inquire" aria-label="Start a Type 40 application">
+          <input type="hidden" name="class" value="Type 40">
+          <div class="field">
+            <label for="q-name">Your name</label>
+            <input type="text" id="q-name" name="name" autocomplete="name" required>
+          </div>
+          <div class="field">
+            <label for="q-phone">Phone</label>
+            <input type="tel" id="q-phone" name="phone" autocomplete="tel" inputmode="tel" required>
+          </div>
+          <div class="field">
+            <label for="q-email">Email</label>
+            <input type="email" id="q-email" name="email" autocomplete="email" inputmode="email" required>
+          </div>
+          <div class="field">
+            <label for="q-use">What are you opening?</label>
+            <div class="sf-control">
+              <select id="q-use" name="use" required aria-describedby="h-use">
+                <option value="">Choose one</option>
+                <option>A restaurant with beer and wine</option>
+                <option>A beer bar, tavern or taproom</option>
+                <option>A restaurant with a full bar</option>
+                <option>A bar or nightclub, no kitchen</option>
+                <option>A shop selling beer and wine only</option>
+                <option>A liquor store selling spirits</option>
+                <option>Adding a license to a site I already trade from</option>
+              </select>
+            </div>
+            <p class="hint" id="h-use">This is the question that picks the class. Tell us the venue and we will tell you the license, rather than the other way round.</p>
+          </div>
+          <div class="field">
+            <label for="q-site">Do you have a site?</label>
+            <div class="sf-control">
+              <select id="q-site" name="site" required aria-describedby="h-site">
+                <option value="">Choose one</option>
+                <option>Signed lease, ready to go</option>
+                <option>In negotiation on a specific address</option>
+                <option>Looking, nothing signed</option>
+                <option>Already trading there</option>
+              </select>
+            </div>
+            <p class="hint" id="h-site">It matters more here than elsewhere. The San Francisco Planning district your address sits in decides whether you need a conditional use, and that is usually the longest pole in the tent.</p>
+          </div>
+          <div class="field">
+            <label for="q-msg">Anything else we should know</label>
+            <textarea id="q-msg" name="message" rows="4"></textarea>
+          </div>
+          <button class="btn btn-primary wow-glow" type="submit">Start my Type 40 application</button>
+          <p class="hint">What you send goes to the desk and nowhere else. We do not publish, sell or trade it, and there is no charge for the conversation.</p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer" id="site-footer">
+  <div class="container">
+
+    <div class="mm-footer__lead">
+      <div class="mm-footer__lead-copy">
+        <p class="eyebrow">San Francisco Type 40</p>
+        <h2>Tell us what you are <span class="accent">opening.</span></h2>
+        <p class="mm-footer__lead-sub">We will tell you whether to apply for a Type 40 or buy a license on the book, and handle whichever it is.</p>
+      </div>
+      <div class="mm-footer__lead-actions">
+        <a class="btn btn-primary wow-glow" href="#inquire">Start a Type 40 application with us</a>
+        <a href="tel:+18007999081">(800) 799-9081</a>
+      </div>
+    </div>
+
+    <hr class="mm-footer__divide" aria-hidden="true">
+
+    <div class="site-footer__top">
+      <div>
+        <div class="site-footer__brand"><span class="site-footer__brand-mark" aria-hidden="true">L</span>Liquor License Agents</div>
+        <p class="site-footer__blurb">Liquor license brokerage and application work in California. We sell the license only, and we handle new applications with the ABC.</p>
+        <div class="site-footer__hours">
+          <strong>Direct line</strong>
+          <a href="tel:+18007999081">(800) 799-9081</a>
+          <a href="mailto:desk@liquorlicenseagents.com">desk@liquorlicenseagents.com</a>
+        </div>
+      </div>
+
+      <div class="site-footer__col">
+        <h4>Licenses for sale</h4>
+        <ul>
+          <li><a href="../../../california/san-francisco/type-47/">Type 47 &mdash; On-Sale General, Eating Place</a></li>
+          <li><a href="../../../california/san-francisco/type-21/">Type 21 &mdash; Off-Sale General</a></li>
+          <li><a href="../../../california/san-francisco/type-48/">Type 48 &mdash; On-Sale General, Public Premises</a></li>
+          <li><a href="../../../california/san-francisco/type-20/">Type 20 &mdash; Off-Sale Beer and Wine</a></li>
+        </ul>
+      </div>
+
+      <div class="site-footer__col">
+        <h4>Applications</h4>
+        <ul>
+          <li><a href="../../../california/san-francisco/type-41/">Type 41 &mdash; On-Sale Beer and Wine, Eating Place</a></li>
+          <li><a href="../../../california/san-francisco/type-40/">Type 40 &mdash; On-Sale Beer</a></li>
+          <li><a href="../../../california/san-francisco/">All San Francisco licenses</a></li>
+        </ul>
+      </div>
+
+      <div class="site-footer__col">
+        <h4>Confidentiality</h4>
+        <p>License numbers, licensees, premises and terms are not published. Identifying detail goes to a qualified buyer under NDA.</p>
+      </div>
+    </div>
+
+    <div class="site-footer__bottom">
+      <span>&copy; 2026 Liquor License Agents</span>
+      <span class="site-footer__bcorp">City and county of San Francisco. Class rules are confirmed for your specific premises during qualification.</span>
+    </div>
+
+  </div>
+</footer>
+
+<div class="mm-sticky-cta" id="mm-sticky-cta" aria-hidden="true">
+  <div class="mm-sticky-cta__copy">
+    <b>Type 40 applications</b>
+    <span>San Francisco. We run the ABC file.</span>
+  </div>
+  <a class="btn btn-primary" href="#inquire">Start a Type 40 application with us</a>
+</div>
+
+<script>
+/* [sf-v5] the sticky bar stands down once the footer is in view (FIX 1).
+   Sets a body class only — the cascade rule in the page's <style> does the
+   hiding, so this composes with site.js's own .show toggle rather than racing
+   it. Null-guarded and feature-guarded. */
+(function () {
+  var f = document.getElementById('site-footer');
+  if (!f || !('IntersectionObserver' in window)) return;
+  new IntersectionObserver(function (entries) {
+    for (var i = 0; i < entries.length; i++) {
+      document.body.classList.toggle('sf-at-footer', entries[i].isIntersecting);
+    }
+  }, { threshold: 0 }).observe(f);
+})();
+</script>
+</body>
+</html>

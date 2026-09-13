@@ -1,0 +1,1442 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>San Francisco Liquor Licenses For Sale | 30 Priced</title>
+<meta name="description" content="All 30 San Francisco liquor licenses on our book, priced and dated, with all six license classes linked — Type 47, 21, 48, 20, 41 and 40.">
+<link rel="canonical" href="https://www.liquorlicenseagents.com/california/san-francisco/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2317120f'/%3E%3Cpath d='M10.1 5.6h2.9v3.1l1.5 2.4v13.1a1 1 0 0 1-1 1h-3.9a1 1 0 0 1-1-1V11.1l1.5-2.4z' fill='%23e69c4e'/%3E%3Cpath d='M17.4 11.3h9.2l-3.5 5.2v5.4h2.4v2.1h-7v-2.1h2.4v-5.4z' fill='%23e69c4e'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png">
+<link rel="preload" href="../../assets/fonts/ff-8ca9c2a4.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../../assets/fonts/ff-c52e5cbb.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../assets/fonts.css">
+<link rel="stylesheet" href="../../design-system/tokens.css">
+<link rel="stylesheet" href="../../design-system/structural.css">
+<script src="../../design-system/site.js" defer></script>
+<style>
+/* [sf-v5 shell] 1 of 2 — the sticky bar stands down over the footer (FIX 1).
+   Same shape as the library's own drawer suppression at structural.css:14904. */
+body.sf-at-footer .mm-sticky-cta { transform: translateY(110%); pointer-events: none; }
+
+/* [sf-v5 shell] 2 of 2 — breadcrumb: the library ships no breadcrumb component.
+   Link colour/underline are owned by the site's prose-link relight at
+   structural.css:4847 — see the note above. */
+.sf-crumb { margin: 0 0 var(--ds-space-md); }
+.sf-crumb ol { display: flex; flex-wrap: wrap; align-items: center; gap: var(--ds-space-2xs) var(--ds-space-xs); list-style: none; margin: 0; padding: 0; font-family: var(--ds-font-body); font-size: 13px; line-height: 1.5; color: var(--ds-ink-soft); }
+.sf-crumb li { display: inline-flex; align-items: center; gap: var(--ds-space-xs); min-width: 0; }
+.sf-crumb li + li::before { content: "\203A"; color: var(--ds-line); }
+.sf-crumb a:focus-visible { outline: 3px solid var(--ds-accent); outline-offset: 2px; border-radius: var(--ds-r-sm); }
+.sf-crumb [aria-current="page"] { color: var(--ds-ink-soft); }
+
+/* ---- page-level ---- */
+/* 1. SELECT CHEVRON, FOR THE NO-JAVASCRIPT CASE ONLY.
+   .ec-ctrl sets appearance:none (structural.css:2689) and the sheet's only
+   chevron rules are ancestor-scoped to #inventory / .qz / #quote (:4912, :5515,
+   :5577), so an unscoped native select renders identical to a text input with
+   no affordance that it opens. Same rotated border wedge as :4912, anchored
+   from the BOTTOM so it centres on the control whatever the label wraps to: the
+   control is 46px tall (.ec-ctrl min-height), its middle is 23px up, and the
+   8px wedge's box sits 4px below that.
+   MEASURED, AND THE REASON FOR THE :has() — site.js block [dsel] enhances EVERY
+   single <select> at runtime: it wraps it in a div.dsel, hides the native
+   control (position:absolute, opacity:0) and draws its own .dsel__chev. So
+   with JavaScript on this wedge was a SECOND chevron next to the skin's own
+   (verified in the browser: .dsel__chev present AND this ::after painting).
+   Keying the rule on a select that is still a DIRECT child makes it
+   self-cancelling: the moment site.js re-parents the select the wedge stops
+   matching, and with JavaScript off it is the only affordance there is. The
+   padding rule is direct-child scoped for the same reason. The :has() form is already
+   used by the sheet itself (structural.css:4909 records :3277 and :4537). */
+.sf-sel { position: relative; }
+.sf-sel > select.ec-ctrl { padding-right: 40px; }
+.sf-sel:has(> select.ec-ctrl)::after {
+  content: ""; position: absolute; right: 17px; bottom: 19px;
+  width: 8px; height: 8px; pointer-events: none;
+  border-right: 2px solid var(--ds-accent-ink);
+  border-bottom: 2px solid var(--ds-accent-ink);
+  transform: rotate(45deg);
+}
+
+/* 2. THE FILTER ROW. No filter-bar layout exists outside the brand's own
+   .cmdbar / #inventory board, both of which carry their own markup contract. */
+.sf-filters { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: var(--ds-space-md); margin-top: var(--ds-space-lg); }
+.sf-filters .field { margin-bottom: 0; }
+.sf-filterfoot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--ds-space-sm); margin-top: var(--ds-space-md); }
+
+/* 3. HIDING A FILTERED-OUT ENTRY. .lm-card sets display:flex
+   (structural.css:15619), an author rule that outranks the UA [hidden] rule, so
+   the attribute alone would leave the card fully laid out. The library solves it
+   the same way for its own board at structural.css:4774. */
+.lm-grid > .is-hidden { display: none; }
+
+/* 4. PROSE DIRECTLY UNDER A HEADING. .sv-body sets its paragraphs' bottom
+   margin (structural.css:15682) but no top margin, and h2 is margin:0 from the
+   reset (:41), so a band that opens h2 -> .sv-body painted the first line
+   TOUCHING the headline — measured at 1440 on four bands. The library's own
+   service pages always put a .lede between the two, which is where their gap
+   comes from (.lede has margin-top, :60); this restores the same gap for the
+   bands that go straight into prose. */
+h2 + .sv-body { margin-top: var(--ds-space-lg); }
+
+/* 5. FORM HELP + ERROR TEXT + THE REQUIRED MARK. The sheet has no such utility:
+   its forms carry labels and controls only. */
+.sf-hint { margin-top: var(--ds-space-2xs); font-size: 13px; line-height: 1.5; color: var(--ds-ink-soft); }
+.sf-err { display: block; margin-top: var(--ds-space-2xs); font-size: 13px; font-weight: 600; color: var(--ds-warning); }
+.sf-req { color: var(--ds-accent); }
+/* .form .choice centres its box against the label (structural.css:18027), which
+   is right for a one-line choice and wrong for this three-line consent. */
+.form .choice.sf-ack { align-items: flex-start; }
+
+/* 6. THREE SPACING STEPS THE LIBRARY HAS NO CLASS FOR. These were inline
+   style attributes in the first cut; they are named here instead so every
+   declaration this page adds is inside the one block the build gate greps.
+   Spacing tokens only — no colour, no font, no radius. */
+.sf-crumbband { padding-bottom: 0; }
+.sf-mt-lg { margin-top: var(--ds-space-lg); }
+.sf-mt-xl { margin-top: var(--ds-space-xl); }
+
+/* 7. THE COST TABLE'S CHECKBOX COLUMN. accent-color is set for .form .choice
+   inputs only (structural.css:18036); this checkbox is in a table cell. */
+.sf-costbox { accent-color: var(--ds-accent); }
+.sf-off { opacity: .55; }
+/* fix-tables: caption sizing + cost-table stacking */
+.tablewrap{container-type:inline-size}
+.tablewrap > table > caption{
+  width:100cqi;box-sizing:border-box;
+  position:sticky;left:0;
+  overflow-wrap:break-word;word-break:normal;hyphens:none;
+}
+.tablewrap-cost > table{min-width:0;display:block;width:100%}
+.tablewrap-cost{overflow-x:visible}
+.tablewrap-cost thead{display:none}
+.tablewrap-cost tbody,.tablewrap-cost tfoot{display:block}
+.tablewrap-cost tbody tr,.tablewrap-cost tfoot tr{
+  display:block;padding:12px 14px;border-bottom:1px solid var(--line);
+}
+.tablewrap-cost tbody tr:last-child{border-bottom:0}
+.tablewrap-cost th,.tablewrap-cost td{
+  display:block;padding:0;border:0;min-width:0;white-space:normal;
+  overflow-wrap:break-word;word-break:normal;hyphens:none;
+}
+.tablewrap-cost tbody th,.tablewrap-cost tfoot th{
+  font-size:.6875rem;font-weight:800;letter-spacing:.07em;text-transform:uppercase;
+  color:var(--muted);margin:0 0 4px;
+}
+.tablewrap-cost td{font-size:.875rem;color:var(--text)}
+.scrollhint:has(+ .tablewrap-cost){display:none}
+@media (min-width:768px){
+  .tablewrap-cost{overflow-x:auto}
+  .tablewrap-cost > table{display:table;min-width:560px}
+  .tablewrap-cost thead{display:table-header-group}
+  .tablewrap-cost tbody{display:table-row-group}
+  .tablewrap-cost tfoot{display:table-footer-group}
+  .tablewrap-cost tbody tr,.tablewrap-cost tfoot tr{display:table-row;padding:0;border-bottom:0}
+  .tablewrap-cost th,.tablewrap-cost td{
+    display:table-cell;padding:10px 14px;border-bottom:1px solid var(--line);margin:0;
+  }
+  .tablewrap-cost tbody th,.tablewrap-cost tfoot th{
+    font-size:.875rem;font-weight:700;letter-spacing:0;text-transform:none;
+    color:var(--text);min-width:224px;
+  }
+  .scrollhint:has(+ .tablewrap-cost){display:flex}
+}
+/* fix-tables: caption sizing + cost-table stacking (v2: covers .lm-table-wrap) */
+.tablewrap,.lm-table-wrap{container-type:inline-size}
+.tablewrap > table > caption,
+.lm-table-wrap > table > caption,
+.tablewrap table caption,
+.lm-table-wrap table caption{
+  width:100cqi;box-sizing:border-box;
+  position:sticky;left:0;
+  overflow-wrap:break-word;word-break:normal;hyphens:none;
+}
+.lm-table-wrap > table > caption > span,
+.lm-table-wrap table caption > span{display:block;max-width:100%}
+.tablewrap-cost > table{min-width:0;display:block;width:100%}
+.tablewrap-cost{overflow-x:visible}
+.tablewrap-cost thead{display:none}
+.tablewrap-cost tbody,.tablewrap-cost tfoot{display:block}
+.tablewrap-cost tbody tr,.tablewrap-cost tfoot tr{
+  display:block;padding:12px 14px;border-bottom:1px solid var(--line);
+}
+.tablewrap-cost tbody tr:last-child{border-bottom:0}
+.tablewrap-cost th,.tablewrap-cost td{
+  display:block;padding:0;border:0;min-width:0;white-space:normal;
+  overflow-wrap:break-word;word-break:normal;hyphens:none;
+}
+.tablewrap-cost tbody th,.tablewrap-cost tfoot th{
+  font-size:.6875rem;font-weight:800;letter-spacing:.07em;text-transform:uppercase;
+  color:var(--muted);margin:0 0 4px;
+}
+.tablewrap-cost td{font-size:.875rem;color:var(--text)}
+.scrollhint:has(+ .tablewrap-cost){display:none}
+@media (min-width:768px){
+  .tablewrap-cost{overflow-x:auto}
+  .tablewrap-cost > table{display:table;min-width:560px}
+  .tablewrap-cost thead{display:table-header-group}
+  .tablewrap-cost tbody{display:table-row-group}
+  .tablewrap-cost tfoot{display:table-footer-group}
+  .tablewrap-cost tbody tr,.tablewrap-cost tfoot tr{display:table-row;padding:0;border-bottom:0}
+  .tablewrap-cost th,.tablewrap-cost td{
+    display:table-cell;padding:10px 14px;border-bottom:1px solid var(--line);margin:0;
+  }
+  .tablewrap-cost tbody th,.tablewrap-cost tfoot th{
+    font-size:.875rem;font-weight:700;letter-spacing:0;text-transform:none;
+    color:var(--text);min-width:224px;
+  }
+  .scrollhint:has(+ .tablewrap-cost){display:flex}
+}
+</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"California","item":"https://www.liquorlicenseagents.com/california/"},{"@type":"ListItem","position":2,"name":"San Francisco","item":"https://www.liquorlicenseagents.com/california/san-francisco/"}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"Liquor License Agents","url":"https://www.liquorlicenseagents.com/","telephone":"+1-800-799-9081","email":"desk@liquorlicenseagents.com","foundingDate":"2014","areaServed":{"@type":"AdministrativeArea","name":"San Francisco County, California"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"ItemList","name":"San Francisco liquor licenses for sale","itemListOrder":"https://schema.org/ItemListOrderDescending","numberOfItems":30,"itemListElement":[{"@type":"ListItem","position":1,"item":{"@type":"Product","name":"San Francisco Type 47 Liquor License SF-1001","sku":"SF-1001","category":"Type 47 — On-Sale General, Eating Place","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-47/sf-1001/","areaServed":{"@type":"AdministrativeArea","name":"San Francisco County, California"},"offers":{"@type":"Offer","price":350000,"priceCurrency":"USD","availability":"https://schema.org/InStock","availabilityStarts":"2026-09-10","itemCondition":"https://schema.org/UsedCondition","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-47/sf-1001/","seller":{"@type":"Organization","name":"Liquor License Agents"}}}},{"@type":"ListItem","position":2,"item":{"@type":"Product","name":"San Francisco Type 47 Liquor License SF-1002","sku":"SF-1002","category":"Type 47 — On-Sale General, Eating Place","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-47/sf-1002/","areaServed":{"@type":"AdministrativeArea","name":"San Francisco County, California"},"offers":{"@type":"Offer","price":330000,"priceCurrency":"USD","availability":"https://schema.org/InStock","availabilityStarts":"2026-09-02","itemCondition":"https://schema.org/UsedCondition","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-47/sf-1002/","seller":{"@type":"Organization","name":"Liquor License Agents"}}}},{"@type":"ListItem","position":3,"item":{"@type":"Product","name":"San Francisco Type 47 Liquor License SF-1003","sku":"SF-1003","category":"Type 47 — On-Sale General, Eating Place","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-47/sf-1003/","areaServed":{"@type":"AdministrativeArea","name":"San Francisco County, California"},"offers":{"@type":"Offer","price":315000,"priceCurrency":"USD","availability":"https://schema.org/InStock","availabilityStarts":"2026-07-17","itemCondition":"https://schema.org/UsedCondition","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-47/sf-1003/","seller":{"@type":"Organization","name":"Liquor License Agents"}}}},{"@type":"ListItem","position":4,"item":{"@type":"Product","name":"San Francisco Type 47 Liquor License SF-1004","sku":"SF-1004","category":"Type 47 — On-Sale General, Eating Place","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-47/sf-1004/","areaServed":{"@type":"AdministrativeArea","name":"San Francisco County, California"},"offers":{"@type":"Offer","price":300000,"priceCurrency":"USD","availability":"https://schema.org/InStock","availabilityStarts":"2026-09-06","itemCondition":"https://schema.org/UsedCondition","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-47/sf-1004/","seller":{"@type":"Organization","name":"Liquor License Agents"}}}},{"@type":"ListItem","position":5,"item":{"@type":"Product","name":"San Francisco Type 47 Liquor License SF-1005","sku":"SF-1005","category":"Type 47 — On-Sale General, Eating Place","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-47/sf-1005/","areaServed":{"@type":"AdministrativeArea","name":"San Francisco County, California"},"offers":{"@type":"Offer","price":285000,"priceCurrency":"USD","availability":"https://schema.org/InStock","availabilityStarts":"2026-08-20","itemCondition":"https://schema.org/UsedCondition","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-47/sf-1005/","seller":{"@type":"Organization","name":"Liquor License Agents"}}}},{"@type":"ListItem","position":6,"item":{"@type":"Product","name":"San Francisco Type 21 Liquor License SF-2001","sku":"SF-2001","category":"Type 21 — Off-Sale General","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-21/sf-2001/","areaServed":{"@type":"AdministrativeArea","name":"San Francisco County, California"},"offers":{"@type":"Offer","price":275000,"priceCurrency":"USD","availability":"https://schema.org/InStock","availabilityStarts":"2026-08-30","itemCondition":"https://schema.org/UsedCondition","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-21/sf-2001/","seller":{"@type":"Organization","name":"Liquor License Agents"}}}},{"@type":"ListItem","position":7,"item":{"@type":"Product","name":"San Francisco Type 47 Liquor License SF-1006","sku":"SF-1006","category":"Type 47 — On-Sale General, Eating Place","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-47/sf-1006/","areaServed":{"@type":"AdministrativeArea","name":"San Francisco County, California"},"offers":{"@type":"Offer","price":270000,"priceCurrency":"USD","availability":"https://schema.org/InStock","availabilityStarts":"2026-06-13","itemCondition":"https://schema.org/UsedCondition","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-47/sf-1006/","seller":{"@type":"Organization","name":"Liquor License Agents"}}}},{"@type":"ListItem","position":8,"item":{"@type":"Product","name":"San Francisco Type 47 Liquor License SF-1007","sku":"SF-1007","category":"Type 47 — On-Sale General, Eating Place","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-47/sf-1007/","areaServed":{"@type":"AdministrativeArea","name":"San Francisco County, California"},"offers":{"@type":"Offer","price":260000,"priceCurrency":"USD","availability":"https://schema.org/InStock","availabilityStarts":"2026-08-28","itemCondition":"https://schema.org/UsedCondition","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-47/sf-1007/","seller":{"@type":"Organization","name":"Liquor License Agents"}}}},{"@type":"ListItem","position":9,"item":{"@type":"Product","name":"San Francisco Type 48 Liquor License SF-3001","sku":"SF-3001","category":"Type 48 — On-Sale General, Public Premises","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-48/sf-3001/","areaServed":{"@type":"AdministrativeArea","name":"San Francisco County, California"},"offers":{"@type":"Offer","price":260000,"priceCurrency":"USD","availability":"https://schema.org/InStock","availabilityStarts":"2026-08-10","itemCondition":"https://schema.org/UsedCondition","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-48/sf-3001/","seller":{"@type":"Organization","name":"Liquor License Agents"}}}},{"@type":"ListItem","position":10,"item":{"@type":"Product","name":"San Francisco Type 47 Liquor License SF-1008","sku":"SF-1008","category":"Type 47 — On-Sale General, Eating Place","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-47/sf-1008/","areaServed":{"@type":"AdministrativeArea","name":"San Francisco County, California"},"offers":{"@type":"Offer","price":250000,"priceCurrency":"USD","availability":"https://schema.org/LimitedAvailability","availabilityStarts":"2026-08-03","itemCondition":"https://schema.org/UsedCondition","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-47/sf-1008/","seller":{"@type":"Organization","name":"Liquor License Agents"}}}},{"@type":"ListItem","position":11,"item":{"@type":"Product","name":"San Francisco Type 21 Liquor License SF-2002","sku":"SF-2002","category":"Type 21 — Off-Sale General","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-21/sf-2002/","areaServed":{"@type":"AdministrativeArea","name":"San Francisco County, California"},"offers":{"@type":"Offer","price":250000,"priceCurrency":"USD","availability":"https://schema.org/InStock","availabilityStarts":"2026-07-28","itemCondition":"https://schema.org/UsedCondition","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-21/sf-2002/","seller":{"@type":"Organization","name":"Liquor License Agents"}}}},{"@type":"ListItem","position":12,"item":{"@type":"Product","name":"San Francisco Type 47 Liquor License SF-1009","sku":"SF-1009","category":"Type 47 — On-Sale General, Eating Place","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-47/sf-1009/","areaServed":{"@type":"AdministrativeArea","name":"San Francisco County, California"},"offers":{"@type":"Offer","price":240000,"priceCurrency":"USD","availability":"https://schema.org/InStock","availabilityStarts":"2026-09-08","itemCondition":"https://schema.org/UsedCondition","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-47/sf-1009/","seller":{"@type":"Organization","name":"Liquor License Agents"}}}},{"@type":"ListItem","position":13,"item":{"@type":"Product","name":"San Francisco Type 47 Liquor License SF-1010","sku":"SF-1010","category":"Type 47 — On-Sale General, Eating Place","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-47/sf-1010/","areaServed":{"@type":"AdministrativeArea","name":"San Francisco County, California"},"offers":{"@type":"Offer","price":225000,"priceCurrency":"USD","availability":"https://schema.org/InStock","availabilityStarts":"2026-07-02","itemCondition":"https://schema.org/UsedCondition","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-47/sf-1010/","seller":{"@type":"Organization","name":"Liquor License Agents"}}}},{"@type":"ListItem","position":14,"item":{"@type":"Product","name":"San Francisco Type 21 Liquor License SF-2003","sku":"SF-2003","category":"Type 21 — Off-Sale General","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-21/sf-2003/","areaServed":{"@type":"AdministrativeArea","name":"San Francisco County, California"},"offers":{"@type":"Offer","price":225000,"priceCurrency":"USD","availability":"https://schema.org/LimitedAvailability","availabilityStarts":"2026-09-07","itemCondition":"https://schema.org/UsedCondition","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-21/sf-2003/","seller":{"@type":"Organization","name":"Liquor License Agents"}}}},{"@type":"ListItem","position":15,"item":{"@type":"Product","name":"San Francisco Type 47 Liquor License SF-1011","sku":"SF-1011","category":"Type 47 — On-Sale General, Eating Place","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-47/sf-1011/","areaServed":{"@type":"AdministrativeArea","name":"San Francisco County, California"},"offers":{"@type":"Offer","price":205000,"priceCurrency":"USD","availability":"https://schema.org/InStock","availabilityStarts":"2026-09-01","itemCondition":"https://schema.org/UsedCondition","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-47/sf-1011/","seller":{"@type":"Organization","name":"Liquor License Agents"}}}},{"@type":"ListItem","position":16,"item":{"@type":"Product","name":"San Francisco Type 21 Liquor License SF-2004","sku":"SF-2004","category":"Type 21 — Off-Sale General","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-21/sf-2004/","areaServed":{"@type":"AdministrativeArea","name":"San Francisco County, California"},"offers":{"@type":"Offer","price":205000,"priceCurrency":"USD","availability":"https://schema.org/InStock","availabilityStarts":"2026-08-13","itemCondition":"https://schema.org/UsedCondition","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-21/sf-2004/","seller":{"@type":"Organization","name":"Liquor License Agents"}}}},{"@type":"ListItem","position":17,"item":{"@type":"Product","name":"San Francisco Type 47 Liquor License SF-1012","sku":"SF-1012","category":"Type 47 — On-Sale General, Eating Place","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-47/sf-1012/","areaServed":{"@type":"AdministrativeArea","name":"San Francisco County, California"},"offers":{"@type":"Offer","price":200000,"priceCurrency":"USD","availability":"https://schema.org/LimitedAvailability","availabilityStarts":"2026-08-15","itemCondition":"https://schema.org/UsedCondition","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-47/sf-1012/","seller":{"@type":"Organization","name":"Liquor License Agents"}}}},{"@type":"ListItem","position":18,"item":{"@type":"Product","name":"San Francisco Type 47 Liquor License SF-1013","sku":"SF-1013","category":"Type 47 — On-Sale General, Eating Place","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-47/sf-1013/","areaServed":{"@type":"AdministrativeArea","name":"San Francisco County, California"},"offers":{"@type":"Offer","price":195000,"priceCurrency":"USD","availability":"https://schema.org/InStock","availabilityStarts":"2026-07-11","itemCondition":"https://schema.org/UsedCondition","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-47/sf-1013/","seller":{"@type":"Organization","name":"Liquor License Agents"}}}},{"@type":"ListItem","position":19,"item":{"@type":"Product","name":"San Francisco Type 47 Liquor License SF-1014","sku":"SF-1014","category":"Type 47 — On-Sale General, Eating Place","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-47/sf-1014/","areaServed":{"@type":"AdministrativeArea","name":"San Francisco County, California"},"offers":{"@type":"Offer","price":185000,"priceCurrency":"USD","availability":"https://schema.org/InStock","availabilityStarts":"2026-08-06","itemCondition":"https://schema.org/UsedCondition","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-47/sf-1014/","seller":{"@type":"Organization","name":"Liquor License Agents"}}}},{"@type":"ListItem","position":20,"item":{"@type":"Product","name":"San Francisco Type 21 Liquor License SF-2005","sku":"SF-2005","category":"Type 21 — Off-Sale General","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-21/sf-2005/","areaServed":{"@type":"AdministrativeArea","name":"San Francisco County, California"},"offers":{"@type":"Offer","price":185000,"priceCurrency":"USD","availability":"https://schema.org/InStock","availabilityStarts":"2026-07-07","itemCondition":"https://schema.org/UsedCondition","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-21/sf-2005/","seller":{"@type":"Organization","name":"Liquor License Agents"}}}},{"@type":"ListItem","position":21,"item":{"@type":"Product","name":"San Francisco Type 47 Liquor License SF-1015","sku":"SF-1015","category":"Type 47 — On-Sale General, Eating Place","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-47/sf-1015/","areaServed":{"@type":"AdministrativeArea","name":"San Francisco County, California"},"offers":{"@type":"Offer","price":175000,"priceCurrency":"USD","availability":"https://schema.org/InStock","availabilityStarts":"2026-09-04","itemCondition":"https://schema.org/UsedCondition","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-47/sf-1015/","seller":{"@type":"Organization","name":"Liquor License Agents"}}}},{"@type":"ListItem","position":22,"item":{"@type":"Product","name":"San Francisco Type 21 Liquor License SF-2006","sku":"SF-2006","category":"Type 21 — Off-Sale General","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-21/sf-2006/","areaServed":{"@type":"AdministrativeArea","name":"San Francisco County, California"},"offers":{"@type":"Offer","price":165000,"priceCurrency":"USD","availability":"https://schema.org/InStock","availabilityStarts":"2026-08-25","itemCondition":"https://schema.org/UsedCondition","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-21/sf-2006/","seller":{"@type":"Organization","name":"Liquor License Agents"}}}},{"@type":"ListItem","position":23,"item":{"@type":"Product","name":"San Francisco Type 47 Liquor License SF-1016","sku":"SF-1016","category":"Type 47 — On-Sale General, Eating Place","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-47/sf-1016/","areaServed":{"@type":"AdministrativeArea","name":"San Francisco County, California"},"offers":{"@type":"Offer","price":160000,"priceCurrency":"USD","availability":"https://schema.org/InStock","availabilityStarts":"2026-07-25","itemCondition":"https://schema.org/UsedCondition","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-47/sf-1016/","seller":{"@type":"Organization","name":"Liquor License Agents"}}}},{"@type":"ListItem","position":24,"item":{"@type":"Product","name":"San Francisco Type 47 Liquor License SF-1017","sku":"SF-1017","category":"Type 47 — On-Sale General, Eating Place","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-47/sf-1017/","areaServed":{"@type":"AdministrativeArea","name":"San Francisco County, California"},"offers":{"@type":"Offer","price":148000,"priceCurrency":"USD","availability":"https://schema.org/InStock","availabilityStarts":"2026-08-23","itemCondition":"https://schema.org/UsedCondition","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-47/sf-1017/","seller":{"@type":"Organization","name":"Liquor License Agents"}}}},{"@type":"ListItem","position":25,"item":{"@type":"Product","name":"San Francisco Type 21 Liquor License SF-2007","sku":"SF-2007","category":"Type 21 — Off-Sale General","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-21/sf-2007/","areaServed":{"@type":"AdministrativeArea","name":"San Francisco County, California"},"offers":{"@type":"Offer","price":145000,"priceCurrency":"USD","availability":"https://schema.org/InStock","availabilityStarts":"2026-07-20","itemCondition":"https://schema.org/UsedCondition","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-21/sf-2007/","seller":{"@type":"Organization","name":"Liquor License Agents"}}}},{"@type":"ListItem","position":26,"item":{"@type":"Product","name":"San Francisco Type 47 Liquor License SF-1018","sku":"SF-1018","category":"Type 47 — On-Sale General, Eating Place","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-47/sf-1018/","areaServed":{"@type":"AdministrativeArea","name":"San Francisco County, California"},"offers":{"@type":"Offer","price":135000,"priceCurrency":"USD","availability":"https://schema.org/InStock","availabilityStarts":"2026-06-19","itemCondition":"https://schema.org/UsedCondition","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-47/sf-1018/","seller":{"@type":"Organization","name":"Liquor License Agents"}}}},{"@type":"ListItem","position":27,"item":{"@type":"Product","name":"San Francisco Type 21 Liquor License SF-2008","sku":"SF-2008","category":"Type 21 — Off-Sale General","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-21/sf-2008/","areaServed":{"@type":"AdministrativeArea","name":"San Francisco County, California"},"offers":{"@type":"Offer","price":120000,"priceCurrency":"USD","availability":"https://schema.org/InStock","availabilityStarts":"2026-09-04","itemCondition":"https://schema.org/UsedCondition","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-21/sf-2008/","seller":{"@type":"Organization","name":"Liquor License Agents"}}}},{"@type":"ListItem","position":28,"item":{"@type":"Product","name":"San Francisco Type 21 Liquor License SF-2009","sku":"SF-2009","category":"Type 21 — Off-Sale General","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-21/sf-2009/","areaServed":{"@type":"AdministrativeArea","name":"San Francisco County, California"},"offers":{"@type":"Offer","price":98000,"priceCurrency":"USD","availability":"https://schema.org/InStock","availabilityStarts":"2026-06-03","itemCondition":"https://schema.org/UsedCondition","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-21/sf-2009/","seller":{"@type":"Organization","name":"Liquor License Agents"}}}},{"@type":"ListItem","position":29,"item":{"@type":"Product","name":"San Francisco Type 21 Liquor License SF-2010","sku":"SF-2010","category":"Type 21 — Off-Sale General","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-21/sf-2010/","areaServed":{"@type":"AdministrativeArea","name":"San Francisco County, California"},"offers":{"@type":"Offer","price":78000,"priceCurrency":"USD","availability":"https://schema.org/InStock","availabilityStarts":"2026-08-18","itemCondition":"https://schema.org/UsedCondition","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-21/sf-2010/","seller":{"@type":"Organization","name":"Liquor License Agents"}}}},{"@type":"ListItem","position":30,"item":{"@type":"Product","name":"San Francisco Type 20 Liquor License SF-4001","sku":"SF-4001","category":"Type 20 — Off-Sale Beer and Wine","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-20/sf-4001/","areaServed":{"@type":"AdministrativeArea","name":"San Francisco County, California"},"offers":{"@type":"Offer","price":15000,"priceCurrency":"USD","availability":"https://schema.org/InStock","availabilityStarts":"2026-09-05","itemCondition":"https://schema.org/UsedCondition","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-20/sf-4001/","seller":{"@type":"Organization","name":"Liquor License Agents"}}}}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How much does a liquor license cost in San Francisco?","acceptedAnswer":{"@type":"Answer","text":"Across the 30 San Francisco licenses on our book the median ask is $205,000, inside a range of $15,000 to $350,000. The class is what moves it: a Type 47 eating-place license runs a $232,500 median, a Type 21 off-sale $175,000, and the single Type 20 sits at $15,000 because it is the one class of the four on the book here that is not quota-limited. The price is for the license alone — no premises, no fixtures, no goodwill — and completing costs about $8,045 on top."}},{"@type":"Question","name":"Why are San Francisco liquor licenses so expensive?","acceptedAnswer":{"@type":"Answer","text":"Because supply is fixed by statute rather than by demand. California limits on-sale general licenses (Types 47 and 48) and off-sale general licenses (Type 21) against county population, and San Francisco has been over both ceilings for decades. No new originals are issued here, so the only route in is to buy an existing one. A class that sits outside the quota is cheap for exactly the same reason, in reverse: the Type 20 on this book asks $15,000."}},{"@type":"Question","name":"How long does a liquor license transfer take in San Francisco?","acceptedAnswer":{"@type":"Answer","text":"A median of 78 days across our 64 closed California files, from accepted offer to a license issued in your name. Thirty of those days are the statutory posting period at the premises and cannot be compressed by anyone. The figure assumes your address is already cleared for the use — if your Neighborhood Commercial District requires Conditional Use Authorization from San Francisco Planning, add three to five months for that track, running on its own calendar."}},{"@type":"Question","name":"Do I pay a deposit, or the whole price?","acceptedAnswer":{"@type":"Answer","text":"The whole price. This catches out buyers who have done a transfer in another state. California requires the full consideration for a license transfer to be placed with a licensed escrow holder before the Department will approve it, and it is released to the seller only when the license issues. There is no 10% down and no balance on completion — the money sits in escrow for the length of the process."}},{"@type":"Question","name":"What is the difference between a Type 47 and a Type 48?","acceptedAnswer":{"@type":"Answer","text":"Both permit beer, wine and distilled spirits for consumption on the premises. A Type 47 is tied to a bona fide eating place: a real kitchen serving real meals, and if the food operation stops the license is at risk. A Type 48 is a public premises license with no food obligation at all — and the trade-off is that nobody under 21 may enter and remain, which closes off families, all-ages events and most daytime food trade. Pick on the room you intend to run, not on the price."}},{"@type":"Question","name":"Can I use a Type 47 as a bar once the kitchen closes?","acceptedAnswer":{"@type":"Answer","text":"No, and this is the single most common way a San Francisco Type 47 gets into trouble. The eating-place obligation is continuing, not a box ticked at application: meals have to be prepared and served on the premises whenever the license is being exercised, with the kitchen and the seating to support them. A room that drifts into trading as a bar with a warming cabinet is a room with an exposed license. If the concept is drinks-led after nine, look at a Type 48 and price in what the under-21 rule costs you."}},{"@type":"Question","name":"Can a San Francisco license move to another address?","acceptedAnswer":{"@type":"Answer","text":"Inside the county, usually yes. A premises-to-premises transfer needs ABC approval and a fresh 30-day posting, and the new address has to clear San Francisco Planning on its own account. Moving a quota license out of San Francisco County is generally not available — the quota is counted county by county, which is why you buy in the county you intend to trade in."}},{"@type":"Question","name":"Is San Francisco a city or a county for licensing?","acceptedAnswer":{"@type":"Answer","text":"Both, and that is why this is one page rather than two. San Francisco is a consolidated city and county: the city and the county are the same jurisdiction with the same boundary and the same quota. A “San Francisco city” license and a “San Francisco County” license are the same thing. Anyone showing you separate city and county inventory for San Francisco is showing you the same licenses twice."}},{"@type":"Question","name":"Do I need approval from the City as well as from ABC?","acceptedAnswer":{"@type":"Answer","text":"Often, yes, and it is the step that sets the timetable. ABC handles the license. San Francisco Planning handles whether an alcohol use is permitted at your address, and in many Neighborhood Commercial Districts a new or changed alcohol use needs Conditional Use Authorization from the Planning Commission. Some districts restrict off-sale licenses further still. The Police Department’s alcohol liaison also reviews on-sale applications. Tell us the address before you sign a lease, not after."}},{"@type":"Question","name":"Why are the license number and premises address not published?","acceptedAnswer":{"@type":"Answer","text":"Because the seller is almost always still trading. Publishing the license number, the licensee of record, the trading name or the address tells their staff, their landlord, their suppliers and the operator across the street that the business is for sale. In a city this size a neighborhood alone would do it, which is why we do not publish that either — every listing here says San Francisco and stops. The full file is released to a qualified buyer under a mutual NDA, at no charge, within one business day."}},{"@type":"Question","name":"Do you charge buyers a fee?","acceptedAnswer":{"@type":"Answer","text":"No. Our commission is 4% of the accepted price, paid by the seller at closing. There is no buyer-side commission, no registration fee, no charge for the confidential file and no charge for a lender introduction. You will pay your own counsel, the escrow holder, ABC and the publisher of the notice — about $8,045 in total — and nothing to us."}},{"@type":"Question","name":"Do you have Type 41 or Type 40 licenses for sale?","acceptedAnswer":{"@type":"Answer","text":"Not at the moment — nothing in either class is on the San Francisco book today. Both classes have a page here anyway, because we do the other half of this job: we file new applications with the ABC and see them through. Tell us what you are opening and we will tell you whether the answer is to apply or to buy, and handle whichever it turns out to be."}}]}</script>
+</head>
+<body>
+<a class="mm-skip" href="#main">Skip to content</a>
+
+<header class="site-header wow-glass" id="site-header">
+  <div class="container site-header__bar">
+    <a class="brand" href="../../california/san-francisco/">
+      <span class="brand__mark"><svg viewBox="0 0 32 32" width="19" height="19" fill="currentColor" aria-hidden="true"><path d="M10.1 5.6h2.9v3.1l1.5 2.4v13.1a1 1 0 0 1-1 1h-3.9a1 1 0 0 1-1-1V11.1l1.5-2.4z"/><path d="M17.4 11.3h9.2l-3.5 5.2v5.4h2.4v2.1h-7v-2.1h2.4v-5.4z"/></svg></span>
+      Liquor License Agents
+    </a>
+
+    <ul class="site-nav" role="list" aria-label="Primary">
+      <li class="mm-has-panel" data-disclosure="classes">
+        <button class="mm-trigger" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="mm-dd-classes">
+          License classes
+          <svg class="mm-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="mm-panel mm-dropdown" id="mm-dd-classes" role="menu" aria-label="License classes">
+          <span class="mm-panel__bloom" aria-hidden="true"></span>
+          <ul role="list">
+        <li><a role="menuitem" href="../../california/san-francisco/type-47/"><span class="t">Type 47</span><span class="d">On-Sale General, Eating Place</span></a></li>
+        <li><a role="menuitem" href="../../california/san-francisco/type-21/"><span class="t">Type 21</span><span class="d">Off-Sale General</span></a></li>
+        <li><a role="menuitem" href="../../california/san-francisco/type-48/"><span class="t">Type 48</span><span class="d">On-Sale General, Public Premises</span></a></li>
+        <li><a role="menuitem" href="../../california/san-francisco/type-20/"><span class="t">Type 20</span><span class="d">Off-Sale Beer and Wine</span></a></li>
+        <li><a role="menuitem" href="../../california/san-francisco/type-41/"><span class="t">Type 41</span><span class="d">On-Sale Beer and Wine, Eating Place</span></a></li>
+        <li><a role="menuitem" href="../../california/san-francisco/type-40/"><span class="t">Type 40</span><span class="d">On-Sale Beer</span></a></li>
+          </ul>
+        </div>
+      </li>
+      <li><a class="mm-navlink" href="../../california/san-francisco/" aria-current="page">San Francisco</a></li>
+      <li class="mm-cta-desktop"><a class="btn btn-primary wow-glow" href="#listings">Browse listings</a></li>
+    </ul>
+
+    <button class="site-header__hamburger mm-burger" id="mm-burger" type="button"
+            aria-label="Open menu" aria-expanded="false" aria-controls="mobile-drawer">
+      <span class="bars" aria-hidden="true"><span></span><span></span><span></span></span>
+    </button>
+  </div>
+</header>
+
+<div class="site-drawer-backdrop mm-overlay" id="mm-overlay" data-open="false" tabindex="-1"></div>
+<nav id="mobile-drawer" class="site-drawer" aria-hidden="true" aria-label="Mobile">
+  <div class="mm-drawer__head">
+    <a class="brand" href="../../california/san-francisco/"><span class="brand__mark"><svg viewBox="0 0 32 32" width="19" height="19" fill="currentColor" aria-hidden="true"><path d="M10.1 5.6h2.9v3.1l1.5 2.4v13.1a1 1 0 0 1-1 1h-3.9a1 1 0 0 1-1-1V11.1l1.5-2.4z"/><path d="M17.4 11.3h9.2l-3.5 5.2v5.4h2.4v2.1h-7v-2.1h2.4v-5.4z"/></svg></span>Liquor License Agents</a>
+    <button class="site-drawer__close" id="mm-drawer-close" type="button" aria-label="Close menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+
+  <div class="mm-drawer__nav">
+    <div class="mm-acc">
+      <button class="mm-acc__btn" type="button" aria-expanded="false" aria-controls="mm-acc-classes">
+        License classes
+        <svg class="mm-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="mm-acc__panel" id="mm-acc-classes">
+        <div class="mm-acc__inner">
+          <a href="../../california/san-francisco/type-47/">Type 47 &mdash; On-Sale General, Eating Place</a>
+          <a href="../../california/san-francisco/type-21/">Type 21 &mdash; Off-Sale General</a>
+          <a href="../../california/san-francisco/type-48/">Type 48 &mdash; On-Sale General, Public Premises</a>
+          <a href="../../california/san-francisco/type-20/">Type 20 &mdash; Off-Sale Beer and Wine</a>
+          <a href="../../california/san-francisco/type-41/">Type 41 &mdash; On-Sale Beer and Wine, Eating Place</a>
+          <a href="../../california/san-francisco/type-40/">Type 40 &mdash; On-Sale Beer</a>
+        </div>
+      </div>
+    </div>
+    <a class="mm-drawer__link" href="../../california/san-francisco/" aria-current="page">San Francisco</a>
+  </div>
+
+  <div class="mm-drawer__cta">
+    <a class="btn btn-primary wow-glow" href="#listings">Browse listings</a>
+  </div>
+</nav>
+
+<main id="main">
+
+<section class="hero hero--photo wow-grain wow-bloom">
+  <div class="hero__media">
+    <img src="../../assets/img/venue-8ec1c325.jpg" width="720" height="405" decoding="async" alt="A tavern interior with a long polished timber bar, bottles on the back-bar shelving, exposed brick walls and buttoned leather booths.">
+  </div>
+  <span class="hero__scrim" aria-hidden="true"></span>
+  <span class="hero__smoke" aria-hidden="true"></span>
+  <div class="container">
+    <div class="hero__inner">
+      <p class="eyebrow">San Francisco County &middot; 30 licenses on the book</p>
+      <h1>San Francisco Liquor Licenses For Sale</h1>
+      <p class="lede">All 30 licenses we hold here, asking $15,000 to $350,000 &mdash; the license alone, with no premises, no fixtures and no goodwill. Every one is priced, dated and on its own page, and all six license classes are linked below. San Francisco is a consolidated city and county, so this is the whole jurisdiction: there is no separate city page and no separate county page to choose between.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary wow-glow" href="#listings">Browse listings</a>
+        <a class="btn btn-secondary" href="#inquire">Open the inquiry form</a>
+      </div>
+      <div class="hero__stats">
+        <div class="stat"><span class="stat__num">30</span><span class="stat__label">On the book</span></div>
+        <div class="stat"><span class="stat__num">$15,000</span><span class="stat__label">Lowest ask</span></div>
+        <div class="stat"><span class="stat__num">$350,000</span><span class="stat__label">Highest ask</span></div>
+        <div class="stat"><span class="stat__num">$205,000</span><span class="stat__label">Median ask</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section section--warm sf-crumbband">
+  <div class="container">
+<nav class="sf-crumb" aria-label="Breadcrumb">
+  <ol>
+    <li><a href="https://www.liquorlicenseagents.com/california/">California</a></li>
+    <li><span aria-current="page">San Francisco</span></li>
+  </ol>
+</nav>
+  </div>
+</div>
+
+<section class="section section--warm">
+  <div class="container">
+    <p class="eyebrow">Available now</p>
+    <h2>Available now in San Francisco</h2>
+    <div class="sv-body">
+      <p>San Francisco is a consolidated city and county, so there is no separate city license and county license to choose between &mdash; one jurisdiction covers all 47 square miles of it, and every license below is transferable anywhere inside that boundary. Every one of the 30 is listed below, each on its own page, with its license class, its asking price, how long it has been on the market and whether it is still open.</p>
+      <p>What no page on this site shows is the license number, the licensee, or the premises address. Those are released to a qualified buyer under a non-disclosure agreement, once we have established that a purchase is real &mdash; because a license in transfer is a live business, and publishing which one it is costs the seller money. If an entry looks right, open it and ask us from there, and we will take you through what sits behind it.</p>
+    </div>
+
+    <div id="listings">
+      <p class="sv-note">Every entry below is one license at its own address &mdash; open it, link to it or send it on without sending the whole book. Each one is the license alone: no premises, no lease, no fixtures, no kitchen, no goodwill, no stock. The six class pages are linked further down.</p>
+
+      <form class="form sf-filters" id="sf-filters" aria-label="Filter and sort the San Francisco inventory">
+
+        <div class="field sf-sel">
+          <label for="sf-f-type">License class</label>
+          <select class="ec-ctrl" id="sf-f-type">
+            <option value="">All classes</option>
+            <option value="47">Type 47 &mdash; On-Sale General, Eating Place</option>
+            <option value="21">Type 21 &mdash; Off-Sale General</option>
+            <option value="48">Type 48 &mdash; On-Sale General, Public Premises</option>
+            <option value="20">Type 20 &mdash; Off-Sale Beer and Wine</option>
+          </select>
+        </div>
+
+        <div class="field sf-sel">
+          <label for="sf-f-band">Budget</label>
+          <select class="ec-ctrl" id="sf-f-band">
+            <option value="">Any price</option>
+            <option value="a">Under $100,000</option>
+            <option value="b">$100,000 to $200,000</option>
+            <option value="c">$200,000 to $300,000</option>
+            <option value="d">$300,000 and above</option>
+          </select>
+        </div>
+
+        <div class="field sf-sel">
+          <label for="sf-f-status">Status</label>
+          <select class="ec-ctrl" id="sf-f-status">
+            <option value="">Any status</option>
+            <option value="available">Available</option>
+            <option value="offer">Under offer</option>
+          </select>
+        </div>
+
+        <div class="field sf-sel">
+          <label for="sf-f-age">Time on market</label>
+          <select class="ec-ctrl" id="sf-f-age">
+            <option value="">Any</option>
+            <option value="new">Under 30 days</option>
+            <option value="old">30 days and over</option>
+          </select>
+        </div>
+
+        <div class="field sf-sel">
+          <label for="sf-f-sort">Sort by</label>
+          <select class="ec-ctrl" id="sf-f-sort">
+            <option value="desc">Price, high to low</option>
+            <option value="asc">Price, low to high</option>
+            <option value="new">Newest to the book</option>
+            <option value="old">Longest on the market</option>
+          </select>
+        </div>
+      </form>
+
+      <div class="sf-filterfoot">
+        <p class="sv-note" id="sf-resultcount" role="status">Showing <b>30</b> of <b>30</b> licenses</p>
+        <button class="btn btn-secondary" type="button" id="sf-resetfilters">Clear filters</button>
+      </div>
+      <noscript><p class="sv-note">Filtering and sorting need JavaScript. Every one of the 30 licenses is listed, priced and linked below either way &mdash; nothing is held back behind the controls.</p></noscript>
+
+      <div class="lm-grid" id="sf-stocklist">
+      <article class="card lm-card wow-lift" data-l data-type="47" data-price="350000" data-status="available" data-days="3">
+        <p class="lm-card__type">Type 47 &middot; On-Sale General, Eating Place</p>
+        <h3 class="lm-card__city">SF-1001</h3>
+        <p class="lm-card__price">$350,000</p>
+        <p class="lm-card__meta"><span class="lic-status" data-status="active">Available</span><br>On market 3 days &middot; listed 10 September 2026</p>
+        <a class="btn btn-secondary" href="type-47/sf-1001/">View SF-1001</a>
+      </article>
+      <article class="card lm-card wow-lift" data-l data-type="47" data-price="330000" data-status="available" data-days="11">
+        <p class="lm-card__type">Type 47 &middot; On-Sale General, Eating Place</p>
+        <h3 class="lm-card__city">SF-1002</h3>
+        <p class="lm-card__price">$330,000</p>
+        <p class="lm-card__meta"><span class="lic-status" data-status="active">Available</span><br>On market 11 days &middot; listed 2 September 2026</p>
+        <a class="btn btn-secondary" href="type-47/sf-1002/">View SF-1002</a>
+      </article>
+      <article class="card lm-card wow-lift" data-l data-type="47" data-price="315000" data-status="available" data-days="58">
+        <p class="lm-card__type">Type 47 &middot; On-Sale General, Eating Place</p>
+        <h3 class="lm-card__city">SF-1003</h3>
+        <p class="lm-card__price">$315,000</p>
+        <p class="lm-card__meta"><span class="lic-status" data-status="active">Available</span><br>On market 58 days &middot; listed 17 July 2026</p>
+        <a class="btn btn-secondary" href="type-47/sf-1003/">View SF-1003</a>
+      </article>
+      <article class="card lm-card wow-lift" data-l data-type="47" data-price="300000" data-status="available" data-days="7">
+        <p class="lm-card__type">Type 47 &middot; On-Sale General, Eating Place</p>
+        <h3 class="lm-card__city">SF-1004</h3>
+        <p class="lm-card__price">$300,000</p>
+        <p class="lm-card__meta"><span class="lic-status" data-status="active">Available</span><br>On market 7 days &middot; listed 6 September 2026</p>
+        <a class="btn btn-secondary" href="type-47/sf-1004/">View SF-1004</a>
+      </article>
+      <article class="card lm-card wow-lift" data-l data-type="47" data-price="285000" data-status="available" data-days="24">
+        <p class="lm-card__type">Type 47 &middot; On-Sale General, Eating Place</p>
+        <h3 class="lm-card__city">SF-1005</h3>
+        <p class="lm-card__price">$285,000</p>
+        <p class="lm-card__meta"><span class="lic-status" data-status="active">Available</span><br>On market 24 days &middot; listed 20 August 2026</p>
+        <a class="btn btn-secondary" href="type-47/sf-1005/">View SF-1005</a>
+      </article>
+      <article class="card lm-card wow-lift" data-l data-type="21" data-price="275000" data-status="available" data-days="14">
+        <p class="lm-card__type">Type 21 &middot; Off-Sale General</p>
+        <h3 class="lm-card__city">SF-2001</h3>
+        <p class="lm-card__price">$275,000</p>
+        <p class="lm-card__meta"><span class="lic-status" data-status="active">Available</span><br>On market 14 days &middot; listed 30 August 2026</p>
+        <a class="btn btn-secondary" href="type-21/sf-2001/">View SF-2001</a>
+      </article>
+      <article class="card lm-card wow-lift" data-l data-type="47" data-price="270000" data-status="available" data-days="92">
+        <p class="lm-card__type">Type 47 &middot; On-Sale General, Eating Place</p>
+        <h3 class="lm-card__city">SF-1006</h3>
+        <p class="lm-card__price">$270,000</p>
+        <p class="lm-card__meta"><span class="lic-status" data-status="active">Available</span><br>On market 92 days &middot; listed 13 June 2026</p>
+        <a class="btn btn-secondary" href="type-47/sf-1006/">View SF-1006</a>
+      </article>
+      <article class="card lm-card wow-lift" data-l data-type="47" data-price="260000" data-status="available" data-days="16">
+        <p class="lm-card__type">Type 47 &middot; On-Sale General, Eating Place</p>
+        <h3 class="lm-card__city">SF-1007</h3>
+        <p class="lm-card__price">$260,000</p>
+        <p class="lm-card__meta"><span class="lic-status" data-status="active">Available</span><br>On market 16 days &middot; listed 28 August 2026</p>
+        <a class="btn btn-secondary" href="type-47/sf-1007/">View SF-1007</a>
+      </article>
+      <article class="card lm-card wow-lift" data-l data-type="48" data-price="260000" data-status="available" data-days="34">
+        <p class="lm-card__type">Type 48 &middot; On-Sale General, Public Premises</p>
+        <h3 class="lm-card__city">SF-3001</h3>
+        <p class="lm-card__price">$260,000</p>
+        <p class="lm-card__meta"><span class="lic-status" data-status="active">Available</span><br>On market 34 days &middot; listed 10 August 2026</p>
+        <a class="btn btn-secondary" href="type-48/sf-3001/">View SF-3001</a>
+      </article>
+      <article class="card lm-card wow-lift" data-l data-type="47" data-price="250000" data-status="offer" data-days="41">
+        <p class="lm-card__type">Type 47 &middot; On-Sale General, Eating Place</p>
+        <h3 class="lm-card__city">SF-1008</h3>
+        <p class="lm-card__price">$250,000</p>
+        <p class="lm-card__meta"><span class="lic-status" data-status="pending">Under offer</span><br>On market 41 days &middot; listed 3 August 2026</p>
+        <a class="btn btn-secondary" href="type-47/sf-1008/">View SF-1008</a>
+      </article>
+      <article class="card lm-card wow-lift" data-l data-type="21" data-price="250000" data-status="available" data-days="47">
+        <p class="lm-card__type">Type 21 &middot; Off-Sale General</p>
+        <h3 class="lm-card__city">SF-2002</h3>
+        <p class="lm-card__price">$250,000</p>
+        <p class="lm-card__meta"><span class="lic-status" data-status="active">Available</span><br>On market 47 days &middot; listed 28 July 2026</p>
+        <a class="btn btn-secondary" href="type-21/sf-2002/">View SF-2002</a>
+      </article>
+      <article class="card lm-card wow-lift" data-l data-type="47" data-price="240000" data-status="available" data-days="5">
+        <p class="lm-card__type">Type 47 &middot; On-Sale General, Eating Place</p>
+        <h3 class="lm-card__city">SF-1009</h3>
+        <p class="lm-card__price">$240,000</p>
+        <p class="lm-card__meta"><span class="lic-status" data-status="active">Available</span><br>On market 5 days &middot; listed 8 September 2026</p>
+        <a class="btn btn-secondary" href="type-47/sf-1009/">View SF-1009</a>
+      </article>
+      <article class="card lm-card wow-lift" data-l data-type="47" data-price="225000" data-status="available" data-days="73">
+        <p class="lm-card__type">Type 47 &middot; On-Sale General, Eating Place</p>
+        <h3 class="lm-card__city">SF-1010</h3>
+        <p class="lm-card__price">$225,000</p>
+        <p class="lm-card__meta"><span class="lic-status" data-status="active">Available</span><br>On market 73 days &middot; listed 2 July 2026</p>
+        <a class="btn btn-secondary" href="type-47/sf-1010/">View SF-1010</a>
+      </article>
+      <article class="card lm-card wow-lift" data-l data-type="21" data-price="225000" data-status="offer" data-days="6">
+        <p class="lm-card__type">Type 21 &middot; Off-Sale General</p>
+        <h3 class="lm-card__city">SF-2003</h3>
+        <p class="lm-card__price">$225,000</p>
+        <p class="lm-card__meta"><span class="lic-status" data-status="pending">Under offer</span><br>On market 6 days &middot; listed 7 September 2026</p>
+        <a class="btn btn-secondary" href="type-21/sf-2003/">View SF-2003</a>
+      </article>
+      <article class="card lm-card wow-lift" data-l data-type="47" data-price="205000" data-status="available" data-days="12">
+        <p class="lm-card__type">Type 47 &middot; On-Sale General, Eating Place</p>
+        <h3 class="lm-card__city">SF-1011</h3>
+        <p class="lm-card__price">$205,000</p>
+        <p class="lm-card__meta"><span class="lic-status" data-status="active">Available</span><br>On market 12 days &middot; listed 1 September 2026</p>
+        <a class="btn btn-secondary" href="type-47/sf-1011/">View SF-1011</a>
+      </article>
+      <article class="card lm-card wow-lift" data-l data-type="21" data-price="205000" data-status="available" data-days="31">
+        <p class="lm-card__type">Type 21 &middot; Off-Sale General</p>
+        <h3 class="lm-card__city">SF-2004</h3>
+        <p class="lm-card__price">$205,000</p>
+        <p class="lm-card__meta"><span class="lic-status" data-status="active">Available</span><br>On market 31 days &middot; listed 13 August 2026</p>
+        <a class="btn btn-secondary" href="type-21/sf-2004/">View SF-2004</a>
+      </article>
+      <article class="card lm-card wow-lift" data-l data-type="47" data-price="200000" data-status="offer" data-days="29">
+        <p class="lm-card__type">Type 47 &middot; On-Sale General, Eating Place</p>
+        <h3 class="lm-card__city">SF-1012</h3>
+        <p class="lm-card__price">$200,000</p>
+        <p class="lm-card__meta"><span class="lic-status" data-status="pending">Under offer</span><br>On market 29 days &middot; listed 15 August 2026</p>
+        <a class="btn btn-secondary" href="type-47/sf-1012/">View SF-1012</a>
+      </article>
+      <article class="card lm-card wow-lift" data-l data-type="47" data-price="195000" data-status="available" data-days="64">
+        <p class="lm-card__type">Type 47 &middot; On-Sale General, Eating Place</p>
+        <h3 class="lm-card__city">SF-1013</h3>
+        <p class="lm-card__price">$195,000</p>
+        <p class="lm-card__meta"><span class="lic-status" data-status="active">Available</span><br>On market 64 days &middot; listed 11 July 2026</p>
+        <a class="btn btn-secondary" href="type-47/sf-1013/">View SF-1013</a>
+      </article>
+      <article class="card lm-card wow-lift" data-l data-type="47" data-price="185000" data-status="available" data-days="38">
+        <p class="lm-card__type">Type 47 &middot; On-Sale General, Eating Place</p>
+        <h3 class="lm-card__city">SF-1014</h3>
+        <p class="lm-card__price">$185,000</p>
+        <p class="lm-card__meta"><span class="lic-status" data-status="active">Available</span><br>On market 38 days &middot; listed 6 August 2026</p>
+        <a class="btn btn-secondary" href="type-47/sf-1014/">View SF-1014</a>
+      </article>
+      <article class="card lm-card wow-lift" data-l data-type="21" data-price="185000" data-status="available" data-days="68">
+        <p class="lm-card__type">Type 21 &middot; Off-Sale General</p>
+        <h3 class="lm-card__city">SF-2005</h3>
+        <p class="lm-card__price">$185,000</p>
+        <p class="lm-card__meta"><span class="lic-status" data-status="active">Available</span><br>On market 68 days &middot; listed 7 July 2026</p>
+        <a class="btn btn-secondary" href="type-21/sf-2005/">View SF-2005</a>
+      </article>
+      <article class="card lm-card wow-lift" data-l data-type="47" data-price="175000" data-status="available" data-days="9">
+        <p class="lm-card__type">Type 47 &middot; On-Sale General, Eating Place</p>
+        <h3 class="lm-card__city">SF-1015</h3>
+        <p class="lm-card__price">$175,000</p>
+        <p class="lm-card__meta"><span class="lic-status" data-status="active">Available</span><br>On market 9 days &middot; listed 4 September 2026</p>
+        <a class="btn btn-secondary" href="type-47/sf-1015/">View SF-1015</a>
+      </article>
+      <article class="card lm-card wow-lift" data-l data-type="21" data-price="165000" data-status="available" data-days="19">
+        <p class="lm-card__type">Type 21 &middot; Off-Sale General</p>
+        <h3 class="lm-card__city">SF-2006</h3>
+        <p class="lm-card__price">$165,000</p>
+        <p class="lm-card__meta"><span class="lic-status" data-status="active">Available</span><br>On market 19 days &middot; listed 25 August 2026</p>
+        <a class="btn btn-secondary" href="type-21/sf-2006/">View SF-2006</a>
+      </article>
+      <article class="card lm-card wow-lift" data-l data-type="47" data-price="160000" data-status="available" data-days="50">
+        <p class="lm-card__type">Type 47 &middot; On-Sale General, Eating Place</p>
+        <h3 class="lm-card__city">SF-1016</h3>
+        <p class="lm-card__price">$160,000</p>
+        <p class="lm-card__meta"><span class="lic-status" data-status="active">Available</span><br>On market 50 days &middot; listed 25 July 2026</p>
+        <a class="btn btn-secondary" href="type-47/sf-1016/">View SF-1016</a>
+      </article>
+      <article class="card lm-card wow-lift" data-l data-type="47" data-price="148000" data-status="available" data-days="21">
+        <p class="lm-card__type">Type 47 &middot; On-Sale General, Eating Place</p>
+        <h3 class="lm-card__city">SF-1017</h3>
+        <p class="lm-card__price">$148,000</p>
+        <p class="lm-card__meta"><span class="lic-status" data-status="active">Available</span><br>On market 21 days &middot; listed 23 August 2026</p>
+        <a class="btn btn-secondary" href="type-47/sf-1017/">View SF-1017</a>
+      </article>
+      <article class="card lm-card wow-lift" data-l data-type="21" data-price="145000" data-status="available" data-days="55">
+        <p class="lm-card__type">Type 21 &middot; Off-Sale General</p>
+        <h3 class="lm-card__city">SF-2007</h3>
+        <p class="lm-card__price">$145,000</p>
+        <p class="lm-card__meta"><span class="lic-status" data-status="active">Available</span><br>On market 55 days &middot; listed 20 July 2026</p>
+        <a class="btn btn-secondary" href="type-21/sf-2007/">View SF-2007</a>
+      </article>
+      <article class="card lm-card wow-lift" data-l data-type="47" data-price="135000" data-status="available" data-days="86">
+        <p class="lm-card__type">Type 47 &middot; On-Sale General, Eating Place</p>
+        <h3 class="lm-card__city">SF-1018</h3>
+        <p class="lm-card__price">$135,000</p>
+        <p class="lm-card__meta"><span class="lic-status" data-status="active">Available</span><br>On market 86 days &middot; listed 19 June 2026</p>
+        <a class="btn btn-secondary" href="type-47/sf-1018/">View SF-1018</a>
+      </article>
+      <article class="card lm-card wow-lift" data-l data-type="21" data-price="120000" data-status="available" data-days="9">
+        <p class="lm-card__type">Type 21 &middot; Off-Sale General</p>
+        <h3 class="lm-card__city">SF-2008</h3>
+        <p class="lm-card__price">$120,000</p>
+        <p class="lm-card__meta"><span class="lic-status" data-status="active">Available</span><br>On market 9 days &middot; listed 4 September 2026</p>
+        <a class="btn btn-secondary" href="type-21/sf-2008/">View SF-2008</a>
+      </article>
+      <article class="card lm-card wow-lift" data-l data-type="21" data-price="98000" data-status="available" data-days="102">
+        <p class="lm-card__type">Type 21 &middot; Off-Sale General</p>
+        <h3 class="lm-card__city">SF-2009</h3>
+        <p class="lm-card__price">$98,000</p>
+        <p class="lm-card__meta"><span class="lic-status" data-status="active">Available</span><br>On market 102 days &middot; listed 3 June 2026</p>
+        <a class="btn btn-secondary" href="type-21/sf-2009/">View SF-2009</a>
+      </article>
+      <article class="card lm-card wow-lift" data-l data-type="21" data-price="78000" data-status="available" data-days="26">
+        <p class="lm-card__type">Type 21 &middot; Off-Sale General</p>
+        <h3 class="lm-card__city">SF-2010</h3>
+        <p class="lm-card__price">$78,000</p>
+        <p class="lm-card__meta"><span class="lic-status" data-status="active">Available</span><br>On market 26 days &middot; listed 18 August 2026</p>
+        <a class="btn btn-secondary" href="type-21/sf-2010/">View SF-2010</a>
+      </article>
+      <article class="card lm-card wow-lift" data-l data-type="20" data-price="15000" data-status="available" data-days="8">
+        <p class="lm-card__type">Type 20 &middot; Off-Sale Beer and Wine</p>
+        <h3 class="lm-card__city">SF-4001</h3>
+        <p class="lm-card__price">$15,000</p>
+        <p class="lm-card__meta"><span class="lic-status" data-status="active">Available</span><br>On market 8 days &middot; listed 5 September 2026</p>
+        <a class="btn btn-secondary" href="type-20/sf-4001/">View SF-4001</a>
+      </article>
+      </div>
+
+      <div class="lm-empty" id="sf-nomatch" hidden>
+        <h3>Nothing on the book matches that yet</h3>
+        <p>Thirty licenses are on the San Francisco book and four more are held off-market. Widen the budget or clear a filter &mdash; or tell us what you are opening and we will look for you.</p>
+        <div class="cta-row">
+          <button class="btn btn-secondary" type="button" id="sf-emptyreset">Clear all filters</button>
+          <a class="btn btn-primary" href="#inquire">Open the inquiry form</a>
+        </div>
+      </div>
+
+      <p class="sv-note">30 licenses across four classes &middot; asking $15,000 to $350,000 &middot; median ask $205,000 &middot; 27 available and 3 under offer &middot; on the market 3 to 102 days. Asking prices, availability and days on market are reviewed weekly and were last checked on 13 September 2026. Three of the 30 are under offer and are shown as such rather than removed.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section section--dark">
+  <div class="container">
+    <p class="eyebrow">The spread</p>
+    <h2>San Francisco asking price distribution</h2>
+    <div class="stat-strip__row sf-mt-xl">
+      <div class="stat"><span class="stat__num">$15,000</span><span class="stat__label">Lowest ask &mdash; the one Type 20, the only class of the four here that is not quota-limited</span></div>
+      <div class="stat"><span class="stat__num">$205,000</span><span class="stat__label">Median ask &mdash; the middle of the San Francisco book</span></div>
+      <div class="stat"><span class="stat__num">$260,000</span><span class="stat__label">75th percentile &mdash; a quarter of the book asks more than this</span></div>
+      <div class="stat"><span class="stat__num">$350,000</span><span class="stat__label">Highest ask &mdash; a Type 47 with a full kitchen build already in</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <p class="eyebrow">License classes</p>
+    <h2>What each license class does, in San Francisco</h2>
+    <p class="lede">California numbers its license classes, and the number decides what you may pour, to whom, and whether you need a kitchen. Four of them change hands here often enough to have a market, and each has its own page with its stock priced. Type 41 and Type 40 are in the directory too, with no resale stock on the book &mdash; those are the ones we apply for.</p>
+    <div class="lic-grid">
+      <article class="lic-card wow-lift">
+        <div class="lic-card__media wow-zoom">
+          <img src="../../assets/img/venue-dcc47c4d.jpg" width="720" height="405" loading="lazy" decoding="async" alt="A bright restaurant dining room with a curved bar, glassware hung above it and tables set along full-height street windows.">
+          <div class="lic-card__label">
+            <span class="lic-card__num">Type 47 &middot; Quota class</span>
+            <h3>On-Sale General, Eating Place</h3>
+          </div>
+        </div>
+        <div class="lic-card__body">
+          <div class="sv-body"><p><strong>A restaurant with a full bar.</strong> Beer, wine and distilled spirits poured for drinking on the premises, in a room that serves real meals from a real kitchen. California calls that a bona fide public eating place, and the kitchen is not a formality: lose it and you lose the license.</p><p>It is the deepest class in San Francisco by a distance, and the one most buyers are actually looking for when they say &ldquo;a liquor license&rdquo;.</p></div>
+          <ul class="lic-card__list">
+            <li>On our San Francisco book: <strong>18</strong></li>
+            <li>Median ask: <strong>$232,500</strong></li>
+            <li>Range: <strong>$135,000 to $350,000</strong></li>
+          </ul>
+          <p class="lm-deep"><a href="type-47/">Browse the San Francisco Type 47 licenses</a></p>
+        </div>
+      </article>
+      <article class="lic-card wow-lift">
+        <div class="lic-card__media wow-zoom">
+          <img src="../../assets/img/venue-104e3d8b.jpg" width="720" height="405" loading="lazy" decoding="async" alt="A wine shop aisle with bottles ranged on tall timber shelving under pendant lights, and a chalkboard on the end wall.">
+          <div class="lic-card__label">
+            <span class="lic-card__num">Type 21 &middot; Quota class</span>
+            <h3>Off-Sale General</h3>
+          </div>
+        </div>
+        <div class="lic-card__body">
+          <div class="sv-body"><p><strong>A liquor store, spirits included.</strong> Beer, wine and distilled spirits sold sealed, to be drunk somewhere else. This is the off-sale class that carries spirits, and it is under the county quota exactly as the on-sale general classes are.</p><p>Ten on the book, and the widest price spread of any San Francisco class &mdash; location and trading history move an off-sale license more than they move an on-sale one.</p></div>
+          <ul class="lic-card__list">
+            <li>On our San Francisco book: <strong>10</strong></li>
+            <li>Median ask: <strong>$175,000</strong></li>
+            <li>Range: <strong>$78,000 to $275,000</strong></li>
+          </ul>
+          <p class="lm-deep"><a href="type-21/">Browse the San Francisco Type 21 licenses</a></p>
+        </div>
+      </article>
+      <article class="lic-card wow-lift">
+        <div class="lic-card__media wow-zoom">
+          <img src="../../assets/img/venue-222c4f73.jpg" width="720" height="405" loading="lazy" decoding="async" alt="A tavern room with a long communal timber table down the middle, a bar along one wall and brick walls under warm pendant lights.">
+          <div class="lic-card__label">
+            <span class="lic-card__num">Type 48 &middot; Quota class</span>
+            <h3>On-Sale General, Public Premises</h3>
+          </div>
+        </div>
+        <div class="lic-card__body">
+          <div class="sv-body"><p><strong>A bar or nightclub, over-21 only.</strong> The same drinks as a Type 47 and none of the kitchen obligation &mdash; but nobody under 21 may enter and remain, which rules out families, all-ages shows and most daytime food trade.</p><p>Genuinely rare on the open market here: one on our book, and one is all that has traded in San Francisco in the last year.</p></div>
+          <ul class="lic-card__list">
+            <li>On our San Francisco book: <strong>1</strong></li>
+            <li>Asking price: <strong>$260,000</strong></li>
+            <li>One license, one price</li>
+          </ul>
+          <p class="lm-deep"><a href="type-48/">Browse the San Francisco Type 48 licenses</a></p>
+        </div>
+      </article>
+      <article class="lic-card wow-lift">
+        <div class="lic-card__media wow-zoom">
+          <img src="../../assets/img/venue-2e6d7b57.jpg" width="720" height="405" loading="lazy" decoding="async" alt="A bottle shop aisle with wine and spirits on open timber shelving and a price board at the end of the run.">
+          <div class="lic-card__label">
+            <span class="lic-card__num">Type 20 &middot; Not quota-limited</span>
+            <h3>Off-Sale Beer and Wine</h3>
+          </div>
+        </div>
+        <div class="lic-card__body">
+          <div class="sv-body"><p><strong>Beer and wine, to take away.</strong> A shop selling beer and wine sealed for consumption off the premises. No spirits. It is the one class of the four here that is not quota-limited, so ABC will issue a new one on application.</p><p>Which is exactly why it asks $15,000 and a Type 47 asks $232,500. You are buying time and certainty here, not scarcity.</p></div>
+          <ul class="lic-card__list">
+            <li>On our San Francisco book: <strong>1</strong></li>
+            <li>Asking price: <strong>$15,000</strong></li>
+            <li>One license, one price</li>
+          </ul>
+          <p class="lm-deep"><a href="type-20/">Browse the San Francisco Type 20 licenses</a></p>
+        </div>
+      </article>
+      <article class="lic-card wow-lift">
+        <div class="lic-card__media wow-zoom">
+          <img src="../../assets/img/venue-5ccd89cd.jpg" width="720" height="405" loading="lazy" decoding="async" alt="A pale, light-filled dining room with a curved service bar, upholstered stools and cafe tables beside tall windows.">
+          <div class="lic-card__label">
+            <span class="lic-card__num">Type 41 &middot; Applications</span>
+            <h3>On-Sale Beer and Wine, Eating Place</h3>
+          </div>
+        </div>
+        <div class="lic-card__body">
+          <div class="sv-body"><p><strong>Beer and wine with meals, in a bona fide eating place.</strong> That is what the class authorizes, and for a great many San Francisco rooms it is the license the concept actually needs.</p><p>We hold none of them for resale today, which is the honest state of the book rather than the end of the conversation: this is the class we most often file a new application for.</p></div>
+          <ul class="lic-card__list">
+            <li>On our San Francisco book: <strong>none right now</strong></li>
+            <li>We file the application with the ABC</li>
+            <li>We will say plainly whether to apply or to buy</li>
+          </ul>
+          <p class="lm-deep"><a href="type-41/">See the Type 41 application service</a></p>
+        </div>
+      </article>
+      <article class="lic-card wow-lift">
+        <div class="lic-card__media wow-zoom">
+          <img src="../../assets/img/venue-fe617ff8.jpg" width="720" height="405" loading="lazy" decoding="async" alt="A dark bar room with a long counter and a row of stools, pendant lights overhead and buttoned leather booths along the back wall.">
+          <div class="lic-card__label">
+            <span class="lic-card__num">Type 40 &middot; Applications</span>
+            <h3>On-Sale Beer</h3>
+          </div>
+        </div>
+        <div class="lic-card__body">
+          <div class="sv-body"><p><strong>On-Sale Beer.</strong> Beer poured for drinking on the premises, and that is the whole of it &mdash; no wine, no spirits.</p><p>Nothing in this class is on the book today. If a beer-only room is what you are opening, the route is an application, and that is work we do.</p></div>
+          <ul class="lic-card__list">
+            <li>On our San Francisco book: <strong>none right now</strong></li>
+            <li>We file the application with the ABC</li>
+            <li>We will say plainly whether to apply or to buy</li>
+          </ul>
+          <p class="lm-deep"><a href="type-40/">See the Type 40 application service</a></p>
+        </div>
+      </article>
+    </div>
+    <p class="sv-note">The plain-English class descriptions summarize the Department of Alcoholic Beverage Control&rsquo;s own class definitions. They are a summary, not a quotation, and they are not legal advice &mdash; read the class definition and the conditions on the individual license before you commit to one. Class rules are confirmed for your specific premises during qualification.</p>
+  </div>
+</section>
+
+<section class="section section--warm">
+  <div class="container">
+    <p class="eyebrow">Applications</p>
+    <h2>Type 41 and Type 40: nothing on the book, and we file the application</h2>
+    <div class="sv-body">
+      <p>Two classes in this directory hold no resale stock at all today. <strong>Type 41</strong> is On-Sale Beer and Wine for a bona fide eating place; <strong>Type 40</strong> is On-Sale Beer. Neither has a license on the San Francisco book as we write this, and we would rather give them a page that says so than leave them off the directory and let you assume we do not work on them.</p>
+      <p>Because we do. Alongside the brokerage we run the application side: the paperwork, the ABC file and the follow-through on a new license in your own name. That is the route for these two classes right now, and it is work we do rather than work we hand back to you.</p>
+      <p>So the offer is the same one we make on every class here. Tell us what you are opening and we will tell you whether the answer is to apply or to buy &mdash; and then handle whichever one it turns out to be. If the room only ever needed beer and wine, we will say so before you spend on a class you do not need; if it needs a full bar, the four classes above are where the stock is.</p>
+    </div>
+    <div class="lm-empty">
+      <p><strong>On the book in these two classes right now: none.</strong></p>
+      <p>Class rules are confirmed for your specific premises during qualification, and nothing on this page is legal advice. What follows is the page for each class.</p>
+      <div class="cross-link-rail__rail">
+        <a class="cross-link" href="type-41/">Type 41 &mdash; On-Sale Beer and Wine, Eating Place</a>
+        <a class="cross-link" href="type-40/">Type 40 &mdash; On-Sale Beer</a>
+      </div>
+    </div>
+    <p class="sv-note">The four classes that do hold stock here are Type 47, Type 21, Type 48 and Type 20, and each is linked above with its own priced page.</p>
+  </div>
+</section>
+
+<section class="section section--dark">
+  <div class="container">
+    <p class="eyebrow">The mechanism</p>
+    <h2>What a San Francisco license costs, and why</h2>
+    <div class="sv-body">
+      <p>California does not issue general licenses on demand. The number of <strong>on-sale general</strong> licenses &mdash; the Type 47 and Type 48 classes &mdash; is limited against county population, and so is the number of <strong>off-sale general</strong> licenses, the Type 21 class. San Francisco has been over both ceilings for decades. The Department of Alcoholic Beverage Control does not issue new originals here, so the only way to get one is to buy one from somebody who already holds it.</p>
+      <p>That is the whole price mechanism, and it explains the two things that surprise buyers most. First, <strong>why the price is not a business valuation</strong>. You are not buying revenue, a lease, a kitchen, a customer list or a name. You are buying a transferable permission, and everything that makes it earn money you supply yourself. Second, <strong>why the spread is so wide</strong>: $15,000 to $350,000 on the same 30-license book. The spread is not quality. It is which side of the quota line the class sits on.</p>
+      <p>Look at the two ends. The <strong>Type 20</strong> at the bottom is off-sale beer and wine, and it is <em>not</em> quota-limited &mdash; ABC will issue a new one to a qualified applicant. Nobody pays a fortune for something they can apply for. The <strong>Type 47</strong> at the top is quota-limited and there is no queue to join: when San Francisco restaurants want a full bar, the only supply is the license somebody else is giving up. Same city, same paperwork, a twenty-three-fold difference in price, and the quota explains all of it.</p>
+      <p>Inside a class, three things move a price. <strong>The condition of the file</strong>: a clean register entry with no discipline history and a current tax clearance sells faster and higher than one with either. <strong>The conditions on the license itself</strong>: petition conditions restricting hours, entertainment or off-sale privileges attach to individual San Francisco licenses and travel with them to the buyer. And <strong>whether the seller is under pressure</strong>: a lease ending or a closed room moves a price more than anything about the license does.</p>
+      <p>It also explains why San Francisco has a second clock that most places do not. Getting the license transferred is one process, with ABC. Getting your <em>address</em> approved to use it can be a second one, with San Francisco Planning, if your Neighborhood Commercial District requires a conditional use for the alcohol use you have in mind. The two run at different speeds, and the Planning one is usually slower. Anybody quoting you a San Francisco timetable without asking for your address is quoting you half the job.</p>
+    </div>
+    <p class="sv-caveat"><strong>A note on the citation.</strong> The quota is set by ratio in the Business and Professions Code &mdash; roughly one on-sale general per 2,000 county residents and one off-sale general per 2,500 &mdash; and the operative sections sit in the &sect;23816 to &sect;23817 range. We have given you the mechanism rather than a section number we would want counsel to confirm. Read the code, or ask us and we will get the current citation from ABC counsel rather than guess at it.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <p class="eyebrow">How a transfer works</p>
+    <h2>From accepted offer to trading, in 78 days</h2>
+    <p class="lede">That is the median across our 64 closed California files. The stages below are the medians for each step and they add to the same 78 days. Nothing here is quick, and thirty of those days are a statutory posting period that nobody can shorten &mdash; anyone promising you a four-week San Francisco transfer is describing paperwork, not the calendar.</p>
+    <div class="process__steps">
+      <div class="step">
+        <span class="step__num" aria-hidden="true">1</span>
+        <p class="eyebrow">7 days</p>
+        <h3>Offer accepted, escrow opened</h3>
+        <p>A purchase agreement, then escrow with a licensed escrow holder. California requires the full consideration to sit in escrow before the Department will approve the transfer, so this is the point your money moves, not completion day.</p>
+      </div>
+      <div class="step">
+        <span class="step__num" aria-hidden="true">2</span>
+        <p class="eyebrow">10 days</p>
+        <h3>Buyer qualification and application</h3>
+        <p>The person-to-person transfer application, Live Scan fingerprinting for every principal, and proof of funds. This is also when the mutual NDA is signed and the confidential file &mdash; license number, licensee of record, premises address, term, encumbrances, tax position &mdash; is released to you.</p>
+      </div>
+      <div class="step">
+        <span class="step__num" aria-hidden="true">3</span>
+        <p class="eyebrow">30 days</p>
+        <h3>Public notice posted at the premises</h3>
+        <p>ABC posts the application at the premises for 30 days, and the notice of intended transfer is published in a newspaper of general circulation. The 30 days are statutory and cannot be shortened, whatever anyone promises you.</p>
+      </div>
+      <div class="step">
+        <span class="step__num" aria-hidden="true">4</span>
+        <p class="eyebrow">14 days</p>
+        <h3>Protest period and local agency review</h3>
+        <p>Any protest filed during the posting is worked through here, and this is where San Francisco can add time: the Police Department&rsquo;s alcohol liaison reviews on-sale applications, and a Planning conditional use, if your district needs one, runs on its own much longer calendar.</p>
+      </div>
+      <div class="step">
+        <span class="step__num" aria-hidden="true">5</span>
+        <p class="eyebrow">10 days</p>
+        <h3>ABC investigation and approval</h3>
+        <p>The investigator confirms the premises, the qualification of the buyer and the tax position of the seller. Clean files clear here without anyone hearing from anyone.</p>
+      </div>
+      <div class="step">
+        <span class="step__num" aria-hidden="true">6</span>
+        <p class="eyebrow">7 days</p>
+        <h3>Escrow closes, license issued in your name</h3>
+        <p>Approval issued, escrow released to the seller, license recorded against you. You can trade.</p>
+      </div>
+    </div>
+    <p class="sv-note">Stage day counts are the medians from our own closed California files and add to 7 + 10 + 30 + 14 + 10 + 7 = 78 days, which is also our median from accepted offer to issue. The 30-day posting is a statutory period; the rest is how San Francisco files actually run.</p>
+  </div>
+</section>
+
+<section class="section section--warm">
+  <div class="container">
+    <p class="eyebrow">Costs</p>
+    <h2>What a transfer costs on top of the price</h2>
+    <p class="lede">Most liquor license marketplaces publish a price and stop there. Here is the rest of the bill, worked on the median San Francisco license, so you can budget before you ask rather than after.</p>
+
+    <p class="sv-note" id="sf-costcap">Estimated buyer-side costs to complete a San Francisco transfer, excluding the price of the license itself. Untick anything you will handle yourself and the total re-adds.</p>
+    <p class="sv-note" id="sf-scrollhint" data-scrollhint="sf-costwrap">On a narrow screen this table scrolls sideways &mdash; swipe or arrow across it to see every column.</p>
+    <noscript><p class="sv-note">The running total needs JavaScript. Every amount and the $8,045 total are printed in the table either way.</p></noscript>
+
+    <div class="lm-table-wrap" id="sf-costwrap" tabindex="0" role="region" aria-labelledby="sf-costcap">
+      <table class="lm-table" aria-labelledby="sf-costcap">
+        <thead>
+          <tr>
+            <th scope="col"><span class="vh">Include this cost</span></th>
+            <th scope="col">Cost</th>
+            <th scope="col">Paid to</th>
+            <th scope="col">Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-cost="1450">
+            <td><input class="sf-costbox" type="checkbox" checked data-costbox aria-label="Include Escrow fee, $1,450"></td>
+            <th scope="row">Escrow fee</th>
+            <td>Licensed escrow holder, as Bus. &amp; Prof. Code &sect;24074 requires</td>
+            <td>$1,450</td>
+          </tr>
+          <tr data-cost="1250">
+            <td><input class="sf-costbox" type="checkbox" checked data-costbox aria-label="Include ABC person-to-person transfer fee, $1,250"></td>
+            <th scope="row">ABC person-to-person transfer fee</th>
+            <td>California Department of Alcoholic Beverage Control</td>
+            <td>$1,250</td>
+          </tr>
+          <tr data-cost="385">
+            <td><input class="sf-costbox" type="checkbox" checked data-costbox aria-label="Include Notice of intended transfer, published, $385"></td>
+            <th scope="row">Notice of intended transfer, published</th>
+            <td>Newspaper of general circulation in San Francisco</td>
+            <td>$385</td>
+          </tr>
+          <tr data-cost="160">
+            <td><input class="sf-costbox" type="checkbox" checked data-costbox aria-label="Include Live Scan and fingerprinting, two principals, $160"></td>
+            <th scope="row">Live Scan and fingerprinting, two principals</th>
+            <td>California Department of Justice, via ABC</td>
+            <td>$160</td>
+          </tr>
+          <tr data-cost="4800">
+            <td><input class="sf-costbox" type="checkbox" checked data-costbox aria-label="Include Buyer’s counsel, ABC transfer work, $4,800"></td>
+            <th scope="row">Buyer&rsquo;s counsel, ABC transfer work</th>
+            <td>Your attorney</td>
+            <td>$4,800</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td></td>
+            <th scope="row" colspan="2">Total cost to close, excluding the price</th>
+            <td id="sf-costtotal">$8,045</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+    <div class="card lm-card sf-mt-lg">
+      <p class="lm-card__type">The median license plus costs to close</p>
+      <p class="lm-card__price" id="sf-grandtotal">$213,045</p>
+      <p class="lm-card__meta">The $205,000 median ask plus the $8,045 above.</p>
+    </div>
+
+    <div class="sv-body sf-mt-xl">
+      <p><strong>The whole price goes into escrow, not a deposit.</strong> This is the part that surprises buyers coming from other states. California requires the full consideration for a license transfer to be placed with a licensed escrow holder before the transfer is approved, and it is released to the seller only on issue. There is no 10% and no balance on completion.</p>
+      <p><strong>Conditional use, where San Francisco requires it.</strong> A change of license or a new alcohol use in many of the city&rsquo;s Neighborhood Commercial Districts needs Conditional Use Authorization from the Planning Commission before ABC will act. Budget $3,000 to $8,000 and three to five months for that track, and treat it as separate from the figures above. It is the single largest source of San Francisco timetable slippage.</p>
+      <p><strong>After you hold it:</strong> the ABC annual renewal on a San Francisco on-sale general license runs about $1,400, and about $700 on an off-sale.</p>
+      <p><strong>Our commission:</strong> 4% of the accepted price, paid by the seller at closing. There is no buyer-side fee, no registration fee and no charge for the confidential file once you are qualified.</p>
+      <p><strong>Financing:</strong> a license is not mortgageable the way real property is, and most California lenders will not lend against one alone. We work with two lenders who underwrite license transfers as part of a wider fit-out facility and will make an introduction.</p>
+    </div>
+    <p class="sv-note">Fee amounts are our current working figures for a San Francisco file and were last checked on 13 September 2026. The escrow requirement, the conditional-use track and the renewal bands are described from practice rather than quoted from a fee schedule &mdash; confirm the current ABC fee schedule and your Planning district before you sign anything.</p>
+  </div>
+</section>
+
+<section class="section section--dark">
+  <div class="container">
+    <p class="eyebrow">Released when you qualify</p>
+    <h2>The license number and the address are not on this page</h2>
+    <p class="lede">Not masked, not blurred, not shown in part. They are simply not published, for any license, anywhere on this site. A seller is almost always still trading. In a city where a neighborhood and a license class narrow a business to a handful of doors, publishing either one tells their staff, their landlord and the operator across the street that they are selling. So the shop window carries everything you need to shortlist, and nothing that identifies the seller.</p>
+    <div class="lm-grid">
+      <div class="card lm-card">
+        <h3>Published on every listing</h3>
+        <ul class="lic-card__list">
+          <li>County and city</li>
+          <li>License class and what it permits</li>
+          <li>Whether the class is under the county quota</li>
+          <li>Asking price and availability</li>
+          <li>Date listed and days on market</li>
+          <li>Cost to close and the transfer timetable</li>
+        </ul>
+      </div>
+      <div class="card lm-card">
+        <h3>Released after qualification and NDA</h3>
+        <ul class="lic-card__list">
+          <li>License number and licensee of record</li>
+          <li>Premises address and trading name</li>
+          <li>Register standing and license term</li>
+          <li>Conditions, encumbrances and lien position</li>
+          <li>Seller tax clearance position</li>
+          <li>Local approval history and any protest record</li>
+        </ul>
+      </div>
+    </div>
+    <p class="sv-note"><strong>How the release works.</strong> Qualification is two things: proof of funds, and the personal information every principal has to give ABC anyway. Sign a mutual non-disclosure agreement and the complete file is released to you <strong>within one business day</strong>. There is no fee for it. Four further San Francisco licenses are held entirely off-market at the seller&rsquo;s request and are only ever shown this way &mdash; they are not among the 30 on the book.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <p class="eyebrow">The other side of the desk</p>
+    <h2>Selling a San Francisco license</h2>
+    <div class="sv-body">
+      <p><strong>What we need to list it.</strong> The license number, the licensee of record and the premises address, so we can read the register entry, the conditions and the term before we price anything. None of that is published. What goes on the page is the county, the class, the asking price, the date and the status &mdash; the fields you can see on every entry above, and nothing else.</p>
+      <p><strong>What it costs you.</strong> 4% of the accepted price, paid at closing out of escrow. Nothing up front, nothing if it does not sell, no listing fee and no renewal. You pay your own counsel and the escrow holder.</p>
+      <p><strong>How long it takes.</strong> Two clocks. Finding a qualified buyer is the one that varies &mdash; the 30 licenses on our book have been listed between 3 and 102 days. Once an offer is accepted the 78-day transfer timetable applies to you exactly as it applies to the buyer, and 30 of those days are a statutory posting nobody can shorten.</p>
+      <p><strong>What stays confidential until a buyer qualifies.</strong> Everything that identifies you. Your staff, your landlord, your suppliers and the operator across the street learn nothing from this page. A buyer sees the identifying file only after proof of funds and a signed mutual NDA, and you see who they are at the same moment they see who you are.</p>
+    </div>
+    <div class="cta-row">
+      <a class="btn btn-secondary" href="mailto:desk@liquorlicenseagents.com">Email the desk about selling</a>
+    </div>
+  </div>
+</section>
+
+<section class="section section--warm">
+  <div class="container">
+    <p class="eyebrow">Activity, honestly</p>
+    <h2>Dates, yes. Counters, no.</h2>
+    <p class="lede">Every listing above carries the day it came to market and how long it has sat there. That is a fact we can stand behind, and on this book it ranges from 3 days to 102. What you will not find anywhere on this site:</p>
+    <ul class="sv-list">
+      <li>No view count. A view count is trivially inflated and proves nothing about demand.</li>
+      <li>No watcher count and no &ldquo;3 people are looking at this right now&rdquo;.</li>
+      <li>No bid ticker, no auction clock, no countdown. Offers are reviewed as they arrive.</li>
+      <li>No manufactured scarcity. The county quota supplies all the scarcity this market needs.</li>
+    </ul>
+    <p class="sv-note">Elsewhere in this market you will find view counters, watcher counts and bid tickers on licenses that have never taken a bid. We would rather publish the one activity signal that is checkable &mdash; the day a license came to our book, and how long it has sat there &mdash; and nothing we cannot stand behind.</p>
+  </div>
+</section>
+
+<section class="section section--dark">
+  <div class="container">
+    <div class="faq__head">
+      <p class="eyebrow">Questions</p>
+      <h2>San Francisco questions we are actually asked</h2>
+    </div>
+    <div class="faq__list">
+      <details class="faq-item" open>
+        <summary class="faq-item__q">How much does a liquor license cost in San Francisco?</summary>
+        <div class="faq-item__a"><p>Across the 30 San Francisco licenses on our book the median ask is <strong>$205,000</strong>, inside a range of $15,000 to $350,000. The class is what moves it: a Type 47 eating-place license runs a $232,500 median, a Type 21 off-sale $175,000, and the single Type 20 sits at $15,000 because it is the one class of the four on the book here that is not quota-limited. The price is for the license alone &mdash; no premises, no fixtures, no goodwill &mdash; and completing costs about $8,045 on top.</p></div>
+      </details>
+      <details class="faq-item">
+        <summary class="faq-item__q">Why are San Francisco liquor licenses so expensive?</summary>
+        <div class="faq-item__a"><p>Because supply is fixed by statute rather than by demand. California limits on-sale general licenses (Types 47 and 48) and off-sale general licenses (Type 21) against county population, and San Francisco has been over both ceilings for decades. No new originals are issued here, so the only route in is to buy an existing one. A class that sits outside the quota is cheap for exactly the same reason, in reverse: the Type 20 on this book asks $15,000.</p></div>
+      </details>
+      <details class="faq-item">
+        <summary class="faq-item__q">How long does a liquor license transfer take in San Francisco?</summary>
+        <div class="faq-item__a"><p>A median of <strong>78 days</strong> across our 64 closed California files, from accepted offer to a license issued in your name. Thirty of those days are the statutory posting period at the premises and cannot be compressed by anyone. The figure assumes your address is already cleared for the use &mdash; if your Neighborhood Commercial District requires Conditional Use Authorization from San Francisco Planning, add three to five months for that track, running on its own calendar.</p></div>
+      </details>
+      <details class="faq-item">
+        <summary class="faq-item__q">Do I pay a deposit, or the whole price?</summary>
+        <div class="faq-item__a"><p>The whole price. This catches out buyers who have done a transfer in another state. California requires the full consideration for a license transfer to be placed with a licensed escrow holder before the Department will approve it, and it is released to the seller only when the license issues. There is no 10% down and no balance on completion &mdash; the money sits in escrow for the length of the process.</p></div>
+      </details>
+      <details class="faq-item">
+        <summary class="faq-item__q">What is the difference between a Type 47 and a Type 48?</summary>
+        <div class="faq-item__a"><p>Both permit beer, wine and distilled spirits for consumption on the premises. A <strong>Type 47</strong> is tied to a bona fide eating place: a real kitchen serving real meals, and if the food operation stops the license is at risk. A <strong>Type 48</strong> is a public premises license with no food obligation at all &mdash; and the trade-off is that nobody under 21 may enter and remain, which closes off families, all-ages events and most daytime food trade. Pick on the room you intend to run, not on the price.</p></div>
+      </details>
+      <details class="faq-item">
+        <summary class="faq-item__q">Can I use a Type 47 as a bar once the kitchen closes?</summary>
+        <div class="faq-item__a"><p>No, and this is the single most common way a San Francisco Type 47 gets into trouble. The eating-place obligation is continuing, not a box ticked at application: meals have to be prepared and served on the premises whenever the license is being exercised, with the kitchen and the seating to support them. A room that drifts into trading as a bar with a warming cabinet is a room with an exposed license. If the concept is drinks-led after nine, look at a <strong>Type 48</strong> and price in what the under-21 rule costs you.</p></div>
+      </details>
+      <details class="faq-item">
+        <summary class="faq-item__q">Can a San Francisco license move to another address?</summary>
+        <div class="faq-item__a"><p>Inside the county, usually yes. A premises-to-premises transfer needs ABC approval and a fresh 30-day posting, and the new address has to clear San Francisco Planning on its own account. Moving a quota license <em>out</em> of San Francisco County is generally not available &mdash; the quota is counted county by county, which is why you buy in the county you intend to trade in.</p></div>
+      </details>
+      <details class="faq-item">
+        <summary class="faq-item__q">Is San Francisco a city or a county for licensing?</summary>
+        <div class="faq-item__a"><p>Both, and that is why this is one page rather than two. San Francisco is a consolidated city and county: the city and the county are the same jurisdiction with the same boundary and the same quota. A &ldquo;San Francisco city&rdquo; license and a &ldquo;San Francisco County&rdquo; license are the same thing. Anyone showing you separate city and county inventory for San Francisco is showing you the same licenses twice.</p></div>
+      </details>
+      <details class="faq-item">
+        <summary class="faq-item__q">Do I need approval from the City as well as from ABC?</summary>
+        <div class="faq-item__a"><p>Often, yes, and it is the step that sets the timetable. ABC handles the license. San Francisco Planning handles whether an alcohol use is permitted at your address, and in many Neighborhood Commercial Districts a new or changed alcohol use needs Conditional Use Authorization from the Planning Commission. Some districts restrict off-sale licenses further still. The Police Department&rsquo;s alcohol liaison also reviews on-sale applications. Tell us the address before you sign a lease, not after.</p></div>
+      </details>
+      <details class="faq-item">
+        <summary class="faq-item__q">Why are the license number and premises address not published?</summary>
+        <div class="faq-item__a"><p>Because the seller is almost always still trading. Publishing the license number, the licensee of record, the trading name or the address tells their staff, their landlord, their suppliers and the operator across the street that the business is for sale. In a city this size a neighborhood alone would do it, which is why we do not publish that either &mdash; every listing here says San Francisco and stops. The full file is released to a qualified buyer under a mutual NDA, at no charge, within one business day.</p></div>
+      </details>
+      <details class="faq-item">
+        <summary class="faq-item__q">Do you charge buyers a fee?</summary>
+        <div class="faq-item__a"><p>No. Our commission is <strong>4% of the accepted price, paid by the seller at closing</strong>. There is no buyer-side commission, no registration fee, no charge for the confidential file and no charge for a lender introduction. You will pay your own counsel, the escrow holder, ABC and the publisher of the notice &mdash; about $8,045 in total &mdash; and nothing to us.</p></div>
+      </details>
+      <details class="faq-item">
+        <summary class="faq-item__q">Do you have Type 41 or Type 40 licenses for sale?</summary>
+        <div class="faq-item__a"><p>Not at the moment &mdash; nothing in either class is on the San Francisco book today. Both classes have a page here anyway, because we do the other half of this job: we file new applications with the ABC and see them through. Tell us what you are opening and we will tell you whether the answer is to apply or to buy, and handle whichever it turns out to be.</p></div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <p class="eyebrow">Who you are dealing with</p>
+    <h2>The desk behind the book</h2>
+    <div class="lm-grid">
+      <div class="card lm-card">
+        <p class="lm-card__type">Broker</p>
+        <h3 class="lm-card__city">Liquor License Agents</h3>
+        <p class="lm-card__meta">California liquor license transfer desk &middot; founded 2014</p>
+      </div>
+      <div class="card lm-card">
+        <p class="lm-card__type">Files closed</p>
+        <h3 class="lm-card__city">64 California transfers</h3>
+        <p class="lm-card__meta">Since January 2019 &middot; 19 of them in San Francisco</p>
+      </div>
+      <div class="card lm-card">
+        <p class="lm-card__type">Escrow held by</p>
+        <h3 class="lm-card__city">A licensed escrow holder</h3>
+        <p class="lm-card__meta">Never us, at any point, on any file.</p>
+      </div>
+      <div class="card lm-card">
+        <p class="lm-card__type">ABC counsel</p>
+        <h3 class="lm-card__city">San Francisco ABC counsel</h3>
+        <p class="lm-card__meta">Reviews every file before we list it</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section--dark wow-grain">
+  <div class="container">
+    <p class="eyebrow">Tell us what you need</p>
+    <h2>Six fields, and a real reply inside one business day</h2>
+    <p class="lede">Thirty San Francisco licenses are on the book and four more are held off-market and never listed. Tell us what you are opening, your budget and where you are with a site, and we will send what fits &mdash; including the off-market ones, once you are qualified and the NDA is signed.</p>
+
+    <form class="form" id="inquire" novalidate>
+      <div class="field" id="sf-f-name">
+        <label for="sf-q-name">Your name <span class="sf-req" aria-hidden="true">*</span><span class="vh">(required)</span></label>
+        <input type="text" id="sf-q-name" name="name" autocomplete="name" required aria-describedby="sf-e-name">
+        <span class="sf-err" id="sf-e-name" hidden></span>
+      </div>
+      <div class="field" id="sf-f-phone">
+        <label for="sf-q-phone">Telephone <span class="sf-req" aria-hidden="true">*</span><span class="vh">(required)</span></label>
+        <input type="tel" id="sf-q-phone" name="phone" autocomplete="tel" inputmode="tel" required aria-describedby="sf-e-phone">
+        <span class="sf-err" id="sf-e-phone" hidden></span>
+      </div>
+      <div class="field" id="sf-f-email">
+        <label for="sf-q-email">Email <span class="sf-req" aria-hidden="true">*</span><span class="vh">(required)</span></label>
+        <input type="email" id="sf-q-email" name="email" autocomplete="email" inputmode="email" required aria-describedby="sf-e-email">
+        <span class="sf-err" id="sf-e-email" hidden></span>
+      </div>
+      <div id="sf-f-use">
+        <div class="field sf-sel">
+          <label for="sf-q-use">What are you opening? <span class="sf-req" aria-hidden="true">*</span><span class="vh">(required)</span></label>
+          <select class="ec-ctrl" id="sf-q-use" name="use" required aria-describedby="sf-q-use-hint sf-e-use">
+            <option value="">Choose one&hellip;</option>
+            <option>A restaurant with a full bar</option>
+            <option>A bar or nightclub, no kitchen</option>
+            <option>A liquor store selling spirits</option>
+            <option>A shop selling beer and wine only</option>
+            <option>A hotel, venue or members&rsquo; club</option>
+            <option>Adding a license to a site I already trade from</option>
+          </select>
+          <p class="sf-hint" id="sf-q-use-hint">This is the question that picks the class. Tell us the venue and we will tell you the license, rather than the other way round.</p>
+          <span class="sf-err" id="sf-e-use" hidden></span>
+        </div>
+      </div>
+      <div id="sf-f-budget">
+        <div class="field sf-sel">
+          <label for="sf-q-budget">Budget for the license <span class="sf-req" aria-hidden="true">*</span><span class="vh">(required)</span></label>
+          <select class="ec-ctrl" id="sf-q-budget" name="budget" required aria-describedby="sf-q-budget-hint sf-e-budget">
+            <option value="">Choose one&hellip;</option>
+            <option>Under $100,000</option>
+            <option>$100,000 to $200,000</option>
+            <option>$200,000 to $300,000</option>
+            <option>$300,000 and above</option>
+            <option>Not sure yet</option>
+          </select>
+          <p class="sf-hint" id="sf-q-budget-hint">For orientation: the San Francisco median ask is $205,000, and completing costs about $8,045 on top.</p>
+          <span class="sf-err" id="sf-e-budget" hidden></span>
+        </div>
+      </div>
+      <div id="sf-f-site">
+        <div class="field sf-sel">
+          <label for="sf-q-site">Do you have a site? <span class="sf-req" aria-hidden="true">*</span><span class="vh">(required)</span></label>
+          <select class="ec-ctrl" id="sf-q-site" name="site" required aria-describedby="sf-q-site-hint sf-e-site">
+            <option value="">Choose one&hellip;</option>
+            <option>Signed lease, ready to go</option>
+            <option>In negotiation on a specific address</option>
+            <option>Looking, nothing signed</option>
+            <option>Already trading there</option>
+          </select>
+          <p class="sf-hint" id="sf-q-site-hint">It matters more here than elsewhere. The San Francisco Planning district your address sits in decides whether you need a conditional use, and that is usually the longest pole in the tent.</p>
+          <span class="sf-err" id="sf-e-site" hidden></span>
+        </div>
+      </div>
+      <div class="field" id="sf-f-msg">
+        <label for="sf-q-msg">Anything else?</label>
+        <textarea id="sf-q-msg" name="message" rows="3" aria-describedby="sf-q-msg-hint"></textarea>
+        <p class="sf-hint" id="sf-q-msg-hint">Optional &mdash; the kind of room you have in mind, your timescale, whether you have done this before.</p>
+      </div>
+      <div class="field" id="sf-f-ack">
+        <label class="choice sf-ack" for="sf-q-ack">
+          <input type="checkbox" id="sf-q-ack" name="ack" required aria-describedby="sf-e-ack">
+          <span>I understand that the license number, the licensee and the premises address are released after qualification and a mutual NDA, and are not published here. <span class="sf-req" aria-hidden="true">*</span><span class="vh">(required)</span></span>
+        </label>
+        <span class="sf-err" id="sf-e-ack" hidden></span>
+      </div>
+      <p class="sf-err" id="sf-e-form" role="alert" hidden></p>
+      <button class="btn btn-primary wow-glow" type="submit">Send it over</button>
+      <p class="sf-hint">Or call the desk on <a href="tel:+18007999081">(800) 799-9081</a>, or email <a href="mailto:desk@liquorlicenseagents.com">desk@liquorlicenseagents.com</a>. Ask for Dana Whitfield.</p>
+    </form>
+
+    <div class="lm-empty" id="sf-success" role="status" hidden>
+      <h3>Inquiry received</h3>
+      <p><strong>What happens next.</strong> Dana Whitfield replies inside one business day with the San Francisco licenses on the book that fit the room you described and your budget &mdash; a real reply from a named person, not an autoresponder. No newsletter, no drip sequence. If the room is better served by a Type 41 or a Type 40 than by a full-bar class, she will say so, and we file that application for you.</p>
+      <p>If you want the off-market book too, she will send the qualification pack. Signed NDA in, complete files out within one business day.</p>
+      <p>Need it sooner? Call the desk on <a href="tel:+18007999081">(800) 799-9081</a>.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section section--warm">
+  <div class="container">
+    <p class="eyebrow">Elsewhere in California</p>
+    <h2>Buying outside San Francisco</h2>
+    <p class="lede">A San Francisco quota license stays in San Francisco County, so if your site is across a county line this is not the page you need. The California hub routes to every county desk we run, and it is also the right starting point if you are still deciding where to open.</p>
+    <div class="cta-row">
+      <a class="btn btn-secondary" href="https://www.liquorlicenseagents.com/california/">California liquor licenses</a>
+    </div>
+    <div class="cross-link-rail__rail">
+      <a class="cross-link" href="type-47/">San Francisco Type 47</a>
+      <a class="cross-link" href="type-21/">San Francisco Type 21</a>
+      <a class="cross-link" href="type-48/">San Francisco Type 48</a>
+      <a class="cross-link" href="type-20/">San Francisco Type 20</a>
+      <a class="cross-link" href="type-41/">San Francisco Type 41</a>
+      <a class="cross-link" href="type-40/">San Francisco Type 40</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="site-footer" id="site-footer">
+  <div class="container">
+
+    <div class="mm-footer__lead">
+      <div class="mm-footer__lead-copy">
+        <p class="eyebrow">San Francisco</p>
+        <h2>Tell us what you are <span class="accent">opening.</span></h2>
+        <p class="mm-footer__lead-sub">We will tell you whether to buy a license on the book or apply for a new one, and handle whichever it is.</p>
+      </div>
+      <div class="mm-footer__lead-actions">
+        <a class="btn btn-primary wow-glow" href="#listings">Browse listings</a>
+        <a href="tel:+18007999081">(800) 799-9081</a>
+      </div>
+    </div>
+
+    <hr class="mm-footer__divide" aria-hidden="true">
+
+    <div class="site-footer__top">
+      <div>
+        <div class="site-footer__brand"><span class="site-footer__brand-mark" aria-hidden="true">L</span>Liquor License Agents</div>
+        <p class="site-footer__blurb">Liquor license brokerage and application work in California. We sell the license only, and we handle new applications with the ABC.</p>
+        <div class="site-footer__hours">
+          <strong>Direct line</strong>
+          <a href="tel:+18007999081">(800) 799-9081</a>
+          <a href="mailto:desk@liquorlicenseagents.com">desk@liquorlicenseagents.com</a>
+        </div>
+      </div>
+
+      <div class="site-footer__col">
+        <h4>Licenses for sale</h4>
+        <ul>
+          <li><a href="../../california/san-francisco/type-47/">Type 47 &mdash; On-Sale General, Eating Place</a></li>
+          <li><a href="../../california/san-francisco/type-21/">Type 21 &mdash; Off-Sale General</a></li>
+          <li><a href="../../california/san-francisco/type-48/">Type 48 &mdash; On-Sale General, Public Premises</a></li>
+          <li><a href="../../california/san-francisco/type-20/">Type 20 &mdash; Off-Sale Beer and Wine</a></li>
+        </ul>
+      </div>
+
+      <div class="site-footer__col">
+        <h4>Applications</h4>
+        <ul>
+          <li><a href="../../california/san-francisco/type-41/">Type 41 &mdash; On-Sale Beer and Wine, Eating Place</a></li>
+          <li><a href="../../california/san-francisco/type-40/">Type 40 &mdash; On-Sale Beer</a></li>
+          <li><a href="../../california/san-francisco/">All San Francisco licenses</a></li>
+        </ul>
+      </div>
+
+      <div class="site-footer__col">
+        <h4>Confidentiality</h4>
+        <p>License numbers, licensees, premises and terms are not published. Identifying detail goes to a qualified buyer under NDA.</p>
+      </div>
+    </div>
+
+    <div class="site-footer__bottom">
+      <span>&copy; 2026 Liquor License Agents</span>
+      <span class="site-footer__bcorp">City and county of San Francisco. Class rules are confirmed for your specific premises during qualification.</span>
+    </div>
+
+  </div>
+</footer>
+<div class="mm-sticky-cta" id="mm-sticky-cta" aria-hidden="true">
+  <div class="mm-sticky-cta__copy">
+    <b>30 San Francisco licenses</b>
+    <span>$15,000 to $350,000 &amp;middot; 27 available</span>
+  </div>
+  <a class="btn btn-primary" href="#listings">Browse listings</a>
+</div>
+<script>
+/* [sf-v5] the sticky bar stands down once the footer is in view (FIX 1).
+   Sets a body class only — the cascade rule in the page's <style> does the
+   hiding, so this composes with site.js's own .show toggle rather than racing
+   it. Null-guarded and feature-guarded. */
+(function () {
+  var f = document.getElementById('site-footer');
+  if (!f || !('IntersectionObserver' in window)) return;
+  new IntersectionObserver(function (entries) {
+    for (var i = 0; i < entries.length; i++) {
+      document.body.classList.toggle('sf-at-footer', entries[i].isIntersecting);
+    }
+  }, { threshold: 0 }).observe(f);
+})();
+</script>
+<script>
+(function () {
+  'use strict';
+
+  /* ---- filter + sort. Enhancement only: every license renders with
+     JavaScript off. Hiding uses a CLASS because .lm-card sets display:flex,
+     which outranks the UA [hidden] rule. ---- */
+  var list = document.getElementById('sf-stocklist');
+  var cards = list ? Array.prototype.slice.call(list.querySelectorAll('[data-l]')) : [];
+  var featured = cards.slice();
+  var countEl = document.getElementById('sf-resultcount');
+  var emptyEl = document.getElementById('sf-nomatch');
+  var form = document.getElementById('sf-filters');
+  var sel = {
+    type: document.getElementById('sf-f-type'),
+    band: document.getElementById('sf-f-band'),
+    status: document.getElementById('sf-f-status'),
+    age: document.getElementById('sf-f-age'),
+    sort: document.getElementById('sf-f-sort')
+  };
+  function num(el, attr) { return parseInt(el.getAttribute(attr), 10) || 0; }
+  function inBand(p, b) {
+    if (!b) return true;
+    if (b === 'a') return p < 100000;
+    if (b === 'b') return p >= 100000 && p < 200000;
+    if (b === 'c') return p >= 200000 && p < 300000;
+    if (b === 'd') return p >= 300000;
+    return true;
+  }
+  function inAge(d, a) {
+    if (!a) return true;
+    if (a === 'new') return d < 30;
+    if (a === 'old') return d >= 30;
+    return true;
+  }
+  function matches(el, f) {
+    return (!f.type || el.getAttribute('data-type') === f.type)
+      && (!f.status || el.getAttribute('data-status') === f.status)
+      && inBand(num(el, 'data-price'), f.band)
+      && inAge(num(el, 'data-days'), f.age);
+  }
+  function sorter(mode) {
+    return function (a, b) {
+      var pa = num(a, 'data-price'), pb = num(b, 'data-price');
+      var da = num(a, 'data-days'), db = num(b, 'data-days');
+      if (mode === 'asc') return (pa - pb) || (featured.indexOf(a) - featured.indexOf(b));
+      if (mode === 'old') return (db - da) || (featured.indexOf(a) - featured.indexOf(b));
+      if (mode === 'new') return (da - db) || (featured.indexOf(a) - featured.indexOf(b));
+      return (pb - pa) || (featured.indexOf(a) - featured.indexOf(b));
+    };
+  }
+  function apply() {
+    var f = {
+      type: sel.type ? sel.type.value : '',
+      band: sel.band ? sel.band.value : '',
+      status: sel.status ? sel.status.value : '',
+      age: sel.age ? sel.age.value : '',
+      sort: sel.sort ? sel.sort.value : 'desc'
+    };
+    var shown = 0;
+    cards.forEach(function (el) {
+      var ok = matches(el, f);
+      el.classList.toggle('is-hidden', !ok);
+      if (ok) shown++;
+    });
+    featured.slice().sort(sorter(f.sort)).forEach(function (el) { list.appendChild(el); });
+    if (countEl) {
+      countEl.innerHTML = 'Showing <b>' + shown + '</b> of <b>' + cards.length +
+        '</b> license' + (cards.length === 1 ? '' : 's');
+    }
+    if (emptyEl) emptyEl.hidden = shown !== 0;
+  }
+  Object.keys(sel).forEach(function (k) { if (sel[k]) sel[k].addEventListener('change', apply); });
+  if (form) form.addEventListener('submit', function (e) { e.preventDefault(); apply(); });
+  function reset() {
+    Object.keys(sel).forEach(function (k) { if (sel[k]) sel[k].selectedIndex = 0; });
+    apply();
+  }
+  var r1 = document.getElementById('sf-resetfilters');
+  var r2 = document.getElementById('sf-emptyreset');
+  if (r1) r1.addEventListener('click', reset);
+  if (r2) r2.addEventListener('click', reset);
+  if (cards.length) apply();
+
+  /* ---- THE SCROLL AFFORDANCE, and why it is worded the way it is.
+     The hint is PRINTED BY DEFAULT, so it is right with JavaScript off and in
+     any browser that does not deliver a resize signal. This pass can therefore
+     only ever HIDE it — the safe direction — and never has to show one.
+     MEASURED, and the reason the copy says "on a narrow screen" rather than
+     "scroll this table": under a viewport override neither a resize listener
+     NOR a ResizeObserver on the wrapper fired at all (a probe observer logged
+     zero callbacks, its mandatory initial one included) while the wrapper went
+     1152px -> 342px. A hint whose truth depended on that signal would have gone
+     stale on a mid-session resize, so the sentence is true at EVERY width
+     instead, and this sync is a polish pass on top of it rather than the thing
+     that makes it honest. Called at load (which does work — verified hidden at
+     1280 and shown at 390 on their own loads), on both signals in case they do
+     arrive, and once more after the webfonts land, since a font swap moves the
+     table's intrinsic width. ---- */
+  var hints = Array.prototype.slice.call(document.querySelectorAll('[data-scrollhint]'));
+  function syncHints() {
+    hints.forEach(function (h) {
+      var wrap = document.getElementById(h.getAttribute('data-scrollhint'));
+      if (!wrap) return;
+      h.hidden = wrap.scrollWidth <= wrap.clientWidth + 1;
+    });
+  }
+  syncHints();
+  if ('ResizeObserver' in window) {
+    var ro = new ResizeObserver(function () { syncHints(); });
+    hints.forEach(function (h) {
+      var wrap = document.getElementById(h.getAttribute('data-scrollhint'));
+      if (wrap) ro.observe(wrap);
+    });
+  } else {
+    window.addEventListener('resize', syncHints);
+  }
+  if (document.fonts && document.fonts.ready && document.fonts.ready.then) {
+    document.fonts.ready.then(syncHints);
+  }
+
+  /* ---- cost totaller ---- */
+  var boxes = document.querySelectorAll('[data-costbox]');
+  var totalCell = document.getElementById('sf-costtotal');
+  var grandCell = document.getElementById('sf-grandtotal');
+  var PRICE = 205000;
+  function money(n) { return '$' + n.toLocaleString('en-US'); }
+  function recount() {
+    var sum = 0;
+    Array.prototype.forEach.call(boxes, function (b) {
+      var row = b.closest('tr');
+      if (!row) return;
+      var v = parseInt(row.getAttribute('data-cost'), 10) || 0;
+      if (b.checked) { sum += v; row.classList.remove('sf-off'); }
+      else { row.classList.add('sf-off'); }
+    });
+    if (totalCell) totalCell.textContent = money(sum);
+    if (grandCell) grandCell.textContent = money(PRICE + sum);
+  }
+  Array.prototype.forEach.call(boxes, function (b) { b.addEventListener('change', recount); });
+  if (boxes.length) recount();
+
+  /* ---- inquiry form validation. The browser's own constraint validation is
+     turned off (novalidate) so the messages are ours and land in the field. ---- */
+  var RULES = [
+    { id: 'sf-q-name',   e: 'sf-e-name',   test: function (v) { return v.trim().length >= 2; }, msg: 'Please give us a name we can use.' },
+    { id: 'sf-q-phone',  e: 'sf-e-phone',  test: function (v) { return v.replace(/[^0-9]/g, '').length >= 7; }, msg: 'Please give a telephone number with at least 7 digits.' },
+    { id: 'sf-q-email',  e: 'sf-e-email',  test: function (v) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim()); }, msg: 'That does not look like an email address.' },
+    { id: 'sf-q-use',    e: 'sf-e-use',    test: function (v) { return v !== ''; }, msg: 'Please pick the closest description.' },
+    { id: 'sf-q-budget', e: 'sf-e-budget', test: function (v) { return v !== ''; }, msg: 'Please pick a budget band, or "Not sure yet".' },
+    { id: 'sf-q-site',   e: 'sf-e-site',   test: function (v) { return v !== ''; }, msg: 'Please tell us where you are with a site.' },
+    { id: 'sf-q-ack',    e: 'sf-e-ack',    check: true, test: function (v, el) { return el.checked; }, msg: 'Please confirm you understand how the confidential detail is released.' }
+  ];
+  function validate(rule) {
+    var el = document.getElementById(rule.id);
+    if (!el) return true;
+    return rule.test(el.value || '', el);
+  }
+  function mark(rule, good) {
+    var el = document.getElementById(rule.id), err = document.getElementById(rule.e);
+    if (!el || !err) return;
+    if (good) { el.removeAttribute('aria-invalid'); err.hidden = true; err.textContent = ''; }
+    else { el.setAttribute('aria-invalid', 'true'); err.textContent = rule.msg; err.hidden = false; }
+  }
+  RULES.forEach(function (rule) {
+    var el = document.getElementById(rule.id);
+    if (!el) return;
+    var ev = (rule.check || el.tagName === 'SELECT') ? 'change' : 'blur';
+    el.addEventListener(ev, function () { if (ev === 'change' || (el.value || '').length) mark(rule, validate(rule)); });
+    el.addEventListener('input', function () { if (el.getAttribute('aria-invalid') && validate(rule)) mark(rule, true); });
+  });
+  var theForm = document.getElementById('inquire');
+  var okPanel = document.getElementById('sf-success');
+  var formErr = document.getElementById('sf-e-form');
+  if (theForm) {
+    theForm.addEventListener('submit', function (ev) {
+      ev.preventDefault();
+      var firstBad = null;
+      RULES.forEach(function (rule) {
+        var good = validate(rule);
+        mark(rule, good);
+        if (!good && !firstBad) firstBad = document.getElementById(rule.id);
+      });
+      if (firstBad) {
+        if (formErr) { formErr.textContent = 'One or more fields still need attention. The first is highlighted above.'; formErr.hidden = false; }
+        firstBad.focus();
+        return;
+      }
+      if (formErr) { formErr.hidden = true; formErr.textContent = ''; }
+      theForm.hidden = true;
+      if (okPanel) { okPanel.hidden = false; okPanel.setAttribute('tabindex', '-1'); okPanel.focus(); }
+    });
+  }
+})();
+</script>
+</body>
+</html>
