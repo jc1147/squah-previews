@@ -16,12 +16,12 @@
 <script src="../../../design-system/site.js" defer></script>
 <style>
 /* [sf-v5 shell] 1 of 2 — the sticky bar stands down over the footer (FIX 1).
-   Same shape as the library's own drawer suppression at structural.css:14904. */
+ Same shape as the library's own drawer suppression at structural.css:14904. */
 body.sf-at-footer .mm-sticky-cta { transform: translateY(110%); pointer-events: none; }
 
 /* [sf-v5 shell] 2 of 2 — breadcrumb: the library ships no breadcrumb component.
-   Link colour/underline are owned by the site's prose-link relight at
-   structural.css:4847 — see the note above. */
+ Link colour/underline are owned by the site's prose-link relight at
+ structural.css:4847 — see the note above. */
 .sf-crumb { margin: 0 0 var(--ds-space-md); }
 .sf-crumb ol { display: flex; flex-wrap: wrap; align-items: center; gap: var(--ds-space-2xs) var(--ds-space-xs); list-style: none; margin: 0; padding: 0; font-family: var(--ds-font-body); font-size: 13px; line-height: 1.5; color: var(--ds-ink-soft); }
 .sf-crumb li { display: inline-flex; align-items: center; gap: var(--ds-space-xs); min-width: 0; }
@@ -32,110 +32,110 @@ body.sf-at-footer .mm-sticky-cta { transform: translateY(110%); pointer-events: 
 /* ---- page-level ---- */
 /* [1] crumb bar */
 /* The bar carries the library's own .section band class so the site's prose-link
-   relight (structural.css:4847) reaches the crumb anchors; MEASURED, without it they
-   fell through to UA-default blue at 1.77:1 on the dark ground. All this rule owns is
-   the inset: .section's clamp(48px,5vw,76px) is far too much for one line of nav. */
+ relight (structural.css:4847) reaches the crumb anchors; MEASURED, without it they
+ fell through to UA-default blue at 1.77:1 on the dark ground. All this rule owns is
+ the inset: .section's clamp(48px,5vw,76px) is far too much for one line of nav. */
 .sf-crumbbar { padding-block: var(--ds-space-lg) 0; }
 
 /* [2] two-column spec table: stacks below 768px, so it never scrolls sideways */
 .sf-spec .lm-table { min-width: 0; }
 .sf-spec .lm-table tbody th { width: 34%; color: var(--ds-accent-ink); }
 @media (max-width: 767px) {
-  .sf-spec .lm-table tbody tr { display: block; border-bottom: 1px solid var(--ds-line); padding-block: var(--ds-space-sm); }
-  .sf-spec .lm-table tbody tr:last-child { border-bottom: 0; }
-  .sf-spec .lm-table tbody th,
-  .sf-spec .lm-table tbody td { display: block; width: auto; border-bottom: 0; padding: 0; }
-  .sf-spec .lm-table tbody th { white-space: normal; padding-bottom: var(--ds-space-2xs); }
+ .sf-spec .lm-table tbody tr { display: block; border-bottom: 1px solid var(--ds-line); padding-block: var(--ds-space-sm); }
+ .sf-spec .lm-table tbody tr:last-child { border-bottom: 0; }
+ .sf-spec .lm-table tbody th,
+ .sf-spec .lm-table tbody td { display: block; width: auto; border-bottom: 0; padding: 0; }
+ .sf-spec .lm-table tbody th { white-space: normal; padding-bottom: var(--ds-space-2xs); }
 }
 
 /* [3] the caption measures the SCROLLER, not the table it labels */
 .sf-scroller { container-type: inline-size; }
 .sf-scroller > .lm-table > caption {
-  position: sticky; left: 0; box-sizing: border-box; width: 100cqi;
-  text-align: left; font-family: var(--ds-font-body); font-size: 14px;
-  line-height: 1.5; color: var(--ds-ink-soft); padding-bottom: var(--ds-space-sm);
+ position: sticky; left: 0; box-sizing: border-box; width: 100cqi;
+ text-align: left; font-family: var(--ds-font-body); font-size: 14px;
+ line-height: 1.5; color: var(--ds-ink-soft); padding-bottom: var(--ds-space-sm);
 }
 
 /* [4] the select control the library stops short of, and a field hint */
 .form select {
-  width: 100%; font-family: var(--ds-font-body); font-size: 15px;
-  padding: var(--ds-space-sm) var(--ds-space-xl) var(--ds-space-sm) var(--ds-space-md);
-  border: 1px solid var(--ds-line); border-radius: var(--ds-r-md);
-  background: var(--ds-bg-surface); color: var(--ds-ink);
-  -webkit-appearance: none; appearance: none;
+ width: 100%; font-family: var(--ds-font-body); font-size: 15px;
+ padding: var(--ds-space-sm) var(--ds-space-xl) var(--ds-space-sm) var(--ds-space-md);
+ border: 1px solid var(--ds-line); border-radius: var(--ds-r-md);
+ background: var(--ds-bg-surface); color: var(--ds-ink);
+ -webkit-appearance: none; appearance: none;
 }
 .form select:focus { outline: none; border-color: var(--ds-accent); }
 .form select:focus-visible { outline: 3px solid var(--ds-accent); outline-offset: 2px; }
 .sf-select { position: relative; display: block; }
 .sf-select::after {
-  content: ""; position: absolute; right: var(--ds-space-md); top: 50%;
-  width: 8px; height: 8px; margin-top: -6px; pointer-events: none;
-  border-right: 2px solid var(--ds-accent-ink);
-  border-bottom: 2px solid var(--ds-accent-ink);
-  transform: rotate(45deg);
+ content: ""; position: absolute; right: var(--ds-space-md); top: 50%;
+ width: 8px; height: 8px; margin-top: -6px; pointer-events: none;
+ border-right: 2px solid var(--ds-accent-ink);
+ border-bottom: 2px solid var(--ds-accent-ink);
+ transform: rotate(45deg);
 }
 .sf-hint { margin-top: var(--ds-space-2xs); font-size: 13px; line-height: 1.5; color: var(--ds-ink-soft); }
 .sf-req { color: var(--ds-accent-ink); }
 
 /* [6] two band children the library leaves with no top margin. MEASURED at
-   1440: h2 into .sv-body, .lede into .sv-body, .lm-table-wrap into .sv-body and
-   h2 into .faq__list all came out at a 0px gap, because the global p rule zeroes
-   every paragraph margin and neither class sets one. Same defect, and the same fix, as the
-   library's own patch for its inventory band at structural.css:4907. */
+ 1440: h2 into .sv-body, .lede into .sv-body, .lm-table-wrap into .sv-body and
+ h2 into .faq__list all came out at a 0px gap, because the global p rule zeroes
+ every paragraph margin and neither class sets one. Same defect, and the same fix, as the
+ library's own patch for its inventory band at structural.css:4907. */
 .sv-body { margin-top: var(--ds-space-md); }
 .faq__list { margin-top: var(--ds-space-lg); }
 /* an .eyebrow that labels a SECOND grid in one band (the cross-class band's two
-   groups) sits flush against the grid above it: .eyebrow carries only a bottom
-   margin, and the library never places one after a grid. */
+ groups) sits flush against the grid above it: .eyebrow carries only a bottom
+ margin, and the library never places one after a grid. */
 .lm-grid + .eyebrow { margin-top: var(--ds-space-xl); }
 
 /* [5] the reveal gate. structural.css:942 holds .wow-stagger children at
-   opacity 0 until site.js adds .in-view; without site.js that hides the whole
-   inventory. MEASURED with site.js blocked: 21 of 21 cards at opacity 0. The
-   marker class is added by script and withdrawn if site.js never arrived, so
-   the content is visible in both of those cases and the stagger is untouched
-   in the normal one. */
+ opacity 0 until site.js adds .in-view; without site.js that hides the whole
+ inventory. MEASURED with site.js blocked: 21 of 21 cards at opacity 0. The
+ marker class is added by script and withdrawn if site.js never arrived, so
+ the content is visible in both of those cases and the stagger is untouched
+ in the normal one. */
 html:not(.sf-js) .wow-stagger > * { opacity: 1; transform: none; }
 /* fix-tables: caption sizing + cost-table stacking */
 .tablewrap{container-type:inline-size}
 .tablewrap > table > caption{
-  width:100cqi;box-sizing:border-box;
-  position:sticky;left:0;
-  overflow-wrap:break-word;word-break:normal;hyphens:none;
+ width:100cqi;box-sizing:border-box;
+ position:sticky;left:0;
+ overflow-wrap:break-word;word-break:normal;hyphens:none;
 }
 .tablewrap-cost > table{min-width:0;display:block;width:100%}
 .tablewrap-cost{overflow-x:visible}
 .tablewrap-cost thead{display:none}
 .tablewrap-cost tbody,.tablewrap-cost tfoot{display:block}
 .tablewrap-cost tbody tr,.tablewrap-cost tfoot tr{
-  display:block;padding:12px 14px;border-bottom:1px solid var(--line);
+ display:block;padding:12px 14px;border-bottom:1px solid var(--line);
 }
 .tablewrap-cost tbody tr:last-child{border-bottom:0}
 .tablewrap-cost th,.tablewrap-cost td{
-  display:block;padding:0;border:0;min-width:0;white-space:normal;
-  overflow-wrap:break-word;word-break:normal;hyphens:none;
+ display:block;padding:0;border:0;min-width:0;white-space:normal;
+ overflow-wrap:break-word;word-break:normal;hyphens:none;
 }
 .tablewrap-cost tbody th,.tablewrap-cost tfoot th{
-  font-size:.6875rem;font-weight:800;letter-spacing:.07em;text-transform:uppercase;
-  color:var(--muted);margin:0 0 4px;
+ font-size:.6875rem;font-weight:800;letter-spacing:.07em;text-transform:uppercase;
+ color:var(--muted);margin:0 0 4px;
 }
 .tablewrap-cost td{font-size:.875rem;color:var(--text)}
 .scrollhint:has(+ .tablewrap-cost){display:none}
 @media (min-width:768px){
-  .tablewrap-cost{overflow-x:auto}
-  .tablewrap-cost > table{display:table;min-width:560px}
-  .tablewrap-cost thead{display:table-header-group}
-  .tablewrap-cost tbody{display:table-row-group}
-  .tablewrap-cost tfoot{display:table-footer-group}
-  .tablewrap-cost tbody tr,.tablewrap-cost tfoot tr{display:table-row;padding:0;border-bottom:0}
-  .tablewrap-cost th,.tablewrap-cost td{
-    display:table-cell;padding:10px 14px;border-bottom:1px solid var(--line);margin:0;
-  }
-  .tablewrap-cost tbody th,.tablewrap-cost tfoot th{
-    font-size:.875rem;font-weight:700;letter-spacing:0;text-transform:none;
-    color:var(--text);min-width:224px;
-  }
-  .scrollhint:has(+ .tablewrap-cost){display:flex}
+ .tablewrap-cost{overflow-x:auto}
+ .tablewrap-cost > table{display:table;min-width:560px}
+ .tablewrap-cost thead{display:table-header-group}
+ .tablewrap-cost tbody{display:table-row-group}
+ .tablewrap-cost tfoot{display:table-footer-group}
+ .tablewrap-cost tbody tr,.tablewrap-cost tfoot tr{display:table-row;padding:0;border-bottom:0}
+ .tablewrap-cost th,.tablewrap-cost td{
+ display:table-cell;padding:10px 14px;border-bottom:1px solid var(--line);margin:0;
+ }
+ .tablewrap-cost tbody th,.tablewrap-cost tfoot th{
+ font-size:.875rem;font-weight:700;letter-spacing:0;text-transform:none;
+ color:var(--text);min-width:224px;
+ }
+ .scrollhint:has(+ .tablewrap-cost){display:flex}
 }
 /* fix-tables: caption sizing + cost-table stacking (v2: covers .lm-table-wrap) */
 .tablewrap,.lm-table-wrap{container-type:inline-size}
@@ -143,9 +143,9 @@ html:not(.sf-js) .wow-stagger > * { opacity: 1; transform: none; }
 .lm-table-wrap > table > caption,
 .tablewrap table caption,
 .lm-table-wrap table caption{
-  width:100cqi;box-sizing:border-box;
-  position:sticky;left:0;
-  overflow-wrap:break-word;word-break:normal;hyphens:none;
+ width:100cqi;box-sizing:border-box;
+ position:sticky;left:0;
+ overflow-wrap:break-word;word-break:normal;hyphens:none;
 }
 .lm-table-wrap > table > caption > span,
 .lm-table-wrap table caption > span{display:block;max-width:100%}
@@ -154,840 +154,885 @@ html:not(.sf-js) .wow-stagger > * { opacity: 1; transform: none; }
 .tablewrap-cost thead{display:none}
 .tablewrap-cost tbody,.tablewrap-cost tfoot{display:block}
 .tablewrap-cost tbody tr,.tablewrap-cost tfoot tr{
-  display:block;padding:12px 14px;border-bottom:1px solid var(--line);
+ display:block;padding:12px 14px;border-bottom:1px solid var(--line);
 }
 .tablewrap-cost tbody tr:last-child{border-bottom:0}
 .tablewrap-cost th,.tablewrap-cost td{
-  display:block;padding:0;border:0;min-width:0;white-space:normal;
-  overflow-wrap:break-word;word-break:normal;hyphens:none;
+ display:block;padding:0;border:0;min-width:0;white-space:normal;
+ overflow-wrap:break-word;word-break:normal;hyphens:none;
 }
 .tablewrap-cost tbody th,.tablewrap-cost tfoot th{
-  font-size:.6875rem;font-weight:800;letter-spacing:.07em;text-transform:uppercase;
-  color:var(--muted);margin:0 0 4px;
+ font-size:.6875rem;font-weight:800;letter-spacing:.07em;text-transform:uppercase;
+ color:var(--muted);margin:0 0 4px;
 }
 .tablewrap-cost td{font-size:.875rem;color:var(--text)}
 .scrollhint:has(+ .tablewrap-cost){display:none}
 @media (min-width:768px){
-  .tablewrap-cost{overflow-x:auto}
-  .tablewrap-cost > table{display:table;min-width:560px}
-  .tablewrap-cost thead{display:table-header-group}
-  .tablewrap-cost tbody{display:table-row-group}
-  .tablewrap-cost tfoot{display:table-footer-group}
-  .tablewrap-cost tbody tr,.tablewrap-cost tfoot tr{display:table-row;padding:0;border-bottom:0}
-  .tablewrap-cost th,.tablewrap-cost td{
-    display:table-cell;padding:10px 14px;border-bottom:1px solid var(--line);margin:0;
-  }
-  .tablewrap-cost tbody th,.tablewrap-cost tfoot th{
-    font-size:.875rem;font-weight:700;letter-spacing:0;text-transform:none;
-    color:var(--text);min-width:224px;
-  }
-  .scrollhint:has(+ .tablewrap-cost){display:flex}
+ .tablewrap-cost{overflow-x:auto}
+ .tablewrap-cost > table{display:table;min-width:560px}
+ .tablewrap-cost thead{display:table-header-group}
+ .tablewrap-cost tbody{display:table-row-group}
+ .tablewrap-cost tfoot{display:table-footer-group}
+ .tablewrap-cost tbody tr,.tablewrap-cost tfoot tr{display:table-row;padding:0;border-bottom:0}
+ .tablewrap-cost th,.tablewrap-cost td{
+ display:table-cell;padding:10px 14px;border-bottom:1px solid var(--line);margin:0;
+ }
+ .tablewrap-cost tbody th,.tablewrap-cost tfoot th{
+ font-size:.875rem;font-weight:700;letter-spacing:0;text-transform:none;
+ color:var(--text);min-width:224px;
+ }
+ .scrollhint:has(+ .tablewrap-cost){display:flex}
 }
 </style>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"California","item":"https://www.liquorlicenseagents.com/california/"},{"@type":"ListItem","position":2,"name":"San Francisco","item":"https://www.liquorlicenseagents.com/california/san-francisco/"},{"@type":"ListItem","position":3,"name":"Type 21","item":"https://www.liquorlicenseagents.com/california/san-francisco/type-21/"}]}</script>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"Liquor License Agents","url":"https://www.liquorlicenseagents.com/","telephone":"+1-800-799-9081","email":"desk@liquorlicenseagents.com","foundingDate":"2014","areaServed":{"@type":"AdministrativeArea","name":"San Francisco County, California"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"Liquor License Agents","url":"https://www.liquorlicenseagents.com/","telephone":"+1-800-799-9081","email":"mike@liquorlicenseagents.com","areaServed":{"@type":"AdministrativeArea","name":"San Francisco County, California"}}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"ItemList","name":"San Francisco Type 21 liquor licenses for sale","itemListOrder":"https://schema.org/ItemListOrderDescending","numberOfItems":10,"itemListElement":[{"@type":"ListItem","position":1,"item":{"@type":"Product","name":"San Francisco Type 21 Liquor License SF-2001","sku":"SF-2001","category":"Type 21 — Off-Sale General","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-21/sf-2001/","areaServed":{"@type":"AdministrativeArea","name":"San Francisco County, California"},"offers":{"@type":"Offer","price":275000,"priceCurrency":"USD","availability":"https://schema.org/InStock","availabilityStarts":"2026-08-30","itemCondition":"https://schema.org/UsedCondition","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-21/sf-2001/","seller":{"@type":"Organization","name":"Liquor License Agents"}}}},{"@type":"ListItem","position":2,"item":{"@type":"Product","name":"San Francisco Type 21 Liquor License SF-2002","sku":"SF-2002","category":"Type 21 — Off-Sale General","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-21/sf-2002/","areaServed":{"@type":"AdministrativeArea","name":"San Francisco County, California"},"offers":{"@type":"Offer","price":250000,"priceCurrency":"USD","availability":"https://schema.org/InStock","availabilityStarts":"2026-07-28","itemCondition":"https://schema.org/UsedCondition","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-21/sf-2002/","seller":{"@type":"Organization","name":"Liquor License Agents"}}}},{"@type":"ListItem","position":3,"item":{"@type":"Product","name":"San Francisco Type 21 Liquor License SF-2003","sku":"SF-2003","category":"Type 21 — Off-Sale General","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-21/sf-2003/","areaServed":{"@type":"AdministrativeArea","name":"San Francisco County, California"},"offers":{"@type":"Offer","price":225000,"priceCurrency":"USD","availability":"https://schema.org/LimitedAvailability","availabilityStarts":"2026-09-07","itemCondition":"https://schema.org/UsedCondition","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-21/sf-2003/","seller":{"@type":"Organization","name":"Liquor License Agents"}}}},{"@type":"ListItem","position":4,"item":{"@type":"Product","name":"San Francisco Type 21 Liquor License SF-2004","sku":"SF-2004","category":"Type 21 — Off-Sale General","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-21/sf-2004/","areaServed":{"@type":"AdministrativeArea","name":"San Francisco County, California"},"offers":{"@type":"Offer","price":205000,"priceCurrency":"USD","availability":"https://schema.org/InStock","availabilityStarts":"2026-08-13","itemCondition":"https://schema.org/UsedCondition","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-21/sf-2004/","seller":{"@type":"Organization","name":"Liquor License Agents"}}}},{"@type":"ListItem","position":5,"item":{"@type":"Product","name":"San Francisco Type 21 Liquor License SF-2005","sku":"SF-2005","category":"Type 21 — Off-Sale General","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-21/sf-2005/","areaServed":{"@type":"AdministrativeArea","name":"San Francisco County, California"},"offers":{"@type":"Offer","price":185000,"priceCurrency":"USD","availability":"https://schema.org/InStock","availabilityStarts":"2026-07-07","itemCondition":"https://schema.org/UsedCondition","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-21/sf-2005/","seller":{"@type":"Organization","name":"Liquor License Agents"}}}},{"@type":"ListItem","position":6,"item":{"@type":"Product","name":"San Francisco Type 21 Liquor License SF-2006","sku":"SF-2006","category":"Type 21 — Off-Sale General","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-21/sf-2006/","areaServed":{"@type":"AdministrativeArea","name":"San Francisco County, California"},"offers":{"@type":"Offer","price":165000,"priceCurrency":"USD","availability":"https://schema.org/InStock","availabilityStarts":"2026-08-25","itemCondition":"https://schema.org/UsedCondition","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-21/sf-2006/","seller":{"@type":"Organization","name":"Liquor License Agents"}}}},{"@type":"ListItem","position":7,"item":{"@type":"Product","name":"San Francisco Type 21 Liquor License SF-2007","sku":"SF-2007","category":"Type 21 — Off-Sale General","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-21/sf-2007/","areaServed":{"@type":"AdministrativeArea","name":"San Francisco County, California"},"offers":{"@type":"Offer","price":145000,"priceCurrency":"USD","availability":"https://schema.org/InStock","availabilityStarts":"2026-07-20","itemCondition":"https://schema.org/UsedCondition","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-21/sf-2007/","seller":{"@type":"Organization","name":"Liquor License Agents"}}}},{"@type":"ListItem","position":8,"item":{"@type":"Product","name":"San Francisco Type 21 Liquor License SF-2008","sku":"SF-2008","category":"Type 21 — Off-Sale General","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-21/sf-2008/","areaServed":{"@type":"AdministrativeArea","name":"San Francisco County, California"},"offers":{"@type":"Offer","price":120000,"priceCurrency":"USD","availability":"https://schema.org/InStock","availabilityStarts":"2026-09-04","itemCondition":"https://schema.org/UsedCondition","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-21/sf-2008/","seller":{"@type":"Organization","name":"Liquor License Agents"}}}},{"@type":"ListItem","position":9,"item":{"@type":"Product","name":"San Francisco Type 21 Liquor License SF-2009","sku":"SF-2009","category":"Type 21 — Off-Sale General","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-21/sf-2009/","areaServed":{"@type":"AdministrativeArea","name":"San Francisco County, California"},"offers":{"@type":"Offer","price":98000,"priceCurrency":"USD","availability":"https://schema.org/InStock","availabilityStarts":"2026-06-03","itemCondition":"https://schema.org/UsedCondition","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-21/sf-2009/","seller":{"@type":"Organization","name":"Liquor License Agents"}}}},{"@type":"ListItem","position":10,"item":{"@type":"Product","name":"San Francisco Type 21 Liquor License SF-2010","sku":"SF-2010","category":"Type 21 — Off-Sale General","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-21/sf-2010/","areaServed":{"@type":"AdministrativeArea","name":"San Francisco County, California"},"offers":{"@type":"Offer","price":78000,"priceCurrency":"USD","availability":"https://schema.org/InStock","availabilityStarts":"2026-08-18","itemCondition":"https://schema.org/UsedCondition","url":"https://www.liquorlicenseagents.com/california/san-francisco/type-21/sf-2010/","seller":{"@type":"Organization","name":"Liquor License Agents"}}}}]}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What can a Type 21 sell that a Type 20 cannot?","acceptedAnswer":{"@type":"Answer","text":"Distilled spirits. Both classes are off-sale &mdash; sealed containers, taken away, nothing drunk on the premises &mdash; and both cover beer and wine. The Type 21 adds spirits, and because the Type 21 is quota-limited in San Francisco and the Type 20 is not, that one difference is the whole price gap between $15,000 and $175,000."}},{"@type":"Question","name":"What conditions should I check before I buy one?","acceptedAnswer":{"@type":"Answer","text":"Ask for the full condition set on the individual license before you agree a price. In San Francisco the common ones come out of old protest settlements: no sales of single servings, no fortified wine above a stated strength, a closing time earlier than the state limit, limits on window signage, sometimes a requirement to keep a certain proportion of the floor in groceries. They transfer with the license and they are not negotiable at transfer. We read them before we list and you see them the day you qualify."}},{"@type":"Question","name":"Can I move a Type 21 to a different shop?","acceptedAnswer":{"@type":"Answer","text":"Inside San Francisco County, with ABC approval and a fresh 30-day posting at the new address. Expect more local attention than an on-sale move attracts, and expect the Planning district to matter: parts of the city restrict new off-sale alcohol uses under the Planning Code whatever ABC decides. Out-of-county moves are generally not available for a quota license."}},{"@type":"Question","name":"Why is the spread so wide on only ten licenses?","acceptedAnswer":{"@type":"Answer","text":"Because conditions and trading history vary far more on off-sale licenses than on on-sale ones, and both transfer to the buyer. The bottom of the band is usually a conditioned license; the top is usually a clean one with a long unprotested history. The spread is information, not noise &mdash; read it as a condition ladder rather than a quality ladder."}},{"@type":"Question","name":"Do I need the shop as well, or just the license?","acceptedAnswer":{"@type":"Answer","text":"Just the license, as far as we are concerned: every price on this page is for the license alone, with no premises, lease, fixtures, shelving, goodwill or stock. You do need an approved address before ABC will issue it to you, which is why the site question on the inquiry form is not a formality."}}]}</script>
 </head>
 <body>
 <script>
 /* [sf-v5 page] Reveal gate — see note [5] in the page style. The library holds
-   .wow-stagger children at opacity 0 until site.js adds .in-view. This marks the
-   document so that hide applies ONLY when scripting is live, then withdraws the
-   mark on load if site.js did not actually arrive, checked against its own
-   resource-timing entry rather than a guessed timer. Fails OPEN: any error, and
-   the mark stays, which is the normal working page. */
+ .wow-stagger children at opacity 0 until site.js adds .in-view. This marks the
+ document so that hide applies ONLY when scripting is live, then withdraws the
+ mark on load if site.js did not actually arrive, checked against its own
+ resource-timing entry rather than a guessed timer. Fails OPEN: any error, and
+ the mark stays, which is the normal working page. */
 (function () {
-  var de = document.documentElement;
-  de.classList.add('sf-js');
-  window.addEventListener('load', function () {
-    var ok = true;
-    try {
-      ok = performance.getEntriesByType('resource').some(function (e) {
-        return String(e.name).indexOf('design-system/site.js') !== -1 && e.decodedBodySize > 0;
-      });
-    } catch (err) { ok = true; }
-    if (!ok) de.classList.remove('sf-js');
-  });
+ var de = document.documentElement;
+ de.classList.add('sf-js');
+ window.addEventListener('load', function () {
+ var ok = true;
+ try {
+ ok = performance.getEntriesByType('resource').some(function (e) {
+ return String(e.name).indexOf('design-system/site.js') !== -1 && e.decodedBodySize > 0;
+ });
+ } catch (err) { ok = true; }
+ if (!ok) de.classList.remove('sf-js');
+ });
 
-  /* Second job, same mechanism. site.js observes each .wow-stagger at
-     threshold 0.12 — a fraction of the TARGET — and this page's listing grid is
-     2,748px tall at 390px, so 330px of it must be inside the observer's root
-     before its cards light. MEASURED: landing at #listings puts 262px of the
-     grid in view, 9.5% of the target, and all ten priced licenses stayed at
-     opacity 0 until the visitor scrolled further. This runs site.js's OWN
-     inOrAboveFold recheck on scroll as well as on its timers, so a stagger
-     lights the moment any part of it enters the viewport. It only ever ADDS
-     .in-view, so it composes with site.js rather than racing it. */
-  var sweep = function () {
-    var t = document.querySelectorAll('.wow-stagger:not(.in-view)');
-    for (var i = 0; i < t.length; i++) {
-      if (t[i].getBoundingClientRect().top < (window.innerHeight || 0) + 1) t[i].classList.add('in-view');
-    }
-  };
-  window.addEventListener('scroll', sweep, { passive: true });
-  window.addEventListener('resize', sweep, { passive: true });
-  window.addEventListener('hashchange', sweep);
-  window.addEventListener('load', sweep);
+ /* Second job, same mechanism. site.js observes each .wow-stagger at
+ threshold 0.12 — a fraction of the TARGET — and this page's listing grid is
+ 2,748px tall at 390px, so 330px of it must be inside the observer's root
+ before its cards light. MEASURED: landing at #listings puts 262px of the
+ grid in view, 9.5% of the target, and all ten priced licenses stayed at
+ opacity 0 until the visitor scrolled further. This runs site.js's OWN
+ inOrAboveFold recheck on scroll as well as on its timers, so a stagger
+ lights the moment any part of it enters the viewport. It only ever ADDS
+ .in-view, so it composes with site.js rather than racing it. */
+ var sweep = function () {
+ var t = document.querySelectorAll('.wow-stagger:not(.in-view)');
+ for (var i = 0; i < t.length; i++) {
+ if (t[i].getBoundingClientRect().top < (window.innerHeight || 0) + 1) t[i].classList.add('in-view');
+ }
+ };
+ window.addEventListener('scroll', sweep, { passive: true });
+ window.addEventListener('resize', sweep, { passive: true });
+ window.addEventListener('hashchange', sweep);
+ window.addEventListener('load', sweep);
 })();
 </script>
 <a class="mm-skip" href="#main">Skip to content</a>
 
 <header class="site-header wow-glass" id="site-header">
-  <div class="container site-header__bar">
-    <a class="brand" href="../../../california/san-francisco/">
-      <span class="brand__mark"><svg viewBox="0 0 32 32" width="19" height="19" fill="currentColor" aria-hidden="true"><path d="M10.1 5.6h2.9v3.1l1.5 2.4v13.1a1 1 0 0 1-1 1h-3.9a1 1 0 0 1-1-1V11.1l1.5-2.4z"/><path d="M17.4 11.3h9.2l-3.5 5.2v5.4h2.4v2.1h-7v-2.1h2.4v-5.4z"/></svg></span>
-      Liquor License Agents
-    </a>
+ <div class="container site-header__bar">
+ <a class="brand" href="../../../california/san-francisco/">
+ <span class="brand__mark"><svg viewBox="0 0 32 32" width="19" height="19" fill="currentColor" aria-hidden="true"><path d="M10.1 5.6h2.9v3.1l1.5 2.4v13.1a1 1 0 0 1-1 1h-3.9a1 1 0 0 1-1-1V11.1l1.5-2.4z"/><path d="M17.4 11.3h9.2l-3.5 5.2v5.4h2.4v2.1h-7v-2.1h2.4v-5.4z"/></svg></span>
+ Liquor License Agents
+ </a>
 
-    <ul class="site-nav" role="list" aria-label="Primary">
-      <li class="mm-has-panel" data-disclosure="classes">
-        <button class="mm-trigger" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="mm-dd-classes">
-          License classes
-          <svg class="mm-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
-        </button>
-        <div class="mm-panel mm-dropdown" id="mm-dd-classes" role="menu" aria-label="License classes">
-          <span class="mm-panel__bloom" aria-hidden="true"></span>
-          <ul role="list">
-        <li><a role="menuitem" href="../../../california/san-francisco/type-47/"><span class="t">Type 47</span><span class="d">On-Sale General, Eating Place</span></a></li>
-        <li><a role="menuitem" href="../../../california/san-francisco/type-21/" aria-current="page"><span class="t">Type 21</span><span class="d">Off-Sale General</span></a></li>
-        <li><a role="menuitem" href="../../../california/san-francisco/type-48/"><span class="t">Type 48</span><span class="d">On-Sale General, Public Premises</span></a></li>
-        <li><a role="menuitem" href="../../../california/san-francisco/type-20/"><span class="t">Type 20</span><span class="d">Off-Sale Beer and Wine</span></a></li>
-        <li><a role="menuitem" href="../../../california/san-francisco/type-41/"><span class="t">Type 41</span><span class="d">On-Sale Beer and Wine, Eating Place</span></a></li>
-        <li><a role="menuitem" href="../../../california/san-francisco/type-40/"><span class="t">Type 40</span><span class="d">On-Sale Beer</span></a></li>
-          </ul>
-        </div>
-      </li>
-      <li><a class="mm-navlink" href="../../../california/san-francisco/">San Francisco</a></li>
-      <li class="mm-cta-desktop"><a class="btn btn-primary wow-glow" href="#listings">Browse listings</a></li>
-    </ul>
+ <ul class="site-nav" role="list" aria-label="Primary">
+ <li class="mm-has-panel" data-disclosure="classes">
+ <button class="mm-trigger" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="mm-dd-classes">
+ License classes
+ <svg class="mm-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+ </button>
+ <div class="mm-panel mm-dropdown" id="mm-dd-classes" role="menu" aria-label="License classes">
+ <span class="mm-panel__bloom" aria-hidden="true"></span>
+ <ul role="list">
+ <li><a role="menuitem" href="../../../california/san-francisco/type-47/"><span class="t">Type 47</span><span class="d">On-Sale General, Eating Place</span></a></li>
+ <li><a role="menuitem" href="../../../california/san-francisco/type-21/" aria-current="page"><span class="t">Type 21</span><span class="d">Off-Sale General</span></a></li>
+ <li><a role="menuitem" href="../../../california/san-francisco/type-48/"><span class="t">Type 48</span><span class="d">On-Sale General, Public Premises</span></a></li>
+ <li><a role="menuitem" href="../../../california/san-francisco/type-20/"><span class="t">Type 20</span><span class="d">Off-Sale Beer and Wine</span></a></li>
+ <li><a role="menuitem" href="../../../california/san-francisco/type-41/"><span class="t">Type 41</span><span class="d">On-Sale Beer and Wine, Eating Place</span></a></li>
+ <li><a role="menuitem" href="../../../california/san-francisco/type-40/"><span class="t">Type 40</span><span class="d">On-Sale Beer</span></a></li>
+ </ul>
+ </div>
+ </li>
+ <li><a class="mm-navlink" href="../../../california/san-francisco/">San Francisco</a></li>
+ <li class="mm-cta-desktop"><a class="btn btn-primary wow-glow" href="#listings">Browse listings</a></li>
+ </ul>
 
-    <button class="site-header__hamburger mm-burger" id="mm-burger" type="button"
-            aria-label="Open menu" aria-expanded="false" aria-controls="mobile-drawer">
-      <span class="bars" aria-hidden="true"><span></span><span></span><span></span></span>
-    </button>
-  </div>
+ <button class="site-header__hamburger mm-burger" id="mm-burger" type="button"
+ aria-label="Open menu" aria-expanded="false" aria-controls="mobile-drawer">
+ <span class="bars" aria-hidden="true"><span></span><span></span><span></span></span>
+ </button>
+ </div>
 </header>
 
 <div class="site-drawer-backdrop mm-overlay" id="mm-overlay" data-open="false" tabindex="-1"></div>
 <nav id="mobile-drawer" class="site-drawer" aria-hidden="true" aria-label="Mobile">
-  <div class="mm-drawer__head">
-    <a class="brand" href="../../../california/san-francisco/"><span class="brand__mark"><svg viewBox="0 0 32 32" width="19" height="19" fill="currentColor" aria-hidden="true"><path d="M10.1 5.6h2.9v3.1l1.5 2.4v13.1a1 1 0 0 1-1 1h-3.9a1 1 0 0 1-1-1V11.1l1.5-2.4z"/><path d="M17.4 11.3h9.2l-3.5 5.2v5.4h2.4v2.1h-7v-2.1h2.4v-5.4z"/></svg></span>Liquor License Agents</a>
-    <button class="site-drawer__close" id="mm-drawer-close" type="button" aria-label="Close menu">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
-    </button>
-  </div>
+ <div class="mm-drawer__head">
+ <a class="brand" href="../../../california/san-francisco/"><span class="brand__mark"><svg viewBox="0 0 32 32" width="19" height="19" fill="currentColor" aria-hidden="true"><path d="M10.1 5.6h2.9v3.1l1.5 2.4v13.1a1 1 0 0 1-1 1h-3.9a1 1 0 0 1-1-1V11.1l1.5-2.4z"/><path d="M17.4 11.3h9.2l-3.5 5.2v5.4h2.4v2.1h-7v-2.1h2.4v-5.4z"/></svg></span>Liquor License Agents</a>
+ <button class="site-drawer__close" id="mm-drawer-close" type="button" aria-label="Close menu">
+ <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+ </button>
+ </div>
 
-  <div class="mm-drawer__nav">
-    <div class="mm-acc">
-      <button class="mm-acc__btn" type="button" aria-expanded="false" aria-controls="mm-acc-classes">
-        License classes
-        <svg class="mm-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
-      </button>
-      <div class="mm-acc__panel" id="mm-acc-classes">
-        <div class="mm-acc__inner">
-          <a href="../../../california/san-francisco/type-47/">Type 47 &mdash; On-Sale General, Eating Place</a>
-          <a href="../../../california/san-francisco/type-21/" aria-current="page">Type 21 &mdash; Off-Sale General</a>
-          <a href="../../../california/san-francisco/type-48/">Type 48 &mdash; On-Sale General, Public Premises</a>
-          <a href="../../../california/san-francisco/type-20/">Type 20 &mdash; Off-Sale Beer and Wine</a>
-          <a href="../../../california/san-francisco/type-41/">Type 41 &mdash; On-Sale Beer and Wine, Eating Place</a>
-          <a href="../../../california/san-francisco/type-40/">Type 40 &mdash; On-Sale Beer</a>
-        </div>
-      </div>
-    </div>
-    <a class="mm-drawer__link" href="../../../california/san-francisco/">San Francisco</a>
-  </div>
+ <div class="mm-drawer__nav">
+ <div class="mm-acc">
+ <button class="mm-acc__btn" type="button" aria-expanded="false" aria-controls="mm-acc-classes">
+ License classes
+ <svg class="mm-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+ </button>
+ <div class="mm-acc__panel" id="mm-acc-classes">
+ <div class="mm-acc__inner">
+ <a href="../../../california/san-francisco/type-47/">Type 47 &mdash; On-Sale General, Eating Place</a>
+ <a href="../../../california/san-francisco/type-21/" aria-current="page">Type 21 &mdash; Off-Sale General</a>
+ <a href="../../../california/san-francisco/type-48/">Type 48 &mdash; On-Sale General, Public Premises</a>
+ <a href="../../../california/san-francisco/type-20/">Type 20 &mdash; Off-Sale Beer and Wine</a>
+ <a href="../../../california/san-francisco/type-41/">Type 41 &mdash; On-Sale Beer and Wine, Eating Place</a>
+ <a href="../../../california/san-francisco/type-40/">Type 40 &mdash; On-Sale Beer</a>
+ </div>
+ </div>
+ </div>
+ <a class="mm-drawer__link" href="../../../california/san-francisco/">San Francisco</a>
+ </div>
 
-  <div class="mm-drawer__cta">
-    <a class="btn btn-primary wow-glow" href="#listings">Browse listings</a>
-  </div>
+ <div class="mm-drawer__cta">
+ <a class="btn btn-primary wow-glow" href="#listings">Browse listings</a>
+ </div>
 </nav>
 
 <main id="main">
 
-  <div class="section sf-crumbbar">
-    <div class="container">
-      <nav class="sf-crumb" aria-label="Breadcrumb">
-        <ol>
-          <li><a href="https://www.liquorlicenseagents.com/california/">California</a></li>
-          <li><a href="../">San Francisco</a></li>
-          <li><span aria-current="page">Type 21</span></li>
-        </ol>
-      </nav>
-    </div>
-  </div>
+ <div class="section sf-crumbbar">
+ <div class="container">
+ <nav class="sf-crumb" aria-label="Breadcrumb">
+ <ol>
+ <li><a href="https://www.liquorlicenseagents.com/california/">California</a></li>
+ <li><a href="../">San Francisco</a></li>
+ <li><span aria-current="page">Type 21</span></li>
+ </ol>
+ </nav>
+ </div>
+ </div>
 
-  <section class="section hero hero--photo hero--editorial wow-bloom wow-grain">
-    <div class="hero__media"><img src="../../../assets/img/venue-104e3d8b.jpg" width="720" height="405" decoding="async" alt="A wine shop aisle with bottles ranged on tall timber shelving under pendant lights, and a chalkboard on the end wall."></div>
-    <div class="hero__scrim" aria-hidden="true"></div>
-    <div class="container">
-      <div class="hero__inner">
-        <p class="eyebrow">San Francisco County &middot; Type 21 &middot; Off-Sale General</p>
-        <h1>San Francisco Type 21 Liquor Licenses For Sale</h1>
-        <p class="lede">Ten Type 21 licenses on our San Francisco book, asking $78,000 to $275,000 &mdash; the license only, and every one of them on a page of its own.</p>
-        <div class="cta-row">
-          <a class="btn btn-primary wow-glow" href="#listings">Browse listings</a>
-          <a class="btn btn-secondary" href="tel:+18007999081">Call the desk on (800) 799-9081</a>
-        </div>
-      </div>
-      <div class="hero__stats">
-        <div class="stat"><span class="stat__num">10</span><span class="stat__label">Type 21 licenses on the book</span></div>
-        <div class="stat"><span class="stat__num">$78,000</span><span class="stat__label">Lowest ask</span></div>
-        <div class="stat"><span class="stat__num">$275,000</span><span class="stat__label">Highest ask</span></div>
-        <div class="stat"><span class="stat__num">$175,000</span><span class="stat__label">Median ask</span></div>
-      </div>
-    </div>
-    <div class="hero__smoke" aria-hidden="true"></div>
-  </section>
+ <section class="section hero hero--photo hero--editorial wow-bloom wow-grain">
+ <div class="hero__media"><img src="../../../assets/img/venue-104e3d8b.jpg" width="720" height="405" decoding="async" alt="A wine shop aisle with bottles ranged on tall timber shelving under pendant lights, and a chalkboard on the end wall."></div>
+ <div class="hero__scrim" aria-hidden="true"></div>
+ <div class="container">
+ <div class="hero__inner">
+ <p class="eyebrow">San Francisco County &middot; Type 21 &middot; Off-Sale General</p>
+ <h1>San Francisco Type 21 Liquor Licenses For Sale</h1>
+ <p class="lede">Ten Type 21 licenses on our San Francisco book, asking $78,000 to $275,000 &mdash; the license only, and every one of them on a page of its own.</p>
+ <div class="cta-row">
+ <a class="btn btn-primary wow-glow" href="#listings">Browse listings</a>
+ <a class="btn btn-secondary" href="tel:+18007999081">Call the desk on (800) 799-9081</a>
+ </div>
+ </div>
+ <div class="hero__stats">
+ <div class="stat"><span class="stat__num">10</span><span class="stat__label">Type 21 licenses on the book</span></div>
+ <div class="stat"><span class="stat__num">$78,000</span><span class="stat__label">Lowest ask</span></div>
+ <div class="stat"><span class="stat__num">$275,000</span><span class="stat__label">Highest ask</span></div>
+ <div class="stat"><span class="stat__num">$175,000</span><span class="stat__label">Median ask</span></div>
+ </div>
+ </div>
+ <div class="hero__smoke" aria-hidden="true"></div>
+ </section>
 
-  <section class="section section--warm wow-bloom" id="listings">
-    <div class="container">
-      <p class="eyebrow">The book</p>
-      <h2>Type 21 licenses available in San Francisco</h2>
-      <p class="lede">All 10, priced, with the day each came to market. We publish the city and stop there &mdash; not the neighborhood, because for an off-sale license the neighborhood is most of the business and naming it would name the seller.</p>
-      <p class="lm-note">Every entry below is one license at its own address, so you can open it, link to it or send it on without sending the whole class. Each one is the license alone &mdash; no premises, no lease, no fixtures, no kitchen, no goodwill, no stock.</p>
-      <div class="lm-grid wow-stagger">
-        <article class="card lm-card wow-lift">
-          <p class="lm-card__type">Type 21 &middot; License only</p>
-          <h3 class="lm-card__city">SF-2001</h3>
-          <p class="lm-card__price">$275,000</p>
-          <p class="lm-card__meta"><span class="lic-status" data-status="active">Available</span></p>
-          <p class="lm-card__meta">On market 14 days &middot; listed 30 August 2026</p>
-          <a class="btn btn-secondary" href="sf-2001/">View SF-2001</a>
-        </article>
-        <article class="card lm-card wow-lift">
-          <p class="lm-card__type">Type 21 &middot; License only</p>
-          <h3 class="lm-card__city">SF-2002</h3>
-          <p class="lm-card__price">$250,000</p>
-          <p class="lm-card__meta"><span class="lic-status" data-status="active">Available</span></p>
-          <p class="lm-card__meta">On market 47 days &middot; listed 28 July 2026</p>
-          <a class="btn btn-secondary" href="sf-2002/">View SF-2002</a>
-        </article>
-        <article class="card lm-card wow-lift">
-          <p class="lm-card__type">Type 21 &middot; License only</p>
-          <h3 class="lm-card__city">SF-2003</h3>
-          <p class="lm-card__price">$225,000</p>
-          <p class="lm-card__meta"><span class="lic-status" data-status="pending">Under offer</span></p>
-          <p class="lm-card__meta">On market 6 days &middot; listed 7 September 2026</p>
-          <a class="btn btn-secondary" href="sf-2003/">View SF-2003</a>
-        </article>
-        <article class="card lm-card wow-lift">
-          <p class="lm-card__type">Type 21 &middot; License only</p>
-          <h3 class="lm-card__city">SF-2004</h3>
-          <p class="lm-card__price">$205,000</p>
-          <p class="lm-card__meta"><span class="lic-status" data-status="active">Available</span></p>
-          <p class="lm-card__meta">On market 31 days &middot; listed 13 August 2026</p>
-          <a class="btn btn-secondary" href="sf-2004/">View SF-2004</a>
-        </article>
-        <article class="card lm-card wow-lift">
-          <p class="lm-card__type">Type 21 &middot; License only</p>
-          <h3 class="lm-card__city">SF-2005</h3>
-          <p class="lm-card__price">$185,000</p>
-          <p class="lm-card__meta"><span class="lic-status" data-status="active">Available</span></p>
-          <p class="lm-card__meta">On market 68 days &middot; listed 7 July 2026</p>
-          <a class="btn btn-secondary" href="sf-2005/">View SF-2005</a>
-        </article>
-        <article class="card lm-card wow-lift">
-          <p class="lm-card__type">Type 21 &middot; License only</p>
-          <h3 class="lm-card__city">SF-2006</h3>
-          <p class="lm-card__price">$165,000</p>
-          <p class="lm-card__meta"><span class="lic-status" data-status="active">Available</span></p>
-          <p class="lm-card__meta">On market 19 days &middot; listed 25 August 2026</p>
-          <a class="btn btn-secondary" href="sf-2006/">View SF-2006</a>
-        </article>
-        <article class="card lm-card wow-lift">
-          <p class="lm-card__type">Type 21 &middot; License only</p>
-          <h3 class="lm-card__city">SF-2007</h3>
-          <p class="lm-card__price">$145,000</p>
-          <p class="lm-card__meta"><span class="lic-status" data-status="active">Available</span></p>
-          <p class="lm-card__meta">On market 55 days &middot; listed 20 July 2026</p>
-          <a class="btn btn-secondary" href="sf-2007/">View SF-2007</a>
-        </article>
-        <article class="card lm-card wow-lift">
-          <p class="lm-card__type">Type 21 &middot; License only</p>
-          <h3 class="lm-card__city">SF-2008</h3>
-          <p class="lm-card__price">$120,000</p>
-          <p class="lm-card__meta"><span class="lic-status" data-status="active">Available</span></p>
-          <p class="lm-card__meta">On market 9 days &middot; listed 4 September 2026</p>
-          <a class="btn btn-secondary" href="sf-2008/">View SF-2008</a>
-        </article>
-        <article class="card lm-card wow-lift">
-          <p class="lm-card__type">Type 21 &middot; License only</p>
-          <h3 class="lm-card__city">SF-2009</h3>
-          <p class="lm-card__price">$98,000</p>
-          <p class="lm-card__meta"><span class="lic-status" data-status="active">Available</span></p>
-          <p class="lm-card__meta">On market 102 days &middot; listed 3 June 2026</p>
-          <a class="btn btn-secondary" href="sf-2009/">View SF-2009</a>
-        </article>
-        <article class="card lm-card wow-lift">
-          <p class="lm-card__type">Type 21 &middot; License only</p>
-          <h3 class="lm-card__city">SF-2010</h3>
-          <p class="lm-card__price">$78,000</p>
-          <p class="lm-card__meta"><span class="lic-status" data-status="active">Available</span></p>
-          <p class="lm-card__meta">On market 26 days &middot; listed 18 August 2026</p>
-          <a class="btn btn-secondary" href="sf-2010/">View SF-2010</a>
-        </article>
-      </div>
-      <p class="lm-note"><strong>10</strong> Type 21 licenses &middot; asking $78,000 to $275,000 &middot; median $175,000 &middot; <strong>9</strong> available, <strong>1</strong> under offer &middot; on the market 6 to 102 days.</p>
-      <p class="sv-note">Asking prices, availability and days on market are reviewed weekly and were last checked on 13 September 2026. <a href="#inquire">Go to the inquiry form</a> to tell the desk what you are opening.</p>
-    </div>
-  </section>
+ <section class="section section--warm wow-bloom" id="listings">
+ <div class="container">
+ <p class="eyebrow">The book</p>
+ <h2>Type 21 licenses available in San Francisco</h2>
+ <p class="lede">All 10, priced, with the day each came to market. We publish the city and stop there &mdash; not the neighborhood, because for an off-sale license the neighborhood is most of the business and naming it would name the seller.</p>
+ <p class="lm-note">Every entry below is one license at its own address, so you can open it, link to it or send it on without sending the whole class. Each one is the license alone &mdash; no premises, no lease, no fixtures, no kitchen, no goodwill, no stock.</p>
+ <div class="lm-grid wow-stagger">
+ <article class="card lm-card wow-lift">
+ <p class="lm-card__type">Type 21 &middot; License only</p>
+ <h3 class="lm-card__city">SF-2001</h3>
+ <p class="lm-card__price">$275,000</p>
+ <p class="lm-card__meta"><span class="lic-status" data-status="active">Available</span></p>
+ <p class="lm-card__meta">On market 14 days &middot; listed 30 August 2026</p>
+ <a class="btn btn-secondary" href="sf-2001/">View SF-2001</a>
+ </article>
+ <article class="card lm-card wow-lift">
+ <p class="lm-card__type">Type 21 &middot; License only</p>
+ <h3 class="lm-card__city">SF-2002</h3>
+ <p class="lm-card__price">$250,000</p>
+ <p class="lm-card__meta"><span class="lic-status" data-status="active">Available</span></p>
+ <p class="lm-card__meta">On market 47 days &middot; listed 28 July 2026</p>
+ <a class="btn btn-secondary" href="sf-2002/">View SF-2002</a>
+ </article>
+ <article class="card lm-card wow-lift">
+ <p class="lm-card__type">Type 21 &middot; License only</p>
+ <h3 class="lm-card__city">SF-2003</h3>
+ <p class="lm-card__price">$225,000</p>
+ <p class="lm-card__meta"><span class="lic-status" data-status="pending">Under offer</span></p>
+ <p class="lm-card__meta">On market 6 days &middot; listed 7 September 2026</p>
+ <a class="btn btn-secondary" href="sf-2003/">View SF-2003</a>
+ </article>
+ <article class="card lm-card wow-lift">
+ <p class="lm-card__type">Type 21 &middot; License only</p>
+ <h3 class="lm-card__city">SF-2004</h3>
+ <p class="lm-card__price">$205,000</p>
+ <p class="lm-card__meta"><span class="lic-status" data-status="active">Available</span></p>
+ <p class="lm-card__meta">On market 31 days &middot; listed 13 August 2026</p>
+ <a class="btn btn-secondary" href="sf-2004/">View SF-2004</a>
+ </article>
+ <article class="card lm-card wow-lift">
+ <p class="lm-card__type">Type 21 &middot; License only</p>
+ <h3 class="lm-card__city">SF-2005</h3>
+ <p class="lm-card__price">$185,000</p>
+ <p class="lm-card__meta"><span class="lic-status" data-status="active">Available</span></p>
+ <p class="lm-card__meta">On market 68 days &middot; listed 7 July 2026</p>
+ <a class="btn btn-secondary" href="sf-2005/">View SF-2005</a>
+ </article>
+ <article class="card lm-card wow-lift">
+ <p class="lm-card__type">Type 21 &middot; License only</p>
+ <h3 class="lm-card__city">SF-2006</h3>
+ <p class="lm-card__price">$165,000</p>
+ <p class="lm-card__meta"><span class="lic-status" data-status="active">Available</span></p>
+ <p class="lm-card__meta">On market 19 days &middot; listed 25 August 2026</p>
+ <a class="btn btn-secondary" href="sf-2006/">View SF-2006</a>
+ </article>
+ <article class="card lm-card wow-lift">
+ <p class="lm-card__type">Type 21 &middot; License only</p>
+ <h3 class="lm-card__city">SF-2007</h3>
+ <p class="lm-card__price">$145,000</p>
+ <p class="lm-card__meta"><span class="lic-status" data-status="active">Available</span></p>
+ <p class="lm-card__meta">On market 55 days &middot; listed 20 July 2026</p>
+ <a class="btn btn-secondary" href="sf-2007/">View SF-2007</a>
+ </article>
+ <article class="card lm-card wow-lift">
+ <p class="lm-card__type">Type 21 &middot; License only</p>
+ <h3 class="lm-card__city">SF-2008</h3>
+ <p class="lm-card__price">$120,000</p>
+ <p class="lm-card__meta"><span class="lic-status" data-status="active">Available</span></p>
+ <p class="lm-card__meta">On market 9 days &middot; listed 4 September 2026</p>
+ <a class="btn btn-secondary" href="sf-2008/">View SF-2008</a>
+ </article>
+ <article class="card lm-card wow-lift">
+ <p class="lm-card__type">Type 21 &middot; License only</p>
+ <h3 class="lm-card__city">SF-2009</h3>
+ <p class="lm-card__price">$98,000</p>
+ <p class="lm-card__meta"><span class="lic-status" data-status="active">Available</span></p>
+ <p class="lm-card__meta">On market 102 days &middot; listed 3 June 2026</p>
+ <a class="btn btn-secondary" href="sf-2009/">View SF-2009</a>
+ </article>
+ <article class="card lm-card wow-lift">
+ <p class="lm-card__type">Type 21 &middot; License only</p>
+ <h3 class="lm-card__city">SF-2010</h3>
+ <p class="lm-card__price">$78,000</p>
+ <p class="lm-card__meta"><span class="lic-status" data-status="active">Available</span></p>
+ <p class="lm-card__meta">On market 26 days &middot; listed 18 August 2026</p>
+ <a class="btn btn-secondary" href="sf-2010/">View SF-2010</a>
+ </article>
+ </div>
+ <p class="lm-note"><strong>10</strong> Type 21 licenses &middot; asking $78,000 to $275,000 &middot; median $175,000 &middot; <strong>9</strong> available, <strong>1</strong> under offer &middot; on the market 6 to 102 days.</p>
+ <p class="sv-note">Asking prices, availability and days on market are reviewed weekly and were last checked on 13 September 2026. <a href="#inquire">Go to the inquiry form</a> to tell the desk what you are opening.</p>
+ </div>
+ </section>
 
-  <section class="section">
-    <div class="container sf-spec">
-      <p class="eyebrow">The privilege</p>
-      <h2>What a Type 21 lets you do &mdash; and what it does not</h2>
-      <div class="lm-table-wrap sf-scroller">
-        <table class="lm-table">
-          <caption>Type 21 privileges and limits in San Francisco.</caption>
-          <tbody>
-          <tr><th scope="row">Class</th><td>Type 21 &mdash; Off-Sale General</td></tr>
-          <tr><th scope="row">In plain English</th><td>A liquor store. Beer, wine and distilled spirits sold in sealed containers, taken away and drunk somewhere else.</td></tr>
-          <tr><th scope="row">Food obligation</th><td>None. There is no eating-place requirement on an off-sale license.</td></tr>
-          <tr><th scope="row">Minors</th><td>May be on the premises and may work there subject to the usual rules, but may not purchase. Sales require the checks you would expect.</td></tr>
-          <tr><th scope="row">Hours</th><td>California permits sale from 6:00 a.m. to 2:00 a.m. San Francisco off-sale licenses commonly carry conditions narrowing that, and those conditions transfer with the license.</td></tr>
-          <tr><th scope="row">Quota status</th><td>Quota class. San Francisco is over the county ceiling for off-sale general licenses, so no new original issues and the only supply is an existing holder.</td></tr>
-          <tr><th scope="row">Moving it to another address</th><td>A premises-to-premises transfer inside San Francisco County is possible with ABC approval and a fresh 30-day posting, but an off-sale move draws more local attention than an on-sale one. Moving a quota license out of the county is generally not available.</td></tr>
-          <tr><th scope="row">Local approval</th><td>Separate from ABC, and the harder half. Parts of San Francisco restrict new off-sale alcohol uses under the Planning Code, and a conditional use may be required at your address. This is a question about the location, not about you.</td></tr>
-          <tr><th scope="row">Conditions to read before you buy</th><td>Off-sale licenses here often carry conditions from old protest settlements: no single-serving sales, no fortified wine, reduced hours, signage limits. They travel with the license. We read them before listing and you see them on qualification.</td></tr>
-          <tr><th scope="row">Included in the price</th><td>The license. No premises, no lease, no fixtures, no shelving, no goodwill, no stock.</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <p class="sv-note">This table summarizes the class from the Department of Alcoholic Beverage Control&rsquo;s own definitions and from how San Francisco files actually run. It is a summary, not a quotation, and it is not legal advice &mdash; conditions on an individual license override the general picture, and you will see those on qualification.</p>
-    </div>
-  </section>
+ <section class="section">
+ <div class="container sf-spec">
+ <p class="eyebrow">The privilege</p>
+ <h2>What a Type 21 lets you do &mdash; and what it does not</h2>
+ <div class="lm-table-wrap sf-scroller">
+ <table class="lm-table">
+ <caption>Type 21 privileges and limits in San Francisco.</caption>
+ <tbody>
+ <tr><th scope="row">Class</th><td>Type 21 &mdash; Off-Sale General</td></tr>
+ <tr><th scope="row">In plain English</th><td>A liquor store. Beer, wine and distilled spirits sold in sealed containers, taken away and drunk somewhere else.</td></tr>
+ <tr><th scope="row">Food obligation</th><td>None. There is no eating-place requirement on an off-sale license.</td></tr>
+ <tr><th scope="row">Minors</th><td>May be on the premises and may work there subject to the usual rules, but may not purchase. Sales require the checks you would expect.</td></tr>
+ <tr><th scope="row">Hours</th><td>California permits sale from 6:00 a.m. to 2:00 a.m. San Francisco off-sale licenses commonly carry conditions narrowing that, and those conditions transfer with the license.</td></tr>
+ <tr><th scope="row">Quota status</th><td>Quota class. San Francisco is over the county ceiling for off-sale general licenses, so no new original issues and the only supply is an existing holder.</td></tr>
+ <tr><th scope="row">Moving it to another address</th><td>A premises-to-premises transfer inside San Francisco County is possible with ABC approval and a fresh 30-day posting, but an off-sale move draws more local attention than an on-sale one. Moving a quota license out of the county is generally not available.</td></tr>
+ <tr><th scope="row">Local approval</th><td>Separate from ABC, and the harder half. Parts of San Francisco restrict new off-sale alcohol uses under the Planning Code, and a conditional use may be required at your address. This is a question about the location, not about you.</td></tr>
+ <tr><th scope="row">Conditions to read before you buy</th><td>Off-sale licenses here often carry conditions from old protest settlements: no single-serving sales, no fortified wine, reduced hours, signage limits. They travel with the license. We read them before listing and you see them on qualification.</td></tr>
+ <tr><th scope="row">Included in the price</th><td>The license. No premises, no lease, no fixtures, no shelving, no goodwill, no stock.</td></tr>
+ </tbody>
+ </table>
+ </div>
+ <p class="sv-note">This table summarizes the class from the Department of Alcoholic Beverage Control&rsquo;s own definitions and from how San Francisco files actually run. It is a summary, not a quotation, and it is not legal advice &mdash; conditions on an individual license override the general picture, and you will see those on qualification.</p>
+ </div>
+ </section>
 
-  <section class="section section--warm">
-    <div class="container">
-      <p class="eyebrow">The room</p>
-      <h2>What a Type 21 room looks like in San Francisco</h2>
-      <p class="lede">A license is an abstraction until you picture the shop. A San Francisco Type 21 is a room built around shelving and a counter, and the spirits behind it are the reason the license costs what it does.</p>
-      <div class="lm-grid wow-stagger">
-        <div class="card lic-card wow-lift">
-          <div class="lic-card__media wow-zoom">
-            <img src="../../../assets/img/venue-2dfbef85.jpg" width="720" height="405" loading="lazy" decoding="async" alt="A wine and spirits retail floor with bottles on timber shelving either side of a central aisle and chalkboards above the racks.">
-            <div class="lic-card__label">
-              <span class="lic-card__num">Type 21</span>
-              <h3>The spirits wall</h3>
-            </div>
-          </div>
-        </div>
-        <div class="card lic-card wow-lift">
-          <div class="lic-card__media wow-zoom">
-            <img src="../../../assets/img/venue-2e6d7b57.jpg" width="720" height="405" loading="lazy" decoding="async" alt="A bottle shop aisle with wine and spirits on open timber shelving and a price board at the end of the run.">
-            <div class="lic-card__label">
-              <span class="lic-card__num">Type 21</span>
-              <h3>The bottle-shop floor</h3>
-            </div>
-          </div>
-        </div>
-      </div>
-      <p class="sv-note">Seeing a specific room happens after qualification and the mutual NDA, in person and with the seller&rsquo;s consent. Until then the page carries the county, the class, the price and the dates, which is everything you need to shortlist.</p>
-    </div>
-  </section>
+ <section class="section section--warm">
+ <div class="container">
+ <p class="eyebrow">The room</p>
+ <h2>What a Type 21 room looks like in San Francisco</h2>
+ <p class="lede">A license is an abstraction until you picture the shop. A San Francisco Type 21 is a room built around shelving and a counter, and the spirits behind it are the reason the license costs what it does.</p>
+ <div class="lm-grid wow-stagger">
+ <div class="card lic-card wow-lift">
+ <div class="lic-card__media wow-zoom">
+ <img src="../../../assets/img/venue-2dfbef85.jpg" width="720" height="405" loading="lazy" decoding="async" alt="A wine and spirits retail floor with bottles on timber shelving either side of a central aisle and chalkboards above the racks.">
+ <div class="lic-card__label">
+ <span class="lic-card__num">Type 21</span>
+ <h3>The spirits wall</h3>
+ </div>
+ </div>
+ </div>
+ <div class="card lic-card wow-lift">
+ <div class="lic-card__media wow-zoom">
+ <img src="../../../assets/img/venue-2e6d7b57.jpg" width="720" height="405" loading="lazy" decoding="async" alt="A bottle shop aisle with wine and spirits on open timber shelving and a price board at the end of the run.">
+ <div class="lic-card__label">
+ <span class="lic-card__num">Type 21</span>
+ <h3>The bottle-shop floor</h3>
+ </div>
+ </div>
+ </div>
+ </div>
+ <p class="sv-note">Seeing a specific room happens after qualification and the mutual NDA, in person and with the seller&rsquo;s consent. Until then the page carries the county, the class, the price and the dates, which is everything you need to shortlist.</p>
+ </div>
+ </section>
 
-  <section class="section">
-    <div class="container">
-      <p class="eyebrow">The band</p>
-      <h2>What a San Francisco Type 21 costs</h2>
-      <div class="sv-body">
-        <p>Type 21 licenses on our San Francisco book run from <strong>$78,000 to $275,000</strong>, with the middle of the book at <strong>$175,000</strong>. That is a three and a half fold spread on ten licenses &mdash; the widest of any class we hold here &mdash; and it is genuinely informative rather than noise.</p>
-        <p><strong>Conditions move an off-sale price more than anything else.</strong> A license carrying settlement conditions &mdash; no single servings, no fortified wine, a 10 p.m. stop, restricted signage &mdash; is a materially different asset from a clean one, and the market prices that gap hard. At the bottom of this band you are usually buying conditions; at the top you are usually buying their absence.</p>
-        <p><strong>Trading history moves it next.</strong> An off-sale license that has run without a protest or a discipline entry is worth a premium, because the next protest is easier to defend and the transfer is quicker to clear.</p>
-        <p><strong>Your Planning district decides whether any of this matters.</strong> Parts of San Francisco restrict new off-sale alcohol uses regardless of license class. A cheap Type 21 at an address that will not clear is not cheap; it is unusable. Send us the address before you pick a license.</p>
-      </div>
-      <p class="sv-note">Read off our own current San Francisco book on 13 September 2026 and restated whenever the book changes.</p>
-    </div>
-  </section>
+ <section class="section">
+ <div class="container">
+ <p class="eyebrow">The band</p>
+ <h2>What a San Francisco Type 21 costs</h2>
+ <div class="sv-body">
+ <p>Type 21 licenses on our San Francisco book run from <strong>$78,000 to $275,000</strong>, with the middle of the book at <strong>$175,000</strong>. That is a three and a half fold spread on ten licenses &mdash; the widest of any class we hold here &mdash; and it is genuinely informative rather than noise.</p>
+ <p><strong>Conditions move an off-sale price more than anything else.</strong> A license carrying settlement conditions &mdash; no single servings, no fortified wine, a 10 p.m. stop, restricted signage &mdash; is a materially different asset from a clean one, and the market prices that gap hard. At the bottom of this band you are usually buying conditions; at the top you are usually buying their absence.</p>
+ <p><strong>Trading history moves it next.</strong> An off-sale license that has run without a protest or a discipline entry is worth a premium, because the next protest is easier to defend and the transfer is quicker to clear.</p>
+ <p><strong>Your Planning district decides whether any of this matters.</strong> Parts of San Francisco restrict new off-sale alcohol uses regardless of license class. A cheap Type 21 at an address that will not clear is not cheap; it is unusable. Send us the address before you pick a license.</p>
+ </div>
+ <p class="sv-note">Read off our own current San Francisco book on 13 September 2026 and restated whenever the book changes.</p>
+ </div>
+ </section>
 
-  <section class="section section--warm">
-    <div class="container">
-      <p class="eyebrow">Beyond the price</p>
-      <h2>What completing actually costs</h2>
-      <p class="lede">The asking price is not the cost of the deal. Here is the rest of it, itemized against the $175,000 median.</p>
-      <p class="lm-note">Three columns. On a narrow screen the table scrolls sideways inside its own box &mdash; the page does not.</p>
-      <div class="lm-table-wrap sf-scroller" tabindex="0" role="region"
-           aria-label="Buyer-side costs to complete a San Francisco transfer">
-        <table class="lm-table">
-          <caption>Estimated buyer-side costs to complete a San Francisco transfer, over and above the price of the license itself.</caption>
-          <thead>
-            <tr><th scope="col">Item</th><th scope="col">Paid to</th><th scope="col">Amount</th></tr>
-          </thead>
-          <tbody>
-            <tr><th scope="row">Escrow fee</th><td>Licensed escrow holder, as Bus. &amp; Prof. Code &sect;24074 requires</td><td>$1,450</td></tr>
-            <tr><th scope="row">ABC person-to-person transfer fee</th><td>California Department of Alcoholic Beverage Control</td><td>$1,250</td></tr>
-            <tr><th scope="row">Notice of intended transfer, published</th><td>Newspaper of general circulation in San Francisco</td><td>$385</td></tr>
-            <tr><th scope="row">Live Scan and fingerprinting, two principals</th><td>California Department of Justice, via ABC</td><td>$160</td></tr>
-            <tr><th scope="row">Buyer&rsquo;s counsel, ABC transfer work</th><td>Your attorney</td><td>$4,800</td></tr>
-          </tbody>
-          <tfoot>
-            <tr><th scope="row">Costs to close</th><td class="lm-no">Excluding the license price</td><td class="lm-yes">$8,045</td></tr>
-            <tr><th scope="row">This license plus costs to close</th><td class="lm-no">$175,000 + $8,045</td><td class="lm-yes">$183,045</td></tr>
-          </tfoot>
-        </table>
-      </div>
-      <div class="sv-body">
-        <p><strong>The whole price goes into escrow, not a deposit.</strong> This is the part that surprises buyers coming from other states. California requires the full consideration for a license transfer to be placed with a licensed escrow holder before the transfer is approved, and it is released to the seller only on issue. There is no 10% and no balance on completion.</p>
-        <p><strong>Conditional use, where San Francisco requires it.</strong> A change of license or a new alcohol use in many of the city&rsquo;s Neighborhood Commercial Districts needs Conditional Use Authorization from the Planning Commission before ABC will act. Budget $3,000 to $8,000 and three to five months for that track, and treat it as separate from the figures above. It is the single largest source of San Francisco timetable slippage.</p>
-        <p><strong>After you hold it:</strong> the ABC annual renewal on a San Francisco on-sale general license runs about $1,400, and about $700 on an off-sale.</p>
-        <p><strong>Our commission:</strong> 4% of the accepted price, paid by the seller at closing. There is no buyer-side fee, no registration fee and no charge for the confidential file once you are qualified.</p>
-        <p><strong>Financing:</strong> a license is not mortgageable the way real property is, and most California lenders will not lend against one alone. We work with two lenders who underwrite license transfers as part of a wider fit-out facility and will make an introduction.</p>
-      </div>
-      <p class="sv-note">Fee amounts are our current working figures for a San Francisco file and were last checked on 13 September 2026. The escrow requirement, the conditional-use track and the renewal bands are described from practice rather than quoted from a fee schedule &mdash; confirm the current ABC fee schedule and your Planning district before you sign anything.</p>
-    </div>
-  </section>
+ <section class="section section--warm">
+ <div class="container">
+ <p class="eyebrow">Beyond the price</p>
+ <h2>What completing actually costs</h2>
+ <p class="lede">The asking price is not the cost of the deal. Here is the rest of it, itemized against the $175,000 median.</p>
+ <p class="lm-note">Three columns. On a narrow screen the table scrolls sideways inside its own box &mdash; the page does not.</p>
+ <div class="lm-table-wrap sf-scroller" tabindex="0" role="region"
+ aria-label="Buyer-side costs to complete a San Francisco transfer">
+ <table class="lm-table">
+ <caption>Estimated buyer-side costs to complete a San Francisco transfer, over and above the price of the license itself.</caption>
+ <thead>
+ <tr><th scope="col">Item</th><th scope="col">Paid to</th><th scope="col">Amount</th></tr>
+ </thead>
+ <tbody>
+ <tr><th scope="row">Escrow fee</th><td>Licensed escrow holder, as Bus. &amp; Prof. Code &sect;24074 requires</td><td>$1,450</td></tr>
+ <tr><th scope="row">ABC person-to-person transfer fee</th><td>California Department of Alcoholic Beverage Control</td><td>$1,250</td></tr>
+ <tr><th scope="row">Notice of intended transfer, published</th><td>Newspaper of general circulation in San Francisco</td><td>$385</td></tr>
+ <tr><th scope="row">Live Scan and fingerprinting, two principals</th><td>California Department of Justice, via ABC</td><td>$160</td></tr>
+ <tr><th scope="row">Buyer&rsquo;s counsel, ABC transfer work</th><td>Your attorney</td><td>$4,800</td></tr>
+ </tbody>
+ <tfoot>
+ <tr><th scope="row">Costs to close</th><td class="lm-no">Excluding the license price</td><td class="lm-yes">$8,045</td></tr>
+ <tr><th scope="row">This license plus costs to close</th><td class="lm-no">$175,000 + $8,045</td><td class="lm-yes">$183,045</td></tr>
+ </tfoot>
+ </table>
+ </div>
+ <div class="sv-body">
+ <p><strong>The whole price goes into escrow, not a deposit.</strong> This is the part that surprises buyers coming from other states. California requires the full consideration for a license transfer to be placed with a licensed escrow holder before the transfer is approved, and it is released to the seller only on issue. There is no 10% and no balance on completion.</p>
+ <p><strong>Conditional use, where San Francisco requires it.</strong> A change of license or a new alcohol use in many of the city&rsquo;s Neighborhood Commercial Districts needs Conditional Use Authorization from the Planning Commission before ABC will act. Budget $3,000 to $8,000 and three to five months for that track, and treat it as separate from the figures above. It is the single largest source of San Francisco timetable slippage.</p>
+ <p><strong>After you hold it:</strong> the ABC annual renewal on a San Francisco on-sale general license runs about $1,400, and about $700 on an off-sale.</p>
+ <p><strong>Our commission:</strong> our fee, quoted in writing before we start, paid by the seller at closing. There is no buyer-side fee, no registration fee and no charge for the confidential file once you are qualified.</p>
+ <p><strong>Financing:</strong> a license is not mortgageable the way real property is, and most California lenders will not lend against one alone. We work with two lenders who underwrite license transfers as part of a wider fit-out facility and will make an introduction.</p>
+ </div>
+ <p class="sv-note">Fee amounts are our current working figures for a San Francisco file and were last checked on 13 September 2026. The escrow requirement, the conditional-use track and the renewal bands are described from practice rather than quoted from a fee schedule &mdash; confirm the current ABC fee schedule and your Planning district before you sign anything.</p>
+ </div>
+ </section>
 
-  <section class="section wow-grain" id="process">
-    <div class="container">
-      <p class="eyebrow">The timetable</p>
-      <h2>Transferring a Type 21 in San Francisco</h2>
-      <p class="lede">Six stages, 78 days from an accepted offer to a license in your name. Thirty of those days are a statutory posting that nobody can shorten.</p>
-      <div class="process__steps">
-        <div class="step">
-          <span class="step__num">1</span>
-          <h3>Offer accepted, escrow opened</h3>
-          <p><strong>7 days.</strong> A purchase agreement, then escrow with a licensed escrow holder. California requires the full consideration to sit in escrow before the Department will approve the transfer, so this is the point your money moves, not completion day.</p>
-        </div>
-        <div class="step">
-          <span class="step__num">2</span>
-          <h3>Buyer qualification and application</h3>
-          <p><strong>10 days.</strong> The person-to-person transfer application, Live Scan fingerprinting for every principal, and proof of funds. This is also when the mutual NDA is signed and the confidential file &mdash; license number, licensee of record, premises address, term, encumbrances, tax position &mdash; is released to you.</p>
-        </div>
-        <div class="step">
-          <span class="step__num">3</span>
-          <h3>Public notice posted at the premises</h3>
-          <p><strong>30 days.</strong> ABC posts the application at the premises for 30 days, and the notice of intended transfer is published in a newspaper of general circulation. The 30 days are statutory and cannot be shortened, whatever anyone promises you.</p>
-        </div>
-        <div class="step">
-          <span class="step__num">4</span>
-          <h3>Protest period and local agency review</h3>
-          <p><strong>14 days.</strong> Any protest filed during the posting is worked through here, and this is where San Francisco can add time: the Police Department&rsquo;s alcohol liaison reviews on-sale applications, and a Planning conditional use, if your district needs one, runs on its own much longer calendar.</p>
-        </div>
-        <div class="step">
-          <span class="step__num">5</span>
-          <h3>ABC investigation and approval</h3>
-          <p><strong>10 days.</strong> The investigator confirms the premises, the qualification of the buyer and the tax position of the seller. Clean files clear here without anyone hearing from anyone.</p>
-        </div>
-        <div class="step">
-          <span class="step__num">6</span>
-          <h3>Escrow closes, license issued in your name</h3>
-          <p><strong>7 days.</strong> Approval issued, escrow released to the seller, license recorded against you. You can trade.</p>
-        </div>
-      </div>
-      <p class="trust-note">Stage day counts are the medians from our own closed California files and add to 7 + 10 + 30 + 14 + 10 + 7 = 78 days, which is also our median from accepted offer to issue. The 30-day posting is a statutory period; the rest is how San Francisco files actually run.</p>
-    </div>
-  </section>
+ <section class="section wow-grain" id="process">
+ <div class="container">
+ <p class="eyebrow">The timetable</p>
+ <h2>Transferring a Type 21 in San Francisco</h2>
+ <p class="lede">Six stages from an accepted offer to a license in your name. Thirty of those days are a statutory posting that nobody can shorten.</p>
+ <div class="process__steps">
+ <div class="step">
+ <span class="step__num">1</span>
+ <h3>Offer accepted, escrow opened</h3>
+ <p><strong>7 days.</strong> A purchase agreement, then escrow with a licensed escrow holder. California requires the full consideration to sit in escrow before the Department will approve the transfer, so this is the point your money moves, not completion day.</p>
+ </div>
+ <div class="step">
+ <span class="step__num">2</span>
+ <h3>Buyer qualification and application</h3>
+ <p><strong>10 days.</strong> The person-to-person transfer application, Live Scan fingerprinting for every principal, and proof of funds. This is also when the mutual NDA is signed and the confidential file &mdash; license number, licensee of record, premises address, term, encumbrances, tax position &mdash; is released to you.</p>
+ </div>
+ <div class="step">
+ <span class="step__num">3</span>
+ <h3>Public notice posted at the premises</h3>
+ <p><strong>30 days.</strong> ABC posts the application at the premises for 30 days, and the notice of intended transfer is published in a newspaper of general circulation. The 30 days are statutory and cannot be shortened, whatever anyone promises you.</p>
+ </div>
+ <div class="step">
+ <span class="step__num">4</span>
+ <h3>Protest period and local agency review</h3>
+ <p><strong>14 days.</strong> Any protest filed during the posting is worked through here, and this is where San Francisco can add time: the Police Department&rsquo;s alcohol liaison reviews on-sale applications, and a Planning conditional use, if your district needs one, runs on its own much longer calendar.</p>
+ </div>
+ <div class="step">
+ <span class="step__num">5</span>
+ <h3>ABC investigation and approval</h3>
+ <p><strong>10 days.</strong> The investigator confirms the premises, the qualification of the buyer and the tax position of the seller. Clean files clear here without anyone hearing from anyone.</p>
+ </div>
+ <div class="step">
+ <span class="step__num">6</span>
+ <h3>Escrow closes, license issued in your name</h3>
+ <p><strong>7 days.</strong> Approval issued, escrow released to the seller, license recorded against you. You can trade.</p>
+ </div>
+ </div>
+ <p class="trust-note">Stage day counts are the medians from our own closed California files and add to . The 30-day posting is a statutory period; the rest is how San Francisco files actually run.</p>
+ </div>
+ </section>
 
-  <section class="section">
-    <div class="container">
-      <p class="eyebrow">Released when you qualify</p>
-      <h2>The license number and the address are not on this page</h2>
-      <p class="lede">Not masked, not blurred, not shown in part. They are simply not published, for any license, anywhere on this site. A seller is almost always still trading. In a city where a neighborhood and a license class narrow a business to a handful of doors, publishing either one tells their staff, their landlord and the operator across the street that they are selling. So the shop window carries everything you need to shortlist, and nothing that identifies the seller.</p>
-      <div class="lm-grid">
-        <div class="card lm-card">
-          <p class="lm-card__type">Published on every listing</p>
-          <ul class="sv-list">
-            <li>County and city</li>
-            <li>License class and what it permits</li>
-            <li>Whether the class is under the county quota</li>
-            <li>Asking price and availability</li>
-            <li>Date listed and days on market</li>
-            <li>Cost to close and the transfer timetable</li>
-          </ul>
-        </div>
-        <div class="card lm-card">
-          <p class="lm-card__type">Released after qualification and NDA</p>
-          <ul class="sv-list">
-            <li>License number and licensee of record</li>
-            <li>Premises address and trading name</li>
-            <li>Register standing and license term</li>
-            <li>Conditions, encumbrances and lien position</li>
-            <li>Seller tax clearance position</li>
-            <li>Local approval history and any protest record</li>
-          </ul>
-        </div>
-      </div>
-      <p class="sv-note"><strong>How the release works.</strong> Qualification is two things: proof of funds, and the personal information every principal has to give ABC anyway. Sign a mutual non-disclosure agreement and the complete file is released to you <strong>within one business day</strong>. There is no fee for it. Four further San Francisco licenses are held entirely off-market at the seller&rsquo;s request and are only ever shown this way &mdash; they are not among the 30 on the book. Qualification starts at the <a href="#inquire">inquiry form</a>.</p>
-    </div>
-  </section>
+ <section class="section">
+ <div class="container">
+ <p class="eyebrow">Released when you qualify</p>
+ <h2>The license number and the address are not on this page</h2>
+ <p class="lede">Not masked, not blurred, not shown in part. They are simply not published, for any license, anywhere on this site. A seller is almost always still trading. In a city where a neighborhood and a license class narrow a business to a handful of doors, publishing either one tells their staff, their landlord and the operator across the street that they are selling. So the shop window carries everything you need to shortlist, and nothing that identifies the seller.</p>
+ <div class="lm-grid">
+ <div class="card lm-card">
+ <p class="lm-card__type">Published on every listing</p>
+ <ul class="sv-list">
+ <li>County and city</li>
+ <li>License class and what it permits</li>
+ <li>Whether the class is under the county quota</li>
+ <li>Asking price and availability</li>
+ <li>Date listed and days on market</li>
+ <li>Cost to close and the transfer timetable</li>
+ </ul>
+ </div>
+ <div class="card lm-card">
+ <p class="lm-card__type">Released after qualification and NDA</p>
+ <ul class="sv-list">
+ <li>License number and licensee of record</li>
+ <li>Premises address and trading name</li>
+ <li>Register standing and license term</li>
+ <li>Conditions, encumbrances and lien position</li>
+ <li>Seller tax clearance position</li>
+ <li>Local approval history and any protest record</li>
+ </ul>
+ </div>
+ </div>
+ <p class="sv-note"><strong>How the release works.</strong> Qualification is two things: proof of funds, and the personal information every principal has to give ABC anyway. Sign a mutual non-disclosure agreement and the complete file is released to you <strong>within one business day</strong>. There is no fee for it. Four further San Francisco licenses are held entirely off-market at the seller&rsquo;s request and are only ever shown this way &mdash; they are not among the 30 on the book. Qualification starts at the <a href="#inquire">inquiry form</a>.</p>
+ </div>
+ </section>
 
 <section class="section section--dark" id="inquire">
-    <div class="container">
-      <div class="cta-form__layout">
+ <div class="container">
+ <div class="cta-form__layout">
 
-        <form class="form" action="mailto:desk@liquorlicenseagents.com" method="post" enctype="text/plain" aria-labelledby="inquire-h">
-          <div class="field">
-            <label for="q-name">Your name <span class="sf-req" aria-hidden="true">*</span></label>
-            <input type="text" id="q-name" name="name" autocomplete="name" required>
-          </div>
-          <div class="field">
-            <label for="q-phone">Phone <span class="sf-req" aria-hidden="true">*</span></label>
-            <input type="tel" id="q-phone" name="phone" autocomplete="tel" inputmode="tel" required>
-          </div>
-          <div class="field">
-            <label for="q-email">Email <span class="sf-req" aria-hidden="true">*</span></label>
-            <input type="email" id="q-email" name="email" autocomplete="email" inputmode="email" required>
-          </div>
-          <div class="field">
-            <label for="q-use">What are you opening?</label>
-            <span class="sf-select">
-              <select id="q-use" name="use" required>
-                <option value="">Choose one</option>
-                <option>A restaurant with a full bar</option>
-                <option>A bar or nightclub, no kitchen</option>
-                <option>A liquor store selling spirits</option>
-                <option>A shop selling beer and wine only</option>
-                <option>A hotel, venue or members&rsquo; club</option>
-                <option>Adding a license to a site I already trade from</option>
-              </select>
-            </span>
-            <p class="sf-hint">This is the question that picks the class. Tell us the venue and we will tell you the license, rather than the other way round.</p>
-          </div>
-          <div class="field">
-            <label for="q-budget">Budget for the license</label>
-            <span class="sf-select">
-              <select id="q-budget" name="budget" required>
-                <option value="">Choose one</option>
-                <option>Under $100,000</option>
-                <option>$100,000 to $200,000</option>
-                <option>$200,000 to $300,000</option>
-                <option>$300,000 and above</option>
-                <option>Not sure yet</option>
-              </select>
-            </span>
-            <p class="sf-hint">For orientation: the San Francisco median ask is $205,000, and completing costs about $8,045 on top.</p>
-          </div>
-          <div class="field">
-            <label for="q-site">Do you have a site?</label>
-            <span class="sf-select">
-              <select id="q-site" name="site" required>
-                <option value="">Choose one</option>
-                <option>Signed lease, ready to go</option>
-                <option>In negotiation on a specific address</option>
-                <option>Looking, nothing signed</option>
-                <option>Already trading there</option>
-              </select>
-            </span>
-            <p class="sf-hint">It matters more here than elsewhere. The San Francisco Planning district your address sits in decides whether you need a conditional use, and that is usually the longest pole in the tent.</p>
-          </div>
-          <div class="field">
-            <label for="q-msg">Anything else</label>
-            <textarea id="q-msg" name="message" rows="3"></textarea>
-            <p class="sf-hint">Optional. The kind of room you have in mind, your timescale, whether you have done this before.</p>
-          </div>
-          <fieldset class="field field--choice">
-            <legend>Before you send</legend>
-            <div class="choice-row">
-              <label class="choice">
-                <input type="checkbox" name="ack" required>
-                <span>I understand the license number, the licensee and the premises are released after qualification and a mutual NDA.</span>
-              </label>
-            </div>
-          </fieldset>
-          <button class="btn btn-primary" type="submit">Send this to the desk</button>
-        </form>
+ <form class="form" action="mailto:mike@liquorlicenseagents.com" method="post" enctype="text/plain" aria-labelledby="inquire-h">
+ <div class="field">
+ <label for="q-name">Your name <span class="sf-req" aria-hidden="true">*</span></label>
+ <input type="text" id="q-name" name="name" autocomplete="name" required>
+ </div>
+ <div class="field">
+ <label for="q-phone">Phone <span class="sf-req" aria-hidden="true">*</span></label>
+ <input type="tel" id="q-phone" name="phone" autocomplete="tel" inputmode="tel" required>
+ </div>
+ <div class="field">
+ <label for="q-email">Email <span class="sf-req" aria-hidden="true">*</span></label>
+ <input type="email" id="q-email" name="email" autocomplete="email" inputmode="email" required>
+ </div>
+ <div class="field">
+ <label for="q-use">What are you opening?</label>
+ <span class="sf-select">
+ <select id="q-use" name="use" required>
+ <option value="">Choose one</option>
+ <option>A restaurant with a full bar</option>
+ <option>A bar or nightclub, no kitchen</option>
+ <option>A liquor store selling spirits</option>
+ <option>A shop selling beer and wine only</option>
+ <option>A hotel, venue or members&rsquo; club</option>
+ <option>Adding a license to a site I already trade from</option>
+ </select>
+ </span>
+ <p class="sf-hint">This is the question that picks the class. Tell us the venue and we will tell you the license, rather than the other way round.</p>
+ </div>
+ <div class="field">
+ <label for="q-budget">Budget for the license</label>
+ <span class="sf-select">
+ <select id="q-budget" name="budget" required>
+ <option value="">Choose one</option>
+ <option>Under $100,000</option>
+ <option>$100,000 to $200,000</option>
+ <option>$200,000 to $300,000</option>
+ <option>$300,000 and above</option>
+ <option>Not sure yet</option>
+ </select>
+ </span>
+ <p class="sf-hint">For orientation: the San Francisco median ask is $205,000, and completing costs about $8,045 on top.</p>
+ </div>
+ <div class="field">
+ <label for="q-site">Do you have a site?</label>
+ <span class="sf-select">
+ <select id="q-site" name="site" required>
+ <option value="">Choose one</option>
+ <option>Signed lease, ready to go</option>
+ <option>In negotiation on a specific address</option>
+ <option>Looking, nothing signed</option>
+ <option>Already trading there</option>
+ </select>
+ </span>
+ <p class="sf-hint">It matters more here than elsewhere. The San Francisco Planning district your address sits in decides whether you need a conditional use, and that is usually the longest pole in the tent.</p>
+ </div>
+ <div class="field">
+ <label for="q-msg">Anything else</label>
+ <textarea id="q-msg" name="message" rows="3"></textarea>
+ <p class="sf-hint">Optional. The kind of room you have in mind, your timescale, whether you have done this before.</p>
+ </div>
+ <fieldset class="field field--choice">
+ <legend>Before you send</legend>
+ <div class="choice-row">
+ <label class="choice">
+ <input type="checkbox" name="ack" required>
+ <span>I understand the license number, the licensee and the premises are released after qualification and a mutual NDA.</span>
+ </label>
+ </div>
+ </fieldset>
+ <button class="btn btn-primary" type="submit">Send this to the desk</button>
+ </form>
 
-        <div class="cta-form__pitch">
-          <p class="eyebrow">Type 21 &middot; San Francisco</p>
-          <h2 id="inquire-h">Tell the desk what you are opening</h2>
-          <p class="lede">Seven fields. We reply <strong>inside one business day</strong>, from a named person, with the next step and nothing else. No newsletter, no drip sequence, no call center.</p>
-          <div class="sv-body">
-            <p>Tell us the venue and we will tell you the license, rather than the other way round &mdash; and whether the sensible route is to buy one on the book or to apply for a new one. We handle whichever it is.</p>
-            <p>Prefer to talk? The direct line is <a href="tel:+18007999081">(800) 799-9081</a>, or write to <a href="mailto:desk@liquorlicenseagents.com">desk@liquorlicenseagents.com</a>.</p>
-          </div>
-          <p class="sv-note">Inquiring commits you to nothing, and there is no buyer-side fee.</p>
-          <div class="cta-row">
-            <a class="btn btn-primary wow-glow" href="#listings">Browse listings</a>
-          </div>
-        </div>
+ <div class="cta-form__pitch">
+ <p class="eyebrow">Type 21 &middot; San Francisco</p>
+ <h2 id="inquire-h">Tell the desk what you are opening</h2>
+ <p class="lede">Seven fields. We reply <strong>inside one business day</strong>, from a named person, with the next step and nothing else. No newsletter, no drip sequence, no call center.</p>
+ <div class="sv-body">
+ <p>Tell us the venue and we will tell you the license, rather than the other way round &mdash; and whether the sensible route is to buy one on the book or to apply for a new one. We handle whichever it is.</p>
+ <p>Prefer to talk? The direct line is <a href="tel:+18007999081">(800) 799-9081</a>, or write to <a href="mailto:mike@liquorlicenseagents.com">mike@liquorlicenseagents.com</a>.</p>
+ </div>
+ <p class="sv-note">Inquiring commits you to nothing, and there is no buyer-side fee.</p>
+ <div class="cta-row">
+ <a class="btn btn-primary wow-glow" href="#listings">Browse listings</a>
+ </div>
+ </div>
 
-      </div>
-    </div>
-  </section>
+ </div>
+ </div>
+ </section>
 
-  <section class="section section--warm">
-    <div class="container">
-      <p class="eyebrow">The other side of the desk</p>
-      <h2>Selling a San Francisco Type 21</h2>
-      <div class="sv-body">
-        <p><strong>What we need to list it.</strong> The license number, the licensee of record and the premises address, so we can read the register entry, the conditions and the term before we price anything. None of that is published. What goes on the page is the county, the class, the asking price, the date and the status &mdash; the fields you can see on every entry above, and nothing else.</p>
-        <p><strong>What it costs you.</strong> 4% of the accepted price, paid at closing out of escrow. Nothing up front, nothing if it does not sell, no listing fee and no renewal. You pay your own counsel and the escrow holder.</p>
-        <p><strong>How long it takes.</strong> Two clocks. Finding a qualified buyer is the one that varies &mdash; the 10 Type 21 licenses on our book have been listed between 6 and 102 days. Once an offer is accepted the 78-day transfer timetable applies to you exactly as it applies to the buyer, and 30 of those days are a statutory posting nobody can shorten.</p>
-        <p><strong>What stays confidential until a buyer qualifies.</strong> Everything that identifies you. Your staff, your landlord, your suppliers and the operator across the street learn nothing from this page. A buyer sees the identifying file only after proof of funds and a signed mutual NDA, and you see who they are at the same moment they see who you are.</p>
-      </div>
-      <div class="cross-link-rail__rail">
-        <a class="cross-link" href="mailto:desk@liquorlicenseagents.com">Email the desk about selling</a>
-        <a class="cross-link" href="tel:+18007999081">(800) 799-9081</a>
-      </div>
-    </div>
-  </section>
+ <section class="section section--warm">
+ <div class="container">
+ <p class="eyebrow">The other side of the desk</p>
+ <h2>Selling a San Francisco Type 21</h2>
+ <div class="sv-body">
+ <p><strong>What we need to list it.</strong> The license number, the licensee of record and the premises address, so we can read the register entry, the conditions and the term before we price anything. None of that is published. What goes on the page is the county, the class, the asking price, the date and the status &mdash; the fields you can see on every entry above, and nothing else.</p>
+ <p><strong>What it costs you.</strong> our fee, quoted in writing before we start, paid at closing out of escrow. Nothing up front, nothing if it does not sell, no listing fee and no renewal. You pay your own counsel and the escrow holder.</p>
+ <p><strong>How long it takes.</strong> Two clocks. Finding a qualified buyer is the one that varies &mdash; the 10 Type 21 licenses on our book have been listed between 6 and 102 days. Once an offer is accepted the 78-day transfer timetable applies to you exactly as it applies to the buyer, and 30 of those days are a statutory posting nobody can shorten.</p>
+ <p><strong>What stays confidential until a buyer qualifies.</strong> Everything that identifies you. Your staff, your landlord, your suppliers and the operator across the street learn nothing from this page. A buyer sees the identifying file only after proof of funds and a signed mutual NDA, and you see who they are at the same moment they see who you are.</p>
+ </div>
+ <div class="cross-link-rail__rail">
+ <a class="cross-link" href="mailto:mike@liquorlicenseagents.com">Email the desk about selling</a>
+ <a class="cross-link" href="tel:+18007999081">(800) 799-9081</a>
+ </div>
+ </div>
+ </section>
 
-  <section class="section">
-    <div class="container">
-      <p class="eyebrow">Questions</p>
-      <h2>Type 21 questions we are actually asked</h2>
-      <div class="faq__list">
-        <details class="faq-item">
-          <summary class="faq-item__q">What can a Type 21 sell that a Type 20 cannot?</summary>
-          <div class="faq-item__a"><p>Distilled spirits. Both classes are off-sale &mdash; sealed containers, taken away, nothing drunk on the premises &mdash; and both cover beer and wine. The Type 21 adds spirits, and because the Type 21 is quota-limited in San Francisco and the <a href="../type-20/">Type 20</a> is not, that one difference is the whole price gap between $15,000 and $175,000.</p></div>
-        </details>
-        <details class="faq-item">
-          <summary class="faq-item__q">What conditions should I check before I buy one?</summary>
-          <div class="faq-item__a"><p>Ask for the full condition set on the individual license before you agree a price. In San Francisco the common ones come out of old protest settlements: no sales of single servings, no fortified wine above a stated strength, a closing time earlier than the state limit, limits on window signage, sometimes a requirement to keep a certain proportion of the floor in groceries. They transfer with the license and they are not negotiable at transfer. We read them before we list and you see them the day you qualify.</p></div>
-        </details>
-        <details class="faq-item">
-          <summary class="faq-item__q">Can I move a Type 21 to a different shop?</summary>
-          <div class="faq-item__a"><p>Inside San Francisco County, with ABC approval and a fresh 30-day posting at the new address. Expect more local attention than an on-sale move attracts, and expect the Planning district to matter: parts of the city restrict new off-sale alcohol uses under the Planning Code whatever ABC decides. Out-of-county moves are generally not available for a quota license.</p></div>
-        </details>
-        <details class="faq-item">
-          <summary class="faq-item__q">Why is the spread so wide on only ten licenses?</summary>
-          <div class="faq-item__a"><p>Because conditions and trading history vary far more on off-sale licenses than on on-sale ones, and both transfer to the buyer. The bottom of the band is usually a conditioned license; the top is usually a clean one with a long unprotested history. The spread is information, not noise &mdash; read it as a condition ladder rather than a quality ladder.</p></div>
-        </details>
-        <details class="faq-item">
-          <summary class="faq-item__q">Do I need the shop as well, or just the license?</summary>
-          <div class="faq-item__a"><p>Just the license, as far as we are concerned: every price on this page is for the license alone, with no premises, lease, fixtures, shelving, goodwill or stock. You do need an approved address before ABC will issue it to you, which is why the site question on the inquiry form is not a formality.</p></div>
-        </details>
-      </div>
-    </div>
-  </section>
+ <section class="section">
+ <div class="container">
+ <p class="eyebrow">Questions</p>
+ <h2>Type 21 questions we are actually asked</h2>
+ <div class="faq__list">
+ <details class="faq-item">
+ <summary class="faq-item__q">What can a Type 21 sell that a Type 20 cannot?</summary>
+ <div class="faq-item__a"><p>Distilled spirits. Both classes are off-sale &mdash; sealed containers, taken away, nothing drunk on the premises &mdash; and both cover beer and wine. The Type 21 adds spirits, and because the Type 21 is quota-limited in San Francisco and the <a href="../type-20/">Type 20</a> is not, that one difference is the whole price gap between $15,000 and $175,000.</p></div>
+ </details>
+ <details class="faq-item">
+ <summary class="faq-item__q">What conditions should I check before I buy one?</summary>
+ <div class="faq-item__a"><p>Ask for the full condition set on the individual license before you agree a price. In San Francisco the common ones come out of old protest settlements: no sales of single servings, no fortified wine above a stated strength, a closing time earlier than the state limit, limits on window signage, sometimes a requirement to keep a certain proportion of the floor in groceries. They transfer with the license and they are not negotiable at transfer. We read them before we list and you see them the day you qualify.</p></div>
+ </details>
+ <details class="faq-item">
+ <summary class="faq-item__q">Can I move a Type 21 to a different shop?</summary>
+ <div class="faq-item__a"><p>Inside San Francisco County, with ABC approval and a fresh 30-day posting at the new address. Expect more local attention than an on-sale move attracts, and expect the Planning district to matter: parts of the city restrict new off-sale alcohol uses under the Planning Code whatever ABC decides. Out-of-county moves are generally not available for a quota license.</p></div>
+ </details>
+ <details class="faq-item">
+ <summary class="faq-item__q">Why is the spread so wide on only ten licenses?</summary>
+ <div class="faq-item__a"><p>Because conditions and trading history vary far more on off-sale licenses than on on-sale ones, and both transfer to the buyer. The bottom of the band is usually a conditioned license; the top is usually a clean one with a long unprotested history. The spread is information, not noise &mdash; read it as a condition ladder rather than a quality ladder.</p></div>
+ </details>
+ <details class="faq-item">
+ <summary class="faq-item__q">Do I need the shop as well, or just the license?</summary>
+ <div class="faq-item__a"><p>Just the license, as far as we are concerned: every price on this page is for the license alone, with no premises, lease, fixtures, shelving, goodwill or stock. You do need an approved address before ABC will issue it to you, which is why the site question on the inquiry form is not a formality.</p></div>
+ </details>
+ </div>
+ </div>
+ </section>
 
-  <section class="section section--warm">
-    <div class="container">
-      <p class="eyebrow">Activity, honestly</p>
-      <h2>Dates, yes. Counters, no.</h2>
-      <p class="lede">Every Type 21 above carries the day it came to market and how long it has sat there &mdash; on this class, from 6 days to 102. That is a fact we can stand behind. What you will not find anywhere on this site:</p>
-      <ul class="sv-list">
-        <li>No view count. A view count is trivially inflated and proves nothing about demand.</li>
-        <li>No watcher count and no &ldquo;3 people are looking at this right now&rdquo;.</li>
-        <li>No bid ticker, no auction clock, no countdown. Offers are reviewed as they arrive.</li>
-        <li>No manufactured scarcity. The county quota supplies all the scarcity this market needs.</li>
-      </ul>
-      <p class="sv-note">Elsewhere in this market you will find view counters, watcher counts and bid tickers on licenses that have never taken a bid. We would rather publish the one activity signal that is checkable &mdash; the day a license came to our book, and how long it has sat there &mdash; and nothing we cannot stand behind.</p>
-    </div>
-  </section>
+ <section class="section section--warm">
+ <div class="container">
+ <p class="eyebrow">Activity, honestly</p>
+ <h2>Dates, yes. Counters, no.</h2>
+ <p class="lede">Every Type 21 above carries the day it came to market and how long it has sat there &mdash; on this class, from 6 days to 102. That is a fact we can stand behind. What you will not find anywhere on this site:</p>
+ <ul class="sv-list">
+ <li>No view count. A view count is trivially inflated and proves nothing about demand.</li>
+ <li>No watcher count and no &ldquo;3 people are looking at this right now&rdquo;.</li>
+ <li>No bid ticker, no auction clock, no countdown. Offers are reviewed as they arrive.</li>
+ <li>No manufactured scarcity. The county quota supplies all the scarcity this market needs.</li>
+ </ul>
+ <p class="sv-note"> We would rather publish the one activity signal that is checkable &mdash; the day a license came to our book, and how long it has sat there &mdash; and nothing we cannot stand behind.</p>
+ </div>
+ </section>
 
-  <section class="section">
-    <div class="container">
-      <p class="eyebrow">Who you are dealing with</p>
-      <h2>The desk handling this transfer</h2>
-      <div class="lm-grid wow-stagger">
-        <div class="card lm-card">
-          <p class="lm-card__type">Broker</p>
-          <h3 class="lm-card__city">Liquor License Agents</h3>
-          <p class="lm-card__meta">California liquor license transfer desk &middot; founded 2014</p>
-        </div>
-        <div class="card lm-card">
-          <p class="lm-card__type">Files closed</p>
-          <h3 class="lm-card__city">64 California transfers</h3>
-          <p class="lm-card__meta">Since January 2019 &middot; 19 of them in San Francisco</p>
-        </div>
-        <div class="card lm-card">
-          <p class="lm-card__type">Escrow held by</p>
-          <h3 class="lm-card__city">A licensed escrow holder</h3>
-          <p class="lm-card__meta">Never us, at any point, on any file.</p>
-        </div>
-        <div class="card lm-card">
-          <p class="lm-card__type">ABC counsel</p>
-          <h3 class="lm-card__city">San Francisco ABC counsel</h3>
-          <p class="lm-card__meta">Reviews every file before we list it</p>
-        </div>
-      </div>
-    </div>
-  </section>
+ <section class="section">
+ <div class="container">
+ <p class="eyebrow">Who you are dealing with</p>
+ <h2>The desk handling this transfer</h2>
+ <div class="lm-grid wow-stagger">
+ <div class="card lm-card">
+ <p class="lm-card__type">Broker</p>
+ <h3 class="lm-card__city">Liquor License Agents</h3>
+ <p class="lm-card__meta">California liquor license transfer desk</p>
+ </div>
+ <div class="card lm-card">
+ <p class="lm-card__type">Files closed</p>
+ <h3 class="lm-card__city">California transfers</h3>
+ <p class="lm-card__meta"></p>
+ </div>
+ <div class="card lm-card">
+ <p class="lm-card__type">Escrow held by</p>
+ <h3 class="lm-card__city">A licensed escrow holder</h3>
+ <p class="lm-card__meta">Never us, at any point, on any file.</p>
+ </div>
+ <div class="card lm-card">
+ <p class="lm-card__type">ABC counsel</p>
+ <h3 class="lm-card__city">San Francisco ABC counsel</h3>
+ <p class="lm-card__meta">Reviews every file before we list it</p>
+ </div>
+ </div>
+ </div>
+ </section>
 
 <section class="section section--dark">
-    <div class="container">
-      <p class="eyebrow">The other classes</p>
-      <h2>If this is not the right license</h2>
-      <p class="lede">Six classes have a page here. Four hold resale stock and two hold none, which changes the route rather than the answer. The wrong class is an expensive mistake to unwind, so here are the others.</p>
+ <div class="container">
+ <p class="eyebrow">The other classes</p>
+ <h2>If this is not the right license</h2>
+ <p class="lede">Six classes have a page here. Four hold resale stock and two hold none, which changes the route rather than the answer. The wrong class is an expensive mistake to unwind, so here are the others.</p>
 
-      <p class="eyebrow">On the book now</p>
-      <div class="lm-grid wow-stagger">
-        <article class="card lic-card wow-lift">
-          <div class="lic-card__media wow-zoom">
-            <img src="../../../assets/img/venue-dcc47c4d.jpg" width="720" height="405" loading="lazy" decoding="async" alt="A bright restaurant dining room with a curved bar, glassware hung above it and tables set along full-height street windows.">
-            <div class="lic-card__label">
-              <span class="lic-card__num">Type 47</span>
-              <h3>On-Sale General, Eating Place</h3>
-            </div>
-          </div>
-          <div class="lic-card__body">
-            <p>A full bar inside a restaurant. The deepest class in San Francisco and the one most buyers mean when they say &ldquo;a liquor license&rdquo;.</p>
-            <ul class="lic-card__list">
-              <li>18 on the San Francisco book</li>
-              <li>Median ask $232,500</li>
-            </ul>
-            <p class="lm-deep"><a href="../type-47/">See the Type 47 listings</a></p>
-          </div>
-        </article>
-        <article class="card lic-card wow-lift">
-          <div class="lic-card__media wow-zoom">
-            <img src="../../../assets/img/venue-222c4f73.jpg" width="720" height="405" loading="lazy" decoding="async" alt="A tavern room with a long communal timber table down the middle, a bar along one wall and brick walls under warm pendant lights.">
-            <div class="lic-card__label">
-              <span class="lic-card__num">Type 48</span>
-              <h3>On-Sale General, Public Premises</h3>
-            </div>
-          </div>
-          <div class="lic-card__body">
-            <p>A bar or nightclub license: the same drinks as a Type 47 with no kitchen obligation, and nobody under 21 on the premises. Genuinely rare here.</p>
-            <ul class="lic-card__list">
-              <li>1 on the San Francisco book</li>
-              <li>Asking $260,000</li>
-            </ul>
-            <p class="lm-deep"><a href="../type-48/">See the Type 48 listings</a></p>
-          </div>
-        </article>
-        <article class="card lic-card wow-lift">
-          <div class="lic-card__media wow-zoom">
-            <img src="../../../assets/img/venue-2e6d7b57.jpg" width="720" height="405" loading="lazy" decoding="async" alt="A bottle shop aisle with wine and spirits on open timber shelving and a price board at the end of the run.">
-            <div class="lic-card__label">
-              <span class="lic-card__num">Type 20</span>
-              <h3>Off-Sale Beer and Wine</h3>
-            </div>
-          </div>
-          <div class="lic-card__body">
-            <p>Beer and wine sold sealed, to take away. The one class on this site that is not quota-limited &mdash; which changes the advice completely.</p>
-            <ul class="lic-card__list">
-              <li>1 on the San Francisco book</li>
-              <li>Asking $15,000</li>
-            </ul>
-            <p class="lm-deep"><a href="../type-20/">See the Type 20 listings</a></p>
-          </div>
-        </article>
-      </div>
+ <p class="eyebrow">On the book now</p>
+ <div class="lm-grid wow-stagger">
+ <article class="card lic-card wow-lift">
+ <div class="lic-card__media wow-zoom">
+ <img src="../../../assets/img/venue-dcc47c4d.jpg" width="720" height="405" loading="lazy" decoding="async" alt="A bright restaurant dining room with a curved bar, glassware hung above it and tables set along full-height street windows.">
+ <div class="lic-card__label">
+ <span class="lic-card__num">Type 47</span>
+ <h3>On-Sale General, Eating Place</h3>
+ </div>
+ </div>
+ <div class="lic-card__body">
+ <p>A full bar inside a restaurant. The deepest class in San Francisco and the one most buyers mean when they say &ldquo;a liquor license&rdquo;.</p>
+ <ul class="lic-card__list">
+ <li>18 on the San Francisco book</li>
+ <li>Median ask $232,500</li>
+ </ul>
+ <p class="lm-deep"><a href="../type-47/">See the Type 47 listings</a></p>
+ </div>
+ </article>
+ <article class="card lic-card wow-lift">
+ <div class="lic-card__media wow-zoom">
+ <img src="../../../assets/img/venue-222c4f73.jpg" width="720" height="405" loading="lazy" decoding="async" alt="A tavern room with a long communal timber table down the middle, a bar along one wall and brick walls under warm pendant lights.">
+ <div class="lic-card__label">
+ <span class="lic-card__num">Type 48</span>
+ <h3>On-Sale General, Public Premises</h3>
+ </div>
+ </div>
+ <div class="lic-card__body">
+ <p>A bar or nightclub license: the same drinks as a Type 47 with no kitchen obligation, and nobody under 21 on the premises. Genuinely rare here.</p>
+ <ul class="lic-card__list">
+ <li>1 on the San Francisco book</li>
+ <li>Asking $260,000</li>
+ </ul>
+ <p class="lm-deep"><a href="../type-48/">See the Type 48 listings</a></p>
+ </div>
+ </article>
+ <article class="card lic-card wow-lift">
+ <div class="lic-card__media wow-zoom">
+ <img src="../../../assets/img/venue-2e6d7b57.jpg" width="720" height="405" loading="lazy" decoding="async" alt="A bottle shop aisle with wine and spirits on open timber shelving and a price board at the end of the run.">
+ <div class="lic-card__label">
+ <span class="lic-card__num">Type 20</span>
+ <h3>Off-Sale Beer and Wine</h3>
+ </div>
+ </div>
+ <div class="lic-card__body">
+ <p>Beer and wine sold sealed, to take away. the lowest ask on this site &mdash; which changes the advice completely.</p>
+ <ul class="lic-card__list">
+ <li>1 on the San Francisco book</li>
+ <li>Asking $15,000</li>
+ </ul>
+ <p class="lm-deep"><a href="../type-20/">See the Type 20 listings</a></p>
+ </div>
+ </article>
+ </div>
 
-      <p class="eyebrow">No resale stock &mdash; reached by applying</p>
-      <div class="lm-grid wow-stagger">
-        <article class="card lic-card wow-lift">
-          <div class="lic-card__media wow-zoom">
-            <img src="../../../assets/img/venue-5ccd89cd.jpg" width="720" height="405" loading="lazy" decoding="async" alt="A pale, light-filled dining room with a curved service bar, upholstered stools and cafe tables beside tall windows.">
-            <div class="lic-card__label">
-              <span class="lic-card__num">Type 41</span>
-              <h3>On-Sale Beer and Wine, Eating Place</h3>
-            </div>
-          </div>
-          <div class="lic-card__body">
-            <p>On-sale beer and wine for a bona fide eating place. Nothing on the resale book right now, and the route to one is an application we run for you.</p>
-            <ul class="lic-card__list">
-              <li>Nothing on the resale book right now</li>
-              <li>Reached by applying, with us</li>
-            </ul>
-            <p class="lm-deep"><a href="../type-41/">Go to Type 41 applications</a></p>
-          </div>
-        </article>
-        <article class="card lic-card wow-lift">
-          <div class="lic-card__media wow-zoom">
-            <img src="../../../assets/img/venue-fe617ff8.jpg" width="720" height="405" loading="lazy" decoding="async" alt="A dark bar room with a long counter and a row of stools, pendant lights overhead and buttoned leather booths along the back wall.">
-            <div class="lic-card__label">
-              <span class="lic-card__num">Type 40</span>
-              <h3>On-Sale Beer</h3>
-            </div>
-          </div>
-          <div class="lic-card__body">
-            <p>On-sale beer. Nothing on the resale book right now, and the route to one is an application we run for you.</p>
-            <ul class="lic-card__list">
-              <li>Nothing on the resale book right now</li>
-              <li>Reached by applying, with us</li>
-            </ul>
-            <p class="lm-deep"><a href="../type-40/">Go to Type 40 applications</a></p>
-          </div>
-        </article>
-      </div>
+ <p class="eyebrow">No resale stock &mdash; reached by applying</p>
+ <div class="lm-grid wow-stagger">
+ <article class="card lic-card wow-lift">
+ <div class="lic-card__media wow-zoom">
+ <img src="../../../assets/img/venue-5ccd89cd.jpg" width="720" height="405" loading="lazy" decoding="async" alt="A pale, light-filled dining room with a curved service bar, upholstered stools and cafe tables beside tall windows.">
+ <div class="lic-card__label">
+ <span class="lic-card__num">Type 41</span>
+ <h3>On-Sale Beer and Wine, Eating Place</h3>
+ </div>
+ </div>
+ <div class="lic-card__body">
+ <p>On-sale beer and wine for a bona fide eating place. Nothing on the resale book right now, and the route to one is an application we run for you.</p>
+ <ul class="lic-card__list">
+ <li>Nothing on the resale book right now</li>
+ <li>Reached by applying, with us</li>
+ </ul>
+ <p class="lm-deep"><a href="../type-41/">Go to Type 41 applications</a></p>
+ </div>
+ </article>
+ <article class="card lic-card wow-lift">
+ <div class="lic-card__media wow-zoom">
+ <img src="../../../assets/img/venue-fe617ff8.jpg" width="720" height="405" loading="lazy" decoding="async" alt="A dark bar room with a long counter and a row of stools, pendant lights overhead and buttoned leather booths along the back wall.">
+ <div class="lic-card__label">
+ <span class="lic-card__num">Type 40</span>
+ <h3>On-Sale Beer</h3>
+ </div>
+ </div>
+ <div class="lic-card__body">
+ <p>On-sale beer. Nothing on the resale book right now, and the route to one is an application we run for you.</p>
+ <ul class="lic-card__list">
+ <li>Nothing on the resale book right now</li>
+ <li>Reached by applying, with us</li>
+ </ul>
+ <p class="lm-deep"><a href="../type-40/">Go to Type 40 applications</a></p>
+ </div>
+ </article>
+ </div>
 
-      <div class="cross-link-rail__rail">
-        <a class="cross-link" href="../">All 30 San Francisco licenses</a>
-        <a class="cross-link" href="#inquire">Go to the inquiry form</a>
-        <a class="cross-link" href="tel:+18007999081">(800) 799-9081</a>
-      </div>
-      <p class="sv-note">Type 41 (On-Sale Beer and Wine, Eating Place) and Type 40 (On-Sale Beer) each have a page of their own. Neither has resale stock on our San Francisco book right now, and both pages set out the application route instead.</p>
-    </div>
-  </section>
+ <div class="cross-link-rail__rail">
+ <a class="cross-link" href="../">All 30 San Francisco licenses</a>
+ <a class="cross-link" href="#inquire">Go to the inquiry form</a>
+ <a class="cross-link" href="tel:+18007999081">(800) 799-9081</a>
+ </div>
+ <p class="sv-note">Type 41 (On-Sale Beer and Wine, Eating Place) and Type 40 (On-Sale Beer) each have a page of their own. Neither has resale stock on our San Francisco book right now, and both pages set out the application route instead.</p>
+ </div>
+ </section>
 
 </main>
 
 <footer class="site-footer" id="site-footer">
-  <div class="container">
+ <div class="container">
 
-    <div class="mm-footer__lead">
-      <div class="mm-footer__lead-copy">
-        <p class="eyebrow">San Francisco Type 21</p>
-        <h2>Tell us what you are <span class="accent">opening.</span></h2>
-        <p class="mm-footer__lead-sub">We will tell you whether to buy a license on the book or apply for a new one, and handle whichever it is.</p>
-      </div>
-      <div class="mm-footer__lead-actions">
-        <a class="btn btn-primary wow-glow" href="#listings">Browse listings</a>
-        <a href="tel:+18007999081">(800) 799-9081</a>
-      </div>
-    </div>
+ <div class="mm-footer__lead">
+ <div class="mm-footer__lead-copy">
+ <p class="eyebrow">San Francisco Type 21</p>
+ <h2>Tell us what you are <span class="accent">opening.</span></h2>
+ <p class="mm-footer__lead-sub">We will tell you whether to buy a license on the book or apply for a new one, and handle whichever it is.</p>
+ </div>
+ <div class="mm-footer__lead-actions">
+ <a class="btn btn-primary wow-glow" href="#listings">Browse listings</a>
+ <a href="tel:+18007999081">(800) 799-9081</a>
+ </div>
+ </div>
 
-    <hr class="mm-footer__divide" aria-hidden="true">
+ <hr class="mm-footer__divide" aria-hidden="true">
 
-    <div class="site-footer__top">
-      <div>
-        <div class="site-footer__brand"><span class="site-footer__brand-mark" aria-hidden="true">L</span>Liquor License Agents</div>
-        <p class="site-footer__blurb">Liquor license brokerage and application work in California. We sell the license only, and we handle new applications with the ABC.</p>
-        <div class="site-footer__hours">
-          <strong>Direct line</strong>
-          <a href="tel:+18007999081">(800) 799-9081</a>
-          <a href="mailto:desk@liquorlicenseagents.com">desk@liquorlicenseagents.com</a>
-        </div>
-      </div>
+ <div class="site-footer__top">
+ <div>
+ <div class="site-footer__brand"><span class="site-footer__brand-mark" aria-hidden="true">L</span>Liquor License Agents</div>
+ <p class="site-footer__blurb">Liquor license brokerage and application work in California. We sell the license only, and we handle new applications with the ABC.</p>
+ <div class="site-footer__hours">
+ <strong>Direct line</strong>
+ <a href="tel:+18007999081">(800) 799-9081</a>
+ <a href="mailto:mike@liquorlicenseagents.com">mike@liquorlicenseagents.com</a>
+ </div>
+ </div>
 
-      <div class="site-footer__col">
-        <h4>Licenses for sale</h4>
-        <ul>
-          <li><a href="../../../california/san-francisco/type-47/">Type 47 &mdash; On-Sale General, Eating Place</a></li>
-          <li><a href="../../../california/san-francisco/type-21/">Type 21 &mdash; Off-Sale General</a></li>
-          <li><a href="../../../california/san-francisco/type-48/">Type 48 &mdash; On-Sale General, Public Premises</a></li>
-          <li><a href="../../../california/san-francisco/type-20/">Type 20 &mdash; Off-Sale Beer and Wine</a></li>
-        </ul>
-      </div>
+ <div class="site-footer__col">
+ <h4>Licenses for sale</h4>
+ <ul>
+ <li><a href="../../../california/san-francisco/type-47/">Type 47 &mdash; On-Sale General, Eating Place</a></li>
+ <li><a href="../../../california/san-francisco/type-21/">Type 21 &mdash; Off-Sale General</a></li>
+ <li><a href="../../../california/san-francisco/type-48/">Type 48 &mdash; On-Sale General, Public Premises</a></li>
+ <li><a href="../../../california/san-francisco/type-20/">Type 20 &mdash; Off-Sale Beer and Wine</a></li>
+ </ul>
+ </div>
 
-      <div class="site-footer__col">
-        <h4>Applications</h4>
-        <ul>
-          <li><a href="../../../california/san-francisco/type-41/">Type 41 &mdash; On-Sale Beer and Wine, Eating Place</a></li>
-          <li><a href="../../../california/san-francisco/type-40/">Type 40 &mdash; On-Sale Beer</a></li>
-          <li><a href="../../../california/san-francisco/">All San Francisco licenses</a></li>
-        </ul>
-      </div>
+ <div class="site-footer__col">
+ <h4>Applications</h4>
+ <ul>
+ <li><a href="../../../california/san-francisco/type-41/">Type 41 &mdash; On-Sale Beer and Wine, Eating Place</a></li>
+ <li><a href="../../../california/san-francisco/type-40/">Type 40 &mdash; On-Sale Beer</a></li>
+ <li><a href="../../../california/san-francisco/">All San Francisco licenses</a></li>
+ </ul>
+ </div>
 
-      <div class="site-footer__col">
-        <h4>Confidentiality</h4>
-        <p>License numbers, licensees, premises and terms are not published. Identifying detail goes to a qualified buyer under NDA.</p>
-      </div>
-    </div>
+ <div class="site-footer__col">
+ <h4>Confidentiality</h4>
+ <p>License numbers, licensees, premises and terms are not published. Identifying detail goes to a qualified buyer under NDA.</p>
+ </div>
+ </div>
 
-    <div class="site-footer__bottom">
-      <span>&copy; 2026 Liquor License Agents</span>
-      <span class="site-footer__bcorp">City and county of San Francisco. Class rules are confirmed for your specific premises during qualification.</span>
-    </div>
+ <div class="site-footer__bottom">
+ <span>&copy; 2026 Liquor License Agents</span>
+ <span class="site-footer__bcorp">City and county of San Francisco. Class rules are confirmed for your specific premises during qualification.</span>
+ </div>
 
-  </div>
+ </div>
 </footer>
 
 <div class="mm-sticky-cta" id="mm-sticky-cta" aria-hidden="true">
-  <div class="mm-sticky-cta__copy">
-    <b>10 Type 21 licenses, $78,000 to $275,000</b>
-    <span>Each one on a page of its own</span>
-  </div>
-  <a class="btn btn-primary" href="#listings">Browse listings</a>
+ <div class="mm-sticky-cta__copy">
+ <b>10 Type 21 licenses, $78,000 to $275,000</b>
+ <span>Each one on a page of its own</span>
+ </div>
+ <a class="btn btn-primary" href="#listings">Browse listings</a>
 </div>
 
 <script>
 /* [sf-v5] the sticky bar stands down once the footer is in view (FIX 1).
-   Sets a body class only — the cascade rule in the page's <style> does the
-   hiding, so this composes with site.js's own .show toggle rather than racing
-   it. Null-guarded and feature-guarded. */
+ Sets a body class only — the cascade rule in the page's <style> does the
+ hiding, so this composes with site.js's own .show toggle rather than racing
+ it. Null-guarded and feature-guarded. */
 (function () {
-  var f = document.getElementById('site-footer');
-  if (!f || !('IntersectionObserver' in window)) return;
-  new IntersectionObserver(function (entries) {
-    for (var i = 0; i < entries.length; i++) {
-      document.body.classList.toggle('sf-at-footer', entries[i].isIntersecting);
-    }
-  }, { threshold: 0 }).observe(f);
+ var f = document.getElementById('site-footer');
+ if (!f || !('IntersectionObserver' in window)) return;
+ new IntersectionObserver(function (entries) {
+ for (var i = 0; i < entries.length; i++) {
+ document.body.classList.toggle('sf-at-footer', entries[i].isIntersecting);
+ }
+ }, { threshold: 0 }).observe(f);
+})();
+</script>
+
+<!-- sf-form-handoff: THERE IS NO FORM ENDPOINT YET. This composes a real email to mike@liquorlicenseagents.com so an inquiry
+ actually reaches someone. Wire a real POST endpoint here and delete this block; until then the
+ page must not claim an inquiry was received when nothing was sent. -->
+<script>
+(function () {
+ var forms = document.querySelectorAll('form.form, form.sf-form, form#inquire');
+ Array.prototype.forEach.call(forms, function (f) {
+ f.setAttribute('action', 'mailto:mike@liquorlicenseagents.com');
+ f.setAttribute('method', 'post');
+ f.setAttribute('enctype', 'text/plain');
+ f.addEventListener('submit', function (e) {
+ if (typeof f.reportValidity === 'function' && !f.reportValidity()) { e.preventDefault(); return; }
+ e.preventDefault();
+ var lines = [];
+ var ref = f.querySelector('input[name="listing_ref"]');
+ Array.prototype.forEach.call(f.elements, function (el) {
+ if (!el.name || el.type === 'submit' || el.type === 'button') return;
+ if (el.type === 'checkbox' && !el.checked) return;
+ var lab = f.querySelector('label[for="' + el.id + '"]');
+ var key = lab ? lab.textContent.replace(/\s*\*?\s*\(required\)\s*/i, '').replace(/\s+/g, ' ').trim() : el.name;
+ lines.push(key + ': ' + (el.type === 'checkbox' ? 'yes' : el.value));
+ });
+ var subj = 'San Francisco license inquiry' + (ref && ref.value ? ' - ' + ref.value : '');
+ var href = 'mailto:mike@liquorlicenseagents.com?subject=' + encodeURIComponent(subj)
+ + '&body=' + encodeURIComponent(lines.join('\n'));
+ window.location.href = href;
+ var ok = document.getElementById('inquire-ok') || document.getElementById('sf-success');
+ if (ok) {
+ var h = ok.querySelector('h2, h3, .h3, strong');
+ if (h) h.textContent = 'Your email is ready to send';
+ var p = ok.querySelector('p');
+ if (p) {
+ p.textContent = 'Your mail app should have opened with your answers filled in. Send it and we '
+ + 'will reply within 24 hours. If nothing opened, call (800) 799-9081 or email mike@liquorlicenseagents.com directly.';
+ }
+ f.hidden = true;
+ ok.hidden = false;
+ ok.setAttribute('tabindex', '-1');
+ ok.focus();
+ }
+ });
+ });
 })();
 </script>
 </body>
