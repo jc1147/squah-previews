@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Liquor License Agents — everything built so far</title>
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="../liquor-license-sf-v5/assets/fonts.css">
+<link rel="stylesheet" href="../liquor-license-sf-v5/design-system/tokens.css">
+<style>
+  *{box-sizing:border-box}
+  body{
+    margin:0;background:var(--ds-bg-surface);color:var(--ds-ink);
+    font-family:var(--ds-font-body);font-size:16px;line-height:1.55;
+    padding:clamp(20px,5vw,56px) clamp(16px,5vw,40px);
+  }
+  .wrap{max-width:64rem;margin:0 auto}
+  h1{
+    font-family:var(--ds-font-display);font-weight:700;
+    font-size:clamp(28px,5vw,44px);line-height:1.1;letter-spacing:-.02em;
+    margin:0 0 8px;text-wrap:balance;
+  }
+  .sub{color:var(--ds-ink-soft);margin:0 0 6px;font-size:clamp(15px,2vw,17px);max-width:52ch}
+  .stamp{color:var(--ds-ink-soft);font-size:13px;margin:0 0 clamp(28px,5vw,44px)}
+  h2{
+    font-family:var(--ds-font-display);font-weight:700;
+    font-size:clamp(19px,2.6vw,24px);margin:clamp(32px,5vw,48px) 0 4px;letter-spacing:-.01em;
+  }
+  .note{color:var(--ds-ink-soft);font-size:14px;margin:0 0 16px;max-width:64ch}
+  .grid{display:grid;gap:12px;grid-template-columns:1fr}
+  @media (min-width:760px){.grid{grid-template-columns:1fr 1fr}}
+  a.card{
+    display:block;text-decoration:none;color:inherit;
+    background:var(--ds-bg-surface-2);border:1px solid var(--ds-line);
+    border-radius:var(--ds-r-lg);padding:16px 18px;
+    box-shadow:var(--ds-shadow-rest);
+    transition:border-color var(--ds-dur) var(--ds-ease), transform var(--ds-dur) var(--ds-ease);
+  }
+  a.card:hover{border-color:var(--ds-accent);transform:translateY(-1px)}
+  a.card:focus-visible{outline:2px solid var(--ds-accent);outline-offset:3px}
+  a.card b{display:block;font-family:var(--ds-font-display);font-size:17px;font-weight:700;margin:0 0 3px}
+  a.card span{display:block;color:var(--ds-ink-soft);font-size:14px;line-height:1.45}
+  a.card code{
+    display:block;font-family:var(--ds-font-mono);font-size:12px;color:var(--ds-accent-ink);
+    margin-top:8px;word-break:break-all;
+  }
+  .lead{border-color:var(--ds-accent);background:var(--ds-accent-soft)}
+  .chip{
+    display:inline-block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+    padding:2px 8px;border-radius:var(--ds-r-pill);margin-bottom:8px;
+    background:var(--ds-primary);color:var(--ds-ink-on-dark);
+  }
+  .chip-old{background:transparent;border:1px solid var(--ds-line);color:var(--ds-ink-soft)}
+  ul.open{margin:0;padding-left:20px;color:var(--ds-ink-soft);font-size:15px}
+  ul.open li{margin-bottom:7px}
+  ul.open strong{color:var(--ds-ink)}
+  footer{margin-top:clamp(40px,7vw,64px);padding-top:20px;border-top:1px solid var(--ds-line);
+    color:var(--ds-ink-soft);font-size:13px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>Liquor License Agents</h1>
+  <p class="sub">Everything built for the directory direction, in one place. Start at the top; the rest
+  is history and working papers.</p>
+  <p class="stamp">Last updated 14 September 2026.</p>
+
+  <h2>The current build</h2>
+  <p class="note">San Francisco, 37 pages. The county hub, six license classes and a page for each of
+  the 30 licenses on the book. Built on the approved brand.</p>
+  <div class="grid">
+    <a class="card lead" href="../liquor-license-sf-v5/california/san-francisco/">
+      <span class="chip">Current</span>
+      <b>San Francisco county hub</b>
+      <span>All 30 licenses, every class, and the two application-only classes. Click any license to
+      open its own page.</span>
+      <code>/california/san-francisco/</code>
+    </a>
+    <a class="card" href="../liquor-license-sf-v5/california/san-francisco/type-47/">
+      <b>A class page — Type 47</b>
+      <span>Eighteen licenses, each linking to its own page. Shows the count and the price range rather
+      than a single figure.</span>
+      <code>/california/san-francisco/type-47/</code>
+    </a>
+    <a class="card" href="../liquor-license-sf-v5/california/san-francisco/type-47/sf-1001/">
+      <b>A license page — SF-1001</b>
+      <span>One license, its asking price, where it sits against the rest of the book, and the inquiry
+      form.</span>
+      <code>/california/san-francisco/type-47/sf-1001/</code>
+    </a>
+    <a class="card" href="../liquor-license-sf-v5/california/san-francisco/type-41/">
+      <b>An application class — Type 41</b>
+      <span>No resale stock, so the page sells the ABC application service instead of a browse.</span>
+      <code>/california/san-francisco/type-41/</code>
+    </a>
+  </div>
+
+  <h2>Needs Clint before this goes live</h2>
+  <p class="note">None of these are claimed on the pages any more, so nothing on there is wrong while
+  they are pending. They are blanks, not errors.</p>
+  <ul class="open">
+    <li><strong>A form endpoint.</strong> There is no backend. The form composes a real email with the
+      answers filled in, to an address on the client's own domain that receives mail. A real endpoint
+      replaces that.</li>
+    <li><strong>The real commission</strong>, if he wants one published at all.</li>
+    <li><strong>A real transfer timeline</strong>, from his own closed files.</li>
+    <li><strong>Whether Type 20 is quota-limited in San Francisco.</strong> The page no longer claims
+      either way. It needs his ABC contact, not a guess.</li>
+    <li><strong>Whether to name anyone</strong> as the contact, and who.</li>
+  </ul>
+
+  <h2>The research this was built on</h2>
+  <p class="note">Why the directory direction, and what the measurements said.</p>
+  <div class="grid">
+    <a class="card" href="../liquor-license-research/">
+      <b>The research bundle</b>
+      <span>Start here. Links every piece below.</span>
+    </a>
+    <a class="card" href="../liquor-license-research/direction.html">
+      <b>The state hub play</b>
+      <span>The core finding: the rival's eight hub pages carry 57% of its traffic, its 1,227 listing
+      pages carry 1.8%.</span>
+    </a>
+    <a class="card" href="../liquor-license-research/site-audit.html">
+      <b>Your site, measured</b>
+      <span>liquorlicenseagents.com as it stands, across 1,007 pages.</span>
+    </a>
+    <a class="card" href="../liquor-license-research/competitor.html">
+      <b>Competitor teardown</b>
+      <span>How the rival ranks for everything while looking like a directory.</span>
+    </a>
+    <a class="card" href="../liquor-license-research/san-francisco.html">
+      <b>San Francisco, end to end</b>
+      <span>Thirteen existing pages, what each becomes, and why.</span>
+    </a>
+    <a class="card" href="../liquor-license-research/sitemap-plan.html">
+      <b>Sitemap and canonical work order</b>
+      <span>908 URL pairs, the rule that reproduces all of them, and the 49 that need fixing first.</span>
+    </a>
+  </div>
+
+  <h2>Earlier versions</h2>
+  <p class="note">Kept so you can see what changed and why. Superseded by the current build.</p>
+  <div class="grid">
+    <a class="card" href="../liquor-license-sf-v4/california/san-francisco/">
+      <span class="chip chip-old">Superseded</span>
+      <b>v4 — the first with a page per license</b>
+      <span>Same architecture, before the brand. This is the one whose class pages headlined a median
+      price as though it were one license.</span>
+    </a>
+    <a class="card" href="../liquor-license-sf-final/california/counties/san-francisco/">
+      <span class="chip chip-old">Superseded</span>
+      <b>v3 — before the URL structure was fixed</b>
+      <span>Still carries the "counties" segment, and lists stock in a table rather than as pages.</span>
+    </a>
+    <a class="card" href="../liquor-license-sf/">
+      <span class="chip chip-old">Superseded</span>
+      <b>v2 — flat files</b>
+      <span>The first San Francisco set.</span>
+    </a>
+    <a class="card" href="../liquor-license/">
+      <span class="chip chip-old">Superseded</span>
+      <b>The original marketplace concept</b>
+      <span>New Jersey sample listings, from before the direction was settled.</span>
+    </a>
+  </div>
+
+  <footer>
+    Sample inventory throughout. The 30 San Francisco licenses, their prices and their dates are
+    consistent across every page but are not live stock.
+  </footer>
+
+</div>
+</body>
+</html>
