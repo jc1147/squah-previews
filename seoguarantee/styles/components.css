@@ -573,6 +573,12 @@
   .site-header__inner { gap: var(--sp-3); padding-left: 1rem; }
   .brand img { height: 52px; }
 }
+/* M7 part E: with the Resources item the bar holds seven items; just above the phone breakpoint the links tighten so the
+   Start Here button keeps its place inside the bar (measured at 1141px: 13px short). Placed before the 1140px block, whose
+   phone padding still wins below it. */
+@media (max-width: 1240px) {
+  .nav__link { padding-inline: 0.45rem; letter-spacing: 0.02em; }
+}
 
 @media (max-width: 1080px) {
   .hero__grid { grid-template-columns: 1fr; }
@@ -1080,6 +1086,14 @@
   .site-header .nav__item--has-menu:not(.nav__item--mega)::before { content: ""; position: absolute; left: 0; right: 0; top: 100%; height: 0.9rem; }
 }
 .site-header .subnav a[aria-current="page"] { color: var(--gold-200); }
+/* M7 part E (plan decision 3): the Resources panel (the blog): the lead with "All articles", then two columns of guides. It
+   opens from its item's right edge (the item sits right of centre), so it stays inside the viewport at every desktop width. */
+@media (min-width: 1141px) {
+  .site-header .megamenu--resources { left: auto; right: 0; translate: none; width: min(740px, calc(100vw - 2 * var(--gutter))); grid-template-columns: 1.05fr 1fr 1fr; }
+}
+.site-header .megamenu a.megamenu__all:not(.btn) { display: inline-flex; align-items: center; gap: 0.4rem; margin-top: var(--sp-1); font-size: 0.74rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold-200); }
+.site-header .megamenu a.megamenu__all:not(.btn)::after { content: "\2192"; }
+.site-header .megamenu a.megamenu__all:not(.btn):hover { color: var(--gold-100); }
 .site-footer__grid--m2 { grid-template-columns: minmax(0, 1.5fr) repeat(4, minmax(0, 1fr)); gap: var(--sp-6) var(--sp-5); }
 .site-footer__brand .brand { display: inline-block; margin-bottom: var(--sp-4); }
 .site-footer__guarantee { margin: 0 0 var(--sp-3); max-width: 34ch; font-size: var(--step--1); line-height: 1.55; color: var(--fg); }
