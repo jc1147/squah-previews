@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex,nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Design &mdash; Monday</title>
+<style>
+:root{
+  --ground:#EBF0EF; --surface:#FFFFFF; --surface-2:#F4F7F6;
+  --ink:#131E1D; --ink-2:#3A4B49; --muted:#65776F;
+  --line:#CFDCD9; --line-soft:#E2EAE8;
+  --accent:#0E5A64; --accent-2:#0A3F47; --accent-wash:#DDEDEF;
+  --now:#A32E1C;   --now-wash:#FAE4DF;
+  --next:#8A5E08;  --next-wash:#F8ECD4;
+  --week:#2F6B4C;  --week-wash:#DFEEE5;
+  --gate:#6A3572;  --gate-wash:#EFE2F1;
+  --later:#4A5F72; --later-wash:#E3E9EE;
+  --done:#3E6E5C;  --done-wash:#E4EFEA;
+  --shadow:0 1px 2px rgba(19,30,29,.06),0 8px 24px -14px rgba(19,30,29,.22);
+  --display:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif;
+  --body:"Literata",Georgia,"Times New Roman",serif;
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#0C1413; --surface:#141F1E; --surface-2:#192625;
+    --ink:#E6EFED; --ink-2:#BACAC7; --muted:#8CA29D;
+    --line:#2A3A38; --line-soft:#213130;
+    --accent:#5CBFCB; --accent-2:#8FD8E1; --accent-wash:#123136;
+    --now:#F08C77;   --now-wash:#3A1912;
+    --next:#E4B857;  --next-wash:#352706;
+    --week:#78C79B;  --week-wash:#0E2A1D;
+    --gate:#C79AD0;  --gate-wash:#2B1730;
+    --later:#9FB7C9; --later-wash:#16242E;
+    --done:#6FB79A;  --done-wash:#12261F;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 30px -16px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0C1413; --surface:#141F1E; --surface-2:#192625;
+  --ink:#E6EFED; --ink-2:#BACAC7; --muted:#8CA29D;
+  --line:#2A3A38; --line-soft:#213130;
+  --accent:#5CBFCB; --accent-2:#8FD8E1; --accent-wash:#123136;
+  --now:#F08C77;   --now-wash:#3A1912;
+  --next:#E4B857;  --next-wash:#352706;
+  --week:#78C79B;  --week-wash:#0E2A1D;
+  --gate:#C79AD0;  --gate-wash:#2B1730;
+  --later:#9FB7C9; --later-wash:#16242E;
+  --done:#6FB79A;  --done-wash:#12261F;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 30px -16px rgba(0,0,0,.7);
+}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:16px;padding-block:0 64px}
+a{color:var(--accent);text-decoration-color:color-mix(in srgb,var(--accent) 40%,transparent);text-underline-offset:2px}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:3px}
+h1,h2,h3,h4{font-family:var(--display);margin:0;text-wrap:balance;letter-spacing:-.015em}
+code{font-family:var(--mono);font-size:.88em;background:var(--surface-2);padding:1px 4px;border-radius:4px;word-break:break-word}
+
+.mast{padding-block:34px 22px;border-bottom:1px solid var(--line)}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);display:flex;flex-wrap:wrap;gap:10px 18px;align-items:baseline}
+.eyebrow b{color:var(--accent);font-weight:600}
+h1{font-size:clamp(34px,6.4vw,54px);font-weight:800;line-height:1.02;margin-block:12px 10px}
+.dek{font-size:17px;color:var(--ink-2);max-width:63ch;margin:0}
+.dek em{font-style:italic;color:var(--ink)}
+.tally{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.tally button{font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;border:1px solid var(--line);background:var(--surface);color:var(--ink-2);border-radius:999px;padding:7px 13px;cursor:pointer;display:inline-flex;gap:8px;align-items:center;transition:border-color .12s,background .12s,color .12s}
+.tally button:hover{border-color:var(--accent);color:var(--ink)}
+.tally button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--ground)}
+.tally button .n{font-weight:600;font-variant-numeric:tabular-nums}
+.tally .dot{width:7px;height:7px;border-radius:50%;flex:none}
+
+.controls{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--ground) 92%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding-block:11px;margin-top:22px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.seg{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--surface)}
+.seg button{font-family:var(--display);font-size:13px;font-weight:600;border:0;background:transparent;color:var(--muted);padding:7px 14px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--ground)}
+.search{flex:1 1 190px;min-width:0;font-family:var(--display);font-size:13.5px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);padding:8px 12px}
+.search::placeholder{color:var(--muted)}
+.clear{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:8px;padding:8px 11px;cursor:pointer}
+.clear:hover{color:var(--ink);border-color:var(--accent)}
+
+.flash{margin-top:26px;display:grid;gap:14px}
+@media (min-width:820px){.flash{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.card{background:var(--surface);border:1px solid var(--now);border-left-width:4px;border-radius:12px;padding:16px 18px;box-shadow:var(--shadow)}
+.card .kicker{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--now);font-weight:600;display:block;margin-bottom:6px}
+.card h3{font-size:17px;font-weight:800;line-height:1.2;margin-bottom:7px}
+.card p{margin:0;font-size:14px;color:var(--ink-2);line-height:1.55}
+.card p + p{margin-top:8px}
+.card b{color:var(--ink);font-weight:600}
+.card .owner{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-top:10px;display:block}
+
+.sec{margin-top:44px}
+.sec > h2{font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);padding-bottom:9px;border-bottom:1px solid var(--line);margin-bottom:20px;display:flex;justify-content:space-between;gap:12px;align-items:baseline;font-family:var(--mono)}
+.sec > h2 em{font-style:normal;color:var(--accent);font-weight:600}
+
+.deptbar{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(168px,1fr))}
+.deptbar button{text-align:left;background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:10px;padding:12px 14px;cursor:pointer;font-family:inherit;transition:border-color .12s,transform .08s}
+.deptbar button:hover{border-color:var(--accent);transform:translateY(-1px)}
+.deptbar button[aria-pressed="true"]{background:var(--accent-wash);border-color:var(--accent)}
+.deptbar .n{display:block;font-family:var(--display);font-size:26px;font-weight:800;line-height:1;color:var(--ink);font-variant-numeric:tabular-nums}
+.deptbar .nm{display:block;font-family:var(--display);font-size:14px;font-weight:700;color:var(--ink);margin-top:5px;line-height:1.2}
+.deptbar .hot{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--now);margin-top:4px}
+.fbar{display:none;align-items:center;flex-wrap:wrap;gap:10px 14px;margin-bottom:18px;padding:12px 16px;border-radius:10px;border:1px solid var(--next);border-left-width:4px;background:var(--next-wash)}
+.fbar.on{display:flex}
+.fbar b{font-family:var(--display);font-size:14.5px;font-weight:700;color:var(--ink)}
+.fbar span{font-size:13.5px;color:var(--ink-2)}
+.fbar .pill{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;background:var(--next);color:var(--ground);border-radius:5px;padding:3px 8px}
+.fbar button{margin-left:auto;font-family:var(--display);font-size:13px;font-weight:700;border:1px solid var(--next);background:transparent;color:var(--next);border-radius:8px;padding:7px 14px;cursor:pointer}
+.fbar button:hover{background:var(--next);color:var(--ground)}
+.lanes{display:grid;gap:16px}
+@media (min-width:860px){.lanes{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.lane{background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column}
+.lane-head{padding:13px 16px;border-bottom:1px solid var(--line-soft);background:var(--surface-2);display:flex;gap:11px;align-items:center;cursor:pointer}
+.av{width:34px;height:34px;flex:none;border-radius:9px;display:grid;place-items:center;font-family:var(--display);font-size:12.5px;font-weight:800;background:var(--accent-wash);color:var(--accent-2)}
+.lane-head .who{flex:1;min-width:0}
+.lane-head .who b{font-family:var(--display);font-size:15.5px;font-weight:700;display:block;line-height:1.25}
+.lane-head .who i{font-style:normal;font-family:var(--mono);font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.lane-head .cnt{font-family:var(--mono);font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.lane ul{list-style:none;margin:0;padding:0}
+
+.item{border-bottom:1px solid var(--line-soft);padding:12px 16px 13px;border-left:3px solid transparent}
+.item:last-child{border-bottom:0}
+.item.sev-now{border-left-color:var(--now)}
+.item.sev-next{border-left-color:var(--next)}
+.item.sev-week{border-left-color:var(--week)}
+.item.sev-gate{border-left-color:var(--gate)}
+.item.sev-later{border-left-color:var(--later)}
+.ask{font-family:var(--display);font-size:15px;font-weight:600;line-height:1.35;margin:0 0 5px}
+.why{margin:0;font-size:13.7px;line-height:1.52;color:var(--ink-2)}
+.why b{font-weight:600;color:var(--ink)}
+.meta{margin-top:8px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase}
+.chip{border-radius:5px;padding:3px 7px;white-space:nowrap;border:1px solid transparent}
+.chip.now{background:var(--now-wash);color:var(--now)}
+.chip.next{background:var(--next-wash);color:var(--next)}
+.chip.week{background:var(--week-wash);color:var(--week)}
+.chip.gate{background:var(--gate-wash);color:var(--gate)}
+.chip.later{background:var(--later-wash);color:var(--later)}
+.chip.stream{background:var(--accent-wash);color:var(--accent-2)}
+.chip.src{background:transparent;border-color:var(--line);color:var(--muted)}
+.chip.src a{color:inherit;text-decoration:none}
+.chip.src a:hover{color:var(--accent)}
+
+.landed{display:grid;gap:10px}
+@media (min-width:760px){.landed{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.land{background:var(--done-wash);border:1px solid color-mix(in srgb,var(--done) 35%,transparent);border-radius:9px;padding:11px 14px}
+.land b{font-family:var(--display);font-size:14px;font-weight:700;display:block;line-height:1.3}
+.land span{display:block;font-size:13.2px;color:var(--ink-2);margin-top:3px;line-height:1.5}
+.land i{font-style:normal;font-family:var(--mono);font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:var(--done);display:block;margin-top:6px}
+
+.dgrid{display:grid;gap:14px}
+@media (min-width:760px){.dgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.dec{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:15px 17px}
+.dec h4{font-size:15px;font-weight:700;margin-bottom:6px}
+.dec p{margin:0;font-size:13.8px;color:var(--ink-2);line-height:1.55}
+.dec .verdict{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);display:block;margin-bottom:5px;font-weight:600}
+.dec.open{border-color:var(--next);background:var(--next-wash)}
+.dec.open .verdict{color:var(--next)}
+.dec.open p{color:var(--ink)}
+
+.tscroll{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:13.6px}
+th,td{padding:10px 14px;text-align:left;border-bottom:1px solid var(--line-soft);vertical-align:top}
+th{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);background:var(--surface-2);white-space:nowrap;font-weight:400}
+tbody tr:last-child td{border-bottom:0}
+td.when{font-family:var(--mono);font-size:12.5px;white-space:nowrap;font-variant-numeric:tabular-nums}
+td.who{font-family:var(--display);font-weight:600;white-space:nowrap}
+.flag{display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;background:var(--next-wash);color:var(--next);border-radius:4px;padding:2px 6px;margin-left:6px;white-space:nowrap}
+
+.figs{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.fig{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:13px 15px}
+.fig b{display:block;font-family:var(--display);font-size:24px;font-weight:800;line-height:1.05;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.fig span{display:block;font-size:12.8px;color:var(--muted);margin-top:4px;line-height:1.4}
+.fig.bad b{color:var(--now)}
+.fig.good b{color:var(--week)}
+
+.note{background:var(--surface-2);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:9px;padding:13px 16px;font-size:13.8px;color:var(--ink-2);line-height:1.58}
+.note b{color:var(--ink);font-weight:600}
+.note + .note{margin-top:12px}
+.note.warn{border-left-color:var(--now);background:var(--now-wash)}
+.note.warn b{color:var(--now)}
+
+.empty{text-align:center;color:var(--muted);font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;padding:34px 0}
+footer{margin-top:52px;padding-top:22px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+footer p{margin:0 0 9px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+<style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="mast">
+    <div class="eyebrow">
+      <span><b>Monday 28 September 2026</b></span><span>Design digest</span><span>Mikko · Mikko / Nicole Dreo · James · Unassigned</span>
+    </div>
+    <h1>Design</h1>
+    <p class="dek">Advertisement, outreach and mock-up creative. <b>6 open</b>.
+      Everything here was said on one of today&rsquo;s client calls.</p>
+    <div class="daynav"><b>This is the Design slice.</b>
+      <span>The full board carries every department, plus the decisions, figures and sources.</span>
+      <a href="index.html" target="_blank" rel="noopener">Full board &rarr;</a></div>
+  </header>
+
+  <section class="sec" style="margin-top:28px">
+    <h2><span>Read first</span> <em>changes what happens next</em></h2>
+    <div class="flash"><article class="card"><span class="kicker">Outreach &middot; before tomorrow&rsquo;s send</span><h3>James told Noire to cut texts to event, big-sale and holiday mornings; emails keep going</h3><p>James to Giovanni: &ldquo;And my advice is let&rsquo;s scale down on the texts.&rdquo; / &ldquo;reserve text messages for, like, the morning of an event or the morning of a big sale or a holiday&rdquo;.</p><p>Any Noire text already scheduled this week should be checked against this before it sends.</p><span class="owner">James &rarr; Mikko</span></article><article class="card"><span class="kicker">New campaign &middot; Noire</span><h3>Noire handed Dispenza the Magic Gardens VIP giveaway for Thu 10-15</h3><p>Giovanni: &ldquo;I&rsquo;ll let you all lead on this.&rdquo; James: &ldquo;Let me, let me both think about this and talk with, with my team, uh, a little later today.&rdquo;</p><p>10 invite-only tickets, each with &ldquo;a $300 gift bag with product&rdquo;. James floated purchase-to-enter on Tue 10-13 and Wed 10-14 with the draw around 2 PM Wed. Nothing is locked yet.</p><span class="owner">James</span></article><article class="card"><span class="kicker">High Society &middot; case study unlocked</span><h3>Anthony approved remaking his site as the AI-search case study, once name.com clears</h3><p>James: &ldquo;Can, can I experiment with your site?&rdquo; &hellip; &ldquo;then I&rsquo;ll take that as a green light&rdquo;. Anthony: &ldquo;yep I will I&rsquo;m gonna push on that&rdquo; (name.com).</p><p>Anthony owes proof of ownership via name.com live chat, CC Jasper. James owes: a software-team brief on the deal tool this week and the punch-card mock-up once terms arrive. Suggested: forward his Q4 doc to Mikko.</p><span class="owner">James + Jasper</span></article></div>
+  </section>
+
+  <section class="sec">
+    <h2><span>Open work</span> <em>6 items · grouped by client</em></h2>
+    <div class="lanes">
+      <article class="lane">
+        <div class="lane-head">
+          <div class="av">HS</div>
+          <div class="who"><b>High Society</b><i>Mikko / Nicole Dreo, Mikko, James, Unassigned</i></div>
+          <div class="cnt">4</div>
+        </div>
+        <ul><li class="item sev-week">
+      <p class="ask">Build HS October (Halloween) concepts that evolve through the campaign, with options for Anthony to choose from</p>
+      <p class="why">James: &ldquo;I think we can make evolutions of content instead of the same exact content&rdquo; / &ldquo;Like October is an opportunity for sure to try something out like that.&rdquo; / &ldquo;I&rsquo;ve already passed off workflows to my design team&rdquo;. Confirm the team has those workflows. Tonight&rsquo;s Graphics &amp; Creative is a good place to hand it off.</p>
+      <div class="meta">
+        <span class="chip week">This week</span>
+        <span class="chip stream">Mikko / Nicole Dreo</span>
+        <a class="chip src" href="https://fathom.video/share/XYe-_i5rvoxoUepzd2PRuEnY2iM-KEKt" target="_blank" rel="noopener" title="Watch the recording">&#9654; High Society · Anthony</a>
+      </div>
+    </li><li class="item sev-gate">
+      <p class="ask">When Anthony&rsquo;s Jars emails arrive, propose a Jars-style format for the HS weekly newsletter</p>
+      <p class="why">&ldquo;Yeah, we&rsquo;ll take a look at them and see if it helps us and gives us any direction.&rdquo; Anthony likes that &ldquo;it feels like uniform and it feels like a newsletter&rdquo;: points, app download, deals, happy hour, lifestyle photos.</p>
+      <div class="meta">
+        <span class="chip gate">Blocked</span>
+        <span class="chip stream">Mikko</span>
+        <a class="chip src" href="https://fathom.video/share/XYe-_i5rvoxoUepzd2PRuEnY2iM-KEKt" target="_blank" rel="noopener" title="Watch the recording">&#9654; High Society · Anthony</a>
+      </div>
+    </li><li class="item sev-gate">
+      <p class="ask">Mock up the HS new-customer punch card once Anthony sends the terms</p>
+      <p class="why">&ldquo;And then I&rsquo;ll mock something up for a graphic for you.&rdquo; Waits on Anthony&rsquo;s fifth-visit terms.</p>
+      <div class="meta">
+        <span class="chip gate">Blocked</span>
+        <span class="chip stream">James</span>
+        <a class="chip src" href="https://fathom.video/share/XYe-_i5rvoxoUepzd2PRuEnY2iM-KEKt" target="_blank" rel="noopener" title="Watch the recording">&#9654; High Society · Anthony</a>
+      </div>
+    </li><li class="item sev-later">
+      <p class="ask">Print the punch cards once the mock-up is approved</p>
+      <p class="why">&ldquo;And we&rsquo;ll print them out and see what happens.&rdquo; Who prints and who pays wasn&rsquo;t said.</p>
+      <div class="meta">
+        <span class="chip later">Booked ahead</span>
+        <span class="chip stream">Unassigned</span>
+        <a class="chip src" href="https://fathom.video/share/XYe-_i5rvoxoUepzd2PRuEnY2iM-KEKt" target="_blank" rel="noopener" title="Watch the recording">&#9654; High Society · Anthony</a>
+      </div>
+    </li></ul>
+      </article><article class="lane">
+        <div class="lane-head">
+          <div class="av">N</div>
+          <div class="who"><b>Noire</b><i>Mikko / Nicole Dreo</i></div>
+          <div class="cnt">1</div>
+        </div>
+        <ul><li class="item sev-gate">
+      <p class="ask">When James approves, make the Magic Gardens giveaway creative (email, text and push, plus social if in scope)</p>
+      <p class="why">Giovanni: &ldquo;if we could do something on social, this is something we would want to promote.&rdquo; Feature the $300 gift bag and the gold card (&ldquo;it&rsquo;s like a golden ticket&rdquo;). Whether Dispenza runs Noire&rsquo;s social is unverified.</p>
+      <div class="meta">
+        <span class="chip gate">Blocked</span>
+        <span class="chip stream">Mikko / Nicole Dreo</span>
+        <a class="chip src" href="https://fathom.video/share/hyjfvQz1EsFa2vJP1Z3bGUQKk1X1vZ3k" target="_blank" rel="noopener" title="Watch the recording">&#9654; Noire · Giovanni</a>
+      </div>
+    </li></ul>
+      </article><article class="lane">
+        <div class="lane-head">
+          <div class="av">NF</div>
+          <div class="who"><b>Nova Farms</b><i>Mikko</i></div>
+          <div class="cnt">1</div>
+        </div>
+        <ul><li class="item sev-later">
+      <p class="ask">Note that Nova is making its own Green Wednesday and Thanksgiving creative, and don&rsquo;t duplicate it</p>
+      <p class="why">Celia, in side chat (not a request to us): &ldquo;I&rsquo;m doing the Green Wednesday and, like, Thanksgiving imagery, and I think I&rsquo;m, like, finally landing on a concept.&rdquo; Concepts: a retro 2000s shopping-cart look, and &ldquo;friends having fun&rdquo; plus a cousin&rsquo;s walk idea for Thanksgiving.</p>
+      <div class="meta">
+        <span class="chip later">Booked ahead</span>
+        <span class="chip stream">Mikko</span>
+        <a class="chip src" href="https://fathom.video/share/EomzLMZGjcEutdEfvMoobUqQPy1FaCHE" target="_blank" rel="noopener" title="Watch the recording">&#9654; Nova Farms deep dive</a>
+      </div>
+    </li></ul>
+      </article>
+    </div>
+  </section>
+
+  
+
+  <section class="sec">
+    <h2><span>Waiting on someone else</span> <em>chase these</em></h2>
+    <div class="tscroll"><table>
+      <thead><tr><th>Who</th><th>What they owe us</th><th>What it blocks</th></tr></thead>
+      <tbody><tr><td class="who">Celia Velez / Todd Wender (Nova Farms)</td><td>The revised brand and media folder, &ldquo;about 13 gigabytes&rdquo;, in &ldquo;the next couple days&rdquo;</td><td>James&rsquo;s review before the deep dive</td></tr><tr><td class="who">Giovanni Paul (Noire)</td><td>The weekly deals spreadsheet, due Tue 09-29 (&ldquo;I&rsquo;m on it&rdquo;)</td><td>Next cycle&rsquo;s graphics, upload and schedule</td></tr><tr><td class="who">Giovanni Paul (Noire)</td><td>Check with his staff on raffle vs first-come and timing (&ldquo;Let me let me talk to my staff on this&rdquo;; speaker not certain)</td><td>Building any Magic Gardens sends</td></tr><tr><td class="who">Anthony Shimoon (High Society)</td><td>The fifth-visit punch-card terms: what it gets, the minimum spend, the $1 price</td><td>The mock-up, printing and tracking</td></tr><tr><td class="who">Anthony Shimoon (High Society)</td><td>A stack of Jars marketing emails, CC Mikko and Jasper</td><td>The Jars-style newsletter format</td></tr><tr><td class="who">Anthony Shimoon (High Society)</td><td>Unusual-shape hole punchers from Amazon (&ldquo;I&rsquo;ll do that.&rdquo;)</td><td>Nothing on our side</td></tr></tbody>
+    </table></div>
+  </section>
+
+  <section class="sec">
+    <h2><span>Dates that touch Design</span> <em>now through mid-October · Pacific unless noted</em></h2>
+    <div class="tscroll"><table>
+      <thead><tr><th>When</th><th>What</th><th>Who</th><th>Notes</th></tr></thead>
+      <tbody><tr><td class="when">Tue 09-29</td><td><b>Noire deal sheet due (standing Tuesday deadline)</b></td><td>Giovanni</td><td>&ldquo;I&rsquo;m on it&rdquo;</td></tr><tr><td class="when">Wed 09-30 or Thu 10-01</td><td><b>Nova Brand Deep Dive (rescheduled)</b></td><td>James, Todd, Matt, Celia, Nicole S</td><td>Time TBD; no invite sent yet. Review the brand folder first</td></tr><tr><td class="when">Thu 10-08 &ndash; Mon 10-12 (to confirm)</td><td><b>Magic Gardens tease window</b></td><td>Outreach</td><td>As spoken, &ldquo;Thursday, Friday, the 10th, 11th, and 12th&rdquo; doesn&rsquo;t match the calendar</td></tr></tbody>
+    </table></div>
+  </section>
+
+  <section class="sec">
+    <h2><span>Today&rsquo;s recordings</span> <em>watch the source</em></h2>
+    <div class="tscroll"><table>
+      <thead><tr><th>When</th><th>Call</th><th>Who</th><th>Recording</th></tr></thead>
+      <tbody><tr><td class="when">Mon 11:01 AM</td><td><b>NovaFarms + Dispenza &middot; Brand Deep Dive</b></td><td>James, Matt Davidson, Celia Velez, Nicole Suraci. Booked for 60 min; rescheduled because Todd was in transit. Shared with all teams.</td><td><a href="https://fathom.video/share/EomzLMZGjcEutdEfvMoobUqQPy1FaCHE" target="_blank" rel="noopener">&#9654; 7 min</a></td></tr><tr><td class="when">Mon 12:00 PM</td><td><b>Noire &middot; Giovanni Paul</b></td><td>James, Giovanni Paul. NOT shared with the team.</td><td><a href="https://fathom.video/share/hyjfvQz1EsFa2vJP1Z3bGUQKk1X1vZ3k" target="_blank" rel="noopener">&#9654; 21 min</a></td></tr><tr><td class="when">Mon 1:02 PM</td><td><b>High Society &middot; Anthony Shimoon</b></td><td>James, Anthony Shimoon. NOT shared with the team.</td><td><a href="https://fathom.video/share/XYe-_i5rvoxoUepzd2PRuEnY2iM-KEKt" target="_blank" rel="noopener">&#9654; 24 min</a></td></tr></tbody>
+    </table></div>
+  </section>
+
+  <footer>
+    <p>Design slice of the Monday handoff, generated from the same source as the full board. Source: the three client calls in Fathom on Monday 28 September 2026. Slack is intentionally excluded.</p>
+    <p>If something here is wrong or missing, it is wrong on the full board too &mdash; say so and both get corrected.</p>
+  </footer>
+</div>
+</body>
+</html>

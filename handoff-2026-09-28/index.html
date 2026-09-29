@@ -1,0 +1,1403 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex,nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Monday Handoff</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=JetBrains+Mono:wght@400;600&display=swap">
+
+<style>
+:root{
+  --ground:#EBF0EF; --surface:#FFFFFF; --surface-2:#F4F7F6;
+  --ink:#131E1D; --ink-2:#3A4B49; --muted:#65776F;
+  --line:#CFDCD9; --line-soft:#E2EAE8;
+  --accent:#0E5A64; --accent-2:#0A3F47; --accent-wash:#DDEDEF;
+  --now:#A32E1C;   --now-wash:#FAE4DF;
+  --next:#8A5E08;  --next-wash:#F8ECD4;
+  --week:#2F6B4C;  --week-wash:#DFEEE5;
+  --gate:#6A3572;  --gate-wash:#EFE2F1;
+  --later:#4A5F72; --later-wash:#E3E9EE;
+  --done:#3E6E5C;  --done-wash:#E4EFEA;
+  --shadow:0 1px 2px rgba(19,30,29,.06),0 8px 24px -14px rgba(19,30,29,.22);
+  --display:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif;
+  --body:"Literata",Georgia,"Times New Roman",serif;
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#0C1413; --surface:#141F1E; --surface-2:#192625;
+    --ink:#E6EFED; --ink-2:#BACAC7; --muted:#8CA29D;
+    --line:#2A3A38; --line-soft:#213130;
+    --accent:#5CBFCB; --accent-2:#8FD8E1; --accent-wash:#123136;
+    --now:#F08C77;   --now-wash:#3A1912;
+    --next:#E4B857;  --next-wash:#352706;
+    --week:#78C79B;  --week-wash:#0E2A1D;
+    --gate:#C79AD0;  --gate-wash:#2B1730;
+    --later:#9FB7C9; --later-wash:#16242E;
+    --done:#6FB79A;  --done-wash:#12261F;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 30px -16px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0C1413; --surface:#141F1E; --surface-2:#192625;
+  --ink:#E6EFED; --ink-2:#BACAC7; --muted:#8CA29D;
+  --line:#2A3A38; --line-soft:#213130;
+  --accent:#5CBFCB; --accent-2:#8FD8E1; --accent-wash:#123136;
+  --now:#F08C77;   --now-wash:#3A1912;
+  --next:#E4B857;  --next-wash:#352706;
+  --week:#78C79B;  --week-wash:#0E2A1D;
+  --gate:#C79AD0;  --gate-wash:#2B1730;
+  --later:#9FB7C9; --later-wash:#16242E;
+  --done:#6FB79A;  --done-wash:#12261F;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 30px -16px rgba(0,0,0,.7);
+}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:16px;padding-block:0 64px}
+a{color:var(--accent);text-decoration-color:color-mix(in srgb,var(--accent) 40%,transparent);text-underline-offset:2px}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:3px}
+h1,h2,h3,h4{font-family:var(--display);margin:0;text-wrap:balance;letter-spacing:-.015em}
+code{font-family:var(--mono);font-size:.88em;background:var(--surface-2);padding:1px 4px;border-radius:4px;word-break:break-word}
+
+.mast{padding-block:34px 22px;border-bottom:1px solid var(--line)}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);display:flex;flex-wrap:wrap;gap:10px 18px;align-items:baseline}
+.eyebrow b{color:var(--accent);font-weight:600}
+h1{font-size:clamp(34px,6.4vw,54px);font-weight:800;line-height:1.02;margin-block:12px 10px}
+.dek{font-size:17px;color:var(--ink-2);max-width:63ch;margin:0}
+.dek em{font-style:italic;color:var(--ink)}
+.tally{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.tally button{font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;border:1px solid var(--line);background:var(--surface);color:var(--ink-2);border-radius:999px;padding:7px 13px;cursor:pointer;display:inline-flex;gap:8px;align-items:center;transition:border-color .12s,background .12s,color .12s}
+.tally button:hover{border-color:var(--accent);color:var(--ink)}
+.tally button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--ground)}
+.tally button .n{font-weight:600;font-variant-numeric:tabular-nums}
+.tally .dot{width:7px;height:7px;border-radius:50%;flex:none}
+
+.controls{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--ground) 92%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding-block:11px;margin-top:22px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.seg{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--surface)}
+.seg button{font-family:var(--display);font-size:13px;font-weight:600;border:0;background:transparent;color:var(--muted);padding:7px 14px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--ground)}
+.search{flex:1 1 190px;min-width:0;font-family:var(--display);font-size:13.5px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);padding:8px 12px}
+.search::placeholder{color:var(--muted)}
+.clear{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:8px;padding:8px 11px;cursor:pointer}
+.clear:hover{color:var(--ink);border-color:var(--accent)}
+
+.flash{margin-top:26px;display:grid;gap:14px}
+@media (min-width:820px){.flash{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.card{background:var(--surface);border:1px solid var(--now);border-left-width:4px;border-radius:12px;padding:16px 18px;box-shadow:var(--shadow)}
+.card .kicker{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--now);font-weight:600;display:block;margin-bottom:6px}
+.card h3{font-size:17px;font-weight:800;line-height:1.2;margin-bottom:7px}
+.card p{margin:0;font-size:14px;color:var(--ink-2);line-height:1.55}
+.card p + p{margin-top:8px}
+.card b{color:var(--ink);font-weight:600}
+.card .owner{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-top:10px;display:block}
+
+.sec{margin-top:44px}
+.sec > h2{font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);padding-bottom:9px;border-bottom:1px solid var(--line);margin-bottom:20px;display:flex;justify-content:space-between;gap:12px;align-items:baseline;font-family:var(--mono)}
+.sec > h2 em{font-style:normal;color:var(--accent);font-weight:600}
+
+.deptbar{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(168px,1fr))}
+.deptbar button{text-align:left;background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:10px;padding:12px 14px;cursor:pointer;font-family:inherit;transition:border-color .12s,transform .08s}
+.deptbar button:hover{border-color:var(--accent);transform:translateY(-1px)}
+.deptbar button[aria-pressed="true"]{background:var(--accent-wash);border-color:var(--accent)}
+.deptbar .n{display:block;font-family:var(--display);font-size:26px;font-weight:800;line-height:1;color:var(--ink);font-variant-numeric:tabular-nums}
+.deptbar .nm{display:block;font-family:var(--display);font-size:14px;font-weight:700;color:var(--ink);margin-top:5px;line-height:1.2}
+.deptbar .hot{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--now);margin-top:4px}
+.fbar{display:none;align-items:center;flex-wrap:wrap;gap:10px 14px;margin-bottom:18px;padding:12px 16px;border-radius:10px;border:1px solid var(--next);border-left-width:4px;background:var(--next-wash)}
+.fbar.on{display:flex}
+.fbar b{font-family:var(--display);font-size:14.5px;font-weight:700;color:var(--ink)}
+.fbar span{font-size:13.5px;color:var(--ink-2)}
+.fbar .pill{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;background:var(--next);color:var(--ground);border-radius:5px;padding:3px 8px}
+.fbar button{margin-left:auto;font-family:var(--display);font-size:13px;font-weight:700;border:1px solid var(--next);background:transparent;color:var(--next);border-radius:8px;padding:7px 14px;cursor:pointer}
+.fbar button:hover{background:var(--next);color:var(--ground)}
+.lanes{display:grid;gap:16px}
+@media (min-width:860px){.lanes{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.lane{background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column}
+.lane-head{padding:13px 16px;border-bottom:1px solid var(--line-soft);background:var(--surface-2);display:flex;gap:11px;align-items:center;cursor:pointer}
+.av{width:34px;height:34px;flex:none;border-radius:9px;display:grid;place-items:center;font-family:var(--display);font-size:12.5px;font-weight:800;background:var(--accent-wash);color:var(--accent-2)}
+.lane-head .who{flex:1;min-width:0}
+.lane-head .who b{font-family:var(--display);font-size:15.5px;font-weight:700;display:block;line-height:1.25}
+.lane-head .who i{font-style:normal;font-family:var(--mono);font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.lane-head .cnt{font-family:var(--mono);font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.lane ul{list-style:none;margin:0;padding:0}
+
+.item{border-bottom:1px solid var(--line-soft);padding:12px 16px 13px;border-left:3px solid transparent}
+.item:last-child{border-bottom:0}
+.item.sev-now{border-left-color:var(--now)}
+.item.sev-next{border-left-color:var(--next)}
+.item.sev-week{border-left-color:var(--week)}
+.item.sev-gate{border-left-color:var(--gate)}
+.item.sev-later{border-left-color:var(--later)}
+.ask{font-family:var(--display);font-size:15px;font-weight:600;line-height:1.35;margin:0 0 5px}
+.why{margin:0;font-size:13.7px;line-height:1.52;color:var(--ink-2)}
+.why b{font-weight:600;color:var(--ink)}
+.meta{margin-top:8px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase}
+.chip{border-radius:5px;padding:3px 7px;white-space:nowrap;border:1px solid transparent}
+.chip.now{background:var(--now-wash);color:var(--now)}
+.chip.next{background:var(--next-wash);color:var(--next)}
+.chip.week{background:var(--week-wash);color:var(--week)}
+.chip.gate{background:var(--gate-wash);color:var(--gate)}
+.chip.later{background:var(--later-wash);color:var(--later)}
+.chip.stream{background:var(--accent-wash);color:var(--accent-2)}
+.chip.src{background:transparent;border-color:var(--line);color:var(--muted)}
+.chip.src a{color:inherit;text-decoration:none}
+.chip.src a:hover{color:var(--accent)}
+
+.landed{display:grid;gap:10px}
+@media (min-width:760px){.landed{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.land{background:var(--done-wash);border:1px solid color-mix(in srgb,var(--done) 35%,transparent);border-radius:9px;padding:11px 14px}
+.land b{font-family:var(--display);font-size:14px;font-weight:700;display:block;line-height:1.3}
+.land span{display:block;font-size:13.2px;color:var(--ink-2);margin-top:3px;line-height:1.5}
+.land i{font-style:normal;font-family:var(--mono);font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:var(--done);display:block;margin-top:6px}
+
+.dgrid{display:grid;gap:14px}
+@media (min-width:760px){.dgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.dec{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:15px 17px}
+.dec h4{font-size:15px;font-weight:700;margin-bottom:6px}
+.dec p{margin:0;font-size:13.8px;color:var(--ink-2);line-height:1.55}
+.dec .verdict{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);display:block;margin-bottom:5px;font-weight:600}
+.dec.open{border-color:var(--next);background:var(--next-wash)}
+.dec.open .verdict{color:var(--next)}
+.dec.open p{color:var(--ink)}
+
+.tscroll{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:13.6px}
+th,td{padding:10px 14px;text-align:left;border-bottom:1px solid var(--line-soft);vertical-align:top}
+th{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);background:var(--surface-2);white-space:nowrap;font-weight:400}
+tbody tr:last-child td{border-bottom:0}
+td.when{font-family:var(--mono);font-size:12.5px;white-space:nowrap;font-variant-numeric:tabular-nums}
+td.who{font-family:var(--display);font-weight:600;white-space:nowrap}
+.flag{display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;background:var(--next-wash);color:var(--next);border-radius:4px;padding:2px 6px;margin-left:6px;white-space:nowrap}
+
+.figs{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.fig{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:13px 15px}
+.fig b{display:block;font-family:var(--display);font-size:24px;font-weight:800;line-height:1.05;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.fig span{display:block;font-size:12.8px;color:var(--muted);margin-top:4px;line-height:1.4}
+.fig.bad b{color:var(--now)}
+.fig.good b{color:var(--week)}
+
+.note{background:var(--surface-2);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:9px;padding:13px 16px;font-size:13.8px;color:var(--ink-2);line-height:1.58}
+.note b{color:var(--ink);font-weight:600}
+.note + .note{margin-top:12px}
+.note.warn{border-left-color:var(--now);background:var(--now-wash)}
+.note.warn b{color:var(--now)}
+
+.empty{text-align:center;color:var(--muted);font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;padding:34px 0}
+footer{margin-top:52px;padding-top:22px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+footer p{margin:0 0 9px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+<style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+
+
+<div class="wrap">
+
+  <header class="mast">
+    <div class="eyebrow">
+      <span>Monday <b>28 September 2026</b></span>
+      <span>3 client calls · Fathom only</span>
+      <span>Dispenza · SGEN · SEO Guarantee</span>
+    </div>
+    <h1>Monday Handoff</h1>
+    <p class="dek">Everything promised, raised or committed on today&rsquo;s three client calls, sorted into the department that owns it. <em>Fathom only &mdash; Slack is left out because the team already has it.</em></p>
+    <div class="note warn"><b>Source: today&rsquo;s three client calls in Fathom</b> &mdash; Nova Farms 11:01, Noire 12:00, High Society 1:02 PM PT. Slack, email and texts are left out on purpose. Every commitment James made on these calls was swept separately and checked against this board.</div>
+    <div class="tally" id="tally"></div>
+  </header>
+
+  <section class="sec" style="margin-top:28px">
+    <h2><span>Read these four first</span> <em>they change what happens next</em></h2>
+    <div class="flash" id="flash"></div>
+  </section>
+
+  <section class="sec" style="margin-top:36px">
+    <h2><span>Departments</span> <em>click a lane to filter</em></h2>
+    <div class="deptbar" id="deptbar"></div>
+    <div class="note" style="margin-top:14px"><b>Account Mgmt leads today (13 items).</b> Three client calls, so most of the follow-through is client-facing.</div>
+  </section>
+
+  <div class="controls">
+    <div class="seg" id="viewseg" role="group" aria-label="Grouping">
+      <button type="button" data-view="dept" aria-pressed="true">By department</button>
+      <button type="button" data-view="owner" aria-pressed="false">By person</button>
+      <button type="button" data-view="stream" aria-pressed="false">By client</button>
+    </div>
+    <input class="search" id="q" type="search" placeholder="Filter — a name, a client, a keyword…" aria-label="Filter commitments">
+    <button type="button" class="clear" id="clear">Reset</button>
+  </div>
+
+  <section class="sec" style="margin-top:26px">
+    <h2><span>Open work &mdash; by department</span> <em id="shown"></em></h2>
+    <div class="fbar" id="fbar"></div>
+    <div class="lanes" id="board"></div>
+    <div class="empty" id="empty" hidden>Nothing matches that filter</div>
+  </section>
+
+  <section class="sec">
+    <h2><span>Landed today</span> <em>done — listed so nobody redoes it</em></h2>
+    <div class="landed" id="landed"></div>
+  </section>
+
+  <section class="sec">
+    <h2><span>Waiting on someone outside the team</span> <em>chase these, they gate real work</em></h2>
+    <div class="tscroll">
+      <table>
+        <thead><tr><th>Who</th><th>What they owe us</th><th>What it blocks</th></tr></thead>
+        <tbody id="client"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="sec">
+    <h2><span>Decided today — don't relitigate</span> <em>and the questions still open</em></h2>
+    <div class="dgrid" id="decisions"></div>
+  </section>
+
+  <section class="sec">
+    <h2><span>The numbers behind those calls</span> <em>as measured or quoted today</em></h2>
+    <div class="figs" id="figs"></div>
+    <div class="note" style="margin-top:14px"><b>Figures are as spoken or written today.</b> None were re-measured for this board. The High Society AI-search numbers were read off James&rsquo;s screen and are unverified.</div>
+  </section>
+
+  <section class="sec">
+    <h2><span>Calendar</span> <em>now through mid-October · Pacific unless noted</em></h2>
+    <div class="tscroll">
+      <table>
+        <thead><tr><th>When</th><th>What</th><th>Who</th><th>Notes</th></tr></thead>
+        <tbody id="cal"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="sec">
+    <h2><span>Where this came from</span> <em>Conversation Hub · Fathom + Slack</em></h2>
+    <div class="tscroll">
+      <table>
+        <thead><tr><th>Source</th><th>Pacific</th><th>Len</th><th>In the room</th><th>Link</th></tr></thead>
+        <tbody id="src"></tbody>
+      </table>
+    </div>
+    <div class="note warn" style="margin-top:14px"><b>Two of today&rsquo;s recordings will not open for the team.</b> The Noire and High Society calls are set to <b>No Team Visibility</b> in Fathom, which makes them private to James as the host. The Nova Farms call is visible to all teams. <b>James: set the other two to &ldquo;Visible to All Teams&rdquo;</b> on each recording page if the team should watch them.</div>
+    <div class="note" style="margin-top:12px"><b>One caution on attribution.</b> Fathom&rsquo;s speaker labels misfire on client calls. Every item was read back against the surrounding context, and where a speaker could not be pinned the item says &ldquo;said on the call&rdquo;. If a line is attributed to you and it was not yours, say so and it gets corrected at source.</div>
+  </section>
+
+  <footer>
+    <p>Compiled Monday 28 September 2026 from the Conversation Hub &mdash; Fathom conversations 27385 (Nova Farms), 27384 (Noire) and 27383 (High Society). Slack is intentionally excluded.</p>
+    <p>Anything marked <b>CONFIRM</b> is a genuine conflict in the source, not a guess &mdash; resolve it before building to it.</p>
+  </footer>
+</div>
+
+<script>
+const MEET = {
+ "nova": {
+  "label": "Nova Farms deep dive",
+  "url": "https://fathom.video/share/EomzLMZGjcEutdEfvMoobUqQPy1FaCHE"
+ },
+ "noire": {
+  "label": "Noire · Giovanni",
+  "url": "https://fathom.video/share/hyjfvQz1EsFa2vJP1Z3bGUQKk1X1vZ3k"
+ },
+ "hs": {
+  "label": "High Society · Anthony",
+  "url": "https://fathom.video/share/XYe-_i5rvoxoUepzd2PRuEnY2iM-KEKt"
+ },
+ "slack": {
+  "label": "Slack",
+  "url": ""
+ }
+};
+
+const DEPTNOTE = {
+  'Web Dev':'Site edits, change requests, launches',
+  'SEO':'Rankings, citations, metadata, Search Console',
+  'Design':'Advertisement, outreach and mock-up creative',
+  'Outreach':'Client campaigns, sends and cadence',
+  'Marketing':'Our own outreach, not a client’s',
+  'Product & Software':'Internal builds and custom development',
+  'Account Mgmt':'Client relationship, sales, scheduling, billing',
+};
+const DEPTORDER = ['Product & Software','SEO','Design','Outreach','Web Dev','Account Mgmt','Marketing'];
+
+const SEV = {
+  now:  {label:'Today',     rank:0},
+  next: {label:'Tomorrow',  rank:1},
+  week: {label:'This week', rank:2},
+  gate: {label:'Blocked',   rank:3},
+  later:{label:'Booked ahead', rank:4}
+};
+
+const PEOPLE = {
+ "James": "Owner",
+ "Coty": "Sales",
+ "Ritchie": "CRM",
+ "Jerome": "SGEN",
+ "Glemer": "PM platform",
+ "Anna": "SEO content",
+ "Jaryll": "SEO Guarantee",
+ "Kyl": "Build team",
+ "CJ": "Build team",
+ "Aeron": "Build team",
+ "Mikko": "Head of graphics",
+ "Nicole Dreo": "Design",
+ "Dimple": "Outreach",
+ "Adrian": "Outreach",
+ "Lem": "MediMarketing",
+ "Emman": "Solutions architect",
+ "Whole team": "Open assignment",
+ "Jasper": "Web uploads / dev",
+ "Jasper / Emman": "Launch + Cloudflare cutover",
+ "Jasper / CJ": "Web Dev + build team",
+ "Angelina": "Admin / AR",
+ "Mikko / Nicole Dreo": "Design",
+ "Unassigned": "No owner named yet",
+ "Software team": "Not yet named",
+ "Dan": "SEOS / dashboard",
+ "Regei": "SGP / Eagle Eyes",
+ "Marky": "SGEN Builder MCP",
+ "Clark": "Marketing content",
+ "Carl Celino": "Design / redesigns"
+};
+
+const FLASH = [
+ {
+  "kicker": "Launch &middot; on hold",
+  "h": "Nova Farms can&rsquo;t launch until Sweed connects, and no new date was set",
+  "p": "James on the 11:01 call: &ldquo;I have not received any introduction or anything like that.&rdquo; / &ldquo;That&rsquo;s the only thing in the way of me launching and fixing this slow- website, which I want to do immediately.&rdquo;",
+  "p2": "Nicole Suraci is emailing Sweed (&ldquo;Reverse proxy is the conversation&rdquo;), and Nova was asked to phone them and &ldquo;just say it&rsquo;s urgent&rdquo;. Cutover waits on Sweed&rsquo;s tech contact.",
+  "owner": "James &rarr; Matt Davidson, Jasper",
+  "depts": [
+   "Web Dev",
+   "SEO",
+   "Account Mgmt"
+  ]
+ },
+ {
+  "kicker": "Outreach &middot; before tomorrow&rsquo;s send",
+  "h": "James told Noire to cut texts to event, big-sale and holiday mornings; emails keep going",
+  "p": "James to Giovanni: &ldquo;And my advice is let&rsquo;s scale down on the texts.&rdquo; / &ldquo;reserve text messages for, like, the morning of an event or the morning of a big sale or a holiday&rdquo;.",
+  "p2": "Any Noire text already scheduled this week should be checked against this before it sends.",
+  "owner": "James &rarr; Mikko",
+  "depts": [
+   "Outreach",
+   "Design"
+  ]
+ },
+ {
+  "kicker": "New campaign &middot; Noire",
+  "h": "Noire handed Dispenza the Magic Gardens VIP giveaway for Thu 10-15",
+  "p": "Giovanni: &ldquo;I&rsquo;ll let you all lead on this.&rdquo; James: &ldquo;Let me, let me both think about this and talk with, with my team, uh, a little later today.&rdquo;",
+  "p2": "10 invite-only tickets, each with &ldquo;a $300 gift bag with product&rdquo;. James floated purchase-to-enter on Tue 10-13 and Wed 10-14 with the draw around 2 PM Wed. Nothing is locked yet.",
+  "owner": "James",
+  "depts": [
+   "Outreach",
+   "Design",
+   "Account Mgmt"
+  ]
+ },
+ {
+  "kicker": "High Society &middot; case study unlocked",
+  "h": "Anthony approved remaking his site as the AI-search case study, once name.com clears",
+  "p": "James: &ldquo;Can, can I experiment with your site?&rdquo; &hellip; &ldquo;then I&rsquo;ll take that as a green light&rdquo;. Anthony: &ldquo;yep I will I&rsquo;m gonna push on that&rdquo; (name.com).",
+  "p2": "Anthony owes proof of ownership via name.com live chat, CC Jasper. James owes: a software-team brief on the deal tool this week and the punch-card mock-up once terms arrive. Suggested: forward his Q4 doc to Mikko.",
+  "owner": "James + Jasper",
+  "depts": [
+   "Web Dev",
+   "Marketing",
+   "Product & Software",
+   "Design"
+  ]
+ }
+];
+
+const ITEMS = [
+ {
+  "dept": "Web Dev",
+  "stream": "Nova Farms",
+  "who": "James",
+  "sev": "now",
+  "m": "nova",
+  "ask": "Tell the dev and SEO team tonight&rsquo;s Nova launch is on hold until Sweed connects, and what now triggers cutover",
+  "why": "On the call: &ldquo;That&rsquo;s the only thing in the way of me launching and fixing this slow- website.&rdquo; No new launch date was set. Cutover waits on Sweed&rsquo;s tech contact setting up the reverse proxy."
+ },
+ {
+  "dept": "Web Dev",
+  "stream": "Nova Farms",
+  "who": "Jasper / Emman",
+  "sev": "gate",
+  "m": "nova",
+  "ask": "Launch novafarms.com on SGEN as soon as Sweed&rsquo;s tech contact sets up the reverse proxy",
+  "why": "James: &ldquo;That&rsquo;s the only thing in the way of me launching and fixing this slow- website, which I want to do immediately.&rdquo; No new date was given and tonight wasn&rsquo;t mentioned. Emman handles the Cloudflare cutover."
+ },
+ {
+  "dept": "Web Dev",
+  "stream": "Nova Farms",
+  "who": "James",
+  "sev": "next",
+  "m": "nova",
+  "ask": "Chase Sweed directly for a tech contact if Nova&rsquo;s email hasn&rsquo;t produced an intro by tomorrow",
+  "why": "&ldquo;I believe where we left off with Sweed is we&rsquo;re waiting for one of their technical people to follow up with us. I haven&rsquo;t received any follow-up.&rdquo; The chase-tomorrow step is a suggestion; it wasn&rsquo;t said on the call."
+ },
+ {
+  "dept": "Web Dev",
+  "stream": "Nova Farms",
+  "who": "James",
+  "sev": "gate",
+  "m": "nova",
+  "ask": "At launch, give Nova&rsquo;s content team their own SGEN backend logins and a walkthrough",
+  "why": "Celia asked: &ldquo;Or will we have our own backend that we can go in?&rdquo; The answer (Fathom credits Celia; by content it&rsquo;s James): &ldquo;You&rsquo;ll have your own backend. It&rsquo;s almost identical to WordPress.&rdquo; / &ldquo;You&rsquo;ll feel right at home.&rdquo;"
+ },
+ {
+  "dept": "Web Dev",
+  "stream": "Nova Farms",
+  "who": "Jasper",
+  "sev": "gate",
+  "m": "nova",
+  "ask": "Before cutover, copy any blog posts Nova publishes on the live site this week into the SGEN build",
+  "why": "Said on the call: &ldquo;We had a few come out this week.&rdquo; The SGEN build was cloned from the live site, so new posts would be lost at the DNS switch. This step is an inference; it wasn&rsquo;t agreed on the call."
+ },
+ {
+  "dept": "Web Dev",
+  "stream": "Nova Farms",
+  "who": "James",
+  "sev": "later",
+  "m": "nova",
+  "ask": "Take Nova&rsquo;s content and publishing requests whenever they send them",
+  "why": "&ldquo;And you can always send stuff over to us, too, if you&rsquo;re running into any trouble&hellip; Like, we are that kind of service for you as well.&rdquo; Nova: &ldquo;Thank you so much, James. That&rsquo;s awesome.&rdquo; Standing offer; Web Dev does the work."
+ },
+ {
+  "dept": "Account Mgmt",
+  "stream": "Nova Farms",
+  "who": "James",
+  "sev": "next",
+  "m": "nova",
+  "ask": "Get Todd&rsquo;s availability and rebook the Nova Brand Deep Dive for Wed 09-30 or Thu 10-01, with an invite",
+  "why": "&ldquo;So I&rsquo;d say as long as we get through this before the week is over, we&rsquo;re all good.&rdquo; / &ldquo;Let&rsquo;s shoot for Wednesday or Thursday then.&rdquo; No time was set and nobody said who sends the invite. Todd hadn&rsquo;t replied during the call: &ldquo;He just hasn&rsquo;t gotten back to me yet&rdquo;."
+ },
+ {
+  "dept": "Account Mgmt",
+  "stream": "Nova Farms",
+  "who": "James",
+  "sev": "now",
+  "m": "nova",
+  "ask": "Watch for Nicole Suraci&rsquo;s Sweed email and the tech-contact intro, and reply the same day",
+  "why": "&ldquo;I&rsquo;ll look out for you guys&rsquo; emails.&rdquo; Nicole: &ldquo;I&rsquo;m going to this sent right now.&rdquo; Email isn&rsquo;t in today&rsquo;s evidence, so whether anything arrived after 11:07 PT is unknown."
+ },
+ {
+  "dept": "Account Mgmt",
+  "stream": "Nova Farms",
+  "who": "James",
+  "sev": "now",
+  "m": "nova",
+  "ask": "Tell Matt in writing that tonight&rsquo;s launch waits on Sweed, and give the next target",
+  "why": "On 09-24 Matt planned to brief ownership today and have the teams watching Tuesday morning. Today&rsquo;s call only heard that Sweed is &ldquo;the only thing in the way&rdquo;. This step is an inference; it wasn&rsquo;t agreed today."
+ },
+ {
+  "dept": "Account Mgmt",
+  "stream": "Nova Farms",
+  "who": "James",
+  "sev": "gate",
+  "m": "nova",
+  "ask": "Review Nova&rsquo;s revised brand folder before the rescheduled deep dive",
+  "why": "&ldquo;As soon as you guys have it together, that way I can review it before we jump on the phone.&rdquo; Celia: &ldquo;the next couple days&rdquo;, &ldquo;about 13 gigabytes&rdquo;. How a 13 GB file will be sent wasn&rsquo;t discussed."
+ },
+ {
+  "dept": "Design",
+  "stream": "Nova Farms",
+  "who": "Mikko",
+  "sev": "later",
+  "m": "nova",
+  "ask": "Note that Nova is making its own Green Wednesday and Thanksgiving creative, and don&rsquo;t duplicate it",
+  "why": "Celia, in side chat (not a request to us): &ldquo;I&rsquo;m doing the Green Wednesday and, like, Thanksgiving imagery, and I think I&rsquo;m, like, finally landing on a concept.&rdquo; Concepts: a retro 2000s shopping-cart look, and &ldquo;friends having fun&rdquo; plus a cousin&rsquo;s walk idea for Thanksgiving."
+ },
+ {
+  "dept": "Outreach",
+  "stream": "Noire",
+  "who": "James",
+  "sev": "now",
+  "m": "noire",
+  "ask": "Decide today whether tomorrow&rsquo;s Noire text still goes out, and tell whoever can edit the SweedPos draft",
+  "why": "You told Giovanni: &ldquo;I think we should reserve text messages for, like, the morning of an event or the morning of a big sale or a holiday.&rdquo; Any Noire text already scheduled this week should be checked against that."
+ },
+ {
+  "dept": "Outreach",
+  "stream": "Noire",
+  "who": "James",
+  "sev": "now",
+  "m": "noire",
+  "ask": "Talk with the team today about promoting the Magic Gardens VIP giveaway, and check whether outreach has room to rush it",
+  "why": "&ldquo;Let me, let me both think about this and talk with, with my team, uh, a little later today.&rdquo; / &ldquo;If there is time in the queue and we can rush something, I do think that there&rsquo;s something worth it.&rdquo; Said again later: &ldquo;Let me think about this, talk with my team&rdquo;. Tonight&rsquo;s Graphics &amp; Creative (6:15 PM PT) is one place to do it."
+ },
+ {
+  "dept": "Outreach",
+  "stream": "Noire",
+  "who": "James",
+  "sev": "week",
+  "m": "noire",
+  "ask": "Make sure Giovanni has the unsubscribe ratio by Wed 09-30 (the &ldquo;no later than Wednesday&rdquo; promise may be yours; speaker unclear), then give him the SMS unsubscribe answer owed since 08-18",
+  "why": "Neither side could find unsubscribes in Sweed: &ldquo;It&rsquo;s showing gross figures. I&rsquo;d love to see the unsubscribe ratio out of this.&rdquo; Then: &ldquo;So I will work on that. I will have that no later than Wednesday for you.&rdquo; Who said the Wednesday line is unclear on the recording (said on the call)."
+ },
+ {
+  "dept": "Outreach",
+  "stream": "Noire",
+  "who": "Dimple",
+  "sev": "week",
+  "m": "noire",
+  "ask": "Rework Noire&rsquo;s schedule so texts go out only on event, big-sale or holiday mornings, and keep emails as they are",
+  "why": "James: &ldquo;And my advice is let&rsquo;s scale down on the texts.&rdquo; / &ldquo;just let the emails roll.&rdquo; / &ldquo;Because I don&rsquo;t think we&rsquo;re being annoying in the emails.&rdquo;"
+ },
+ {
+  "dept": "Outreach",
+  "stream": "Noire",
+  "who": "James",
+  "sev": "week",
+  "m": "noire",
+  "ask": "Have the email-vs-text conversion data ready to back the text cut",
+  "why": "&ldquo;I think the email, and I have enough data to be confident on this, the email is where we&rsquo;re getting conversions.&rdquo; / &ldquo;I&rsquo;m seeing a lack of conversion association with text messages across all of our accounts.&rdquo; Giovanni wants spend only where returns are proven. Because James described all accounts, the same cut may apply to other clients (inference)."
+ },
+ {
+  "dept": "Outreach",
+  "stream": "Noire",
+  "who": "Dimple",
+  "sev": "gate",
+  "m": "noire",
+  "ask": "When James approves, build the Magic Gardens flash-giveaway sends",
+  "why": "James&rsquo;s proposal: &ldquo;any purchase on Tuesday, Wednesday, the 13th and 14th qualifies for your chance to win&rdquo;, with the raffle &ldquo;Wednesday at like 2pm&rdquo;, because &ldquo;You want to have urgency on that&rdquo;. Fix the tease dates first. He said &ldquo;Thursday, Friday, the 10th, 11th, and 12th&rdquo;, but Thu/Fri are 10-08/09 and 10-10 to 10-12 are Sat&ndash;Mon."
+ },
+ {
+  "dept": "Design",
+  "stream": "Noire",
+  "who": "Mikko / Nicole Dreo",
+  "sev": "gate",
+  "m": "noire",
+  "ask": "When James approves, make the Magic Gardens giveaway creative (email, text and push, plus social if in scope)",
+  "why": "Giovanni: &ldquo;if we could do something on social, this is something we would want to promote.&rdquo; Feature the $300 gift bag and the gold card (&ldquo;it&rsquo;s like a golden ticket&rdquo;). Whether Dispenza runs Noire&rsquo;s social is unverified."
+ },
+ {
+  "dept": "Account Mgmt",
+  "stream": "Noire",
+  "who": "James",
+  "sev": "week",
+  "m": "noire",
+  "ask": "Send Giovanni the Magic Gardens plan: raffle or first-come, entry days, draw time and channels",
+  "why": "Giovanni: &ldquo;I&rsquo;ll let you all lead on this.&rdquo; On the call (labelled Giovanni, reads as James): &ldquo;So I owe you some answers.&rdquo; Giovanni&rsquo;s first thought was &ldquo;first come first serve&rdquo;; the raffle was James&rsquo;s idea. The plan is needed before the tease starts around 10-08 (inference)."
+ },
+ {
+  "dept": "Account Mgmt",
+  "stream": "Noire",
+  "who": "James",
+  "sev": "now",
+  "m": "noire",
+  "ask": "Save the Magic Gardens flyer and link Giovanni posted in the Meet chat, and pass them to the team",
+  "why": "Giovanni: &ldquo;I&rsquo;m sending you the link just so you can just...&rdquo; James: &ldquo;I haven&rsquo;t had the chance to read the whole text here.&rdquo; The link isn&rsquo;t in the transcript."
+ },
+ {
+  "dept": "Account Mgmt",
+  "stream": "Noire",
+  "who": "James",
+  "sev": "week",
+  "m": "noire",
+  "ask": "Make sure a Sweed rep walkthrough of Noire&rsquo;s reporting gets booked, and confirm with Giovanni who books it",
+  "why": "&ldquo;I think it&rsquo;s time to, like, get a rep on the phone so they can walk us through&rdquo; / &ldquo;Like, most reports are showing me zero data.&rdquo; Closing: &ldquo;let&rsquo;s get an appointment on the books with Sweed so we can figure out this data thing.&rdquo; &mdash; &ldquo;Will do.&rdquo;, which may be Giovanni. Fathom assigns it to James."
+ },
+ {
+  "dept": "Account Mgmt",
+  "stream": "Noire",
+  "who": "James",
+  "sev": "week",
+  "m": "noire",
+  "ask": "Book the next Noire check-in and settle the meeting cadence and his day-to-day contact",
+  "why": "The call ended &ldquo;Talk you soon.&rdquo; with no date set."
+ },
+ {
+  "dept": "Account Mgmt",
+  "stream": "Noire",
+  "who": "James",
+  "sev": "week",
+  "m": "noire",
+  "ask": "Tell Giovanni that Darrell has moved on and who handles his account now",
+  "why": "Giovanni still names Darrell: &ldquo;Um, yeah, Darrell was good with that.&rdquo; / &ldquo;So that was the next thing Darrell.&rdquo; Only Nick&rsquo;s absence came up today."
+ },
+ {
+  "dept": "SEO",
+  "stream": "Noire",
+  "who": "James",
+  "sev": "week",
+  "m": "noire",
+  "ask": "Check local competitors&rsquo; Weedmaps and Leafly listings, then give Giovanni a keep-or-cut answer on the ~$700/month",
+  "why": "Giovanni: &ldquo;Uh, both about $350 a month each.&rdquo; / &ldquo;I&rsquo;m just throwing money away&rdquo;. James: &ldquo;I&rsquo;m going to get you an exact science answer on that.&rdquo; / &ldquo;Let me pull the data and give you an exact answer.&rdquo; No date was given."
+ },
+ {
+  "dept": "SEO",
+  "stream": "Noire",
+  "who": "James",
+  "sev": "gate",
+  "m": "noire",
+  "ask": "Once Giovanni sends access, build the Weedmaps/Leafly optimization plan",
+  "why": "&ldquo;Get me access. We&rsquo;ll make a plan for that as well.&rdquo; Darrell&rsquo;s open thread was &ldquo;optimization, getting the deals out there, and keeping it fresh&rdquo;. Also confirm delivery: he said &ldquo;I&rsquo;m on a basic delivery listing&rdquo; but also &ldquo;I don&rsquo;t think we&rsquo;ve done anything yet to list delivery.&rdquo; If the answer is to cut, this plan is moot."
+ },
+ {
+  "dept": "Web Dev",
+  "stream": "Noire",
+  "who": "Jasper",
+  "sev": "next",
+  "m": "noire",
+  "ask": "Make sure Giovanni&rsquo;s weekly deals sheet arrives by Tue 09-29",
+  "why": "James: &ldquo;You got the email from Jasper reminding you on the spreadsheet, right?&rdquo; Giovanni: &ldquo;We&rsquo;ve been conversing and I&rsquo;m on it.&rdquo; Nothing shows it submitted, and it was late on 09-16 and 09-23. Jasper sends the reminders."
+ },
+ {
+  "dept": "Account Mgmt",
+  "stream": "High Society",
+  "who": "James",
+  "sev": "next",
+  "m": "hs",
+  "ask": "Check whether Anthony&rsquo;s weekend message still needs a reply, and route anything he sends Nick",
+  "why": "Anthony: &ldquo;I asked him the question and he just didn&rsquo;t answer.&rdquo; James: &ldquo;I&rsquo;m so sorry about that.&rdquo; The banter after it (&ldquo;Being cordial, you know&rdquo;) suggests a check-in, not a work question. Who &ldquo;he&rdquo; is wasn&rsquo;t said. While Nick is on leave, route HS messages to Mikko, Jasper or James."
+ },
+ {
+  "dept": "Account Mgmt",
+  "stream": "High Society",
+  "who": "James",
+  "sev": "next",
+  "m": "hs",
+  "ask": "Chase Anthony on the name.com proof of ownership until access is back",
+  "why": "&ldquo;I cannot tell you how important every day that passes, it&rsquo;s more and more important.&rdquo; / &ldquo;let&rsquo;s push for this name.com so I can go crazy man&rdquo;. Anthony: &ldquo;yep I will I&rsquo;m gonna push on that&rdquo;. Registrar access has been outstanding since at least 06-10."
+ },
+ {
+  "dept": "Account Mgmt",
+  "stream": "High Society",
+  "who": "James",
+  "sev": "next",
+  "m": "hs",
+  "ask": "Confirm Anthony has Mikko&rsquo;s and Jasper&rsquo;s correct email addresses",
+  "why": "&ldquo;I&rsquo;ll just put them in the chat really quick.&rdquo; The transcript garbles it (&ldquo;Jasper is at Good&rdquo;); later it says &ldquo;Also include Jasper at Dispenza on that one.&rdquo; Anthony: &ldquo;Dude, I have so many different email addresses.&rdquo;"
+ },
+ {
+  "dept": "Outreach",
+  "stream": "High Society",
+  "who": "James",
+  "sev": "now",
+  "m": "hs",
+  "ask": "Forward Anthony&rsquo;s Q4 plan doc to Mikko",
+  "why": "Anthony: &ldquo;So I shared with you, um, a Google doc.&rdquo; James: &ldquo;I can pull it up by email.&rdquo; It sets the Q4 email days, SMS days and asset go-live dates. The doc reached James by email, so the team may not have it."
+ },
+ {
+  "dept": "Outreach",
+  "stream": "High Society",
+  "who": "Mikko",
+  "sev": "week",
+  "m": "hs",
+  "ask": "Load the HS Q4 doc&rsquo;s email, SMS and asset go-live dates into the outreach calendar and graphics queue",
+  "why": "&ldquo;tells us, you know, what, what day we were sending emails, what days we&rsquo;re sending SMS&rdquo;. Not settled: who makes the weekly graphics (Anthony: &ldquo;now I can just kind of feed this in and get everything made&rdquo;), and who uploads the Weedmaps and Dutchie &ldquo;assets go live&rdquo; items."
+ },
+ {
+  "dept": "Design",
+  "stream": "High Society",
+  "who": "Mikko / Nicole Dreo",
+  "sev": "week",
+  "m": "hs",
+  "ask": "Build HS October (Halloween) concepts that evolve through the campaign, with options for Anthony to choose from",
+  "why": "James: &ldquo;I think we can make evolutions of content instead of the same exact content&rdquo; / &ldquo;Like October is an opportunity for sure to try something out like that.&rdquo; / &ldquo;I&rsquo;ve already passed off workflows to my design team&rdquo;. Confirm the team has those workflows. Tonight&rsquo;s Graphics &amp; Creative is a good place to hand it off."
+ },
+ {
+  "dept": "Design",
+  "stream": "High Society",
+  "who": "Mikko",
+  "sev": "gate",
+  "m": "hs",
+  "ask": "When Anthony&rsquo;s Jars emails arrive, propose a Jars-style format for the HS weekly newsletter",
+  "why": "&ldquo;Yeah, we&rsquo;ll take a look at them and see if it helps us and gives us any direction.&rdquo; Anthony likes that &ldquo;it feels like uniform and it feels like a newsletter&rdquo;: points, app download, deals, happy hour, lifestyle photos."
+ },
+ {
+  "dept": "Design",
+  "stream": "High Society",
+  "who": "James",
+  "sev": "gate",
+  "m": "hs",
+  "ask": "Mock up the HS new-customer punch card once Anthony sends the terms",
+  "why": "&ldquo;And then I&rsquo;ll mock something up for a graphic for you.&rdquo; Waits on Anthony&rsquo;s fifth-visit terms."
+ },
+ {
+  "dept": "Design",
+  "stream": "High Society",
+  "who": "Unassigned",
+  "sev": "later",
+  "m": "hs",
+  "ask": "Print the punch cards once the mock-up is approved",
+  "why": "&ldquo;And we&rsquo;ll print them out and see what happens.&rdquo; Who prints and who pays wasn&rsquo;t said."
+ },
+ {
+  "dept": "Outreach",
+  "stream": "High Society",
+  "who": "James",
+  "sev": "gate",
+  "m": "hs",
+  "ask": "Own the HS progressive new-customer campaign you offered to build: terms, then mock-up, print and tracking",
+  "why": "&ldquo;Have you started working on, or is this something we can help you with in actually making a progressive new customer campaign?&rdquo; Anthony: &ldquo;But if you think that we need to change it, I&rsquo;m definitely open to it.&rdquo; This is the umbrella for the punch-card items. It waits on his terms."
+ },
+ {
+  "dept": "Product & Software",
+  "stream": "High Society",
+  "who": "James",
+  "sev": "gate",
+  "m": "hs",
+  "ask": "Set up punch-card reporting: gross new customers vs fifth-visit cards collected",
+  "why": "&ldquo;Because like it&rsquo;s really easy to see gross new customers.&rdquo; / &ldquo;And then we can track how many punch cards we&rsquo;ve collected on that fifth visit over a period of time.&rdquo;"
+ },
+ {
+  "dept": "Product & Software",
+  "stream": "High Society",
+  "who": "James",
+  "sev": "week",
+  "m": "hs",
+  "ask": "Brief the software team this week on the HS deal-analytics tool and bring back their feedback",
+  "why": "&ldquo;I&rsquo;m going to talk with my software team at some point this week on this project, get their initial feedback, and then we&rsquo;ll start poking around.&rdquo; Anthony: &ldquo;I&rsquo;ll need help, I guess.&rdquo; James: &ldquo;I really think that we can build something for this.&rdquo;"
+ },
+ {
+  "dept": "Product & Software",
+  "stream": "High Society",
+  "who": "Software team",
+  "sev": "week",
+  "m": "hs",
+  "ask": "Scope the HS deal tool: scrape high spy.io within 3&ndash;5 miles, run the deal analysis deterministically, and back it with published deal-strategy research",
+  "why": "James: &ldquo;So if, if this was just scraped for all the deals, then we know, we know what everybody is running exactly.&rdquo; / &ldquo;all this is deterministic processing&rdquo;. Anthony&rsquo;s own process: &ldquo;I did mine based off 90 days&rdquo; of usage and margin, then competitor prices, and cover the big three (Mitten, Muha, MKX). Still open: Anthony says he can &ldquo;have my agent go ahead and do it&rdquo;."
+ },
+ {
+  "dept": "Product & Software",
+  "stream": "High Society",
+  "who": "James",
+  "sev": "gate",
+  "m": "hs",
+  "ask": "In the HS sales data matrix, test whether the 2025 visit card lifted return visits",
+  "why": "&ldquo;I&rsquo;m going to make a note of that when we get a little more intimate with building a data matrix for your sales.&rdquo; Waits on Anthony sending the card and its dates."
+ },
+ {
+  "dept": "Web Dev",
+  "stream": "High Society",
+  "who": "Jasper",
+  "sev": "gate",
+  "m": "hs",
+  "ask": "Watch for Anthony&rsquo;s name.com email and move HS to 3.0 as soon as registrar access is back",
+  "why": "&ldquo;Look, I want to do more, but we gotta get you on 3.0.&rdquo; / &ldquo;after we get to 3.0, let&rsquo;s just hypothetically say we can get it done this week.&rdquo; Anthony will CC Jasper."
+ },
+ {
+  "dept": "Web Dev",
+  "stream": "High Society",
+  "who": "James",
+  "sev": "gate",
+  "m": "hs",
+  "ask": "After 3.0, remake the HS site in the AI-suggestions content strategy",
+  "why": "&ldquo;Can I, can I remake it in this alternate strategy and see if I can, I can, you know, circumvent the loss of search volume as a whole on Google right now?&rdquo; &mdash; &ldquo;then I&rsquo;ll take that as a green light&rdquo;. Anthony: &ldquo;I&rsquo;m definitely interested&rdquo;. SEO shares the content work."
+ },
+ {
+  "dept": "Marketing",
+  "stream": "High Society",
+  "who": "James",
+  "sev": "gate",
+  "m": "hs",
+  "ask": "Plan the HS remake as Dispenza&rsquo;s AI-search case study",
+  "why": "&ldquo;a massive win on this and I&rsquo;m looking for a huge case study right now&rdquo;. It waits on the 3.0 move and the remake."
+ },
+ {
+  "dept": "Account Mgmt",
+  "stream": "High Society",
+  "who": "James",
+  "sev": "now",
+  "m": "hs",
+  "ask": "Tell Mikko and Jasper they are now Anthony&rsquo;s direct contacts (Mikko for design and outreach, Jasper for web), and to expect his emails: the Jars newsletter stack (CC both) and the name.com thread (CC Jasper)",
+  "why": "James set the routing on the call: &ldquo;Mikko&rsquo;s like all things design and outreach.&rdquo; / &ldquo;Jasper&rsquo;s all things web.&rdquo; (Fathom labels the first line Anthony; by content it is James). He also asked Anthony: &ldquo;And also CC, Mikko, and Jasper.&rdquo; and &ldquo;Also include Jasper at Dispenza on that one.&rdquo;"
+ }
+];
+
+const LANDED = [
+ {
+  "b": "Giovanni confirmed Jasper&rsquo;s deal-sheet reminder",
+  "s": "&ldquo;We&rsquo;ve been conversing and I&rsquo;m on it.&rdquo;",
+  "i": "Noire call 12:21 PT",
+  "dept": "Account Mgmt"
+ },
+ {
+  "b": "HS Q4 send plan received",
+  "s": "Anthony emailed a Google Doc with the Q4 email days, SMS days and asset go-live dates.",
+  "i": "HS call 13:08 PT",
+  "dept": "Outreach"
+ },
+ {
+  "b": "name.com route agreed for HS",
+  "s": "Anthony goes through live chat and proves ownership with an invoice (&ldquo;look up an invoice, find proof of payment&rdquo;). It was given verbally only.",
+  "i": "HS call 13:23&ndash;13:24 PT",
+  "dept": "Web Dev"
+ },
+ {
+  "b": "Anthony&rsquo;s deal process captured on record",
+  "s": "90 days of usage and margin, competitor prices via high spy.io, and the big three staples. James: &ldquo;I got all that on record, and that was gold.&rdquo;",
+  "i": "HS call 13:14&ndash;13:18 PT",
+  "dept": "Product & Software"
+ },
+ {
+  "b": "Anthony got the team update",
+  "s": "Only the end was recorded: &ldquo;we won&rsquo;t let you down, don&rsquo;t worry.&rdquo;",
+  "i": "HS call 13:02 PT",
+  "dept": "Account Mgmt"
+ }
+];
+
+const CLIENT = [
+ {
+  "who": "Nicole Suraci (Nova Farms)",
+  "what": "Email Sweed&rsquo;s Kristi, &ldquo;Sandie&rdquo; and Eugene on the existing thread, CC James and Matt, asking for a direct tech contact (&ldquo;Reverse proxy is the conversation&rdquo;). She said &ldquo;I&rsquo;m going to this sent right now.&rdquo;",
+  "blocks": "The reverse proxy, and so the Nova launch",
+  "depts": [
+   "Web Dev",
+   "Account Mgmt"
+  ]
+ },
+ {
+  "who": "Nova team (no one named)",
+  "what": "Phone Sweed for a direct tech contact and &ldquo;just say it&rsquo;s urgent&rdquo;",
+  "blocks": "The reverse proxy, and so the Nova launch",
+  "depts": [
+   "Web Dev"
+  ]
+ },
+ {
+  "who": "Todd Wender (Nova Farms, via Matt / Celia)",
+  "what": "His availability for Wed 09-30 or Thu 10-01",
+  "blocks": "Rebooking the Brand Deep Dive",
+  "depts": [
+   "Account Mgmt"
+  ]
+ },
+ {
+  "who": "Celia Velez / Todd Wender (Nova Farms)",
+  "what": "The revised brand and media folder, &ldquo;about 13 gigabytes&rdquo;, in &ldquo;the next couple days&rdquo;",
+  "blocks": "James&rsquo;s review before the deep dive",
+  "depts": [
+   "Design",
+   "Account Mgmt"
+  ]
+ },
+ {
+  "who": "Giovanni Paul (Noire)",
+  "what": "Find the unsubscribe report in Sweed through his consultants, &ldquo;no later than Wednesday&rdquo; (said on the call; the speaker is unclear, so it may be your promise)",
+  "blocks": "The SMS unsubscribe answer owed since 08-18",
+  "depts": [
+   "Outreach"
+  ]
+ },
+ {
+  "who": "Giovanni Paul (Noire)",
+  "what": "Weedmaps and Leafly logins (&ldquo;Get me access.&rdquo;)",
+  "blocks": "The listing optimization plan",
+  "depts": [
+   "SEO"
+  ]
+ },
+ {
+  "who": "Giovanni Paul (Noire)",
+  "what": "The weekly deals spreadsheet, due Tue 09-29 (&ldquo;I&rsquo;m on it&rdquo;)",
+  "blocks": "Next cycle&rsquo;s graphics, upload and schedule",
+  "depts": [
+   "Design",
+   "Outreach"
+  ]
+ },
+ {
+  "who": "Giovanni Paul (Noire)",
+  "what": "Check with his staff on raffle vs first-come and timing (&ldquo;Let me let me talk to my staff on this&rdquo;; speaker not certain)",
+  "blocks": "Building any Magic Gardens sends",
+  "depts": [
+   "Outreach",
+   "Design"
+  ]
+ },
+ {
+  "who": "Giovanni Paul (Noire)",
+  "what": "He may be booking the Sweed rep session (&ldquo;Will do.&rdquo;; speaker unclear)",
+  "blocks": "Finding Noire&rsquo;s unsubscribe, opt-in and loyalty data",
+  "depts": [
+   "Account Mgmt"
+  ]
+ },
+ {
+  "who": "Anthony Shimoon (High Society)",
+  "what": "Prove name.com ownership over live chat with an invoice, and email the thread to James with Jasper CC&rsquo;d (&ldquo;yep I will I&rsquo;m gonna push on that&rdquo;)",
+  "blocks": "The 3.0 move, the site remake and the case study",
+  "depts": [
+   "Web Dev"
+  ]
+ },
+ {
+  "who": "Anthony Shimoon (High Society)",
+  "what": "The fifth-visit punch-card terms: what it gets, the minimum spend, the $1 price",
+  "blocks": "The mock-up, printing and tracking",
+  "depts": [
+   "Design",
+   "Outreach"
+  ]
+ },
+ {
+  "who": "Anthony Shimoon (High Society)",
+  "what": "A stack of Jars marketing emails, CC Mikko and Jasper",
+  "blocks": "The Jars-style newsletter format",
+  "depts": [
+   "Design",
+   "Outreach"
+  ]
+ },
+ {
+  "who": "Anthony Shimoon (High Society)",
+  "what": "The old second/third-visit card and the dates it ran (&ldquo;It was like 2025.&rdquo;)",
+  "blocks": "The return-visit analysis",
+  "depts": [
+   "Product & Software"
+  ]
+ },
+ {
+  "who": "Anthony Shimoon (High Society)",
+  "what": "Unusual-shape hole punchers from Amazon (&ldquo;I&rsquo;ll do that.&rdquo;)",
+  "blocks": "Nothing on our side",
+  "depts": [
+   "Design"
+  ]
+ }
+];
+
+const DECISIONS = [
+ {
+  "v": "Decided",
+  "h": "The Nova Brand Deep Dive moves to Wed 09-30 or Thu 10-01",
+  "p": "Matt: &ldquo;But I do think this is probably one we need Todd for.&rdquo; / &ldquo;Then let&rsquo;s reschedule.&rdquo; James: &ldquo;Let&rsquo;s shoot for Wednesday or Thursday then.&rdquo; No time was set.",
+  "open": false
+ },
+ {
+  "v": "Decided",
+  "h": "Brand work does not hold up the Nova site build",
+  "p": "James: &ldquo;This slows us down anyway. I&rsquo;m not waiting on anything brand-related in all the things that we&rsquo;re doing.&rdquo;",
+  "open": false
+ },
+ {
+  "v": "Decided",
+  "h": "Nova runs its own blog through its own SGEN backend, and Dispenza posts on request",
+  "p": "&ldquo;You&rsquo;ll have your own backend. It&rsquo;s almost identical to WordPress.&rdquo; / &ldquo;you can always send stuff over to us, too&rdquo;",
+  "open": false
+ },
+ {
+  "v": "Still open",
+  "h": "The Nova launch date, now that tonight is blocked on Sweed",
+  "p": "&ldquo;That&rsquo;s the only thing in the way of me launching and fixing this slow- website, which I want to do immediately.&rdquo; No new date was given, and tonight wasn&rsquo;t mentioned.",
+  "open": true
+ },
+ {
+  "v": "Decided &mdash; James&rsquo;s advice, no schedule signed off",
+  "h": "Noire texts only on event, big-sale and holiday mornings; emails keep going",
+  "p": "&ldquo;I think we should reserve text messages for, like, the morning of an event or the morning of a big sale or a holiday or things of this nature and just let the emails roll.&rdquo; Giovanni: &ldquo;Okay.&rdquo; / &ldquo;So that&rsquo;s good to know.&rdquo;",
+  "open": false
+ },
+ {
+  "v": "Decided",
+  "h": "Dispenza leads the Magic Gardens VIP giveaway promotion",
+  "p": "Giovanni: &ldquo;I&rsquo;ll let you all lead on this. I just wanted to get it ahead of you just so we can try to figure this out.&rdquo;",
+  "open": false
+ },
+ {
+  "v": "Still open",
+  "h": "Magic Gardens: raffle or first-come, and the tease window",
+  "p": "James: &ldquo;any purchase on Tuesday, Wednesday, the 13th and 14th qualifies for your chance to win&rdquo;. Giovanni: &ldquo;I was just thinking maybe just first come first serve.&rdquo; The tease dates as spoken (&ldquo;Thursday, Friday, the 10th, 11th, and 12th&rdquo;) don&rsquo;t match the calendar.",
+  "open": true
+ },
+ {
+  "v": "Still open",
+  "h": "Keep or cut Noire&rsquo;s Weedmaps and Leafly listings (about $700/month)",
+  "p": "Giovanni: &ldquo;But to be honest, I&rsquo;m just throwing money away because conversions is little to none.&rdquo; James: &ldquo;Let me pull the data and give you an exact answer.&rdquo;",
+  "open": true
+ },
+ {
+  "v": "Still open",
+  "h": "Who books the Sweed rep session for Noire",
+  "p": "&ldquo;let&rsquo;s get an appointment on the books with Sweed so we can figure out this data thing.&rdquo; &mdash; &ldquo;Will do.&rdquo; (speaker unclear)",
+  "open": true
+ },
+ {
+  "v": "Decided &mdash; green light",
+  "h": "HS site gets remade in the AI-suggestions strategy after the 3.0 move",
+  "p": "&ldquo;Can I, can I remake it in this alternate strategy&hellip;?&rdquo; / &ldquo;I&rsquo;m definitely interested&rdquo; / &ldquo;then I&rsquo;ll take that as a green light&rdquo;",
+  "open": false
+ },
+ {
+  "v": "Decided &mdash; terms pending",
+  "h": "HS runs a new-customers-only punch card: fifth-visit reward, minimum spend, sold for $1",
+  "p": "&ldquo;But I&rsquo;m just thinking like the sushi punch card method for new customers only.&rdquo; Anthony: &ldquo;Yeah, I like that.&rdquo; / &ldquo;Come up with that.&rdquo;",
+  "open": false
+ },
+ {
+  "v": "Decided",
+  "h": "HS contacts: Mikko for design and outreach, Jasper for web",
+  "p": "&ldquo;Mikko&rsquo;s like all things design and outreach.&rdquo; / &ldquo;Jasper&rsquo;s all things web.&rdquo;",
+  "open": false
+ },
+ {
+  "v": "Still open",
+  "h": "Who makes the HS weekly graphics from the Q4 doc, and who uploads the Weedmaps/Dutchie assets",
+  "p": "Anthony: &ldquo;And now I can just kind of feed this in and get everything made&rdquo;. Nobody was assigned on the call.",
+  "open": true
+ },
+ {
+  "v": "Still open",
+  "h": "HS deal tool: does Dispenza build it, or advise Anthony&rsquo;s own agent?",
+  "p": "Anthony: &ldquo;I can have my agent go ahead and do it.&rdquo; James: &ldquo;I really think that we can build something for this.&rdquo;",
+  "open": true
+ }
+];
+
+const FIGS = [
+ {
+  "n": "7 min",
+  "l": "Nova Brand Deep Dive. Todd was in transit, so the brand session moved to Wed/Thu",
+  "cls": "bad"
+ },
+ {
+  "n": "13 GB",
+  "l": "Nova&rsquo;s revised brand and media folder. How it will be sent wasn&rsquo;t discussed",
+  "cls": ""
+ },
+ {
+  "n": "~$700",
+  "l": "Noire&rsquo;s monthly Weedmaps + Leafly spend (about $350 each). Giovanni: &ldquo;conversions is little to none&rdquo;",
+  "cls": "bad"
+ },
+ {
+  "n": "10 &times; $300",
+  "l": "Magic Gardens VIP tickets for Noire customers, each with a $300 gift bag, Thu 10-15. Invite only",
+  "cls": ""
+ },
+ {
+  "n": "20&ndash;30",
+  "l": "Noire customers who bought Magic Gardens in the last 90 days. The line has a month-long waitlist, so the goal is traffic, not stock",
+  "cls": ""
+ },
+ {
+  "n": "$80",
+  "l": "Magic Gardens vape ($70 each for two). Edibles $25 for 5 pieces; Lucy&rsquo;s pre-roll $15&ndash;20; five-pack about $45",
+  "cls": ""
+ },
+ {
+  "n": "Tue / Wed",
+  "l": "Noire&rsquo;s &ldquo;swing days&rdquo;. &ldquo;Wednesdays will be the pop&rdquo;, and some Thursdays are slow",
+  "cls": ""
+ },
+ {
+  "n": "Trending up",
+  "l": "Noire loyalty as of 09-27, per Giovanni&rsquo;s consultants. Gross figures only, with no unsubscribe ratio",
+  "cls": "good"
+ },
+ {
+  "n": "1,662",
+  "l": "HS AI-search impressions last week, up from about 350 a week two months ago (1,100, 1,100 and 1,250 the three weeks before). James&rsquo;s screen; not verified",
+  "cls": "good"
+ },
+ {
+  "n": "20%",
+  "l": "New Buffalo&rsquo;s share of HS AI-search impressions (about 2,000 of about 10,400 since early July; 600 suggestions last week), all within 3&ndash;4 weeks",
+  "cls": "good"
+ },
+ {
+  "n": "90 days",
+  "l": "Anthony&rsquo;s deal-review window: usage and margin per deal, then competitor prices via high spy.io",
+  "cls": ""
+ },
+ {
+  "n": "20 &rarr; 30&ndash;40",
+  "l": "James&rsquo;s hypothetical: second-visit returns per 100 new customers the punch card should lift",
+  "cls": ""
+ }
+];
+
+const CAL = [
+ {
+  "when": "Mon 09-28 night",
+  "what": "Nova launch, as Matt picked on 09-24",
+  "who": "James, Jasper, Emman",
+  "note": "ON HOLD: Sweed hasn&rsquo;t connected, and no new date was set on the call.",
+  "depts": [
+   "Web Dev",
+   "SEO",
+   "Account Mgmt"
+  ]
+ },
+ {
+  "when": "Tue 09-29",
+  "what": "Noire deal sheet due (standing Tuesday deadline)",
+  "who": "Giovanni",
+  "note": "&ldquo;I&rsquo;m on it&rdquo;",
+  "depts": [
+   "Design",
+   "Outreach"
+  ]
+ },
+ {
+  "when": "Wed 09-30",
+  "what": "Noire unsubscribe report",
+  "who": "Unclear who promised it (said on the call); James follows up",
+  "note": "&ldquo;I will have that no later than Wednesday for you.&rdquo;",
+  "depts": [
+   "Outreach"
+  ]
+ },
+ {
+  "when": "Wed 09-30 or Thu 10-01",
+  "what": "Nova Brand Deep Dive (rescheduled)",
+  "who": "James, Todd, Matt, Celia, Nicole S",
+  "note": "Time TBD; no invite sent yet. Review the brand folder first",
+  "depts": [
+   "Account Mgmt",
+   "Design"
+  ]
+ },
+ {
+  "when": "This week",
+  "what": "Brief the software team on the HS deal tool",
+  "who": "James",
+  "note": "&ldquo;at some point this week&rdquo;",
+  "depts": [
+   "Product & Software"
+  ]
+ },
+ {
+  "when": "This week (hoped)",
+  "what": "HS move to 3.0",
+  "who": "Jasper",
+  "note": "Only if Anthony clears name.com: &ldquo;let&rsquo;s just hypothetically say we can get it done this week&rdquo;",
+  "depts": [
+   "Web Dev"
+  ]
+ },
+ {
+  "when": "Thu 10-08 &ndash; Mon 10-12 (to confirm)",
+  "what": "Magic Gardens tease window",
+  "who": "Outreach",
+  "note": "As spoken, &ldquo;Thursday, Friday, the 10th, 11th, and 12th&rdquo; doesn&rsquo;t match the calendar",
+  "depts": [
+   "Outreach",
+   "Design"
+  ]
+ },
+ {
+  "when": "Tue 10-13 &amp; Wed 10-14 (proposed)",
+  "what": "Magic Gardens raffle entry days; draw Wed around 2 PM",
+  "who": "Noire + Outreach",
+  "note": "Proposed on the call, not locked",
+  "depts": [
+   "Outreach"
+  ]
+ },
+ {
+  "when": "Thu 10-15",
+  "what": "Magic Gardens VIP event",
+  "who": "Giovanni / Magic Gardens",
+  "note": "10 invite-only tickets with $300 gift bags",
+  "depts": [
+   "Outreach",
+   "Account Mgmt"
+  ]
+ }
+];
+
+const SRC = [
+ {
+  "n": "NovaFarms + Dispenza &middot; Brand Deep Dive",
+  "t": "Mon 11:01 AM",
+  "l": "7 min",
+  "r": "James, Matt Davidson, Celia Velez, Nicole Suraci. Booked for 60 min; rescheduled because Todd was in transit. Shared with all teams.",
+  "u": "https://fathom.video/share/EomzLMZGjcEutdEfvMoobUqQPy1FaCHE"
+ },
+ {
+  "n": "Noire &middot; Giovanni Paul",
+  "t": "Mon 12:00 PM",
+  "l": "21 min",
+  "r": "James, Giovanni Paul. NOT shared with the team.",
+  "u": "https://fathom.video/share/hyjfvQz1EsFa2vJP1Z3bGUQKk1X1vZ3k"
+ },
+ {
+  "n": "High Society &middot; Anthony Shimoon",
+  "t": "Mon 1:02 PM",
+  "l": "24 min",
+  "r": "James, Anthony Shimoon. NOT shared with the team.",
+  "u": "https://fathom.video/share/XYe-_i5rvoxoUepzd2PRuEnY2iM-KEKt"
+ }
+];
+
+const $ = (s) => document.querySelector(s);
+let view = 'dept', filter = '', person = null, sevFilter = null, deptFilter = null;
+const initials = (n) => n.split(/\s+/).filter(Boolean).slice(0,2).map(w=>w[0]).join('').toUpperCase();
+
+function itemHTML(it){
+  const m = MEET[it.m];
+  const srcChip = m.url
+    ? `<span class="chip src"><a href="${m.url}" target="_blank" rel="noopener">${m.label} &#8599;</a></span>`
+    : `<span class="chip src">${m.label}</span>`;
+  return `<li class="item sev-${it.sev}">
+    <p class="ask">${it.ask}</p>
+    <p class="why">${it.why}</p>
+    <div class="meta">
+      <span class="chip ${it.sev}">${SEV[it.sev].label}</span>
+      <span class="chip stream">${view === 'dept' ? it.stream : it.dept}</span>
+      ${srcChip}
+    </div>
+  </li>`;
+}
+
+function matches(it){
+  if (deptFilter && it.dept !== deptFilter) return false;
+  if (person && it.who !== person) return false;
+  if (sevFilter && it.sev !== sevFilter) return false;
+  if (!filter) return true;
+  return (it.who+' '+it.ask+' '+it.why+' '+it.stream+' '+it.dept+' '+MEET[it.m].label).toLowerCase().includes(filter);
+}
+
+function render(){
+  const rows = ITEMS.filter(matches);
+  $('#shown').textContent = rows.length === ITEMS.length
+    ? ITEMS.length + ' open · ' + new Set(ITEMS.map(i=>i.who)).size + ' owners'
+    : rows.length + ' of ' + ITEMS.length + ' shown';
+
+  const groups = new Map();
+  for (const it of rows){
+    const key = view === 'owner' ? it.who : (view === 'dept' ? it.dept : it.stream);
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(it);
+  }
+  const ordered = [...groups.entries()].sort((a,b) => {
+    const ra = Math.min(...a[1].map(i=>SEV[i.sev].rank));
+    const rb = Math.min(...b[1].map(i=>SEV[i.sev].rank));
+    if (ra !== rb) return ra - rb;
+    if (a[1].length !== b[1].length) return b[1].length - a[1].length;
+    return a[0].localeCompare(b[0]);
+  });
+
+  $('#board').innerHTML = ordered.map(([key, list]) => {
+    list.sort((x,y) => SEV[x.sev].rank - SEV[y.sev].rank);
+    const sub = view === 'owner' ? (PEOPLE[key] || '')
+      : (view === 'dept' ? (DEPTNOTE[key] || '') + ' \u00b7 ' + [...new Set(list.map(x=>x.stream))].length + ' client' + ([...new Set(list.map(x=>x.stream))].length>1?'s':'')
+      : list.length + ' open item' + (list.length>1?'s':''));
+    return `<article class="lane">
+      <div class="lane-head">
+        <div class="av">${initials(key)}</div>
+        <div class="who"><b>${key}</b><i>${sub}</i></div>
+        <div class="cnt">${list.length}</div>
+      </div>
+      <ul>${list.map(itemHTML).join('')}</ul>
+    </article>`;
+  }).join('');
+
+  // A filter set from the Departments strip stays on while you scroll past it, so
+  // the board silently shows a subset. Say so, loudly, right above the board.
+  const bits = [];
+  if (typeof deptFilter !== 'undefined' && deptFilter) bits.push(['Department', deptFilter]);
+  if (person) bits.push(['Person', person]);
+  if (sevFilter) bits.push(['When', SEV[sevFilter].label]);
+  if (filter) bits.push(['Search', filter]);
+  const fbar = $('#fbar');
+  if (bits.length) {
+    fbar.innerHTML = '<b>Filtered view</b>'
+      + bits.map(([k, v]) => '<span class="pill">' + k + ': ' + v + '</span>').join('')
+      + '<span>showing <b>' + rows.length + '</b> of ' + ITEMS.length + ' items \u2014 the rest are hidden, not missing.</span>'
+      + '<button type="button" id="fclear">Show all ' + ITEMS.length + '</button>';
+    fbar.className = 'fbar on';
+    const b = document.querySelector('#fclear');
+    if (b) b.addEventListener('click', () => { $('#clear').click(); });
+  } else {
+    fbar.innerHTML = '';
+    fbar.className = 'fbar';
+  }
+
+  $('#empty').hidden = rows.length > 0;
+}
+
+$('#flash').innerHTML = FLASH.map(f =>
+  `<article class="card"><span class="kicker">${f.kicker}</span><h3>${f.h}</h3><p>${f.p}</p><p>${f.p2}</p><span class="owner">${f.owner}</span></article>`).join('');
+
+$('#landed').innerHTML = LANDED.map(l =>
+  `<div class="land"><b>${l.b}</b><span>${l.s}</span><i>${l.i}</i></div>`).join('');
+
+$('#client').innerHTML = CLIENT.map(c =>
+  `<tr><td class="who">${c.who}</td><td>${c.what}</td><td>${c.blocks}</td></tr>`).join('');
+
+$('#decisions').innerHTML = DECISIONS.map(d =>
+  `<div class="dec${d.open?' open':''}"><span class="verdict">${d.v}</span><h4>${d.h}</h4><p>${d.p}</p></div>`).join('');
+
+$('#figs').innerHTML = FIGS.map(f =>
+  `<div class="fig ${f.cls}"><b>${f.n}</b><span>${f.l}</span></div>`).join('');
+
+$('#cal').innerHTML = CAL.map(c =>
+  `<tr><td class="when">${c.when}</td><td><b>${c.what}</b></td><td>${c.who}</td><td>${c.note}</td></tr>`).join('');
+
+$('#src').innerHTML = SRC.map(s =>
+  `<tr><td class="who">${s.n}</td><td class="when">${s.t}</td><td class="when">${s.l}</td><td>${s.r}</td>
+   <td>${s.u ? `<a href="${s.u}" target="_blank" rel="noopener">Fathom &#8599;</a>` : '&mdash;'}</td></tr>`).join('');
+
+function renderDeptBar(){
+  const counts = {}, hot = {};
+  for (const it of ITEMS){
+    counts[it.dept] = (counts[it.dept]||0)+1;
+    if (it.sev === 'now') hot[it.dept] = (hot[it.dept]||0)+1;
+  }
+  $('#deptbar').innerHTML = DEPTORDER.filter(k=>counts[k]).map(k =>
+    `<button type="button" data-dept="${k}" aria-pressed="false">
+      <span class="n">${counts[k]}</span>
+      <span class="nm">${k}</span>
+      <span class="hot">${hot[k] ? hot[k] + ' due today' : '&nbsp;'}</span>
+    </button>`).join('');
+  $('#deptbar').addEventListener('click', (e) => {
+    const b = e.target.closest('button'); if (!b) return;
+    deptFilter = deptFilter === b.dataset.dept ? null : b.dataset.dept;
+    [...$('#deptbar').children].forEach(x => x.setAttribute('aria-pressed', String(x.dataset.dept === deptFilter)));
+    render();
+  });
+}
+
+function renderTally(){
+  const counts = {};
+  for (const it of ITEMS) counts[it.sev] = (counts[it.sev]||0)+1;
+  $('#tally').innerHTML = Object.keys(SEV).map(k =>
+    `<button type="button" data-sev="${k}" aria-pressed="false"><span class="dot" style="background:var(--${k})"></span>${SEV[k].label}<span class="n">${counts[k]||0}</span></button>`).join('');
+  $('#tally').addEventListener('click', (e) => {
+    const b = e.target.closest('button'); if (!b) return;
+    sevFilter = sevFilter === b.dataset.sev ? null : b.dataset.sev;
+    [...$('#tally').children].forEach(x => x.setAttribute('aria-pressed', String(x.dataset.sev === sevFilter)));
+    render();
+  });
+}
+
+$('#viewseg').addEventListener('click', (e) => {
+  const b = e.target.closest('button'); if (!b) return;
+  view = b.dataset.view;
+  [...e.currentTarget.children].forEach(x => x.setAttribute('aria-pressed', String(x.dataset.view === view)));
+  render();
+});
+$('#q').addEventListener('input', (e) => { filter = e.target.value.trim().toLowerCase(); render(); });
+$('#clear').addEventListener('click', () => {
+  filter = ''; person = null; sevFilter = null; deptFilter = null;
+  $('#q').value = '';
+  [...$('#deptbar').children].forEach(x => x.setAttribute('aria-pressed','false'));
+  [...$('#tally').children].forEach(x => x.setAttribute('aria-pressed','false'));
+  render();
+});
+document.addEventListener('click', (e) => {
+  const head = e.target.closest('.lane-head');
+  if (!head || view !== 'owner') return;
+  const name = head.querySelector('.who b').textContent;
+  person = person === name ? null : name;
+  render();
+});
+
+renderDeptBar();
+renderTally();
+render();
+</script>
+
+</body>
+</html>
