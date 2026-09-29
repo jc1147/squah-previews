@@ -147,6 +147,9 @@
 
 
 
+    /* @release-strip:start forms-not-connected
+       M14 (plan ruling 12): build/build-release.mjs removes everything from this line to the matching end marker in the
+       launch release, where every form posts to /api/contact (the Cloudflare Pages function). The preview keeps it. */
     /* ---- forms without a backend ----
        This is a static build: POSTing to a static host returns 405. Rather
        than ship a button that errors, submission is intercepted and the
@@ -169,6 +172,7 @@
         note.style.color = 'var(--gold-200)';
       });
     });
+    /* @release-strip:end forms-not-connected */
 
     /* ---- the video FAQ (M3; owner, 2026-09-27: "Yes, use all 17") ----
        Each poster is a <button data-faq-video> holding the site's own MP4 (data-video-src). A click swaps it for ONE

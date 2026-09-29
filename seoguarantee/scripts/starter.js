@@ -112,6 +112,9 @@
     try { video.focus(); } catch (err) { /* focus is a courtesy */ }
   });
 
+  /* @release-strip:start forms-not-connected
+     M14 (plan ruling 12): build/build-release.mjs removes everything from this line to the matching end marker in the
+     launch release, where every form posts to /api/contact (the Cloudflare Pages function). The preview keeps it. */
   // G2 round 4: the shared app.js answers a submit on these not-yet-connected forms with "Please call
   // +1 (702) ..." (a phone-call CTA). On programme pages this capture-phase handler answers first and
   // stops the event before app.js's own listener on the form runs. No number, no call ask.
@@ -131,6 +134,7 @@
     note.textContent = 'This preview form is not connected yet, so nothing was sent.';
     note.style.color = 'var(--gold-200)';
   }, true);
+  /* @release-strip:end forms-not-connected */
 
   function ready(fn) {
     if (document.readyState !== 'loading') fn();
