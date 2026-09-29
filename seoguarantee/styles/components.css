@@ -1121,15 +1121,26 @@
 .contact-line__list li { margin: 0 0 0.2rem; font-size: var(--step--1); line-height: 1.5; }
 .contact-line__links { margin: var(--sp-2) 0 0; font-size: var(--step--1); }
 .contact-line__links a { text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
-/* Mikko's glass card links (a service card's link, a location card's title and place links). */
+/* Mikko's glass card links (a service card's link, a hub card's title and place links). */
 .card h2 a, .card h3 a { color: inherit; }
 .card h2 a:hover, .card h3 a:hover { color: var(--gold-200); }
-.loc-card__places { list-style: none; margin: var(--sp-3) 0 0; padding: 0; }
-.loc-card__places li { margin: 0 0 var(--sp-2); font-size: var(--step--1); line-height: 1.45; }
-.loc-card__places a { font-weight: 700; color: var(--gold-200); }
-.loc-card__places a:hover { color: var(--gold-100); }
-.loc-card__lead { display: block; color: var(--fg-muted); }
-.loc-card__city { margin-left: 0.15rem; padding-left: 0.75rem; border-left: 1px solid var(--glass-border); }
+/* M10: the hub card, ONE component on /locations/ and /industries/ (owner: "same style on both pages ... let's take that
+   exact style and just fill it all out"): the /locations/ state card's rules as they were (loc-card), plus a second
+   indented level (a city under a county under a state) and the compact industry row under a place. */
+.hub-card__places { list-style: none; margin: var(--sp-3) 0 0; padding: 0; }
+.hub-card__places li { margin: 0 0 var(--sp-2); font-size: var(--step--1); line-height: 1.45; }
+.hub-card__places a { font-weight: 700; color: var(--gold-200); }
+.hub-card__places a:hover { color: var(--gold-100); }
+.hub-card__lead { display: block; color: var(--fg-muted); }
+/* a deeper level sits behind its rule (the old city row as it rendered: the list item's own margin rule wins over a margin
+   set here, so the indent is the padding and the rule); the third level's rule stands under the second level's text */
+.hub-card__d1, .hub-card__d2 { padding-left: 0.75rem; border-left: 1px solid var(--glass-border); }
+.hub-card__places .hub-card__d2 { margin-left: calc(0.75rem + 1px); }
+.hub-card__niches { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 0.45rem; margin-top: 0.15rem; font-size: var(--step--1); line-height: 1.45; }
+.hub-card > .hub-card__niches { margin-top: var(--sp-2); }
+.hub-card__niches span { color: var(--fg-muted); }
+.hub-card .hub-card__niches a { font-weight: 600; color: var(--gold-200); text-decoration: underline; text-decoration-color: rgba(255, 201, 6, 0.4); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+.hub-card .hub-card__niches a:hover { color: var(--gold-100); text-decoration-color: currentColor; }
 /* The video FAQ: each title is its video, a click-to-play poster that turns into the player in place. */
 .faqvid-group + .faqvid-group { margin-top: var(--sp-8); }
 .faqvid-group__h { margin: 0 0 var(--sp-4); font-size: var(--step--1); font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold-200); }
@@ -1168,6 +1179,6 @@
   .smlist__d2 { padding-left: 1.4rem; }
   .smlist__d3 { padding-left: 2.1rem; }
   .smlist__d4 { padding-left: 2.8rem; }
-  .smlist a, .loc-card__places a { display: inline-block; padding-block: 0.35rem; }
+  .smlist a, .hub-card__places a, .hub-card__niches a { display: inline-block; padding-block: 0.35rem; }
   .legal-toc li { padding-block: 0.3rem; }
 }
