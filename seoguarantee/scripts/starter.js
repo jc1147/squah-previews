@@ -2,8 +2,7 @@
    Starter-test programme pages: Step-1 qualifier behaviour.
    Loaded only by pages build/gen-starter.mjs writes. No dependencies.
    Without JS the forms stay rendered; the site's noscript style hides
-   their controls and a short "turn on JavaScript" note shows (G2 round 4:
-   no phone-call CTA, owner: "No call to actions for phone calls please.").
+   their controls and a short "turn on JavaScript" note shows.
    ============================================================ */
 (function () {
   'use strict';
@@ -16,13 +15,23 @@
   // bar too while any of it is on screen, so the two identical asks never stack at the foot of the page.
   // G2 round 5 fixer (audit D6): the WANT OUR SEO GUARANTEES? band's own START HERE parks the bar too while any of it
   // is on screen, and so does the open phone menu (its own full-width START HERE sat above the still-visible bar).
-  // H2 gate work (render-pilots R26, 360-768px; owner 2026-09-25: "mobile sticky way too big and remove the background
-  // from it let the button float"): the floating button also parks while the hero video is on screen AT REST (on the
+  // H2 gate work (render-pilots R26, 360-768px, where the bar is one compact floating button with no background of
+  // its own): the floating button also parks while the hero video is on screen AT REST (on the
   // first phone screen it sat on the poster and its play button: render-pilots R26 found it at 360, 390, 414 and 768)
   // and while any other Start Here of the page body is on screen (the "Still deciding?" card's Start here, which it
   // overlapped at 360, 390 and 768), so the button never covers the video and never stacks on another Start Here.
-  var park = { hero: false, video: false, foot: false, band: false, menu: false, bar: null, videoObs: null, videoSeen: null };
-  function applyPark() { if (park.bar) park.bar.classList.toggle('is-parked', park.hero || park.video || park.foot || park.band || park.menu); }
+  // M15 (audit Y1): the button also parks while a Step 1 form (form.step1: the page's own and its closing band's) is on
+  // screen, or within FORM_MARGIN below it so the button is gone before the form scrolls up under it, and while focus is
+  // inside one, so it never covers the form's fields or its Submit button. The bar is hidden above 768px (starter.css),
+  // so none of this changes a wider screen.
+  var FORM_MARGIN = '0px 0px 120px 0px';
+  var park = { hero: false, video: false, foot: false, band: false, menu: false, form: false, focus: false, bar: null, videoObs: null, videoSeen: null };
+  function applyPark() { if (park.bar) park.bar.classList.toggle('is-parked', park.hero || park.video || park.foot || park.band || park.menu || park.form || park.focus); }
+  function syncFormFocus() {
+    var a = document.activeElement;
+    park.focus = Boolean(a && a.closest && a.closest('form.step1'));
+    applyPark();
+  }
   function setupPark() {
     park.bar = document.querySelector('.sticky-cta');
     if (!park.bar) return;
@@ -32,7 +41,22 @@
       new MutationObserver(syncMenu).observe(toggle, { attributes: true, attributeFilter: ['aria-expanded'] });
       syncMenu();
     }
+    // Focus inside a Step 1 form (read once the focus change is complete, so a move between two fields never shows the bar).
+    document.addEventListener('focusin', syncFormFocus);
+    document.addEventListener('focusout', function () { setTimeout(syncFormFocus, 0); });
+    syncFormFocus();
     if (!('IntersectionObserver' in window)) return;
+    var steps = document.querySelectorAll('form.step1');
+    if (steps.length) {
+      var stepSeen = new Map();
+      var stepObs = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) { stepSeen.set(e.target, e.isIntersecting); });
+        park.form = false;
+        stepSeen.forEach(function (v) { if (v) park.form = true; });
+        applyPark();
+      }, { rootMargin: FORM_MARGIN });
+      Array.prototype.forEach.call(steps, function (f) { stepObs.observe(f); });
+    }
     // Every Start Here of the page body except the hero's (the hero's own rule is below): the band's and the FAQ card's.
     var bandBtns = Array.prototype.filter.call(document.querySelectorAll('main a[data-qualify-open]'), function (a) { return !a.closest('.hero__actions'); });
     if (bandBtns.length) {
@@ -72,8 +96,8 @@
     if (facade) { park.videoSeen.set(facade, false); park.videoObs.observe(facade); }
   }
 
-  // G2 round 5 fixer (owner, 2026-09-25, verbatim: "this should play in the website not external link"): the hero
-  // poster is a <button> (data-video-src = the owner's own video file on this site). A click swaps it for ONE
+  // G2 round 5 fixer (the video plays in the page, never through an outside link): the hero
+  // poster is a <button> (data-video-src = the site's own video file). A click swaps it for ONE
   // <video controls autoplay playsinline> of that file in the same frame and starts it; no link leaves the page and
   // nothing is requested before the click. Without JavaScript the page's <noscript> <video> plays the same file.
   var VIDEO_SRC = /^\/assets\/media\/[0-9a-f]{8}-[a-z0-9-]+\.mp4$/;
@@ -115,9 +139,8 @@
   /* @release-strip:start forms-not-connected
      M14 (plan ruling 12): build/build-release.mjs removes everything from this line to the matching end marker in the
      launch release, where every form posts to /api/contact (the Cloudflare Pages function). The preview keeps it. */
-  // G2 round 4: the shared app.js answers a submit on these not-yet-connected forms with "Please call
-  // +1 (702) ..." (a phone-call CTA). On programme pages this capture-phase handler answers first and
-  // stops the event before app.js's own listener on the form runs. No number, no call ask.
+  // G2 round 4: the shared app.js answers a submit on forms without a backend as well; on these pages this
+  // capture-phase handler answers first and stops the event before app.js's own listener on the form runs.
   document.addEventListener('submit', function (e) {
     var form = e.target;
     if (!form || !form.hasAttribute || !form.hasAttribute('data-step1')) return;
@@ -165,12 +188,47 @@
     if (first) { try { first.focus({ preventScroll: true }); } catch (e) { first.focus(); } }
   }
 
+  // M15 (audit Y2): a Start Here inside the open phone menu closes the menu first (as app.js closes it on a tap
+  // outside it or on Escape), so the form it opens is not left under the menu panel.
+  function closeMenu() {
+    var toggle = document.querySelector('.nav-toggle');
+    var nav = document.querySelector('.nav');
+    if (!toggle || !(toggle.getAttribute('aria-expanded') === 'true' || (nav && nav.classList.contains('is-open')))) return;
+    toggle.setAttribute('aria-expanded', 'false');
+    if (nav) nav.classList.remove('is-open');
+  }
+
+  // M15 (audit Y2): arriving at #step-1, the browser's own jump to the fragment runs after open() and takes focus
+  // back off the name field (the form element itself cannot take focus, so the focus is cleared). Once the page has
+  // loaded and the scroll has come to rest (SETTLE_FRAMES frames at one position, at most SETTLE_MAX_MS), the name
+  // field takes focus again, unless focus is already on something other than the page itself.
+  var SETTLE_FRAMES = 10, SETTLE_MAX_MS = 4000;
+  function focusWhenSettled(form) {
+    var first = form.querySelector('input[name="name"]');
+    if (!first || !window.requestAnimationFrame) return;
+    var start = function () {
+      var lastY = null, still = 0, t0 = Date.now();
+      var tick = function () {
+        var y = window.pageYOffset;
+        still = y === lastY ? still + 1 : 0;
+        lastY = y;
+        if (still < SETTLE_FRAMES && Date.now() - t0 < SETTLE_MAX_MS) { window.requestAnimationFrame(tick); return; }
+        var a = document.activeElement;
+        if (a && a !== document.body && a !== document.documentElement) return;
+        try { first.focus({ preventScroll: true }); } catch (e) { first.focus(); }
+      };
+      window.requestAnimationFrame(tick);
+    };
+    if (document.readyState === 'complete') start();
+    else window.addEventListener('load', start);
+  }
+
   ready(function () {
     setupPark();
 
     // On phones the breadcrumb is one scrollable row that starts at "Home"; a CSS
     // fade on its right edge shows there is more. It is not auto-scrolled to its
-    // end: that left the first crumb cut mid-word at rest (owner review, G2).
+    // end: that left the first crumb cut mid-word at rest (G2 review).
 
     var forms = document.querySelectorAll('form[data-step1]');
     Array.prototype.forEach.call(forms, function (form) {
@@ -188,13 +246,15 @@
       var form = document.getElementById(link.getAttribute('href').slice(1));
       if (!form || !form.hasAttribute('data-step1')) return;
       e.preventDefault();
+      closeMenu();
       open(form, link.getAttribute('data-qualify'));
     });
 
-    // Arriving on the page with #step-1 in the address opens the form too.
+    // Arriving on the page with #step-1 in the address opens the form too, and its name field takes focus once the
+    // page has settled.
     if (location.hash === '#step-1') {
       var f = document.getElementById('step-1');
-      if (f) open(f, null);
+      if (f) { open(f, null); focusWhenSettled(f); }
     }
 
     // G2 round 2: a derived-figure marker (dagger) links to #sources, a collapsed

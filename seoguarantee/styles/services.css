@@ -1,6 +1,6 @@
 /* ============================================================
-   services.css: the service section (M9; owner, 2026-09-28: "... let's use the same layout that we did and content flow for
-   the service pages as well like we did for dispenza ..."). /services/suite/ (the Full Suite hub) and the six service pages,
+   services.css: the service section (M9: the same layout and content flow as the Dispenza service pages).
+   /services/suite/ (the Full Suite hub) and the six service pages,
    rendered by build/service-pages.mjs. Loaded ONLY by those pages (build/main-pages.mjs headExtra), after tokens.css,
    base.css, components.css, motion.css and premium.css (whose rx-icon, rx-illus, rx-plate and rx-channel it reuses). Every
    class here is sv- prefixed, so nothing reaches another page. Complete at rest without JavaScript (the FAQ is <details>);
@@ -347,7 +347,7 @@ section.section[class*=" sv-"] { padding-block: clamp(3rem, 2rem + 4vw, 6rem); }
 .sv-read__go .rx-icon { display: inline-block; vertical-align: -0.22em; margin-left: 0.2rem; transition: transform var(--dur-fast) var(--ease-out); }
 .sv-read:hover .sv-read__go .rx-icon { transform: translateX(4px); }
 
-/* ---------- watch: the owner's FAQ videos for this service (the /videos/ cards) ---------- */
+/* ---------- watch: the FAQ videos for this service (the /videos/ cards) ---------- */
 .sv-watch .section-head { max-width: 820px; }
 .sv-watch__all { margin: var(--sp-5) 0 0; text-align: center; }
 .sv-gallery { margin-top: clamp(2.5rem, 2rem + 2vw, 4rem); }
@@ -504,7 +504,7 @@ section.section.sv-sources { padding-top: 0; }
 .sv-ind__media { display: block; aspect-ratio: 16 / 9; overflow: hidden; }
 .sv-ind__media img { width: 100%; height: 100%; object-fit: cover; transition: transform var(--dur-slow) var(--ease-out); }
 .sv-ind__card:hover .sv-ind__media img { transform: scale(1.05); }
-/* M11: a row whose page left the site (owner, on the old industry pages: "Remove them too") keeps its words and art as a
+/* M11: a row whose page left the site (the old industry pages are removed) keeps its words and art as a
    plain card, not a link, so it does not lift or zoom on hover */
 .sv-ind__card--plain:hover { transform: none; border-color: rgba(255, 255, 255, 0.1); }
 .sv-ind__card--plain:hover .sv-ind__media img { transform: none; }
@@ -597,15 +597,15 @@ section.section.sv-sources { padding-top: 0; }
   .sv-deliv__card, .sv-case, .sv-case__media img, .sv-case__mini img, .sv-read, .sv-read__go .rx-icon, .sv-link, .sv-svc, .sv-svc__art .sv-art, .sv-gallery__item, .sv-ind__card, .sv-ind__media img, .sv-points li, .sv-suitenav__item, .sv-check__box::after, .sv-faq__icon::before, .sv-faq__icon::after { transition: none; }
 }
 
-/* ---------- the contact page (M12; owner, 2026-09-28: "How about a proper contact page? lol :)") ----------
+/* ---------- the contact page (M12) ----------
    /contact-us/ (build/main-pages.mjs contact()) reuses the hero, the steps, the link cards and the FAQ above; these rules
    only place them, form-first: the page's own form sits in the hero beside the copy (right after it on phones), with
-   "What happens next" under the copy. M15 (owner, 2026-09-29: "ALso the contact page shouldn't we have the same form we use
-   on all the other pages there too?"): the form is the closing band's Get In Touch form (build/main-pages.mjs
+   "What happens next" under the copy. M15 (the contact page carries the same form as the other
+   pages): the form is the closing band's Get In Touch form (build/main-pages.mjs
    getInTouchForm(), the same markup), so it keeps the band's own field styles (components.css: one field a row, first and
    last name side by side only where the card is wide enough); the rules below only let its message box take the card's
-   spare height. (M12's rules set M3's own form, its first four fields two a row.) M15 (owner, 2026-09-29, "Step 1
-   everywhere": "The home page's qualifier goes on all 139 pages, contact included"): the card holds the Step 1 form
+   spare height. (M12's rules set M3's own form, its first four fields two a row.) M15, Step 1 everywhere (the home
+   page's qualifier form on all 139 pages, the contact page included): the card holds the Step 1 form
    (build/step1.mjs, with the band's field styles and components.css's Step 1 rules). It had no message box to take the
    column's spare height, so the card keeps its own height (its website field opens after "Yes") and the rules that
    stretched the card and its message box are gone. (M15 Step 1 message box, 2026-09-30: the form's one optional message
@@ -629,10 +629,28 @@ section.section.sv-sources { padding-top: 0; }
 /* the four "not ready yet" cards: two a row (their lines stay readable), one on phones */
 .ct-links li { flex-basis: calc((100% - var(--sp-4)) / 2); }
 .ct-trust { padding-top: 0; }
+/* M15 X4 (final audit, 2026-09-30): the contact page's "Featured on" band, laid out on purpose. Its rating line is longer
+   than /about/'s, so at 1440px the four logos filled the row and the 4.9 rating wrapped under them, centred on the row
+   rather than on the logos (and at 1024px the logos broke 3 + 1). Here the label, the logos and the rating each take their
+   own centred row, a short gold rule above the rating: four logos a row down to 1081px, two by two down to 481px, one a
+   row below that. Scoped to .ct-trust, so /about/'s band (premium.css) keeps its own layout. */
+.ct-trust .rx-trust__row { flex-direction: column; flex-wrap: nowrap; gap: var(--sp-4); }
+.ct-trust .rx-trust__logos { display: grid; grid-template-columns: repeat(4, auto); justify-content: center; justify-items: center; align-items: center; gap: var(--sp-5) var(--sp-7); }
+.ct-trust .rx-trust__rating { position: relative; margin-top: var(--sp-2); padding-top: var(--sp-5); }
+.ct-trust .rx-trust__rating::before { content: ""; position: absolute; top: 0; inset-inline: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(255, 201, 6, 0.6), transparent); }
 @media (max-width: 900px) {
   .ct-hero__grid { grid-template-columns: minmax(0, 1fr); grid-template-rows: none; grid-template-areas: "copy" "form" "next"; }
+}
+@media (max-width: 1080px) {
+  .ct-trust .rx-trust__logos { grid-template-columns: repeat(2, auto); }
 }
 @media (max-width: 640px) {
   .ct-form__card { padding: 1.3rem 1.1rem 1.4rem; border-radius: var(--r-lg); }
   .ct-links li { flex-basis: 100%; }
+  .ct-trust .rx-trust__logos { gap: var(--sp-4) var(--sp-5); }
+}
+@media (max-width: 480px) {
+  .ct-trust .rx-trust__logos { grid-template-columns: auto; }
+  .ct-trust .rx-trust__rating { flex-direction: column; gap: var(--sp-2); text-align: center; }
+  .ct-trust .rx-trust__rt { align-items: center; }
 }

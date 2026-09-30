@@ -23,7 +23,7 @@
   --font-body: "Montserrat", "Montserrat Fallback", "Futura LT", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
 
-/* ---- visible owner-input / pending placeholders ---- */
+/* ---- visible pending-input placeholders ---- */
 .slot-placeholder {
   border: 2px dashed var(--gold-300);
   background: repeating-linear-gradient(135deg, rgba(255, 180, 0, 0.10) 0 12px, rgba(255, 180, 0, 0.04) 12px 24px);
@@ -75,7 +75,7 @@ a[data-planned] { text-decoration: underline dotted; text-underline-offset: 3px;
 .hero__grid--programme > .hero__visual { grid-area: visual; }
 .hero__grid--programme > .hero__actions { grid-area: actions; margin-top: 0; align-self: start; }
 .hero__grid--programme > .trust-line { grid-area: trust; margin-top: 0; align-self: start; }
-/* G2 round 4 fixer (audit D5): with the call button and the pending note gone, the video sat at the top of the
+/* G2 round 4 fixer (audit D5): with the second hero button and the pending note gone, the video sat at the top of the
    right column with ~300px of nothing under it; above 1080px it now centres against the copy beside it. */
 @media (min-width: 1081px) { .hero__grid--programme > .hero__visual { align-self: center; } }
 @media (max-width: 1080px) {
@@ -93,7 +93,7 @@ a[data-planned] { text-decoration: underline dotted; text-underline-offset: 3px;
 .hero__lede { max-width: 60ch; }
 .gblock { margin: var(--sp-5) 0 var(--sp-2); }
 .gblock__sentence { margin: 0; font-size: var(--step-0); font-weight: 600; color: var(--fg); }
-/* G2 round 4 fixer (audit D6): at desktop widths the owner's guarantee sentence is set at the lede's size
+/* G2 round 4 fixer (audit D6): at desktop widths the guarantee sentence is set at the lede's size
    (1.38rem = 22.08px) and weight 600, so the line that explains "Guaranteed" in the H1 no longer reads as
    fine print under a bigger statistics paragraph. Still plain text (render-pilots R07). */
 @media (min-width: 1081px) { .gblock__sentence { font-size: 1.38rem; line-height: 1.45; } }
@@ -108,19 +108,19 @@ a[data-planned] { text-decoration: underline dotted; text-underline-offset: 3px;
 .hero__visual--video img { aspect-ratio: 600 / 338; max-height: none; object-fit: cover; }
 .vid-poster { margin: 0; position: relative; }
 .vid-poster__note { margin-top: var(--sp-3); font-size: var(--step--1); color: var(--fg-muted); line-height: 1.55; }
-/* The video's own opening line, quoted under the player (owner, 2026-09-25: "You can quote ... under the video. That's epic."). */
+/* The video's own opening line, quoted under the player. */
 .vid-poster__quote { margin-top: var(--sp-4); font-family: var(--font-display); font-weight: 700; font-style: italic; font-size: var(--step-0); line-height: 1.45; color: var(--fg); text-align: center; text-wrap: balance; }
 .vid-poster__quote::first-letter { color: var(--gold-200); }
 .hero__visual--video::after { display: none; }
 .hero__visual--video img { border: 1px solid var(--glass-border); box-shadow: var(--glass-shadow-lg); }
-/* ---- D-VID click-to-play facade (G2 round 4, owner: "video approved get it in here so it plays") ----
+/* ---- D-VID click-to-play facade (G2 round 4: the approved video, played in the page) ----
    The poster keeps its approved look (same <img>, border, shadow and 600:338 frame); a gold play button
-   sits on it. G2 round 5 fixer (owner: "this should play in the website not external link"): starter.js
+   sits on it. G2 round 5 fixer (the video plays in the page, never through an outside link): starter.js
    swaps the facade button for .video-embed (one <video> of the site's own file) on click, in the same
    frame, so nothing moves. Without JS a native <video> of the same file shows instead. */
 .video-facade { position: relative; display: block; border-radius: var(--r-xl); color: inherit; text-decoration: none; }
-/* G2 round 5 fixer (owner: "this should play in the website not external link"): the facade is a <button> now (no
-   link out); it keeps the poster's look, and starter.js swaps in a <video> of the owner's own file on click. */
+/* G2 round 5 fixer (the video plays in the page, never through an outside link): the facade is a <button> now (no
+   link out); it keeps the poster's look, and starter.js swaps in a <video> of the site's own file on click. */
 button.video-facade { width: 100%; padding: 0; margin: 0; border: 0; background: none; font: inherit; cursor: pointer; appearance: none; -webkit-appearance: none; }
 .video-facade img { display: block; }
 .video-facade__play { position: absolute; inset: 0; display: grid; place-items: center; pointer-events: none; }
@@ -192,10 +192,8 @@ button.video-facade { width: 100%; padding: 0; margin: 0; border: 0; background:
 .js .step1[data-collapsible]:not(.is-active) .step1__hint { display: block; }
 
 /* ============================================================
-   G2 round 2: the body below the hero, at the hero's level.
-   Owner, G2 round 1: "the hero looks fucking awesome, the rest of the
-   page doesn't look as good as the hero ... a slightly more modern
-   attempt at making those sections".
+   G2 round 2: the body below the hero, at the hero's level: the
+   sections under the hero in the same, more modern finish.
    Built only from the site's tokens (tokens.css), its .glass / .btn /
    .eyebrow primitives and its data-reveal motion (motion.css, app.js).
    Everything is complete at rest: without JS nothing is hidden, and a
@@ -217,7 +215,7 @@ button.video-facade { width: 100%; padding: 0; margin: 0; border: 0; background:
    left column scrolled away, leaving ~40% of the viewport empty). clip (unlike hidden) creates no
    scroll container. This file loads on the two pilot pages only. The frozen header keeps exactly
    the behaviour it shipped with (it scrolls away): with the fix alone, base.css's own sticky rule
-   would start to work, so it is held at relative here until the owner rules on a sticky header. */
+   would start to work, so it is held at relative here until a sticky header is decided. */
 body { overflow-x: clip; }
 .site-header { position: relative; }
 
@@ -382,7 +380,7 @@ body { overflow-x: clip; }
 .gcard__title { font-size: var(--step-2); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: var(--sp-3); color: var(--white); }
 .gcard__body p { margin: 0; font-size: var(--step-0); }
 .gcards__terms { max-width: 860px; margin: var(--sp-6) auto 0; }
-/* G2 round 5: the owner's schedule (F-GUAR-SCHEDULE-01) under the three guarantee cards. */
+/* G2 round 5: the guarantee schedule (F-GUAR-SCHEDULE-01) under the three guarantee cards. */
 .gcards__schedule { max-width: 980px; margin: var(--sp-7, 2.5rem) auto 0; display: grid; gap: var(--sp-4); text-align: center; }
 .gsched__lead { margin: 0 auto; max-width: 62ch; font-size: var(--step-0); color: var(--fg); font-weight: 600; text-wrap: balance; }
 .gsched { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sp-4); }
@@ -620,8 +618,8 @@ body { overflow-x: clip; }
 .chcard p { margin: 0; font-size: 0.98rem; line-height: 1.66; }
 .chcard a { text-decoration: underline; text-underline-offset: 3px; }
 
-/* ---- A-SPECIALTIES (G2 round 4, owner: "Orthodontist endodontist and all the specialties should be able
-   to rank for this page too"): compact glass cards, an icon beside the H3, the text and, on a card with a
+/* ---- A-SPECIALTIES (G2 round 4: the page names every specialty of the trade, orthodontists and endodontists
+   among them): compact glass cards, an icon beside the H3, the text and, on a card with a
    local figure, a quiet chip at its foot. Two columns by default (an odd last card spans both), four above
    1080px on a 12-track grid (a short last row fills the width: 1 x 12, 2 x 6 or 3 x 4 tracks), one on
    phones, where the list folds after four cards behind "Show all ..." (starter.js, data-fold-more; without
@@ -692,7 +690,7 @@ body { overflow-x: clip; }
 .rules-card .sx-head { margin-bottom: var(--sp-4); }
 .rules-card .sx-head h2 { font-size: var(--step-3); }
 .rules-card .sx-prose { max-width: 64ch; }
-/* H5b install: the rules owner's licensed-specialty list (niche-state, e.g. NAC 631.190) as wrapping chips, in the
+/* H5b install: the rules card's licensed-specialty list (niche-state, e.g. NAC 631.190) as wrapping chips, in the
    proof-card chip style; before this it ran together as one line of text (H5b report, dental-nevada-1440-full-05). */
 .rules-licensed { margin-top: var(--sp-5); max-width: 72ch; }
 .rules-licensed__h { margin: 0 0 var(--sp-3); font-size: 0.78rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold-200); }
@@ -771,7 +769,7 @@ a.lcard__name::after { content: ""; position: absolute; inset: 0; z-index: 1; bo
 .decide-card__icon { width: 48px; height: 48px; padding: 12px; border-radius: 14px; background: var(--grad-gold); color: var(--ink-900); }
 .decide-card__t { margin: var(--sp-2) 0 0; font-family: var(--font-display); font-weight: 800; font-size: var(--step-2); line-height: 1.15; color: var(--white); }
 .decide-card__x { margin: 0 0 var(--sp-2); }
-/* (G2 round 4: the card's CALL button is removed, owner: "No call to actions for phone calls please.") */
+/* (G2 round 4: the card has one button, its START link to Step 1.) */
 .faq { display: grid; gap: var(--sp-4); }
 .faq__item {
   position: relative;
@@ -843,8 +841,7 @@ a.lcard__name::after { content: ""; position: absolute; inset: 0; z-index: 1; bo
 .byline .slot-placeholder { margin: 0; padding: var(--sp-3) var(--sp-4); font-size: 0.78rem; font-weight: 600; line-height: 1.5; }
 
 /* ---- G-PROOF (G2 round 3): page-one results for businesses we have worked for ----
-   Owner, 2026-09-25: "there isn't enough examples of success, ranking #first page in a bunch of
-   industries". Every card is a small search screen: the exact search, the business as the
+   More examples of page-one results, across many industries. Every card is a small search screen: the exact search, the business as the
    highlighted result (no neighbours, so no position is implied), the surfaces it holds there (map,
    page one, AI: the three the guarantee covers, in the same order and gold), then the other searches
    it is found for. 3 / 2 / 1 columns at desktop / tablet / phone.
@@ -992,7 +989,7 @@ a.lcard__name::after { content: ""; position: absolute; inset: 0; z-index: 1; bo
 .pmore__list { margin: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 0.35rem; }
 .pmore__kw { padding: 0.22rem 0.65rem; border-radius: var(--r-pill); background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.14); color: var(--fg); font-size: 0.78rem; font-weight: 600; line-height: 1.35; overflow-wrap: anywhere; }
 .pmore__rest { font-size: 0.78rem; font-weight: 700; color: var(--fg-muted); }
-/* G2 round 5: the card foot is one line, the client's first-page key phrase count (owner, 2026-09-25). */
+/* G2 round 5: the card foot is one line, the client's first-page key phrase count. */
 .pcard__kp { margin: 0; display: flex; align-items: center; gap: 0.45rem; font-size: 0.86rem; font-weight: 600; color: var(--fg); line-height: 1.35; }
 .pcard__kpn { font-family: var(--font-display); font-weight: 800; font-size: 1.05rem; color: var(--gold-200); font-variant-numeric: tabular-nums; }
 /* a card's own date shows only when the cards were checked on different days */
@@ -1012,7 +1009,7 @@ a.lcard__name::after { content: ""; position: absolute; inset: 0; z-index: 1; bo
 }
 .pcta__t { flex: 1 1 18rem; margin: 0; max-width: 34ch; font-family: var(--font-display); font-weight: 800; font-size: var(--step-2); line-height: 1.2; letter-spacing: -0.015em; color: var(--white); }
 
-/* ---- the D-PAIR left column: the owner's three current clients, one compact row each ----
+/* ---- the D-PAIR left column: three current clients, one compact row each ----
    G2 round 3 fixer (audit V01): each row is the name with its trade and place on one line, then the
    search and the surfaces on the next, so the column ends near the Step-1 card beside it. */
 .pair__proof { margin-top: 12px; }
@@ -1159,8 +1156,7 @@ a.lcard__name::after { content: ""; position: absolute; inset: 0; z-index: 1; bo
   .js .sx [data-reveal]:not(.is-in) { animation: none; }
 }
 
-/* ---- CH-STICKY: mobile START HERE bar (G2 round 4: START HERE alone, full width; the CALL US half is
-   removed, owner: "No call to actions for phone calls please. Let’s just remove this.") ---- */
+/* ---- CH-STICKY: mobile START HERE bar (G2 round 4: START HERE alone, full width) ---- */
 .sticky-cta { display: none; }
 @media (max-width: 768px) {
   .sticky-cta {
@@ -1206,8 +1202,7 @@ a.lcard__name::after { content: ""; position: absolute; inset: 0; z-index: 1; bo
 @media (prefers-reduced-motion: reduce) { .sticky-cta { transition: none; } }
 
 /* ============================================================
-   G2 round 5 rows (owner, 2026-09-25: "and can we add these two rows into our location / niche pages to
-   give them some characture ... And make that 2nd one of me crisp and clear" · "and add this row").
+   G2 round 5 rows: rows of the homepage added to the location and niche pages, the cut-out figure kept sharp.
    The rows are the homepage's own markup (render.mjs founderSection, guaranteeSection, reviewsSection)
    styled by components.css; only what the programme pages need on top of that lives here.
    ============================================================ */
@@ -1219,8 +1214,8 @@ a.lcard__name::after { content: ""; position: absolute; inset: 0; z-index: 1; bo
    The figure box is the cover plus its padding (fit-content cannot size it: the 812px file's intrinsic width
    would win), so the brackets sit on the cover's own corners. */
 .sx-founder .hero__grid > .hero__visual { align-self: center; }
-/* G2 round 5 fixer (audits D2, CN-01, CN-07): the whole cover again, the owner-approved edit that prints JAMES
-   COMPTON, at the homepage row's 475px (its 950px file stays 2x on a 2x screen). The cover's own orange frame lines
+/* G2 round 5 fixer (audits D2, CN-01, CN-07): the whole cover again, the approved edit of the cover,
+   at the homepage row's 475px (its 950px file stays 2x on a 2x screen). The cover's own orange frame lines
    are in the image, so the CSS corner brackets that stood in for them around the crop are gone. The box is reserved
    before the lazy image loads (audit SEO-5: components.css's aspect-ratio: auto left 2px and shifted the layout). */
 .sx-founder .founder-figure { box-sizing: border-box; width: min(100%, 475px); margin-inline: auto; }
@@ -1231,7 +1226,7 @@ a.lcard__name::after { content: ""; position: absolute; inset: 0; z-index: 1; bo
 
 /* ---- D-REVIEWS: the typicality line under the carousel (audit CN-03) ---- */
 .sx-reviews .reviews-note { margin: var(--sp-5) auto 0; max-width: 60ch; font-size: var(--step--1); line-height: 1.5; color: var(--fg-muted); text-align: center; }
-/* ---- D-CTA-FOUNDER: what "our guaranteed results" means, one short line under the owner's words (audit CN-05) ---- */
+/* ---- D-CTA-FOUNDER: what "our guaranteed results" means, one short line under the band's words (audit CN-05) ---- */
 .sx-ctaf .cta-band__body > p.cta-band__qualifier { font-size: var(--step--1); line-height: 1.5; color: var(--fg-muted); margin-top: calc(-1 * var(--sp-4)); }
 
 /* ---- D-CTA-FOUNDER: the super-resolved cut-out (1142x924) may grow to 520px on desktop and stays >= 2x
@@ -1252,7 +1247,7 @@ html:not(.js) .sx-reviews .reviews__viewport { overflow-x: auto; }
 
 /* ---- programme chrome: M3 (2026-09-27) moved the chrome rules that stood here (the G2 round 5 panels, the state >
    county > city nesting, the current-page mark, the hover bridge, the opaque panels) into components.css, where every
-   page loads them: the owner wants ONE menu and ONE footer on every page, the main pages included. Only the rule that
+   page loads them: ONE menu and ONE footer on every page, the main pages included. Only the rule that
    serves the programme pages' own sticky bar stays here. ---- */
 /* The phone sticky bar reserved its 68px as body padding below the footer. Since the footer's own Start Here
    parks the bar (starter.js, G2 round 5), that strip showed as a bare band of page background under the footer
@@ -1262,8 +1257,8 @@ html:not(.js) .sx-reviews .reviews__viewport { overflow-x: auto; }
   .site-footer { padding-bottom: calc(var(--sp-6) + 68px + env(safe-area-inset-bottom)); }
 }
 
-/* G2 round 6 (owner, 2026-09-25: "put all 3 on all boxes on 1 line to save space make them rounded edges instead
-   of pill to get more space back like the box above it"): the surface badges sit on ONE line, as compact rounded
+/* G2 round 6 (all three badges on one line, in rounded boxes rather than pills, to save space): the surface
+   badges sit on ONE line, as compact rounded
    rectangles in the result box's style (smaller radius, square-ish icon), in the grid cards and the D-PAIR rows. */
 .pcard__wins { flex-wrap: nowrap; gap: 0.3rem; padding: 0 0.2rem; }
 .pwin { gap: 0.28rem; padding: 0.22rem 0.45rem 0.22rem 0.22rem; border-radius: 8px; font-size: 0.7rem; letter-spacing: -0.005em; }
@@ -1273,8 +1268,7 @@ html:not(.js) .sx-reviews .reviews__viewport { overflow-x: auto; }
 .ppair__wins .pwin__icon { border-radius: 4px; }
 @media (max-width: 640px) { .pwin { font-size: 0.72rem; } .pwin__icon { width: 18px; height: 18px; } }
 
-/* G2 round 6 mobile fixes (owner, 2026-09-25: "mobile responsiveness", "mobile sticky way too big and remove the
-   background from it let the button float"). 1) D-PAIR rows: on phones the badges take their own line under the
+/* G2 round 6 mobile fixes (the phone layout; a smaller sticky button with no bar behind it). 1) D-PAIR rows: on phones the badges take their own line under the
    search (they overflowed the card when they shared its line). 2) CH-STICKY: no bar, no background; one compact
    gold button floats above the page, centred; the nav itself lets taps through. Markup unchanged. */
 @media (max-width: 640px) {
@@ -1308,8 +1302,8 @@ html:not(.js) .sx-reviews .reviews__viewport { overflow-x: auto; }
 }
 
 /* ---- B3 (2026-09-26): the last four types. New selectors only; no approved module's look changes. ----
-   A-TERMS (the terms page while the owner's written terms are pending): one glass card per pending part, its title
-   and the owner slot under it; two columns on desktop, one on phones. */
+   A-TERMS (the terms page while its written terms are pending): one glass card per pending part, its title
+   and the pending slot under it; two columns on desktop, one on phones. */
 .terms-slots { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sx-gap); }
 .terms-slot { margin: 0; display: flex; flex-direction: column; gap: var(--sp-3); padding: clamp(1.1rem, 0.85rem + 0.8vw, 1.5rem); border-color: var(--sx-line); border-radius: var(--r-xl); background: var(--sx-card); }
 .terms-slot:nth-child(odd):last-child { grid-column: 1 / -1; }

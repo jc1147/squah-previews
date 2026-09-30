@@ -134,15 +134,45 @@
       }, { passive: true });
     }
 
-    /* ---- back to top ---- */
+    /* ---- back to top ----
+       M15 (audit Y1): at 768px and below the button floats over the page's own content, so it steps aside while a
+       Step 1 form (form.step1) is on screen, or within 120px below it (it is gone before the form scrolls up under it),
+       and while focus is inside one: it never covers the form's fields or its Submit button. Above 768px it shows and
+       hides exactly as before (past 700px of scroll). */
     var toTop = document.querySelector('.to-top');
     if (toTop) {
-      var toggleTop = function () { toTop.classList.toggle('is-visible', window.scrollY > 700); };
+      var narrow = window.matchMedia('(max-width: 768px)');
+      var nearStep1 = false, inStep1 = false;
+      var toggleTop = function () {
+        toTop.classList.toggle('is-visible', window.scrollY > 700 && !(narrow.matches && (nearStep1 || inStep1)));
+      };
       toggleTop();
       window.addEventListener('scroll', toggleTop, { passive: true });
       toTop.addEventListener('click', function () {
         window.scrollTo({ top: 0, behavior: isReduced() ? 'auto' : 'smooth' });
       });
+      var step1Forms = document.querySelectorAll('form.step1');
+      if (step1Forms.length) {
+        if ('IntersectionObserver' in window) {
+          var step1Seen = new Map();
+          var step1Obs = new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) { step1Seen.set(e.target, e.isIntersecting); });
+            nearStep1 = false;
+            step1Seen.forEach(function (v) { if (v) nearStep1 = true; });
+            toggleTop();
+          }, { rootMargin: '0px 0px 120px 0px' });
+          step1Forms.forEach(function (f) { step1Obs.observe(f); });
+        }
+        var syncStep1Focus = function () {
+          var a = document.activeElement;
+          inStep1 = Boolean(a && a.closest && a.closest('form.step1'));
+          toggleTop();
+        };
+        document.addEventListener('focusin', syncStep1Focus);
+        document.addEventListener('focusout', function () { setTimeout(syncStep1Focus, 0); });
+        if (narrow.addEventListener) narrow.addEventListener('change', toggleTop);
+        else if (narrow.addListener) narrow.addListener(toggleTop);
+      }
     }
 
 
@@ -153,7 +183,7 @@
     /* ---- forms without a backend ----
        This is a static build: POSTing to a static host returns 405. Rather
        than ship a button that errors, submission is intercepted and the
-       visitor is pointed at the phone number. Wire /api/contact to a real
+       form answers with a short note. Wire /api/contact to a real
        handler and delete this block (see docs/DEPLOY.md). */
     document.querySelectorAll('form[data-needs-endpoint]').forEach(function (form) {
       form.addEventListener('submit', function (e) {
@@ -166,15 +196,15 @@
           note.setAttribute('role', 'status');
           form.appendChild(note);
         }
-        // M3 (owner, G2 round 4: "No call to actions for phone calls please."): no call ask, the same answer the
-        // programme pages give (src/scripts/starter.js). The launch build switches this interceptor off.
+        // M3: the same answer the programme pages give (src/scripts/starter.js). The launch build switches this
+        // interceptor off.
         note.textContent = 'This form is not connected yet, so nothing was sent.';
         note.style.color = 'var(--gold-200)';
       });
     });
     /* @release-strip:end forms-not-connected */
 
-    /* ---- the video FAQ (M3; owner, 2026-09-27: "Yes, use all 17") ----
+    /* ---- the video FAQ (M3: all 17 FAQ videos) ----
        Each poster is a <button data-faq-video> holding the site's own MP4 (data-video-src). A click swaps it for ONE
        <video controls autoplay playsinline> of that file in the same frame and starts it; any other FAQ video that is
        playing pauses. Nothing is requested before the click, nothing loads from YouTube and no link leaves the page.
