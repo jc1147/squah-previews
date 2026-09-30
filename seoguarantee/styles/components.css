@@ -1120,6 +1120,21 @@
 .choice { display: inline-flex; align-items: center; gap: 0.5rem; margin-right: var(--sp-5); color: var(--fg); font-weight: 600; cursor: pointer; }
 .choice input { width: 1.15rem; height: 1.15rem; accent-color: var(--gold-300); }
 .field select { width: 100%; }
+/* M15 (owner, 2026-09-29, "Step 1 everywhere": "The home page's qualifier goes on all 139 pages, contact included"): the
+   Step 1 form (build/step1.mjs) on the main pages' closing bands, the contact page and 404.html. The programme pages' rules
+   (starter.css, which these pages do not load), word for word; check-starter C87 holds the two copies equal. */
+.step1 { margin-top: var(--sp-5); }
+.step1__title { font-family: var(--font-display); font-weight: 800; color: var(--gold-200); letter-spacing: 0.14em; text-transform: uppercase; margin: 0 0 var(--sp-2); font-size: var(--step--1); }
+.step1 [hidden] { display: none !important; }
+.step1__hint { display: none; }
+.js .step1[data-collapsible]:not(.is-active) .step1__body { display: none; }
+.js .step1[data-collapsible]:not(.is-active) .step1__hint { display: block; }
+/* M15 (a defect of the Step 1 form, on the programme pages too, found while making it the site's one lead form; the main
+   pages' render check R30m holds it): a Yes / No radio takes .field input's padding and border for as long as its focus
+   transition runs, so the radio a click leaves grows from 18 x 18 to 37 x 29 px for a moment and "No" slides 19 px while it
+   is being clicked: after "Yes", a click on "No" was lost (the button went down on it and came up beside it). With no
+   transition a radio keeps its size. Every page loads this file, the programme pages included. */
+.choice input { transition: none; }
 /* Contact: the owner's guarantee schedule under its label, and two links. */
 .contact-line__list { margin: var(--sp-1) 0 0; padding-left: 1.1rem; color: var(--fg); }
 .contact-line__list li { margin: 0 0 0.2rem; font-size: var(--step--1); line-height: 1.5; }

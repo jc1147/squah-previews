@@ -600,7 +600,16 @@ section.section.sv-sources { padding-top: 0; }
 /* ---------- the contact page (M12; owner, 2026-09-28: "How about a proper contact page? lol :)") ----------
    /contact-us/ (build/main-pages.mjs contact()) reuses the hero, the steps, the link cards and the FAQ above; these rules
    only place them, form-first: the page's own form sits in the hero beside the copy (right after it on phones), with
-   "What happens next" under the copy. The form is the M3 form, untouched: its first four fields go two a row by CSS alone. */
+   "What happens next" under the copy. M15 (owner, 2026-09-29: "ALso the contact page shouldn't we have the same form we use
+   on all the other pages there too?"): the form is the closing band's Get In Touch form (build/main-pages.mjs
+   getInTouchForm(), the same markup), so it keeps the band's own field styles (components.css: one field a row, first and
+   last name side by side only where the card is wide enough); the rules below only let its message box take the card's
+   spare height. (M12's rules set M3's own form, its first four fields two a row.) M15 (owner, 2026-09-29, "Step 1
+   everywhere": "The home page's qualifier goes on all 139 pages, contact included"): the card holds the Step 1 form
+   (build/step1.mjs, with the band's field styles and components.css's Step 1 rules). It had no message box to take the
+   column's spare height, so the card keeps its own height (its website field opens after "Yes") and the rules that
+   stretched the card and its message box are gone. (M15 Step 1 message box, 2026-09-30: the form's one optional message
+   box, its last field, keeps its own height, components.css's .field textarea; so does the card.) */
 .ct-hero { padding-bottom: clamp(2.5rem, 2rem + 3vw, 5rem); }
 .ct-hero__grid {
   display: grid; grid-template-columns: minmax(0, 1.14fr) minmax(0, 1fr); grid-template-rows: auto 1fr;
@@ -608,44 +617,22 @@ section.section.sv-sources { padding-top: 0; }
 }
 .ct-hero__copy { grid-area: copy; }
 .ct-hero__copy h1 { font-size: var(--step-5); }
-/* beside the copy and the steps the card runs the column's full height, and the message box takes what is left. With
-   JavaScript only (html.js): without it the site hides the form's controls (lib.mjs shell() noscript), so the card keeps its
-   natural height instead of standing empty. */
 .ct-form { grid-area: form; }
-.js .ct-form { align-self: stretch; display: flex; }
 .ct-next { grid-area: next; }
 .ct-form__card { padding: clamp(1.4rem, 1rem + 2vw, 2.5rem); border-radius: var(--r-xl); border-color: rgba(255, 201, 6, 0.3); }
-.js .ct-form__card { flex: 1; display: flex; flex-direction: column; }
 .ct-form__card::after { content: ""; position: absolute; left: 12%; right: 12%; top: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(255, 201, 6, 0.85), transparent); pointer-events: none; }
 .ct-form__title { position: relative; font-size: var(--step-3); line-height: 1.15; margin: 0 0 var(--sp-5); }
-.ct-form #contact-form { position: relative; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--sp-4); }
-.js .ct-form #contact-form { flex: 1; grid-template-rows: auto auto 1fr auto; }
-.ct-form #contact-form > * { grid-column: 1 / -1; }
-.ct-form #contact-form > label:nth-of-type(-n + 4) { grid-column: auto; }
-.ct-form #contact-form > label:nth-of-type(5) { display: flex; flex-direction: column; }
-.ct-form #contact-form > label:nth-of-type(5) textarea { flex: 1 1 auto; min-height: 140px; }
-.ct-form #contact-form .btn { margin-top: var(--sp-2); }
+.ct-form .step1 { position: relative; }
 .ct-next__title { font-size: var(--step-2); margin: 0 0 var(--sp-4); }
 .ct-steps { margin: 0; }
 .ct-steps .sv-step__body a { color: var(--gold-200); text-decoration: underline; text-underline-offset: 3px; }
 /* the four "not ready yet" cards: two a row (their lines stay readable), one on phones */
 .ct-links li { flex-basis: calc((100% - var(--sp-4)) / 2); }
 .ct-trust { padding-top: 0; }
-/* the narrow form column beside the copy: the fields one a row (two a row would clip "you@company.com"); the message box
-   keeps the stretch. Below 901px the card is full width again, so the fields go back to two a row (one on phones). */
-@media (min-width: 901px) and (max-width: 1080px) {
-  .ct-form #contact-form { grid-template-columns: minmax(0, 1fr); }
-  .js .ct-form #contact-form { grid-template-rows: auto auto auto auto 1fr auto; }
-  .ct-form #contact-form > label:nth-of-type(-n + 4) { grid-column: 1 / -1; }
-}
 @media (max-width: 900px) {
   .ct-hero__grid { grid-template-columns: minmax(0, 1fr); grid-template-rows: none; grid-template-areas: "copy" "form" "next"; }
-  .js .ct-form { display: block; }
-  .js .ct-form #contact-form { grid-template-rows: none; }
 }
 @media (max-width: 640px) {
   .ct-form__card { padding: 1.3rem 1.1rem 1.4rem; border-radius: var(--r-lg); }
-  .ct-form #contact-form { grid-template-columns: minmax(0, 1fr); }
-  .ct-form #contact-form > label:nth-of-type(-n + 4) { grid-column: 1 / -1; }
   .ct-links li { flex-basis: 100%; }
 }

@@ -1,4 +1,4 @@
-/* blog.js: the blog pages (/blog/ and /blog/<slug>/), loaded only by them. Every page is complete without it.
+/* blog.js: the blog pages (M15: the Resources section, /resources/ and /resources/<slug>/), loaded only by them. Every page is complete without it.
    - The reading-progress bar: browsers with CSS scroll timelines fill it in blog.css; elsewhere this sets its width.
    - The table of contents marks the section being read (both the sticky list and the phone drawer), and the phone drawer
      folds again after a link in it is followed.
